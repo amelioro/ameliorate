@@ -2,22 +2,26 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
+import { useTheme } from "@mui/material";
 
 const Home: NextPage = () => {
+  const theme = useTheme();
+
   return (
     <>
       <Head>
         <title>ameliorate</title>
         <meta name="description" content="Solve problems" />
         <link rel="icon" href="/favicon.ico" />
+
+        {/* https://mui.com/material-ui/getting-started/usage/#responsive-meta-tag */}
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
 
       <header>
         <nav>
           <Link href="/">
-            <a>
-              <Image src="/favicon.ico" height={32} width={32} />
-            </a>
+            <a>ameliorate</a>
           </Link>
 
           <div className="right">
@@ -48,8 +52,12 @@ const Home: NextPage = () => {
           display: flex;
           align-items: center;
           padding: 10px;
-          background-color: cyan;
+          background-color: ${theme.palette.primary.main};
           border-bottom: solid gray;
+        }
+
+        nav a {
+          display: flex;
         }
 
         .right {
