@@ -11,11 +11,6 @@ const Home: NextPage = () => {
     <>
       <Head>
         <title>ameliorate</title>
-        <meta name="description" content="Solve problems" />
-        <link rel="icon" href="/favicon.ico" />
-
-        {/* https://mui.com/material-ui/getting-started/usage/#responsive-meta-tag */}
-        <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
 
       <header>
