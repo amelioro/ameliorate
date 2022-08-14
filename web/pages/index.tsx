@@ -20,7 +20,7 @@ const Home: NextPage = () => {
           </Link>
 
           <div className="right">
-            <Image src="/Search_Icon.svg" height={32} width={32} />
+            <Image src="/Search_Icon.svg" height={32} width={32} alt="search" />
             <Link href="/new">
               <a>create understanding</a>
             </Link>
@@ -35,7 +35,12 @@ const Home: NextPage = () => {
             </Link>
             <Link href="https://github.com/keyserj/ameliorate">
               <a>
-                <Image src="/GitHub-Mark-64px.png" height={32} width={32} />
+                <Image
+                  src="/GitHub-Mark-64px.png"
+                  height={32}
+                  width={32}
+                  alt="github link"
+                />
               </a>
             </Link>
           </div>

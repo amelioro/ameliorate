@@ -15,12 +15,6 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="description" content="Solve problems" />
         <link rel="icon" href="/favicon.ico" />
 
-        {/* MUI fonts */}
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-        />
-
         {/* https://mui.com/material-ui/getting-started/usage/#responsive-meta-tag */}
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
