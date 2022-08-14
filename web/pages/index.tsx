@@ -1,8 +1,8 @@
+import { useTheme } from "@mui/material";
 import type { NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
 import Image from "next/image";
-import { useTheme } from "@mui/material";
+import Link from "next/link";
 
 const Home: NextPage = () => {
   const theme = useTheme();
