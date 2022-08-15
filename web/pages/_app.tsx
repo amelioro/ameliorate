@@ -4,6 +4,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 
+import Layout from "../common/components/layout";
 import { getThemeOptions } from "../common/theme";
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -12,6 +13,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
+        <title>ameliorate</title>
         <meta name="description" content="Solve problems" />
         <link rel="icon" href="/favicon.ico" />
 
@@ -21,7 +23,10 @@ function MyApp({ Component, pageProps }: AppProps) {
 
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Component {...pageProps} />
+
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
       </ThemeProvider>
     </>
   );

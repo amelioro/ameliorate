@@ -1,52 +1,11 @@
 import { useTheme } from "@mui/material";
 import type { NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
-import Link from "next/link";
 
 const Home: NextPage = () => {
   const theme = useTheme();
 
   return (
     <>
-      <Head>
-        <title>ameliorate</title>
-      </Head>
-
-      <header>
-        <nav>
-          <Link href="/">
-            <a>ameliorate</a>
-          </Link>
-
-          <div className="right">
-            <Image src="/Search_Icon.svg" height={32} width={32} alt="search" />
-            <Link href="/new">
-              <a>create understanding</a>
-            </Link>
-            <Link href="/mine">
-              <a>my understandings</a>
-            </Link>
-            <Link href="/about">
-              <a>about</a>
-            </Link>
-            <Link href="/login">
-              <a>login</a>
-            </Link>
-            <Link href="https://github.com/keyserj/ameliorate">
-              <a>
-                <Image
-                  src="/GitHub-Mark-64px.png"
-                  height={32}
-                  width={32}
-                  alt="github link"
-                />
-              </a>
-            </Link>
-          </div>
-        </nav>
-      </header>
-
       <div className="center">
         <section className="paper">
           <h2>No problem is too complex.</h2>
@@ -74,26 +33,6 @@ const Home: NextPage = () => {
       </div>
 
       <style jsx>{`
-        nav {
-          display: flex;
-          align-items: center;
-          padding: 10px;
-          background-color: ${theme.palette.primary.main};
-          border-bottom: solid ${theme.palette.divider};
-        }
-
-        nav a {
-          display: flex;
-          color: ${theme.palette.primary.contrastText};
-        }
-
-        .right {
-          display: flex;
-          align-items: center;
-          margin-left: auto;
-          gap: 15px;
-        }
-
         .center {
           display: flex;
           justify-content: center;
