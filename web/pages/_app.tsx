@@ -1,4 +1,3 @@
-import "../styles/globals.css";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import type { AppProps } from "next/app";
@@ -28,6 +27,13 @@ function MyApp({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
         </Layout>
       </ThemeProvider>
+
+      <style jsx global>{`
+        a {
+          color: inherit;
+          text-decoration: none;
+        }
+      `}</style>
     </>
   );
 }
