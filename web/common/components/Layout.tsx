@@ -35,12 +35,7 @@ const Layout: NextPage<Props> = ({ children }) => {
             </Link>
             <Link href="https://github.com/keyserj/ameliorate">
               <a>
-                <Image
-                  src="/GitHub-Mark-64px.png"
-                  height={32}
-                  width={32}
-                  alt="github link"
-                />
+                <Image src="/GitHub-Mark-64px.png" height={32} width={32} alt="github link" />
               </a>
             </Link>
           </div>

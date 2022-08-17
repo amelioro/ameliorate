@@ -28,28 +28,15 @@ const LayoutMaterial: NextPage<LayoutProps> = ({ children }) => {
     <>
       <AppBar position="sticky">
         <Toolbar variant="dense">
-          <Box
-            flex="1"
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-          >
+          <Box flex="1" display="flex" justifyContent="space-between" alignItems="center">
             <NavLink href="/">ameliorate</NavLink>
             <Box display="flex" gap="15px" alignItems="center">
               <NavLink href="/new">create understanding</NavLink>
               <NavLink href="/mine">my understandings</NavLink>
               <NavLink href="/about">about</NavLink>
               <NavLink href="/login">login</NavLink>
-              <NavLink
-                href="https://github.com/keyserj/ameliorate"
-                display="flex"
-              >
-                <Image
-                  src="/GitHub-Mark-64px.png"
-                  height={32}
-                  width={32}
-                  alt="github link"
-                />
+              <NavLink href="https://github.com/keyserj/ameliorate" display="flex">
+                <Image src="/GitHub-Mark-64px.png" height={32} width={32} alt="github link" />
               </NavLink>
             </Box>
           </Box>
