@@ -3,7 +3,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 
-import Layout from "../common/components/layout";
+import LayoutMaterial from "../common/components/LayoutMaterial";
 import { getThemeOptions } from "../common/theme";
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -23,9 +23,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       <ThemeProvider theme={theme}>
         <CssBaseline />
 
-        <Layout>
+        <LayoutMaterial>
           <Component {...pageProps} />
-        </Layout>
+        </LayoutMaterial>
       </ThemeProvider>
 
       <style jsx global>{`
