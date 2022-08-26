@@ -5,16 +5,16 @@
 import { type PaletteMode, type ThemeOptions } from "@mui/material";
 
 const lightPalette = {
-  background: {
-    default: "#fafafa",
-  },
+  // background: {
+  //   default: "#fafafa",
+  // },
 };
 
 const darkPalette = {
-  background: {
-    default: "#303030",
-    paper: "rgb(35, 35, 35)",
-  },
+  // background: {
+  //   default: "#303030",
+  //   paper: "rgb(35, 35, 35)",
+  // },
 };
 
 const sharedPalette = {

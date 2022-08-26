@@ -7,7 +7,7 @@ import LayoutMaterial from "../common/components/LayoutMaterial";
 import { getThemeOptions } from "../common/theme";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const theme = createTheme(getThemeOptions("dark"));
+  const theme = createTheme(getThemeOptions("light"));
 
   return (
     <>
