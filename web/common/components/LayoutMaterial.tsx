@@ -1,4 +1,4 @@
-import { AppBar, Box, Toolbar } from "@mui/material";
+import { AppBar, Box, Toolbar, useTheme } from "@mui/material";
 import { NextPage } from "next";
 import Image from "next/image";
 import { ReactNode } from "react";
@@ -24,6 +24,10 @@ const NavLink = ({ href, display, children }: NavLinkProps) => {
 };
 
 const LayoutMaterial: NextPage<LayoutProps> = ({ children }) => {
+  const theme = useTheme();
+  const githubIconSrc =
+    theme.palette.mode == "light" ? "/GitHub-Mark-64px.png" : "/GitHub-Mark-Light-64px.png";
+
   return (
     <>
       <AppBar position="sticky">
@@ -36,7 +40,7 @@ const LayoutMaterial: NextPage<LayoutProps> = ({ children }) => {
               <NavLink href="/about">about</NavLink>
               <NavLink href="/login">login</NavLink>
               <NavLink href="https://github.com/keyserj/ameliorate" display="flex">
-                <Image src="/GitHub-Mark-64px.png" height={32} width={32} alt="github link" />
+                <Image src={githubIconSrc} height={32} width={32} alt="github link" />
               </NavLink>
             </Box>
           </Box>
