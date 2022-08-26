@@ -2,7 +2,7 @@
 // used material color tool to confirm accessibility (legibility) https://material.io/resources/color/#!/?view.left=1&view.right=1&primary.color=4ab74c&secondary.color=b74ab5
 // used mui-theme-creator to see the colors in action and pick light & dark palettes https://bareynol.github.io/mui-theme-creator/?firstName=&lastName=&email=&password=
 
-import { type PaletteMode } from "@mui/material";
+import { type PaletteMode, type ThemeOptions } from "@mui/material";
 
 const lightPalette = {
   background: {
@@ -26,10 +26,17 @@ const sharedPalette = {
   },
 };
 
-export const getThemeOptions = (mode: PaletteMode) => ({
+export const getThemeOptions = (mode: PaletteMode): ThemeOptions => ({
   palette: {
     mode,
     ...sharedPalette,
     ...(mode === "light" ? lightPalette : darkPalette),
+  },
+  components: {
+    MuiTypography: {
+      defaultProps: {
+        margin: "0.4em",
+      },
+    },
   },
 });
