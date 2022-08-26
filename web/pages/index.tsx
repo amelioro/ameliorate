@@ -6,10 +6,14 @@ const Home: NextPage = () => {
     <>
       <Box display="flex" justifyContent="center">
         <Paper sx={paper}>
-          <Typography variant="h2">Don&#39;t sit back any longer.</Typography>
-          <Typography variant="h5">Understand yourself.</Typography>
-          <Typography variant="h5">Understand each other.</Typography>
-          <Typography variant="h5">Grow together.</Typography>
+          <Typography variant="h5">Between us all, we have the information.</Typography>
+          <Typography variant="h5">
+            We just need to be able to organize it, communicate it, improve it, and act on it.
+          </Typography>
+
+          <Divider />
+
+          <Typography variant="h4">Don't sit back any longer.</Typography>
 
           <Divider />
 
