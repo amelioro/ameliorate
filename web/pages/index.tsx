@@ -5,7 +5,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Box display="flex" justifyContent="center">
-        <Paper sx={paper}>
+        <Paper sx={pageMiddle}>
           <Typography variant="h5">Between us all, we have the information.</Typography>
           <Typography variant="h5">
             We just need to be able to organize it, communicate it, improve it, and act on it.
@@ -39,7 +39,7 @@ const Home: NextPage = () => {
   );
 };
 
-const paper = {
+const pageMiddle = {
   width: "1080px",
   textAlign: "center",
   margin: "10px",
