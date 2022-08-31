@@ -33,6 +33,16 @@ function MyApp({ Component, pageProps }: AppProps) {
           color: inherit;
           text-decoration: none;
         }
+
+        #__next {
+          height: 100vh;
+          display: flex;
+          flex-direction: column;
+        }
+
+        main {
+          flex: 1;
+        }
       `}</style>
     </>
   );
