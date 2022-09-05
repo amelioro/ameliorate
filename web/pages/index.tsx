@@ -1,4 +1,4 @@
-import { Box, TextareaAutosize, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import _ from "lodash";
 import { NextPage } from "next";
 import { useState } from "react";
@@ -9,24 +9,18 @@ import ReactFlow, {
   type Node,
 } from "react-flow-renderer";
 
+import { EditableNode } from "../modules/diagram/components/EditableNode";
+
+const nodeTypes = { editable: EditableNode };
+
 const initialNodes = [
   {
     id: "1",
     data: {
-      label: (
-        <TextareaAutosize
-          placeholder="Enter text..."
-          style={{
-            width: "100%",
-            border: 0,
-            resize: "none",
-            outline: "none",
-            textAlign: "center",
-          }}
-        />
-      ),
+      label: "text1",
     },
     position: { x: 250, y: 25 },
+    type: "editable",
   },
 ];
 
@@ -40,18 +34,11 @@ const Home: NextPage = () => {
   return (
     <>
       <Box width="100%" height="100%">
-        <ReactFlow nodes={nodes} edges={edges} fitView style={centerText}>
+        <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} fitView style={centerText}>
           <Background variant={BackgroundVariant.Dots} />
           {_(nodes).isEmpty() && emptyText}
         </ReactFlow>
       </Box>
-
-      <style jsx global>{`
-        div.react-flow__node-default {
-          padding: 5px;
-          display: flex;
-        }
-      `}</style>
     </>
   );
 };
