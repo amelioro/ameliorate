@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, TextareaAutosize, Typography } from "@mui/material";
 import _ from "lodash";
 import { NextPage } from "next";
 import { useState } from "react";
@@ -12,7 +12,20 @@ import ReactFlow, {
 const initialNodes = [
   {
     id: "1",
-    data: { label: "test" },
+    data: {
+      label: (
+        <TextareaAutosize
+          placeholder="Enter text..."
+          style={{
+            width: "100%",
+            border: 0,
+            resize: "none",
+            outline: "none",
+            textAlign: "center",
+          }}
+        />
+      ),
+    },
     position: { x: 250, y: 25 },
   },
 ];
@@ -25,12 +38,21 @@ const Home: NextPage = () => {
   const emptyText = <Typography variant="h5">Right-click to create</Typography>;
 
   return (
-    <Box width="100%" height="100%">
-      <ReactFlow nodes={nodes} edges={edges} fitView style={centerText}>
-        <Background variant={BackgroundVariant.Dots} />
-        {_(nodes).isEmpty() && emptyText}
-      </ReactFlow>
-    </Box>
+    <>
+      <Box width="100%" height="100%">
+        <ReactFlow nodes={nodes} edges={edges} fitView style={centerText}>
+          <Background variant={BackgroundVariant.Dots} />
+          {_(nodes).isEmpty() && emptyText}
+        </ReactFlow>
+      </Box>
+
+      <style jsx global>{`
+        div.react-flow__node-default {
+          padding: 5px;
+          display: flex;
+        }
+      `}</style>
+    </>
   );
 };
 
