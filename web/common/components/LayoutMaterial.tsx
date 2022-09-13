@@ -35,10 +35,10 @@ const LayoutMaterial: NextPage<LayoutProps> = ({ children }) => {
           <Box flex="1" display="flex" justifyContent="space-between" alignItems="center">
             <NavLink href="/">ameliorate</NavLink>
             <Box display="flex" gap="15px" alignItems="center">
-              <NavLink href="/new">create understanding</NavLink>
-              <NavLink href="/mine">my understandings</NavLink>
+              {/* <NavLink href="/new">create understanding</NavLink> */}
+              {/* <NavLink href="/mine">my understandings</NavLink> */}
               <NavLink href="/about">about</NavLink>
-              <NavLink href="/login">login</NavLink>
+              {/* <NavLink href="/login">login</NavLink> */}
               <NavLink href="https://github.com/keyserj/ameliorate" display="flex">
                 <Image src={githubIconSrc} height={32} width={32} alt="github link" />
               </NavLink>
