@@ -22,19 +22,42 @@ const initialNodes = [
     position: { x: 250, y: 25 },
     type: "editable",
   },
+  {
+    id: "2",
+    data: {
+      label: "text2",
+    },
+    position: { x: 250, y: 125 },
+    type: "editable",
+  },
 ];
 
 const Home: NextPage = () => {
-  const [nodes] = useState<Node[]>(initialNodes);
+  const [nodes, setNodes] = useState<Node[]>(initialNodes);
   // const [nodes] = useState<Node[]>();
   const [edges] = useState<Edge[]>();
+
+  const deselectNodes = () => {
+    setNodes((nodes) => {
+      return nodes.map((node) => {
+        return { ...node, selected: false };
+      });
+    });
+  };
 
   const emptyText = <Typography variant="h5">Right-click to create</Typography>;
 
   return (
     <>
       <Box width="100%" height="100%">
-        <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} fitView style={centerText}>
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          nodeTypes={nodeTypes}
+          fitView
+          onPaneClick={deselectNodes}
+          style={centerText}
+        >
           <Background variant={BackgroundVariant.Dots} />
           {_(nodes).isEmpty() && emptyText}
         </ReactFlow>
