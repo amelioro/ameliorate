@@ -2,5 +2,11 @@
   "editor.codeActionsOnSave": ["source.fixAll.eslint"],
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
+  "emmet.extensionsPath": ["./.vscode"],
+  "emmet.includeLanguages": {
+    // html snippets don't show up in jsx/tsx without this
+    "javascriptreact": "html",
+    "typescriptreact": "html"
+  },
   "eslint.workingDirectories": ["./web"] // for if project is opened from repo root rather than web/
 }
