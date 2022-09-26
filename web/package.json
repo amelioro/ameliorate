@@ -14,13 +14,9 @@
     "@mui/material": "^5.9.3",
     "lodash": "^4.17.21",
     "next": "^12.2.5",
-    "postcss-flexbugs-fixes": "^5.0.2",
-    "postcss-nested": "^5.0.6",
-    "postcss-preset-env": "^7.8.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-flow-renderer": "^10.3.16",
-    "styled-jsx-plugin-postcss": "^4.0.1"
+    "react-flow-renderer": "^10.3.16"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.184",
