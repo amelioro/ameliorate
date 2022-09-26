@@ -2,14 +2,10 @@ import { Box, Typography } from "@mui/material";
 import _ from "lodash";
 import { NextPage } from "next";
 import { useState } from "react";
-import ReactFlow, {
-  Background,
-  BackgroundVariant,
-  type Edge,
-  type Node,
-} from "react-flow-renderer";
+import { Background, BackgroundVariant, type Edge, type Node } from "react-flow-renderer";
 
-import { EditableNode } from "../modules/diagram/components/EditableNode";
+import { EditableNode } from "../modules/diagram/components/EditableNode/EditableNode";
+import { StyledReactFlow } from "../page_styles/index.styles";
 
 const nodeTypes = { editable: EditableNode };
 
@@ -50,22 +46,19 @@ const Home: NextPage = () => {
   return (
     <>
       <Box width="100%" height="100%">
-        <ReactFlow
+        <StyledReactFlow
           nodes={nodes}
           edges={edges}
           nodeTypes={nodeTypes}
           fitView
           onPaneClick={deselectNodes}
-          style={centerText}
         >
           <Background variant={BackgroundVariant.Dots} />
           {_(nodes).isEmpty() && emptyText}
-        </ReactFlow>
+        </StyledReactFlow>
       </Box>
     </>
   );
 };
-
-const centerText = { display: "flex", justifyContent: "center", alignItems: "center" };
 
 export default Home;

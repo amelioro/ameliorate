@@ -1,11 +1,13 @@
-import { Box, Divider, Link, Paper, Typography } from "@mui/material";
+import { Box, Divider, Link, Typography } from "@mui/material";
 import type { NextPage } from "next";
+
+import { PaperMiddle } from "../page_styles/about.styles";
 
 const Home: NextPage = () => {
   return (
     <>
       <Box display="flex" justifyContent="center">
-        <Paper sx={pageMiddle}>
+        <PaperMiddle>
           <Typography variant="h5">What is this?</Typography>
           <Typography variant="body1">
             This is a tool to help reason around hard decisions, and to enable that reasoning to be
@@ -75,16 +77,10 @@ const Home: NextPage = () => {
           >
             https://www.figma.com/file/bYNA5pVNoaoWboh6TyBTkb/Understandings---sketches
           </Link>
-        </Paper>
+        </PaperMiddle>
       </Box>
     </>
   );
-};
-
-const pageMiddle = {
-  width: "1080px",
-  margin: "10px",
-  padding: "10px",
 };
 
 export default Home;

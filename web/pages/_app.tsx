@@ -1,3 +1,4 @@
+import { Global } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import type { AppProps } from "next/app";
@@ -5,6 +6,7 @@ import Head from "next/head";
 
 import LayoutMaterial from "../common/components/LayoutMaterial";
 import { getThemeOptions } from "../common/theme";
+import { globals } from "../page_styles/_app.styles";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const theme = createTheme(getThemeOptions("light"));
@@ -28,22 +30,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         </LayoutMaterial>
       </ThemeProvider>
 
-      <style jsx global>{`
-        a {
-          color: inherit;
-          text-decoration: none;
-        }
-
-        #__next {
-          height: 100vh;
-          display: flex;
-          flex-direction: column;
-        }
-
-        main {
-          flex: 1;
-        }
-      `}</style>
+      <Global styles={globals} />
     </>
   );
 }
