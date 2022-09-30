@@ -24,6 +24,13 @@
         }
       }
     ],
+    "no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
+      }
+    ],
     "react/no-unescaped-entities": "off",
     "sort-imports": [
       "error",
