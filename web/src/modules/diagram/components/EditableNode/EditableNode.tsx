@@ -18,7 +18,7 @@ interface NodeProps {
   };
 }
 
-export function EditableNode({ id, data }: NodeProps) {
+export const EditableNode = ({ id, data }: NodeProps) => {
   return (
     <>
       <Handle type="target" position={Position.Top} />
@@ -32,4 +32,4 @@ export function EditableNode({ id, data }: NodeProps) {
       <Global styles={nodeStyles} />
     </>
   );
-}
+};

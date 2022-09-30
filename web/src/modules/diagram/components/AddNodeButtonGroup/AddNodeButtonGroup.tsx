@@ -8,7 +8,7 @@ interface Props {
   as: As;
 }
 
-export function AddNodeButtonGroup({ className, addNode, nodeId, as }: Props) {
+export const AddNodeButtonGroup = ({ className, addNode, nodeId, as }: Props) => {
   return (
     <>
       <StyledButtonGroup
@@ -21,4 +21,4 @@ export function AddNodeButtonGroup({ className, addNode, nodeId, as }: Props) {
       </StyledButtonGroup>
     </>
   );
-}
+};
