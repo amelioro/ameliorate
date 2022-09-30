@@ -15,11 +15,11 @@ const StyledAddNodeButtonGroup = styled(AddNodeButtonGroup)`
   }
 `;
 
-export const AddNodeButtonGroupTop = styled(StyledAddNodeButtonGroup)`
+export const AddNodeButtonGroupParent = styled(StyledAddNodeButtonGroup)`
   top: -30px;
 `;
 
-export const AddNodeButtonGroupBottom = styled(StyledAddNodeButtonGroup)`
+export const AddNodeButtonGroupChild = styled(StyledAddNodeButtonGroup)`
   bottom: -30px;
 `;
 

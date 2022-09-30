@@ -1,10 +1,14 @@
+import { As } from "../../../../pages";
 import { StyledButton, StyledButtonGroup } from "./AddNodeButtonGroup.styles";
 
 interface Props {
   className?: string;
+  addNode: (_toNode: string, _as: As) => void;
+  nodeId: string;
+  as: As;
 }
 
-export function AddNodeButtonGroup({ className }: Props) {
+export function AddNodeButtonGroup({ className, addNode, nodeId, as }: Props) {
   return (
     <>
       <StyledButtonGroup
@@ -12,8 +16,8 @@ export function AddNodeButtonGroup({ className }: Props) {
         aria-label="add node button group"
         className={className}
       >
-        <StyledButton>Problem</StyledButton>
-        <StyledButton>Solution</StyledButton>
+        <StyledButton onClick={() => addNode(nodeId, as)}>Problem</StyledButton>
+        <StyledButton onClick={() => addNode(nodeId, as)}>Solution</StyledButton>
       </StyledButtonGroup>
     </>
   );
