@@ -1,7 +1,7 @@
 import { Global } from "@emotion/react";
 import { Handle, Position } from "react-flow-renderer";
 
-import { As } from "../../../../pages";
+import { As } from "../Diagram/Diagram";
 import {
   AddNodeButtonGroupChild,
   AddNodeButtonGroupParent,

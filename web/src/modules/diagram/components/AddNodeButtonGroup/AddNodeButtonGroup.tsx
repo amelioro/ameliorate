@@ -1,4 +1,4 @@
-import { As } from "../../../../pages";
+import { As } from "../Diagram/Diagram";
 import { StyledButton, StyledButtonGroup } from "./AddNodeButtonGroup.styles";
 
 interface Props {
