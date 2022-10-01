@@ -11,13 +11,36 @@ const nodeTypes = { editable: EditableNode };
 
 export type As = "Parent" | "Child";
 
-let nodeId = 0;
+let nodeId = 1;
 const nextNodeId = () => (nodeId++).toString();
 let edgeId = 0;
 const nextEdgeId = () => (edgeId++).toString();
 
+const initialNodes = () => {
+  return [buildNode({ id: "0", x: 250, y: 25 })];
+};
+
+interface BuildProps {
+  id: string;
+  x: number;
+  y: number;
+  addNode?: (_toNode: string, _as: As) => void;
+}
+
+const buildNode = ({ id, x, y, addNode }: BuildProps) => {
+  return {
+    id: id,
+    data: {
+      label: `text${id}`,
+      addNode: addNode,
+    },
+    position: { x: x, y: y },
+    type: "editable",
+  };
+};
+
 const Home: NextPage = () => {
-  const [nodes, setNodes] = useNodesState([]);
+  const [nodes, setNodes] = useNodesState(initialNodes());
   const [edges, setEdges] = useEdgesState([]);
 
   const addNode = (toNodeId: string, as: As) => {
@@ -28,16 +51,12 @@ const Home: NextPage = () => {
       if (!toNode) throw "toNode not found";
 
       const yShift = as === "Parent" ? -100 : 100;
-
-      const newNode = {
+      const newNode = buildNode({
         id: newNodeId,
-        data: {
-          label: `text${newNodeId}`,
-          addNode: addNode,
-        },
-        position: { x: toNode.position.x, y: toNode.position.y + yShift },
-        type: "editable",
-      };
+        x: toNode.position.x,
+        y: toNode.position.y + yShift,
+        addNode: addNode,
+      });
 
       return nodes.concat(newNode);
     });
@@ -53,17 +72,12 @@ const Home: NextPage = () => {
   };
 
   useEffect(() => {
-    setNodes([
-      {
-        id: nextNodeId(),
-        data: {
-          label: "text1",
-          addNode: addNode,
-        },
-        position: { x: 250, y: 25 },
-        type: "editable",
-      },
-    ]);
+    setNodes((nodes) => {
+      return nodes.map((node) => {
+        node.data.addNode = addNode;
+        return node;
+      });
+    });
   }, []); // only run the first render
 
   const deselectNodes = () => {
