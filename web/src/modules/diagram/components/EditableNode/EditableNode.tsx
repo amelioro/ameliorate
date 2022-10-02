@@ -1,7 +1,6 @@
 import { Global } from "@emotion/react";
 import { Handle, Position } from "react-flow-renderer";
 
-import { As } from "../Diagram/Diagram";
 import {
   AddNodeButtonGroupChild,
   AddNodeButtonGroupParent,
@@ -14,7 +13,6 @@ interface NodeProps {
   id: string;
   data: {
     label: string;
-    addNode: (_toNode: string, _as: As) => void;
   };
 }
 
@@ -22,11 +20,11 @@ export const EditableNode = ({ id, data }: NodeProps) => {
   return (
     <>
       <Handle type="target" position={Position.Top} />
-      <AddNodeButtonGroupParent addNode={data.addNode} nodeId={id} as="Parent" />
+      <AddNodeButtonGroupParent nodeId={id} as="Parent" />
       <Div>
         <StyledTextareaAutosize placeholder="Enter text..." defaultValue={data.label} />
       </Div>
-      <AddNodeButtonGroupChild addNode={data.addNode} nodeId={id} as="Child" />
+      <AddNodeButtonGroupChild nodeId={id} as="Child" />
       <Handle type="source" position={Position.Bottom} />
 
       <Global styles={nodeStyles} />

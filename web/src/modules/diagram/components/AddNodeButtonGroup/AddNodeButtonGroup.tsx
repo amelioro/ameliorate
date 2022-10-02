@@ -1,14 +1,17 @@
-import { As } from "../Diagram/Diagram";
+import { useContext } from "react";
+
+import { As, DiagramContext } from "../Diagram/Diagram";
 import { StyledButton, StyledButtonGroup } from "./AddNodeButtonGroup.styles";
 
 interface Props {
   className?: string;
-  addNode: (_toNode: string, _as: As) => void;
   nodeId: string;
   as: As;
 }
 
-export const AddNodeButtonGroup = ({ className, addNode, nodeId, as }: Props) => {
+export const AddNodeButtonGroup = ({ className, nodeId, as }: Props) => {
+  const { addNode } = useContext(DiagramContext);
+
   return (
     <>
       <StyledButtonGroup

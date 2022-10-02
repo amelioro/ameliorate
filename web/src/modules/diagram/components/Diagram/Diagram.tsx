@@ -1,12 +1,13 @@
 import { Typography } from "@mui/material";
 import _ from "lodash";
-import { useEffect } from "react";
+import { createContext } from "react";
 import { Background, BackgroundVariant, useEdgesState, useNodesState } from "react-flow-renderer";
 
 import { EditableNode } from "../EditableNode/EditableNode";
 import { StyledReactFlow } from "./Diagram.styles";
 
 const nodeTypes = { editable: EditableNode };
+export const DiagramContext = createContext<ContextValue>({ addNode: () => {} }); // default should never be used
 
 export type As = "Parent" | "Child";
 
@@ -23,20 +24,22 @@ interface BuildProps {
   id: string;
   x: number;
   y: number;
-  addNode?: (_toNode: string, _as: As) => void;
 }
 
-const buildNode = ({ id, x, y, addNode }: BuildProps) => {
+const buildNode = ({ id, x, y }: BuildProps) => {
   return {
     id: id,
     data: {
       label: `text${id}`,
-      addNode: addNode,
     },
     position: { x: x, y: y },
     type: "editable",
   };
 };
+
+interface ContextValue {
+  addNode: (_toNode: string, _as: As) => void;
+}
 
 export const Diagram = () => {
   const [nodes, setNodes] = useNodesState(initialNodes());
@@ -54,7 +57,6 @@ export const Diagram = () => {
         id: newNodeId,
         x: toNode.position.x,
         y: toNode.position.y + yShift,
-        addNode: addNode,
       });
 
       return nodes.concat(newNode);
@@ -70,15 +72,6 @@ export const Diagram = () => {
     });
   };
 
-  useEffect(() => {
-    setNodes((nodes) => {
-      return nodes.map((node) => {
-        node.data.addNode = addNode;
-        return node;
-      });
-    });
-  }, []); // only run the first render
-
   const deselectNodes = () => {
     setNodes((nodes) => {
       return nodes.map((node) => {
@@ -90,15 +83,18 @@ export const Diagram = () => {
   const emptyText = <Typography variant="h5">Right-click to create</Typography>;
 
   return (
-    <StyledReactFlow
-      nodes={nodes}
-      edges={edges}
-      nodeTypes={nodeTypes}
-      fitView
-      onPaneClick={deselectNodes}
-    >
-      <Background variant={BackgroundVariant.Dots} />
-      {_(nodes).isEmpty() && emptyText}
-    </StyledReactFlow>
+    /* use context because Flow component creates nodes for us, so it's awkward to pass info to nodes */
+    <DiagramContext.Provider value={{ addNode }}>
+      <StyledReactFlow
+        nodes={nodes}
+        edges={edges}
+        nodeTypes={nodeTypes}
+        fitView
+        onPaneClick={deselectNodes}
+      >
+        <Background variant={BackgroundVariant.Dots} />
+        {_(nodes).isEmpty() && emptyText}
+      </StyledReactFlow>
+    </DiagramContext.Provider>
   );
 };
