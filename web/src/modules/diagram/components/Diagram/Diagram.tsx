@@ -7,7 +7,6 @@ import { EditableNode } from "../EditableNode/EditableNode";
 import { StyledReactFlow } from "./Diagram.styles";
 
 const nodeTypes = { editable: EditableNode };
-export const DiagramContext = createContext<ContextValue>({ addNode: () => null }); // default should never be used
 
 export type As = "Parent" | "Child";
 
@@ -40,6 +39,8 @@ const buildNode = ({ id, x, y }: BuildProps) => {
 interface ContextValue {
   addNode: (_toNode: string, _as: As) => void;
 }
+
+export const DiagramContext = createContext<ContextValue>({ addNode: () => null }); // default should never be used
 
 export const Diagram = () => {
   const [nodes, setNodes] = useNodesState(initialNodes());
