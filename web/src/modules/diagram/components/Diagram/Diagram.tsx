@@ -7,7 +7,7 @@ import { EditableNode } from "../EditableNode/EditableNode";
 import { StyledReactFlow } from "./Diagram.styles";
 
 const nodeTypes = { editable: EditableNode };
-export const DiagramContext = createContext<ContextValue>({ addNode: () => {} }); // default should never be used
+export const DiagramContext = createContext<ContextValue>({ addNode: () => null }); // default should never be used
 
 export type As = "Parent" | "Child";
 
@@ -50,7 +50,7 @@ export const Diagram = () => {
 
     setNodes((nodes) => {
       const toNode = nodes.find((node) => node.id === toNodeId);
-      if (!toNode) throw "toNode not found";
+      if (!toNode) throw new Error("toNode not found");
 
       const yShift = as === "Parent" ? -100 : 100;
       const newNode = buildNode({
