@@ -15,10 +15,6 @@ const nextNodeId = () => (nodeId++).toString();
 let edgeId = 0;
 const nextEdgeId = () => (edgeId++).toString();
 
-const initialNodes = () => {
-  return [buildNode({ id: "0", x: 250, y: 25 })];
-};
-
 interface BuildProps {
   id: string;
   x: number;
@@ -36,6 +32,8 @@ const buildNode = ({ id, x, y }: BuildProps) => {
   };
 };
 
+const initialNodes = [buildNode({ id: "0", x: 250, y: 25 })];
+
 interface ContextValue {
   addNode: (_toNode: string, _as: As) => void;
 }
@@ -43,7 +41,7 @@ interface ContextValue {
 export const DiagramContext = createContext<ContextValue>({ addNode: () => null }); // default should never be used
 
 export const Diagram = () => {
-  const [nodes, setNodes] = useNodesState(initialNodes());
+  const [nodes, setNodes] = useNodesState(initialNodes);
   const [edges, setEdges] = useEdgesState([]);
 
   const addNode = (toNodeId: string, as: As) => {
