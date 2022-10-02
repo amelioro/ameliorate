@@ -1,6 +1,5 @@
 import { Typography } from "@mui/material";
 import _ from "lodash";
-import { NextPage } from "next";
 import { useEffect } from "react";
 import { Background, BackgroundVariant, useEdgesState, useNodesState } from "react-flow-renderer";
 
@@ -39,7 +38,7 @@ const buildNode = ({ id, x, y, addNode }: BuildProps) => {
   };
 };
 
-const Home: NextPage = () => {
+export const Diagram = () => {
   const [nodes, setNodes] = useNodesState(initialNodes());
   const [edges, setEdges] = useEdgesState([]);
 
@@ -103,5 +102,3 @@ const Home: NextPage = () => {
     </StyledReactFlow>
   );
 };
-
-export default Home;
