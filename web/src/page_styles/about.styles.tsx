@@ -5,4 +5,5 @@ export const PaperMiddle = styled(Paper)`
   width: 1080px;
   margin: 10px;
   padding: 10px;
+  text-align: center;
 `;
