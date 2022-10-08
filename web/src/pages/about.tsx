@@ -19,8 +19,8 @@ const Home: NextPage = () => {
           </Typography>
 
           <Typography variant="body1">
-            I want disagreements to come down to differences in human/moral values, whereas right
-            now they're often rooted in misunderstanding.
+            Disagreements should come down to differences in human/moral values, whereas right now
+            they're often rooted in misunderstanding.
           </Typography>
 
           <Typography variant="body1">
