@@ -1,5 +1,6 @@
 import { type Edge, type Node } from "react-flow-renderer";
 import create from "zustand";
+import { devtools } from "zustand/middleware";
 
 export type As = "Parent" | "Child";
 
@@ -32,38 +33,49 @@ interface DiagramState {
   addNode: (_toNodeId: string, _as: As) => void;
   deselectNodes: () => void;
 }
-export const useDiagramStore = create<DiagramState>()((set) => ({
-  nodes: initialNodes,
-  edges: [],
+export const useDiagramStore = create<DiagramState>()(
+  // seems like we should be able to auto-wrap all stores with devtools
+  devtools((set) => ({
+    nodes: initialNodes,
+    edges: [],
 
-  addNode: (toNodeId, as) => {
-      set((state) => {
-      const toNode = state.nodes.find((node) => node.id === toNodeId);
-      if (!toNode) throw new Error("toNode not found");
+    addNode: (toNodeId, as) => {
+      set(
+        (state) => {
+          const toNode = state.nodes.find((node) => node.id === toNodeId);
+          if (!toNode) throw new Error("toNode not found");
 
-      const newNodeId = nextNodeId();
-      const yShift = as === "Parent" ? -100 : 100;
-      const newNode = buildNode({
-        id: newNodeId,
-        x: toNode.position.x,
-        y: toNode.position.y + yShift,
-      });
+          const newNodeId = nextNodeId();
+          const yShift = as === "Parent" ? -100 : 100;
+          const newNode = buildNode({
+            id: newNodeId,
+            x: toNode.position.x,
+            y: toNode.position.y + yShift,
+          });
 
-      const newEdgeId = nextEdgeId();
-      const sourceNode = as === "Parent" ? newNodeId : toNodeId;
-      const targetNode = as === "Parent" ? toNodeId : newNodeId;
-      const newEdge = { id: newEdgeId, source: sourceNode, target: targetNode };
+          const newEdgeId = nextEdgeId();
+          const sourceNode = as === "Parent" ? newNodeId : toNodeId;
+          const targetNode = as === "Parent" ? toNodeId : newNodeId;
+          const newEdge = { id: newEdgeId, source: sourceNode, target: targetNode };
 
-      return { nodes: state.nodes.concat(newNode), edges: state.edges.concat(newEdge) };
-    });
-  },
+          return { nodes: state.nodes.concat(newNode), edges: state.edges.concat(newEdge) };
+        },
+        false,
+        "addNode" // little gross, seems like this should be inferrable from method name
+      );
+    },
 
-  deselectNodes: () => {
-      set((state) => {
-      const newNodes = state.nodes.map((node) => {
-        return { ...node, selected: false };
-      });
-      return { nodes: newNodes };
-    });
-  },
-}));
+    deselectNodes: () => {
+      set(
+        (state) => {
+          const newNodes = state.nodes.map((node) => {
+            return { ...node, selected: false };
+          });
+          return { nodes: newNodes };
+        },
+        false,
+        "deselectNodes"
+      );
+    },
+  }))
+);
