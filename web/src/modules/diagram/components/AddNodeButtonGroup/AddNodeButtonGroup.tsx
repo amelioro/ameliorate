@@ -1,6 +1,4 @@
-import { useContext } from "react";
-
-import { As, DiagramContext } from "../Diagram/Diagram";
+import { As, useDiagramStore } from "../Diagram.store";
 import { StyledButton, StyledButtonGroup } from "./AddNodeButtonGroup.styles";
 
 interface Props {
@@ -10,7 +8,7 @@ interface Props {
 }
 
 export const AddNodeButtonGroup = ({ className, nodeId, as }: Props) => {
-  const { addNode } = useContext(DiagramContext);
+  const addNode = useDiagramStore((state) => state.addNode);
 
   return (
     <>
