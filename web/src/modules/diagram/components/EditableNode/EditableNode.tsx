@@ -13,6 +13,8 @@ interface NodeProps {
   id: string;
   data: {
     label: string;
+    width: number;
+    height: number;
   };
 }
 
@@ -27,7 +29,7 @@ export const EditableNode = ({ id, data }: NodeProps) => {
       <AddNodeButtonGroupChild nodeId={id} as="Child" />
       <Handle type="source" position={Position.Bottom} />
 
-      <Global styles={nodeStyles} />
+      <Global styles={nodeStyles(data.width, data.height)} />
     </>
   );
 };

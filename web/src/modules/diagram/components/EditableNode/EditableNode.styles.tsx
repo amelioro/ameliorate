@@ -37,12 +37,13 @@ export const StyledTextareaAutosize = styled(TextareaAutosize)`
   text-align: center;
 `;
 
-export const nodeStyles = css`
+export const nodeStyles = (width: number, height: number) => css`
   /* copied from https://github.com/wbkd/react-flow/blob/147656b22f577bb4141664d000e62ada9b490473/src/theme-default.css#L42-L77 */
   .react-flow__node-editable {
     padding: 0px;
     border-radius: 3px;
-    width: 150px;
+    width: ${width}px;
+    height: ${height}px;
     font-size: 12px;
     color: #222;
     text-align: center;
