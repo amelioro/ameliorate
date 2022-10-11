@@ -1,6 +1,8 @@
-import { type Edge, type Node } from "react-flow-renderer";
+import { type Edge } from "react-flow-renderer";
 import create from "zustand";
 import { devtools } from "zustand/middleware";
+
+import { layout } from "../utils/layout";
 
 export type As = "Parent" | "Child";
 
@@ -21,6 +23,7 @@ const buildNode = ({ id, x, y }: BuildProps) => {
     type: "editable",
   };
 };
+export type Node = ReturnType<typeof buildNode>;
 
 const initialNodes = [buildNode({ id: "0", x: 250, y: 25 })];
 
@@ -60,7 +63,10 @@ export const useDiagramStore = create<DiagramState>()(
           const targetNode = as === "Parent" ? toNodeId : newNodeId;
           const newEdge = { id: newEdgeId, source: sourceNode, target: targetNode };
 
-          return { nodes: state.nodes.concat(newNode), edges: state.edges.concat(newEdge) };
+          const newNodes = state.nodes.concat(newNode);
+          const newEdges = state.edges.concat(newEdge);
+          const { layoutedNodes, layoutedEdges } = layout(newNodes, newEdges);
+          return { nodes: layoutedNodes, edges: layoutedEdges };
         },
         false,
         "addNode" // little gross, seems like this should be inferrable from method name
