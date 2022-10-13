@@ -74,7 +74,7 @@ const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(function Link(props,
   });
 
   const isExternal =
-    typeof href === "string" && (href.indexOf("http") === 0 || href.indexOf("mailto:") === 0);
+    typeof href === "string" && (href.startsWith("http") || href.startsWith("mailto:"));
 
   if (isExternal) {
     if (noLinkStyle) {
