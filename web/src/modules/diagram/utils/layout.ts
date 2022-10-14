@@ -20,18 +20,19 @@ export const layout = (nodes: Node[], edges: Edge[]) => {
 
   dagre.layout(dagreGraph);
 
-  nodes.forEach((node) => {
+  const layoutedNodes = nodes.map((node) => {
     const nodeWithPosition = dagreGraph.node(node.id);
 
     // We are shifting the dagre node position (anchor=center center) to the top left
     // so it matches the React Flow node anchor point (top left).
-    node.position = {
-      x: nodeWithPosition.x - node.data.width / 2,
-      y: nodeWithPosition.y - node.data.height / 2,
+    return {
+      ...node,
+      position: {
+        x: nodeWithPosition.x - node.data.width / 2,
+        y: nodeWithPosition.y - node.data.height / 2,
+      },
     };
-
-    return node;
   });
 
-  return { layoutedNodes: nodes, layoutedEdges: edges };
+  return { layoutedNodes, layoutedEdges: edges };
 };
