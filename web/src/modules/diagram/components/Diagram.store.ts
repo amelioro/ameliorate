@@ -8,10 +8,8 @@ export type As = "Parent" | "Child";
 
 interface BuildProps {
   id: string;
-  x: number;
-  y: number;
 }
-const buildNode = ({ id, x, y }: BuildProps) => {
+const buildNode = ({ id }: BuildProps) => {
   return {
     id: id,
     data: {
@@ -19,13 +17,13 @@ const buildNode = ({ id, x, y }: BuildProps) => {
       width: 150,
       height: 41,
     },
-    position: { x: x, y: y },
+    position: { x: 0, y: 0 }, // assume layout will adjust this
     type: "editable",
   };
 };
 export type Node = ReturnType<typeof buildNode>;
 
-const initialNodes = [buildNode({ id: "0", x: 250, y: 25 })];
+const { layoutedNodes: initialNodes } = layout([buildNode({ id: "0" })], []);
 
 /* eslint-disable functional/no-let */
 let nodeId = 1;
@@ -53,11 +51,8 @@ export const useDiagramStore = create<DiagramState>()(
           if (!toNode) throw new Error("toNode not found");
 
           const newNodeId = nextNodeId();
-          const yShift = as === "Parent" ? -100 : 100;
           const newNode = buildNode({
             id: newNodeId,
-            x: toNode.position.x,
-            y: toNode.position.y + yShift,
           });
 
           const newEdgeId = nextEdgeId();
