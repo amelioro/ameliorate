@@ -27,10 +27,12 @@ export type Node = ReturnType<typeof buildNode>;
 
 const initialNodes = [buildNode({ id: "0", x: 250, y: 25 })];
 
+/* eslint-disable functional/no-let */
 let nodeId = 1;
 const nextNodeId = () => (nodeId++).toString();
 let edgeId = 0;
 const nextEdgeId = () => (edgeId++).toString();
+/* eslint-enable functional/no-let */
 
 interface DiagramState {
   nodes: Node[];

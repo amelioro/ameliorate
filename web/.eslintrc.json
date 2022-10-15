@@ -1,4 +1,5 @@
 {
+  // lean strict on linting, can reduce strictness if/when things get annoying
   "extends": [
     "next/core-web-vitals",
     "eslint:recommended",
@@ -9,7 +10,7 @@
     "plugin:import/recommended",
     "prettier"
   ],
-  "plugins": ["@typescript-eslint", "import"],
+  "plugins": ["@typescript-eslint", "functional", "import"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "tsconfigRootDir": ".",
@@ -17,6 +18,18 @@
   },
   "rules": {
     "@typescript-eslint/member-ordering": "error",
+    "@typescript-eslint/switch-exhaustiveness-check": "error",
+    "functional/functional-parameters": [
+      "error",
+      {
+        "enforceParameterCount": false
+      }
+    ],
+    "functional/immutable-data": "error",
+    "functional/no-class": "error",
+    "functional/no-let": "error",
+    "functional/no-loop-statement": "error",
+    "functional/no-this-expression": "error",
     "import/order": [
       "error",
       {
@@ -32,6 +45,12 @@
         "alphabetize": {
           "order": "asc"
         }
+      }
+    ],
+    "no-param-reassign": [
+      "error",
+      {
+        "props": true
       }
     ],
     "no-unused-vars": [
