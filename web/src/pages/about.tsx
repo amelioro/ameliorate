@@ -10,12 +10,16 @@ const Home: NextPage = () => {
         <PaperMiddle>
           <Typography variant="h5">What is this?</Typography>
           <Typography variant="body1">
-            This is a tool to help reason around hard decisions, and to enable that reasoning to be
-            shared and improved. The core idea is that you can map pieces of solutions to pieces of
-            problems, compare the tradeoffs of each solution, and everything that you're claiming
-            implicitly (e.g. this piece of the problem is the most important thing to solve, this
-            piece of the solution solves that problem) can clearly be justified and critiqued, in an
-            off-to-the-side but easy-to-access way.
+            This is a problem-solving tool that focuses on reaching shared understandings.
+          </Typography>
+
+          <Typography variant="body1">
+            Its purpose is to help reason around hard decisions, and to enable that reasoning to be
+            shared, mutually understood, and improved. The core idea is that you can map pieces of
+            solutions to pieces of problems, compare the tradeoffs of each solution, and everything
+            that you're claiming implicitly (e.g. this piece of the problem is the most important
+            thing to solve, this piece of the solution solves that problem) can clearly be justified
+            and critiqued, in an off-to-the-side but easy-to-access way.
           </Typography>
 
           <Typography variant="body1">
