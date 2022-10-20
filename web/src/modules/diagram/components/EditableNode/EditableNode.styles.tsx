@@ -23,23 +23,51 @@ export const AddNodeButtonGroupChild = styled(StyledAddNodeButtonGroup)`
   bottom: -30px;
 `;
 
-// allow handling mouse events for whole node without mouse icon changing to input for textarea
-export const Div = styled.div`
+export const YEdgeDiv = styled.div`
   display: flex;
-  padding: 10px;
+  flex-basis: 100%;
+  justify-content: space-between;
+  height: 12px;
+`;
+
+export const NodeTypeDiv = styled.div`
+  display: flex;
+  padding: 2px;
+`;
+
+export const NodeTypeSpan = styled.span`
+  font-size: 8px;
+  line-height: 8px;
+  padding-left: 2px;
+`;
+
+export const ScoreSpan = styled.span`
+  font-size: 8px;
+  line-height: 8px;
+  padding: 2px;
+`;
+
+export const XEdgeDiv = styled.div`
+  width: 12px;
+`;
+
+// allow handling mouse events for whole node without mouse icon changing to input for textarea
+export const MiddleDiv = styled.div`
+  display: flex;
 `;
 
 export const StyledTextareaAutosize = styled(TextareaAutosize)`
-  width: 100%;
   border: 0;
   resize: none;
   outline: none;
   text-align: center;
+  align-self: center;
+  background-color: ${({ color }) => color};
 `;
 
-export const nodeStyles = (width: number) => css`
-  /* copied from https://github.com/wbkd/react-flow/blob/147656b22f577bb4141664d000e62ada9b490473/src/theme-default.css#L42-L77 */
-  .react-flow__node-editable {
+export const nodeStyles = (width: number, color: string) => css`
+  /* mostly copied from https://github.com/wbkd/react-flow/blob/147656b22f577bb4141664d000e62ada9b490473/src/theme-default.css#L42-L77 */
+  .react-flow__node {
     padding: 0px;
     border-radius: 3px;
     width: ${width}px;
@@ -48,9 +76,14 @@ export const nodeStyles = (width: number) => css`
     text-align: center;
     border-width: 1px;
     border-style: solid;
-    background: #fff;
+    background: ${color};
     border-color: #1a192b;
     display: flex;
+    flex-wrap: wrap;
+
+    > * {
+      width: 100%;
+    }
 
     &.selectable {
       &:hover {

@@ -17,7 +17,7 @@ const buildNode = ({ id }: BuildProps) => {
       width: 150,
     },
     position: { x: 0, y: 0 }, // assume layout will adjust this
-    type: "editable",
+    type: "problem",
   };
 };
 export type Node = ReturnType<typeof buildNode>;
