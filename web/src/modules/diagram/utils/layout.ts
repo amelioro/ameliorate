@@ -8,10 +8,12 @@ dagreGraph.setDefaultEdgeLabel(() => ({}));
 
 // mostly from https://reactflow.dev/docs/examples/layout/dagre/
 export const layout = (nodes: Node[], edges: Edge[]) => {
+  const height = 45; // grab size from node, but how? size adjusts based on input rows
+
   dagreGraph.setGraph({ rankdir: "TB" });
 
   nodes.forEach((node) => {
-    dagreGraph.setNode(node.id, { width: node.data.width, height: node.data.height });
+    dagreGraph.setNode(node.id, { width: node.data.width, height: height });
   });
 
   edges.forEach((edge) => {
@@ -29,7 +31,7 @@ export const layout = (nodes: Node[], edges: Edge[]) => {
       ...node,
       position: {
         x: nodeWithPosition.x - node.data.width / 2,
-        y: nodeWithPosition.y - node.data.height / 2,
+        y: nodeWithPosition.y - height / 2,
       },
     };
   });

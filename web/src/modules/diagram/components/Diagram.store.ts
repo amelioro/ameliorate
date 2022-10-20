@@ -15,7 +15,6 @@ const buildNode = ({ id }: BuildProps) => {
     data: {
       label: `text${id}`,
       width: 150,
-      height: 41,
     },
     position: { x: 0, y: 0 }, // assume layout will adjust this
     type: "editable",
