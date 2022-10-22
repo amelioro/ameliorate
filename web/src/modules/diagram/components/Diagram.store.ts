@@ -3,13 +3,15 @@ import create from "zustand";
 import { devtools } from "zustand/middleware";
 
 import { layout } from "../utils/layout";
+import { NodeType } from "./nodeDecorations";
 
 export type As = "Parent" | "Child";
 
 interface BuildProps {
   id: string;
+  type: NodeType;
 }
-const buildNode = ({ id }: BuildProps) => {
+const buildNode = ({ id, type }: BuildProps) => {
   return {
     id: id,
     data: {
@@ -17,12 +19,12 @@ const buildNode = ({ id }: BuildProps) => {
       width: 150,
     },
     position: { x: 0, y: 0 }, // assume layout will adjust this
-    type: "problem",
+    type: type,
   };
 };
 export type Node = ReturnType<typeof buildNode>;
 
-const { layoutedNodes: initialNodes } = layout([buildNode({ id: "0" })], []);
+const { layoutedNodes: initialNodes } = layout([buildNode({ id: "0", type: "Problem" })], []);
 
 /* eslint-disable functional/no-let */
 let nodeId = 1;
@@ -34,7 +36,7 @@ const nextEdgeId = () => (edgeId++).toString();
 interface DiagramState {
   nodes: Node[];
   edges: Edge[];
-  addNode: (_toNodeId: string, _as: As) => void;
+  addNode: (_toNodeId: string, _as: As, _type: NodeType) => void;
   deselectNodes: () => void;
 }
 export const useDiagramStore = create<DiagramState>()(
@@ -43,7 +45,7 @@ export const useDiagramStore = create<DiagramState>()(
     nodes: initialNodes,
     edges: [],
 
-    addNode: (toNodeId, as) => {
+    addNode: (toNodeId, as, type) => {
       set(
         (state) => {
           const toNode = state.nodes.find((node) => node.id === toNodeId);
@@ -52,6 +54,7 @@ export const useDiagramStore = create<DiagramState>()(
           const newNodeId = nextNodeId();
           const newNode = buildNode({
             id: newNodeId,
+            type: type,
           });
 
           const newEdgeId = nextEdgeId();

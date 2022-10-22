@@ -1,5 +1,6 @@
-import { As, useDiagramStore } from "../Diagram.store";
-import { StyledButton, StyledButtonGroup } from "./AddNodeButtonGroup.styles";
+import { AddNodeButton } from "../AddNodeButton/AddNodeButton";
+import { As } from "../Diagram.store";
+import { StyledButtonGroup } from "./AddNodeButtonGroup.styles";
 
 interface Props {
   className?: string;
@@ -8,8 +9,6 @@ interface Props {
 }
 
 export const AddNodeButtonGroup = ({ className, nodeId, as }: Props) => {
-  const addNode = useDiagramStore((state) => state.addNode);
-
   return (
     <>
       <StyledButtonGroup
@@ -17,8 +16,8 @@ export const AddNodeButtonGroup = ({ className, nodeId, as }: Props) => {
         aria-label="add node button group"
         className={className}
       >
-        <StyledButton onClick={() => addNode(nodeId, as)}>Problem</StyledButton>
-        <StyledButton onClick={() => addNode(nodeId, as)}>Solution</StyledButton>
+        <AddNodeButton nodeId={nodeId} as={as} nodeType="Problem" />
+        <AddNodeButton nodeId={nodeId} as={as} nodeType="Solution" />
       </StyledButtonGroup>
     </>
   );

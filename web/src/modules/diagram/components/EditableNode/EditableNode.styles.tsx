@@ -56,7 +56,11 @@ export const MiddleDiv = styled.div`
   display: flex;
 `;
 
-export const StyledTextareaAutosize = styled(TextareaAutosize)`
+interface StyledTextareaProps {
+  color: string;
+}
+
+export const StyledTextareaAutosize = styled(TextareaAutosize)<StyledTextareaProps>`
   border: 0;
   resize: none;
   outline: none;
@@ -65,9 +69,9 @@ export const StyledTextareaAutosize = styled(TextareaAutosize)`
   background-color: ${({ color }) => color};
 `;
 
-export const nodeStyles = (width: number, color: string) => css`
+export const nodeStyles = (width: number, color: string, type: string) => css`
   /* mostly copied from https://github.com/wbkd/react-flow/blob/147656b22f577bb4141664d000e62ada9b490473/src/theme-default.css#L42-L77 */
-  .react-flow__node {
+  .react-flow__node-${type} {
     padding: 0px;
     border-radius: 3px;
     width: ${width}px;

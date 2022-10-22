@@ -1,8 +1,10 @@
 import { Global } from "@emotion/react";
+import { useTheme } from "@mui/material";
 import Image from "next/image";
 import { Handle, Position } from "react-flow-renderer";
 
 import { NodeProps } from "../Diagram/Diagram";
+import { NodeDecoration } from "../nodeDecorations";
 import {
   AddNodeButtonGroupChild,
   AddNodeButtonGroupParent,
@@ -16,13 +18,17 @@ import {
   nodeStyles,
 } from "./EditableNode.styles";
 
-interface NodeDecoration {
-  color: string;
-  icon: string;
-  name: string;
-}
+export const EditableNode = ({
+  id,
+  data,
+  themeColor,
+  iconSrc,
+  type,
+}: NodeProps & NodeDecoration) => {
+  const theme = useTheme();
+  const color = theme.palette[themeColor].main;
 
-export const EditableNode = ({ id, data, color, icon, name }: NodeProps & NodeDecoration) => {
+  // add node button group needs to be type-specific
   return (
     <>
       <Handle type="target" position={Position.Top} />
@@ -30,8 +36,8 @@ export const EditableNode = ({ id, data, color, icon, name }: NodeProps & NodeDe
 
       <YEdgeDiv>
         <NodeTypeDiv>
-          <Image src={icon} width="8" height="8" alt="problem icon" />
-          <NodeTypeSpan>{name}</NodeTypeSpan>
+          <Image src={iconSrc} width="8" height="8" alt={`${type} icon`} />
+          <NodeTypeSpan>{type}</NodeTypeSpan>
         </NodeTypeDiv>
         <ScoreSpan>7</ScoreSpan>
       </YEdgeDiv>
@@ -50,7 +56,7 @@ export const EditableNode = ({ id, data, color, icon, name }: NodeProps & NodeDe
       <AddNodeButtonGroupChild nodeId={id} as="Child" />
       <Handle type="source" position={Position.Bottom} />
 
-      <Global styles={nodeStyles(data.width, color)} />
+      <Global styles={nodeStyles(data.width, color, type)} />
     </>
   );
 };

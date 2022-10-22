@@ -1,5 +1,6 @@
 import { Typography } from "@mui/material";
 import _ from "lodash";
+import { ComponentType } from "react";
 import {
   Background,
   BackgroundVariant,
@@ -7,10 +8,29 @@ import {
 } from "react-flow-renderer";
 
 import { Node, useDiagramStore } from "../Diagram.store";
-import { ProblemNode } from "../EditableNode/ProblemNode";
+import { EditableNode } from "../EditableNode/EditableNode";
+import { type NodeDecoration, type NodeType, nodeDecorations } from "../nodeDecorations";
 import { StyledReactFlow } from "./Diagram.styles";
 
-const nodeTypes = { problem: ProblemNode };
+const buildNodeComponent = (type: NodeType, decoration: NodeDecoration) => {
+  // eslint-disable-next-line react/display-name -- react flow dynamically creates these components without name anyway
+  return (props: NodeProps) => {
+    return (
+      <EditableNode
+        {...props}
+        themeColor={decoration.themeColor}
+        iconSrc={decoration.iconSrc}
+        type={type}
+      />
+    );
+  };
+};
+
+// this can be generated via `nodeDecorations` but hard to do without the complexity making it hard to follow, so leaving this hardcoded
+const nodeTypes: Record<NodeType, ComponentType<NodeProps>> = {
+  Problem: buildNodeComponent("Problem", nodeDecorations.Problem),
+  Solution: buildNodeComponent("Solution", nodeDecorations.Solution),
+};
 
 // react-flow passes exactly DefaultNodeProps but data can be customized
 // not sure why, but DefaultNodeProps has xPos and yPos instead of Node's position.x and position.y
