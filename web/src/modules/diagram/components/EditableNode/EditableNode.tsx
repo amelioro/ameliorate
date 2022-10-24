@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Handle, Position } from "react-flow-renderer";
 
 import { NodeProps } from "../Diagram/Diagram";
+import { Score } from "../Score/Score";
 import { NodeDecoration } from "../nodeDecorations";
 import {
   AddNodeButtonGroupChild,
@@ -11,7 +12,6 @@ import {
   MiddleDiv,
   NodeTypeDiv,
   NodeTypeSpan,
-  ScoreSpan,
   StyledTextareaAutosize,
   XEdgeDiv,
   YEdgeDiv,
@@ -39,7 +39,7 @@ export const EditableNode = ({
           <Image src={iconSrc} width="8" height="8" alt={`${type} icon`} />
           <NodeTypeSpan>{type}</NodeTypeSpan>
         </NodeTypeDiv>
-        <ScoreSpan>7</ScoreSpan>
+        <Score />
       </YEdgeDiv>
       <MiddleDiv>
         <XEdgeDiv />

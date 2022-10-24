@@ -41,12 +41,6 @@ export const NodeTypeSpan = styled.span`
   padding-left: 2px;
 `;
 
-export const ScoreSpan = styled.span`
-  font-size: 8px;
-  line-height: 8px;
-  padding: 2px;
-`;
-
 export const XEdgeDiv = styled.div`
   width: 12px;
 `;
