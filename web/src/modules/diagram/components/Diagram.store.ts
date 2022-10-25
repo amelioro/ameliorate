@@ -1,4 +1,4 @@
-import { type Edge } from "react-flow-renderer";
+import { type Edge } from "reactflow";
 import create from "zustand";
 import { devtools } from "zustand/middleware";
 

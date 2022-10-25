@@ -1,5 +1,5 @@
 import dagre from "dagre";
-import { type Edge } from "react-flow-renderer";
+import { type Edge } from "reactflow";
 
 import { Node } from "../components/Diagram.store";
 

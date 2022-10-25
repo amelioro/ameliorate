@@ -1,7 +1,7 @@
 import { Global } from "@emotion/react";
 import { useTheme } from "@mui/material";
 import Image from "next/image";
-import { Handle, Position } from "react-flow-renderer";
+import { Handle, Position } from "reactflow";
 
 import { NodeProps } from "../Diagram/Diagram";
 import { Score } from "../Score/Score";

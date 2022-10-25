@@ -1,11 +1,7 @@
 import { Typography } from "@mui/material";
 import _ from "lodash";
 import { ComponentType } from "react";
-import {
-  Background,
-  BackgroundVariant,
-  type NodeProps as DefaultNodeProps,
-} from "react-flow-renderer";
+import { Background, BackgroundVariant, type NodeProps as DefaultNodeProps } from "reactflow";
 
 import { Node, useDiagramStore } from "../Diagram.store";
 import { EditableNode } from "../EditableNode/EditableNode";
