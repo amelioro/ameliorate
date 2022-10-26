@@ -25,9 +25,8 @@ export const AddNodeButtonGroupChild = styled(StyledAddNodeButtonGroup)`
 
 export const YEdgeDiv = styled.div`
   display: flex;
-  flex-basis: 100%;
   justify-content: space-between;
-  height: 12px;
+  min-height: 12px;
 `;
 
 export const NodeTypeDiv = styled.div`
@@ -77,11 +76,7 @@ export const nodeStyles = (width: number, color: string, type: string) => css`
     background: ${color};
     border-color: #1a192b;
     display: flex;
-    flex-wrap: wrap;
-
-    > * {
-      width: 100%;
-    }
+    flex-direction: column;
 
     &.selectable {
       &:hover {
