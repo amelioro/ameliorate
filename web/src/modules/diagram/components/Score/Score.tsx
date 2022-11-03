@@ -1,36 +1,76 @@
+import _ from "lodash";
 import { useState } from "react";
 
-import { ScoreSpan, StyledSlider } from "./Score.style";
+import { FloatingButton, FloatingDiv, MainButton, StyledDiv } from "./Score.style";
 
+// issue (inform maintainer?):
+// 1. PieContainer is rendered server-side, generating HTML which includes slice hash ids generated via current time
+// https://github.com/psychobolt/react-pie-menu/blob/091431b21426527fbea007d5a1e92838334b31d2/src/PieMenu.container.js#L40-L46
+// 2. PieContainer is rendered client-side, trusting the SSR'd HTML, hydrating the JS, but generating new slice hash ids
+// 3. JS hash ids mismatch with HTML, slice reactivity does not work
+
+const getButtonPositions = (expansionRadius: number, numberOfButtons: number) => {
+  const degreesPerScore = 360 / numberOfButtons;
+
+  const positions = _.range(numberOfButtons).map((index) => {
+    const degrees = 180 - degreesPerScore * index; // use 180 to flip because '-' was showing at bottom
+
+    // thanks stackoverflow https://stackoverflow.com/a/43642346
+    const x = expansionRadius * Math.sin((Math.PI * 2 * degrees) / 360);
+    const y = expansionRadius * Math.cos((Math.PI * 2 * degrees) / 360);
+
+    return { x, y };
+  });
+
+  return positions;
+};
+
+// similar to MUI speed dial (https://mui.com/material-ui/react-speed-dial/),
+// but the main reasons for creating a custom component are:
+// * allow dial click to be different than hover. will want to eventually make this work reasonably on mobile, but for desktop this seems very useful
+// * allow actions to be positioned around the dial for even closer navigability to each one
+//
+// TODO:
+// * use radial slider with notches instead of buttons:
+// 11 buttons are too many to fit close to the main button without collisions,
+// and button text is hard to fit in a small spot (i.e. corner of an EditableNode)
+// ... although... would "-" work well in a slider? want to allow the ability to deselect a score
 export const Score = () => {
-  const initialScore = 7;
+  const initialScore = "-";
   const [score, setScore] = useState(initialScore);
 
-  const handleSliderChange = (_event: Event, newValue: number | number[]) => {
-    if (newValue instanceof Array) {
-      throw new Error("slider should not have range value");
-    }
+  const buttonLength = 10; //px
+  const possibleScores = ["-", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+  const expansionRadius = 2 * buttonLength; // no collisions for fitting 11 elements
 
-    setScore(newValue);
-  };
+  // little awkward to use parallel arrays, but wanted to extract position logic
+  const buttonPositions = getButtonPositions(expansionRadius, possibleScores.length);
+
+  const floatingButtons = possibleScores.map((possibleScore, index) => {
+    return (
+      <FloatingButton
+        buttonLength={buttonLength}
+        position={buttonPositions[index]}
+        key={possibleScore}
+        variant="contained"
+        onClick={() => setScore(possibleScore)}
+      >
+        {possibleScore}
+      </FloatingButton>
+    );
+  });
 
   return (
     <>
-      <ScoreSpan>
-        {/* nodrag is a hack to stop parent react flow component from preventing drag events i.e. sliding, see https://github.com/wbkd/react-flow/issues/2077 */}
-        <StyledSlider
-          aria-label="Score"
-          onChange={handleSliderChange}
-          className="nodrag"
-          marks
-          size="small"
-          step={1}
-          min={1}
-          max={10}
-          defaultValue={initialScore}
-        />
-        {score}
-      </ScoreSpan>
+      <StyledDiv>
+        {/* keep floating div as sibling to floating buttons so that each can be positioned relative to the MainButton */}
+        {floatingButtons}
+        <FloatingDiv radius={expansionRadius} buttonLength={buttonLength}></FloatingDiv>
+
+        <MainButton buttonLength={buttonLength} variant="contained">
+          {score}
+        </MainButton>
+      </StyledDiv>
     </>
   );
 };

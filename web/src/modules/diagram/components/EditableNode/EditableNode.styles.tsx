@@ -26,6 +26,7 @@ export const AddNodeButtonGroupChild = styled(StyledAddNodeButtonGroup)`
 export const YEdgeDiv = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
   min-height: 12px;
 `;
 

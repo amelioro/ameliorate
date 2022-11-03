@@ -1,20 +1,70 @@
 import styled from "@emotion/styled";
-import { Slider } from "@mui/material";
+import { Button } from "@mui/material";
 
-export const ScoreSpan = styled.span`
-  font-size: 8px;
-  line-height: 8px;
-  padding: 2px;
+export const StyledDiv = styled.div`
+  display: flex;
+  position: relative;
+  margin: 1px;
 `;
 
-export const StyledSlider = styled(Slider)`
-  position: absolute;
-  bottom: 90%;
-  left: 46.8%;
-  display: none;
+interface StyledButtonProps {
+  buttonLength: number;
+}
 
-  span:hover > &,
-  &.MuiSlider-dragging {
+// TODO bump MUI version to remove passing invalid buttonlength prop as an HTML attribute
+// https://github.com/mui/material-ui/issues/29320
+const StyledButton = styled(Button)<StyledButtonProps>`
+  height: ${({ buttonLength }) => `${buttonLength}px`};
+  width: ${({ buttonLength }) => `${buttonLength}px`};
+  min-width: ${({ buttonLength }) => `${buttonLength}px`};
+  line-height: 8px;
+  font-size: 8px;
+  padding: 0px;
+  border-radius: 50%;
+`;
+
+export const MainButton = styled(StyledButton)`
+  z-index: 2; // in front of floating buttons (to avoid hover interference during transition)
+`;
+
+interface FloatingButtonProps {
+  position: {
+    x: number;
+    y: number;
+  };
+  buttonLength: number; // just forwarded
+}
+
+export const FloatingButton = styled(StyledButton)<FloatingButtonProps>`
+  position: absolute;
+  visibility: hidden; // visibility works with transitions, display does not
+  transition: all 0.5s; // would be nice to make this zoom rather than expand, not sure how to do that though (briefly looked at MUI's Zoom component)
+  z-index: 1;
+
+  ${StyledDiv}:hover & {
+    visibility: visible;
+    transform: ${({ position }) => `translate(${position.x}px, ${position.y}px)`};
+  }
+`;
+
+interface FloatingDivProps {
+  radius: number;
+  buttonLength: number;
+}
+
+// keep floating buttons displayed while hovering within this
+export const FloatingDiv = styled.div<FloatingDivProps>`
+  position: absolute;
+  width: ${({ radius, buttonLength }) => `${radius * 2 + buttonLength}px`};
+  height: ${({ radius, buttonLength }) => `${radius * 2 + buttonLength}px`};
+  transform: ${({ buttonLength }) =>
+    // center around MainButton, then shift by half floating button width because lowest button is positioned from its top
+    `translate(-50%, -50%) translate(${buttonLength / 2}px, ${buttonLength / 2}px)`};
+  border-radius: 50%;
+  display: none;
+  z-index: 0; // render behind buttons
+
+  ${StyledDiv}:hover & {
     display: inherit;
   }
 `;
