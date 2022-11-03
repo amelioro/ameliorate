@@ -11,9 +11,12 @@ interface StyledButtonProps {
   buttonLength: number;
 }
 
-// TODO bump MUI version to remove passing invalid buttonlength prop as an HTML attribute
-// https://github.com/mui/material-ui/issues/29320
-const StyledButton = styled(Button)<StyledButtonProps>`
+// seems like MUI automatically forwards invalid props to underlying HTML components?
+// this seems wrong, or at least that it shouldn't be the default
+const options = {
+  shouldForwardProp: (prop: string) => !["buttonLength"].includes(prop),
+};
+const StyledButton = styled(Button, options)<StyledButtonProps>`
   height: ${({ buttonLength }) => `${buttonLength}px`};
   width: ${({ buttonLength }) => `${buttonLength}px`};
   min-width: ${({ buttonLength }) => `${buttonLength}px`};
