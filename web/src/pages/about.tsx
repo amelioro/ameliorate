@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 
 import { PaperMiddle } from "../page_styles/about.styles";
 
-const Home: NextPage = () => {
+const About: NextPage = () => {
   return (
     <>
       <Box display="flex" justifyContent="center">
@@ -87,4 +87,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default About;
