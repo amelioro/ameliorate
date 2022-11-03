@@ -3,12 +3,6 @@ import { useState } from "react";
 
 import { FloatingButton, FloatingDiv, MainButton, StyledDiv } from "./Score.style";
 
-// issue (inform maintainer?):
-// 1. PieContainer is rendered server-side, generating HTML which includes slice hash ids generated via current time
-// https://github.com/psychobolt/react-pie-menu/blob/091431b21426527fbea007d5a1e92838334b31d2/src/PieMenu.container.js#L40-L46
-// 2. PieContainer is rendered client-side, trusting the SSR'd HTML, hydrating the JS, but generating new slice hash ids
-// 3. JS hash ids mismatch with HTML, slice reactivity does not work
-
 const getButtonPositions = (expansionRadius: number, numberOfButtons: number) => {
   const degreesPerScore = 360 / numberOfButtons;
 
