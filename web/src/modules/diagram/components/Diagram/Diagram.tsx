@@ -5,6 +5,7 @@ import { Background, BackgroundVariant, type NodeProps as DefaultNodeProps } fro
 
 import { Node, useDiagramStore } from "../Diagram.store";
 import { EditableNode } from "../EditableNode/EditableNode";
+import { ScoreEdge } from "../ScoreEdge/ScoreEdge";
 import { type NodeDecoration, type NodeType, nodeDecorations } from "../nodeDecorations";
 import { StyledReactFlow } from "./Diagram.styles";
 
@@ -28,6 +29,8 @@ const nodeTypes: Record<NodeType, ComponentType<NodeProps>> = {
   Solution: buildNodeComponent("Solution", nodeDecorations.Solution),
 };
 
+const edgeTypes = { ScoreEdge: ScoreEdge };
+
 // react-flow passes exactly DefaultNodeProps but data can be customized
 // not sure why, but DefaultNodeProps has xPos and yPos instead of Node's position.x and position.y
 export interface NodeProps extends DefaultNodeProps {
@@ -48,6 +51,7 @@ export const Diagram = () => {
       nodes={nodes}
       edges={edges}
       nodeTypes={nodeTypes}
+      edgeTypes={edgeTypes}
       fitView
       onPaneClick={deselectNodes}
     >

@@ -60,7 +60,12 @@ export const useDiagramStore = create<DiagramState>()(
           const newEdgeId = nextEdgeId();
           const sourceNode = as === "Parent" ? newNodeId : toNodeId;
           const targetNode = as === "Parent" ? toNodeId : newNodeId;
-          const newEdge = { id: newEdgeId, source: sourceNode, target: targetNode };
+          const newEdge = {
+            id: newEdgeId,
+            source: sourceNode,
+            target: targetNode,
+            type: "ScoreEdge",
+          };
 
           const newNodes = state.nodes.concat(newNode);
           const newEdges = state.edges.concat(newEdge);
