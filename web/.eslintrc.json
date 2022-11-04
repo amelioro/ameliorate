@@ -4,6 +4,7 @@
     "next/core-web-vitals",
     "eslint:recommended",
     "plugin:import/recommended",
+    "plugin:storybook/recommended",
     "prettier"
   ],
   "plugins": ["functional", "import"],
