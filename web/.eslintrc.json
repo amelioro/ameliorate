@@ -3,22 +3,34 @@
   "extends": [
     "next/core-web-vitals",
     "eslint:recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    "plugin:@typescript-eslint/strict",
     "plugin:import/recommended",
+    "plugin:storybook/recommended",
     "prettier"
   ],
-  "plugins": ["@typescript-eslint", "functional", "import"],
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "tsconfigRootDir": ".",
-    "project": ["./tsconfig.json"]
-  },
+  "plugins": ["functional", "import"],
+  "overrides": [
+    // don't use ts checking for js files https://stackoverflow.com/a/64488475
+    {
+      "files": ["*.ts", "*.tsx"],
+      "extends": [
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "plugin:@typescript-eslint/strict"
+      ],
+      "plugins": ["@typescript-eslint"],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "tsconfigRootDir": ".",
+        "project": ["./tsconfig.json"]
+      },
+      "rules": {
+        "@typescript-eslint/member-ordering": "error",
+        "@typescript-eslint/switch-exhaustiveness-check": "error"
+      }
+    }
+  ],
   "rules": {
-    "@typescript-eslint/member-ordering": "error",
-    "@typescript-eslint/switch-exhaustiveness-check": "error",
     "functional/functional-parameters": [
       "error",
       {

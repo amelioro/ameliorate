@@ -1,0 +1,5 @@
+// needed to extract .babelrc from next.config.js because storybook wasn't using next's babel config
+{
+  "presets": ["next/babel"],
+  "plugins": ["@emotion"] // mainly to enable https://emotion.sh/docs/styled#targeting-another-emotion-component
+}

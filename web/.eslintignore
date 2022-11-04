@@ -1,0 +1,2 @@
+# allow linting config files inside .storybook/, see https://github.com/storybookjs/eslint-plugin-storybook#installation
+!.storybook
