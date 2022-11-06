@@ -1,12 +1,7 @@
 import _ from "lodash";
 
-import {
-  type ComponentType,
-  PossibleScore,
-  possibleScores,
-  useDiagramStore,
-} from "../Diagram.store";
-import { FloatingButton, FloatingDiv, MainButton, StyledDiv } from "./Score.style";
+import { type ComponentType, Score, possibleScores, useDiagramStore } from "../Diagram.store";
+import { FloatingButton, FloatingDiv, MainButton, StyledDiv } from "./ScoreDial.style";
 
 const getButtonPositions = (expansionRadius: number, numberOfButtons: number) => {
   const degreesPerScore = 360 / numberOfButtons;
@@ -24,10 +19,10 @@ const getButtonPositions = (expansionRadius: number, numberOfButtons: number) =>
   return positions;
 };
 
-interface ScoreProps {
+interface ScoreDialProps {
   parentId: string;
   parentType: ComponentType;
-  score: PossibleScore;
+  score: Score;
 }
 
 // similar to MUI speed dial (https://mui.com/material-ui/react-speed-dial/),
@@ -40,7 +35,7 @@ interface ScoreProps {
 // 11 buttons are too many to fit close to the main button without collisions,
 // and button text is hard to fit in a small spot (i.e. corner of an EditableNode)
 // ... although... would "-" work well in a slider? want to allow the ability to deselect a score
-export const Score = ({ parentId, parentType, score }: ScoreProps) => {
+export const ScoreDial = ({ parentId, parentType, score }: ScoreDialProps) => {
   const scoreParent = useDiagramStore((state) => state.scoreParent);
 
   const buttonLength = 10; //px

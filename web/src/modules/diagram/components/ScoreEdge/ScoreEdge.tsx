@@ -2,7 +2,7 @@ import React from "react";
 import { getBezierPath } from "reactflow";
 
 import { EdgeProps } from "../Diagram/Diagram";
-import { Score } from "../Score/Score";
+import { ScoreDial } from "../ScoreDial/ScoreDial";
 import { StyledDiv } from "./ScoreEdge.style";
 
 // base for custom edge taken from https://reactflow.dev/docs/examples/edges/edge-with-button/
@@ -50,7 +50,7 @@ export const ScoreEdge = ({
         <StyledDiv length={minEdgeLength}>
           {/* we'll always pass data - why does react-flow make it nullable :( */}
           {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */}
-          <Score parentId={id} parentType="edge" score={data!.score} />
+          <ScoreDial parentId={id} parentType="edge" score={data!.score} />
         </StyledDiv>
       </foreignObject>
     </>

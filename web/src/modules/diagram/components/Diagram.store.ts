@@ -23,7 +23,7 @@ const buildNode = ({ id, type }: BuildProps) => {
     id: id,
     data: {
       label: `text${id}`,
-      score: "-" as PossibleScore,
+      score: "-" as Score,
       width: 150,
     },
     position: { x: 0, y: 0 }, // assume layout will adjust this
@@ -36,7 +36,7 @@ function buildEdge(sourceNodeId: string, targetNodeId: string) {
   return {
     id: nextEdgeId(),
     data: {
-      score: "-" as PossibleScore,
+      score: "-" as Score,
     },
     source: sourceNodeId,
     target: targetNodeId,
@@ -55,13 +55,13 @@ interface DiagramState {
   edges: Edge[];
   addNode: (_toNodeId: string, _as: As, _type: NodeType) => void;
   deselectNodes: () => void;
-  scoreParent: (parentId: string, parentType: ComponentType, score: PossibleScore) => void;
+  scoreParent: (parentId: string, parentType: ComponentType, score: Score) => void;
 }
 
 export type ComponentType = "node" | "edge";
 
 export const possibleScores = ["-", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"] as const;
-export type PossibleScore = typeof possibleScores[number];
+export type Score = typeof possibleScores[number];
 
 export const useDiagramStore = create<DiagramState>()(
   // seems like we should be able to auto-wrap all stores with devtools

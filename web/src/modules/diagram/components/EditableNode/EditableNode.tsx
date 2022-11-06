@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Handle, Position } from "reactflow";
 
 import { NodeProps } from "../Diagram/Diagram";
-import { Score } from "../Score/Score";
+import { ScoreDial } from "../ScoreDial/ScoreDial";
 import { NodeDecoration } from "../nodeDecorations";
 import {
   AddNodeButtonGroupChild,
@@ -39,7 +39,7 @@ export const EditableNode = ({
           <Image src={iconSrc} width="8" height="8" alt={`${type} icon`} />
           <NodeTypeSpan>{type}</NodeTypeSpan>
         </NodeTypeDiv>
-        <Score parentId={id} parentType="node" score={data.score} />
+        <ScoreDial parentId={id} parentType="node" score={data.score} />
       </YEdgeDiv>
       <MiddleDiv>
         <XEdgeDiv />
