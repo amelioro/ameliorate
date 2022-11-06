@@ -53,9 +53,6 @@ const { layoutedNodes: initialNodes } = layout(
 interface DiagramState {
   nodes: Node[];
   edges: Edge[];
-  addNode: (_toNodeId: string, _as: As, _type: NodeType) => void;
-  deselectNodes: () => void;
-  scoreParent: (parentId: string, parentType: ComponentType, score: Score) => void;
 }
 
 export type ComponentType = "node" | "edge";
@@ -63,7 +60,13 @@ export type ComponentType = "node" | "edge";
 export const possibleScores = ["-", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"] as const;
 export type Score = typeof possibleScores[number];
 
-export const useDiagramStore = create<DiagramState>()(
+interface DiagramActions {
+  addNode: (_toNodeId: string, _as: As, _type: NodeType) => void;
+  deselectNodes: () => void;
+  scoreParent: (parentId: string, parentType: ComponentType, score: Score) => void;
+}
+
+export const useDiagramStore = create<DiagramState & DiagramActions>()(
   // seems like we should be able to auto-wrap all stores with devtools
   devtools((set) => ({
     nodes: initialNodes,
