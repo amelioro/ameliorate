@@ -1,12 +1,15 @@
 import React from "react";
-import { type EdgeProps, getBezierPath } from "reactflow";
+import { getBezierPath } from "reactflow";
 
+import { EdgeProps } from "../Diagram/Diagram";
 import { Score } from "../Score/Score";
 import { StyledDiv } from "./ScoreEdge.style";
 
 // base for custom edge taken from https://reactflow.dev/docs/examples/edges/edge-with-button/
-export function ScoreEdge({
+// TODO: upgrade react-flow and remove foreignObject jazz https://github.com/wbkd/react-flow/releases/tag/11.2.0
+export const ScoreEdge = ({
   id,
+  data,
   sourceX,
   sourceY,
   targetX,
@@ -15,7 +18,7 @@ export function ScoreEdge({
   targetPosition,
   style = {},
   markerEnd,
-}: EdgeProps) {
+}: EdgeProps) => {
   const [edgePath, labelX, labelY] = getBezierPath({
     sourceX,
     sourceY,
@@ -45,9 +48,11 @@ export function ScoreEdge({
       >
         {/* flex stylings don't work directly from the foreignObject? so we need a div */}
         <StyledDiv length={minEdgeLength}>
-          <Score />
+          {/* we'll always pass data - why does react-flow make it nullable :( */}
+          {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */}
+          <Score parentId={id} parentType="edge" score={data!.score} />
         </StyledDiv>
       </foreignObject>
     </>
   );
-}
+};

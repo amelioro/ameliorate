@@ -39,7 +39,7 @@ export const EditableNode = ({
           <Image src={iconSrc} width="8" height="8" alt={`${type} icon`} />
           <NodeTypeSpan>{type}</NodeTypeSpan>
         </NodeTypeDiv>
-        <Score />
+        <Score parentId={id} parentType="node" score={data.score} />
       </YEdgeDiv>
       <MiddleDiv>
         <XEdgeDiv />

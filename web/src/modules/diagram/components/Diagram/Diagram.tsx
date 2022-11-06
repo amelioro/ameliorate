@@ -1,9 +1,14 @@
 import { Typography } from "@mui/material";
 import _ from "lodash";
 import { ComponentType } from "react";
-import { Background, BackgroundVariant, type NodeProps as DefaultNodeProps } from "reactflow";
+import {
+  Background,
+  BackgroundVariant,
+  type EdgeProps as DefaultEdgeProps,
+  type NodeProps as DefaultNodeProps,
+} from "reactflow";
 
-import { Node, useDiagramStore } from "../Diagram.store";
+import { Edge, Node, useDiagramStore } from "../Diagram.store";
 import { EditableNode } from "../EditableNode/EditableNode";
 import { ScoreEdge } from "../ScoreEdge/ScoreEdge";
 import { type NodeDecoration, type NodeType, nodeDecorations } from "../nodeDecorations";
@@ -29,12 +34,18 @@ const nodeTypes: Record<NodeType, ComponentType<NodeProps>> = {
   Solution: buildNodeComponent("Solution", nodeDecorations.Solution),
 };
 
-const edgeTypes = { ScoreEdge: ScoreEdge };
+const edgeTypes: Record<"ScoreEdge", ComponentType<EdgeProps>> = { ScoreEdge: ScoreEdge };
 
 // react-flow passes exactly DefaultNodeProps but data can be customized
 // not sure why, but DefaultNodeProps has xPos and yPos instead of Node's position.x and position.y
 export interface NodeProps extends DefaultNodeProps {
   data: Node["data"];
+}
+
+export interface EdgeProps extends DefaultEdgeProps {
+  // we'll always pass data - why does react-flow make it nullable :(
+  // can't figure out how to amend this to make it non-nullable, since react-flow's Edge is defined as a type, not an interface
+  data?: Edge["data"];
 }
 
 export const Diagram = () => {

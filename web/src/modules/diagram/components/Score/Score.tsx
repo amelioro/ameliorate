@@ -1,6 +1,11 @@
 import _ from "lodash";
-import { useState } from "react";
 
+import {
+  type ComponentType,
+  PossibleScore,
+  possibleScores,
+  useDiagramStore,
+} from "../Diagram.store";
 import { FloatingButton, FloatingDiv, MainButton, StyledDiv } from "./Score.style";
 
 const getButtonPositions = (expansionRadius: number, numberOfButtons: number) => {
@@ -19,6 +24,12 @@ const getButtonPositions = (expansionRadius: number, numberOfButtons: number) =>
   return positions;
 };
 
+interface ScoreProps {
+  parentId: string;
+  parentType: ComponentType;
+  score: PossibleScore;
+}
+
 // similar to MUI speed dial (https://mui.com/material-ui/react-speed-dial/),
 // but the main reasons for creating a custom component are:
 // * allow dial click to be different than hover. will want to eventually make this work reasonably on mobile, but for desktop this seems very useful
@@ -29,12 +40,10 @@ const getButtonPositions = (expansionRadius: number, numberOfButtons: number) =>
 // 11 buttons are too many to fit close to the main button without collisions,
 // and button text is hard to fit in a small spot (i.e. corner of an EditableNode)
 // ... although... would "-" work well in a slider? want to allow the ability to deselect a score
-export const Score = () => {
-  const initialScore = "-";
-  const [score, setScore] = useState(initialScore);
+export const Score = ({ parentId, parentType, score }: ScoreProps) => {
+  const scoreParent = useDiagramStore((state) => state.scoreParent);
 
   const buttonLength = 10; //px
-  const possibleScores = ["-", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
   const expansionRadius = 2 * buttonLength; // no collisions for fitting 11 elements
 
   // little awkward to use parallel arrays, but wanted to extract position logic
@@ -47,7 +56,7 @@ export const Score = () => {
         position={buttonPositions[index]}
         key={possibleScore}
         variant="contained"
-        onClick={() => setScore(possibleScore)}
+        onClick={() => scoreParent(parentId, parentType, possibleScore)}
       >
         {possibleScore}
       </FloatingButton>

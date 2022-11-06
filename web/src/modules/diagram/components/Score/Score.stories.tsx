@@ -4,4 +4,6 @@ import { Score } from "./Score";
 
 export default { component: Score } as Meta<typeof Score>;
 
-export const Basic: StoryFn<typeof Score> = () => <Score />;
+export const Basic: StoryFn<typeof Score> = () => (
+  <Score parentId="1" parentType="node" score="-" />
+);
