@@ -46,7 +46,7 @@ export const Score = ({ parentId, parentType, score }: ScoreProps) => {
   const buttonLength = 10; //px
   const expansionRadius = 2 * buttonLength; // no collisions for fitting 11 elements
 
-  // little awkward to use parallel arrays, but wanted to extract position logic
+  // little awkward to use parallel arrays, but wanted to isolate position logic
   const buttonPositions = getButtonPositions(expansionRadius, possibleScores.length);
 
   const floatingButtons = possibleScores.map((possibleScore, index) => {

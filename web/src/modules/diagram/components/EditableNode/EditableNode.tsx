@@ -28,7 +28,7 @@ export const EditableNode = ({
   const theme = useTheme();
   const color = theme.palette[themeColor].main;
 
-  // add node button group needs to be type-specific
+  // add node button group needs to be type-specific (at least for claim types vs problem/solution types)
   return (
     <>
       <Handle type="target" position={Position.Top} />

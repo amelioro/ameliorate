@@ -42,7 +42,7 @@ export const ScoreEdge = ({
       <foreignObject
         width={minEdgeLength}
         height={minEdgeLength}
-        x={labelX - minEdgeLength / 2} // center because object is drawn from upper-left corner, not center
+        x={labelX - minEdgeLength / 2} // object is drawn from upper-left corner, not center
         y={labelY - minEdgeLength / 2}
         requiredExtensions="http://www.w3.org/1999/xhtml"
       >
