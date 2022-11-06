@@ -50,6 +50,13 @@ const { layoutedNodes: initialNodes } = layout(
   []
 );
 
+const diagrams: Record<string, DiagramState> = {
+  root: {
+    nodes: initialNodes,
+    edges: [],
+  },
+};
+
 interface DiagramState {
   nodes: Node[];
   edges: Edge[];
@@ -64,13 +71,14 @@ interface DiagramActions {
   addNode: (_toNodeId: string, _as: As, _type: NodeType) => void;
   deselectNodes: () => void;
   scoreParent: (parentId: string, parentType: ComponentType, score: Score) => void;
+  setActiveDiagram: (diagramId: string) => void;
 }
 
 export const useDiagramStore = create<DiagramState & DiagramActions>()(
   // seems like we should be able to auto-wrap all stores with devtools
   devtools((set) => ({
-    nodes: initialNodes,
-    edges: [],
+    nodes: diagrams.root.nodes,
+    edges: diagrams.root.edges,
 
     addNode: (toNodeId, as, type) => {
       set(
@@ -132,6 +140,15 @@ export const useDiagramStore = create<DiagramState & DiagramActions>()(
         false,
         "scoreParent"
       );
+    },
+
+    setActiveDiagram: (diagramId) => {
+      if (!Object.keys(diagrams).includes(diagramId)) {
+        // TODO: perhaps we could use classes to isolate/indicate state & state change?
+        // eslint-disable-next-line functional/immutable-data
+        diagrams[diagramId] = { nodes: initialNodes, edges: [] };
+      }
+      set(diagrams[diagramId], false, "setActiveDiagram");
     },
   }))
 );
