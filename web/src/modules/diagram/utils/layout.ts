@@ -2,12 +2,12 @@ import dagre from "dagre";
 
 import { type Edge, type Node } from "../components/Diagram.store";
 
-const dagreGraph = new dagre.graphlib.Graph();
-dagreGraph.setDefaultEdgeLabel(() => ({}));
-
 // mostly from https://reactflow.dev/docs/examples/layout/dagre/
 export const layout = (nodes: Node[], edges: Edge[]) => {
+  const dagreGraph = new dagre.graphlib.Graph();
   const height = 45; // grab size from node, but how? size adjusts based on input rows
+
+  dagreGraph.setDefaultEdgeLabel(() => ({}));
 
   dagreGraph.setGraph({ rankdir: "TB" });
 
