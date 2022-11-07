@@ -45,16 +45,20 @@ function buildEdge(sourceNodeId: string, targetNodeId: string) {
 }
 export type Edge = ReturnType<typeof buildEdge>;
 
+const getInitialNodes = () => {
 const { layoutedNodes: initialNodes } = layout(
   [buildNode({ id: nextNodeId(), type: "Problem" })],
   []
 );
 
+  return initialNodes;
+};
+
 // eh duplicate id, but key makes it easy to find in store and property makes it easy to check which diagram we're currently using
 const diagrams: Record<string, DiagramState> = {
   root: {
     diagramId: "root",
-    nodes: initialNodes,
+    nodes: getInitialNodes(),
     edges: [],
   },
 };
@@ -160,7 +164,11 @@ export const useDiagramStore = create<DiagramState & DiagramActions>()(
           if (!Object.keys(diagrams).includes(diagramId)) {
             // TODO: perhaps we could use classes to isolate/indicate state & state change?
             // eslint-disable-next-line functional/immutable-data
-            diagrams[diagramId] = { diagramId: diagramId, nodes: initialNodes, edges: [] };
+            diagrams[diagramId] = {
+              diagramId: diagramId,
+              nodes: getInitialNodes(),
+              edges: [],
+            };
           }
 
           // set diagram
