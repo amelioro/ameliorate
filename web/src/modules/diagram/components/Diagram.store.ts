@@ -46,10 +46,10 @@ function buildEdge(sourceNodeId: string, targetNodeId: string) {
 export type Edge = ReturnType<typeof buildEdge>;
 
 const getInitialNodes = () => {
-const { layoutedNodes: initialNodes } = layout(
-  [buildNode({ id: nextNodeId(), type: "Problem" })],
-  []
-);
+  const { layoutedNodes: initialNodes } = layout(
+    [buildNode({ id: nextNodeId(), type: "Problem" })],
+    []
+  );
 
   return initialNodes;
 };
@@ -61,6 +61,10 @@ const diagrams: Record<string, DiagramState> = {
     nodes: getInitialNodes(),
     edges: [],
   },
+};
+
+const doesDiagramExist = (diagramId: string) => {
+  return Object.keys(diagrams).includes(diagramId);
 };
 
 interface DiagramState {
@@ -77,6 +81,7 @@ export type Score = typeof possibleScores[number];
 interface DiagramActions {
   addNode: (_toNodeId: string, _as: As, _type: NodeType) => void;
   deselectNodes: () => void;
+  doesDiagramExist: (diagramId: string) => boolean;
   scoreParent: (parentId: string, parentType: ComponentType, score: Score) => void;
   setActiveDiagram: (diagramId: string) => void;
 }
@@ -127,6 +132,8 @@ export const useDiagramStore = create<DiagramState & DiagramActions>()(
       );
     },
 
+    doesDiagramExist: doesDiagramExist,
+
     // will this trigger re-render for all parentType components, since Diagram depends on the whole array?
     // theoretically we should be able to just re-render the affected component...
     // at least the HTML should mostly be unchanged I guess; not sure how big of a deal the performance impact is here
@@ -161,7 +168,7 @@ export const useDiagramStore = create<DiagramState & DiagramActions>()(
           /* eslint-enable functional/immutable-data */
 
           // create new diagram if it doesn't exist
-          if (!Object.keys(diagrams).includes(diagramId)) {
+          if (!doesDiagramExist(diagramId)) {
             // TODO: perhaps we could use classes to isolate/indicate state & state change?
             // eslint-disable-next-line functional/immutable-data
             diagrams[diagramId] = {

@@ -36,10 +36,13 @@ interface ScoreDialProps {
 // and button text is hard to fit in a small spot (i.e. corner of an EditableNode)
 // ... although... would "-" work well in a slider? want to allow the ability to deselect a score
 export const ScoreDial = ({ parentId, parentType, score }: ScoreDialProps) => {
-  const [scoreParent, setActiveDiagram] = useDiagramStore((state) => [
+  const [doesDiagramExist, scoreParent, setActiveDiagram] = useDiagramStore((state) => [
+    state.doesDiagramExist,
     state.scoreParent,
     state.setActiveDiagram,
   ]);
+
+  const childDiagramId = `${parentType}-${parentId}`;
 
   const buttonLength = 10; //px
   const expansionRadius = 2 * buttonLength; // no collisions for fitting 11 elements
@@ -69,9 +72,10 @@ export const ScoreDial = ({ parentId, parentType, score }: ScoreDialProps) => {
         <FloatingDiv radius={expansionRadius} buttonLength={buttonLength}></FloatingDiv>
 
         <MainButton
-          onClick={() => setActiveDiagram(`${parentType}-${parentId}`)}
+          onClick={() => setActiveDiagram(childDiagramId)}
           buttonLength={buttonLength}
           variant="contained"
+          sx={doesDiagramExist(childDiagramId) ? { border: 1 } : {}}
         >
           {score}
         </MainButton>
