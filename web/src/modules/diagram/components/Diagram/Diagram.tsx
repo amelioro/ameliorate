@@ -1,3 +1,4 @@
+import { CloseRounded } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import _ from "lodash";
 import { ComponentType } from "react";
@@ -12,7 +13,7 @@ import { Edge, Node, useDiagramStore } from "../Diagram.store";
 import { EditableNode } from "../EditableNode/EditableNode";
 import { ScoreEdge } from "../ScoreEdge/ScoreEdge";
 import { type NodeDecoration, type NodeType, nodeDecorations } from "../nodeDecorations";
-import { StyledReactFlow } from "./Diagram.styles";
+import { PositionedIconButton, StyledReactFlow } from "./Diagram.styles";
 
 const buildNodeComponent = (type: NodeType, decoration: NodeDecoration) => {
   // eslint-disable-next-line react/display-name -- react flow dynamically creates these components without name anyway
@@ -49,25 +50,40 @@ export interface EdgeProps extends DefaultEdgeProps {
 }
 
 export const Diagram = () => {
-  const [nodes, edges, deselectNodes] = useDiagramStore((state) => [
-    state.nodes,
-    state.edges,
-    state.deselectNodes,
-  ]);
+  const [activeDiagramId, nodes, edges, deselectNodes, setActiveDiagram] = useDiagramStore(
+    (state) => [
+      state.diagramId,
+      state.nodes,
+      state.edges,
+      state.deselectNodes,
+      state.setActiveDiagram,
+    ]
+  );
+
+  const showCloseButton = activeDiagramId != "root";
+  const closeButton = (
+    <PositionedIconButton onClick={() => setActiveDiagram("root")} color="secondary">
+      <CloseRounded />
+    </PositionedIconButton>
+  );
 
   const emptyText = <Typography variant="h5">Right-click to create</Typography>;
 
   return (
-    <StyledReactFlow
-      nodes={nodes}
-      edges={edges}
-      nodeTypes={nodeTypes}
-      edgeTypes={edgeTypes}
-      fitView
-      onPaneClick={deselectNodes}
-    >
-      <Background variant={BackgroundVariant.Dots} />
-      {_(nodes).isEmpty() && emptyText}
-    </StyledReactFlow>
+    <>
+      {showCloseButton && closeButton}
+
+      <StyledReactFlow
+        nodes={nodes}
+        edges={edges}
+        nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
+        fitView
+        onPaneClick={deselectNodes}
+      >
+        <Background variant={BackgroundVariant.Dots} />
+        {_(nodes).isEmpty() && emptyText}
+      </StyledReactFlow>
+    </>
   );
 };

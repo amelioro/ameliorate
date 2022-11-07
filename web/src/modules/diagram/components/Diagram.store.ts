@@ -50,14 +50,17 @@ const { layoutedNodes: initialNodes } = layout(
   []
 );
 
+// eh duplicate id, but key makes it easy to find in store and property makes it easy to check which diagram we're currently using
 const diagrams: Record<string, DiagramState> = {
   root: {
+    diagramId: "root",
     nodes: initialNodes,
     edges: [],
   },
 };
 
 interface DiagramState {
+  diagramId: string;
   nodes: Node[];
   edges: Edge[];
 }
@@ -77,6 +80,7 @@ interface DiagramActions {
 export const useDiagramStore = create<DiagramState & DiagramActions>()(
   // seems like we should be able to auto-wrap all stores with devtools
   devtools((set) => ({
+    diagramId: "root",
     nodes: diagrams.root.nodes,
     edges: diagrams.root.edges,
 
@@ -143,12 +147,28 @@ export const useDiagramStore = create<DiagramState & DiagramActions>()(
     },
 
     setActiveDiagram: (diagramId) => {
-      if (!Object.keys(diagrams).includes(diagramId)) {
-        // TODO: perhaps we could use classes to isolate/indicate state & state change?
-        // eslint-disable-next-line functional/immutable-data
-        diagrams[diagramId] = { nodes: initialNodes, edges: [] };
-      }
-      set(diagrams[diagramId], false, "setActiveDiagram");
+      set(
+        (state) => {
+          // save current diagram state before switching
+          // TODO: perhaps we could use classes to isolate/indicate state & state change?
+          /* eslint-disable functional/immutable-data */
+          diagrams[state.diagramId].nodes = state.nodes;
+          diagrams[state.diagramId].edges = state.edges;
+          /* eslint-enable functional/immutable-data */
+
+          // create new diagram if it doesn't exist
+          if (!Object.keys(diagrams).includes(diagramId)) {
+            // TODO: perhaps we could use classes to isolate/indicate state & state change?
+            // eslint-disable-next-line functional/immutable-data
+            diagrams[diagramId] = { diagramId: diagramId, nodes: initialNodes, edges: [] };
+          }
+
+          // set diagram
+          return diagrams[diagramId];
+        },
+        false,
+        "setActiveDiagram"
+      );
     },
   }))
 );

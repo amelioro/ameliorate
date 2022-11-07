@@ -13,6 +13,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
+    "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.10.12",
     "dagre": "^0.8.5",
     "lodash": "^4.17.21",
