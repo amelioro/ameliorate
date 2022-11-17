@@ -2,7 +2,12 @@
 // used material color tool to confirm accessibility (legibility) https://material.io/resources/color/#!/?view.left=1&view.right=1&primary.color=4ab74c&secondary.color=b74ab5
 // used mui-theme-creator to see the colors in action and pick light & dark palettes https://bareynol.github.io/mui-theme-creator/?firstName=&lastName=&email=&password=
 
-import { type PaletteMode, type ThemeOptions, createTheme } from "@mui/material";
+import {
+  type Theme as MaterialUITheme,
+  type PaletteMode,
+  type ThemeOptions,
+  createTheme,
+} from "@mui/material";
 
 // adding colors to theme documented at https://mui.com/material-ui/customization/palette/#adding-new-colors
 declare module "@mui/material/styles" {
@@ -22,6 +27,13 @@ declare module "@mui/material/Button" {
     problem: true;
     solution: true;
   }
+}
+
+// augment emotion theme to include Material methods (for use with styled)
+// https://github.com/emotion-js/emotion/discussions/2291#discussioncomment-491185
+declare module "@emotion/react" {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  export interface Theme extends MaterialUITheme {}
 }
 
 const lightPalette = {
