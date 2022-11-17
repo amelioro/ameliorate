@@ -22,7 +22,7 @@ const buildNodeComponent = (type: NodeType, decoration: NodeDecoration) => {
       <EditableNode
         {...props}
         themeColor={decoration.themeColor}
-        iconSrc={decoration.iconSrc}
+        NodeIcon={decoration.NodeIcon}
         type={type}
       />
     );

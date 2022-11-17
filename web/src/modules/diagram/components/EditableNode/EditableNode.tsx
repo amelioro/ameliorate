@@ -1,6 +1,5 @@
 import { Global } from "@emotion/react";
 import { useTheme } from "@mui/material";
-import Image from "next/image";
 import { Handle, Position } from "reactflow";
 
 import { NodeProps } from "../Diagram/Diagram";
@@ -22,7 +21,7 @@ export const EditableNode = ({
   id,
   data,
   themeColor,
-  iconSrc,
+  NodeIcon,
   type,
 }: NodeProps & NodeDecoration) => {
   const theme = useTheme();
@@ -36,7 +35,7 @@ export const EditableNode = ({
 
       <YEdgeDiv>
         <NodeTypeDiv>
-          <Image src={iconSrc} width="8" height="8" alt={`${type} icon`} />
+          <NodeIcon sx={{ width: "8px", height: "8px" }} />
           <NodeTypeSpan>{type}</NodeTypeSpan>
         </NodeTypeDiv>
         <ScoreDial parentId={id} parentType="node" score={data.score} />

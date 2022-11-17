@@ -1,6 +1,8 @@
+import { Check, Extension } from "@mui/icons-material";
+
 export interface NodeDecoration {
   themeColor: "primary" | "secondary" | "problem" | "solution"; // theme colors; is there a better way to get this?
-  iconSrc: string;
+  NodeIcon: typeof Extension;
 }
 
 export type NodeType = "Problem" | "Solution";
@@ -8,10 +10,10 @@ export type NodeType = "Problem" | "Solution";
 export const nodeDecorations: Record<NodeType, NodeDecoration> = {
   Problem: {
     themeColor: "problem",
-    iconSrc: "/puzzle.png",
+    NodeIcon: Extension,
   },
   Solution: {
     themeColor: "solution",
-    iconSrc: "/check.svg",
+    NodeIcon: Check,
   },
 };
