@@ -52,7 +52,7 @@ export interface EdgeProps extends DefaultEdgeProps {
 export const Diagram = () => {
   const [activeDiagramId, nodes, edges, deselectNodes, setActiveDiagram] = useDiagramStore(
     (state) => [
-      state.diagramId,
+      state.currentDiagramId,
       state.nodes,
       state.edges,
       state.deselectNodes,
