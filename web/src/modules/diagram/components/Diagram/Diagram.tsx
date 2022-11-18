@@ -22,7 +22,7 @@ const buildNodeComponent = (type: NodeType, decoration: NodeDecoration) => {
       <EditableNode
         {...props}
         themeColor={decoration.themeColor}
-        iconSrc={decoration.iconSrc}
+        NodeIcon={decoration.NodeIcon}
         type={type}
       />
     );
@@ -50,9 +50,9 @@ export interface EdgeProps extends DefaultEdgeProps {
 }
 
 export const Diagram = () => {
-  const [activeDiagramId, nodes, edges, deselectNodes, setActiveDiagram] = useDiagramStore(
+  const [currentDiagramId, nodes, edges, deselectNodes, setActiveDiagram] = useDiagramStore(
     (state) => [
-      state.diagramId,
+      state.currentDiagramId,
       state.nodes,
       state.edges,
       state.deselectNodes,
@@ -60,7 +60,7 @@ export const Diagram = () => {
     ]
   );
 
-  const showCloseButton = activeDiagramId != "root";
+  const showCloseButton = currentDiagramId != "root";
   const closeButton = (
     <PositionedIconButton onClick={() => setActiveDiagram("root")} color="secondary">
       <CloseRounded />

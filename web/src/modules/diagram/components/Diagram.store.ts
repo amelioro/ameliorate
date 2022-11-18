@@ -57,7 +57,6 @@ const getInitialNodes = () => {
 // eh duplicate id, but key makes it easy to find in store and property makes it easy to check which diagram we're currently using
 const diagrams: Record<string, DiagramState> = {
   root: {
-    diagramId: "root",
     nodes: getInitialNodes(),
     edges: [],
   },
@@ -67,8 +66,13 @@ const doesDiagramExist = (diagramId: string) => {
   return Object.keys(diagrams).includes(diagramId);
 };
 
+interface AllDiagramState {
+  currentDiagramId: string;
+  rootDiagramId: string;
+  claimDiagramIds: string[];
+}
+
 interface DiagramState {
-  diagramId: string;
   nodes: Node[];
   edges: Edge[];
 }
@@ -86,10 +90,12 @@ interface DiagramActions {
   setActiveDiagram: (diagramId: string) => void;
 }
 
-export const useDiagramStore = create<DiagramState & DiagramActions>()(
+export const useDiagramStore = create<AllDiagramState & DiagramState & DiagramActions>()(
   // seems like we should be able to auto-wrap all stores with devtools
   devtools((set) => ({
-    diagramId: "root",
+    currentDiagramId: "root",
+    rootDiagramId: "root",
+    claimDiagramIds: [],
     nodes: diagrams.root.nodes,
     edges: diagrams.root.edges,
 
@@ -163,8 +169,8 @@ export const useDiagramStore = create<DiagramState & DiagramActions>()(
           // save current diagram state before switching
           // TODO: perhaps we could use classes to isolate/indicate state & state change?
           /* eslint-disable functional/immutable-data */
-          diagrams[state.diagramId].nodes = state.nodes;
-          diagrams[state.diagramId].edges = state.edges;
+          diagrams[state.currentDiagramId].nodes = state.nodes;
+          diagrams[state.currentDiagramId].edges = state.edges;
           /* eslint-enable functional/immutable-data */
 
           // create new diagram if it doesn't exist
@@ -172,14 +178,16 @@ export const useDiagramStore = create<DiagramState & DiagramActions>()(
             // TODO: perhaps we could use classes to isolate/indicate state & state change?
             // eslint-disable-next-line functional/immutable-data
             diagrams[diagramId] = {
-              diagramId: diagramId,
               nodes: getInitialNodes(),
               edges: [],
             };
+
+            const claimDiagramIds = state.claimDiagramIds.concat(diagramId);
+            return { currentDiagramId: diagramId, ...diagrams[diagramId], claimDiagramIds };
           }
 
           // set diagram
-          return diagrams[diagramId];
+          return { currentDiagramId: diagramId, ...diagrams[diagramId] };
         },
         false,
         "setActiveDiagram"
