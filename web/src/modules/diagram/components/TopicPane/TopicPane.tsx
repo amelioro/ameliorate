@@ -10,6 +10,7 @@ import {
 import { Collapse, List, ListItem, ListItemIcon, ListItemText, Toolbar } from "@mui/material";
 import { useState } from "react";
 
+import { useDiagramStore } from "../Diagram.store";
 import {
   NestedListItemButton,
   PositionedDiv,
@@ -21,6 +22,15 @@ import {
 export const TopicPane = () => {
   const [isTopicDrawerOpen, setIsTopicDrawerOpen] = useState(true);
   const [isClaimsListOpen, setIsClaimsListOpen] = useState(true);
+
+  const [currentDiagramId, rootDiagramId, claimDiagramIds, setActiveDiagram] = useDiagramStore(
+    (state) => [
+      state.currentDiagramId,
+      state.rootDiagramId,
+      state.claimDiagramIds,
+      state.setActiveDiagram,
+    ]
+  );
 
   const handleDrawerToggle = () => {
     if (isTopicDrawerOpen) {
@@ -43,11 +53,14 @@ export const TopicPane = () => {
           <Toolbar variant="dense" />
           <List>
             <ListItem key="1" disablePadding>
-              <StyledListItemButton>
+              <StyledListItemButton
+                selected={currentDiagramId === rootDiagramId}
+                onClick={() => setActiveDiagram(rootDiagramId)}
+              >
                 <ListItemIcon>
                   <AutoStories />
                 </ListItemIcon>
-                <ListItemText primary="Root view does this expand?" />
+                <ListItemText primary={rootDiagramId} />
               </StyledListItemButton>
             </ListItem>
             <ListItem key="2" disablePadding>
@@ -61,14 +74,29 @@ export const TopicPane = () => {
             </ListItem>
             <Collapse in={isClaimsListOpen} timeout="auto" unmountOnExit>
               <List disablePadding>
-                <ListItem key="1" disablePadding>
-                  <NestedListItemButton>
-                    <ListItemIcon>
-                      <Article />
-                    </ListItemIcon>
-                    <ListItemText primary="Claim 1" />
-                  </NestedListItemButton>
-                </ListItem>
+                {claimDiagramIds.length === 0 && (
+                  <ListItem key="1" disablePadding>
+                    <NestedListItemButton disabled={true}>
+                      <ListItemIcon>
+                        <Article />
+                      </ListItemIcon>
+                      <ListItemText primary="No claims yet!" />
+                    </NestedListItemButton>
+                  </ListItem>
+                )}
+                {claimDiagramIds.map((claimDiagramId) => (
+                  <ListItem key={claimDiagramId} disablePadding>
+                    <NestedListItemButton
+                      selected={currentDiagramId === claimDiagramId}
+                      onClick={() => setActiveDiagram(claimDiagramId)}
+                    >
+                      <ListItemIcon>
+                        <Article />
+                      </ListItemIcon>
+                      <ListItemText primary={claimDiagramId} />
+                    </NestedListItemButton>
+                  </ListItem>
+                ))}
               </List>
             </Collapse>
           </List>
