@@ -10,7 +10,7 @@ const About: NextPage = () => {
         <PaperMiddle>
           <Typography variant="h5">What is this?</Typography>
           <Typography variant="body1">
-            This is a problem-solving tool that focuses on reaching shared understandings.
+            This is a tool for solving controversial problems.
           </Typography>
 
           <Typography variant="body1">
