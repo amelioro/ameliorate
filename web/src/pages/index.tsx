@@ -1,8 +1,8 @@
 import { Box } from "@mui/material";
 import { NextPage } from "next";
 
-import { Diagram } from "../modules/diagram/components/Diagram/Diagram";
-import { TopicPane } from "../modules/diagram/components/TopicPane/TopicPane";
+import { Diagram } from "../modules/topic/components/Diagram/Diagram";
+import { TopicPane } from "../modules/topic/components/TopicPane/TopicPane";
 
 const Home: NextPage = () => {
   return (

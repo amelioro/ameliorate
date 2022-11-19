@@ -17,7 +17,7 @@ import {
   PositionedIconButton,
   StyledDrawer,
   StyledListItemButton,
-} from "../TopicPane/TopicPane.styles";
+} from "./TopicPane.styles";
 
 export const TopicPane = () => {
   const [isTopicDrawerOpen, setIsTopicDrawerOpen] = useState(true);
