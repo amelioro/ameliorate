@@ -23,9 +23,9 @@ export const TopicPane = () => {
   const [isTopicDrawerOpen, setIsTopicDrawerOpen] = useState(true);
   const [isClaimsListOpen, setIsClaimsListOpen] = useState(true);
 
-  const [currentDiagramId, rootDiagramId, claimDiagramIds, setActiveDiagram] = useDiagramStore(
+  const [activeDiagramId, rootDiagramId, claimDiagramIds, setActiveDiagram] = useDiagramStore(
     (state) => [
-      state.currentDiagramId,
+      state.activeDiagramId,
       state.rootDiagramId,
       state.claimDiagramIds,
       state.setActiveDiagram,
@@ -54,7 +54,7 @@ export const TopicPane = () => {
           <List>
             <ListItem key="1" disablePadding>
               <StyledListItemButton
-                selected={currentDiagramId === rootDiagramId}
+                selected={activeDiagramId === rootDiagramId}
                 onClick={() => setActiveDiagram(rootDiagramId)}
               >
                 <ListItemIcon>
@@ -87,7 +87,7 @@ export const TopicPane = () => {
                 {claimDiagramIds.map((claimDiagramId) => (
                   <ListItem key={claimDiagramId} disablePadding>
                     <NestedListItemButton
-                      selected={currentDiagramId === claimDiagramId}
+                      selected={activeDiagramId === claimDiagramId}
                       onClick={() => setActiveDiagram(claimDiagramId)}
                     >
                       <ListItemIcon>

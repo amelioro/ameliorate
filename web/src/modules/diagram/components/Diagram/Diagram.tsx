@@ -50,9 +50,9 @@ export interface EdgeProps extends DefaultEdgeProps {
 }
 
 export const Diagram = () => {
-  const [currentDiagramId, nodes, edges, deselectNodes, setActiveDiagram] = useDiagramStore(
+  const [activeDiagramId, nodes, edges, deselectNodes, setActiveDiagram] = useDiagramStore(
     (state) => [
-      state.currentDiagramId,
+      state.activeDiagramId,
       state.nodes,
       state.edges,
       state.deselectNodes,
@@ -60,7 +60,7 @@ export const Diagram = () => {
     ]
   );
 
-  const showCloseButton = currentDiagramId != "root";
+  const showCloseButton = activeDiagramId != "root";
   const closeButton = (
     <PositionedIconButton onClick={() => setActiveDiagram("root")} color="secondary">
       <CloseRounded />

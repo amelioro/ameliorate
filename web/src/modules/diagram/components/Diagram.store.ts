@@ -54,7 +54,6 @@ const getInitialNodes = () => {
   return initialNodes;
 };
 
-// eh duplicate id, but key makes it easy to find in store and property makes it easy to check which diagram we're currently using
 const diagrams: Record<string, DiagramState> = {
   root: {
     nodes: getInitialNodes(),
@@ -67,7 +66,7 @@ const doesDiagramExist = (diagramId: string) => {
 };
 
 interface AllDiagramState {
-  currentDiagramId: string;
+  activeDiagramId: string;
   rootDiagramId: string;
   claimDiagramIds: string[];
 }
@@ -93,7 +92,7 @@ interface DiagramActions {
 export const useDiagramStore = create<AllDiagramState & DiagramState & DiagramActions>()(
   // seems like we should be able to auto-wrap all stores with devtools
   devtools((set) => ({
-    currentDiagramId: "root",
+    activeDiagramId: "root",
     rootDiagramId: "root",
     claimDiagramIds: [],
     nodes: diagrams.root.nodes,
@@ -169,8 +168,8 @@ export const useDiagramStore = create<AllDiagramState & DiagramState & DiagramAc
           // save current diagram state before switching
           // TODO: perhaps we could use classes to isolate/indicate state & state change?
           /* eslint-disable functional/immutable-data */
-          diagrams[state.currentDiagramId].nodes = state.nodes;
-          diagrams[state.currentDiagramId].edges = state.edges;
+          diagrams[state.activeDiagramId].nodes = state.nodes;
+          diagrams[state.activeDiagramId].edges = state.edges;
           /* eslint-enable functional/immutable-data */
 
           // create new diagram if it doesn't exist
@@ -183,11 +182,11 @@ export const useDiagramStore = create<AllDiagramState & DiagramState & DiagramAc
             };
 
             const claimDiagramIds = state.claimDiagramIds.concat(diagramId);
-            return { currentDiagramId: diagramId, ...diagrams[diagramId], claimDiagramIds };
+            return { activeDiagramId: diagramId, ...diagrams[diagramId], claimDiagramIds };
           }
 
           // set diagram
-          return { currentDiagramId: diagramId, ...diagrams[diagramId] };
+          return { activeDiagramId: diagramId, ...diagrams[diagramId] };
         },
         false,
         "setActiveDiagram"
