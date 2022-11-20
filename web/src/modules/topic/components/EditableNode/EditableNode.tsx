@@ -2,6 +2,7 @@ import { Global } from "@emotion/react";
 import { useTheme } from "@mui/material";
 import { Handle, Position } from "reactflow";
 
+import { useDiagramStore } from "../Diagram.store";
 import { NodeProps } from "../Diagram/Diagram";
 import { ScoreDial } from "../ScoreDial/ScoreDial";
 import { NodeDecoration } from "../nodeDecorations";
@@ -24,14 +25,15 @@ export const EditableNode = ({
   NodeIcon,
   type,
 }: NodeProps & NodeDecoration) => {
+  const direction = useDiagramStore((state) => state.direction);
   const theme = useTheme();
   const color = theme.palette[themeColor].main;
 
   // add node button group needs to be type-specific (at least for claim types vs problem/solution types)
   return (
     <>
-      <Handle type="target" position={Position.Top} />
-      <AddNodeButtonGroupParent nodeId={id} as="Parent" />
+      <Handle type="target" position={direction == "TB" ? Position.Top : Position.Left} />
+      <AddNodeButtonGroupParent nodeId={id} as="Parent" direction={direction} />
 
       <YEdgeDiv>
         <NodeTypeDiv>
@@ -52,8 +54,8 @@ export const EditableNode = ({
       </MiddleDiv>
       <YEdgeDiv />
 
-      <AddNodeButtonGroupChild nodeId={id} as="Child" />
-      <Handle type="source" position={Position.Bottom} />
+      <AddNodeButtonGroupChild nodeId={id} as="Child" direction={direction} />
+      <Handle type="source" position={direction == "TB" ? Position.Bottom : Position.Right} />
 
       <Global styles={nodeStyles(data.width, color, type)} />
     </>

@@ -2,14 +2,16 @@ import dagre from "dagre";
 
 import { type Edge, type Node } from "../components/Diagram.store";
 
+export type Direction = "TB" | "BT" | "LR" | "RL";
+
 // mostly from https://reactflow.dev/docs/examples/layout/dagre/
-export const layout = (nodes: Node[], edges: Edge[]) => {
+export const layout = (nodes: Node[], edges: Edge[], direction: Direction) => {
   const dagreGraph = new dagre.graphlib.Graph();
   const height = 45; // grab size from node, but how? size adjusts based on input rows
 
   dagreGraph.setDefaultEdgeLabel(() => ({}));
 
-  dagreGraph.setGraph({ rankdir: "TB" });
+  dagreGraph.setGraph({ rankdir: direction });
 
   nodes.forEach((node) => {
     dagreGraph.setNode(node.id, { width: node.data.width, height: height });

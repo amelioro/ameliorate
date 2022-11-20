@@ -1,7 +1,7 @@
 import create from "zustand";
 import { devtools } from "zustand/middleware";
 
-import { layout } from "../utils/layout";
+import { Direction, layout } from "../utils/layout";
 import { NodeType } from "./nodeDecorations";
 
 export type As = "Parent" | "Child";
@@ -48,7 +48,8 @@ export type Edge = ReturnType<typeof buildEdge>;
 const getInitialNodes = () => {
   const { layoutedNodes: initialNodes } = layout(
     [buildNode({ id: nextNodeId(), type: "Problem" })],
-    []
+    [],
+    "TB"
   );
 
   return initialNodes;
@@ -58,6 +59,7 @@ const diagrams: Record<string, DiagramState> = {
   root: {
     nodes: getInitialNodes(),
     edges: [],
+    direction: "TB",
   },
 };
 
@@ -74,6 +76,7 @@ interface AllDiagramState {
 interface DiagramState {
   nodes: Node[];
   edges: Edge[];
+  direction: Direction;
 }
 
 export type ComponentType = "node" | "edge";
@@ -97,6 +100,7 @@ export const useDiagramStore = create<AllDiagramState & DiagramState & DiagramAc
     claimDiagramIds: [],
     nodes: diagrams.root.nodes,
     edges: diagrams.root.edges,
+    direction: diagrams.root.direction,
 
     addNode: (toNodeId, as, type) => {
       set(
@@ -116,7 +120,7 @@ export const useDiagramStore = create<AllDiagramState & DiagramState & DiagramAc
 
           const newNodes = state.nodes.concat(newNode);
           const newEdges = state.edges.concat(newEdge);
-          const { layoutedNodes, layoutedEdges } = layout(newNodes, newEdges);
+          const { layoutedNodes, layoutedEdges } = layout(newNodes, newEdges, state.direction);
           return { nodes: layoutedNodes, edges: layoutedEdges };
         },
         false,
@@ -179,6 +183,7 @@ export const useDiagramStore = create<AllDiagramState & DiagramState & DiagramAc
             diagrams[diagramId] = {
               nodes: getInitialNodes(),
               edges: [],
+              direction: "LR",
             };
 
             const claimDiagramIds = state.claimDiagramIds.concat(diagramId);

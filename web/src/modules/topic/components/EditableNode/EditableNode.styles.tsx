@@ -1,12 +1,11 @@
 import styled from "@emotion/styled";
 import { TextareaAutosize, css } from "@mui/material";
 
+import { Direction } from "../../utils/layout";
 import { AddNodeButtonGroup } from "../AddNodeButtonGroup/AddNodeButtonGroup";
 
 const StyledAddNodeButtonGroup = styled(AddNodeButtonGroup)`
   position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
   display: none;
 
   .react-flow__node:hover > &,
@@ -15,12 +14,49 @@ const StyledAddNodeButtonGroup = styled(AddNodeButtonGroup)`
   }
 `;
 
-export const AddNodeButtonGroupParent = styled(StyledAddNodeButtonGroup)`
-  top: -30px;
+const gap = "10px";
+const options = {
+  shouldForwardProp: (prop: string) => !["direction"].includes(prop),
+};
+
+export const AddNodeButtonGroupParent = styled(StyledAddNodeButtonGroup, options)<{
+  direction: Direction;
+}>`
+  ${({ direction }) => {
+    if (direction === "TB") {
+      return css`
+        left: 50%;
+        top: 0;
+        transform: translateX(-50%) translateY(-100%) translateY(-${gap});
+      `;
+    } else {
+      return css`
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%) translateX(-100%) translateX(-${gap});
+      `;
+    }
+  }}
 `;
 
-export const AddNodeButtonGroupChild = styled(StyledAddNodeButtonGroup)`
-  bottom: -30px;
+export const AddNodeButtonGroupChild = styled(StyledAddNodeButtonGroup, options)<{
+  direction: Direction;
+}>`
+  ${({ direction }) => {
+    if (direction === "TB") {
+      return css`
+        left: 50%;
+        bottom: 0;
+        transform: translateX(-50%) translateY(100%) translateY(${gap});
+      `;
+    } else {
+      return css`
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%) translateX(100%) translateX(${gap});
+      `;
+    }
+  }}
 `;
 
 export const YEdgeDiv = styled.div`
