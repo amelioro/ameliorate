@@ -45,9 +45,9 @@ function buildEdge(sourceNodeId: string, targetNodeId: string) {
 }
 export type Edge = ReturnType<typeof buildEdge>;
 
-const getInitialNodes = () => {
+const getInitialNodes = (startingNodeType: NodeType) => {
   const { layoutedNodes: initialNodes } = layout(
-    [buildNode({ id: nextNodeId(), type: "Problem" })],
+    [buildNode({ id: nextNodeId(), type: startingNodeType })],
     [],
     "TB"
   );
@@ -57,7 +57,7 @@ const getInitialNodes = () => {
 
 const diagrams: Record<string, DiagramState> = {
   root: {
-    nodes: getInitialNodes(),
+    nodes: getInitialNodes("Problem"),
     edges: [],
     direction: "TB",
   },
@@ -181,7 +181,7 @@ export const useDiagramStore = create<AllDiagramState & DiagramState & DiagramAc
             // TODO: perhaps we could use classes to isolate/indicate state & state change?
             // eslint-disable-next-line functional/immutable-data
             diagrams[diagramId] = {
-              nodes: getInitialNodes(),
+              nodes: getInitialNodes("RootClaim"),
               edges: [],
               direction: "LR",
             };

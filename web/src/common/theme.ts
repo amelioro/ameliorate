@@ -14,11 +14,17 @@ declare module "@mui/material/styles" {
   interface Palette {
     problem: Palette["primary"];
     solution: Palette["primary"];
+    rootClaim: Palette["primary"];
+    support: Palette["primary"];
+    critique: Palette["primary"];
   }
 
   interface PaletteOptions {
     problem: PaletteOptions["primary"];
     solution: PaletteOptions["primary"];
+    rootClaim: PaletteOptions["primary"];
+    support: PaletteOptions["primary"];
+    critique: PaletteOptions["primary"];
   }
 }
 
@@ -26,6 +32,9 @@ declare module "@mui/material/Button" {
   interface ButtonPropsColorOverrides {
     problem: true;
     solution: true;
+    rootClaim: true;
+    support: true;
+    critique: true;
   }
 }
 
@@ -63,6 +72,9 @@ const sharedPalette = {
   },
   problem: augmentColor({ color: { main: secondary } }),
   solution: augmentColor({ color: { main: primary } }),
+  rootClaim: augmentColor({ color: { main: primary } }),
+  support: augmentColor({ color: { main: primary } }),
+  critique: augmentColor({ color: { main: primary } }),
 };
 
 export const getThemeOptions = (mode: PaletteMode): ThemeOptions => ({

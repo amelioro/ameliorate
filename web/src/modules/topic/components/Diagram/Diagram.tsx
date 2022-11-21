@@ -26,6 +26,9 @@ const buildNodeComponent = (type: NodeType) => {
 const nodeTypes: Record<NodeType, ComponentType<NodeProps>> = {
   Problem: buildNodeComponent("Problem"),
   Solution: buildNodeComponent("Solution"),
+  RootClaim: buildNodeComponent("RootClaim"),
+  Support: buildNodeComponent("Support"),
+  Critique: buildNodeComponent("Critique"),
 };
 
 const edgeTypes: Record<"ScoreEdge", ComponentType<EdgeProps>> = { ScoreEdge: ScoreEdge };
