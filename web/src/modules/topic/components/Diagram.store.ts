@@ -92,6 +92,8 @@ interface DiagramActions {
   setActiveDiagram: (diagramId: string) => void;
 }
 
+// TODO: reorganize so that lint errors are more specific; right now, any error in this invocation
+// seems to report all lines in the invocation, making it very hard to debug.
 export const useDiagramStore = create<AllDiagramState & DiagramState & DiagramActions>()(
   // seems like we should be able to auto-wrap all stores with devtools
   devtools((set) => ({
