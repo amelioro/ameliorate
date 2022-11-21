@@ -12,27 +12,20 @@ import {
 import { Edge, Node, useDiagramStore } from "../Diagram.store";
 import { EditableNode } from "../EditableNode/EditableNode";
 import { ScoreEdge } from "../ScoreEdge/ScoreEdge";
-import { type NodeDecoration, type NodeType, nodeDecorations } from "../nodeDecorations";
+import { type NodeType } from "../nodeDecorations";
 import { PositionedIconButton, StyledReactFlow } from "./Diagram.styles";
 
-const buildNodeComponent = (type: NodeType, decoration: NodeDecoration) => {
+const buildNodeComponent = (type: NodeType) => {
   // eslint-disable-next-line react/display-name -- react flow dynamically creates these components without name anyway
   return (props: NodeProps) => {
-    return (
-      <EditableNode
-        {...props}
-        themeColor={decoration.themeColor}
-        NodeIcon={decoration.NodeIcon}
-        type={type}
-      />
-    );
+    return <EditableNode {...props} type={type} />;
   };
 };
 
 // this can be generated via `nodeDecorations` but hard to do without the complexity making it hard to follow, so leaving this hardcoded
 const nodeTypes: Record<NodeType, ComponentType<NodeProps>> = {
-  Problem: buildNodeComponent("Problem", nodeDecorations.Problem),
-  Solution: buildNodeComponent("Solution", nodeDecorations.Solution),
+  Problem: buildNodeComponent("Problem"),
+  Solution: buildNodeComponent("Solution"),
 };
 
 const edgeTypes: Record<"ScoreEdge", ComponentType<EdgeProps>> = { ScoreEdge: ScoreEdge };

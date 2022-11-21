@@ -5,7 +5,7 @@ import { Handle, Position } from "reactflow";
 import { useDiagramStore } from "../Diagram.store";
 import { NodeProps } from "../Diagram/Diagram";
 import { ScoreDial } from "../ScoreDial/ScoreDial";
-import { NodeDecoration } from "../nodeDecorations";
+import { NodeType, nodeDecorations } from "../nodeDecorations";
 import {
   AddNodeButtonGroupChild,
   AddNodeButtonGroupParent,
@@ -18,18 +18,15 @@ import {
   nodeStyles,
 } from "./EditableNode.styles";
 
-export const EditableNode = ({
-  id,
-  data,
-  themeColor,
-  NodeIcon,
-  type,
-}: NodeProps & NodeDecoration) => {
+export const EditableNode = ({ id, data, type }: NodeProps) => {
   const direction = useDiagramStore((state) => state.direction);
   const theme = useTheme();
-  const color = theme.palette[themeColor].main;
 
-  // add node button group needs to be type-specific (at least for claim types vs problem/solution types)
+  const nodeType = type as NodeType; // we always pass a NodeType from the diagram, but I'm not sure how to override react-flow's type to tell it that
+  const nodeDecoration = nodeDecorations[nodeType];
+  const color = theme.palette[nodeDecoration.themeColor].main;
+  const NodeIcon = nodeDecoration.NodeIcon;
+
   return (
     <>
       <Handle type="target" position={direction == "TB" ? Position.Top : Position.Left} />
@@ -38,7 +35,7 @@ export const EditableNode = ({
       <YEdgeDiv>
         <NodeTypeDiv>
           <NodeIcon sx={{ width: "8px", height: "8px" }} />
-          <NodeTypeSpan>{type}</NodeTypeSpan>
+          <NodeTypeSpan>{nodeType}</NodeTypeSpan>
         </NodeTypeDiv>
         <ScoreDial parentId={id} parentType="node" score={data.score} />
       </YEdgeDiv>
@@ -57,7 +54,7 @@ export const EditableNode = ({
       <AddNodeButtonGroupChild nodeId={id} as="Child" direction={direction} />
       <Handle type="source" position={direction == "TB" ? Position.Bottom : Position.Right} />
 
-      <Global styles={nodeStyles(data.width, color, type)} />
+      <Global styles={nodeStyles(data.width, color, nodeType)} />
     </>
   );
 };

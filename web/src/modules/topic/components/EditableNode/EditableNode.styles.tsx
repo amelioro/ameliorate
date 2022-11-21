@@ -3,6 +3,7 @@ import { TextareaAutosize, css } from "@mui/material";
 
 import { Direction } from "../../utils/layout";
 import { AddNodeButtonGroup } from "../AddNodeButtonGroup/AddNodeButtonGroup";
+import { NodeType } from "../nodeDecorations";
 
 const StyledAddNodeButtonGroup = styled(AddNodeButtonGroup)`
   position: absolute;
@@ -99,9 +100,9 @@ export const StyledTextareaAutosize = styled(TextareaAutosize)<StyledTextareaPro
   background-color: ${({ color }) => color};
 `;
 
-export const nodeStyles = (width: number, color: string, type: string) => css`
+export const nodeStyles = (width: number, color: string, nodeType: NodeType) => css`
   /* mostly copied from https://github.com/wbkd/react-flow/blob/147656b22f577bb4141664d000e62ada9b490473/src/theme-default.css#L42-L77 */
-  .react-flow__node-${type} {
+  .react-flow__node-${nodeType} {
     padding: 0px;
     border-radius: 3px;
     width: ${width}px;
