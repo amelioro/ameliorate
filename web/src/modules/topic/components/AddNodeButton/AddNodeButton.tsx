@@ -14,8 +14,12 @@ export const AddNodeButton = ({ nodeId, as, nodeType }: Props) => {
   const decoration = nodeDecorations[nodeType];
 
   return (
-    <StyledButton color={decoration.themeColor} onClick={() => addNode(nodeId, as, nodeType)}>
-      {nodeType}
+    <StyledButton
+      color={decoration.themeColor}
+      size="small"
+      onClick={() => addNode(nodeId, as, nodeType)}
+    >
+      <decoration.NodeIcon />
     </StyledButton>
   );
 };
