@@ -58,7 +58,7 @@ export const Diagram = () => {
 
   const showCloseButton = activeDiagramId != "root";
   const closeButton = (
-    <PositionedIconButton onClick={() => setActiveDiagram("root")} color="secondary">
+    <PositionedIconButton onClick={() => setActiveDiagram("root")} color="primary">
       <CloseRounded />
     </PositionedIconButton>
   );

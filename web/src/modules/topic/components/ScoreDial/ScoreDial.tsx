@@ -57,6 +57,7 @@ export const ScoreDial = ({ parentId, parentType, score }: ScoreDialProps) => {
         position={buttonPositions[index]}
         key={possibleScore}
         variant="contained"
+        color="inherit" // idk how this becomes gray but that's the color that looks good here
         onClick={() => scoreParent(parentId, parentType, possibleScore)}
       >
         {possibleScore}
@@ -75,6 +76,7 @@ export const ScoreDial = ({ parentId, parentType, score }: ScoreDialProps) => {
           onClick={() => setActiveDiagram(childDiagramId)}
           buttonLength={buttonLength}
           variant="contained"
+          color="inherit" // idk how this becomes gray but that's the color that looks good here
           sx={doesDiagramExist(childDiagramId) ? { border: 1 } : {}}
         >
           {score}

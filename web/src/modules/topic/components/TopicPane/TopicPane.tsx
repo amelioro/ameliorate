@@ -44,7 +44,7 @@ export const TopicPane = () => {
     <>
       {/* div to enable menu button to be positioned to the right of the drawer */}
       <PositionedDiv>
-        <PositionedIconButton onClick={handleDrawerToggle}>
+        <PositionedIconButton onClick={handleDrawerToggle} color="primary">
           {isTopicDrawerOpen ? <ChevronLeft /> : <Menu />}
         </PositionedIconButton>
         {/* `permanent` because `persistent` adds transitions that conflict with our styles */}

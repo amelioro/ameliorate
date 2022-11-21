@@ -1,6 +1,7 @@
 // used material color palettes to find complement https://material.io/design/color/the-color-system.html#tools-for-picking-colors
 // used material color tool to confirm accessibility (legibility) https://material.io/resources/color/#!/?view.left=1&view.right=1&primary.color=4ab74c&secondary.color=b74ab5
 // used mui-theme-creator to see the colors in action and pick light & dark palettes https://bareynol.github.io/mui-theme-creator/?firstName=&lastName=&email=&password=
+// color names from color-name.com
 
 import {
   type Theme as MaterialUITheme,
@@ -58,23 +59,20 @@ const darkPalette = {
   // },
 };
 
-const primary = "#4ab74c";
-const secondary = "#b84ab6"; // slightly darker so that text isn't white?
+const primary = "#4AB84E"; // apple (green): good, optimistic, let's solve things
+const secondary = "#B84AB4"; // deep fuchsia (purple): truth; complementary to primary
 const { palette } = createTheme();
 const { augmentColor } = palette; // automatically creates light and dark colors too, thanks https://stackoverflow.com/a/69836010
 
 const sharedPalette = {
-  primary: {
-    main: primary, // green: good, optimistic, let's solve things
-  },
-  secondary: {
-    main: secondary, // purple: truth, complementary to green
-  },
-  problem: augmentColor({ color: { main: secondary } }),
+  primary: { main: primary },
+  secondary: { main: secondary },
+  // use black contrast text for consistency with other node colors; accessibility tool indicates black is still accessible
+  problem: augmentColor({ color: { main: secondary, contrastText: "rgba(0, 0, 0, 0.87)" } }),
   solution: augmentColor({ color: { main: primary } }),
-  rootClaim: augmentColor({ color: { main: primary } }),
-  support: augmentColor({ color: { main: primary } }),
-  critique: augmentColor({ color: { main: primary } }),
+  rootClaim: augmentColor({ color: { main: "#DA9526" } }), // goldenrod (gold): somewhat neutral; analogous to critique
+  support: augmentColor({ color: { main: "#26C5DA" } }), // battery charged blue (cyan): non-green support-ish color; top color from https://zenoo.github.io/mui-theme-creator/
+  critique: augmentColor({ color: { main: "#DA3B26", contrastText: "rgba(0, 0, 0, 0.87)" } }), // vermilion (red-orange): opposing; complementary to support
 };
 
 export const getThemeOptions = (mode: PaletteMode): ThemeOptions => ({

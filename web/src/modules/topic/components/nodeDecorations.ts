@@ -38,7 +38,7 @@ export const nodeDecorations: Record<NodeType, NodeDecoration> = {
     },
   },
   RootClaim: {
-    themeColor: "solution",
+    themeColor: "rootClaim",
     NodeIcon: Article,
     allowed: {
       Parent: [],
@@ -46,7 +46,7 @@ export const nodeDecorations: Record<NodeType, NodeDecoration> = {
     },
   },
   Support: {
-    themeColor: "solution",
+    themeColor: "support",
     NodeIcon: ThumbUp,
     allowed: {
       Parent: [],
@@ -54,7 +54,7 @@ export const nodeDecorations: Record<NodeType, NodeDecoration> = {
     },
   },
   Critique: {
-    themeColor: "solution",
+    themeColor: "critique",
     NodeIcon: ThumbDown,
     allowed: {
       Parent: [],
