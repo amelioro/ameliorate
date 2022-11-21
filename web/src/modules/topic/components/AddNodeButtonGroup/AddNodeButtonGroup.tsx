@@ -25,7 +25,7 @@ export const AddNodeButtonGroup = ({ className, nodeId, nodeType, as }: Props) =
       orientation={direction === "TB" ? "horizontal" : "vertical"}
     >
       {buttonTypes.map((type) => (
-        <AddNodeButton key={nodeId} nodeId={nodeId} as={as} nodeType={type} />
+        <AddNodeButton key={type} nodeId={nodeId} as={as} nodeType={type} />
       ))}
     </ButtonGroup>
   );
