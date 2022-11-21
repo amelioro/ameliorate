@@ -1,70 +1,53 @@
-import { useTheme } from "@mui/material";
+import { AppBar, Box, Toolbar, useTheme } from "@mui/material";
 import { NextPage } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { ReactNode } from "react";
 
-interface Props {
+import Link from "./Link";
+
+interface NavLinkProps {
+  href: string;
+  display?: string;
   children: ReactNode;
 }
 
-const Layout: NextPage<Props> = ({ children }) => {
+interface LayoutProps {
+  children: ReactNode;
+}
+
+const NavLink = ({ href, display, children }: NavLinkProps) => {
+  return (
+    <Link href={href} display={display} color="text" underline="none">
+      {children}
+    </Link>
+  );
+};
+
+const Layout: NextPage<LayoutProps> = ({ children }) => {
   const theme = useTheme();
+  const githubIconSrc =
+    theme.palette.mode == "light" ? "/GitHub-Mark-64px.png" : "/GitHub-Mark-Light-64px.png";
 
   return (
     <>
-      <header>
-        <nav>
-          <Link href="/">
-            <a>ameliorate</a>
-          </Link>
-
-          <div className="right">
-            <Image src="/Search_Icon.svg" height={32} width={32} alt="search" />
-            <Link href="/new">
-              <a>create understanding</a>
-            </Link>
-            <Link href="/mine">
-              <a>my understandings</a>
-            </Link>
-            <Link href="/about">
-              <a>about</a>
-            </Link>
-            <Link href="/login">
-              <a>login</a>
-            </Link>
-            <Link href="https://github.com/keyserj/ameliorate">
-              <a>
-                <Image src="/GitHub-Mark-64px.png" height={32} width={32} alt="github link" />
-              </a>
-            </Link>
-          </div>
-        </nav>
-      </header>
+      <AppBar position="sticky">
+        <Toolbar variant="dense">
+          <Box flex="1" display="flex" justifyContent="space-between" alignItems="center">
+            <NavLink href="/">ameliorate</NavLink>
+            <Box display="flex" gap="15px" alignItems="center">
+              {/* <NavLink href="/new">create understanding</NavLink> */}
+              {/* <NavLink href="/mine">my understandings</NavLink> */}
+              <NavLink href="/about">about</NavLink>
+              {/* <NavLink href="/login">login</NavLink> */}
+              <NavLink href="https://github.com/keyserj/ameliorate" display="flex">
+                <Image src={githubIconSrc} height={32} width={32} alt="github link" />
+              </NavLink>
+            </Box>
+          </Box>
+        </Toolbar>
+      </AppBar>
 
       <main>{children}</main>
-
-      <style jsx>{`
-        nav {
-          display: flex;
-          align-items: center;
-          padding: 10px;
-          background-color: ${theme.palette.primary.main};
-          border-bottom: solid ${theme.palette.divider};
-        }
-
-        nav a {
-          display: flex;
-          color: ${theme.palette.primary.contrastText};
-        }
-
-        .right {
-          display: flex;
-          align-items: center;
-          margin-left: auto;
-          gap: 15px;
-        }
-      `}</style>
     </>
   );
 };
