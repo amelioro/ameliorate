@@ -4,7 +4,7 @@ import { devtools } from "zustand/middleware";
 import { Direction, layout } from "../utils/layout";
 import { NodeType } from "./nodeDecorations";
 
-export type As = "Parent" | "Child";
+export type NodeRelation = "Parent" | "Child";
 
 // TODO: perhaps we could use classes to isolate/indicate state & state change?
 /* eslint-disable functional/no-let */
@@ -85,7 +85,7 @@ export const possibleScores = ["-", "1", "2", "3", "4", "5", "6", "7", "8", "9",
 export type Score = typeof possibleScores[number];
 
 interface DiagramActions {
-  addNode: (_toNodeId: string, _as: As, _type: NodeType) => void;
+  addNode: (_toNodeId: string, _as: NodeRelation, _type: NodeType) => void;
   deselectNodes: () => void;
   doesDiagramExist: (diagramId: string) => boolean;
   scoreParent: (parentId: string, parentType: ComponentType, score: Score) => void;

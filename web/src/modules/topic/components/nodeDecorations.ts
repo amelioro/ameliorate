@@ -1,6 +1,6 @@
 import { Article, Check, Extension, ThumbDown, ThumbUp } from "@mui/icons-material";
 
-import { As } from "./Diagram.store";
+import { NodeRelation } from "./Diagram.store";
 
 export interface NodeDecoration {
   themeColor:
@@ -13,7 +13,7 @@ export interface NodeDecoration {
     | "critique"; // theme colors; is there a better way to get this?
   NodeIcon: typeof Extension;
   allowed: {
-    [key in As]: NodeType[];
+    [key in NodeRelation]: NodeType[];
   };
 }
 

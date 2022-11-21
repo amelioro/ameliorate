@@ -1,10 +1,10 @@
-import { As, useDiagramStore } from "../Diagram.store";
+import { NodeRelation, useDiagramStore } from "../Diagram.store";
 import { NodeType, nodeDecorations } from "../nodeDecorations";
 import { StyledButton } from "./AddNodeButton.styles";
 
 interface Props {
   nodeId: string;
-  as: As;
+  as: NodeRelation;
   nodeType: NodeType;
 }
 

@@ -1,14 +1,14 @@
 import { ButtonGroup } from "@mui/material";
 
 import { AddNodeButton } from "../AddNodeButton/AddNodeButton";
-import { As, useDiagramStore } from "../Diagram.store";
+import { NodeRelation, useDiagramStore } from "../Diagram.store";
 import { NodeType, nodeDecorations } from "../nodeDecorations";
 
 interface Props {
   className?: string;
   nodeId: string;
   nodeType: NodeType;
-  as: As;
+  as: NodeRelation;
 }
 
 export const AddNodeButtonGroup = ({ className, nodeId, nodeType, as }: Props) => {
