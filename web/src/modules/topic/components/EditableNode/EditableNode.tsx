@@ -1,5 +1,6 @@
 import { Global } from "@emotion/react";
 import { useTheme } from "@mui/material";
+import _ from "lodash";
 import { Handle, Position } from "reactflow";
 
 import { useDiagramStore } from "../Diagram.store";
@@ -35,7 +36,7 @@ export const EditableNode = ({ id, data, type }: NodeProps) => {
       <YEdgeDiv>
         <NodeTypeDiv>
           <NodeIcon sx={{ width: "8px", height: "8px" }} />
-          <NodeTypeSpan>{nodeType}</NodeTypeSpan>
+          <NodeTypeSpan>{_.startCase(nodeType)}</NodeTypeSpan>
         </NodeTypeDiv>
         <ScoreDial parentId={id} parentType="node" score={data.score} />
       </YEdgeDiv>
