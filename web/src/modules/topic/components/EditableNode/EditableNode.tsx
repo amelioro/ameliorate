@@ -30,7 +30,7 @@ export const EditableNode = ({ id, data, type }: NodeProps) => {
   return (
     <>
       <Handle type="target" position={direction == "TB" ? Position.Top : Position.Left} />
-      <AddNodeButtonGroupParent nodeId={id} as="Parent" direction={direction} />
+      <AddNodeButtonGroupParent nodeId={id} nodeType={nodeType} as="Parent" direction={direction} />
 
       <YEdgeDiv>
         <NodeTypeDiv>
@@ -51,7 +51,7 @@ export const EditableNode = ({ id, data, type }: NodeProps) => {
       </MiddleDiv>
       <YEdgeDiv />
 
-      <AddNodeButtonGroupChild nodeId={id} as="Child" direction={direction} />
+      <AddNodeButtonGroupChild nodeId={id} nodeType={nodeType} as="Child" direction={direction} />
       <Handle type="source" position={direction == "TB" ? Position.Bottom : Position.Right} />
 
       <Global styles={nodeStyles(data.width, color, nodeType)} />
