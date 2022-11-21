@@ -1,5 +1,5 @@
 import React from "react";
-import { getBezierPath } from "reactflow";
+import { EdgeLabelRenderer, getBezierPath } from "reactflow";
 
 import { EdgeProps } from "../Diagram/Diagram";
 import { ScoreDial } from "../ScoreDial/ScoreDial";
@@ -39,20 +39,14 @@ export const ScoreEdge = ({
         d={edgePath}
         markerEnd={markerEnd}
       />
-      <foreignObject
-        width={minEdgeLength}
-        height={minEdgeLength}
-        x={labelX - minEdgeLength / 2} // object is drawn from upper-left corner, not center
-        y={labelY - minEdgeLength / 2}
-        requiredExtensions="http://www.w3.org/1999/xhtml"
-      >
-        {/* flex stylings don't work directly from the foreignObject? so we need a div */}
-        <StyledDiv length={minEdgeLength}>
+      {/* see for example usage https://reactflow.dev/docs/api/edges/edge-label-renderer/ */}
+      <EdgeLabelRenderer>
+        <StyledDiv length={minEdgeLength} labelX={labelX} labelY={labelY}>
           {/* we'll always pass data - why does react-flow make it nullable :( */}
           {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */}
           <ScoreDial parentId={id} parentType="edge" score={data!.score} />
         </StyledDiv>
-      </foreignObject>
+      </EdgeLabelRenderer>
     </>
   );
 };
