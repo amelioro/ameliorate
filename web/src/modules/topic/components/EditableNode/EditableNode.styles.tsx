@@ -15,7 +15,7 @@ const StyledAddNodeButtonGroup = styled(AddNodeButtonGroup)`
   }
 `;
 
-const gap = "10px";
+const gap = "8px";
 const options = {
   shouldForwardProp: (prop: string) => !["direction"].includes(prop),
 };
