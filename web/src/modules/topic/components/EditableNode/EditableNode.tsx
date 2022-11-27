@@ -1,7 +1,6 @@
 import { Global } from "@emotion/react";
 import { useTheme } from "@mui/material";
 import _ from "lodash";
-import { Handle, Position } from "reactflow";
 
 import { useDiagramStore } from "../Diagram.store";
 import { NodeProps } from "../Diagram/Diagram";
@@ -30,7 +29,6 @@ export const EditableNode = ({ id, data, type }: NodeProps) => {
 
   return (
     <>
-      <Handle type="target" position={direction == "TB" ? Position.Top : Position.Left} />
       {/* should this use react-flow's NodeToolbar? seems like it'd automatically handle positioning */}
       <AddNodeButtonGroupParent nodeId={id} nodeType={nodeType} as="Parent" direction={direction} />
 
@@ -54,7 +52,6 @@ export const EditableNode = ({ id, data, type }: NodeProps) => {
       <YEdgeDiv />
 
       <AddNodeButtonGroupChild nodeId={id} nodeType={nodeType} as="Child" direction={direction} />
-      <Handle type="source" position={direction == "TB" ? Position.Bottom : Position.Right} />
 
       <Global styles={nodeStyles(data.width, color, nodeType)} />
     </>
