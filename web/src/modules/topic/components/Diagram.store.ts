@@ -24,7 +24,7 @@ const buildNode = ({ id, type }: BuildProps) => {
     data: {
       label: `text${id}`,
       score: "-" as Score,
-      width: 150,
+      width: 300,
     },
     position: { x: 0, y: 0 }, // assume layout will adjust this
     type: type,

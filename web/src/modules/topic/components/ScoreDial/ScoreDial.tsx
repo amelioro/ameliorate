@@ -1,5 +1,6 @@
 import _ from "lodash";
 
+import { minSpaceBetweenNodes } from "../../utils/layout";
 import { type ComponentType, Score, possibleScores, useDiagramStore } from "../Diagram.store";
 import { FloatingButton, FloatingDiv, MainButton, StyledDiv } from "./ScoreDial.style";
 
@@ -44,7 +45,7 @@ export const ScoreDial = ({ parentId, parentType, score }: ScoreDialProps) => {
 
   const childDiagramId = `${parentType}-${parentId}`;
 
-  const buttonLength = 10; //px
+  const buttonLength = minSpaceBetweenNodes / 5; //px
   const expansionRadius = 2 * buttonLength; // no collisions for fitting 11 elements
 
   // little awkward to use parallel arrays, but wanted to isolate position logic

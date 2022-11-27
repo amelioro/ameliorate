@@ -3,15 +3,16 @@ import dagre from "dagre";
 import { type Edge, type Node } from "../components/Diagram.store";
 
 export type Direction = "TB" | "BT" | "LR" | "RL";
+export const minSpaceBetweenNodes = 100;
 
 // mostly from https://reactflow.dev/docs/examples/layout/dagre/
 export const layout = (nodes: Node[], edges: Edge[], direction: Direction) => {
   const dagreGraph = new dagre.graphlib.Graph();
-  const height = 45; // grab size from node, but how? size adjusts based on input rows
+  const height = 90; // grab size from node, but how? size adjusts based on input rows
 
   dagreGraph.setDefaultEdgeLabel(() => ({}));
 
-  dagreGraph.setGraph({ rankdir: direction });
+  dagreGraph.setGraph({ rankdir: direction, ranksep: minSpaceBetweenNodes });
 
   nodes.forEach((node) => {
     dagreGraph.setNode(node.id, { width: node.data.width, height: height });

@@ -1,6 +1,7 @@
 import React from "react";
 import { EdgeLabelRenderer, getBezierPath } from "reactflow";
 
+import { minSpaceBetweenNodes } from "../../utils/layout";
 import { EdgeProps } from "../Diagram/Diagram";
 import { ScoreDial } from "../ScoreDial/ScoreDial";
 import { StyledDiv } from "./ScoreEdge.style";
@@ -28,8 +29,6 @@ export const ScoreEdge = ({
     targetPosition,
   });
 
-  const minEdgeLength = 50; // take up as much space as possible between nodes to have space for edge score hover
-
   return (
     <>
       <path
@@ -41,7 +40,7 @@ export const ScoreEdge = ({
       />
       {/* see for example usage https://reactflow.dev/docs/api/edges/edge-label-renderer/ */}
       <EdgeLabelRenderer>
-        <StyledDiv length={minEdgeLength} labelX={labelX} labelY={labelY}>
+        <StyledDiv length={minSpaceBetweenNodes} labelX={labelX} labelY={labelY}>
           {/* we'll always pass data - why does react-flow make it nullable :( */}
           {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */}
           <ScoreDial parentId={id} parentType="edge" score={data!.score} />

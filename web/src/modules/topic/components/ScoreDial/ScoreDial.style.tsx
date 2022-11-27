@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 export const StyledDiv = styled.div`
   display: flex;
   position: relative;
-  margin: 1px;
+  margin: 2px;
 `;
 
 interface StyledButtonProps {
@@ -20,8 +20,8 @@ const StyledButton = styled(Button, options)<StyledButtonProps>`
   height: ${({ buttonLength }) => `${buttonLength}px`};
   width: ${({ buttonLength }) => `${buttonLength}px`};
   min-width: ${({ buttonLength }) => `${buttonLength}px`};
-  line-height: 8px;
-  font-size: 8px;
+  line-height: 16px;
+  font-size: 16px;
   padding: 0px;
   border-radius: 50%;
 `;

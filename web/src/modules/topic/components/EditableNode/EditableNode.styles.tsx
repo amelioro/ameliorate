@@ -15,7 +15,7 @@ const StyledAddNodeButtonGroup = styled(AddNodeButtonGroup)`
   }
 `;
 
-const gap = "8px";
+const gap = "16px";
 const options = {
   shouldForwardProp: (prop: string) => !["direction"].includes(prop),
 };
@@ -64,27 +64,29 @@ export const YEdgeDiv = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  min-height: 12px;
+  min-height: 24px;
 `;
 
 export const NodeTypeDiv = styled.div`
   display: flex;
-  padding: 2px;
+  padding: 4px;
 `;
 
 export const NodeTypeSpan = styled.span`
-  font-size: 8px;
-  line-height: 8px;
-  padding-left: 2px;
+  font-size: 16px;
+  line-height: 16px;
+  padding-left: 4px;
 `;
 
 export const XEdgeDiv = styled.div`
-  width: 12px;
+  width: 24px;
 `;
 
 // allow handling mouse events for whole node without mouse icon changing to input for textarea
 export const MiddleDiv = styled.div`
   display: flex;
+  height: 100%;
+  min-height: 38px; // without setting this, not sure how to get this to fill out to node's height, while allowing node's height to be stretched if more text is added
 `;
 
 interface StyledTextareaProps {
@@ -98,18 +100,20 @@ export const StyledTextareaAutosize = styled(TextareaAutosize)<StyledTextareaPro
   text-align: center;
   align-self: center;
   background-color: ${({ color }) => color};
+  width: 100%;
+  font-size: 24px;
 `;
 
 export const nodeStyles = (width: number, color: string, nodeType: NodeType) => css`
   /* mostly copied from https://github.com/wbkd/react-flow/blob/147656b22f577bb4141664d000e62ada9b490473/src/theme-default.css#L42-L77 */
   .react-flow__node-${nodeType} {
     padding: 0px;
-    border-radius: 3px;
+    border-radius: 6px;
     width: ${width}px;
-    font-size: 12px;
+    min-height: 90px;
     color: #222;
     text-align: center;
-    border-width: 1px;
+    border-width: 2px;
     border-style: solid;
     background: ${color};
     border-color: #1a192b;
@@ -118,11 +122,11 @@ export const nodeStyles = (width: number, color: string, nodeType: NodeType) => 
 
     &.selectable {
       &:hover {
-        box-shadow: 0 1px 4px 1px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 2px 8px 2px rgba(0, 0, 0, 0.08);
       }
 
       &.selected {
-        box-shadow: 0 0 0 0.5px #1a192b;
+        box-shadow: 0 0 0 1px #1a192b;
       }
     }
 

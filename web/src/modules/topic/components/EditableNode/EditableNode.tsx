@@ -35,7 +35,7 @@ export const EditableNode = ({ id, data, type }: NodeProps) => {
 
       <YEdgeDiv>
         <NodeTypeDiv>
-          <NodeIcon sx={{ width: "8px", height: "8px" }} />
+          <NodeIcon sx={{ width: "16px", height: "16px" }} />
           <NodeTypeSpan>{_.startCase(nodeType)}</NodeTypeSpan>
         </NodeTypeDiv>
         <ScoreDial parentId={id} parentType="node" score={data.score} />
