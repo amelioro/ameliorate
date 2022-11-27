@@ -1,4 +1,4 @@
-import { CloseRounded } from "@mui/icons-material";
+import { Cancel } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import _ from "lodash";
 import { ComponentType } from "react";
@@ -59,7 +59,7 @@ export const Diagram = () => {
   const showCloseButton = activeDiagramId != "root";
   const closeButton = (
     <PositionedIconButton onClick={() => setActiveDiagram("root")} color="primary">
-      <CloseRounded />
+      <Cancel />
     </PositionedIconButton>
   );
 
