@@ -75,6 +75,8 @@ export const Diagram = () => {
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         fitView
+        fitViewOptions={{ maxZoom: 1 }}
+        minZoom={0.25}
         onPaneClick={deselectNodes}
       >
         <Background variant={BackgroundVariant.Dots} />
