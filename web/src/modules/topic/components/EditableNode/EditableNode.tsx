@@ -55,6 +55,7 @@ export const EditableNode = ({ id, data, type }: NodeProps) => {
           defaultValue={data.label}
           maxRows={3}
           onChange={(event) => setNodeLabel(id, event.target.value)}
+          className="nopan" // allow regular text input drag functionality without using reactflow's pan behavior
         />
         <XEdgeDiv />
       </MiddleDiv>
