@@ -7,6 +7,20 @@ import { NodeType } from "../nodeDecorations";
 
 const gap = 16;
 
+// enables ability to use hover to add a node by bridging the gap between the node and the add buttons
+export const HoverBridgeDiv = styled.div`
+  position: absolute;
+  height: calc(100% + ${2 * gap}px);
+  width: calc(100% + ${2 * gap}px);
+  transform: translateX(-${gap}px) translateY(-${gap}px);
+  z-index: -1; // behind node
+  display: none;
+
+  .react-flow__node:hover > & {
+    display: inherit;
+  }
+`;
+
 const StyledAddNodeButtonGroup = styled(AddNodeButtonGroup)`
   position: absolute;
   display: none;

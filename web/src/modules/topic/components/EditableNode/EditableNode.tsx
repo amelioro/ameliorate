@@ -10,6 +10,7 @@ import { NodeType, nodeDecorations } from "../nodeDecorations";
 import {
   AddNodeButtonGroupChild,
   AddNodeButtonGroupParent,
+  HoverBridgeDiv,
   MiddleDiv,
   NodeTypeDiv,
   NodeTypeSpan,
@@ -30,6 +31,8 @@ export const EditableNode = ({ id, data, type }: NodeProps) => {
 
   return (
     <>
+      <HoverBridgeDiv />
+
       <Handle type="target" position={direction == "TB" ? Position.Top : Position.Left} />
       {/* should this use react-flow's NodeToolbar? seems like it'd automatically handle positioning */}
       <AddNodeButtonGroupParent nodeId={id} nodeType={nodeType} as="Parent" direction={direction} />
