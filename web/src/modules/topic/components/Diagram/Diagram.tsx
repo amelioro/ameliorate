@@ -78,6 +78,8 @@ export const Diagram = () => {
         fitViewOptions={{ maxZoom: 1 }}
         minZoom={0.25}
         onPaneClick={deselectNodes}
+        nodesDraggable={false}
+        nodesConnectable={false} // disable because doesn't work yet
       >
         <Background variant={BackgroundVariant.Dots} />
         {_(nodes).isEmpty() && emptyText}
