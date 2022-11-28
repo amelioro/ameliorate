@@ -5,6 +5,8 @@ import { Direction } from "../../utils/layout";
 import { AddNodeButtonGroup } from "../AddNodeButtonGroup/AddNodeButtonGroup";
 import { NodeType } from "../nodeDecorations";
 
+const gap = 16;
+
 const StyledAddNodeButtonGroup = styled(AddNodeButtonGroup)`
   position: absolute;
   display: none;
@@ -15,7 +17,6 @@ const StyledAddNodeButtonGroup = styled(AddNodeButtonGroup)`
   }
 `;
 
-const gap = "16px";
 const options = {
   shouldForwardProp: (prop: string) => !["direction"].includes(prop),
 };
@@ -28,13 +29,13 @@ export const AddNodeButtonGroupParent = styled(StyledAddNodeButtonGroup, options
       return css`
         left: 50%;
         top: 0;
-        transform: translateX(-50%) translateY(-100%) translateY(-${gap});
+        transform: translateX(-50%) translateY(-100%) translateY(-${gap}px);
       `;
     } else {
       return css`
         top: 50%;
         left: 0;
-        transform: translateY(-50%) translateX(-100%) translateX(-${gap});
+        transform: translateY(-50%) translateX(-100%) translateX(-${gap}px);
       `;
     }
   }}
@@ -48,13 +49,13 @@ export const AddNodeButtonGroupChild = styled(StyledAddNodeButtonGroup, options)
       return css`
         left: 50%;
         bottom: 0;
-        transform: translateX(-50%) translateY(100%) translateY(${gap});
+        transform: translateX(-50%) translateY(100%) translateY(${gap}px);
       `;
     } else {
       return css`
         top: 50%;
         right: 0;
-        transform: translateY(-50%) translateX(100%) translateX(${gap});
+        transform: translateY(-50%) translateX(100%) translateX(${gap}px);
       `;
     }
   }}
