@@ -21,7 +21,10 @@ import {
 } from "./EditableNode.styles";
 
 export const EditableNode = ({ id, data, type }: NodeProps) => {
-  const direction = useDiagramStore((state) => state.direction);
+  const [direction, setNodeLabel] = useDiagramStore((state) => [
+    state.direction,
+    state.setNodeLabel,
+  ]);
   const theme = useTheme();
 
   const nodeType = type as NodeType; // we always pass a NodeType from the diagram, but I'm not sure how to override react-flow's type to tell it that
@@ -51,6 +54,7 @@ export const EditableNode = ({ id, data, type }: NodeProps) => {
           placeholder="Enter text..."
           defaultValue={data.label}
           maxRows={3}
+          onChange={(event) => setNodeLabel(id, event.target.value)}
         />
         <XEdgeDiv />
       </MiddleDiv>

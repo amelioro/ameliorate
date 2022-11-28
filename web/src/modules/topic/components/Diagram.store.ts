@@ -90,6 +90,7 @@ interface DiagramActions {
   doesDiagramExist: (diagramId: string) => boolean;
   scoreParent: (parentId: string, parentType: ComponentType, score: Score) => void;
   setActiveDiagram: (diagramId: string) => void;
+  setNodeLabel: (nodeId: string, value: string) => void;
 }
 
 // TODO: reorganize so that lint errors are more specific; right now, any error in this invocation
@@ -197,6 +198,22 @@ export const useDiagramStore = create<AllDiagramState & DiagramState & DiagramAc
         },
         false,
         "setActiveDiagram"
+      );
+    },
+
+    setNodeLabel: (nodeId, value) => {
+      set(
+        (state) => {
+          const newNodes = state.nodes.map((node) => {
+            if (node.id === nodeId) {
+              return { ...node, data: { ...node.data, label: value } };
+            }
+            return node;
+          });
+          return { nodes: newNodes };
+        },
+        false,
+        "setNodeLabel"
       );
     },
   }))
