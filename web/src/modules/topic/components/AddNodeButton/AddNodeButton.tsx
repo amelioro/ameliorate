@@ -1,4 +1,4 @@
-import { NodeRelation, useDiagramStore } from "../Diagram.store";
+import { NodeRelation, useDiagramStore } from "../../store/store";
 import { NodeType, nodeDecorations } from "../nodeDecorations";
 import { StyledButton } from "./AddNodeButton.styles";
 

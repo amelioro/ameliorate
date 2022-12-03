@@ -1,8 +1,8 @@
 import create from "zustand";
 import { devtools } from "zustand/middleware";
 
+import { NodeType } from "../components/nodeDecorations";
 import { Direction, layout } from "../utils/layout";
-import { NodeType } from "./nodeDecorations";
 
 export type NodeRelation = "Parent" | "Child";
 

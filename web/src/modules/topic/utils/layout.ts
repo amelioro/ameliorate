@@ -1,6 +1,6 @@
 import dagre from "dagre";
 
-import { type Edge, type Node } from "../components/Diagram.store";
+import { type Edge, type Node } from "../store/store";
 
 export type Direction = "TB" | "BT" | "LR" | "RL";
 export const minSpaceBetweenNodes = 100;

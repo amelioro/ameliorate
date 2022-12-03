@@ -1,6 +1,6 @@
 import { Article, Check, Extension, ThumbDown, ThumbUp } from "@mui/icons-material";
 
-import { NodeRelation } from "./Diagram.store";
+import { NodeRelation } from "../store/store";
 
 export interface NodeDecoration {
   themeColor:

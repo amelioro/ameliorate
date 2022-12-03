@@ -9,7 +9,7 @@ import {
   type NodeProps as DefaultNodeProps,
 } from "reactflow";
 
-import { Edge, Node, useDiagramStore } from "../Diagram.store";
+import { Edge, Node, useDiagramStore } from "../../store/store";
 import { EditableNode } from "../EditableNode/EditableNode";
 import { ScoreEdge } from "../ScoreEdge/ScoreEdge";
 import { type NodeType } from "../nodeDecorations";

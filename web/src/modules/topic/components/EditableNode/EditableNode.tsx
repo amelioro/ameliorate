@@ -3,7 +3,7 @@ import { useTheme } from "@mui/material";
 import _ from "lodash";
 import { Handle, Position } from "reactflow";
 
-import { useDiagramStore } from "../Diagram.store";
+import { useDiagramStore } from "../../store/store";
 import { NodeProps } from "../Diagram/Diagram";
 import { ScoreDial } from "../ScoreDial/ScoreDial";
 import { NodeType, nodeDecorations } from "../nodeDecorations";

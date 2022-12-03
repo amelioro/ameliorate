@@ -10,7 +10,7 @@ import {
 import { Collapse, List, ListItem, ListItemIcon, ListItemText, Toolbar } from "@mui/material";
 import { useState } from "react";
 
-import { useDiagramStore } from "../Diagram.store";
+import { useDiagramStore } from "../../store/store";
 import {
   NestedListItemButton,
   PositionedDiv,

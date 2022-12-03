@@ -1,7 +1,7 @@
 import _ from "lodash";
 
 import { minSpaceBetweenNodes } from "../../utils/layout";
-import { type ComponentType, Score, possibleScores, useDiagramStore } from "../Diagram.store";
+import { type ComponentType, Score, possibleScores, useDiagramStore } from "../../store/store";
 import { FloatingButton, FloatingDiv, MainButton, StyledDiv } from "./ScoreDial.style";
 
 const getButtonPositions = (expansionRadius: number, numberOfButtons: number) => {
