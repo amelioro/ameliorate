@@ -28,6 +28,7 @@ const buildNode = ({ id, type }: BuildProps) => {
       width: 300,
     },
     position: { x: 0, y: 0 }, // assume layout will adjust this
+    selected: false,
     type: type,
   };
 };
