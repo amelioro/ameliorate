@@ -3,7 +3,7 @@ import { TextareaAutosize, css } from "@mui/material";
 
 import { Direction } from "../../utils/layout";
 import { AddNodeButtonGroup } from "../AddNodeButtonGroup/AddNodeButtonGroup";
-import { NodeType } from "../nodeDecorations";
+import { NodeType } from "../../utils/nodes";
 
 const gap = 16;
 

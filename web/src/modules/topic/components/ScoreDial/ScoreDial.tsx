@@ -1,7 +1,8 @@
 import _ from "lodash";
 
+import { doesDiagramExist, scoreParent, setActiveDiagram } from "../../store/actions";
+import { type ComponentType, type Score, possibleScores } from "../../utils/diagram";
 import { minSpaceBetweenNodes } from "../../utils/layout";
-import { type ComponentType, Score, possibleScores, useDiagramStore } from "../Diagram.store";
 import { FloatingButton, FloatingDiv, MainButton, StyledDiv } from "./ScoreDial.style";
 
 const getButtonPositions = (expansionRadius: number, numberOfButtons: number) => {
@@ -37,12 +38,6 @@ interface ScoreDialProps {
 // and button text is hard to fit in a small spot (i.e. corner of an EditableNode)
 // ... although... would "-" work well in a slider? want to allow the ability to deselect a score
 export const ScoreDial = ({ parentId, parentType, score }: ScoreDialProps) => {
-  const [doesDiagramExist, scoreParent, setActiveDiagram] = useDiagramStore((state) => [
-    state.doesDiagramExist,
-    state.scoreParent,
-    state.setActiveDiagram,
-  ]);
-
   const childDiagramId = `${parentType}-${parentId}`;
 
   const buttonLength = minSpaceBetweenNodes / 5; //px

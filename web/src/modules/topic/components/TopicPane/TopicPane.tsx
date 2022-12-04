@@ -10,7 +10,8 @@ import {
 import { Collapse, List, ListItem, ListItemIcon, ListItemText, Toolbar } from "@mui/material";
 import { useState } from "react";
 
-import { useDiagramStore } from "../Diagram.store";
+import { setActiveDiagram } from "../../store/actions";
+import { rootId, useActiveDiagramId, useClaimDiagramIds } from "../../store/store";
 import {
   NestedListItemButton,
   PositionedDiv,
@@ -23,14 +24,8 @@ export const TopicPane = () => {
   const [isTopicDrawerOpen, setIsTopicDrawerOpen] = useState(true);
   const [isClaimsListOpen, setIsClaimsListOpen] = useState(true);
 
-  const [activeDiagramId, rootDiagramId, claimDiagramIds, setActiveDiagram] = useDiagramStore(
-    (state) => [
-      state.activeDiagramId,
-      state.rootDiagramId,
-      state.claimDiagramIds,
-      state.setActiveDiagram,
-    ]
-  );
+  const activeDiagramId = useActiveDiagramId();
+  const claimDiagramIds = useClaimDiagramIds();
 
   const handleDrawerToggle = () => {
     if (isTopicDrawerOpen) {
@@ -54,13 +49,13 @@ export const TopicPane = () => {
           <List>
             <ListItem key="1" disablePadding>
               <StyledListItemButton
-                selected={activeDiagramId === rootDiagramId}
-                onClick={() => setActiveDiagram(rootDiagramId)}
+                selected={activeDiagramId === rootId}
+                onClick={() => setActiveDiagram(rootId)}
               >
                 <ListItemIcon>
                   <AutoStories />
                 </ListItemIcon>
-                <ListItemText primary={rootDiagramId} />
+                <ListItemText primary={rootId} />
               </StyledListItemButton>
             </ListItem>
             <ListItem key="2" disablePadding>

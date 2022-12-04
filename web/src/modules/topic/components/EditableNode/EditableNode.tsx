@@ -3,10 +3,11 @@ import { useTheme } from "@mui/material";
 import _ from "lodash";
 import { Handle, Position } from "reactflow";
 
-import { useDiagramStore } from "../Diagram.store";
+import { setNodeLabel } from "../../store/actions";
+import { useActiveDirection } from "../../store/store";
+import { NodeType, nodeDecorations } from "../../utils/nodes";
 import { NodeProps } from "../Diagram/Diagram";
 import { ScoreDial } from "../ScoreDial/ScoreDial";
-import { NodeType, nodeDecorations } from "../nodeDecorations";
 import {
   AddNodeButtonGroupChild,
   AddNodeButtonGroupParent,
@@ -21,10 +22,7 @@ import {
 } from "./EditableNode.styles";
 
 export const EditableNode = ({ id, data, type }: NodeProps) => {
-  const [direction, setNodeLabel] = useDiagramStore((state) => [
-    state.direction,
-    state.setNodeLabel,
-  ]);
+  const direction = useActiveDirection();
   const theme = useTheme();
 
   const nodeType = type as NodeType; // we always pass a NodeType from the diagram, but I'm not sure how to override react-flow's type to tell it that

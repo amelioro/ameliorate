@@ -1,7 +1,8 @@
 import { Article, Check, Extension, ThumbDown, ThumbUp } from "@mui/icons-material";
 
-import { NodeRelation } from "./Diagram.store";
+import { NodeRelation } from "./diagram";
 
+// TODO: probably should separate decoration from non-decoration
 export interface NodeDecoration {
   themeColor:
     | "primary"

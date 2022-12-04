@@ -9,10 +9,12 @@ import {
   type NodeProps as DefaultNodeProps,
 } from "reactflow";
 
-import { Edge, Node, useDiagramStore } from "../Diagram.store";
+import { deselectNodes, setActiveDiagram } from "../../store/actions";
+import { rootId, useActiveDiagram, useActiveDiagramId } from "../../store/store";
+import { type Edge, type Node } from "../../utils/diagram";
+import { type NodeType } from "../../utils/nodes";
 import { EditableNode } from "../EditableNode/EditableNode";
 import { ScoreEdge } from "../ScoreEdge/ScoreEdge";
-import { type NodeType } from "../nodeDecorations";
 import { PositionedIconButton, StyledReactFlow } from "./Diagram.styles";
 
 const buildNodeComponent = (type: NodeType) => {
@@ -46,19 +48,15 @@ export interface EdgeProps extends DefaultEdgeProps {
 }
 
 export const Diagram = () => {
-  const [activeDiagramId, nodes, edges, deselectNodes, setActiveDiagram] = useDiagramStore(
-    (state) => [
-      state.activeDiagramId,
-      state.nodes,
-      state.edges,
-      state.deselectNodes,
-      state.setActiveDiagram,
-    ]
-  );
+  const activeDiagramId = useActiveDiagramId();
+  const activeDiagram = useActiveDiagram();
 
-  const showCloseButton = activeDiagramId != "root";
+  const nodes = activeDiagram.nodes;
+  const edges = activeDiagram.edges;
+
+  const showCloseButton = activeDiagramId != rootId;
   const closeButton = (
-    <PositionedIconButton onClick={() => setActiveDiagram("root")} color="primary">
+    <PositionedIconButton onClick={() => setActiveDiagram(rootId)} color="primary">
       <Cancel />
     </PositionedIconButton>
   );
