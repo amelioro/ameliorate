@@ -16,7 +16,7 @@ import {
   rootId,
   setActiveDiagram,
   useActiveDiagram,
-  useDiagramStore,
+  useActiveDiagramId,
 } from "../../store/store";
 import { EditableNode } from "../EditableNode/EditableNode";
 import { ScoreEdge } from "../ScoreEdge/ScoreEdge";
@@ -54,7 +54,7 @@ export interface EdgeProps extends DefaultEdgeProps {
 }
 
 export const Diagram = () => {
-  const activeDiagramId = useDiagramStore((state) => state.activeDiagramId);
+  const activeDiagramId = useActiveDiagramId();
   const activeDiagram = useActiveDiagram();
 
   const nodes = activeDiagram.nodes;

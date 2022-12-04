@@ -83,7 +83,7 @@ export type ComponentType = "node" | "edge";
 export const possibleScores = ["-", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"] as const;
 export type Score = typeof possibleScores[number];
 
-export const useDiagramStore = create<AllDiagramState>()(
+const useDiagramStore = create<AllDiagramState>()(
   immer(
     devtools(() => ({
       diagrams: initialDiagrams,
@@ -91,6 +91,10 @@ export const useDiagramStore = create<AllDiagramState>()(
     }))
   )
 );
+
+export const useActiveDiagramId = () => {
+  return useDiagramStore((state) => state.activeDiagramId);
+};
 
 export const useActiveDiagram = () => {
   return useDiagramStore((state) => state.diagrams[state.activeDiagramId]);
