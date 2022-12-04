@@ -128,7 +128,11 @@ export const useDiagramStore = create<AllDiagramState & DiagramState & DiagramAc
             const newNodes = state.nodes.concat(newNode);
             const newEdges = state.edges.concat(newEdge);
             const { layoutedNodes, layoutedEdges } = layout(newNodes, newEdges, state.direction);
-            return { nodes: layoutedNodes, edges: layoutedEdges };
+
+            /* eslint-disable functional/immutable-data, no-param-reassign */
+            state.nodes = layoutedNodes;
+            state.edges = layoutedEdges;
+            /* eslint-enable functional/immutable-data, no-param-reassign */
           },
           false,
           "addNode" // little gross, seems like this should be inferrable from method name
@@ -138,10 +142,15 @@ export const useDiagramStore = create<AllDiagramState & DiagramState & DiagramAc
       deselectNodes: () => {
         set(
           (state) => {
-            const newNodes = state.nodes.map((node) => {
-              return { ...node, selected: false };
+            state.nodes.forEach((node) => {
+              // TODO: super jank - node.selected is always false, so setting to true ensures the change is fired (I think)
+              // somehow returning { ...node, selected: false } without immer was actually working as well...
+              // probably should change how we're using `selected`
+              /* eslint-disable functional/immutable-data, no-param-reassign */
+              node.selected = true;
+              node.selected = false;
+              /* eslint-enable functional/immutable-data, no-param-reassign */
             });
-            return { nodes: newNodes };
           },
           false,
           "deselectNodes"
@@ -154,19 +163,17 @@ export const useDiagramStore = create<AllDiagramState & DiagramState & DiagramAc
       // theoretically we should be able to just re-render the affected component...
       // at least the HTML should mostly be unchanged I guess; not sure how big of a deal the performance impact is here
       scoreParent: (parentId, parentType, score) => {
-        // immer seems like it'd make this a lot simpler https://github.com/pmndrs/zustand#sick-of-reducers-and-changing-nested-state-use-immer
-        // state[parentsKey].data.score = score;
         set(
           (state) => {
             const parentsKey = parentType === "node" ? "nodes" : "edges";
-            const parents = state[parentsKey];
-            const newParents = parents.map((parent) => {
-              if (parent.id === parentId) {
-                return { ...parent, data: { ...parent.data, score: score } };
-              }
-              return parent;
-            });
-            return { [parentsKey]: newParents };
+            // RIP typescript can't infer this https://github.com/microsoft/TypeScript/issues/33591#issuecomment-786443978
+            const parents: (Node | Edge)[] = state[parentsKey];
+            const parent = parents.find((parent) => parent.id === parentId);
+            if (!parent) throw new Error("parent not found");
+
+            /* eslint-disable functional/immutable-data, no-param-reassign */
+            parent.data.score = score;
+            /* eslint-enable functional/immutable-data, no-param-reassign */
           },
           false,
           "scoreParent"
@@ -194,11 +201,19 @@ export const useDiagramStore = create<AllDiagramState & DiagramState & DiagramAc
               };
 
               const claimDiagramIds = state.claimDiagramIds.concat(diagramId);
-              return { activeDiagramId: diagramId, ...diagrams[diagramId], claimDiagramIds };
+
+              /* eslint-disable functional/immutable-data, no-param-reassign */
+              state.claimDiagramIds = claimDiagramIds;
+              /* eslint-enable functional/immutable-data, no-param-reassign */
             }
 
             // set diagram
-            return { activeDiagramId: diagramId, ...diagrams[diagramId] };
+            /* eslint-disable functional/immutable-data, no-param-reassign */
+            state.activeDiagramId = diagramId;
+            state.nodes = diagrams[diagramId].nodes;
+            state.edges = diagrams[diagramId].edges;
+            state.direction = diagrams[diagramId].direction;
+            /* eslint-enable functional/immutable-data, no-param-reassign */
           },
           false,
           "setActiveDiagram"
@@ -208,13 +223,12 @@ export const useDiagramStore = create<AllDiagramState & DiagramState & DiagramAc
       setNodeLabel: (nodeId, value) => {
         set(
           (state) => {
-            const newNodes = state.nodes.map((node) => {
-              if (node.id === nodeId) {
-                return { ...node, data: { ...node.data, label: value } };
-              }
-              return node;
-            });
-            return { nodes: newNodes };
+            const node = state.nodes.find((node) => node.id === nodeId);
+            if (!node) throw new Error("node not found");
+
+            /* eslint-disable functional/immutable-data, no-param-reassign */
+            node.data.label = value;
+            /* eslint-enable functional/immutable-data, no-param-reassign */
           },
           false,
           "setNodeLabel"
