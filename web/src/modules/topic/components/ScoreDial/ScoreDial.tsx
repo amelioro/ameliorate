@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-import { doesDiagramExist, scoreParent, setActiveDiagram } from "../../store/store";
+import { doesDiagramExist, scoreParent, setActiveDiagram } from "../../store/actions";
 import { type ComponentType, type Score, possibleScores } from "../../utils/diagram";
 import { minSpaceBetweenNodes } from "../../utils/layout";
 import { FloatingButton, FloatingDiv, MainButton, StyledDiv } from "./ScoreDial.style";

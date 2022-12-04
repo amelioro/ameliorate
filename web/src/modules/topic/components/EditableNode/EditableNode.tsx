@@ -3,10 +3,11 @@ import { useTheme } from "@mui/material";
 import _ from "lodash";
 import { Handle, Position } from "reactflow";
 
-import { setNodeLabel, useActiveDirection } from "../../store/store";
+import { setNodeLabel } from "../../store/actions";
+import { useActiveDirection } from "../../store/store";
+import { NodeType, nodeDecorations } from "../../utils/nodes";
 import { NodeProps } from "../Diagram/Diagram";
 import { ScoreDial } from "../ScoreDial/ScoreDial";
-import { NodeType, nodeDecorations } from "../../utils/nodes";
 import {
   AddNodeButtonGroupChild,
   AddNodeButtonGroupParent,

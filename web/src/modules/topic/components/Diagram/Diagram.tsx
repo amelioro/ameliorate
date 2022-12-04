@@ -9,17 +9,12 @@ import {
   type NodeProps as DefaultNodeProps,
 } from "reactflow";
 
-import {
-  deselectNodes,
-  rootId,
-  setActiveDiagram,
-  useActiveDiagram,
-  useActiveDiagramId,
-} from "../../store/store";
+import { deselectNodes, setActiveDiagram } from "../../store/actions";
+import { rootId, useActiveDiagram, useActiveDiagramId } from "../../store/store";
 import { type Edge, type Node } from "../../utils/diagram";
+import { type NodeType } from "../../utils/nodes";
 import { EditableNode } from "../EditableNode/EditableNode";
 import { ScoreEdge } from "../ScoreEdge/ScoreEdge";
-import { type NodeType } from "../../utils/nodes";
 import { PositionedIconButton, StyledReactFlow } from "./Diagram.styles";
 
 const buildNodeComponent = (type: NodeType) => {

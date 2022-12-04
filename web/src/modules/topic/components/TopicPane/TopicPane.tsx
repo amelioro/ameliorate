@@ -10,12 +10,8 @@ import {
 import { Collapse, List, ListItem, ListItemIcon, ListItemText, Toolbar } from "@mui/material";
 import { useState } from "react";
 
-import {
-  rootId,
-  setActiveDiagram,
-  useActiveDiagramId,
-  useClaimDiagramIds,
-} from "../../store/store";
+import { setActiveDiagram } from "../../store/actions";
+import { rootId, useActiveDiagramId, useClaimDiagramIds } from "../../store/store";
 import {
   NestedListItemButton,
   PositionedDiv,

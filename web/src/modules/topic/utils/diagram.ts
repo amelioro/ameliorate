@@ -1,3 +1,4 @@
+import { layout } from "./layout";
 import { NodeType } from "./nodes";
 
 export type NodeRelation = "Parent" | "Child";
@@ -33,6 +34,16 @@ export const buildEdge = (newEdgeId: string, sourceNodeId: string, targetNodeId:
   };
 };
 export type Edge = ReturnType<typeof buildEdge>;
+
+export const getInitialNodes = (startingNodeType: NodeType) => {
+  const { layoutedNodes: initialNodes } = layout(
+    [buildNode({ id: "0", type: startingNodeType })],
+    [],
+    "TB"
+  );
+
+  return initialNodes;
+};
 
 export type ComponentType = "node" | "edge";
 
