@@ -23,11 +23,9 @@ export const TopicPane = () => {
   const [isTopicDrawerOpen, setIsTopicDrawerOpen] = useState(true);
   const [isClaimsListOpen, setIsClaimsListOpen] = useState(true);
 
-  const [activeDiagramId, rootDiagramId, claimDiagramIds] = useDiagramStore((state) => [
-    state.activeDiagramId,
-    state.rootDiagramId,
-    state.claimDiagramIds,
-  ]);
+  const activeDiagramId = useDiagramStore((state) => state.activeDiagramId);
+  const rootDiagramId = useDiagramStore((state) => state.rootDiagramId);
+  const claimDiagramIds = useDiagramStore((state) => state.claimDiagramIds);
 
   const handleDrawerToggle = () => {
     if (isTopicDrawerOpen) {

@@ -1,7 +1,7 @@
 import { ButtonGroup } from "@mui/material";
 
-import { AddNodeButton } from "../AddNodeButton/AddNodeButton";
 import { NodeRelation, useDiagramStore } from "../../store/store";
+import { AddNodeButton } from "../AddNodeButton/AddNodeButton";
 import { NodeType, nodeDecorations } from "../nodeDecorations";
 
 interface Props {

@@ -46,11 +46,9 @@ export interface EdgeProps extends DefaultEdgeProps {
 }
 
 export const Diagram = () => {
-  const [activeDiagramId, nodes, edges] = useDiagramStore((state) => [
-    state.activeDiagramId,
-    state.nodes,
-    state.edges,
-  ]);
+  const activeDiagramId = useDiagramStore((state) => state.activeDiagramId);
+  const nodes = useDiagramStore((state) => state.nodes);
+  const edges = useDiagramStore((state) => state.edges);
 
   const showCloseButton = activeDiagramId != "root";
   const closeButton = (
