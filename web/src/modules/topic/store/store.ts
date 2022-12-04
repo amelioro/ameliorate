@@ -7,14 +7,6 @@ import { Direction, layout } from "../utils/layout";
 
 export type NodeRelation = "Parent" | "Child";
 
-// TODO: perhaps we could use classes to isolate/indicate state & state change?
-/* eslint-disable functional/no-let */
-let nodeId = 0;
-const nextNodeId = () => (nodeId++).toString();
-let edgeId = 0;
-const nextEdgeId = () => (edgeId++).toString();
-/* eslint-enable functional/no-let */
-
 interface BuildProps {
   id: string;
   type: NodeType;
@@ -34,9 +26,9 @@ const buildNode = ({ id, type }: BuildProps) => {
 };
 export type Node = ReturnType<typeof buildNode>;
 
-function buildEdge(sourceNodeId: string, targetNodeId: string) {
+function buildEdge(newEdgeId: string, sourceNodeId: string, targetNodeId: string) {
   return {
-    id: nextEdgeId(),
+    id: newEdgeId,
     data: {
       score: "-" as Score,
     },
@@ -49,7 +41,7 @@ export type Edge = ReturnType<typeof buildEdge>;
 
 const getInitialNodes = (startingNodeType: NodeType) => {
   const { layoutedNodes: initialNodes } = layout(
-    [buildNode({ id: nextNodeId(), type: startingNodeType })],
+    [buildNode({ id: "0", type: startingNodeType })],
     [],
     "TB"
   );
@@ -70,6 +62,8 @@ const initialDiagrams: Record<string, DiagramState> = {
 interface AllDiagramState {
   diagrams: Record<string, DiagramState>;
   activeDiagramId: string;
+  nextNodeId: number;
+  nextEdgeId: number;
 }
 
 interface DiagramState {
@@ -88,6 +82,8 @@ const useDiagramStore = create<AllDiagramState>()(
     devtools(() => ({
       diagrams: initialDiagrams,
       activeDiagramId: rootId,
+      nextNodeId: 1, // 0 is taken by the initial node
+      nextEdgeId: 0,
     }))
   )
 );
@@ -116,7 +112,11 @@ export const addNode = (toNodeId: string, as: NodeRelation, type: NodeType) => {
       const toNode = activeDiagram.nodes.find((node) => node.id === toNodeId);
       if (!toNode) throw new Error("toNode not found");
 
-      const newNodeId = nextNodeId();
+      /* eslint-disable functional/immutable-data, no-param-reassign */
+      const newNodeId = `${state.nextNodeId++}`;
+      const newEdgeId = `${state.nextEdgeId++}`;
+      /* eslint-enable functional/immutable-data, no-param-reassign */
+
       const newNode = buildNode({
         id: newNodeId,
         type: type,
@@ -124,7 +124,7 @@ export const addNode = (toNodeId: string, as: NodeRelation, type: NodeType) => {
 
       const sourceNodeId = as === "Parent" ? newNodeId : toNodeId;
       const targetNodeId = as === "Parent" ? toNodeId : newNodeId;
-      const newEdge = buildEdge(sourceNodeId, targetNodeId);
+      const newEdge = buildEdge(newEdgeId, sourceNodeId, targetNodeId);
 
       const newNodes = activeDiagram.nodes.concat(newNode);
       const newEdges = activeDiagram.edges.concat(newEdge);
