@@ -3,41 +3,16 @@ import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 import { NodeType } from "../components/nodeDecorations";
+import {
+  type ComponentType,
+  type Edge,
+  type Node,
+  type NodeRelation,
+  type Score,
+  buildEdge,
+  buildNode,
+} from "../utils/diagram";
 import { Direction, layout } from "../utils/layout";
-
-export type NodeRelation = "Parent" | "Child";
-
-interface BuildProps {
-  id: string;
-  type: NodeType;
-}
-const buildNode = ({ id, type }: BuildProps) => {
-  return {
-    id: id,
-    data: {
-      label: `text${id}`,
-      score: "-" as Score,
-      width: 300,
-    },
-    position: { x: 0, y: 0 }, // assume layout will adjust this
-    selected: false,
-    type: type,
-  };
-};
-export type Node = ReturnType<typeof buildNode>;
-
-function buildEdge(newEdgeId: string, sourceNodeId: string, targetNodeId: string) {
-  return {
-    id: newEdgeId,
-    data: {
-      score: "-" as Score,
-    },
-    source: sourceNodeId,
-    target: targetNodeId,
-    type: "ScoreEdge",
-  };
-}
-export type Edge = ReturnType<typeof buildEdge>;
 
 const getInitialNodes = (startingNodeType: NodeType) => {
   const { layoutedNodes: initialNodes } = layout(
@@ -71,11 +46,6 @@ interface DiagramState {
   edges: Edge[];
   direction: Direction;
 }
-
-export type ComponentType = "node" | "edge";
-
-export const possibleScores = ["-", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"] as const;
-export type Score = typeof possibleScores[number];
 
 const useDiagramStore = create<AllDiagramState>()(
   immer(

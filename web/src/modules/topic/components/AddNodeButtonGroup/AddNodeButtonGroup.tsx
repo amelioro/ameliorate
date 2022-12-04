@@ -1,6 +1,7 @@
 import { ButtonGroup } from "@mui/material";
 
-import { NodeRelation, useActiveDirection } from "../../store/store";
+import { useActiveDirection } from "../../store/store";
+import { type NodeRelation } from "../../utils/diagram";
 import { AddNodeButton } from "../AddNodeButton/AddNodeButton";
 import { NodeType, nodeDecorations } from "../nodeDecorations";
 

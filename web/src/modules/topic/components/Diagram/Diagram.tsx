@@ -10,14 +10,13 @@ import {
 } from "reactflow";
 
 import {
-  Edge,
-  Node,
   deselectNodes,
   rootId,
   setActiveDiagram,
   useActiveDiagram,
   useActiveDiagramId,
 } from "../../store/store";
+import { type Edge, type Node } from "../../utils/diagram";
 import { EditableNode } from "../EditableNode/EditableNode";
 import { ScoreEdge } from "../ScoreEdge/ScoreEdge";
 import { type NodeType } from "../nodeDecorations";

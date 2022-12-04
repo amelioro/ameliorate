@@ -1,4 +1,5 @@
-import { NodeRelation, addNode } from "../../store/store";
+import { addNode } from "../../store/store";
+import { type NodeRelation } from "../../utils/diagram";
 import { NodeType, nodeDecorations } from "../nodeDecorations";
 import { StyledButton } from "./AddNodeButton.styles";
 
