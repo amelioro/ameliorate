@@ -19,7 +19,7 @@ import {
 import { type Edge, type Node } from "../../utils/diagram";
 import { EditableNode } from "../EditableNode/EditableNode";
 import { ScoreEdge } from "../ScoreEdge/ScoreEdge";
-import { type NodeType } from "../nodeDecorations";
+import { type NodeType } from "../../utils/nodes";
 import { PositionedIconButton, StyledReactFlow } from "./Diagram.styles";
 
 const buildNodeComponent = (type: NodeType) => {

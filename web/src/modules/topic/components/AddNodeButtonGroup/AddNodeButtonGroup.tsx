@@ -2,8 +2,8 @@ import { ButtonGroup } from "@mui/material";
 
 import { useActiveDirection } from "../../store/store";
 import { type NodeRelation } from "../../utils/diagram";
+import { NodeType, nodeDecorations } from "../../utils/nodes";
 import { AddNodeButton } from "../AddNodeButton/AddNodeButton";
-import { NodeType, nodeDecorations } from "../nodeDecorations";
 
 interface Props {
   className?: string;

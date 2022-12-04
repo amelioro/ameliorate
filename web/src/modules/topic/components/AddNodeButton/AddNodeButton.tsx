@@ -1,6 +1,6 @@
 import { addNode } from "../../store/store";
 import { type NodeRelation } from "../../utils/diagram";
-import { NodeType, nodeDecorations } from "../nodeDecorations";
+import { NodeType, nodeDecorations } from "../../utils/nodes";
 import { StyledButton } from "./AddNodeButton.styles";
 
 interface Props {

@@ -6,7 +6,7 @@ import { Handle, Position } from "reactflow";
 import { setNodeLabel, useActiveDirection } from "../../store/store";
 import { NodeProps } from "../Diagram/Diagram";
 import { ScoreDial } from "../ScoreDial/ScoreDial";
-import { NodeType, nodeDecorations } from "../nodeDecorations";
+import { NodeType, nodeDecorations } from "../../utils/nodes";
 import {
   AddNodeButtonGroupChild,
   AddNodeButtonGroupParent,

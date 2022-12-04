@@ -1,4 +1,4 @@
-import { NodeType } from "../components/nodeDecorations";
+import { NodeType } from "./nodes";
 
 export type NodeRelation = "Parent" | "Child";
 

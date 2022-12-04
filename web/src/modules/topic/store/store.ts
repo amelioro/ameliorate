@@ -2,7 +2,6 @@ import create from "zustand";
 import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
-import { NodeType } from "../components/nodeDecorations";
 import {
   type ComponentType,
   type Edge,
@@ -13,6 +12,7 @@ import {
   buildNode,
 } from "../utils/diagram";
 import { Direction, layout } from "../utils/layout";
+import { NodeType } from "../utils/nodes";
 
 const getInitialNodes = (startingNodeType: NodeType) => {
   const { layoutedNodes: initialNodes } = layout(
