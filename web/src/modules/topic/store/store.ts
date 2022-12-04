@@ -57,8 +57,10 @@ const getInitialNodes = (startingNodeType: NodeType) => {
   return initialNodes;
 };
 
-const diagrams: Record<string, DiagramState> = {
-  root: {
+export const rootId = "root";
+
+const initialDiagrams: Record<string, DiagramState> = {
+  [rootId]: {
     nodes: getInitialNodes("Problem"),
     edges: [],
     direction: "TB",
@@ -66,9 +68,8 @@ const diagrams: Record<string, DiagramState> = {
 };
 
 interface AllDiagramState {
+  diagrams: Record<string, DiagramState>;
   activeDiagramId: string;
-  rootDiagramId: string;
-  claimDiagramIds: string[];
 }
 
 interface DiagramState {
@@ -82,24 +83,33 @@ export type ComponentType = "node" | "edge";
 export const possibleScores = ["-", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"] as const;
 export type Score = typeof possibleScores[number];
 
-export const useDiagramStore = create<AllDiagramState & DiagramState>()(
-  // seems like we should be able to auto-wrap all stores with devtools
+export const useDiagramStore = create<AllDiagramState>()(
   immer(
     devtools(() => ({
-      activeDiagramId: "root",
-      rootDiagramId: "root",
-      claimDiagramIds: [] as string[],
-      nodes: diagrams.root.nodes,
-      edges: diagrams.root.edges,
-      direction: diagrams.root.direction,
+      diagrams: initialDiagrams,
+      activeDiagramId: rootId,
     }))
   )
 );
 
+export const useActiveDiagram = () => {
+  return useDiagramStore((state) => state.diagrams[state.activeDiagramId]);
+};
+
+export const useActiveDirection = () => {
+  return useDiagramStore((state) => state.diagrams[state.activeDiagramId].direction);
+};
+
+export const useClaimDiagramIds = () => {
+  return useDiagramStore((state) => Object.keys(state.diagrams).filter((id) => id !== rootId));
+};
+
 export const addNode = (toNodeId: string, as: NodeRelation, type: NodeType) => {
   useDiagramStore.setState(
     (state) => {
-      const toNode = state.nodes.find((node) => node.id === toNodeId);
+      const activeDiagram = state.diagrams[state.activeDiagramId];
+
+      const toNode = activeDiagram.nodes.find((node) => node.id === toNodeId);
       if (!toNode) throw new Error("toNode not found");
 
       const newNodeId = nextNodeId();
@@ -112,13 +122,13 @@ export const addNode = (toNodeId: string, as: NodeRelation, type: NodeType) => {
       const targetNodeId = as === "Parent" ? toNodeId : newNodeId;
       const newEdge = buildEdge(sourceNodeId, targetNodeId);
 
-      const newNodes = state.nodes.concat(newNode);
-      const newEdges = state.edges.concat(newEdge);
-      const { layoutedNodes, layoutedEdges } = layout(newNodes, newEdges, state.direction);
+      const newNodes = activeDiagram.nodes.concat(newNode);
+      const newEdges = activeDiagram.edges.concat(newEdge);
+      const { layoutedNodes, layoutedEdges } = layout(newNodes, newEdges, activeDiagram.direction);
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
-      state.nodes = layoutedNodes;
-      state.edges = layoutedEdges;
+      activeDiagram.nodes = layoutedNodes;
+      activeDiagram.edges = layoutedEdges;
       /* eslint-enable functional/immutable-data, no-param-reassign */
     },
     false,
@@ -129,7 +139,9 @@ export const addNode = (toNodeId: string, as: NodeRelation, type: NodeType) => {
 export const deselectNodes = () => {
   useDiagramStore.setState(
     (state) => {
-      state.nodes.forEach((node) => {
+      const activeDiagram = state.diagrams[state.activeDiagramId];
+
+      activeDiagram.nodes.forEach((node) => {
         // TODO: super jank - node.selected is always false, so setting to true ensures the change is fired (I think)
         // somehow returning { ...node, selected: false } without immer was actually working as well...
         // probably should change how we're using `selected`
@@ -145,15 +157,17 @@ export const deselectNodes = () => {
 };
 
 export const doesDiagramExist = (diagramId: string) => {
-  return Object.keys(diagrams).includes(diagramId);
+  return Object.keys(useDiagramStore.getState().diagrams).includes(diagramId);
 };
 
 export const scoreParent = (parentId: string, parentType: ComponentType, score: Score) => {
   useDiagramStore.setState(
     (state) => {
+      const activeDiagram = state.diagrams[state.activeDiagramId];
+
       const parentsKey = parentType === "node" ? "nodes" : "edges";
       // RIP typescript can't infer this https://github.com/microsoft/TypeScript/issues/33591#issuecomment-786443978
-      const parents: (Node | Edge)[] = state[parentsKey];
+      const parents: (Node | Edge)[] = activeDiagram[parentsKey];
       const parent = parents.find((parent) => parent.id === parentId);
       if (!parent) throw new Error("parent not found");
 
@@ -169,36 +183,19 @@ export const scoreParent = (parentId: string, parentType: ComponentType, score: 
 export const setActiveDiagram = (diagramId: string) => {
   useDiagramStore.setState(
     (state) => {
-      // save current diagram state before switching
-      // TODO: perhaps we could use classes to isolate/indicate state & state change?
-      /* eslint-disable functional/immutable-data */
-      diagrams[state.activeDiagramId].nodes = useDiagramStore.getState().nodes; // get() because diagrams exist outside of this immer'd method and should not take draft state outside of this scope
-      diagrams[state.activeDiagramId].edges = useDiagramStore.getState().edges;
-      /* eslint-enable functional/immutable-data */
-
       // create new diagram if it doesn't exist
       if (!doesDiagramExist(diagramId)) {
-        // TODO: perhaps we could use classes to isolate/indicate state & state change?
-        // eslint-disable-next-line functional/immutable-data
-        diagrams[diagramId] = {
+        /* eslint-disable functional/immutable-data, no-param-reassign */
+        state.diagrams[diagramId] = {
           nodes: getInitialNodes("RootClaim"),
           edges: [],
           direction: "LR",
         };
-
-        const claimDiagramIds = state.claimDiagramIds.concat(diagramId);
-
-        /* eslint-disable functional/immutable-data, no-param-reassign */
-        state.claimDiagramIds = claimDiagramIds;
         /* eslint-enable functional/immutable-data, no-param-reassign */
       }
 
-      // set diagram
       /* eslint-disable functional/immutable-data, no-param-reassign */
       state.activeDiagramId = diagramId;
-      state.nodes = diagrams[diagramId].nodes;
-      state.edges = diagrams[diagramId].edges;
-      state.direction = diagrams[diagramId].direction;
       /* eslint-enable functional/immutable-data, no-param-reassign */
     },
     false,
@@ -209,7 +206,9 @@ export const setActiveDiagram = (diagramId: string) => {
 export const setNodeLabel = (nodeId: string, value: string) => {
   useDiagramStore.setState(
     (state) => {
-      const node = state.nodes.find((node) => node.id === nodeId);
+      const activeDiagram = state.diagrams[state.activeDiagramId];
+
+      const node = activeDiagram.nodes.find((node) => node.id === nodeId);
       if (!node) throw new Error("node not found");
 
       /* eslint-disable functional/immutable-data, no-param-reassign */

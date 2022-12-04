@@ -1,6 +1,6 @@
 import { ButtonGroup } from "@mui/material";
 
-import { NodeRelation, useDiagramStore } from "../../store/store";
+import { NodeRelation, useActiveDirection } from "../../store/store";
 import { AddNodeButton } from "../AddNodeButton/AddNodeButton";
 import { NodeType, nodeDecorations } from "../nodeDecorations";
 
@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const AddNodeButtonGroup = ({ className, nodeId, nodeType, as }: Props) => {
-  const direction = useDiagramStore((state) => state.direction);
+  const direction = useActiveDirection();
   const buttonTypes = nodeDecorations[nodeType].allowed[as];
 
   if (buttonTypes.length === 0) return <></>;
