@@ -1,4 +1,4 @@
-import { NodeRelation, useDiagramStore } from "../../store/store";
+import { NodeRelation, addNode } from "../../store/store";
 import { NodeType, nodeDecorations } from "../nodeDecorations";
 import { StyledButton } from "./AddNodeButton.styles";
 
@@ -9,8 +9,6 @@ interface Props {
 }
 
 export const AddNodeButton = ({ nodeId, as, nodeType }: Props) => {
-  const addNode = useDiagramStore((state) => state.addNode);
-
   const decoration = nodeDecorations[nodeType];
 
   return (

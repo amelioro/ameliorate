@@ -10,7 +10,7 @@ import {
 import { Collapse, List, ListItem, ListItemIcon, ListItemText, Toolbar } from "@mui/material";
 import { useState } from "react";
 
-import { useDiagramStore } from "../../store/store";
+import { setActiveDiagram, useDiagramStore } from "../../store/store";
 import {
   NestedListItemButton,
   PositionedDiv,
@@ -23,14 +23,11 @@ export const TopicPane = () => {
   const [isTopicDrawerOpen, setIsTopicDrawerOpen] = useState(true);
   const [isClaimsListOpen, setIsClaimsListOpen] = useState(true);
 
-  const [activeDiagramId, rootDiagramId, claimDiagramIds, setActiveDiagram] = useDiagramStore(
-    (state) => [
-      state.activeDiagramId,
-      state.rootDiagramId,
-      state.claimDiagramIds,
-      state.setActiveDiagram,
-    ]
-  );
+  const [activeDiagramId, rootDiagramId, claimDiagramIds] = useDiagramStore((state) => [
+    state.activeDiagramId,
+    state.rootDiagramId,
+    state.claimDiagramIds,
+  ]);
 
   const handleDrawerToggle = () => {
     if (isTopicDrawerOpen) {
