@@ -159,9 +159,6 @@ export const useDiagramStore = create<AllDiagramState & DiagramState & DiagramAc
 
       doesDiagramExist: doesDiagramExist,
 
-      // will this trigger re-render for all parentType components, since Diagram depends on the whole array?
-      // theoretically we should be able to just re-render the affected component...
-      // at least the HTML should mostly be unchanged I guess; not sure how big of a deal the performance impact is here
       scoreParent: (parentId, parentType, score) => {
         set(
           (state) => {
