@@ -8,6 +8,14 @@
       "problemMatcher": ["$tsc-watch"],
       "group": "build",
       "label": "tsc: watch - web/tsconfig.json"
+    },
+    {
+      "type": "npm",
+      "script": "lint",
+      "path": "web",
+      "problemMatcher": ["$eslint-stylish"],
+      "label": "npm: lint - web",
+      "detail": "next lint"
     }
   ]
 }
