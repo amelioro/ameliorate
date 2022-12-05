@@ -2,8 +2,8 @@ import styled from "@emotion/styled";
 import { TextareaAutosize, css } from "@mui/material";
 
 import { Direction } from "../../utils/layout";
-import { AddNodeButtonGroup } from "../AddNodeButtonGroup/AddNodeButtonGroup";
 import { NodeType } from "../../utils/nodes";
+import { AddNodeButtonGroup } from "../AddNodeButtonGroup/AddNodeButtonGroup";
 
 const gap = 16;
 
