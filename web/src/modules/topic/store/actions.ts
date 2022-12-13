@@ -100,7 +100,7 @@ export const setActiveDiagram = (diagramId: string) => {
       if (!doesDiagramExist(diagramId)) {
         /* eslint-disable functional/immutable-data, no-param-reassign */
         state.diagrams[diagramId] = {
-          nodes: getInitialNodes("RootClaim", diagramId),
+          nodes: getInitialNodes(`${state.nextNodeId++}`, "RootClaim", diagramId),
           edges: [],
           direction: "LR",
         };

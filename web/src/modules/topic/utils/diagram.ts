@@ -37,9 +37,9 @@ export const buildEdge = (newEdgeId: string, sourceNodeId: string, targetNodeId:
 };
 export type Edge = ReturnType<typeof buildEdge>;
 
-export const getInitialNodes = (startingNodeType: NodeType, diagramId: string) => {
+export const getInitialNodes = (nodeId: string, startingNodeType: NodeType, diagramId: string) => {
   const { layoutedNodes: initialNodes } = layout(
-    [buildNode({ id: "0", type: startingNodeType, diagramId: diagramId })],
+    [buildNode({ id: nodeId, type: startingNodeType, diagramId: diagramId })],
     [],
     "TB"
   );

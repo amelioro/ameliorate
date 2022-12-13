@@ -9,7 +9,7 @@ export const rootId = "root";
 
 const initialDiagrams: Record<string, DiagramState> = {
   [rootId]: {
-    nodes: getInitialNodes("Problem", rootId),
+    nodes: getInitialNodes("0", "Problem", rootId),
     edges: [],
     direction: "TB",
   },
