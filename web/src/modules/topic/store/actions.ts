@@ -28,6 +28,7 @@ export const addNode = (toNodeId: string, as: NodeRelation, type: NodeType) => {
       const newNode = buildNode({
         id: newNodeId,
         type: type,
+        diagramId: state.activeDiagramId,
       });
 
       const sourceNodeId = as === "Parent" ? newNodeId : toNodeId;
@@ -99,7 +100,7 @@ export const setActiveDiagram = (diagramId: string) => {
       if (!doesDiagramExist(diagramId)) {
         /* eslint-disable functional/immutable-data, no-param-reassign */
         state.diagrams[diagramId] = {
-          nodes: getInitialNodes("RootClaim"),
+          nodes: getInitialNodes("RootClaim", diagramId),
           edges: [],
           direction: "LR",
         };

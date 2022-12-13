@@ -9,7 +9,7 @@ export const rootId = "root";
 
 const initialDiagrams: Record<string, DiagramState> = {
   [rootId]: {
-    nodes: getInitialNodes("Problem"),
+    nodes: getInitialNodes("Problem", rootId),
     edges: [],
     direction: "TB",
   },
@@ -47,8 +47,8 @@ export const useActiveDiagram = () => {
   return useDiagramStore((state) => state.diagrams[state.activeDiagramId]);
 };
 
-export const useActiveDirection = () => {
-  return useDiagramStore((state) => state.diagrams[state.activeDiagramId].direction);
+export const useDiagramDirection = (diagramId: string) => {
+  return useDiagramStore((state) => state.diagrams[diagramId].direction);
 };
 
 export const useClaimDiagramIds = () => {

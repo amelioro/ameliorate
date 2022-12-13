@@ -6,14 +6,16 @@ export type NodeRelation = "Parent" | "Child";
 interface BuildProps {
   id: string;
   type: NodeType;
+  diagramId: string;
 }
-export const buildNode = ({ id, type }: BuildProps) => {
+export const buildNode = ({ id, type, diagramId }: BuildProps) => {
   return {
     id: id,
     data: {
       label: `text${id}`,
       score: "-" as Score,
       width: 300,
+      diagramId: diagramId,
     },
     position: { x: 0, y: 0 }, // assume layout will adjust this
     selected: false,
@@ -35,9 +37,9 @@ export const buildEdge = (newEdgeId: string, sourceNodeId: string, targetNodeId:
 };
 export type Edge = ReturnType<typeof buildEdge>;
 
-export const getInitialNodes = (startingNodeType: NodeType) => {
+export const getInitialNodes = (startingNodeType: NodeType, diagramId: string) => {
   const { layoutedNodes: initialNodes } = layout(
-    [buildNode({ id: "0", type: startingNodeType })],
+    [buildNode({ id: "0", type: startingNodeType, diagramId: diagramId })],
     [],
     "TB"
   );
