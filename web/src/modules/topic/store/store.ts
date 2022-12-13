@@ -1,7 +1,9 @@
+import { useContext } from "react";
 import create from "zustand";
-import { devtools } from "zustand/middleware";
+import { devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
+import { HydrationContext } from "../../../pages/index";
 import { type Edge, type Node, getInitialNodes } from "../utils/diagram";
 import { Direction } from "../utils/layout";
 
@@ -9,7 +11,7 @@ export const rootId = "root";
 
 const initialDiagrams: Record<string, DiagramState> = {
   [rootId]: {
-    nodes: getInitialNodes("Problem"),
+    nodes: getInitialNodes("0", "Problem", rootId),
     edges: [],
     direction: "TB",
   },
@@ -28,29 +30,55 @@ interface DiagramState {
   direction: Direction;
 }
 
+const initialState = {
+  diagrams: initialDiagrams,
+  activeDiagramId: rootId,
+  nextNodeId: 1, // 0 is taken by the initial node
+  nextEdgeId: 0,
+};
+
+// create atomic selectors for usage outside of store/ dir
+// this is only exported to allow actions to be extracted to a separate file
 export const useDiagramStore = create<AllDiagramState>()(
-  immer(
-    devtools(() => ({
-      diagrams: initialDiagrams,
-      activeDiagramId: rootId,
-      nextNodeId: 1, // 0 is taken by the initial node
-      nextEdgeId: 0,
-    }))
-  )
+  persist(immer(devtools(() => initialState)), { name: "diagram-storage" })
 );
 
+const useDiagramStoreAfterHydration = ((selector, compare) => {
+  /*
+  This a fix to ensure zustand never hydrates the store before React hydrates the page.
+  Without this, there is a mismatch between SSR/SSG and client side on first draw which produces
+  an error.
+  Thanks https://github.com/pmndrs/zustand/issues/1145#issuecomment-1247061387
+   */
+  const store = useDiagramStore(selector, compare);
+
+  // unfortunately, useEffect triggers on first render of every component using this,
+  // so when the page has already been loaded, any new component will be rendered for the first time with
+  // `initialState`. we should only be using the `initialState` for the first render of the _page_,
+  // not of every component, so we need to move `useEffect` to the page component.
+  const isHydrated = useContext(HydrationContext);
+
+  return isHydrated ? store : selector(initialState);
+}) as typeof useDiagramStore;
+
 export const useActiveDiagramId = () => {
-  return useDiagramStore((state) => state.activeDiagramId);
+  return useDiagramStoreAfterHydration((state) => state.activeDiagramId);
 };
 
 export const useActiveDiagram = () => {
-  return useDiagramStore((state) => state.diagrams[state.activeDiagramId]);
+  return useDiagramStoreAfterHydration((state) => state.diagrams[state.activeDiagramId]);
 };
 
-export const useActiveDirection = () => {
-  return useDiagramStore((state) => state.diagrams[state.activeDiagramId].direction);
+export const useDiagramDirection = (diagramId: string) => {
+  return useDiagramStoreAfterHydration((state) => state.diagrams[diagramId].direction);
 };
 
 export const useClaimDiagramIds = () => {
-  return useDiagramStore((state) => Object.keys(state.diagrams).filter((id) => id !== rootId));
+  return useDiagramStoreAfterHydration((state) =>
+    Object.keys(state.diagrams).filter((id) => id !== rootId)
+  );
+};
+
+export const useDoesDiagramExist = (diagramId: string) => {
+  return useDiagramStoreAfterHydration((state) => Object.keys(state.diagrams).includes(diagramId));
 };

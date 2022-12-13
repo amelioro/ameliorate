@@ -31,11 +31,7 @@ const StyledAddNodeButtonGroup = styled(AddNodeButtonGroup)`
   }
 `;
 
-const options = {
-  shouldForwardProp: (prop: string) => !["direction"].includes(prop),
-};
-
-export const AddNodeButtonGroupParent = styled(StyledAddNodeButtonGroup, options)<{
+export const AddNodeButtonGroupParent = styled(StyledAddNodeButtonGroup)<{
   direction: Direction;
 }>`
   ${({ direction }) => {
@@ -55,7 +51,7 @@ export const AddNodeButtonGroupParent = styled(StyledAddNodeButtonGroup, options
   }}
 `;
 
-export const AddNodeButtonGroupChild = styled(StyledAddNodeButtonGroup, options)<{
+export const AddNodeButtonGroupChild = styled(StyledAddNodeButtonGroup)<{
   direction: Direction;
 }>`
   ${({ direction }) => {

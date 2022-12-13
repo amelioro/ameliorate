@@ -1,7 +1,7 @@
 import { ButtonGroup } from "@mui/material";
 
-import { useActiveDirection } from "../../store/store";
 import { type NodeRelation } from "../../utils/diagram";
+import { Direction } from "../../utils/layout";
 import { NodeType, nodeDecorations } from "../../utils/nodes";
 import { AddNodeButton } from "../AddNodeButton/AddNodeButton";
 
@@ -10,10 +10,10 @@ interface Props {
   nodeId: string;
   nodeType: NodeType;
   as: NodeRelation;
+  direction: Direction;
 }
 
-export const AddNodeButtonGroup = ({ className, nodeId, nodeType, as }: Props) => {
-  const direction = useActiveDirection();
+export const AddNodeButtonGroup = ({ className, nodeId, nodeType, as, direction }: Props) => {
   const buttonTypes = nodeDecorations[nodeType].allowed[as];
 
   if (buttonTypes.length === 0) return <></>;

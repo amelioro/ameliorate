@@ -28,6 +28,7 @@ export const addNode = (toNodeId: string, as: NodeRelation, type: NodeType) => {
       const newNode = buildNode({
         id: newNodeId,
         type: type,
+        diagramId: state.activeDiagramId,
       });
 
       const sourceNodeId = as === "Parent" ? newNodeId : toNodeId;
@@ -68,10 +69,6 @@ export const deselectNodes = () => {
   );
 };
 
-export const doesDiagramExist = (diagramId: string) => {
-  return Object.keys(useDiagramStore.getState().diagrams).includes(diagramId);
-};
-
 export const scoreParent = (parentId: string, parentType: ComponentType, score: Score) => {
   useDiagramStore.setState(
     (state) => {
@@ -92,6 +89,10 @@ export const scoreParent = (parentId: string, parentType: ComponentType, score: 
   );
 };
 
+const doesDiagramExist = (diagramId: string) => {
+  return Object.keys(useDiagramStore.getState().diagrams).includes(diagramId);
+};
+
 export const setActiveDiagram = (diagramId: string) => {
   useDiagramStore.setState(
     (state) => {
@@ -99,7 +100,7 @@ export const setActiveDiagram = (diagramId: string) => {
       if (!doesDiagramExist(diagramId)) {
         /* eslint-disable functional/immutable-data, no-param-reassign */
         state.diagrams[diagramId] = {
-          nodes: getInitialNodes("RootClaim"),
+          nodes: getInitialNodes(`${state.nextNodeId++}`, "RootClaim", diagramId),
           edges: [],
           direction: "LR",
         };
