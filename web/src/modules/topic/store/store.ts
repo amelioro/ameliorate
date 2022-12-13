@@ -54,3 +54,7 @@ export const useDiagramDirection = (diagramId: string) => {
 export const useClaimDiagramIds = () => {
   return useDiagramStore((state) => Object.keys(state.diagrams).filter((id) => id !== rootId));
 };
+
+export const useDoesDiagramExist = (diagramId: string) => {
+  return useDiagramStore((state) => Object.keys(state.diagrams).includes(diagramId));
+};

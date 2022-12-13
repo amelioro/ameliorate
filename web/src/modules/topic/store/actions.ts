@@ -69,10 +69,6 @@ export const deselectNodes = () => {
   );
 };
 
-export const doesDiagramExist = (diagramId: string) => {
-  return Object.keys(useDiagramStore.getState().diagrams).includes(diagramId);
-};
-
 export const scoreParent = (parentId: string, parentType: ComponentType, score: Score) => {
   useDiagramStore.setState(
     (state) => {
@@ -91,6 +87,10 @@ export const scoreParent = (parentId: string, parentType: ComponentType, score: 
     false,
     "scoreParent"
   );
+};
+
+const doesDiagramExist = (diagramId: string) => {
+  return Object.keys(useDiagramStore.getState().diagrams).includes(diagramId);
 };
 
 export const setActiveDiagram = (diagramId: string) => {
