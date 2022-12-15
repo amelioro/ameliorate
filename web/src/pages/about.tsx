@@ -1,4 +1,13 @@
-import { Box, Divider, Link, Typography } from "@mui/material";
+import { ExpandMore } from "@mui/icons-material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Divider,
+  Link,
+  Typography,
+} from "@mui/material";
 import type { NextPage } from "next";
 
 import { PaperMiddle } from "../page_styles/about.styles";
@@ -59,6 +68,42 @@ const About: NextPage = () => {
             Enable humanity to effectively solve problems through understanding their own
             differences and reasonings.
           </Typography>
+
+          <Divider />
+          <Typography variant="h5">Design Principles</Typography>
+          <Accordion>
+            <AccordionSummary expandIcon={<ExpandMore />}>
+              <Typography variant="body1">Accessible</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography variant="body1">
+                <b>What</b>: Free for public use, a11y, performant, mobile, open source, easy to
+                use, i18n
+              </Typography>
+              <Typography variant="body1">
+                <b>Why</b>: Solving complex problems is hard, and it needs as many great minds as
+                possible. Diversity and perspective are critical. Accessibility is required to
+                maximize these.
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
+          <Accordion>
+            <AccordionSummary expandIcon={<ExpandMore />}>
+              <Typography variant="body1">Simple over precise</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography variant="body1">
+                <b>What</b>: This type of app has a ton of possible features that can easily
+                overwhelm the user if not managed properly. Generally, features should not target
+                academics; this is a tool for the layperson.
+              </Typography>
+              <Typography variant="body1">
+                <b>Why</b>: Complexity is a huge barrier to accessibility; the learning curve to use
+                the tool must be low. This also applies to problem-solving - quickly conveying
+                high-level information makes the learning curve for a specific topic low.
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
 
           <Divider />
 
