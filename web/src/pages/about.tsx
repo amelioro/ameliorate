@@ -24,17 +24,25 @@ const About: NextPage = () => {
 
           <Typography variant="body1">
             Its purpose is to help reason around hard decisions, and to enable that reasoning to be
-            shared, mutually understood, and improved. The core idea is that you can map pieces of
-            solutions to pieces of problems, compare the tradeoffs of each solution, and everything
-            that you're claiming implicitly (e.g. this piece of the problem is the most important
-            thing to solve, this piece of the solution solves that problem) can clearly be justified
-            and critiqued, in an off-to-the-side but easy-to-access way.
+            shared, mutually understood, and improved. It helps you lay out information in a way
+            that is easy to digest, as well as critique and improve upon any individual piece
+            without cluttering or disorganizing any of it.
+          </Typography>
+
+          <Typography variant="body1">
+            The core idea is that you can map pieces of solutions to pieces of problems, compare the
+            tradeoffs of each solution, and everything that you're claiming implicitly (e.g. this
+            piece of the problem is the most important thing to solve, this piece of the solution
+            solves that problem) can clearly be justified and critiqued, in an off-to-the-side but
+            easy-to-access way.
           </Typography>
 
           <Typography variant="body1">
             Disagreements should come down to differences in human/moral values, whereas right now
             they're often rooted in misunderstanding.
           </Typography>
+
+          <Divider />
 
           <Typography variant="body1">
             When such same-pagedness is QED, the ultimate dream is to enhance the tool in order to
