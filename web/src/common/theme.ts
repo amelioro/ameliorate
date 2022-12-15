@@ -84,7 +84,7 @@ export const getThemeOptions = (mode: PaletteMode): ThemeOptions => ({
   components: {
     MuiTypography: {
       defaultProps: {
-        margin: "0.4em",
+        margin: 1,
       },
     },
   },
