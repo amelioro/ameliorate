@@ -1,7 +1,7 @@
 # ameliorate
 
-https://ameliorate.vercel.app/
+https://ameliorate.app/
 
 # non-technical details (what, vision, mission, goals, ui designs)
 
-https://ameliorate.vercel.app/about
+https://ameliorate.app/about
