@@ -4,6 +4,7 @@ import { createContext, useEffect, useState } from "react";
 
 import { Diagram } from "../modules/topic/components/Diagram/Diagram";
 import { TopicPane } from "../modules/topic/components/TopicPane/TopicPane";
+import { TopicToolbar } from "../modules/topic/components/TopicToolbar/TopicToolbar";
 
 export const HydrationContext = createContext(false);
 
@@ -17,6 +18,7 @@ const Home: NextPage = () => {
 
   return (
     <HydrationContext.Provider value={isHydrated}>
+      <TopicToolbar />
       <Box flex={1}>
         <TopicPane />
         <Diagram />
