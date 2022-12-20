@@ -66,8 +66,8 @@ const { augmentColor } = palette; // automatically creates light and dark colors
 
 const sharedPalette = {
   primary: { main: primary },
-  secondary: { main: secondary },
   // use black contrast text for consistency with other node colors; accessibility tool indicates black is still accessible
+  secondary: { main: secondary, contrastText: "rgba(0, 0, 0, 0.87)" },
   problem: augmentColor({ color: { main: secondary, contrastText: "rgba(0, 0, 0, 0.87)" } }),
   solution: augmentColor({ color: { main: primary } }),
   rootClaim: augmentColor({ color: { main: "#DA9526" } }), // goldenrod (gold): somewhat neutral; analogous to critique
