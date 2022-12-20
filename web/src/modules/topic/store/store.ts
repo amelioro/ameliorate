@@ -17,7 +17,7 @@ const initialDiagrams: Record<string, DiagramState> = {
   },
 };
 
-interface AllDiagramState {
+export interface AllDiagramState {
   diagrams: Record<string, DiagramState>;
   activeDiagramId: string;
   nextNodeId: number;

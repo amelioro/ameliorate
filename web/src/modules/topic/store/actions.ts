@@ -10,7 +10,7 @@ import {
 } from "../utils/diagram";
 import { layout } from "../utils/layout";
 import { NodeType } from "../utils/nodes";
-import { useDiagramStore } from "./store";
+import { AllDiagramState, useDiagramStore } from "./store";
 
 export const addNode = (toNodeId: string, as: NodeRelation, type: NodeType) => {
   useDiagramStore.setState(
@@ -131,4 +131,12 @@ export const setNodeLabel = (nodeId: string, value: string) => {
     false,
     "setNodeLabel"
   );
+};
+
+export const getState = () => {
+  return useDiagramStore.getState();
+};
+
+export const setState = (state: AllDiagramState) => {
+  useDiagramStore.setState(() => state);
 };

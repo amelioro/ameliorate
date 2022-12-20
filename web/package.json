@@ -17,6 +17,7 @@
     "@mui/material": "^5.10.12",
     "dagre": "^0.8.5",
     "immer": "^9.0.16",
+    "js-file-download": "^0.4.12",
     "lodash": "^4.17.21",
     "next": "^12.2.5",
     "react": "18.2.0",
