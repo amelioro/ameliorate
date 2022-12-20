@@ -1,0 +1,506 @@
+{
+  "diagrams": {
+    "root": {
+      "nodes": [
+        {
+          "id": "0",
+          "data": {
+            "label": "unwanted pregnancy",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 1060, "y": 760 },
+          "selected": false,
+          "type": "Problem"
+        },
+        {
+          "id": "1",
+          "data": { "label": "abortion", "score": "9", "width": 300, "diagramId": "root" },
+          "position": { "x": 710, "y": 950 },
+          "selected": false,
+          "type": "Solution"
+        },
+        {
+          "id": "2",
+          "data": { "label": "adoption", "score": "7", "width": 300, "diagramId": "root" },
+          "position": { "x": 1070, "y": 950 },
+          "selected": false,
+          "type": "Solution"
+        },
+        {
+          "id": "5",
+          "data": { "label": "notes", "score": "-", "width": 300, "diagramId": "root" },
+          "position": { "x": 700, "y": 760 },
+          "selected": false,
+          "type": "Problem"
+        },
+        {
+          "id": "6",
+          "data": {
+            "label": "different abort times may be controversial",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 1400, "y": 570 },
+          "selected": false,
+          "type": "Problem"
+        },
+        {
+          "id": "7",
+          "data": { "label": "-", "score": "-", "width": 300, "diagramId": "root" },
+          "position": { "x": 1750, "y": 380 },
+          "selected": false,
+          "type": "Problem"
+        },
+        {
+          "id": "8",
+          "data": {
+            "label": "represent these via separate solutions?",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 1400, "y": 380 },
+          "selected": false,
+          "type": "Solution"
+        },
+        {
+          "id": "12",
+          "data": {
+            "label": "comparison of solutions is a bit indirect",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 1050, "y": 570 },
+          "selected": false,
+          "type": "Problem"
+        },
+        {
+          "id": "13",
+          "data": {
+            "label": "represent common solution attributes?",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 1050, "y": 380 },
+          "selected": false,
+          "type": "Solution"
+        },
+        {
+          "id": "14",
+          "data": {
+            "label": "refactoring is annoying",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 1050, "y": 190 },
+          "selected": false,
+          "type": "Problem"
+        },
+        {
+          "id": "15",
+          "data": {
+            "label": "\"change to solution attribute\"?",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 1050, "y": 0 },
+          "selected": false,
+          "type": "Solution"
+        },
+        {
+          "id": "16",
+          "data": {
+            "label": "zoom is off when switching diagrams",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 350, "y": 570 },
+          "selected": false,
+          "type": "Problem"
+        },
+        {
+          "id": "20",
+          "data": {
+            "label": "overlay claim diagram instead of view replacement",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 700, "y": 380 },
+          "selected": false,
+          "type": "Solution"
+        },
+        {
+          "id": "21",
+          "data": { "label": "recalc layout", "score": "-", "width": 300, "diagramId": "root" },
+          "position": { "x": 350, "y": 380 },
+          "selected": false,
+          "type": "Solution"
+        },
+        {
+          "id": "22",
+          "data": {
+            "label": "claims not distinguishable in side pane",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 0, "y": 570 },
+          "selected": false,
+          "type": "Problem"
+        },
+        {
+          "id": "23",
+          "data": {
+            "label": "use root claim text instead of id",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 0, "y": 380 },
+          "selected": false,
+          "type": "Solution"
+        },
+        {
+          "id": "30",
+          "data": {
+            "label": "won't support multiple zooms",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 700, "y": 190 },
+          "selected": false,
+          "type": "Problem"
+        }
+      ],
+      "edges": [
+        { "id": "0", "data": { "score": "7" }, "source": "0", "target": "1", "type": "ScoreEdge" },
+        { "id": "1", "data": { "score": "5" }, "source": "0", "target": "2", "type": "ScoreEdge" },
+        { "id": "3", "data": { "score": "-" }, "source": "5", "target": "1", "type": "ScoreEdge" },
+        { "id": "4", "data": { "score": "-" }, "source": "6", "target": "5", "type": "ScoreEdge" },
+        { "id": "5", "data": { "score": "-" }, "source": "7", "target": "6", "type": "ScoreEdge" },
+        { "id": "6", "data": { "score": "-" }, "source": "8", "target": "6", "type": "ScoreEdge" },
+        { "id": "9", "data": { "score": "-" }, "source": "12", "target": "5", "type": "ScoreEdge" },
+        {
+          "id": "10",
+          "data": { "score": "-" },
+          "source": "13",
+          "target": "12",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "11",
+          "data": { "score": "-" },
+          "source": "14",
+          "target": "13",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "12",
+          "data": { "score": "-" },
+          "source": "15",
+          "target": "14",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "13",
+          "data": { "score": "-" },
+          "source": "16",
+          "target": "5",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "16",
+          "data": { "score": "-" },
+          "source": "20",
+          "target": "16",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "17",
+          "data": { "score": "-" },
+          "source": "21",
+          "target": "16",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "18",
+          "data": { "score": "-" },
+          "source": "22",
+          "target": "5",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "19",
+          "data": { "score": "-" },
+          "source": "23",
+          "target": "22",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "25",
+          "data": { "score": "-" },
+          "source": "30",
+          "target": "20",
+          "type": "ScoreEdge"
+        }
+      ],
+      "direction": "TB"
+    },
+    "edge-0": {
+      "nodes": [
+        {
+          "id": "3",
+          "data": {
+            "label": "\"abortion\" solves \"unwanted pregnancy\"",
+            "score": "7",
+            "width": 300,
+            "diagramId": "edge-0"
+          },
+          "position": { "x": 0, "y": 0 },
+          "selected": false,
+          "type": "RootClaim"
+        },
+        {
+          "id": "4",
+          "data": {
+            "label": "some cases too late for abortion",
+            "score": "-",
+            "width": 300,
+            "diagramId": "edge-0"
+          },
+          "position": { "x": 400, "y": 0 },
+          "selected": false,
+          "type": "Critique"
+        }
+      ],
+      "edges": [
+        { "id": "2", "data": { "score": "-" }, "source": "3", "target": "4", "type": "ScoreEdge" }
+      ],
+      "direction": "LR"
+    },
+    "node-2": {
+      "nodes": [
+        {
+          "id": "9",
+          "data": {
+            "label": "\"adoption\" is important",
+            "score": "-",
+            "width": 300,
+            "diagramId": "node-2"
+          },
+          "position": { "x": 0, "y": 70 },
+          "selected": false,
+          "type": "RootClaim"
+        },
+        {
+          "id": "10",
+          "data": {
+            "label": "some people can't have kids otherwise",
+            "score": "-",
+            "width": 300,
+            "diagramId": "node-2"
+          },
+          "position": { "x": 400, "y": 0 },
+          "selected": false,
+          "type": "Support"
+        },
+        {
+          "id": "11",
+          "data": {
+            "label": "some kids are really mean",
+            "score": "2",
+            "width": 300,
+            "diagramId": "node-2"
+          },
+          "position": { "x": 400, "y": 140 },
+          "selected": false,
+          "type": "Critique"
+        }
+      ],
+      "edges": [
+        { "id": "7", "data": { "score": "-" }, "source": "9", "target": "10", "type": "ScoreEdge" },
+        { "id": "8", "data": { "score": "-" }, "source": "9", "target": "11", "type": "ScoreEdge" }
+      ],
+      "direction": "LR"
+    },
+    "edge-1": {
+      "nodes": [
+        {
+          "id": "17",
+          "data": {
+            "label": "\"adoption\" solves \"unwanted pregnancy\"",
+            "score": "5",
+            "width": 300,
+            "diagramId": "edge-1"
+          },
+          "position": { "x": 0, "y": 70 },
+          "selected": false,
+          "type": "RootClaim"
+        },
+        {
+          "id": "18",
+          "data": {
+            "label": "doesn't interfere with birth",
+            "score": "-",
+            "width": 300,
+            "diagramId": "edge-1"
+          },
+          "position": { "x": 400, "y": 0 },
+          "selected": false,
+          "type": "Support"
+        },
+        {
+          "id": "19",
+          "data": {
+            "label": "mother still goes through pregnancy pains & costs",
+            "score": "-",
+            "width": 300,
+            "diagramId": "edge-1"
+          },
+          "position": { "x": 400, "y": 140 },
+          "selected": false,
+          "type": "Critique"
+        }
+      ],
+      "edges": [
+        {
+          "id": "14",
+          "data": { "score": "-" },
+          "source": "17",
+          "target": "18",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "15",
+          "data": { "score": "-" },
+          "source": "17",
+          "target": "19",
+          "type": "ScoreEdge"
+        }
+      ],
+      "direction": "LR"
+    },
+    "node-1": {
+      "nodes": [
+        {
+          "id": "24",
+          "data": {
+            "label": "\"abortion\" is important",
+            "score": "9",
+            "width": 300,
+            "diagramId": "node-1"
+          },
+          "position": { "x": 0, "y": 280 },
+          "selected": false,
+          "type": "RootClaim"
+        },
+        {
+          "id": "25",
+          "data": {
+            "label": "less risk to mother",
+            "score": "-",
+            "width": 300,
+            "diagramId": "node-1"
+          },
+          "position": { "x": 400, "y": 0 },
+          "selected": false,
+          "type": "Support"
+        },
+        {
+          "id": "26",
+          "data": {
+            "label": "less pain for mother",
+            "score": "-",
+            "width": 300,
+            "diagramId": "node-1"
+          },
+          "position": { "x": 400, "y": 140 },
+          "selected": false,
+          "type": "Support"
+        },
+        {
+          "id": "27",
+          "data": { "label": "bodily autonomy", "score": "-", "width": 300, "diagramId": "node-1" },
+          "position": { "x": 400, "y": 280 },
+          "selected": false,
+          "type": "Support"
+        },
+        {
+          "id": "28",
+          "data": {
+            "label": "violates life rights of fetus",
+            "score": "-",
+            "width": 300,
+            "diagramId": "node-1"
+          },
+          "position": { "x": 400, "y": 420 },
+          "selected": false,
+          "type": "Critique"
+        },
+        {
+          "id": "29",
+          "data": {
+            "label": "men should have stake as well",
+            "score": "-",
+            "width": 300,
+            "diagramId": "node-1"
+          },
+          "position": { "x": 400, "y": 560 },
+          "selected": false,
+          "type": "Critique"
+        }
+      ],
+      "edges": [
+        {
+          "id": "20",
+          "data": { "score": "-" },
+          "source": "24",
+          "target": "25",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "21",
+          "data": { "score": "-" },
+          "source": "24",
+          "target": "26",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "22",
+          "data": { "score": "-" },
+          "source": "24",
+          "target": "27",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "23",
+          "data": { "score": "-" },
+          "source": "24",
+          "target": "28",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "24",
+          "data": { "score": "-" },
+          "source": "24",
+          "target": "29",
+          "type": "ScoreEdge"
+        }
+      ],
+      "direction": "LR"
+    }
+  },
+  "activeDiagramId": "root",
+  "nextNodeId": 31,
+  "nextEdgeId": 26
+}

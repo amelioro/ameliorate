@@ -55,6 +55,14 @@ export const TopicToolbar = () => {
           <MenuItem
             onClick={() => {
               closeMenu();
+              loadExample("abortion.json");
+            }}
+          >
+            Abortion
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              closeMenu();
               loadExample("world_hunger.json");
             }}
           >
