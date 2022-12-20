@@ -1,6 +1,7 @@
 import { Download, Upload } from "@mui/icons-material";
-import { AppBar, IconButton, Toolbar } from "@mui/material";
+import { AppBar, Button, IconButton, Menu, MenuItem, Toolbar } from "@mui/material";
 import fileDownload from "js-file-download";
+import { useState } from "react";
 
 import { getState, setState } from "../../store/actions";
 import { AllDiagramState } from "../../store/store";
@@ -25,20 +26,49 @@ const uploadTopic = (event: React.ChangeEvent<HTMLInputElement>) => {
     });
 };
 
+const loadExample = (exampleFileName: string) => {
+  fetch(`/examples/${exampleFileName}`)
+    .then((response) => response.json())
+    // TODO: validate that file JSON matches interface
+    .then((exampleState) => setState(exampleState as AllDiagramState))
+    .catch((error) => {
+      console.log("error loading example: ", error);
+      throw new Error("Failed to load example");
+    });
+};
+
 export const TopicToolbar = () => {
+  // TODO: figure out how to extract a MUI menu component whose menu items close the menu on click
+  // in addition to the menu item's onClick handler
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const menuIsOpen = Boolean(anchorEl);
+  const openMenu = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
+  const closeMenu = () => setAnchorEl(null);
+
   return (
-    <>
-      <AppBar position="sticky" color="secondary">
-        <Toolbar variant="dense">
-          <IconButton color="inherit" onClick={downloadTopic}>
-            <Download />
-          </IconButton>
-          <IconButton color="inherit" component="label">
-            <Upload />
-            <input hidden accept=".json" type="file" onChange={uploadTopic} />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-    </>
+    <AppBar position="sticky" color="secondary">
+      <Toolbar variant="dense">
+        <Button color="inherit" onClick={openMenu}>
+          Examples
+        </Button>
+        <Menu anchorEl={anchorEl} open={menuIsOpen} onClose={closeMenu}>
+          <MenuItem
+            onClick={() => {
+              closeMenu();
+              loadExample("world_hunger.json");
+            }}
+          >
+            World Hunger
+          </MenuItem>
+        </Menu>
+        <IconButton color="inherit" onClick={downloadTopic}>
+          <Download />
+        </IconButton>
+        <IconButton color="inherit" component="label">
+          <Upload />
+          <input hidden accept=".json" type="file" onChange={uploadTopic} />
+        </IconButton>
+      </Toolbar>
+    </AppBar>
   );
 };

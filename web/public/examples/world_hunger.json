@@ -1,0 +1,226 @@
+{
+  "diagrams": {
+    "root": {
+      "nodes": [
+        {
+          "id": "0",
+          "data": { "label": "world hunger", "score": "-", "width": 300, "diagramId": "root" },
+          "position": { "x": 700, "y": 190 },
+          "selected": false,
+          "type": "Problem"
+        },
+        {
+          "id": "1",
+          "data": {
+            "label": "poor food transportation logistics",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 1750, "y": 380 },
+          "selected": false,
+          "type": "Problem"
+        },
+        {
+          "id": "2",
+          "data": {
+            "label": "poor food production",
+            "score": "8",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 1050, "y": 380 },
+          "selected": false,
+          "type": "Problem"
+        },
+        {
+          "id": "3",
+          "data": {
+            "label": "cannot afford importing food",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 350, "y": 380 },
+          "selected": false,
+          "type": "Problem"
+        },
+        {
+          "id": "4",
+          "data": {
+            "label": "region internally uncooperative",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 0, "y": 380 },
+          "selected": false,
+          "type": "Problem"
+        },
+        {
+          "id": "5",
+          "data": { "label": "donate food", "score": "-", "width": 300, "diagramId": "root" },
+          "position": { "x": 350, "y": 570 },
+          "selected": false,
+          "type": "Solution"
+        },
+        {
+          "id": "6",
+          "data": {
+            "label": "train logistics engineers",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 1750, "y": 570 },
+          "selected": false,
+          "type": "Solution"
+        },
+        {
+          "id": "7",
+          "data": { "label": "train farmers", "score": "-", "width": 300, "diagramId": "root" },
+          "position": { "x": 1400, "y": 570 },
+          "selected": false,
+          "type": "Solution"
+        },
+        {
+          "id": "8",
+          "data": {
+            "label": "donate agriculture tech",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 1050, "y": 570 },
+          "selected": false,
+          "type": "Solution"
+        },
+        {
+          "id": "9",
+          "data": {
+            "label": "fund agricultural research",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 700, "y": 570 },
+          "selected": false,
+          "type": "Solution"
+        },
+        {
+          "id": "10",
+          "data": { "label": "send diplomats", "score": "-", "width": 300, "diagramId": "root" },
+          "position": { "x": 0, "y": 570 },
+          "selected": false,
+          "type": "Solution"
+        },
+        {
+          "id": "13",
+          "data": { "label": "notes", "score": "-", "width": 300, "diagramId": "root" },
+          "position": { "x": 1760, "y": 190 },
+          "selected": false,
+          "type": "Problem"
+        },
+        {
+          "id": "14",
+          "data": {
+            "label": "scoring more meaningful within regional context",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 1935, "y": 0 },
+          "selected": false,
+          "type": "Problem"
+        },
+        {
+          "id": "15",
+          "data": {
+            "label": "node removal needed",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 1585, "y": 0 },
+          "selected": false,
+          "type": "Problem"
+        }
+      ],
+      "edges": [
+        { "id": "0", "data": { "score": "-" }, "source": "0", "target": "1", "type": "ScoreEdge" },
+        { "id": "1", "data": { "score": "-" }, "source": "0", "target": "2", "type": "ScoreEdge" },
+        { "id": "2", "data": { "score": "-" }, "source": "0", "target": "3", "type": "ScoreEdge" },
+        { "id": "3", "data": { "score": "-" }, "source": "0", "target": "4", "type": "ScoreEdge" },
+        { "id": "4", "data": { "score": "-" }, "source": "3", "target": "5", "type": "ScoreEdge" },
+        { "id": "5", "data": { "score": "-" }, "source": "1", "target": "6", "type": "ScoreEdge" },
+        { "id": "6", "data": { "score": "-" }, "source": "2", "target": "7", "type": "ScoreEdge" },
+        { "id": "7", "data": { "score": "-" }, "source": "2", "target": "8", "type": "ScoreEdge" },
+        { "id": "8", "data": { "score": "-" }, "source": "2", "target": "9", "type": "ScoreEdge" },
+        { "id": "9", "data": { "score": "-" }, "source": "4", "target": "10", "type": "ScoreEdge" },
+        {
+          "id": "11",
+          "data": { "score": "-" },
+          "source": "13",
+          "target": "1",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "12",
+          "data": { "score": "-" },
+          "source": "14",
+          "target": "13",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "13",
+          "data": { "score": "-" },
+          "source": "15",
+          "target": "13",
+          "type": "ScoreEdge"
+        }
+      ],
+      "direction": "TB"
+    },
+    "node-2": {
+      "nodes": [
+        {
+          "id": "11",
+          "data": {
+            "label": "\"poor food production\" is important",
+            "score": "8",
+            "width": 300,
+            "diagramId": "node-2"
+          },
+          "position": { "x": 0, "y": 0 },
+          "selected": false,
+          "type": "RootClaim"
+        },
+        {
+          "id": "12",
+          "data": {
+            "label": "required to be self-sufficient",
+            "score": "-",
+            "width": 300,
+            "diagramId": "node-2"
+          },
+          "position": { "x": 400, "y": 0 },
+          "selected": false,
+          "type": "Support"
+        }
+      ],
+      "edges": [
+        {
+          "id": "10",
+          "data": { "score": "-" },
+          "source": "11",
+          "target": "12",
+          "type": "ScoreEdge"
+        }
+      ],
+      "direction": "LR"
+    }
+  },
+  "activeDiagramId": "root",
+  "nextNodeId": 16,
+  "nextEdgeId": 14
+}
