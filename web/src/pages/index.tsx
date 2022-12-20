@@ -17,7 +17,7 @@ const Home: NextPage = () => {
 
   return (
     <HydrationContext.Provider value={isHydrated}>
-      <Box width="100%" height="100%">
+      <Box flex={1}>
         <TopicPane />
         <Diagram />
       </Box>

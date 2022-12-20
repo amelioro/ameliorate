@@ -13,6 +13,8 @@ export const globals = css`
   }
 
   main {
-    flex: 1;
+    flex: 1; // stretch to fill space between layout app bar and viewport bottom
+    display: flex;
+    flex-direction: column; // allow child diagram to stretch to fill space
   }
 `;
