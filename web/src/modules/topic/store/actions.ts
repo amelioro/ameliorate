@@ -132,3 +132,7 @@ export const setNodeLabel = (nodeId: string, value: string) => {
     "setNodeLabel"
   );
 };
+
+export const getState = () => {
+  return useDiagramStore.getState();
+};
