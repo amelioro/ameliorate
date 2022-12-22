@@ -50,7 +50,11 @@ export const EditableNode = ({ id, data, type }: NodeProps) => {
         <StyledTextareaAutosize
           color={color}
           placeholder="Enter text..."
-          defaultValue={data.label}
+          // Will cause re-render on every keystroke because of onChange, hopefully this is fine.
+          // Was previously using defaultValue to avoid this, but that caused text to not update
+          // when rendering for the second time (1. post-hydration value updating, see store, or
+          // 2. when importing a new diagram but the node id's are the same).
+          value={data.label}
           maxRows={3}
           onChange={(event) => setNodeLabel(id, event.target.value)}
           className="nopan" // allow regular text input drag functionality without using reactflow's pan behavior
