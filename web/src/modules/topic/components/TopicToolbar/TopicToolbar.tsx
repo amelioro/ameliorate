@@ -1,4 +1,4 @@
-import { Download, Upload } from "@mui/icons-material";
+import { Download, ExpandMore, Upload } from "@mui/icons-material";
 import { AppBar, Button, IconButton, Menu, MenuItem, Toolbar } from "@mui/material";
 import fileDownload from "js-file-download";
 import { useState } from "react";
@@ -50,6 +50,7 @@ export const TopicToolbar = () => {
       <Toolbar variant="dense">
         <Button color="inherit" onClick={openMenu}>
           Examples
+          <ExpandMore />
         </Button>
         <Menu anchorEl={anchorEl} open={menuIsOpen} onClose={closeMenu}>
           <MenuItem
