@@ -73,9 +73,15 @@ export const useDiagramDirection = (diagramId: string) => {
   return useDiagramStoreAfterHydration((state) => state.diagrams[diagramId].direction);
 };
 
-export const useClaimDiagramIds = () => {
+export const useRootTitle = () => {
+  return useDiagramStoreAfterHydration((state) => state.diagrams[rootId].nodes[0].data.label);
+};
+
+export const useClaimDiagramIdentifiers = () => {
   return useDiagramStoreAfterHydration((state) =>
-    Object.keys(state.diagrams).filter((id) => id !== rootId)
+    Object.entries(state.diagrams)
+      .filter(([id, _]) => id !== rootId)
+      .map(([id, diagram]) => [id, diagram.nodes[0].data.label])
   );
 };
 
