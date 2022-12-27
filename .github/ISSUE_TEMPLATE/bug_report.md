@@ -27,4 +27,4 @@ If applicable, add screenshots to help explain your problem.
 Add any other context about the problem here.
 
 **Technical ideas**
-Any suspicions for cause of problem or possible solutions. Feel free to delete this section.
+Any suspicions for cause of problem or possible solutions. Linking to specific lines of code can be helpful. Feel free to delete this section.

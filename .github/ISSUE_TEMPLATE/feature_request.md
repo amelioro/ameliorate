@@ -20,4 +20,4 @@ A clear and concise description of any alternative solutions or features you've 
 Add any other context or screenshots about the feature request here.
 
 **Technical ideas**
-Any ideas for possible implementations/technical designs. Feel free to delete this section.
+Any ideas for possible implementations/technical designs. Linking to specific lines of code can be helpful. Feel free to delete this section.
