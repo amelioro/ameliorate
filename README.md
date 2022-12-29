@@ -44,4 +44,4 @@ See the [Contributor's Guide](https://github.com/keyserj/ameliorate/blob/main/CO
 
 ## License
 
-[MIT](https://github.com/keyserj/ameliorate/blob/main/LICENSE.md)
+[MIT](https://github.com/keyserj/ameliorate/blob/main/LICENSE)
