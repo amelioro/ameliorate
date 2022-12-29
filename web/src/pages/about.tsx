@@ -121,18 +121,7 @@ const About: NextPage = () => {
             target="_blank"
             rel="noopener"
           >
-            https://miro.com/app/board/uXjVODhExZM=/?share_link_id=328679592737
-          </Link>
-
-          <Divider />
-
-          <Typography variant="h5">UI Designs</Typography>
-          <Link
-            href="https://www.figma.com/file/bYNA5pVNoaoWboh6TyBTkb/Understandings---sketches"
-            target="_blank"
-            rel="noopener"
-          >
-            https://www.figma.com/file/bYNA5pVNoaoWboh6TyBTkb/Understandings---sketches
+            https://github.com/users/keyserj/projects/1/views/1
           </Link>
         </PaperMiddle>
       </Box>
