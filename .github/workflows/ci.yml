@@ -1,0 +1,17 @@
+name: ci
+
+on: pull_request
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - run: npm ci
+      - run: npm run check-types
+      - run: npm run lint
+        if: always() # get lint errors even if there are type errors
