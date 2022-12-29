@@ -62,7 +62,9 @@ npm run lint # from web/
 
 ### Conventional commits
 
-[Conventional commits](https://www.conventionalcommits.org/) is a standard format for commit messages, used to aid readability of commit history. This commit message format, with [these commit types](https://github.com/conventional-changelog/commitlint/tree/master/%40commitlint/config-conventional), is enforced in a precommit hook via [commitlint](https://github.com/conventional-changelog/commitlint) and [husky](https://github.com/typicode/husky/).
+[Conventional commits](https://www.conventionalcommits.org/) is a standard format for commit messages, used to aid readability of commit history. This commit message format, with [these commit types](https://github.com/keyserj/ameliorate/blob/main/commitlint.config.js), is enforced in a precommit hook via [commitlint](https://github.com/conventional-changelog/commitlint) and [husky](https://github.com/typicode/husky/).
+
+Note: skip precommit hooks (e.g. if you want to quickly commit a wip) with `git commit --no-verify`.
 
 ### Helpful VS Code settings
 
