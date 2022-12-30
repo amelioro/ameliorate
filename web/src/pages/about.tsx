@@ -121,7 +121,14 @@ const About: NextPage = () => {
             target="_blank"
             rel="noopener"
           >
-            https://github.com/users/keyserj/projects/1/views/1
+            Long-term
+          </Link>
+          <Link
+            href="https://github.com/users/keyserj/projects/1/views/1"
+            target="_blank"
+            rel="noopener"
+          >
+            Short-term
           </Link>
         </PaperMiddle>
       </Box>
