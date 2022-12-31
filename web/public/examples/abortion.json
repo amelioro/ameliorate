@@ -176,50 +176,125 @@
         }
       ],
       "edges": [
-        { "id": "0", "data": { "score": "-" }, "source": "0", "target": "1", "type": "ScoreEdge" },
-        { "id": "1", "data": { "score": "7" }, "source": "0", "target": "2", "type": "ScoreEdge" },
-        { "id": "2", "data": { "score": "5" }, "source": "0", "target": "3", "type": "ScoreEdge" },
-        { "id": "3", "data": { "score": "-" }, "source": "1", "target": "4", "type": "ScoreEdge" },
-        { "id": "4", "data": { "score": "-" }, "source": "4", "target": "5", "type": "ScoreEdge" },
-        { "id": "5", "data": { "score": "-" }, "source": "1", "target": "6", "type": "ScoreEdge" },
-        { "id": "6", "data": { "score": "-" }, "source": "6", "target": "7", "type": "ScoreEdge" },
-        { "id": "7", "data": { "score": "-" }, "source": "6", "target": "8", "type": "ScoreEdge" },
-        { "id": "8", "data": { "score": "-" }, "source": "8", "target": "9", "type": "ScoreEdge" },
-        { "id": "9", "data": { "score": "-" }, "source": "1", "target": "10", "type": "ScoreEdge" },
+        {
+          "id": "0",
+          "data": { "score": "-" },
+          "source": "0",
+          "target": "1",
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+        },
+        {
+          "id": "1",
+          "data": { "score": "7" },
+          "source": "0",
+          "target": "2",
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+        },
+        {
+          "id": "2",
+          "data": { "score": "5" },
+          "source": "0",
+          "target": "3",
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+        },
+        {
+          "id": "3",
+          "data": { "score": "-" },
+          "source": "1",
+          "target": "4",
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+        },
+        {
+          "id": "4",
+          "data": { "score": "-" },
+          "source": "4",
+          "target": "5",
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+        },
+        {
+          "id": "5",
+          "data": { "score": "-" },
+          "source": "1",
+          "target": "6",
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+        },
+        {
+          "id": "6",
+          "data": { "score": "-" },
+          "source": "6",
+          "target": "7",
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+        },
+        {
+          "id": "7",
+          "data": { "score": "-" },
+          "source": "6",
+          "target": "8",
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+        },
+        {
+          "id": "8",
+          "data": { "score": "-" },
+          "source": "8",
+          "target": "9",
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+        },
+        {
+          "id": "9",
+          "data": { "score": "-" },
+          "source": "1",
+          "target": "10",
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+        },
         {
           "id": "10",
           "data": { "score": "-" },
           "source": "10",
           "target": "11",
-          "type": "ScoreEdge"
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
         },
         {
           "id": "11",
           "data": { "score": "-" },
           "source": "11",
           "target": "12",
-          "type": "ScoreEdge"
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
         },
         {
           "id": "12",
           "data": { "score": "-" },
           "source": "12",
           "target": "13",
-          "type": "ScoreEdge"
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
         },
         {
           "id": "13",
           "data": { "score": "-" },
           "source": "1",
           "target": "14",
-          "type": "ScoreEdge"
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
         },
         {
           "id": "14",
           "data": { "score": "-" },
           "source": "14",
           "target": "15",
-          "type": "ScoreEdge"
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
         }
       ],
       "direction": "TB"
@@ -269,14 +344,16 @@
           "data": { "score": "-" },
           "source": "16",
           "target": "17",
-          "type": "ScoreEdge"
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
         },
         {
           "id": "16",
           "data": { "score": "-" },
           "source": "16",
           "target": "18",
-          "type": "ScoreEdge"
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
         }
       ],
       "direction": "LR"
@@ -357,35 +434,40 @@
           "data": { "score": "-" },
           "source": "19",
           "target": "20",
-          "type": "ScoreEdge"
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
         },
         {
           "id": "18",
           "data": { "score": "-" },
           "source": "19",
           "target": "21",
-          "type": "ScoreEdge"
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
         },
         {
           "id": "19",
           "data": { "score": "-" },
           "source": "19",
           "target": "22",
-          "type": "ScoreEdge"
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
         },
         {
           "id": "20",
           "data": { "score": "-" },
           "source": "19",
           "target": "23",
-          "type": "ScoreEdge"
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
         },
         {
           "id": "21",
           "data": { "score": "-" },
           "source": "19",
           "target": "24",
-          "type": "ScoreEdge"
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
         }
       ],
       "direction": "LR"
@@ -423,7 +505,8 @@
           "data": { "score": "-" },
           "source": "25",
           "target": "26",
-          "type": "ScoreEdge"
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
         }
       ],
       "direction": "LR"
@@ -473,14 +556,16 @@
           "data": { "score": "-" },
           "source": "27",
           "target": "28",
-          "type": "ScoreEdge"
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
         },
         {
           "id": "24",
           "data": { "score": "-" },
           "source": "27",
           "target": "29",
-          "type": "ScoreEdge"
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
         }
       ],
       "direction": "LR"
