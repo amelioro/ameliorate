@@ -1,3 +1,5 @@
+import { MarkerType } from "reactflow";
+
 import { layout } from "./layout";
 import { NodeType } from "./nodes";
 
@@ -30,6 +32,8 @@ export const buildEdge = (newEdgeId: string, sourceNodeId: string, targetNodeId:
     data: {
       score: "-" as Score,
     },
+    // assumes that we always want to point from child to parent
+    markerStart: { type: MarkerType.ArrowClosed, width: 30, height: 30 },
     source: sourceNodeId,
     target: targetNodeId,
     type: "ScoreEdge",

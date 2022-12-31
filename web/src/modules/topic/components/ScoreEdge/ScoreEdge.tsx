@@ -18,6 +18,7 @@ export const ScoreEdge = ({
   sourcePosition,
   targetPosition,
   style = {},
+  markerStart,
   markerEnd,
 }: EdgeProps) => {
   const [edgePath, labelX, labelY] = getBezierPath({
@@ -36,6 +37,7 @@ export const ScoreEdge = ({
         style={style}
         className="react-flow__edge-path"
         d={edgePath}
+        markerStart={markerStart}
         markerEnd={markerEnd}
       />
       {/* see for example usage https://reactflow.dev/docs/api/edges/edge-label-renderer/ */}
