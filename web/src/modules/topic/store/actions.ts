@@ -8,9 +8,9 @@ import {
   findScorable,
   orientations,
 } from "../utils/diagram";
-import { isValidEdge } from "../utils/edge";
+import { RelationName, getRelation, isValidEdge } from "../utils/edge";
 import { layout } from "../utils/layout";
-import { NodeType, RelationName, getRelation } from "../utils/nodes";
+import { NodeType } from "../utils/nodes";
 import { AllDiagramState, rootId, useDiagramStore } from "./store";
 
 export const addNode = (

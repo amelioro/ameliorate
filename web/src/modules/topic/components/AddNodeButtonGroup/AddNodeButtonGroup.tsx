@@ -1,8 +1,9 @@
 import { ButtonGroup } from "@mui/material";
 
 import { type RelationDirection } from "../../utils/diagram";
+import { addableRelationsFrom } from "../../utils/edge";
 import { Orientation } from "../../utils/layout";
-import { NodeType, addableRelationsFrom } from "../../utils/nodes";
+import { NodeType } from "../../utils/nodes";
 import { AddNodeButton } from "../AddNodeButton/AddNodeButton";
 
 interface Props {
