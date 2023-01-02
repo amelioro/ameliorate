@@ -20,15 +20,16 @@ export interface DiagramState {
 interface BuildProps {
   id: string;
   label?: string;
+  score?: Score;
   type: NodeType;
   diagramId: string;
 }
-export const buildNode = ({ id, label, type, diagramId }: BuildProps) => {
+export const buildNode = ({ id, label, score, type, diagramId }: BuildProps) => {
   return {
     id: id,
     data: {
       label: label ?? `text${id}`,
-      score: "-" as Score,
+      score: score ?? ("-" as Score),
       width: 300,
       diagramId: diagramId,
     },
@@ -64,3 +65,17 @@ export type ScorableType = "node" | "edge";
 
 export const possibleScores = ["-", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"] as const;
 export type Score = typeof possibleScores[number];
+
+export const findScorable = (
+  diagram: DiagramState,
+  scorableId: string,
+  scorableType: ScorableType
+) => {
+  const scorableKey = scorableType === "node" ? "nodes" : "edges";
+  // RIP typescript can't infer this https://github.com/microsoft/TypeScript/issues/33591#issuecomment-786443978
+  const scorables: (Node | Edge)[] = diagram[scorableKey];
+  const scorable = scorables.find((scorable) => scorable.id === scorableId);
+  if (!scorable) throw new Error("scorable not found");
+
+  return scorable;
+};

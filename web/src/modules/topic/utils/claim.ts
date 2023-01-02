@@ -3,6 +3,10 @@ import _ from "lodash";
 import { DiagramState, ScorableType } from "./diagram";
 import { maxCharsPerLine } from "./nodes";
 
+export const parseClaimDiagramId = (diagramId: string) => {
+  return diagramId.split("-") as [ScorableType, string];
+};
+
 export const getClaimDiagramId = (parentScorableId: string, parentScorableType: ScorableType) => {
   return `${parentScorableType}-${parentScorableId}`;
 };

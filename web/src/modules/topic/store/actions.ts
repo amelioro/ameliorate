@@ -1,17 +1,16 @@
-import { getClaimDiagramId, getImplicitLabel } from "../utils/claim";
+import { getClaimDiagramId, getImplicitLabel, parseClaimDiagramId } from "../utils/claim";
 import {
-  Edge,
-  Node,
   RelationDirection,
   ScorableType,
   Score,
   buildEdge,
   buildNode,
+  findScorable,
   orientations,
 } from "../utils/diagram";
 import { layout } from "../utils/layout";
 import { NodeType, RelationName } from "../utils/nodes";
-import { AllDiagramState, useDiagramStore } from "./store";
+import { AllDiagramState, rootId, useDiagramStore } from "./store";
 
 export const addNode = (
   toNodeId: string,
@@ -79,20 +78,47 @@ export const deselectNodes = () => {
   );
 };
 
+// score setting is way more work than it needs to be because one score can live in multiple places:
+// - on the scorable
+// - on the parent scorable (if this is a RootClaim)
+// - on the child/implicit root claim (if it exists)
+// keeping this in sync manually ain't great.
+// TODO: store scores in one place
 export const setScore = (scorableId: string, scorableType: ScorableType, score: Score) => {
   useDiagramStore.setState(
     (state) => {
+      // update this node's score
       const activeDiagram = state.diagrams[state.activeDiagramId];
-
-      const scorableKey = scorableType === "node" ? "nodes" : "edges";
-      // RIP typescript can't infer this https://github.com/microsoft/TypeScript/issues/33591#issuecomment-786443978
-      const scorables: (Node | Edge)[] = activeDiagram[scorableKey];
-      const scorable = scorables.find((scorable) => scorable.id === scorableId);
-      if (!scorable) throw new Error("scorable not found");
-
+      const scorable = findScorable(activeDiagram, scorableId, scorableType);
       /* eslint-disable functional/immutable-data, no-param-reassign */
       scorable.data.score = score;
       /* eslint-enable functional/immutable-data, no-param-reassign */
+
+      // update parent scorable's score if this is a RootClaim
+      if (scorable.type === "RootClaim") {
+        const [parentScorableType, parentScorableId] = parseClaimDiagramId(state.activeDiagramId);
+        const parentScorable = findScorable(
+          state.diagrams[rootId], // assuming we won't support nested root claims, so parent will always be root
+          parentScorableId,
+          parentScorableType
+        );
+
+        /* eslint-disable functional/immutable-data, no-param-reassign */
+        parentScorable.data.score = score;
+        /* eslint-enable functional/immutable-data, no-param-reassign */
+      }
+
+      // update implicit child claim's score if it exists
+      const childDiagramId = getClaimDiagramId(scorableId, scorableType);
+      if (doesDiagramExist(childDiagramId)) {
+        const childDiagram = state.diagrams[childDiagramId];
+        const childClaim = childDiagram.nodes.find((node) => node.type === "RootClaim");
+        if (!childClaim) throw new Error("child claim not found");
+
+        /* eslint-disable functional/immutable-data, no-param-reassign */
+        childClaim.data.score = score;
+        /* eslint-enable functional/immutable-data, no-param-reassign */
+      }
     },
     false,
     "setScore"
@@ -110,12 +136,15 @@ export const setOrCreateActiveDiagram = (scorableId: string, scorableType: Scora
 
       // create claim diagram if it doesn't exist
       if (!doesDiagramExist(diagramId)) {
+        const activeDiagram = state.diagrams[state.activeDiagramId];
+        const scorable = findScorable(activeDiagram, scorableId, scorableType);
+        const label = getImplicitLabel(scorableId, scorableType, activeDiagram);
+
         /* eslint-disable functional/immutable-data, no-param-reassign */
         const newNode = buildNode({
           id: `${state.nextNodeId++}`,
-          // TODO: using state.activeDiagramId so that usage from not-root diagram will work
-          // but we shouldn't be supporting this (just trying to avoid extra bugs for now)
-          label: getImplicitLabel(scorableId, scorableType, state.diagrams[state.activeDiagramId]),
+          label: label,
+          score: scorable.data.score,
           type: "RootClaim",
           diagramId: diagramId,
         });
