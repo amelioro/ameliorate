@@ -1,6 +1,6 @@
 import { Article, Check, Extension, ThumbDown, ThumbUp } from "@mui/icons-material";
 
-import { NodeRelation } from "./diagram";
+import { RelationDirection } from "./diagram";
 
 // TODO: probably should separate decoration from non-decoration
 export interface NodeDecoration {
@@ -14,7 +14,7 @@ export interface NodeDecoration {
     | "critique"; // theme colors; is there a better way to get this?
   NodeIcon: typeof Extension;
   allowed: {
-    [key in NodeRelation]: NodeType[];
+    [key in RelationDirection]: NodeType[];
   };
 }
 

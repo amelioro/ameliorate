@@ -1,11 +1,11 @@
 import { addNode } from "../../store/actions";
-import { type NodeRelation } from "../../utils/diagram";
+import { type RelationDirection } from "../../utils/diagram";
 import { NodeType, nodeDecorations } from "../../utils/nodes";
 import { StyledButton } from "./AddNodeButton.styles";
 
 interface Props {
   nodeId: string;
-  as: NodeRelation;
+  as: RelationDirection;
   nodeType: NodeType;
 }
 

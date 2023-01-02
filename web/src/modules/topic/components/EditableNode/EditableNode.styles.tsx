@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { TextareaAutosize, css } from "@mui/material";
 
-import { Direction } from "../../utils/layout";
+import { Orientation } from "../../utils/layout";
 import { NodeType } from "../../utils/nodes";
 import { AddNodeButtonGroup } from "../AddNodeButtonGroup/AddNodeButtonGroup";
 
@@ -32,10 +32,10 @@ const StyledAddNodeButtonGroup = styled(AddNodeButtonGroup)`
 `;
 
 export const AddNodeButtonGroupParent = styled(StyledAddNodeButtonGroup)<{
-  direction: Direction;
+  orientation: Orientation;
 }>`
-  ${({ direction }) => {
-    if (direction === "TB") {
+  ${({ orientation }) => {
+    if (orientation === "TB") {
       return css`
         left: 50%;
         top: 0;
@@ -52,10 +52,10 @@ export const AddNodeButtonGroupParent = styled(StyledAddNodeButtonGroup)<{
 `;
 
 export const AddNodeButtonGroupChild = styled(StyledAddNodeButtonGroup)<{
-  direction: Direction;
+  orientation: Orientation;
 }>`
-  ${({ direction }) => {
-    if (direction === "TB") {
+  ${({ orientation }) => {
+    if (orientation === "TB") {
       return css`
         left: 50%;
         bottom: 0;

@@ -2,7 +2,7 @@ import {
   ComponentType,
   Edge,
   Node,
-  NodeRelation,
+  RelationDirection,
   Score,
   buildEdge,
   buildNode,
@@ -12,7 +12,7 @@ import { layout } from "../utils/layout";
 import { NodeType } from "../utils/nodes";
 import { AllDiagramState, useDiagramStore } from "./store";
 
-export const addNode = (toNodeId: string, as: NodeRelation, type: NodeType) => {
+export const addNode = (toNodeId: string, as: RelationDirection, type: NodeType) => {
   useDiagramStore.setState(
     (state) => {
       const activeDiagram = state.diagrams[state.activeDiagramId];

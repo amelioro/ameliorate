@@ -3,7 +3,7 @@ import { MarkerType } from "reactflow";
 import { layout } from "./layout";
 import { NodeType } from "./nodes";
 
-export type NodeRelation = "Parent" | "Child";
+export type RelationDirection = "Parent" | "Child";
 
 interface BuildProps {
   id: string;
