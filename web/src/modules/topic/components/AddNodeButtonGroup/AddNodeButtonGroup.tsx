@@ -2,7 +2,7 @@ import { ButtonGroup } from "@mui/material";
 
 import { type RelationDirection } from "../../utils/diagram";
 import { Orientation } from "../../utils/layout";
-import { NodeType, nodeDecorations } from "../../utils/nodes";
+import { NodeType, addableRelationsFrom } from "../../utils/nodes";
 import { AddNodeButton } from "../AddNodeButton/AddNodeButton";
 
 interface Props {
@@ -14,9 +14,9 @@ interface Props {
 }
 
 export const AddNodeButtonGroup = ({ className, nodeId, nodeType, as, orientation }: Props) => {
-  const buttonTypes = nodeDecorations[nodeType].allowed[as];
+  const addableRelations = addableRelationsFrom(nodeType, as);
 
-  if (buttonTypes.length === 0) return <></>;
+  if (addableRelations.length === 0) return <></>;
 
   return (
     <ButtonGroup
@@ -25,8 +25,14 @@ export const AddNodeButtonGroup = ({ className, nodeId, nodeType, as, orientatio
       className={className}
       orientation={orientation === "TB" ? "horizontal" : "vertical"}
     >
-      {buttonTypes.map((type) => (
-        <AddNodeButton key={type} nodeId={nodeId} as={as} nodeType={type} />
+      {addableRelations.map(({ toNodeType, relation }) => (
+        <AddNodeButton
+          key={toNodeType}
+          nodeId={nodeId}
+          as={as}
+          toNodeType={toNodeType}
+          relation={relation}
+        />
       ))}
     </ButtonGroup>
   );

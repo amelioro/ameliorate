@@ -2,7 +2,6 @@ import { Article, Check, Extension, ThumbDown, ThumbUp } from "@mui/icons-materi
 
 import { RelationDirection } from "./diagram";
 
-// TODO: probably should separate decoration from non-decoration
 export interface NodeDecoration {
   themeColor:
     | "primary"
@@ -13,9 +12,6 @@ export interface NodeDecoration {
     | "support"
     | "critique"; // theme colors; is there a better way to get this?
   NodeIcon: typeof Extension;
-  allowed: {
-    [key in RelationDirection]: NodeType[];
-  };
 }
 
 // TODO(refactor): should only need to edit this file to add new node types
@@ -25,41 +21,63 @@ export const nodeDecorations: Record<NodeType, NodeDecoration> = {
   Problem: {
     themeColor: "problem",
     NodeIcon: Extension,
-    allowed: {
-      Parent: ["Problem", "Solution"],
-      Child: ["Problem", "Solution"],
-    },
   },
   Solution: {
     themeColor: "solution",
     NodeIcon: Check,
-    allowed: {
-      Parent: ["Problem", "Solution"],
-      Child: ["Problem", "Solution"],
-    },
   },
   RootClaim: {
     themeColor: "rootClaim",
     NodeIcon: Article,
-    allowed: {
-      Parent: [],
-      Child: ["Support", "Critique"],
-    },
   },
   Support: {
     themeColor: "support",
     NodeIcon: ThumbUp,
-    allowed: {
-      Parent: [],
-      Child: ["Support", "Critique"],
-    },
   },
   Critique: {
     themeColor: "critique",
     NodeIcon: ThumbDown,
-    allowed: {
-      Parent: [],
-      Child: ["Support", "Critique"],
-    },
   },
+};
+
+export type RelationName = "causes" | "solves" | "created by" | "supports" | "critiques";
+
+export interface Relation {
+  Parent: NodeType;
+  Child: NodeType;
+  name: RelationName;
+}
+
+// assumes that we're always pointing from child to parent
+export const relations: Relation[] = [
+  { Parent: "Problem", Child: "Problem", name: "causes" },
+  { Parent: "Problem", Child: "Solution", name: "solves" },
+
+  { Parent: "Solution", Child: "Problem", name: "created by" },
+
+  { Parent: "RootClaim", Child: "Support", name: "supports" },
+  { Parent: "RootClaim", Child: "Critique", name: "critiques" },
+
+  { Parent: "Support", Child: "Support", name: "supports" },
+  { Parent: "Support", Child: "Critique", name: "critiques" },
+
+  { Parent: "Critique", Child: "Support", name: "supports" },
+  { Parent: "Critique", Child: "Critique", name: "critiques" },
+];
+
+export const claimNodeTypes = ["RootClaim", "Support", "Critique"];
+
+export const addableRelationsFrom = (nodeType: NodeType, addingAs: RelationDirection) => {
+  // claim diagram is a tree so claim nodes can't add parents
+  if (claimNodeTypes.includes(nodeType) && addingAs === "Parent") return [];
+
+  const fromDirection = addingAs === "Parent" ? "Child" : "Parent";
+  const addableRelations = relations.filter((relation) => relation[fromDirection] === nodeType);
+
+  const formattedRelations = addableRelations.map((relation) => ({
+    toNodeType: relation[addingAs],
+    relation: relation.name,
+  }));
+
+  return formattedRelations;
 };
