@@ -4,7 +4,8 @@ import _ from "lodash";
 import { Handle, Position } from "reactflow";
 
 import { setNodeLabel } from "../../store/actions";
-import { useDiagramDirection } from "../../store/store";
+import { useDiagramType } from "../../store/store";
+import { orientations } from "../../utils/diagram";
 import { NodeType, nodeDecorations } from "../../utils/nodes";
 import { NodeProps } from "../Diagram/Diagram";
 import { ScoreDial } from "../ScoreDial/ScoreDial";
@@ -22,8 +23,10 @@ import {
 } from "./EditableNode.styles";
 
 export const EditableNode = ({ id, data, type }: NodeProps) => {
-  const orientation = useDiagramDirection(data.diagramId);
+  const diagramType = useDiagramType(data.diagramId);
   const theme = useTheme();
+
+  const orientation = orientations[diagramType];
 
   const nodeType = type as NodeType; // we always pass a NodeType from the diagram, but I'm not sure how to override react-flow's type to tell it that
   const nodeDecoration = nodeDecorations[nodeType];

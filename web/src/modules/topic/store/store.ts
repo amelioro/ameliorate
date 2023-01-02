@@ -4,8 +4,7 @@ import { devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 import { HydrationContext } from "../../../pages/index";
-import { type Edge, type Node, getInitialNodes } from "../utils/diagram";
-import { Direction } from "../utils/layout";
+import { DiagramType, type Edge, type Node, getInitialNodes } from "../utils/diagram";
 
 export const rootId = "root";
 
@@ -13,7 +12,7 @@ const initialDiagrams: Record<string, DiagramState> = {
   [rootId]: {
     nodes: getInitialNodes("0", "Problem", rootId),
     edges: [],
-    direction: "TB",
+    type: "Problem",
   },
 };
 
@@ -27,7 +26,7 @@ export interface AllDiagramState {
 interface DiagramState {
   nodes: Node[];
   edges: Edge[];
-  direction: Direction;
+  type: DiagramType;
 }
 
 const initialState = {
@@ -69,8 +68,8 @@ export const useActiveDiagram = () => {
   return useDiagramStoreAfterHydration((state) => state.diagrams[state.activeDiagramId]);
 };
 
-export const useDiagramDirection = (diagramId: string) => {
-  return useDiagramStoreAfterHydration((state) => state.diagrams[diagramId].direction);
+export const useDiagramType = (diagramId: string) => {
+  return useDiagramStoreAfterHydration((state) => state.diagrams[diagramId].type);
 };
 
 export const useRootTitle = () => {

@@ -1,9 +1,15 @@
 import { MarkerType } from "reactflow";
 
-import { layout } from "./layout";
+import { Orientation, layout } from "./layout";
 import { NodeType } from "./nodes";
 
+export type DiagramType = "Problem" | "Claim";
 export type RelationDirection = "Parent" | "Child";
+
+export const orientations: Record<DiagramType, Orientation> = {
+  Problem: "TB",
+  Claim: "LR",
+};
 
 interface BuildProps {
   id: string;

@@ -7,6 +7,7 @@ import {
   buildEdge,
   buildNode,
   getInitialNodes,
+  orientations,
 } from "../utils/diagram";
 import { layout } from "../utils/layout";
 import { NodeType } from "../utils/nodes";
@@ -37,7 +38,11 @@ export const addNode = (toNodeId: string, as: RelationDirection, type: NodeType)
 
       const newNodes = activeDiagram.nodes.concat(newNode);
       const newEdges = activeDiagram.edges.concat(newEdge);
-      const { layoutedNodes, layoutedEdges } = layout(newNodes, newEdges, activeDiagram.direction);
+      const { layoutedNodes, layoutedEdges } = layout(
+        newNodes,
+        newEdges,
+        orientations[activeDiagram.type]
+      );
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
       activeDiagram.nodes = layoutedNodes;
@@ -102,7 +107,7 @@ export const setActiveDiagram = (diagramId: string) => {
         state.diagrams[diagramId] = {
           nodes: getInitialNodes(`${state.nextNodeId++}`, "RootClaim", diagramId),
           edges: [],
-          direction: "LR",
+          type: "Claim",
         };
         /* eslint-enable functional/immutable-data, no-param-reassign */
       }
