@@ -8,8 +8,9 @@ import {
   findScorable,
   orientations,
 } from "../utils/diagram";
+import { RelationName, getRelation, isValidEdge } from "../utils/edge";
 import { layout } from "../utils/layout";
-import { NodeType, RelationName } from "../utils/nodes";
+import { NodeType } from "../utils/nodes";
 import { AllDiagramState, rootId, useDiagramStore } from "./store";
 
 export const addNode = (
@@ -55,6 +56,42 @@ export const addNode = (
     },
     false,
     "addNode" // little gross, seems like this should be inferrable from method name
+  );
+};
+
+export const connectNodes = (parentId: string | null, childId: string | null) => {
+  useDiagramStore.setState(
+    (state) => {
+      const activeDiagram = state.diagrams[state.activeDiagramId];
+
+      const parent = activeDiagram.nodes.find((node) => node.id === parentId);
+      const child = activeDiagram.nodes.find((node) => node.id === childId);
+      if (!parent || !child) throw new Error("parent or child not found");
+
+      if (!isValidEdge(activeDiagram, parent, child)) return;
+
+      /* eslint-disable functional/immutable-data, no-param-reassign */
+      const newEdgeId = `${state.nextEdgeId++}`;
+      /* eslint-enable functional/immutable-data, no-param-reassign */
+
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- isValidEdge ensures relation is valid
+      const relation = getRelation(parent.type, child.type)!;
+      const newEdge = buildEdge(newEdgeId, parent.id, child.id, relation.name);
+      const newEdges = activeDiagram.edges.concat(newEdge);
+
+      const { layoutedNodes, layoutedEdges } = layout(
+        activeDiagram.nodes,
+        newEdges,
+        orientations[activeDiagram.type]
+      );
+
+      /* eslint-disable functional/immutable-data, no-param-reassign */
+      activeDiagram.nodes = layoutedNodes;
+      activeDiagram.edges = layoutedEdges;
+      /* eslint-enable functional/immutable-data, no-param-reassign */
+    },
+    false,
+    "connectNodes"
   );
 };
 

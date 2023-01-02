@@ -1,6 +1,7 @@
 import { addNode } from "../../store/actions";
 import { type RelationDirection } from "../../utils/diagram";
-import { NodeType, RelationName, nodeDecorations } from "../../utils/nodes";
+import { RelationName } from "../../utils/edge";
+import { NodeType, nodeDecorations } from "../../utils/nodes";
 import { StyledButton } from "./AddNodeButton.styles";
 
 interface Props {

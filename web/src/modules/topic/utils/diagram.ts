@@ -1,7 +1,8 @@
 import { MarkerType } from "reactflow";
 
+import { RelationName } from "./edge";
 import { Orientation } from "./layout";
-import { NodeType, RelationName } from "./nodes";
+import { NodeType } from "./nodes";
 
 export type DiagramType = "Problem" | "Claim";
 export type RelationDirection = "Parent" | "Child";
