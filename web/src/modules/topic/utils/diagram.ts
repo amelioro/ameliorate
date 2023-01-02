@@ -1,9 +1,15 @@
 import { MarkerType } from "reactflow";
 
-import { layout } from "./layout";
-import { NodeType } from "./nodes";
+import { Orientation, layout } from "./layout";
+import { NodeType, RelationName } from "./nodes";
 
-export type NodeRelation = "Parent" | "Child";
+export type DiagramType = "Problem" | "Claim";
+export type RelationDirection = "Parent" | "Child";
+
+export const orientations: Record<DiagramType, Orientation> = {
+  Problem: "TB",
+  Claim: "LR",
+};
 
 interface BuildProps {
   id: string;
@@ -26,12 +32,18 @@ export const buildNode = ({ id, type, diagramId }: BuildProps) => {
 };
 export type Node = ReturnType<typeof buildNode>;
 
-export const buildEdge = (newEdgeId: string, sourceNodeId: string, targetNodeId: string) => {
+export const buildEdge = (
+  newEdgeId: string,
+  sourceNodeId: string,
+  targetNodeId: string,
+  relation: RelationName
+) => {
   return {
     id: newEdgeId,
     data: {
       score: "-" as Score,
     },
+    label: relation,
     // assumes that we always want to point from child to parent
     markerStart: { type: MarkerType.ArrowClosed, width: 30, height: 30 },
     source: sourceNodeId,

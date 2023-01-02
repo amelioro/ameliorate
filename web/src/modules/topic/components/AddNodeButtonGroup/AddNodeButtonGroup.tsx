@@ -1,32 +1,38 @@
 import { ButtonGroup } from "@mui/material";
 
-import { type NodeRelation } from "../../utils/diagram";
-import { Direction } from "../../utils/layout";
-import { NodeType, nodeDecorations } from "../../utils/nodes";
+import { type RelationDirection } from "../../utils/diagram";
+import { Orientation } from "../../utils/layout";
+import { NodeType, addableRelationsFrom } from "../../utils/nodes";
 import { AddNodeButton } from "../AddNodeButton/AddNodeButton";
 
 interface Props {
   className?: string;
   nodeId: string;
   nodeType: NodeType;
-  as: NodeRelation;
-  direction: Direction;
+  as: RelationDirection;
+  orientation: Orientation;
 }
 
-export const AddNodeButtonGroup = ({ className, nodeId, nodeType, as, direction }: Props) => {
-  const buttonTypes = nodeDecorations[nodeType].allowed[as];
+export const AddNodeButtonGroup = ({ className, nodeId, nodeType, as, orientation }: Props) => {
+  const addableRelations = addableRelationsFrom(nodeType, as);
 
-  if (buttonTypes.length === 0) return <></>;
+  if (addableRelations.length === 0) return <></>;
 
   return (
     <ButtonGroup
       variant="contained"
       aria-label="add node button group"
       className={className}
-      orientation={direction === "TB" ? "horizontal" : "vertical"}
+      orientation={orientation === "TB" ? "horizontal" : "vertical"}
     >
-      {buttonTypes.map((type) => (
-        <AddNodeButton key={type} nodeId={nodeId} as={as} nodeType={type} />
+      {addableRelations.map(({ toNodeType, relation }) => (
+        <AddNodeButton
+          key={toNodeType}
+          nodeId={nodeId}
+          as={as}
+          toNodeType={toNodeType}
+          relation={relation}
+        />
       ))}
     </ButtonGroup>
   );

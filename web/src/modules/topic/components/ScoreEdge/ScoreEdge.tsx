@@ -1,7 +1,8 @@
+import { Typography } from "@mui/material";
 import React from "react";
 import { EdgeLabelRenderer, getBezierPath } from "reactflow";
 
-import { minSpaceBetweenNodes } from "../../utils/layout";
+import { spaceBetweenNodes } from "../../utils/layout";
 import { EdgeProps } from "../Diagram/Diagram";
 import { ScoreDial } from "../ScoreDial/ScoreDial";
 import { StyledDiv } from "./ScoreEdge.style";
@@ -11,6 +12,7 @@ import { StyledDiv } from "./ScoreEdge.style";
 export const ScoreEdge = ({
   id,
   data,
+  label,
   sourceX,
   sourceY,
   targetX,
@@ -42,7 +44,8 @@ export const ScoreEdge = ({
       />
       {/* see for example usage https://reactflow.dev/docs/api/edges/edge-label-renderer/ */}
       <EdgeLabelRenderer>
-        <StyledDiv length={minSpaceBetweenNodes} labelX={labelX} labelY={labelY}>
+        <StyledDiv length={spaceBetweenNodes} labelX={labelX} labelY={labelY}>
+          <Typography variant="body1">{label}</Typography>
           {/* we'll always pass data - why does react-flow make it nullable :( */}
           {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */}
           <ScoreDial parentId={id} parentType="edge" score={data!.score} />

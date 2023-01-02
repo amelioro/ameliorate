@@ -1,22 +1,23 @@
 import { addNode } from "../../store/actions";
-import { type NodeRelation } from "../../utils/diagram";
-import { NodeType, nodeDecorations } from "../../utils/nodes";
+import { type RelationDirection } from "../../utils/diagram";
+import { NodeType, RelationName, nodeDecorations } from "../../utils/nodes";
 import { StyledButton } from "./AddNodeButton.styles";
 
 interface Props {
   nodeId: string;
-  as: NodeRelation;
-  nodeType: NodeType;
+  as: RelationDirection;
+  toNodeType: NodeType;
+  relation: RelationName;
 }
 
-export const AddNodeButton = ({ nodeId, as, nodeType }: Props) => {
-  const decoration = nodeDecorations[nodeType];
+export const AddNodeButton = ({ nodeId, as, toNodeType, relation }: Props) => {
+  const decoration = nodeDecorations[toNodeType];
 
   return (
     <StyledButton
       color={decoration.themeColor}
       size="small"
-      onClick={() => addNode(nodeId, as, nodeType)}
+      onClick={() => addNode(nodeId, as, toNodeType, relation)}
     >
       <decoration.NodeIcon />
     </StyledButton>

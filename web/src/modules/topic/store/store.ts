@@ -4,8 +4,8 @@ import { devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 import { HydrationContext } from "../../../pages/index";
-import { type Edge, type Node, getInitialNodes } from "../utils/diagram";
-import { Direction } from "../utils/layout";
+import { DiagramType, type Edge, type Node, getInitialNodes } from "../utils/diagram";
+import { migrate } from "./migrate";
 
 export const rootId = "root";
 
@@ -13,7 +13,7 @@ const initialDiagrams: Record<string, DiagramState> = {
   [rootId]: {
     nodes: getInitialNodes("0", "Problem", rootId),
     edges: [],
-    direction: "TB",
+    type: "Problem",
   },
 };
 
@@ -27,7 +27,7 @@ export interface AllDiagramState {
 interface DiagramState {
   nodes: Node[];
   edges: Edge[];
-  direction: Direction;
+  type: DiagramType;
 }
 
 const initialState = {
@@ -40,7 +40,11 @@ const initialState = {
 // create atomic selectors for usage outside of store/ dir
 // this is only exported to allow actions to be extracted to a separate file
 export const useDiagramStore = create<AllDiagramState>()(
-  persist(immer(devtools(() => initialState)), { name: "diagram-storage" })
+  persist(immer(devtools(() => initialState)), {
+    name: "diagram-storage",
+    version: 1,
+    migrate: migrate,
+  })
 );
 
 const useDiagramStoreAfterHydration = ((selector, compare) => {
@@ -69,8 +73,8 @@ export const useActiveDiagram = () => {
   return useDiagramStoreAfterHydration((state) => state.diagrams[state.activeDiagramId]);
 };
 
-export const useDiagramDirection = (diagramId: string) => {
-  return useDiagramStoreAfterHydration((state) => state.diagrams[diagramId].direction);
+export const useDiagramType = (diagramId: string) => {
+  return useDiagramStoreAfterHydration((state) => state.diagrams[diagramId].type);
 };
 
 export const useRootTitle = () => {

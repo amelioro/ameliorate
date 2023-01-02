@@ -4,7 +4,8 @@ import _ from "lodash";
 import { Handle, Position } from "reactflow";
 
 import { setNodeLabel } from "../../store/actions";
-import { useDiagramDirection } from "../../store/store";
+import { useDiagramType } from "../../store/store";
+import { orientations } from "../../utils/diagram";
 import { NodeType, nodeDecorations } from "../../utils/nodes";
 import { NodeProps } from "../Diagram/Diagram";
 import { ScoreDial } from "../ScoreDial/ScoreDial";
@@ -22,8 +23,10 @@ import {
 } from "./EditableNode.styles";
 
 export const EditableNode = ({ id, data, type }: NodeProps) => {
-  const direction = useDiagramDirection(data.diagramId);
+  const diagramType = useDiagramType(data.diagramId);
   const theme = useTheme();
+
+  const orientation = orientations[diagramType];
 
   const nodeType = type as NodeType; // we always pass a NodeType from the diagram, but I'm not sure how to override react-flow's type to tell it that
   const nodeDecoration = nodeDecorations[nodeType];
@@ -34,9 +37,14 @@ export const EditableNode = ({ id, data, type }: NodeProps) => {
     <>
       <HoverBridgeDiv />
 
-      <Handle type="target" position={direction == "TB" ? Position.Top : Position.Left} />
+      <Handle type="target" position={orientation == "TB" ? Position.Top : Position.Left} />
       {/* should this use react-flow's NodeToolbar? seems like it'd automatically handle positioning */}
-      <AddNodeButtonGroupParent nodeId={id} nodeType={nodeType} as="Parent" direction={direction} />
+      <AddNodeButtonGroupParent
+        nodeId={id}
+        nodeType={nodeType}
+        as="Parent"
+        orientation={orientation}
+      />
 
       <YEdgeDiv>
         <NodeTypeDiv>
@@ -63,8 +71,13 @@ export const EditableNode = ({ id, data, type }: NodeProps) => {
       </MiddleDiv>
       <YEdgeDiv />
 
-      <AddNodeButtonGroupChild nodeId={id} nodeType={nodeType} as="Child" direction={direction} />
-      <Handle type="source" position={direction == "TB" ? Position.Bottom : Position.Right} />
+      <AddNodeButtonGroupChild
+        nodeId={id}
+        nodeType={nodeType}
+        as="Child"
+        orientation={orientation}
+      />
+      <Handle type="source" position={orientation == "TB" ? Position.Bottom : Position.Right} />
 
       <Global styles={nodeStyles(data.width, color, nodeType)} />
     </>

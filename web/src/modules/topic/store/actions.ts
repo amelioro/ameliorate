@@ -2,17 +2,23 @@ import {
   ComponentType,
   Edge,
   Node,
-  NodeRelation,
+  RelationDirection,
   Score,
   buildEdge,
   buildNode,
   getInitialNodes,
+  orientations,
 } from "../utils/diagram";
 import { layout } from "../utils/layout";
-import { NodeType } from "../utils/nodes";
+import { NodeType, RelationName } from "../utils/nodes";
 import { AllDiagramState, useDiagramStore } from "./store";
 
-export const addNode = (toNodeId: string, as: NodeRelation, type: NodeType) => {
+export const addNode = (
+  toNodeId: string,
+  as: RelationDirection,
+  toNodeType: NodeType,
+  relation: RelationName
+) => {
   useDiagramStore.setState(
     (state) => {
       const activeDiagram = state.diagrams[state.activeDiagramId];
@@ -27,17 +33,21 @@ export const addNode = (toNodeId: string, as: NodeRelation, type: NodeType) => {
 
       const newNode = buildNode({
         id: newNodeId,
-        type: type,
+        type: toNodeType,
         diagramId: state.activeDiagramId,
       });
 
       const sourceNodeId = as === "Parent" ? newNodeId : toNodeId;
       const targetNodeId = as === "Parent" ? toNodeId : newNodeId;
-      const newEdge = buildEdge(newEdgeId, sourceNodeId, targetNodeId);
+      const newEdge = buildEdge(newEdgeId, sourceNodeId, targetNodeId, relation);
 
       const newNodes = activeDiagram.nodes.concat(newNode);
       const newEdges = activeDiagram.edges.concat(newEdge);
-      const { layoutedNodes, layoutedEdges } = layout(newNodes, newEdges, activeDiagram.direction);
+      const { layoutedNodes, layoutedEdges } = layout(
+        newNodes,
+        newEdges,
+        orientations[activeDiagram.type]
+      );
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
       activeDiagram.nodes = layoutedNodes;
@@ -102,7 +112,7 @@ export const setActiveDiagram = (diagramId: string) => {
         state.diagrams[diagramId] = {
           nodes: getInitialNodes(`${state.nextNodeId++}`, "RootClaim", diagramId),
           edges: [],
-          direction: "LR",
+          type: "Claim",
         };
         /* eslint-enable functional/immutable-data, no-param-reassign */
       }

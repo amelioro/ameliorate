@@ -182,7 +182,8 @@
           "source": "0",
           "target": "1",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "causes"
         },
         {
           "id": "1",
@@ -190,7 +191,8 @@
           "source": "0",
           "target": "2",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "solves"
         },
         {
           "id": "2",
@@ -198,7 +200,8 @@
           "source": "0",
           "target": "3",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "solves"
         },
         {
           "id": "3",
@@ -206,7 +209,8 @@
           "source": "1",
           "target": "4",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "causes"
         },
         {
           "id": "4",
@@ -214,7 +218,8 @@
           "source": "4",
           "target": "5",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "solves"
         },
         {
           "id": "5",
@@ -222,7 +227,8 @@
           "source": "1",
           "target": "6",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "causes"
         },
         {
           "id": "6",
@@ -230,7 +236,8 @@
           "source": "6",
           "target": "7",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "solves"
         },
         {
           "id": "7",
@@ -238,7 +245,8 @@
           "source": "6",
           "target": "8",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "solves"
         },
         {
           "id": "8",
@@ -246,7 +254,8 @@
           "source": "8",
           "target": "9",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "created by"
         },
         {
           "id": "9",
@@ -254,7 +263,8 @@
           "source": "1",
           "target": "10",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "causes"
         },
         {
           "id": "10",
@@ -262,7 +272,8 @@
           "source": "10",
           "target": "11",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "solves"
         },
         {
           "id": "11",
@@ -270,7 +281,8 @@
           "source": "11",
           "target": "12",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "created by"
         },
         {
           "id": "12",
@@ -278,7 +290,8 @@
           "source": "12",
           "target": "13",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "solves"
         },
         {
           "id": "13",
@@ -286,7 +299,8 @@
           "source": "1",
           "target": "14",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "causes"
         },
         {
           "id": "14",
@@ -294,10 +308,11 @@
           "source": "14",
           "target": "15",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "solves"
         }
       ],
-      "direction": "TB"
+      "type": "Problem"
     },
     "node-3": {
       "nodes": [
@@ -345,7 +360,8 @@
           "source": "16",
           "target": "17",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "supports"
         },
         {
           "id": "16",
@@ -353,10 +369,11 @@
           "source": "16",
           "target": "18",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "critiques"
         }
       ],
-      "direction": "LR"
+      "type": "Claim"
     },
     "node-2": {
       "nodes": [
@@ -435,7 +452,8 @@
           "source": "19",
           "target": "20",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "supports"
         },
         {
           "id": "18",
@@ -443,7 +461,8 @@
           "source": "19",
           "target": "21",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "supports"
         },
         {
           "id": "19",
@@ -451,7 +470,8 @@
           "source": "19",
           "target": "22",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "supports"
         },
         {
           "id": "20",
@@ -459,7 +479,8 @@
           "source": "19",
           "target": "23",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "critiques"
         },
         {
           "id": "21",
@@ -467,10 +488,11 @@
           "source": "19",
           "target": "24",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "critiques"
         }
       ],
-      "direction": "LR"
+      "type": "Claim"
     },
     "edge-1": {
       "nodes": [
@@ -506,10 +528,11 @@
           "source": "25",
           "target": "26",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "critiques"
         }
       ],
-      "direction": "LR"
+      "type": "Claim"
     },
     "edge-2": {
       "nodes": [
@@ -557,7 +580,8 @@
           "source": "27",
           "target": "28",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "supports"
         },
         {
           "id": "24",
@@ -565,10 +589,11 @@
           "source": "27",
           "target": "29",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "critiques"
         }
       ],
-      "direction": "LR"
+      "type": "Claim"
     }
   },
   "activeDiagramId": "root",
