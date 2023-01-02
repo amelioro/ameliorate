@@ -3,7 +3,7 @@ import dagre from "dagre";
 import { type Edge, type Node } from "../utils/diagram";
 
 export type Orientation = "TB" | "BT" | "LR" | "RL";
-export const minSpaceBetweenNodes = 100;
+export const spaceBetweenNodes = 130;
 
 // mostly from https://reactflow.dev/docs/examples/layout/dagre/
 export const layout = (nodes: Node[], edges: Edge[], orientation: Orientation) => {
@@ -12,7 +12,7 @@ export const layout = (nodes: Node[], edges: Edge[], orientation: Orientation) =
 
   dagreGraph.setDefaultEdgeLabel(() => ({}));
 
-  dagreGraph.setGraph({ rankdir: orientation, ranksep: minSpaceBetweenNodes });
+  dagreGraph.setGraph({ rankdir: orientation, ranksep: spaceBetweenNodes });
 
   nodes.forEach((node) => {
     dagreGraph.setNode(node.id, { width: node.data.width, height: height });
