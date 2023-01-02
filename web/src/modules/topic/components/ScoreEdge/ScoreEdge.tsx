@@ -48,7 +48,7 @@ export const ScoreEdge = ({
           <Typography variant="body1">{label}</Typography>
           {/* we'll always pass data - why does react-flow make it nullable :( */}
           {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */}
-          <ScoreDial parentId={id} parentType="edge" score={data!.score} />
+          <ScoreDial scorableId={id} scorableType="edge" score={data!.score} />
         </StyledDiv>
       </EdgeLabelRenderer>
     </>

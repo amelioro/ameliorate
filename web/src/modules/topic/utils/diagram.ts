@@ -60,7 +60,7 @@ export const buildEdge = (
 };
 export type Edge = ReturnType<typeof buildEdge>;
 
-export type ComponentType = "node" | "edge";
+export type ScorableType = "node" | "edge";
 
 export const possibleScores = ["-", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"] as const;
 export type Score = typeof possibleScores[number];

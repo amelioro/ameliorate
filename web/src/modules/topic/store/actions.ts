@@ -1,9 +1,9 @@
 import { getClaimDiagramId, getImplicitLabel } from "../utils/claim";
 import {
-  ComponentType,
   Edge,
   Node,
   RelationDirection,
+  ScorableType,
   Score,
   buildEdge,
   buildNode,
@@ -79,23 +79,23 @@ export const deselectNodes = () => {
   );
 };
 
-export const scoreParent = (parentId: string, parentType: ComponentType, score: Score) => {
+export const setScore = (scorableId: string, scorableType: ScorableType, score: Score) => {
   useDiagramStore.setState(
     (state) => {
       const activeDiagram = state.diagrams[state.activeDiagramId];
 
-      const parentsKey = parentType === "node" ? "nodes" : "edges";
+      const scorableKey = scorableType === "node" ? "nodes" : "edges";
       // RIP typescript can't infer this https://github.com/microsoft/TypeScript/issues/33591#issuecomment-786443978
-      const parents: (Node | Edge)[] = activeDiagram[parentsKey];
-      const parent = parents.find((parent) => parent.id === parentId);
-      if (!parent) throw new Error("parent not found");
+      const scorables: (Node | Edge)[] = activeDiagram[scorableKey];
+      const scorable = scorables.find((scorable) => scorable.id === scorableId);
+      if (!scorable) throw new Error("scorable not found");
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
-      parent.data.score = score;
+      scorable.data.score = score;
       /* eslint-enable functional/immutable-data, no-param-reassign */
     },
     false,
-    "scoreParent"
+    "setScore"
   );
 };
 
@@ -103,10 +103,10 @@ const doesDiagramExist = (diagramId: string) => {
   return Object.keys(useDiagramStore.getState().diagrams).includes(diagramId);
 };
 
-export const setOrCreateActiveDiagram = (parentId: string, parentType: ComponentType) => {
+export const setOrCreateActiveDiagram = (scorableId: string, scorableType: ScorableType) => {
   useDiagramStore.setState(
     (state) => {
-      const diagramId = getClaimDiagramId(parentId, parentType);
+      const diagramId = getClaimDiagramId(scorableId, scorableType);
 
       // create claim diagram if it doesn't exist
       if (!doesDiagramExist(diagramId)) {
@@ -115,7 +115,7 @@ export const setOrCreateActiveDiagram = (parentId: string, parentType: Component
           id: `${state.nextNodeId++}`,
           // TODO: using state.activeDiagramId so that usage from not-root diagram will work
           // but we shouldn't be supporting this (just trying to avoid extra bugs for now)
-          label: getImplicitLabel(parentId, parentType, state.diagrams[state.activeDiagramId]),
+          label: getImplicitLabel(scorableId, scorableType, state.diagrams[state.activeDiagramId]),
           type: "RootClaim",
           diagramId: diagramId,
         });
