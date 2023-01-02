@@ -6,7 +6,6 @@ import {
   Score,
   buildEdge,
   buildNode,
-  getInitialNodes,
   orientations,
 } from "../utils/diagram";
 import { layout } from "../utils/layout";
@@ -109,8 +108,14 @@ export const setActiveDiagram = (diagramId: string) => {
       // create new diagram if it doesn't exist
       if (!doesDiagramExist(diagramId)) {
         /* eslint-disable functional/immutable-data, no-param-reassign */
+        const newNode = buildNode({
+          id: `${state.nextNodeId++}`,
+          type: "RootClaim",
+          diagramId: diagramId,
+        });
+
         state.diagrams[diagramId] = {
-          nodes: getInitialNodes(`${state.nextNodeId++}`, "RootClaim", diagramId),
+          nodes: [newNode],
           edges: [],
           type: "Claim",
         };

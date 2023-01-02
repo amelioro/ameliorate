@@ -1,6 +1,6 @@
 import { MarkerType } from "reactflow";
 
-import { Orientation, layout } from "./layout";
+import { Orientation } from "./layout";
 import { NodeType, RelationName } from "./nodes";
 
 export type DiagramType = "Problem" | "Claim";
@@ -52,16 +52,6 @@ export const buildEdge = (
   };
 };
 export type Edge = ReturnType<typeof buildEdge>;
-
-export const getInitialNodes = (nodeId: string, startingNodeType: NodeType, diagramId: string) => {
-  const { layoutedNodes: initialNodes } = layout(
-    [buildNode({ id: nodeId, type: startingNodeType, diagramId: diagramId })],
-    [],
-    "TB"
-  );
-
-  return initialNodes;
-};
 
 export type ComponentType = "node" | "edge";
 
