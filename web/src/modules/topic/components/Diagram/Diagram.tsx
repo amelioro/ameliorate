@@ -9,7 +9,7 @@ import {
   type NodeProps as DefaultNodeProps,
 } from "reactflow";
 
-import { deselectNodes, setActiveDiagram } from "../../store/actions";
+import { connectNodes, deselectNodes, setActiveDiagram } from "../../store/actions";
 import { rootId, useActiveDiagram, useActiveDiagramId } from "../../store/store";
 import { type Edge, type Node } from "../../utils/diagram";
 import { type NodeType } from "../../utils/nodes";
@@ -76,8 +76,9 @@ export const Diagram = () => {
         fitViewOptions={{ maxZoom: 1 }}
         minZoom={0.25}
         onPaneClick={deselectNodes}
+        onConnect={({ source, target }) => connectNodes(source, target)}
         nodesDraggable={false}
-        nodesConnectable={false} // disable because doesn't work yet
+        nodesConnectable={activeDiagram.type !== "Claim"} // claim diagram is a tree, so cannot connect existing nodes
       >
         <Background variant={BackgroundVariant.Dots} />
         {_(nodes).isEmpty() && emptyText}

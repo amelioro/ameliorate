@@ -19,7 +19,9 @@ export const layout = (nodes: Node[], edges: Edge[], orientation: Orientation) =
   });
 
   edges.forEach((edge) => {
-    dagreGraph.setEdge(edge.source, edge.target);
+    // TODO: there's still overlap when connecting existing nodes
+    // height is hardcoded pixel height of text based on font size
+    dagreGraph.setEdge(edge.source, edge.target, { width: spaceBetweenNodes, height: 24 });
   });
 
   dagre.layout(dagreGraph);

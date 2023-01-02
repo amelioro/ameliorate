@@ -69,6 +69,10 @@ export const relations: Relation[] = [
 
 export const claimNodeTypes = ["RootClaim", "Support", "Critique"];
 
+export const getRelation = (Parent: NodeType, Child: NodeType): Relation | undefined => {
+  return relations.find((relation) => relation.Parent === Parent && relation.Child === Child);
+};
+
 export const addableRelationsFrom = (nodeType: NodeType, addingAs: RelationDirection) => {
   // claim diagram is a tree so claim nodes can't add parents
   if (claimNodeTypes.includes(nodeType) && addingAs === "Parent") return [];
