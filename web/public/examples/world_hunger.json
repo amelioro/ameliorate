@@ -153,7 +153,8 @@
           "source": "0",
           "target": "1",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "causes"
         },
         {
           "id": "1",
@@ -161,7 +162,8 @@
           "source": "0",
           "target": "2",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "causes"
         },
         {
           "id": "2",
@@ -169,7 +171,8 @@
           "source": "0",
           "target": "3",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "causes"
         },
         {
           "id": "3",
@@ -177,7 +180,8 @@
           "source": "0",
           "target": "4",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "causes"
         },
         {
           "id": "4",
@@ -185,7 +189,8 @@
           "source": "0",
           "target": "5",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "causes"
         },
         {
           "id": "5",
@@ -193,7 +198,8 @@
           "source": "2",
           "target": "6",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "solves"
         },
         {
           "id": "6",
@@ -201,7 +207,8 @@
           "source": "3",
           "target": "7",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "solves"
         },
         {
           "id": "7",
@@ -209,7 +216,8 @@
           "source": "4",
           "target": "8",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "solves"
         },
         {
           "id": "8",
@@ -217,7 +225,8 @@
           "source": "4",
           "target": "9",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "solves"
         },
         {
           "id": "9",
@@ -225,7 +234,8 @@
           "source": "4",
           "target": "10",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "solves"
         },
         {
           "id": "10",
@@ -233,7 +243,8 @@
           "source": "5",
           "target": "11",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "solves"
         },
         {
           "id": "11",
@@ -241,7 +252,8 @@
           "source": "1",
           "target": "12",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "causes"
         },
         {
           "id": "12",
@@ -249,10 +261,11 @@
           "source": "1",
           "target": "13",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "causes"
         }
       ],
-      "direction": "TB"
+      "type": "Problem"
     },
     "node-4": {
       "nodes": [
@@ -288,10 +301,11 @@
           "source": "14",
           "target": "15",
           "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 }
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "supports"
         }
       ],
-      "direction": "LR"
+      "type": "Claim"
     }
   },
   "activeDiagramId": "root",

@@ -5,6 +5,7 @@ import { immer } from "zustand/middleware/immer";
 
 import { HydrationContext } from "../../../pages/index";
 import { DiagramType, type Edge, type Node, getInitialNodes } from "../utils/diagram";
+import { migrate } from "./migrate";
 
 export const rootId = "root";
 
@@ -39,7 +40,11 @@ const initialState = {
 // create atomic selectors for usage outside of store/ dir
 // this is only exported to allow actions to be extracted to a separate file
 export const useDiagramStore = create<AllDiagramState>()(
-  persist(immer(devtools(() => initialState)), { name: "diagram-storage" })
+  persist(immer(devtools(() => initialState)), {
+    name: "diagram-storage",
+    version: 1,
+    migrate: migrate,
+  })
 );
 
 const useDiagramStoreAfterHydration = ((selector, compare) => {
