@@ -1,9 +1,9 @@
 import _ from "lodash";
 
-import { scoreParent, setOrCreateActiveDiagram } from "../../store/actions";
+import { setOrCreateActiveDiagram, setScore } from "../../store/actions";
 import { useDoesDiagramExist } from "../../store/store";
 import { getClaimDiagramId } from "../../utils/claim";
-import { type ComponentType, type Score, possibleScores } from "../../utils/diagram";
+import { type ScorableType, type Score, possibleScores } from "../../utils/diagram";
 import { FloatingButton, FloatingDiv, MainButton, StyledDiv } from "./ScoreDial.style";
 
 const getButtonPositions = (expansionRadius: number, numberOfButtons: number) => {
@@ -23,8 +23,8 @@ const getButtonPositions = (expansionRadius: number, numberOfButtons: number) =>
 };
 
 interface ScoreDialProps {
-  parentId: string;
-  parentType: ComponentType;
+  scorableId: string;
+  scorableType: ScorableType;
   score: Score;
 }
 
@@ -38,8 +38,8 @@ interface ScoreDialProps {
 // 11 buttons are too many to fit close to the main button without collisions,
 // and button text is hard to fit in a small spot (i.e. corner of an EditableNode)
 // ... although... would "-" work well in a slider? want to allow the ability to deselect a score
-export const ScoreDial = ({ parentId, parentType, score }: ScoreDialProps) => {
-  const childDiagramId = getClaimDiagramId(parentId, parentType);
+export const ScoreDial = ({ scorableId, scorableType, score }: ScoreDialProps) => {
+  const childDiagramId = getClaimDiagramId(scorableId, scorableType);
   const doesDiagramExist = useDoesDiagramExist(childDiagramId);
 
   const buttonLength = 20; //px
@@ -56,7 +56,7 @@ export const ScoreDial = ({ parentId, parentType, score }: ScoreDialProps) => {
         key={possibleScore}
         variant="contained"
         color="inherit" // idk how this becomes gray but that's the color that looks good here
-        onClick={() => scoreParent(parentId, parentType, possibleScore)}
+        onClick={() => setScore(scorableId, scorableType, possibleScore)}
       >
         {possibleScore}
       </FloatingButton>
@@ -71,7 +71,7 @@ export const ScoreDial = ({ parentId, parentType, score }: ScoreDialProps) => {
         <FloatingDiv radius={expansionRadius} buttonLength={buttonLength}></FloatingDiv>
 
         <MainButton
-          onClick={() => setOrCreateActiveDiagram(parentId, parentType)}
+          onClick={() => setOrCreateActiveDiagram(scorableId, scorableType)}
           buttonLength={buttonLength}
           variant="contained"
           color="inherit" // idk how this becomes gray but that's the color that looks good here

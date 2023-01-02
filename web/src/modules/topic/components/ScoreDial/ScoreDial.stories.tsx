@@ -5,5 +5,5 @@ import { ScoreDial } from "./ScoreDial";
 export default { component: ScoreDial } as Meta<typeof ScoreDial>;
 
 export const Basic: StoryFn<typeof ScoreDial> = () => (
-  <ScoreDial parentId="1" parentType="node" score="-" />
+  <ScoreDial scorableId="1" scorableType="node" score="-" />
 );
