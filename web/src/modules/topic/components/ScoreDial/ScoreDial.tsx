@@ -1,7 +1,8 @@
 import _ from "lodash";
 
-import { scoreParent, setActiveDiagram } from "../../store/actions";
+import { scoreParent, setOrCreateActiveDiagram } from "../../store/actions";
 import { useDoesDiagramExist } from "../../store/store";
+import { getClaimDiagramId } from "../../utils/claim";
 import { type ComponentType, type Score, possibleScores } from "../../utils/diagram";
 import { FloatingButton, FloatingDiv, MainButton, StyledDiv } from "./ScoreDial.style";
 
@@ -38,7 +39,7 @@ interface ScoreDialProps {
 // and button text is hard to fit in a small spot (i.e. corner of an EditableNode)
 // ... although... would "-" work well in a slider? want to allow the ability to deselect a score
 export const ScoreDial = ({ parentId, parentType, score }: ScoreDialProps) => {
-  const childDiagramId = `${parentType}-${parentId}`;
+  const childDiagramId = getClaimDiagramId(parentId, parentType);
   const doesDiagramExist = useDoesDiagramExist(childDiagramId);
 
   const buttonLength = 20; //px
@@ -70,7 +71,7 @@ export const ScoreDial = ({ parentId, parentType, score }: ScoreDialProps) => {
         <FloatingDiv radius={expansionRadius} buttonLength={buttonLength}></FloatingDiv>
 
         <MainButton
-          onClick={() => setActiveDiagram(childDiagramId)}
+          onClick={() => setOrCreateActiveDiagram(parentId, parentType)}
           buttonLength={buttonLength}
           variant="contained"
           color="inherit" // idk how this becomes gray but that's the color that looks good here

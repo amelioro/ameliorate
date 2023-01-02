@@ -3,6 +3,10 @@ import _ from "lodash";
 import { ComponentType, DiagramState } from "./diagram";
 import { maxCharsPerLine } from "./nodes";
 
+export const getClaimDiagramId = (parentId: string, parentType: ComponentType) => {
+  return `${parentType}-${parentId}`;
+};
+
 export const getImplicitLabel = (
   parentId: string,
   parentType: ComponentType,

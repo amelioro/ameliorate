@@ -19,14 +19,15 @@ export interface DiagramState {
 
 interface BuildProps {
   id: string;
+  label?: string;
   type: NodeType;
   diagramId: string;
 }
-export const buildNode = ({ id, type, diagramId }: BuildProps) => {
+export const buildNode = ({ id, label, type, diagramId }: BuildProps) => {
   return {
     id: id,
     data: {
-      label: `text${id}`,
+      label: label ?? `text${id}`,
       score: "-" as Score,
       width: 300,
       diagramId: diagramId,
