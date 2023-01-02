@@ -1,3 +1,4 @@
+import { getClaimDiagramId, getImplicitLabel } from "../utils/claim";
 import {
   ComponentType,
   Edge,
@@ -6,7 +7,6 @@ import {
   Score,
   buildEdge,
   buildNode,
-  getInitialNodes,
   orientations,
 } from "../utils/diagram";
 import { layout } from "../utils/layout";
@@ -103,18 +103,45 @@ const doesDiagramExist = (diagramId: string) => {
   return Object.keys(useDiagramStore.getState().diagrams).includes(diagramId);
 };
 
-export const setActiveDiagram = (diagramId: string) => {
+export const setOrCreateActiveDiagram = (parentId: string, parentType: ComponentType) => {
   useDiagramStore.setState(
     (state) => {
-      // create new diagram if it doesn't exist
+      const diagramId = getClaimDiagramId(parentId, parentType);
+
+      // create claim diagram if it doesn't exist
       if (!doesDiagramExist(diagramId)) {
         /* eslint-disable functional/immutable-data, no-param-reassign */
+        const newNode = buildNode({
+          id: `${state.nextNodeId++}`,
+          // TODO: using state.activeDiagramId so that usage from not-root diagram will work
+          // but we shouldn't be supporting this (just trying to avoid extra bugs for now)
+          label: getImplicitLabel(parentId, parentType, state.diagrams[state.activeDiagramId]),
+          type: "RootClaim",
+          diagramId: diagramId,
+        });
+
         state.diagrams[diagramId] = {
-          nodes: getInitialNodes(`${state.nextNodeId++}`, "RootClaim", diagramId),
+          nodes: [newNode],
           edges: [],
           type: "Claim",
         };
         /* eslint-enable functional/immutable-data, no-param-reassign */
+      }
+
+      /* eslint-disable functional/immutable-data, no-param-reassign */
+      state.activeDiagramId = diagramId;
+      /* eslint-enable functional/immutable-data, no-param-reassign */
+    },
+    false,
+    "setOrCreateActiveDiagram"
+  );
+};
+
+export const setActiveDiagram = (diagramId: string) => {
+  useDiagramStore.setState(
+    (state) => {
+      if (!doesDiagramExist(diagramId)) {
+        throw new Error("diagram does not exist");
       }
 
       /* eslint-disable functional/immutable-data, no-param-reassign */

@@ -2,6 +2,8 @@ import { Article, Check, Extension, ThumbDown, ThumbUp } from "@mui/icons-materi
 
 import { RelationDirection } from "./diagram";
 
+export const maxCharsPerLine = 19; // measured by typing "a"'s in a node textbox
+
 export interface NodeDecoration {
   themeColor:
     | "primary"

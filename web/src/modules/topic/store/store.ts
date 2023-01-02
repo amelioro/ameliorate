@@ -4,14 +4,14 @@ import { devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 import { HydrationContext } from "../../../pages/index";
-import { DiagramType, type Edge, type Node, getInitialNodes } from "../utils/diagram";
+import { DiagramState, buildNode } from "../utils/diagram";
 import { migrate } from "./migrate";
 
 export const rootId = "root";
 
 const initialDiagrams: Record<string, DiagramState> = {
   [rootId]: {
-    nodes: getInitialNodes("0", "Problem", rootId),
+    nodes: [buildNode({ id: "0", type: "Problem", diagramId: rootId })],
     edges: [],
     type: "Problem",
   },
@@ -22,12 +22,6 @@ export interface AllDiagramState {
   activeDiagramId: string;
   nextNodeId: number;
   nextEdgeId: number;
-}
-
-interface DiagramState {
-  nodes: Node[];
-  edges: Edge[];
-  type: DiagramType;
 }
 
 const initialState = {

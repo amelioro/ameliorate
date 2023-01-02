@@ -1,6 +1,6 @@
 import { MarkerType } from "reactflow";
 
-import { Orientation, layout } from "./layout";
+import { Orientation } from "./layout";
 import { NodeType, RelationName } from "./nodes";
 
 export type DiagramType = "Problem" | "Claim";
@@ -11,16 +11,23 @@ export const orientations: Record<DiagramType, Orientation> = {
   Claim: "LR",
 };
 
+export interface DiagramState {
+  nodes: Node[];
+  edges: Edge[];
+  type: DiagramType;
+}
+
 interface BuildProps {
   id: string;
+  label?: string;
   type: NodeType;
   diagramId: string;
 }
-export const buildNode = ({ id, type, diagramId }: BuildProps) => {
+export const buildNode = ({ id, label, type, diagramId }: BuildProps) => {
   return {
     id: id,
     data: {
-      label: `text${id}`,
+      label: label ?? `text${id}`,
       score: "-" as Score,
       width: 300,
       diagramId: diagramId,
@@ -52,16 +59,6 @@ export const buildEdge = (
   };
 };
 export type Edge = ReturnType<typeof buildEdge>;
-
-export const getInitialNodes = (nodeId: string, startingNodeType: NodeType, diagramId: string) => {
-  const { layoutedNodes: initialNodes } = layout(
-    [buildNode({ id: nodeId, type: startingNodeType, diagramId: diagramId })],
-    [],
-    "TB"
-  );
-
-  return initialNodes;
-};
 
 export type ComponentType = "node" | "edge";
 
