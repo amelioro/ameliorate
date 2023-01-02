@@ -11,6 +11,12 @@ export const orientations: Record<DiagramType, Orientation> = {
   Claim: "LR",
 };
 
+export interface DiagramState {
+  nodes: Node[];
+  edges: Edge[];
+  type: DiagramType;
+}
+
 interface BuildProps {
   id: string;
   type: NodeType;
