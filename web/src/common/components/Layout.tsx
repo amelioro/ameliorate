@@ -39,7 +39,7 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
               {/* <NavLink href="/mine">my understandings</NavLink> */}
               <NavLink href="/about">about</NavLink>
               {/* <NavLink href="/login">login</NavLink> */}
-              <NavLink href="https://github.com/keyserj/ameliorate" display="flex">
+              <NavLink href="https://github.com/amelioro/ameliorate" display="flex">
                 <Image src={githubIconSrc} height={32} width={32} alt="github link" />
               </NavLink>
             </Box>

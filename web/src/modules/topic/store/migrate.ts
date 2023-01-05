@@ -34,7 +34,7 @@ const migrate_0_to_1 = (state: any) => {
   Object.values(state.diagrams).forEach((diagram: any) => {
     diagram.edges.forEach((edge: any) => {
       // add edge markers
-      // didn't make a separate migration for this - change causing this is https://github.com/keyserj/ameliorate/commit/2434103524718234cf9246bafedab89603c49aae
+      // didn't make a separate migration for this - change causing this is https://github.com/amelioro/ameliorate/commit/2434103524718234cf9246bafedab89603c49aae
       edge.markerStart = { type: "arrowclosed", width: 30, height: 30 };
 
       // add edge labels
