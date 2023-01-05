@@ -124,7 +124,7 @@ const About: NextPage = () => {
             Long-term
           </Link>
           <Link
-            href="https://github.com/users/keyserj/projects/1/views/1"
+            href="https://github.com/orgs/amelioro/projects/2/views/1"
             target="_blank"
             rel="noopener"
           >

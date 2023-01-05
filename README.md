@@ -14,7 +14,7 @@ See the [about](https://www.ameliorate.app/about) page for more details about pu
 
 ## Roadmap
 
-Check out the [GitHub Project](https://github.com/users/keyserj/projects/1/views/1) for a prioritized list of issues.
+Check out the [GitHub Project](https://github.com/orgs/amelioro/projects/2/views/1) for a prioritized list of issues.
 
 ## Built with
 

@@ -10,7 +10,7 @@ This project adheres to the Contributor Covenant [code of conduct](https://githu
 
 ## Finding an issue to work on
 
-Check out the [project backlog, filtered for good first issues](https://github.com/users/keyserj/projects/1/views/1?filterQuery=label%3A%22good+first+issue%22). You can remove the filter if you're feeling daring, plucky, or if this isn't your first rodeo. The backlog should be prioritized, but you don't need to limit yourself to the top.
+Check out the [project backlog, filtered for good first issues](https://github.com/orgs/amelioro/projects/2/views/7). You can remove the filter if you're feeling daring, plucky, or if this isn't your first rodeo. The backlog should be prioritized, but you don't need to limit yourself to the top.
 
 Feel free to clarify any issues via commenting or asking in Discord. When you find an issue you want to work on, assign yourself to it so that nobody else spends time duplicating work on it.
 
