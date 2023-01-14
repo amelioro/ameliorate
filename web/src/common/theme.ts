@@ -21,14 +21,29 @@ declare module "@mui/material/styles" {
   type NodeTypePalettes = { [key in NodeType]: Palette["primary"] };
   type NodeTypePaletteOptions = { [key in NodeType]: PaletteOptions["primary"] };
 
-  interface Palette extends NodeTypePalettes {}
-  interface PaletteOptions extends NodeTypePaletteOptions {}
+  interface Palette extends NodeTypePalettes {
+    primaryVariantDark: Palette["primary"];
+    primaryVariantLight: Palette["primary"];
+  }
+
+  interface PaletteOptions extends NodeTypePaletteOptions {
+    primaryVariantDark: PaletteOptions["primary"];
+    primaryVariantLight: PaletteOptions["primary"];
+  }
 }
 
-declare module "@mui/material/Button" {
+declare module "@mui/material" {
   type NodeTypeColors = { [key in NodeType]: true };
 
-  interface ButtonPropsColorOverrides extends NodeTypeColors {}
+  interface ButtonPropsColorOverrides extends NodeTypeColors {
+    primaryVariantDark: true;
+    primaryVariantLight: true;
+  }
+
+  interface AppBarPropsColorOverrides extends NodeTypeColors {
+    primaryVariantDark: true;
+    primaryVariantLight: true;
+  }
 }
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
@@ -59,6 +74,9 @@ const { augmentColor } = palette; // automatically creates light and dark colors
 
 const sharedPalette = {
   primary: { main: primary },
+  // material design recommends variants for contrasting UI elements, see Primary Colors at https://m2.material.io/design/color/the-color-system.html#color-theme-creation
+  primaryVariantDark: { main: "#359639" }, // 200 higher than primary on material design color tool
+  primaryVariantLight: { main: "#82CE84" }, // 200 lower than primary on material design color tool
   // use black contrast text for consistency with other node colors; accessibility tool indicates black is still accessible
   secondary: { main: secondary, contrastText: "rgba(0, 0, 0, 0.87)" },
   problem: augmentColor({ color: { main: secondary, contrastText: "rgba(0, 0, 0, 0.87)" } }),

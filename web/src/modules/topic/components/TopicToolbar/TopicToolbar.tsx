@@ -46,7 +46,7 @@ export const TopicToolbar = () => {
   const closeMenu = () => setAnchorEl(null);
 
   return (
-    <AppBar position="sticky" color="secondary">
+    <AppBar position="sticky" color="primaryVariantLight">
       <Toolbar variant="dense">
         <Button color="inherit" onClick={openMenu}>
           Examples
