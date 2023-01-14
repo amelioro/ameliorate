@@ -10,34 +10,27 @@ import {
   createTheme,
 } from "@mui/material";
 
-// adding colors to theme documented at https://mui.com/material-ui/customization/palette/#adding-new-colors
-declare module "@mui/material/styles" {
-  interface Palette {
-    problem: Palette["primary"];
-    solution: Palette["primary"];
-    rootClaim: Palette["primary"];
-    support: Palette["primary"];
-    critique: Palette["primary"];
-  }
+import { NodeType } from "../modules/topic/utils/nodes";
 
-  interface PaletteOptions {
-    problem: PaletteOptions["primary"];
-    solution: PaletteOptions["primary"];
-    rootClaim: PaletteOptions["primary"];
-    support: PaletteOptions["primary"];
-    critique: PaletteOptions["primary"];
-  }
+// adding colors to theme documented at https://mui.com/material-ui/customization/palette/#adding-new-colors
+
+/* eslint-disable @typescript-eslint/no-empty-interface -- interfaces are not same as superclass because we're augmenting the module's existing interfaces */
+declare module "@mui/material/styles" {
+  // bit awkward but don't think it's possible to create keys for each NodeType in an interface without creating this intermediate type
+  // thanks https://stackoverflow.com/a/60378992
+  type NodeTypePalettes = { [key in NodeType]: Palette["primary"] };
+  type NodeTypePaletteOptions = { [key in NodeType]: PaletteOptions["primary"] };
+
+  interface Palette extends NodeTypePalettes {}
+  interface PaletteOptions extends NodeTypePaletteOptions {}
 }
 
 declare module "@mui/material/Button" {
-  interface ButtonPropsColorOverrides {
-    problem: true;
-    solution: true;
-    rootClaim: true;
-    support: true;
-    critique: true;
-  }
+  type NodeTypeColors = { [key in NodeType]: true };
+
+  interface ButtonPropsColorOverrides extends NodeTypeColors {}
 }
+/* eslint-disable @typescript-eslint/no-empty-interface */
 
 // augment emotion theme to include Material methods (for use with styled)
 // https://github.com/emotion-js/emotion/discussions/2291#discussioncomment-491185
