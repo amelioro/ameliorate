@@ -149,7 +149,7 @@ export const setScore = (scorableId: string, scorableType: ScorableType, score: 
       const childDiagramId = getClaimDiagramId(scorableId, scorableType);
       if (doesDiagramExist(childDiagramId)) {
         const childDiagram = state.diagrams[childDiagramId];
-        const childClaim = childDiagram.nodes.find((node) => node.type === "RootClaim");
+        const childClaim = childDiagram.nodes.find((node) => node.type === "rootClaim");
         if (!childClaim) throw new Error("child claim not found");
 
         /* eslint-disable functional/immutable-data, no-param-reassign */
@@ -182,7 +182,7 @@ export const setOrCreateActiveDiagram = (scorableId: string, scorableType: Scora
           id: `${state.nextNodeId++}`,
           label: label,
           score: scorable.data.score,
-          type: "RootClaim",
+          type: "rootClaim",
           diagramId: diagramId,
         });
 

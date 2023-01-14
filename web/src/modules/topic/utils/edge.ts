@@ -11,19 +11,19 @@ export interface Relation {
 
 // assumes that we're always pointing from child to parent
 export const relations: Relation[] = [
-  { Parent: "Problem", Child: "Problem", name: "causes" },
-  { Parent: "Problem", Child: "Solution", name: "solves" },
+  { Parent: "problem", Child: "problem", name: "causes" },
+  { Parent: "problem", Child: "solution", name: "solves" },
 
-  { Parent: "Solution", Child: "Problem", name: "created by" },
+  { Parent: "solution", Child: "problem", name: "created by" },
 
-  { Parent: "RootClaim", Child: "Support", name: "supports" },
-  { Parent: "RootClaim", Child: "Critique", name: "critiques" },
+  { Parent: "rootClaim", Child: "support", name: "supports" },
+  { Parent: "rootClaim", Child: "critique", name: "critiques" },
 
-  { Parent: "Support", Child: "Support", name: "supports" },
-  { Parent: "Support", Child: "Critique", name: "critiques" },
+  { Parent: "support", Child: "support", name: "supports" },
+  { Parent: "support", Child: "critique", name: "critiques" },
 
-  { Parent: "Critique", Child: "Support", name: "supports" },
-  { Parent: "Critique", Child: "Critique", name: "critiques" },
+  { Parent: "critique", Child: "support", name: "supports" },
+  { Parent: "critique", Child: "critique", name: "critiques" },
 ];
 
 export const claimNodeTypes = ["RootClaim", "Support", "Critique"];

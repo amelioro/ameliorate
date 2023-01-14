@@ -11,7 +11,7 @@ export const rootId = "root";
 
 const initialDiagrams: Record<string, DiagramState> = {
   [rootId]: {
-    nodes: [buildNode({ id: "0", type: "Problem", diagramId: rootId })],
+    nodes: [buildNode({ id: "0", type: "problem", diagramId: rootId })],
     edges: [],
     type: "Problem",
   },

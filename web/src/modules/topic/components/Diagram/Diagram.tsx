@@ -26,11 +26,11 @@ const buildNodeComponent = (type: NodeType) => {
 
 // this can be generated via `nodeDecorations` but hard to do without the complexity making it hard to follow, so leaving this hardcoded
 const nodeTypes: Record<NodeType, ComponentType<NodeProps>> = {
-  Problem: buildNodeComponent("Problem"),
-  Solution: buildNodeComponent("Solution"),
-  RootClaim: buildNodeComponent("RootClaim"),
-  Support: buildNodeComponent("Support"),
-  Critique: buildNodeComponent("Critique"),
+  problem: buildNodeComponent("problem"),
+  solution: buildNodeComponent("solution"),
+  rootClaim: buildNodeComponent("rootClaim"),
+  support: buildNodeComponent("support"),
+  critique: buildNodeComponent("critique"),
 };
 
 const edgeTypes: Record<"ScoreEdge", ComponentType<EdgeProps>> = { ScoreEdge: ScoreEdge };

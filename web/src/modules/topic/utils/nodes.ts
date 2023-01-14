@@ -15,26 +15,26 @@ export interface NodeDecoration {
 }
 
 // TODO(refactor): should only need to edit this file to add new node types
-export type NodeType = "Problem" | "Solution" | "RootClaim" | "Support" | "Critique";
+export type NodeType = "problem" | "solution" | "rootClaim" | "support" | "critique";
 
 export const nodeDecorations: Record<NodeType, NodeDecoration> = {
-  Problem: {
+  problem: {
     themeColor: "problem",
     NodeIcon: Extension,
   },
-  Solution: {
+  solution: {
     themeColor: "solution",
     NodeIcon: Check,
   },
-  RootClaim: {
+  rootClaim: {
     themeColor: "rootClaim",
     NodeIcon: Article,
   },
-  Support: {
+  support: {
     themeColor: "support",
     NodeIcon: ThumbUp,
   },
-  Critique: {
+  critique: {
     themeColor: "critique",
     NodeIcon: ThumbDown,
   },
