@@ -16,7 +16,7 @@ export const AddNodeButton = ({ nodeId, as, toNodeType, relation }: Props) => {
 
   return (
     <StyledButton
-      color={decoration.themeColor}
+      color={toNodeType}
       size="small"
       onClick={() => addNode(nodeId, as, toNodeType, relation)}
     >

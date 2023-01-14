@@ -30,7 +30,7 @@ export const EditableNode = ({ id, data, type }: NodeProps) => {
 
   const nodeType = type as NodeType; // we always pass a NodeType from the diagram, but I'm not sure how to override react-flow's type to tell it that
   const nodeDecoration = nodeDecorations[nodeType];
-  const color = theme.palette[nodeDecoration.themeColor].main;
+  const color = theme.palette[nodeType].main;
   const NodeIcon = nodeDecoration.NodeIcon;
 
   return (
