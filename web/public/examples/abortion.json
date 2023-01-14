@@ -12,28 +12,28 @@
           },
           "position": { "x": 1050, "y": 0 },
           "selected": false,
-          "type": "Problem"
+          "type": "problem"
         },
         {
           "id": "1",
           "data": { "label": "meta notes", "score": "-", "width": 300, "diagramId": "root" },
           "position": { "x": 700, "y": 190 },
           "selected": false,
-          "type": "Problem"
+          "type": "problem"
         },
         {
           "id": "2",
           "data": { "label": "abortion", "score": "9", "width": 300, "diagramId": "root" },
           "position": { "x": 1050, "y": 190 },
           "selected": false,
-          "type": "Solution"
+          "type": "solution"
         },
         {
           "id": "3",
           "data": { "label": "adoption", "score": "7", "width": 300, "diagramId": "root" },
           "position": { "x": 1400, "y": 190 },
           "selected": false,
-          "type": "Solution"
+          "type": "solution"
         },
         {
           "id": "4",
@@ -45,7 +45,7 @@
           },
           "position": { "x": 0, "y": 380 },
           "selected": false,
-          "type": "Problem"
+          "type": "problem"
         },
         {
           "id": "5",
@@ -57,7 +57,7 @@
           },
           "position": { "x": 0, "y": 570 },
           "selected": false,
-          "type": "Solution"
+          "type": "solution"
         },
         {
           "id": "6",
@@ -69,14 +69,14 @@
           },
           "position": { "x": 525, "y": 380 },
           "selected": false,
-          "type": "Problem"
+          "type": "problem"
         },
         {
           "id": "7",
           "data": { "label": "recalc layout", "score": "-", "width": 300, "diagramId": "root" },
           "position": { "x": 350, "y": 570 },
           "selected": false,
-          "type": "Solution"
+          "type": "solution"
         },
         {
           "id": "8",
@@ -88,7 +88,7 @@
           },
           "position": { "x": 700, "y": 570 },
           "selected": false,
-          "type": "Solution"
+          "type": "solution"
         },
         {
           "id": "9",
@@ -100,7 +100,7 @@
           },
           "position": { "x": 700, "y": 760 },
           "selected": false,
-          "type": "Problem"
+          "type": "problem"
         },
         {
           "id": "10",
@@ -112,7 +112,7 @@
           },
           "position": { "x": 1050, "y": 380 },
           "selected": false,
-          "type": "Problem"
+          "type": "problem"
         },
         {
           "id": "11",
@@ -124,7 +124,7 @@
           },
           "position": { "x": 1050, "y": 570 },
           "selected": false,
-          "type": "Solution"
+          "type": "solution"
         },
         {
           "id": "12",
@@ -136,7 +136,7 @@
           },
           "position": { "x": 1050, "y": 760 },
           "selected": false,
-          "type": "Problem"
+          "type": "problem"
         },
         {
           "id": "13",
@@ -148,7 +148,7 @@
           },
           "position": { "x": 1050, "y": 950 },
           "selected": false,
-          "type": "Solution"
+          "type": "solution"
         },
         {
           "id": "14",
@@ -160,7 +160,7 @@
           },
           "position": { "x": 1400, "y": 380 },
           "selected": false,
-          "type": "Problem"
+          "type": "problem"
         },
         {
           "id": "15",
@@ -172,7 +172,7 @@
           },
           "position": { "x": 1400, "y": 570 },
           "selected": false,
-          "type": "Solution"
+          "type": "solution"
         }
       ],
       "edges": [
@@ -326,7 +326,7 @@
           },
           "position": { "x": 0, "y": 70 },
           "selected": false,
-          "type": "RootClaim"
+          "type": "rootClaim"
         },
         {
           "id": "17",
@@ -338,7 +338,7 @@
           },
           "position": { "x": 400, "y": 0 },
           "selected": false,
-          "type": "Support"
+          "type": "support"
         },
         {
           "id": "18",
@@ -350,7 +350,7 @@
           },
           "position": { "x": 400, "y": 140 },
           "selected": false,
-          "type": "Critique"
+          "type": "critique"
         }
       ],
       "edges": [
@@ -387,7 +387,7 @@
           },
           "position": { "x": 0, "y": 280 },
           "selected": false,
-          "type": "RootClaim"
+          "type": "rootClaim"
         },
         {
           "id": "20",
@@ -399,7 +399,7 @@
           },
           "position": { "x": 400, "y": 0 },
           "selected": false,
-          "type": "Support"
+          "type": "support"
         },
         {
           "id": "21",
@@ -411,14 +411,14 @@
           },
           "position": { "x": 400, "y": 140 },
           "selected": false,
-          "type": "Support"
+          "type": "support"
         },
         {
           "id": "22",
           "data": { "label": "bodily autonomy", "score": "-", "width": 300, "diagramId": "node-2" },
           "position": { "x": 400, "y": 280 },
           "selected": false,
-          "type": "Support"
+          "type": "support"
         },
         {
           "id": "23",
@@ -430,7 +430,7 @@
           },
           "position": { "x": 400, "y": 420 },
           "selected": false,
-          "type": "Critique"
+          "type": "critique"
         },
         {
           "id": "24",
@@ -442,7 +442,7 @@
           },
           "position": { "x": 400, "y": 560 },
           "selected": false,
-          "type": "Critique"
+          "type": "critique"
         }
       ],
       "edges": [
@@ -506,7 +506,7 @@
           },
           "position": { "x": 0, "y": 0 },
           "selected": false,
-          "type": "RootClaim"
+          "type": "rootClaim"
         },
         {
           "id": "26",
@@ -518,7 +518,7 @@
           },
           "position": { "x": 400, "y": 0 },
           "selected": false,
-          "type": "Critique"
+          "type": "critique"
         }
       ],
       "edges": [
@@ -546,7 +546,7 @@
           },
           "position": { "x": 0, "y": 70 },
           "selected": false,
-          "type": "RootClaim"
+          "type": "rootClaim"
         },
         {
           "id": "28",
@@ -558,7 +558,7 @@
           },
           "position": { "x": 400, "y": 0 },
           "selected": false,
-          "type": "Support"
+          "type": "support"
         },
         {
           "id": "29",
@@ -570,7 +570,7 @@
           },
           "position": { "x": 400, "y": 140 },
           "selected": false,
-          "type": "Critique"
+          "type": "critique"
         }
       ],
       "edges": [

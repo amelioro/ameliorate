@@ -36,7 +36,7 @@ const initialState = {
 export const useDiagramStore = create<AllDiagramState>()(
   persist(immer(devtools(() => initialState)), {
     name: "diagram-storage",
-    version: 1,
+    version: 2,
     migrate: migrate,
   })
 );

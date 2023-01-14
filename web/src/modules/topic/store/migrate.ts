@@ -1,13 +1,14 @@
 /* eslint-disable -- don't really care to make this file meet eslint standards */
+import _ from "lodash";
 import { range } from "lodash";
 
 export const migrate = (persistedState: any, version: number) => {
-  const migrations = [migrate_0_to_1];
+  const migrations = [migrate_0_to_1, migrate_1_to_2];
 
   let state = persistedState;
 
   // thanks for this style to migrate one version at a time https://github.com/pmndrs/zustand/issues/984#issuecomment-1144661466
-  range(version + 1).forEach((i) => {
+  range(version, migrations.length).forEach((i) => {
     state = migrations[i](state);
   });
 
@@ -49,6 +50,17 @@ const migrate_0_to_1 = (state: any) => {
     // replace diagram direction with type
     diagram.type = diagram.direction === "TB" ? "Problem" : "Claim";
     delete diagram.direction;
+  });
+
+  return state;
+};
+
+const migrate_1_to_2 = (state: any) => {
+  Object.values(state.diagrams).forEach((diagram: any) => {
+    diagram.nodes.forEach((node: any) => {
+      // change type to lowercase
+      node.type = _.camelCase(node.type);
+    });
   });
 
   return state;
