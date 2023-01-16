@@ -32,12 +32,32 @@ export const getRelation = (Parent: NodeType, Child: NodeType): Relation | undef
   return relations.find((relation) => relation.Parent === Parent && relation.Child === Child);
 };
 
-export const addableRelationsFrom = (nodeType: NodeType, addingAs: RelationDirection) => {
-  // claim diagram is a tree so claim nodes can't add parents
-  if (claimNodeTypes.includes(nodeType) && addingAs === "Parent") return [];
+type AddableNodes = {
+  [key in RelationDirection]: NodeType[];
+};
+const addableNodesFor: Record<NodeType, AddableNodes> = {
+  problem: {
+    Parent: ["problem", "solution"],
+    Child: ["problem", "solution"],
+  },
+  solution: {
+    Parent: ["problem"], // could have criteria, but need to select a specific problem for it & that requires design
+    Child: ["problem"],
+  },
 
+  // claim diagram is a tree so claim nodes can't add parents
+  rootClaim: { Parent: [], Child: ["support", "critique"] },
+  support: { Parent: [], Child: ["support", "critique"] },
+  critique: { Parent: [], Child: ["support", "critique"] },
+};
+
+export const addableRelationsFrom = (nodeType: NodeType, addingAs: RelationDirection) => {
   const fromDirection = addingAs === "Parent" ? "Child" : "Parent";
-  const addableRelations = relations.filter((relation) => relation[fromDirection] === nodeType);
+  const addableNodes = addableNodesFor[nodeType][addingAs];
+
+  const addableRelations = relations.filter(
+    (relation) => addableNodes.includes(relation[addingAs]) && relation[fromDirection] === nodeType
+  );
 
   const formattedRelations = addableRelations.map((relation) => ({
     toNodeType: relation[addingAs],
