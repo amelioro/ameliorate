@@ -1,7 +1,14 @@
 import { DiagramState, Node, RelationDirection } from "./diagram";
 import { NodeType } from "./nodes";
 
-export type RelationName = "causes" | "solves" | "created by" | "supports" | "critiques";
+export type RelationName =
+  | "causes"
+  | "solves"
+  | "created by"
+  | "criteria for"
+  | "embodies"
+  | "supports"
+  | "critiques";
 
 export interface Relation {
   Parent: NodeType;
@@ -15,6 +22,9 @@ export const relations: Relation[] = [
   { Parent: "problem", Child: "solution", name: "solves" },
 
   { Parent: "solution", Child: "problem", name: "created by" },
+
+  { Parent: "problem", Child: "criteria", name: "criteria for" },
+  { Parent: "criteria", Child: "solution", name: "embodies" },
 
   { Parent: "rootClaim", Child: "support", name: "supports" },
   { Parent: "rootClaim", Child: "critique", name: "critiques" },
@@ -38,12 +48,16 @@ type AddableNodes = {
 const addableNodesFor: Record<NodeType, AddableNodes> = {
   problem: {
     Parent: ["problem", "solution"],
-    Child: ["problem", "solution"],
+    Child: ["problem", "solution", "criteria"],
   },
   solution: {
     Parent: ["problem"], // could have criteria, but need to select a specific problem for it & that requires design
     Child: ["problem"],
   },
+
+  // can't have multiple problems;
+  // could have multiple solutions but unintuitive to add from criteria because solution would be tied to parent & all sibling criteria
+  criteria: { Parent: [], Child: [] },
 
   // claim diagram is a tree so claim nodes can't add parents
   rootClaim: { Parent: [], Child: ["support", "critique"] },
