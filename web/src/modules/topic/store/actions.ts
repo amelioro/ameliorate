@@ -13,18 +13,19 @@ import { layout } from "../utils/layout";
 import { NodeType } from "../utils/nodes";
 import { AllDiagramState, rootId, useDiagramStore } from "./store";
 
-export const addNode = (
-  toNodeId: string,
-  as: RelationDirection,
-  toNodeType: NodeType,
-  relation: RelationName
-) => {
+interface AddNodeProps {
+  fromNodeId: string;
+  as: RelationDirection;
+  toNodeType: NodeType;
+  relation: RelationName;
+}
+export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) => {
   useDiagramStore.setState(
     (state) => {
       const activeDiagram = state.diagrams[state.activeDiagramId];
 
-      const toNode = activeDiagram.nodes.find((node) => node.id === toNodeId);
-      if (!toNode) throw new Error("toNode not found");
+      const fromNode = activeDiagram.nodes.find((node) => node.id === fromNodeId);
+      if (!fromNode) throw new Error("fromNode not found");
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
       const newNodeId = `${state.nextNodeId++}`;
@@ -37,8 +38,8 @@ export const addNode = (
         diagramId: state.activeDiagramId,
       });
 
-      const sourceNodeId = as === "Parent" ? newNodeId : toNodeId;
-      const targetNodeId = as === "Parent" ? toNodeId : newNodeId;
+      const sourceNodeId = as === "Parent" ? newNodeId : fromNodeId;
+      const targetNodeId = as === "Parent" ? fromNodeId : newNodeId;
       const newEdge = buildEdge(newEdgeId, sourceNodeId, targetNodeId, relation);
 
       const newNodes = activeDiagram.nodes.concat(newNode);

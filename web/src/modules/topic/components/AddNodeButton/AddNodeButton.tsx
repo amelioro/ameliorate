@@ -5,20 +5,20 @@ import { NodeType, nodeDecorations } from "../../utils/nodes";
 import { StyledButton } from "./AddNodeButton.styles";
 
 interface Props {
-  nodeId: string;
+  fromNodeId: string;
   as: RelationDirection;
   toNodeType: NodeType;
   relation: RelationName;
 }
 
-export const AddNodeButton = ({ nodeId, as, toNodeType, relation }: Props) => {
+export const AddNodeButton = ({ fromNodeId, as, toNodeType, relation }: Props) => {
   const decoration = nodeDecorations[toNodeType];
 
   return (
     <StyledButton
       color={toNodeType}
       size="small"
-      onClick={() => addNode(nodeId, as, toNodeType, relation)}
+      onClick={() => addNode({ fromNodeId, as, toNodeType, relation })}
     >
       <decoration.NodeIcon />
     </StyledButton>
