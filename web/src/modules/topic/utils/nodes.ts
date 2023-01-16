@@ -6,7 +6,7 @@ export interface NodeDecoration {
   NodeIcon: typeof Extension;
 }
 
-export type NodeType = "problem" | "solution" | "criteria" | "rootClaim" | "support" | "critique";
+export type NodeType = "problem" | "solution" | "criterion" | "rootClaim" | "support" | "critique";
 
 export const nodeDecorations: Record<NodeType, NodeDecoration> = {
   problem: {
@@ -15,7 +15,7 @@ export const nodeDecorations: Record<NodeType, NodeDecoration> = {
   solution: {
     NodeIcon: Check,
   },
-  criteria: {
+  criterion: {
     NodeIcon: Ballot,
   },
   rootClaim: {

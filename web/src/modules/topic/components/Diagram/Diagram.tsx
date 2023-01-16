@@ -28,7 +28,7 @@ const buildNodeComponent = (type: NodeType) => {
 const nodeTypes: Record<NodeType, ComponentType<NodeProps>> = {
   problem: buildNodeComponent("problem"),
   solution: buildNodeComponent("solution"),
-  criteria: buildNodeComponent("criteria"),
+  criterion: buildNodeComponent("criterion"),
   rootClaim: buildNodeComponent("rootClaim"),
   support: buildNodeComponent("support"),
   critique: buildNodeComponent("critique"),

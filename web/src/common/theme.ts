@@ -81,7 +81,7 @@ const sharedPalette = {
   secondary: { main: secondary, contrastText: "rgba(0, 0, 0, 0.87)" },
   problem: augmentColor({ color: { main: secondary, contrastText: "rgba(0, 0, 0, 0.87)" } }),
   solution: augmentColor({ color: { main: primary } }),
-  criteria: augmentColor({ color: { main: "#4AB885" } }), // mint: analogous to solution; between solution & support because criteria are kind of like supports for solutions
+  criterion: augmentColor({ color: { main: "#4AB885" } }), // mint: analogous to solution; between solution & support because criteria are kind of like supports for solutions
   rootClaim: augmentColor({ color: { main: "#DA9526" } }), // goldenrod (gold): somewhat neutral; analogous to critique
   support: augmentColor({ color: { main: "#26C5DA" } }), // battery charged blue (cyan): non-green support-ish color; top color from https://zenoo.github.io/mui-theme-creator/
   critique: augmentColor({ color: { main: "#DA3B26", contrastText: "rgba(0, 0, 0, 0.87)" } }), // vermilion (red-orange): opposing; complementary to support

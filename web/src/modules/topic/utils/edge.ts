@@ -5,7 +5,7 @@ export type RelationName =
   | "causes"
   | "solves"
   | "created by"
-  | "criteria for"
+  | "criterion for"
   | "embodies"
   | "supports"
   | "critiques";
@@ -23,8 +23,8 @@ export const relations: Relation[] = [
 
   { Parent: "solution", Child: "problem", name: "created by" },
 
-  { Parent: "problem", Child: "criteria", name: "criteria for" },
-  { Parent: "criteria", Child: "solution", name: "embodies" },
+  { Parent: "problem", Child: "criterion", name: "criterion for" },
+  { Parent: "criterion", Child: "solution", name: "embodies" },
 
   { Parent: "rootClaim", Child: "support", name: "supports" },
   { Parent: "rootClaim", Child: "critique", name: "critiques" },
@@ -48,7 +48,7 @@ type AddableNodes = {
 const addableNodesFor: Record<NodeType, AddableNodes> = {
   problem: {
     Parent: ["problem", "solution"],
-    Child: ["problem", "solution", "criteria"],
+    Child: ["problem", "solution", "criterion"],
   },
   solution: {
     Parent: ["problem"], // could have criteria, but need to select a specific problem for it & that requires design
@@ -56,8 +56,8 @@ const addableNodesFor: Record<NodeType, AddableNodes> = {
   },
 
   // can't have multiple problems;
-  // could have multiple solutions but unintuitive to add from criteria because solution would be tied to parent & all sibling criteria
-  criteria: { Parent: [], Child: [] },
+  // could have multiple solutions but unintuitive to add from criterion because solution would be tied to parent & all sibling criteria
+  criterion: { Parent: [], Child: [] },
 
   // claim diagram is a tree so claim nodes can't add parents
   rootClaim: { Parent: [], Child: ["support", "critique"] },
@@ -106,7 +106,7 @@ export const canCreateEdge = (diagram: DiagramState, parent: Node, child: Node) 
     return false;
   }
 
-  if (parent.type === "criteria" || child.type === "criteria") {
+  if (parent.type === "criterion" || child.type === "criterion") {
     console.log(
       "cannot connect nodes: criteria is always already connected to as many nodes as it can"
     );
