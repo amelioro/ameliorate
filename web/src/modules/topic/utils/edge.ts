@@ -81,7 +81,7 @@ export const addableRelationsFrom = (nodeType: NodeType, addingAs: RelationDirec
   return formattedRelations;
 };
 
-export const isValidEdge = (diagram: DiagramState, parent: Node, child: Node) => {
+export const canCreateEdge = (diagram: DiagramState, parent: Node, child: Node) => {
   const relation = getRelation(parent.type, child.type);
 
   const existingEdge = diagram.edges.find((edge) => {
@@ -103,6 +103,13 @@ export const isValidEdge = (diagram: DiagramState, parent: Node, child: Node) =>
 
   if (claimNodeTypes.includes(parent.type)) {
     console.log("cannot connect nodes: claim diagram is a tree so claim nodes can't add parents");
+    return false;
+  }
+
+  if (parent.type === "criteria" || child.type === "criteria") {
+    console.log(
+      "cannot connect nodes: criteria is always already connected to as many nodes as it can"
+    );
     return false;
   }
 

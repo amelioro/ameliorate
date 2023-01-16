@@ -8,7 +8,7 @@ import {
   findScorable,
   orientations,
 } from "../utils/diagram";
-import { RelationName, getRelation, isValidEdge } from "../utils/edge";
+import { RelationName, canCreateEdge, getRelation } from "../utils/edge";
 import { layout } from "../utils/layout";
 import { NodeType } from "../utils/nodes";
 import { AllDiagramState, rootId, useDiagramStore } from "./store";
@@ -68,7 +68,7 @@ export const connectNodes = (parentId: string | null, childId: string | null) =>
       const child = activeDiagram.nodes.find((node) => node.id === childId);
       if (!parent || !child) throw new Error("parent or child not found");
 
-      if (!isValidEdge(activeDiagram, parent, child)) return;
+      if (!canCreateEdge(activeDiagram, parent, child)) return;
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
       const newEdgeId = `${state.nextEdgeId++}`;
