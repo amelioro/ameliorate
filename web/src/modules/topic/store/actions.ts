@@ -19,6 +19,27 @@ interface AddNodeProps {
   toNodeType: NodeType;
   relation: RelationName;
 }
+
+const createAndConnectNode = (
+  state: AllDiagramState,
+  { fromNodeId, as, toNodeType, relation }: AddNodeProps
+) => {
+  /* eslint-disable functional/immutable-data, no-param-reassign */
+  const newNodeId = `${state.nextNodeId++}`;
+  const newEdgeId = `${state.nextEdgeId++}`;
+  /* eslint-enable functional/immutable-data, no-param-reassign */
+
+  const newNode = buildNode({ id: newNodeId, type: toNodeType, diagramId: state.activeDiagramId });
+
+  const sourceNodeId = as === "Parent" ? newNodeId : fromNodeId;
+  const targetNodeId = as === "Parent" ? fromNodeId : newNodeId;
+  const newEdge = buildEdge(newEdgeId, sourceNodeId, targetNodeId, relation);
+
+  return [newNode, newEdge] as [Node, Edge];
+};
+
+// trying to keep state changes directly within this method,
+// but wasn't sure how to cleanly handle next node/edge id's without letting invoked methods use & mutate state for them
 export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) => {
   useDiagramStore.setState(
     (state) => {
@@ -27,26 +48,18 @@ export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) 
       const fromNode = activeDiagram.nodes.find((node) => node.id === fromNodeId);
       if (!fromNode) throw new Error("fromNode not found");
 
-      /* eslint-disable functional/immutable-data, no-param-reassign */
-      const newNodeId = `${state.nextNodeId++}`;
-      const newEdgeId = `${state.nextEdgeId++}`;
-      /* eslint-enable functional/immutable-data, no-param-reassign */
-
-      const newNode = buildNode({
-        id: newNodeId,
-        type: toNodeType,
-        diagramId: state.activeDiagramId,
+      // create and connect node
+      const [newNode, newEdge] = createAndConnectNode(state, {
+        fromNodeId,
+        as,
+        toNodeType,
+        relation,
       });
 
-      const sourceNodeId = as === "Parent" ? newNodeId : fromNodeId;
-      const targetNodeId = as === "Parent" ? fromNodeId : newNodeId;
-      const newEdge = buildEdge(newEdgeId, sourceNodeId, targetNodeId, relation);
-
-      const newNodes = activeDiagram.nodes.concat(newNode);
-      const newEdges = activeDiagram.edges.concat(newEdge);
+      // re-layout
       const { layoutedNodes, layoutedEdges } = layout(
-        newNodes,
-        newEdges,
+        activeDiagram.nodes.concat(newNode),
+        activeDiagram.edges.concat(newEdge),
         orientations[activeDiagram.type]
       );
 
