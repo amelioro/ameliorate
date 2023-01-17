@@ -1,5 +1,7 @@
 import { getClaimDiagramId, getImplicitLabel, parseClaimDiagramId } from "../utils/claim";
 import {
+  Edge,
+  Node,
   RelationDirection,
   ScorableType,
   Score,
@@ -38,6 +40,32 @@ const createAndConnectNode = (
   return [newNode, newEdge] as [Node, Edge];
 };
 
+// if adding a criterion, connect to solutions
+// if adding a solution, connect to criteria
+const connectCriteriaToSolutions = (state: AllDiagramState, newNode: Node, fromNode: Node) => {
+  const activeDiagram = state.diagrams[state.activeDiagramId];
+
+  const targetRelation: RelationName = newNode.type === "criterion" ? "solves" : "criterion for";
+
+  const newCriterionEdges = activeDiagram.edges
+    .filter((edge) => edge.source === fromNode.id && edge.label === targetRelation)
+    .map((edge) => {
+      const targetNode = activeDiagram.nodes.find((node) => node.id === edge.target);
+      if (!targetNode) throw new Error("targetNode not found");
+
+      /* eslint-disable functional/immutable-data, no-param-reassign */
+      const newCriterionEdgeId = `${state.nextEdgeId++}`;
+      /* eslint-enable functional/immutable-data, no-param-reassign */
+
+      const sourceNodeId = newNode.type === "criterion" ? newNode.id : targetNode.id;
+      const targetNodeId = newNode.type === "criterion" ? targetNode.id : newNode.id;
+
+      return buildEdge(newCriterionEdgeId, sourceNodeId, targetNodeId, "embodies");
+    });
+
+  return newCriterionEdges;
+};
+
 // trying to keep state changes directly within this method,
 // but wasn't sure how to cleanly handle next node/edge id's without letting invoked methods use & mutate state for them
 export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) => {
@@ -55,6 +83,15 @@ export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) 
         toNodeType,
         relation,
       });
+
+      // connect criteria
+      if (["criterion", "solution"].includes(newNode.type) && fromNode.type === "problem") {
+        const newCriterionEdges = connectCriteriaToSolutions(state, newNode, fromNode);
+
+        /* eslint-disable functional/immutable-data, no-param-reassign */
+        activeDiagram.edges.push(...newCriterionEdges);
+        /* eslint-enable functional/immutable-data, no-param-reassign */
+      }
 
       // re-layout
       const { layoutedNodes, layoutedEdges } = layout(
