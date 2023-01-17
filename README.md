@@ -21,7 +21,7 @@ Check out the [Miro Feature Map](https://miro.com/app/board/uXjVODhExZM=/?share_
 - [typescript](https://www.typescriptlang.org/)
 - [react](https://reactjs.org/) - building components
 - [nextjs](https://nextjs.org/) - frontend framework
-- [vercel](https://vercel.com/) - deploying web server
+- [netlify](https://netlify.com/) - deploying web server
 - [react flow](https://reactflow.dev/) - diagram component
 - [zustand](https://github.com/pmndrs/zustand) - component state management
 - [emotion](https://emotion.sh/docs/introduction) - styling components

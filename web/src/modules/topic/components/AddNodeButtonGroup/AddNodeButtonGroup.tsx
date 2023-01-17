@@ -8,14 +8,20 @@ import { AddNodeButton } from "../AddNodeButton/AddNodeButton";
 
 interface Props {
   className?: string;
-  nodeId: string;
-  nodeType: NodeType;
+  fromNodeId: string;
+  fromNodeType: NodeType;
   as: RelationDirection;
   orientation: Orientation;
 }
 
-export const AddNodeButtonGroup = ({ className, nodeId, nodeType, as, orientation }: Props) => {
-  const addableRelations = addableRelationsFrom(nodeType, as);
+export const AddNodeButtonGroup = ({
+  className,
+  fromNodeId,
+  fromNodeType,
+  as,
+  orientation,
+}: Props) => {
+  const addableRelations = addableRelationsFrom(fromNodeType, as);
 
   if (addableRelations.length === 0) return <></>;
 
@@ -29,7 +35,7 @@ export const AddNodeButtonGroup = ({ className, nodeId, nodeType, as, orientatio
       {addableRelations.map(({ toNodeType, relation }) => (
         <AddNodeButton
           key={toNodeType}
-          nodeId={nodeId}
+          fromNodeId={fromNodeId}
           as={as}
           toNodeType={toNodeType}
           relation={relation}

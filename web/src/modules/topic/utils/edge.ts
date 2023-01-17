@@ -1,7 +1,14 @@
 import { DiagramState, Node, RelationDirection } from "./diagram";
 import { NodeType } from "./nodes";
 
-export type RelationName = "causes" | "solves" | "created by" | "supports" | "critiques";
+export type RelationName =
+  | "causes"
+  | "solves"
+  | "created by"
+  | "criterion for"
+  | "embodies"
+  | "supports"
+  | "critiques";
 
 export interface Relation {
   Parent: NodeType;
@@ -15,6 +22,9 @@ export const relations: Relation[] = [
   { Parent: "problem", Child: "solution", name: "solves" },
 
   { Parent: "solution", Child: "problem", name: "created by" },
+
+  { Parent: "problem", Child: "criterion", name: "criterion for" },
+  { Parent: "criterion", Child: "solution", name: "embodies" },
 
   { Parent: "rootClaim", Child: "support", name: "supports" },
   { Parent: "rootClaim", Child: "critique", name: "critiques" },
@@ -32,12 +42,36 @@ export const getRelation = (Parent: NodeType, Child: NodeType): Relation | undef
   return relations.find((relation) => relation.Parent === Parent && relation.Child === Child);
 };
 
-export const addableRelationsFrom = (nodeType: NodeType, addingAs: RelationDirection) => {
-  // claim diagram is a tree so claim nodes can't add parents
-  if (claimNodeTypes.includes(nodeType) && addingAs === "Parent") return [];
+type AddableNodes = {
+  [key in RelationDirection]: NodeType[];
+};
+const addableNodesFor: Record<NodeType, AddableNodes> = {
+  problem: {
+    Parent: ["problem", "solution"],
+    Child: ["problem", "solution", "criterion"],
+  },
+  solution: {
+    Parent: ["problem"], // could have criteria, but need to select a specific problem for it & that requires design
+    Child: ["problem"],
+  },
 
+  // can't have multiple problems;
+  // could have multiple solutions but unintuitive to add from criterion because solution would be tied to parent & all sibling criteria
+  criterion: { Parent: [], Child: [] },
+
+  // claim diagram is a tree so claim nodes can't add parents
+  rootClaim: { Parent: [], Child: ["support", "critique"] },
+  support: { Parent: [], Child: ["support", "critique"] },
+  critique: { Parent: [], Child: ["support", "critique"] },
+};
+
+export const addableRelationsFrom = (nodeType: NodeType, addingAs: RelationDirection) => {
   const fromDirection = addingAs === "Parent" ? "Child" : "Parent";
-  const addableRelations = relations.filter((relation) => relation[fromDirection] === nodeType);
+  const addableNodes = addableNodesFor[nodeType][addingAs];
+
+  const addableRelations = relations.filter(
+    (relation) => addableNodes.includes(relation[addingAs]) && relation[fromDirection] === nodeType
+  );
 
   const formattedRelations = addableRelations.map((relation) => ({
     toNodeType: relation[addingAs],
@@ -47,7 +81,7 @@ export const addableRelationsFrom = (nodeType: NodeType, addingAs: RelationDirec
   return formattedRelations;
 };
 
-export const isValidEdge = (diagram: DiagramState, parent: Node, child: Node) => {
+export const canCreateEdge = (diagram: DiagramState, parent: Node, child: Node) => {
   const relation = getRelation(parent.type, child.type);
 
   const existingEdge = diagram.edges.find((edge) => {
@@ -69,6 +103,13 @@ export const isValidEdge = (diagram: DiagramState, parent: Node, child: Node) =>
 
   if (claimNodeTypes.includes(parent.type)) {
     console.log("cannot connect nodes: claim diagram is a tree so claim nodes can't add parents");
+    return false;
+  }
+
+  if (parent.type === "criterion" || child.type === "criterion") {
+    console.log(
+      "cannot connect nodes: criteria is always already connected to as many nodes as it can"
+    );
     return false;
   }
 

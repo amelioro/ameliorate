@@ -40,8 +40,8 @@ export const EditableNode = ({ id, data, type }: NodeProps) => {
       <Handle type="target" position={orientation == "TB" ? Position.Top : Position.Left} />
       {/* should this use react-flow's NodeToolbar? seems like it'd automatically handle positioning */}
       <AddNodeButtonGroupParent
-        nodeId={id}
-        nodeType={nodeType}
+        fromNodeId={id}
+        fromNodeType={nodeType}
         as="Parent"
         orientation={orientation}
       />
@@ -72,8 +72,8 @@ export const EditableNode = ({ id, data, type }: NodeProps) => {
       <YEdgeDiv />
 
       <AddNodeButtonGroupChild
-        nodeId={id}
-        nodeType={nodeType}
+        fromNodeId={id}
+        fromNodeType={nodeType}
         as="Child"
         orientation={orientation}
       />

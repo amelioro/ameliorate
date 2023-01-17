@@ -1,5 +1,7 @@
 import { getClaimDiagramId, getImplicitLabel, parseClaimDiagramId } from "../utils/claim";
 import {
+  Edge,
+  Node,
   RelationDirection,
   ScorableType,
   Score,
@@ -8,44 +10,93 @@ import {
   findScorable,
   orientations,
 } from "../utils/diagram";
-import { RelationName, getRelation, isValidEdge } from "../utils/edge";
+import { RelationName, canCreateEdge, getRelation } from "../utils/edge";
 import { layout } from "../utils/layout";
 import { NodeType } from "../utils/nodes";
 import { AllDiagramState, rootId, useDiagramStore } from "./store";
 
-export const addNode = (
-  toNodeId: string,
-  as: RelationDirection,
-  toNodeType: NodeType,
-  relation: RelationName
+interface AddNodeProps {
+  fromNodeId: string;
+  as: RelationDirection;
+  toNodeType: NodeType;
+  relation: RelationName;
+}
+
+const createAndConnectNode = (
+  state: AllDiagramState,
+  { fromNodeId, as, toNodeType, relation }: AddNodeProps
 ) => {
+  /* eslint-disable functional/immutable-data, no-param-reassign */
+  const newNodeId = `${state.nextNodeId++}`;
+  const newEdgeId = `${state.nextEdgeId++}`;
+  /* eslint-enable functional/immutable-data, no-param-reassign */
+
+  const newNode = buildNode({ id: newNodeId, type: toNodeType, diagramId: state.activeDiagramId });
+
+  const sourceNodeId = as === "Parent" ? newNodeId : fromNodeId;
+  const targetNodeId = as === "Parent" ? fromNodeId : newNodeId;
+  const newEdge = buildEdge(newEdgeId, sourceNodeId, targetNodeId, relation);
+
+  return [newNode, newEdge] as [Node, Edge];
+};
+
+// if adding a criterion, connect to solutions
+// if adding a solution, connect to criteria
+const connectCriteriaToSolutions = (state: AllDiagramState, newNode: Node, fromNode: Node) => {
+  const activeDiagram = state.diagrams[state.activeDiagramId];
+
+  const targetRelation: RelationName = newNode.type === "criterion" ? "solves" : "criterion for";
+
+  const newCriterionEdges = activeDiagram.edges
+    .filter((edge) => edge.source === fromNode.id && edge.label === targetRelation)
+    .map((edge) => {
+      const targetNode = activeDiagram.nodes.find((node) => node.id === edge.target);
+      if (!targetNode) throw new Error("targetNode not found");
+
+      /* eslint-disable functional/immutable-data, no-param-reassign */
+      const newCriterionEdgeId = `${state.nextEdgeId++}`;
+      /* eslint-enable functional/immutable-data, no-param-reassign */
+
+      const sourceNodeId = newNode.type === "criterion" ? newNode.id : targetNode.id;
+      const targetNodeId = newNode.type === "criterion" ? targetNode.id : newNode.id;
+
+      return buildEdge(newCriterionEdgeId, sourceNodeId, targetNodeId, "embodies");
+    });
+
+  return newCriterionEdges;
+};
+
+// trying to keep state changes directly within this method,
+// but wasn't sure how to cleanly handle next node/edge id's without letting invoked methods use & mutate state for them
+export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) => {
   useDiagramStore.setState(
     (state) => {
       const activeDiagram = state.diagrams[state.activeDiagramId];
 
-      const toNode = activeDiagram.nodes.find((node) => node.id === toNodeId);
-      if (!toNode) throw new Error("toNode not found");
+      const fromNode = activeDiagram.nodes.find((node) => node.id === fromNodeId);
+      if (!fromNode) throw new Error("fromNode not found");
 
-      /* eslint-disable functional/immutable-data, no-param-reassign */
-      const newNodeId = `${state.nextNodeId++}`;
-      const newEdgeId = `${state.nextEdgeId++}`;
-      /* eslint-enable functional/immutable-data, no-param-reassign */
-
-      const newNode = buildNode({
-        id: newNodeId,
-        type: toNodeType,
-        diagramId: state.activeDiagramId,
+      // create and connect node
+      const [newNode, newEdge] = createAndConnectNode(state, {
+        fromNodeId,
+        as,
+        toNodeType,
+        relation,
       });
 
-      const sourceNodeId = as === "Parent" ? newNodeId : toNodeId;
-      const targetNodeId = as === "Parent" ? toNodeId : newNodeId;
-      const newEdge = buildEdge(newEdgeId, sourceNodeId, targetNodeId, relation);
+      // connect criteria
+      if (["criterion", "solution"].includes(newNode.type) && fromNode.type === "problem") {
+        const newCriterionEdges = connectCriteriaToSolutions(state, newNode, fromNode);
 
-      const newNodes = activeDiagram.nodes.concat(newNode);
-      const newEdges = activeDiagram.edges.concat(newEdge);
+        /* eslint-disable functional/immutable-data, no-param-reassign */
+        activeDiagram.edges.push(...newCriterionEdges);
+        /* eslint-enable functional/immutable-data, no-param-reassign */
+      }
+
+      // re-layout
       const { layoutedNodes, layoutedEdges } = layout(
-        newNodes,
-        newEdges,
+        activeDiagram.nodes.concat(newNode),
+        activeDiagram.edges.concat(newEdge),
         orientations[activeDiagram.type]
       );
 
@@ -68,7 +119,7 @@ export const connectNodes = (parentId: string | null, childId: string | null) =>
       const child = activeDiagram.nodes.find((node) => node.id === childId);
       if (!parent || !child) throw new Error("parent or child not found");
 
-      if (!isValidEdge(activeDiagram, parent, child)) return;
+      if (!canCreateEdge(activeDiagram, parent, child)) return;
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
       const newEdgeId = `${state.nextEdgeId++}`;

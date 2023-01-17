@@ -5,5 +5,5 @@ import { AddNodeButtonGroup } from "./AddNodeButtonGroup";
 export default { component: AddNodeButtonGroup } as Meta<typeof AddNodeButtonGroup>;
 
 export const Basic: StoryFn<typeof AddNodeButtonGroup> = () => {
-  return <AddNodeButtonGroup nodeId="1" nodeType="problem" as="Child" orientation="TB" />;
+  return <AddNodeButtonGroup fromNodeId="1" fromNodeType="problem" as="Child" orientation="TB" />;
 };
