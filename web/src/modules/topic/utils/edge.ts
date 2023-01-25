@@ -1,4 +1,4 @@
-import { DiagramState, Node, RelationDirection } from "./diagram";
+import { DiagramState, Edge, Node, RelationDirection, findScorable } from "./diagram";
 import { NodeType } from "./nodes";
 
 export type RelationName =
@@ -119,4 +119,12 @@ export const canCreateEdge = (diagram: DiagramState, parent: Node, child: Node) 
   }
 
   return true;
+};
+
+export const parentNode = (edge: Edge, diagram: DiagramState) => {
+  return findScorable(diagram, edge.source, "node");
+};
+
+export const childNode = (edge: Edge, diagram: DiagramState) => {
+  return findScorable(diagram, edge.target, "node");
 };
