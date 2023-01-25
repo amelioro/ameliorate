@@ -125,7 +125,7 @@ export const connectNodes = (parentId: string | null, childId: string | null) =>
       const newEdgeId = `${state.nextEdgeId++}`;
       /* eslint-enable functional/immutable-data, no-param-reassign */
 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- isValidEdge ensures relation is valid
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- canCreateEdge ensures relation is valid
       const relation = getRelation(parent.type, child.type)!;
       const newEdge = buildEdge(newEdgeId, parent.id, child.id, relation.name);
       const newEdges = activeDiagram.edges.concat(newEdge);
