@@ -4,7 +4,7 @@ import { devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 import { HydrationContext } from "../../../pages/index";
-import { DiagramState, buildNode } from "../utils/diagram";
+import { DiagramState, buildNode, filterHiddenComponents } from "../utils/diagram";
 import { migrate } from "./migrate";
 
 export const rootId = "root";
@@ -63,8 +63,10 @@ export const useActiveDiagramId = () => {
   return useDiagramStoreAfterHydration((state) => state.activeDiagramId);
 };
 
-export const useActiveDiagram = () => {
-  return useDiagramStoreAfterHydration((state) => state.diagrams[state.activeDiagramId]);
+export const useFilteredActiveDiagram = () => {
+  return useDiagramStoreAfterHydration((state) =>
+    filterHiddenComponents(state.diagrams[state.activeDiagramId])
+  );
 };
 
 export const useDiagramType = (diagramId: string) => {

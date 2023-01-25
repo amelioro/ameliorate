@@ -1,8 +1,8 @@
 import { MarkerType } from "reactflow";
 
-import { RelationName } from "./edge";
-import { Orientation } from "./layout";
-import { NodeType } from "./nodes";
+import { RelationName, childNode, parentNode } from "./edge";
+import { Orientation, layout } from "./layout";
+import { NodeType, children, onlyParent } from "./nodes";
 
 export type DiagramType = "Problem" | "Claim";
 export type RelationDirection = "Parent" | "Child";
@@ -33,6 +33,8 @@ export interface Node {
   selected: boolean;
   type: NodeType;
 }
+export type ProblemNode = Node & { data: { showCriteria: boolean } };
+
 interface BuildProps {
   id: string;
   label?: string;
@@ -41,7 +43,7 @@ interface BuildProps {
   diagramId: string;
 }
 export const buildNode = ({ id, label, score, type, diagramId }: BuildProps) => {
-  return {
+  const node = {
     id: id,
     data: {
       label: label ?? `text${id}`,
@@ -53,6 +55,12 @@ export const buildNode = ({ id, label, score, type, diagramId }: BuildProps) => 
     selected: false,
     type: type,
   };
+
+  if (type === "problem") {
+    return { ...node, data: { ...node.data, showCriteria: true } } as ProblemNode;
+  } else {
+    return node as Node;
+  }
 };
 
 export const buildEdge = (
@@ -93,4 +101,61 @@ export const findScorable = (
   if (!scorable) throw new Error("scorable not found");
 
   return scorable;
+};
+
+export const filterHiddenComponents = (diagram: DiagramState) => {
+  const shownNodes = diagram.nodes.filter((node) => {
+    if (node.type !== "criterion") {
+      return true;
+    }
+
+    const problemParent = onlyParent(node, diagram) as ProblemNode;
+    return problemParent.data.showCriteria;
+  });
+  const shownNodeIds = shownNodes.map((node) => node.id);
+
+  const shownEdges = diagram.edges.filter((edge) => {
+    if (!shownNodeIds.includes(edge.source) || !shownNodeIds.includes(edge.target)) return false;
+
+    const edgeParent = parentNode(edge, diagram);
+    const edgeChild = childNode(edge, diagram);
+
+    if (edgeParent.type !== "problem") return true;
+    const problemParent = edgeParent as ProblemNode;
+
+    const problemChildren = children(problemParent, diagram);
+    const problemHasCriteria = problemChildren.some((child) => child.type === "criterion");
+
+    // hide solution connections if showing criteria because criteria imply a connection to solution
+    if (problemParent.data.showCriteria && problemHasCriteria && edgeChild.type === "solution") {
+      return false;
+    }
+
+    return true;
+  });
+
+  return { ...diagram, nodes: shownNodes, edges: shownEdges };
+};
+
+export const layoutVisibleComponents = (diagram: DiagramState) => {
+  // filter
+  const displayDiagram = filterHiddenComponents(diagram);
+
+  // layout only the displayed components
+  const { layoutedNodes } = layout(
+    displayDiagram.nodes,
+    displayDiagram.edges,
+    orientations[diagram.type]
+  );
+
+  // update positions of displayed components
+  const updatedNodes = diagram.nodes.map((node) => {
+    const layoutedNode = layoutedNodes.find((layoutedNode) => layoutedNode.id === node.id);
+    if (!layoutedNode) return node;
+
+    return { ...node, position: layoutedNode.position };
+  });
+
+  // return both displayed and hidden components
+  return { ...diagram, nodes: updatedNodes, edges: diagram.edges };
 };

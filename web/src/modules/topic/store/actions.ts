@@ -8,10 +8,9 @@ import {
   buildEdge,
   buildNode,
   findScorable,
-  orientations,
+  layoutVisibleComponents,
 } from "../utils/diagram";
 import { RelationName, canCreateEdge, getRelation } from "../utils/edge";
-import { layout } from "../utils/layout";
 import { NodeType } from "../utils/nodes";
 import { AllDiagramState, rootId, useDiagramStore } from "./store";
 
@@ -94,15 +93,15 @@ export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) 
       }
 
       // re-layout
-      const { layoutedNodes, layoutedEdges } = layout(
-        activeDiagram.nodes.concat(newNode),
-        activeDiagram.edges.concat(newEdge),
-        orientations[activeDiagram.type]
-      );
+      const layoutedDiagram = layoutVisibleComponents({
+        ...activeDiagram,
+        nodes: activeDiagram.nodes.concat(newNode),
+        edges: activeDiagram.edges.concat(newEdge),
+      });
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
-      activeDiagram.nodes = layoutedNodes;
-      activeDiagram.edges = layoutedEdges;
+      activeDiagram.nodes = layoutedDiagram.nodes;
+      activeDiagram.edges = layoutedDiagram.edges;
       /* eslint-enable functional/immutable-data, no-param-reassign */
     },
     false,
@@ -130,15 +129,11 @@ export const connectNodes = (parentId: string | null, childId: string | null) =>
       const newEdge = buildEdge(newEdgeId, parent.id, child.id, relation.name);
       const newEdges = activeDiagram.edges.concat(newEdge);
 
-      const { layoutedNodes, layoutedEdges } = layout(
-        activeDiagram.nodes,
-        newEdges,
-        orientations[activeDiagram.type]
-      );
+      const layoutedDiagram = layoutVisibleComponents({ ...activeDiagram, edges: newEdges });
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
-      activeDiagram.nodes = layoutedNodes;
-      activeDiagram.edges = layoutedEdges;
+      activeDiagram.nodes = layoutedDiagram.nodes;
+      activeDiagram.edges = layoutedDiagram.edges;
       /* eslint-enable functional/immutable-data, no-param-reassign */
     },
     false,
