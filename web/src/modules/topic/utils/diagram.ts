@@ -18,6 +18,21 @@ export interface DiagramState {
   type: DiagramType;
 }
 
+export interface Node {
+  id: string;
+  data: {
+    label: string;
+    score: Score;
+    width: number;
+    diagramId: string;
+  };
+  position: {
+    x: number;
+    y: number;
+  };
+  selected: boolean;
+  type: NodeType;
+}
 interface BuildProps {
   id: string;
   label?: string;
@@ -39,7 +54,6 @@ export const buildNode = ({ id, label, score, type, diagramId }: BuildProps) => 
     type: type,
   };
 };
-export type Node = ReturnType<typeof buildNode>;
 
 export const buildEdge = (
   newEdgeId: string,
