@@ -89,6 +89,10 @@ export const NodeTypeSpan = styled.span`
   padding-left: 4px;
 `;
 
+export const IndicatorDiv = styled.div`
+  display: flex;
+`;
+
 export const XEdgeDiv = styled.div`
   width: 24px;
 `;

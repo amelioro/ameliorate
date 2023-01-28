@@ -3,7 +3,7 @@ import _ from "lodash";
 import { range } from "lodash";
 
 export const migrate = (persistedState: any, version: number) => {
-  const migrations = [migrate_0_to_1, migrate_1_to_2];
+  const migrations = [migrate_0_to_1, migrate_1_to_2, migrate_2_to_3];
 
   let state = persistedState;
 
@@ -60,6 +60,19 @@ const migrate_1_to_2 = (state: any) => {
     diagram.nodes.forEach((node: any) => {
       // change type to lowercase
       node.type = _.camelCase(node.type);
+    });
+  });
+
+  return state;
+};
+
+const migrate_2_to_3 = (state: any) => {
+  Object.values(state.diagrams).forEach((diagram: any) => {
+    diagram.nodes.forEach((node: any) => {
+      // add showCriteria: true to each problem
+      if (node.type === "problem") {
+        node.data.showCriteria = true;
+      }
     });
   });
 

@@ -4,7 +4,7 @@ import fileDownload from "js-file-download";
 import { useState } from "react";
 
 import { getState, setState } from "../../store/actions";
-import { AllDiagramState } from "../../store/store";
+import { DiagramStoreState } from "../../store/store";
 
 // TODO: might be useful to have downloaded state be more human editable;
 // for this, probably should prettify the JSON, and remove position values (we can re-layout on import)
@@ -19,7 +19,7 @@ const uploadTopic = (event: React.ChangeEvent<HTMLInputElement>) => {
   event.target.files[0]
     .text()
     // TODO: validate that file JSON matches interface
-    .then((text) => setState(JSON.parse(text) as AllDiagramState))
+    .then((text) => setState(JSON.parse(text) as DiagramStoreState))
     .catch((error) => {
       console.log("error reading file: ", error);
       throw new Error("Failed to read file");
@@ -30,7 +30,7 @@ const loadExample = (exampleFileName: string) => {
   fetch(`/examples/${exampleFileName}`)
     .then((response) => response.json())
     // TODO: validate that file JSON matches interface
-    .then((exampleState) => setState(exampleState as AllDiagramState))
+    .then((exampleState) => setState(exampleState as DiagramStoreState))
     .catch((error) => {
       console.log("error loading example: ", error);
       throw new Error("Failed to load example");

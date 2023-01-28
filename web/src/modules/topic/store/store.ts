@@ -4,12 +4,12 @@ import { devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 import { HydrationContext } from "../../../pages/index";
-import { DiagramState, buildNode } from "../utils/diagram";
+import { Diagram, buildNode, filterHiddenComponents } from "../utils/diagram";
 import { migrate } from "./migrate";
 
 export const rootId = "root";
 
-const initialDiagrams: Record<string, DiagramState> = {
+const initialDiagrams: Record<string, Diagram> = {
   [rootId]: {
     nodes: [buildNode({ id: "0", type: "problem", diagramId: rootId })],
     edges: [],
@@ -17,8 +17,8 @@ const initialDiagrams: Record<string, DiagramState> = {
   },
 };
 
-export interface AllDiagramState {
-  diagrams: Record<string, DiagramState>;
+export interface DiagramStoreState {
+  diagrams: Record<string, Diagram>;
   activeDiagramId: string;
   nextNodeId: number;
   nextEdgeId: number;
@@ -33,15 +33,17 @@ const initialState = {
 
 // create atomic selectors for usage outside of store/ dir
 // this is only exported to allow actions to be extracted to a separate file
-export const useDiagramStore = create<AllDiagramState>()(
+export const useDiagramStore = create<DiagramStoreState>()(
   persist(immer(devtools(() => initialState)), {
     name: "diagram-storage",
-    version: 2,
+    version: 3,
     migrate: migrate,
   })
 );
 
-const useDiagramStoreAfterHydration = ((selector, compare) => {
+// create atomic selectors for usage outside of store/ dir
+// this is only exported to allow hooks to be extracted to a separate file
+export const useDiagramStoreAfterHydration = ((selector, compare) => {
   /*
   This a fix to ensure zustand never hydrates the store before React hydrates the page.
   Without this, there is a mismatch between SSR/SSG and client side on first draw which produces
@@ -63,8 +65,10 @@ export const useActiveDiagramId = () => {
   return useDiagramStoreAfterHydration((state) => state.activeDiagramId);
 };
 
-export const useActiveDiagram = () => {
-  return useDiagramStoreAfterHydration((state) => state.diagrams[state.activeDiagramId]);
+export const useFilteredActiveDiagram = () => {
+  return useDiagramStoreAfterHydration((state) =>
+    filterHiddenComponents(state.diagrams[state.activeDiagramId])
+  );
 };
 
 export const useDiagramType = (diagramId: string) => {

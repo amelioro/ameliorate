@@ -7,12 +7,14 @@ import { setNodeLabel } from "../../store/actions";
 import { useDiagramType } from "../../store/store";
 import { orientations } from "../../utils/diagram";
 import { NodeType, nodeDecorations } from "../../utils/nodes";
+import { CriteriaIndicator } from "../CriteriaIndicator/CriteriaIndicator";
 import { NodeProps } from "../Diagram/Diagram";
 import { ScoreDial } from "../ScoreDial/ScoreDial";
 import {
   AddNodeButtonGroupChild,
   AddNodeButtonGroupParent,
   HoverBridgeDiv,
+  IndicatorDiv,
   MiddleDiv,
   NodeTypeDiv,
   NodeTypeSpan,
@@ -51,7 +53,10 @@ export const EditableNode = ({ id, data, type }: NodeProps) => {
           <NodeIcon sx={{ width: "16px", height: "16px" }} />
           <NodeTypeSpan>{_.startCase(nodeType)}</NodeTypeSpan>
         </NodeTypeDiv>
-        <ScoreDial scorableId={id} scorableType="node" score={data.score} />
+        <IndicatorDiv>
+          <CriteriaIndicator nodeId={id} />
+          <ScoreDial scorableId={id} scorableType="node" score={data.score} />
+        </IndicatorDiv>
       </YEdgeDiv>
       <MiddleDiv>
         <XEdgeDiv />

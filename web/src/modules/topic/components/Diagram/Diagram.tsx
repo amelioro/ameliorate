@@ -10,7 +10,7 @@ import {
 } from "reactflow";
 
 import { connectNodes, deselectNodes, setActiveDiagram } from "../../store/actions";
-import { rootId, useActiveDiagram, useActiveDiagramId } from "../../store/store";
+import { rootId, useActiveDiagramId, useFilteredActiveDiagram } from "../../store/store";
 import { type Edge, type Node } from "../../utils/diagram";
 import { type NodeType } from "../../utils/nodes";
 import { EditableNode } from "../EditableNode/EditableNode";
@@ -50,7 +50,7 @@ export interface EdgeProps extends DefaultEdgeProps {
 
 export const Diagram = () => {
   const activeDiagramId = useActiveDiagramId();
-  const activeDiagram = useActiveDiagram();
+  const activeDiagram = useFilteredActiveDiagram();
 
   const nodes = activeDiagram.nodes;
   const edges = activeDiagram.edges;

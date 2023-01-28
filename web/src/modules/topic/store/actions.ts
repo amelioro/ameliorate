@@ -2,18 +2,27 @@ import { getClaimDiagramId, getImplicitLabel, parseClaimDiagramId } from "../uti
 import {
   Edge,
   Node,
+  ProblemNode,
   RelationDirection,
   ScorableType,
   Score,
   buildEdge,
   buildNode,
+  findNode,
   findScorable,
-  orientations,
+  layoutVisibleComponents,
 } from "../utils/diagram";
 import { RelationName, canCreateEdge, getRelation } from "../utils/edge";
-import { layout } from "../utils/layout";
 import { NodeType } from "../utils/nodes";
-import { AllDiagramState, rootId, useDiagramStore } from "./store";
+import { DiagramStoreState, rootId, useDiagramStore } from "./store";
+
+export const getState = () => {
+  return useDiagramStore.getState();
+};
+
+export const setState = (state: DiagramStoreState) => {
+  useDiagramStore.setState(() => state);
+};
 
 interface AddNodeProps {
   fromNodeId: string;
@@ -23,7 +32,7 @@ interface AddNodeProps {
 }
 
 const createAndConnectNode = (
-  state: AllDiagramState,
+  state: DiagramStoreState,
   { fromNodeId, as, toNodeType, relation }: AddNodeProps
 ) => {
   /* eslint-disable functional/immutable-data, no-param-reassign */
@@ -42,7 +51,7 @@ const createAndConnectNode = (
 
 // if adding a criterion, connect to solutions
 // if adding a solution, connect to criteria
-const connectCriteriaToSolutions = (state: AllDiagramState, newNode: Node, fromNode: Node) => {
+const connectCriteriaToSolutions = (state: DiagramStoreState, newNode: Node, fromNode: Node) => {
   const activeDiagram = state.diagrams[state.activeDiagramId];
 
   const targetRelation: RelationName = newNode.type === "criterion" ? "solves" : "criterion for";
@@ -50,8 +59,7 @@ const connectCriteriaToSolutions = (state: AllDiagramState, newNode: Node, fromN
   const newCriterionEdges = activeDiagram.edges
     .filter((edge) => edge.source === fromNode.id && edge.label === targetRelation)
     .map((edge) => {
-      const targetNode = activeDiagram.nodes.find((node) => node.id === edge.target);
-      if (!targetNode) throw new Error("targetNode not found");
+      const targetNode = findNode(activeDiagram, edge.target);
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
       const newCriterionEdgeId = `${state.nextEdgeId++}`;
@@ -72,9 +80,7 @@ export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) 
   useDiagramStore.setState(
     (state) => {
       const activeDiagram = state.diagrams[state.activeDiagramId];
-
-      const fromNode = activeDiagram.nodes.find((node) => node.id === fromNodeId);
-      if (!fromNode) throw new Error("fromNode not found");
+      const fromNode = findNode(activeDiagram, fromNodeId);
 
       // create and connect node
       const [newNode, newEdge] = createAndConnectNode(state, {
@@ -94,15 +100,15 @@ export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) 
       }
 
       // re-layout
-      const { layoutedNodes, layoutedEdges } = layout(
-        activeDiagram.nodes.concat(newNode),
-        activeDiagram.edges.concat(newEdge),
-        orientations[activeDiagram.type]
-      );
+      const layoutedDiagram = layoutVisibleComponents({
+        ...activeDiagram,
+        nodes: activeDiagram.nodes.concat(newNode),
+        edges: activeDiagram.edges.concat(newEdge),
+      });
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
-      activeDiagram.nodes = layoutedNodes;
-      activeDiagram.edges = layoutedEdges;
+      activeDiagram.nodes = layoutedDiagram.nodes;
+      activeDiagram.edges = layoutedDiagram.edges;
       /* eslint-enable functional/immutable-data, no-param-reassign */
     },
     false,
@@ -125,20 +131,16 @@ export const connectNodes = (parentId: string | null, childId: string | null) =>
       const newEdgeId = `${state.nextEdgeId++}`;
       /* eslint-enable functional/immutable-data, no-param-reassign */
 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- isValidEdge ensures relation is valid
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- canCreateEdge ensures relation is valid
       const relation = getRelation(parent.type, child.type)!;
       const newEdge = buildEdge(newEdgeId, parent.id, child.id, relation.name);
       const newEdges = activeDiagram.edges.concat(newEdge);
 
-      const { layoutedNodes, layoutedEdges } = layout(
-        activeDiagram.nodes,
-        newEdges,
-        orientations[activeDiagram.type]
-      );
+      const layoutedDiagram = layoutVisibleComponents({ ...activeDiagram, edges: newEdges });
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
-      activeDiagram.nodes = layoutedNodes;
-      activeDiagram.edges = layoutedEdges;
+      activeDiagram.nodes = layoutedDiagram.nodes;
+      activeDiagram.edges = layoutedDiagram.edges;
       /* eslint-enable functional/immutable-data, no-param-reassign */
     },
     false,
@@ -274,9 +276,7 @@ export const setNodeLabel = (nodeId: string, value: string) => {
   useDiagramStore.setState(
     (state) => {
       const activeDiagram = state.diagrams[state.activeDiagramId];
-
-      const node = activeDiagram.nodes.find((node) => node.id === nodeId);
-      if (!node) throw new Error("node not found");
+      const node = findNode(activeDiagram, nodeId);
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
       node.data.label = value;
@@ -287,10 +287,27 @@ export const setNodeLabel = (nodeId: string, value: string) => {
   );
 };
 
-export const getState = () => {
-  return useDiagramStore.getState();
-};
+export const toggleShowCriteria = (nodeId: string) => {
+  useDiagramStore.setState(
+    (state) => {
+      const activeDiagram = state.diagrams[state.activeDiagramId];
 
-export const setState = (state: AllDiagramState) => {
-  useDiagramStore.setState(() => state);
+      const node = findNode(activeDiagram, nodeId);
+      if (node.type !== "problem") throw new Error("node is not a problem");
+      const problemNode = node as ProblemNode;
+
+      /* eslint-disable functional/immutable-data, no-param-reassign */
+      problemNode.data.showCriteria = !problemNode.data.showCriteria;
+      /* eslint-enable functional/immutable-data, no-param-reassign */
+
+      const layoutedDiagram = layoutVisibleComponents(activeDiagram); // depends on showCriteria having been updated
+
+      /* eslint-disable functional/immutable-data, no-param-reassign */
+      activeDiagram.nodes = layoutedDiagram.nodes;
+      activeDiagram.edges = layoutedDiagram.edges;
+      /* eslint-enable functional/immutable-data, no-param-reassign */
+    },
+    false,
+    "toggleShowCriteria"
+  );
 };
