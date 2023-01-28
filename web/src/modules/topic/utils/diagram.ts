@@ -89,18 +89,26 @@ export type ScorableType = "node" | "edge";
 export const possibleScores = ["-", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"] as const;
 export type Score = typeof possibleScores[number];
 
+export const findNode = (diagram: DiagramState, nodeId: string) => {
+  const node = diagram.nodes.find((node) => node.id === nodeId);
+  if (!node) throw new Error("node not found");
+
+  return node;
+};
+
+export const findEdge = (diagram: DiagramState, edgeId: string) => {
+  const edge = diagram.edges.find((edge) => edge.id === edgeId);
+  if (!edge) throw new Error("edge not found");
+
+  return edge;
+};
+
 export const findScorable = (
   diagram: DiagramState,
   scorableId: string,
   scorableType: ScorableType
 ) => {
-  const scorableKey = scorableType === "node" ? "nodes" : "edges";
-  // RIP typescript can't infer this https://github.com/microsoft/TypeScript/issues/33591#issuecomment-786443978
-  const scorables: (Node | Edge)[] = diagram[scorableKey];
-  const scorable = scorables.find((scorable) => scorable.id === scorableId);
-  if (!scorable) throw new Error("scorable not found");
-
-  return scorable;
+  return scorableType === "node" ? findNode(diagram, scorableId) : findEdge(diagram, scorableId);
 };
 
 export const filterHiddenComponents = (diagram: DiagramState) => {

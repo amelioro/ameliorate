@@ -7,6 +7,7 @@ import {
   Score,
   buildEdge,
   buildNode,
+  findNode,
   findScorable,
   layoutVisibleComponents,
 } from "../utils/diagram";
@@ -49,8 +50,7 @@ const connectCriteriaToSolutions = (state: AllDiagramState, newNode: Node, fromN
   const newCriterionEdges = activeDiagram.edges
     .filter((edge) => edge.source === fromNode.id && edge.label === targetRelation)
     .map((edge) => {
-      const targetNode = activeDiagram.nodes.find((node) => node.id === edge.target);
-      if (!targetNode) throw new Error("targetNode not found");
+      const targetNode = findNode(activeDiagram, edge.target);
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
       const newCriterionEdgeId = `${state.nextEdgeId++}`;
@@ -71,9 +71,7 @@ export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) 
   useDiagramStore.setState(
     (state) => {
       const activeDiagram = state.diagrams[state.activeDiagramId];
-
-      const fromNode = activeDiagram.nodes.find((node) => node.id === fromNodeId);
-      if (!fromNode) throw new Error("fromNode not found");
+      const fromNode = findNode(activeDiagram, fromNodeId);
 
       // create and connect node
       const [newNode, newEdge] = createAndConnectNode(state, {
@@ -269,9 +267,7 @@ export const setNodeLabel = (nodeId: string, value: string) => {
   useDiagramStore.setState(
     (state) => {
       const activeDiagram = state.diagrams[state.activeDiagramId];
-
-      const node = activeDiagram.nodes.find((node) => node.id === nodeId);
-      if (!node) throw new Error("node not found");
+      const node = findNode(activeDiagram, nodeId);
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
       node.data.label = value;
