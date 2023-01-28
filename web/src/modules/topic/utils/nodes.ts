@@ -3,9 +3,12 @@ import { Article, Ballot, Check, Extension, ThumbDown, ThumbUp } from "@mui/icon
 import { DiagramState, Node } from "./diagram";
 
 export const maxCharsPerLine = 19; // measured by typing "a"'s in a node textbox
+export const indicatorLength = 20; // px
+
+export type MuiIcon = typeof Extension;
 
 export interface NodeDecoration {
-  NodeIcon: typeof Extension;
+  NodeIcon: MuiIcon;
 }
 
 export type NodeType = "problem" | "solution" | "criterion" | "rootClaim" | "support" | "critique";

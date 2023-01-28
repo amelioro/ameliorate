@@ -41,7 +41,9 @@ export const useDiagramStore = create<AllDiagramState>()(
   })
 );
 
-const useDiagramStoreAfterHydration = ((selector, compare) => {
+// create atomic selectors for usage outside of store/ dir
+// this is only exported to allow hooks to be extracted to a separate file
+export const useDiagramStoreAfterHydration = ((selector, compare) => {
   /*
   This a fix to ensure zustand never hydrates the store before React hydrates the page.
   Without this, there is a mismatch between SSR/SSG and client side on first draw which produces

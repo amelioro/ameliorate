@@ -2,6 +2,7 @@ import { getClaimDiagramId, getImplicitLabel, parseClaimDiagramId } from "../uti
 import {
   Edge,
   Node,
+  ProblemNode,
   RelationDirection,
   ScorableType,
   Score,
@@ -14,6 +15,14 @@ import {
 import { RelationName, canCreateEdge, getRelation } from "../utils/edge";
 import { NodeType } from "../utils/nodes";
 import { AllDiagramState, rootId, useDiagramStore } from "./store";
+
+export const getState = () => {
+  return useDiagramStore.getState();
+};
+
+export const setState = (state: AllDiagramState) => {
+  useDiagramStore.setState(() => state);
+};
 
 interface AddNodeProps {
   fromNodeId: string;
@@ -278,10 +287,27 @@ export const setNodeLabel = (nodeId: string, value: string) => {
   );
 };
 
-export const getState = () => {
-  return useDiagramStore.getState();
-};
+export const toggleShowCriteria = (nodeId: string) => {
+  useDiagramStore.setState(
+    (state) => {
+      const activeDiagram = state.diagrams[state.activeDiagramId];
 
-export const setState = (state: AllDiagramState) => {
-  useDiagramStore.setState(() => state);
+      const node = findNode(activeDiagram, nodeId);
+      if (node.type !== "problem") throw new Error("node is not a problem");
+      const problemNode = node as ProblemNode;
+
+      /* eslint-disable functional/immutable-data, no-param-reassign */
+      problemNode.data.showCriteria = !problemNode.data.showCriteria;
+      /* eslint-enable functional/immutable-data, no-param-reassign */
+
+      const layoutedDiagram = layoutVisibleComponents(activeDiagram); // depends on showCriteria having been updated
+
+      /* eslint-disable functional/immutable-data, no-param-reassign */
+      activeDiagram.nodes = layoutedDiagram.nodes;
+      activeDiagram.edges = layoutedDiagram.edges;
+      /* eslint-enable functional/immutable-data, no-param-reassign */
+    },
+    false,
+    "toggleShowCriteria"
+  );
 };

@@ -4,6 +4,7 @@ import { setOrCreateActiveDiagram, setScore } from "../../store/actions";
 import { useDoesDiagramExist } from "../../store/store";
 import { getClaimDiagramId } from "../../utils/claim";
 import { type ScorableType, type Score, possibleScores } from "../../utils/diagram";
+import { indicatorLength } from "../../utils/nodes";
 import { FloatingButton, FloatingDiv, MainButton, StyledDiv } from "./ScoreDial.style";
 
 const getButtonPositions = (expansionRadius: number, numberOfButtons: number) => {
@@ -42,7 +43,7 @@ export const ScoreDial = ({ scorableId, scorableType, score }: ScoreDialProps) =
   const childDiagramId = getClaimDiagramId(scorableId, scorableType);
   const doesDiagramExist = useDoesDiagramExist(childDiagramId);
 
-  const buttonLength = 20; //px
+  const buttonLength = indicatorLength; //px
   const expansionRadius = 2 * buttonLength; // no collisions for fitting 11 elements
 
   // little awkward to use parallel arrays, but wanted to isolate position logic

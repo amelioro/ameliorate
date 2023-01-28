@@ -48,6 +48,12 @@ declare module "@mui/material" {
     primaryVariantLight: true;
     neutral: true;
   }
+
+  interface SvgIconPropsColorOverrides extends NodeTypeColors {
+    primaryVariantDark: true;
+    primaryVariantLight: true;
+    neutral: true;
+  }
 }
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
