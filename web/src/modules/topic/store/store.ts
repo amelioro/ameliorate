@@ -4,12 +4,12 @@ import { devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 import { HydrationContext } from "../../../pages/index";
-import { DiagramState, buildNode, filterHiddenComponents } from "../utils/diagram";
+import { Diagram, buildNode, filterHiddenComponents } from "../utils/diagram";
 import { migrate } from "./migrate";
 
 export const rootId = "root";
 
-const initialDiagrams: Record<string, DiagramState> = {
+const initialDiagrams: Record<string, Diagram> = {
   [rootId]: {
     nodes: [buildNode({ id: "0", type: "problem", diagramId: rootId })],
     edges: [],
@@ -18,7 +18,7 @@ const initialDiagrams: Record<string, DiagramState> = {
 };
 
 export interface AllDiagramState {
-  diagrams: Record<string, DiagramState>;
+  diagrams: Record<string, Diagram>;
   activeDiagramId: string;
   nextNodeId: number;
   nextEdgeId: number;

@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-import { DiagramState, ScorableType } from "./diagram";
+import { Diagram, ScorableType } from "./diagram";
 import { maxCharsPerLine } from "./nodes";
 
 export const parseClaimDiagramId = (diagramId: string) => {
@@ -15,7 +15,7 @@ export const getClaimDiagramId = (parentScorableId: string, parentScorableType: 
 export const getImplicitLabel = (
   parentScorableId: string,
   parentScorableType: ScorableType,
-  parentScorableDiagram: DiagramState
+  parentScorableDiagram: Diagram
 ): string => {
   if (parentScorableType === "node") {
     const parentNode = parentScorableDiagram.nodes.find((node) => node.id === parentScorableId);

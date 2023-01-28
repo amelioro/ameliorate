@@ -1,6 +1,6 @@
 import { Article, Ballot, Check, Extension, ThumbDown, ThumbUp } from "@mui/icons-material";
 
-import { DiagramState, Node } from "./diagram";
+import { Diagram, Node } from "./diagram";
 
 export const maxCharsPerLine = 19; // measured by typing "a"'s in a node textbox
 export const indicatorLength = 20; // px
@@ -35,7 +35,7 @@ export const nodeDecorations: Record<NodeType, NodeDecoration> = {
 };
 
 // TODO: memoize? this could traverse a lot of nodes & edges, seems not performant
-export const parents = (node: Node, diagram: DiagramState) => {
+export const parents = (node: Node, diagram: Diagram) => {
   const parentEdges = diagram.edges.filter((edge) => edge.target === node.id);
 
   return parentEdges.map((edge) => {
@@ -46,7 +46,7 @@ export const parents = (node: Node, diagram: DiagramState) => {
   });
 };
 
-export const children = (node: Node, diagram: DiagramState) => {
+export const children = (node: Node, diagram: Diagram) => {
   const childEdges = diagram.edges.filter((edge) => edge.source === node.id);
   return childEdges.map((edge) => {
     const node = diagram.nodes.find((node) => edge.target === node.id);
@@ -57,7 +57,7 @@ export const children = (node: Node, diagram: DiagramState) => {
 };
 
 // errors if node does not have only one parent
-export const onlyParent = (node: Node, diagram: DiagramState) => {
+export const onlyParent = (node: Node, diagram: Diagram) => {
   const allParents = parents(node, diagram);
 
   if (allParents.length !== 1) {

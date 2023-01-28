@@ -12,7 +12,7 @@ export const orientations: Record<DiagramType, Orientation> = {
   Claim: "LR",
 };
 
-export interface DiagramState {
+export interface Diagram {
   nodes: Node[];
   edges: Edge[];
   type: DiagramType;
@@ -89,29 +89,25 @@ export type ScorableType = "node" | "edge";
 export const possibleScores = ["-", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"] as const;
 export type Score = typeof possibleScores[number];
 
-export const findNode = (diagram: DiagramState, nodeId: string) => {
+export const findNode = (diagram: Diagram, nodeId: string) => {
   const node = diagram.nodes.find((node) => node.id === nodeId);
   if (!node) throw new Error("node not found");
 
   return node;
 };
 
-export const findEdge = (diagram: DiagramState, edgeId: string) => {
+export const findEdge = (diagram: Diagram, edgeId: string) => {
   const edge = diagram.edges.find((edge) => edge.id === edgeId);
   if (!edge) throw new Error("edge not found");
 
   return edge;
 };
 
-export const findScorable = (
-  diagram: DiagramState,
-  scorableId: string,
-  scorableType: ScorableType
-) => {
+export const findScorable = (diagram: Diagram, scorableId: string, scorableType: ScorableType) => {
   return scorableType === "node" ? findNode(diagram, scorableId) : findEdge(diagram, scorableId);
 };
 
-export const filterHiddenComponents = (diagram: DiagramState) => {
+export const filterHiddenComponents = (diagram: Diagram) => {
   const shownNodes = diagram.nodes.filter((node) => {
     if (node.type !== "criterion") {
       return true;
@@ -145,7 +141,7 @@ export const filterHiddenComponents = (diagram: DiagramState) => {
   return { ...diagram, nodes: shownNodes, edges: shownEdges };
 };
 
-export const layoutVisibleComponents = (diagram: DiagramState) => {
+export const layoutVisibleComponents = (diagram: Diagram) => {
   // filter
   const displayDiagram = filterHiddenComponents(diagram);
 
