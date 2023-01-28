@@ -14,13 +14,13 @@ import {
 } from "../utils/diagram";
 import { RelationName, canCreateEdge, getRelation } from "../utils/edge";
 import { NodeType } from "../utils/nodes";
-import { AllDiagramState, rootId, useDiagramStore } from "./store";
+import { DiagramStoreState, rootId, useDiagramStore } from "./store";
 
 export const getState = () => {
   return useDiagramStore.getState();
 };
 
-export const setState = (state: AllDiagramState) => {
+export const setState = (state: DiagramStoreState) => {
   useDiagramStore.setState(() => state);
 };
 
@@ -32,7 +32,7 @@ interface AddNodeProps {
 }
 
 const createAndConnectNode = (
-  state: AllDiagramState,
+  state: DiagramStoreState,
   { fromNodeId, as, toNodeType, relation }: AddNodeProps
 ) => {
   /* eslint-disable functional/immutable-data, no-param-reassign */
@@ -51,7 +51,7 @@ const createAndConnectNode = (
 
 // if adding a criterion, connect to solutions
 // if adding a solution, connect to criteria
-const connectCriteriaToSolutions = (state: AllDiagramState, newNode: Node, fromNode: Node) => {
+const connectCriteriaToSolutions = (state: DiagramStoreState, newNode: Node, fromNode: Node) => {
   const activeDiagram = state.diagrams[state.activeDiagramId];
 
   const targetRelation: RelationName = newNode.type === "criterion" ? "solves" : "criterion for";

@@ -17,7 +17,7 @@ const initialDiagrams: Record<string, Diagram> = {
   },
 };
 
-export interface AllDiagramState {
+export interface DiagramStoreState {
   diagrams: Record<string, Diagram>;
   activeDiagramId: string;
   nextNodeId: number;
@@ -33,7 +33,7 @@ const initialState = {
 
 // create atomic selectors for usage outside of store/ dir
 // this is only exported to allow actions to be extracted to a separate file
-export const useDiagramStore = create<AllDiagramState>()(
+export const useDiagramStore = create<DiagramStoreState>()(
   persist(immer(devtools(() => initialState)), {
     name: "diagram-storage",
     version: 3,
