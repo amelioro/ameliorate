@@ -24,11 +24,13 @@ declare module "@mui/material/styles" {
   interface Palette extends NodeTypePalettes {
     primaryVariantDark: Palette["primary"];
     primaryVariantLight: Palette["primary"];
+    neutral: Palette["primary"];
   }
 
   interface PaletteOptions extends NodeTypePaletteOptions {
     primaryVariantDark: PaletteOptions["primary"];
     primaryVariantLight: PaletteOptions["primary"];
+    neutral: PaletteOptions["primary"];
   }
 }
 
@@ -38,11 +40,13 @@ declare module "@mui/material" {
   interface ButtonPropsColorOverrides extends NodeTypeColors {
     primaryVariantDark: true;
     primaryVariantLight: true;
+    neutral: true;
   }
 
   interface AppBarPropsColorOverrides extends NodeTypeColors {
     primaryVariantDark: true;
     primaryVariantLight: true;
+    neutral: true;
   }
 }
 /* eslint-disable @typescript-eslint/no-empty-interface */
@@ -79,6 +83,7 @@ const sharedPalette = {
   primaryVariantLight: { main: "#82CE84" }, // 200 lower than primary on material design color tool
   // use black contrast text for consistency with other node colors; accessibility tool indicates black is still accessible
   secondary: { main: secondary, contrastText: "rgba(0, 0, 0, 0.87)" },
+  neutral: augmentColor({ color: { main: "#BDBDBD" } }), // gray is very neutral, somewhat arbitrarily chosen, no particular relation to the other colors
   problem: augmentColor({ color: { main: secondary, contrastText: "rgba(0, 0, 0, 0.87)" } }),
   solution: augmentColor({ color: { main: primary } }),
   criterion: augmentColor({ color: { main: "#4AB885" } }), // mint: analogous to solution; between solution & support because criteria are kind of like supports for solutions
