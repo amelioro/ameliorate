@@ -1,8 +1,9 @@
 import { Download, ExpandMore, Upload } from "@mui/icons-material";
-import { AppBar, Button, IconButton, Menu, MenuItem, Toolbar } from "@mui/material";
+import { AppBar, Button, IconButton, MenuItem, Toolbar } from "@mui/material";
 import fileDownload from "js-file-download";
-import { useState } from "react";
 
+import { Menu } from "../../../../common/components/Menu/Menu";
+import { useMenu } from "../../../../common/hooks";
 import { getState, setState } from "../../store/actions";
 import { DiagramStoreState } from "../../store/store";
 
@@ -40,10 +41,7 @@ const loadExample = (exampleFileName: string) => {
 export const TopicToolbar = () => {
   // TODO: figure out how to extract a MUI menu component whose menu items close the menu on click
   // in addition to the menu item's onClick handler
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const menuIsOpen = Boolean(anchorEl);
-  const openMenu = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
-  const closeMenu = () => setAnchorEl(null);
+  const [anchorEl, menuIsOpen, openMenu, closeMenu] = useMenu();
 
   return (
     <AppBar position="sticky" color="primaryVariantLight">
@@ -52,23 +50,9 @@ export const TopicToolbar = () => {
           Examples
           <ExpandMore />
         </Button>
-        <Menu anchorEl={anchorEl} open={menuIsOpen} onClose={closeMenu}>
-          <MenuItem
-            onClick={() => {
-              closeMenu();
-              loadExample("abortion.json");
-            }}
-          >
-            Abortion
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              closeMenu();
-              loadExample("world_hunger.json");
-            }}
-          >
-            World Hunger
-          </MenuItem>
+        <Menu anchorEl={anchorEl} isOpen={menuIsOpen} closeMenu={closeMenu}>
+          <MenuItem onClick={() => loadExample("abortion.json")}>Abortion</MenuItem>
+          <MenuItem onClick={() => loadExample("world_hunger.json")}>World Hunger</MenuItem>
         </Menu>
         <IconButton color="inherit" onClick={downloadTopic}>
           <Download />
