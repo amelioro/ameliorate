@@ -54,7 +54,7 @@ export const EditableNode = ({ id, data, type }: NodeProps) => {
           <NodeTypeSpan>{_.startCase(nodeType)}</NodeTypeSpan>
         </NodeTypeDiv>
         <IndicatorDiv>
-          <CriteriaIndicator nodeId={id} />
+          <CriteriaIndicator nodeId={id} diagramId={data.diagramId} />
           <ScoreDial scorableId={id} scorableType="node" score={data.score} />
         </IndicatorDiv>
       </YEdgeDiv>

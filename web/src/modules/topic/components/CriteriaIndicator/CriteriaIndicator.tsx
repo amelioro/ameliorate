@@ -7,11 +7,12 @@ import { Indicator } from "../Indicator/Indicator";
 
 interface Props {
   nodeId: string;
+  diagramId: string;
 }
 
-export const CriteriaIndicator = ({ nodeId }: Props) => {
-  const node = useNode(nodeId);
-  const nodeChildren = useNodeChildren(nodeId);
+export const CriteriaIndicator = ({ nodeId, diagramId }: Props) => {
+  const node = useNode(nodeId, diagramId);
+  const nodeChildren = useNodeChildren(nodeId, diagramId);
 
   const hasCriteria = nodeChildren.some((child) => child.type === "criterion");
 
