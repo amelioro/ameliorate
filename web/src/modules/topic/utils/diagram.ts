@@ -79,7 +79,7 @@ export const buildEdge = (
     markerStart: { type: MarkerType.ArrowClosed, width: 30, height: 30 },
     source: sourceNodeId,
     target: targetNodeId,
-    type: "ScoreEdge",
+    type: "ScoreEdge" as const,
   };
 };
 export type Edge = ReturnType<typeof buildEdge>;

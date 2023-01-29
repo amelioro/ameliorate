@@ -185,7 +185,7 @@ export const setScore = (scorableId: string, scorableType: ScorableType, score: 
       /* eslint-enable functional/immutable-data, no-param-reassign */
 
       // update parent scorable's score if this is a RootClaim
-      if (scorable.type === "RootClaim") {
+      if (scorable.type === "rootClaim") {
         const [parentScorableType, parentScorableId] = parseClaimDiagramId(state.activeDiagramId);
         const parentScorable = findScorable(
           state.diagrams[rootId], // assuming we won't support nested root claims, so parent will always be root
