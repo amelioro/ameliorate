@@ -28,6 +28,14 @@ export const resetState = () => {
   useDiagramStore.setState(initialState, false, "resetState");
 };
 
+export const undo = () => {
+  useDiagramStore.temporal.getState().undo();
+};
+
+export const redo = () => {
+  useDiagramStore.temporal.getState().redo();
+};
+
 interface AddNodeProps {
   fromNodeId: string;
   as: RelationDirection;

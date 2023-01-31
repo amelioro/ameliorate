@@ -1,10 +1,10 @@
-import { AutoStoriesOutlined, Download, ExpandMore, Upload } from "@mui/icons-material";
+import { AutoStoriesOutlined, Download, ExpandMore, Redo, Undo, Upload } from "@mui/icons-material";
 import { AppBar, Button, Divider, IconButton, MenuItem, Toolbar } from "@mui/material";
 import fileDownload from "js-file-download";
 
 import { Menu } from "../../../../common/components/Menu/Menu";
 import { useMenu } from "../../../../common/hooks";
-import { getState, resetState, setState } from "../../store/actions";
+import { getState, redo, resetState, setState, undo } from "../../store/actions";
 import { DiagramStoreState } from "../../store/store";
 
 // TODO: might be useful to have downloaded state be more human editable;
@@ -39,8 +39,6 @@ const loadExample = (exampleFileName: string) => {
 };
 
 export const TopicToolbar = () => {
-  // TODO: figure out how to extract a MUI menu component whose menu items close the menu on click
-  // in addition to the menu item's onClick handler
   const [anchorEl, menuIsOpen, openMenu, closeMenu] = useMenu();
 
   return (
@@ -64,6 +62,16 @@ export const TopicToolbar = () => {
 
         <Divider orientation="vertical" />
 
+        {/* TODO: disable undo/redo when there's nothing to undo/redo; right now can't use hooks for temporal state
+        because it doesn't work with persist middleware.
+        once this currently-in-progress PR merges, we should be able to do that easily!
+        https://github.com/charkour/zundo/pull/61 */}
+        <IconButton color="inherit" onClick={undo}>
+          <Undo />
+        </IconButton>
+        <IconButton color="inherit" onClick={redo}>
+          <Redo />
+        </IconButton>
         <IconButton color="inherit" onClick={resetState}>
           <AutoStoriesOutlined />
         </IconButton>
