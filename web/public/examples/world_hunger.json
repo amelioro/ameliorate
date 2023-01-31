@@ -5,14 +5,7 @@
         {
           "id": "0",
           "data": { "label": "world hunger", "score": "-", "width": 300, "diagramId": "root" },
-          "position": { "x": 1050, "y": 0 },
-          "selected": false,
-          "type": "problem"
-        },
-        {
-          "id": "1",
-          "data": { "label": "meta notes", "score": "-", "width": 300, "diagramId": "root" },
-          "position": { "x": 175, "y": 190 },
+          "position": { "x": 700, "y": 0 },
           "selected": false,
           "type": "problem"
         },
@@ -24,7 +17,7 @@
             "width": 300,
             "diagramId": "root"
           },
-          "position": { "x": 700, "y": 190 },
+          "position": { "x": 0, "y": 244 },
           "selected": false,
           "type": "problem"
         },
@@ -36,7 +29,7 @@
             "width": 300,
             "diagramId": "root"
           },
-          "position": { "x": 1050, "y": 190 },
+          "position": { "x": 350, "y": 244 },
           "selected": false,
           "type": "problem"
         },
@@ -48,7 +41,7 @@
             "width": 300,
             "diagramId": "root"
           },
-          "position": { "x": 1750, "y": 190 },
+          "position": { "x": 1050, "y": 244 },
           "selected": false,
           "type": "problem"
         },
@@ -60,21 +53,21 @@
             "width": 300,
             "diagramId": "root"
           },
-          "position": { "x": 2450, "y": 190 },
+          "position": { "x": 1750, "y": 244 },
           "selected": false,
           "type": "problem"
         },
         {
           "id": "6",
           "data": { "label": "send diplomats", "score": "-", "width": 300, "diagramId": "root" },
-          "position": { "x": 700, "y": 380 },
+          "position": { "x": 0, "y": 488 },
           "selected": false,
           "type": "solution"
         },
         {
           "id": "7",
           "data": { "label": "donate food", "score": "-", "width": 300, "diagramId": "root" },
-          "position": { "x": 1050, "y": 380 },
+          "position": { "x": 350, "y": 488 },
           "selected": false,
           "type": "solution"
         },
@@ -86,7 +79,7 @@
             "width": 300,
             "diagramId": "root"
           },
-          "position": { "x": 1400, "y": 380 },
+          "position": { "x": 700, "y": 488 },
           "selected": false,
           "type": "solution"
         },
@@ -98,14 +91,14 @@
             "width": 300,
             "diagramId": "root"
           },
-          "position": { "x": 1750, "y": 380 },
+          "position": { "x": 1050, "y": 488 },
           "selected": false,
           "type": "solution"
         },
         {
           "id": "10",
           "data": { "label": "train farmers", "score": "-", "width": 300, "diagramId": "root" },
-          "position": { "x": 2100, "y": 380 },
+          "position": { "x": 1400, "y": 488 },
           "selected": false,
           "type": "solution"
         },
@@ -117,45 +110,12 @@
             "width": 300,
             "diagramId": "root"
           },
-          "position": { "x": 2450, "y": 380 },
+          "position": { "x": 1750, "y": 488 },
           "selected": false,
           "type": "solution"
-        },
-        {
-          "id": "12",
-          "data": {
-            "label": "node removal needed",
-            "score": "-",
-            "width": 300,
-            "diagramId": "root"
-          },
-          "position": { "x": 0, "y": 380 },
-          "selected": false,
-          "type": "problem"
-        },
-        {
-          "id": "13",
-          "data": {
-            "label": "scoring more meaningful within regional context",
-            "score": "-",
-            "width": 300,
-            "diagramId": "root"
-          },
-          "position": { "x": 350, "y": 380 },
-          "selected": false,
-          "type": "problem"
         }
       ],
       "edges": [
-        {
-          "id": "0",
-          "data": { "score": "-" },
-          "source": "0",
-          "target": "1",
-          "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "label": "causes"
-        },
         {
           "id": "1",
           "data": { "score": "-" },
@@ -245,24 +205,6 @@
           "type": "ScoreEdge",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "label": "solves"
-        },
-        {
-          "id": "11",
-          "data": { "score": "-" },
-          "source": "1",
-          "target": "12",
-          "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "label": "causes"
-        },
-        {
-          "id": "12",
-          "data": { "score": "-" },
-          "source": "1",
-          "target": "13",
-          "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "label": "causes"
         }
       ],
       "type": "Problem"

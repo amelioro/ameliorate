@@ -1,0 +1,198 @@
+{
+  "diagrams": {
+    "root": {
+      "nodes": [
+        {
+          "id": "0",
+          "data": {
+            "label": "ameliorate annoying to use",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root",
+            "showCriteria": true
+          },
+          "position": { "x": 700, "y": 0 },
+          "selected": false,
+          "type": "problem"
+        },
+        {
+          "id": "2",
+          "data": {
+            "label": "smooth viewport transitions",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 0, "y": 244 },
+          "selected": false,
+          "type": "solution"
+        },
+        {
+          "id": "3",
+          "data": {
+            "label": "auto-pan when diagram mostly off page",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 350, "y": 244 },
+          "selected": false,
+          "type": "solution"
+        },
+        {
+          "id": "4",
+          "data": {
+            "label": "nodes positioned too widely when criteria involved",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root",
+            "showCriteria": true
+          },
+          "position": { "x": 700, "y": 244 },
+          "selected": false,
+          "type": "problem"
+        },
+        {
+          "id": "5",
+          "data": {
+            "label": "criteria make diagram too overwhelming",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root",
+            "showCriteria": true
+          },
+          "position": { "x": 1225, "y": 244 },
+          "selected": false,
+          "type": "problem"
+        },
+        {
+          "id": "6",
+          "data": {
+            "label": "criteria table view",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 1050, "y": 488 },
+          "selected": false,
+          "type": "solution"
+        },
+        {
+          "id": "7",
+          "data": {
+            "label": "improve layout algorithm",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 700, "y": 488 },
+          "selected": false,
+          "type": "solution"
+        },
+        {
+          "id": "8",
+          "data": {
+            "label": "elevate edges when node selected",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 1400, "y": 488 },
+          "selected": false,
+          "type": "solution"
+        },
+        {
+          "id": "9",
+          "data": {
+            "label": "score ux somewhat annoying",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root",
+            "showCriteria": true
+          },
+          "position": { "x": 1575, "y": 244 },
+          "selected": false,
+          "type": "problem"
+        }
+      ],
+      "edges": [
+        {
+          "id": "1",
+          "data": { "score": "-" },
+          "label": "solves",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "0",
+          "target": "2",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "2",
+          "data": { "score": "-" },
+          "label": "solves",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "0",
+          "target": "3",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "3",
+          "data": { "score": "-" },
+          "label": "causes",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "0",
+          "target": "4",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "4",
+          "data": { "score": "-" },
+          "label": "causes",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "0",
+          "target": "5",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "5",
+          "data": { "score": "-" },
+          "label": "solves",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "5",
+          "target": "6",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "6",
+          "data": { "score": "-" },
+          "label": "solves",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "4",
+          "target": "7",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "7",
+          "data": { "score": "-" },
+          "label": "solves",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "5",
+          "target": "8",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "8",
+          "data": { "score": "-" },
+          "label": "causes",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "0",
+          "target": "9",
+          "type": "ScoreEdge"
+        }
+      ],
+      "type": "Problem"
+    }
+  },
+  "activeDiagramId": "root",
+  "nextNodeId": 10,
+  "nextEdgeId": 9
+}

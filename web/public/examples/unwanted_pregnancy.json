@@ -1,0 +1,808 @@
+{
+  "diagrams": {
+    "root": {
+      "nodes": [
+        {
+          "id": "0",
+          "data": {
+            "label": "unwanted pregnancy",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root",
+            "showCriteria": false
+          },
+          "position": { "x": 525, "y": 0 },
+          "selected": false,
+          "type": "problem"
+        },
+        {
+          "id": "2",
+          "data": { "label": "abortion", "score": "8", "width": 300, "diagramId": "root" },
+          "position": { "x": 0, "y": 244 },
+          "selected": false,
+          "type": "solution"
+        },
+        {
+          "id": "3",
+          "data": { "label": "adoption", "score": "7", "width": 300, "diagramId": "root" },
+          "position": { "x": 350, "y": 244 },
+          "selected": false,
+          "type": "solution"
+        },
+        {
+          "id": "35",
+          "data": { "label": "safe for mother", "score": "-", "width": 300, "diagramId": "root" },
+          "position": { "x": 1760, "y": 244 },
+          "selected": false,
+          "type": "criterion"
+        },
+        {
+          "id": "36",
+          "data": {
+            "label": "inexpensive for mother",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 2110, "y": 244 },
+          "selected": false,
+          "type": "criterion"
+        },
+        {
+          "id": "38",
+          "data": { "label": "safe for child", "score": "-", "width": 300, "diagramId": "root" },
+          "position": { "x": 2460, "y": 244 },
+          "selected": false,
+          "type": "criterion"
+        },
+        {
+          "id": "39",
+          "data": { "label": "mother has choice", "score": "-", "width": 300, "diagramId": "root" },
+          "position": { "x": 2810, "y": 244 },
+          "selected": false,
+          "type": "criterion"
+        },
+        {
+          "id": "40",
+          "data": { "label": "father has choice", "score": "-", "width": 300, "diagramId": "root" },
+          "position": { "x": 3160, "y": 244 },
+          "selected": false,
+          "type": "criterion"
+        },
+        {
+          "id": "41",
+          "data": {
+            "label": "painless for mother",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 3510, "y": 244 },
+          "selected": false,
+          "type": "criterion"
+        },
+        {
+          "id": "42",
+          "data": {
+            "label": "inexpensive for society",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 3860, "y": 244 },
+          "selected": false,
+          "type": "criterion"
+        },
+        {
+          "id": "43",
+          "data": {
+            "label": "inexpensive for helpers",
+            "score": "-",
+            "width": 300,
+            "diagramId": "root"
+          },
+          "position": { "x": 4210, "y": 244 },
+          "selected": false,
+          "type": "criterion"
+        },
+        {
+          "id": "44",
+          "data": { "label": "sex education", "score": "8", "width": 300, "diagramId": "root" },
+          "position": { "x": 700, "y": 244 },
+          "selected": false,
+          "type": "solution"
+        },
+        {
+          "id": "45",
+          "data": { "label": "contraceptives", "score": "8", "width": 300, "diagramId": "root" },
+          "position": { "x": 1050, "y": 244 },
+          "selected": false,
+          "type": "solution"
+        }
+      ],
+      "edges": [
+        {
+          "id": "1",
+          "data": { "score": "7" },
+          "source": "0",
+          "target": "2",
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "solves"
+        },
+        {
+          "id": "2",
+          "data": { "score": "5" },
+          "source": "0",
+          "target": "3",
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "solves"
+        },
+        {
+          "id": "31",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "35",
+          "target": "2",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "32",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "35",
+          "target": "3",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "30",
+          "data": { "score": "-" },
+          "label": "criterion for",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "0",
+          "target": "35",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "34",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "36",
+          "target": "2",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "35",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "36",
+          "target": "3",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "33",
+          "data": { "score": "-" },
+          "label": "criterion for",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "0",
+          "target": "36",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "38",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "38",
+          "target": "2",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "39",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "38",
+          "target": "3",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "37",
+          "data": { "score": "-" },
+          "label": "criterion for",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "0",
+          "target": "38",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "41",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "39",
+          "target": "2",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "42",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "39",
+          "target": "3",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "40",
+          "data": { "score": "-" },
+          "label": "criterion for",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "0",
+          "target": "39",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "44",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "40",
+          "target": "2",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "45",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "40",
+          "target": "3",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "43",
+          "data": { "score": "-" },
+          "label": "criterion for",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "0",
+          "target": "40",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "47",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "41",
+          "target": "2",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "48",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "41",
+          "target": "3",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "46",
+          "data": { "score": "-" },
+          "label": "criterion for",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "0",
+          "target": "41",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "50",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "42",
+          "target": "2",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "51",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "42",
+          "target": "3",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "49",
+          "data": { "score": "-" },
+          "label": "criterion for",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "0",
+          "target": "42",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "53",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "43",
+          "target": "2",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "54",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "43",
+          "target": "3",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "52",
+          "data": { "score": "-" },
+          "label": "criterion for",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "0",
+          "target": "43",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "56",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "35",
+          "target": "44",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "57",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "36",
+          "target": "44",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "58",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "38",
+          "target": "44",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "59",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "39",
+          "target": "44",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "60",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "40",
+          "target": "44",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "61",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "41",
+          "target": "44",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "62",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "42",
+          "target": "44",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "63",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "43",
+          "target": "44",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "55",
+          "data": { "score": "-" },
+          "label": "solves",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "0",
+          "target": "44",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "65",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "35",
+          "target": "45",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "66",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "36",
+          "target": "45",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "67",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "38",
+          "target": "45",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "68",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "39",
+          "target": "45",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "69",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "40",
+          "target": "45",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "70",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "41",
+          "target": "45",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "71",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "42",
+          "target": "45",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "72",
+          "data": { "score": "-" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "43",
+          "target": "45",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "64",
+          "data": { "score": "-" },
+          "label": "solves",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "0",
+          "target": "45",
+          "type": "ScoreEdge"
+        }
+      ],
+      "type": "Problem"
+    },
+    "node-3": {
+      "nodes": [
+        {
+          "id": "16",
+          "data": {
+            "label": "\"adoption\" is important",
+            "score": "7",
+            "width": 300,
+            "diagramId": "node-3"
+          },
+          "position": { "x": 0, "y": 70 },
+          "selected": false,
+          "type": "rootClaim"
+        },
+        {
+          "id": "17",
+          "data": {
+            "label": "some people can't have kids otherwise",
+            "score": "-",
+            "width": 300,
+            "diagramId": "node-3"
+          },
+          "position": { "x": 560, "y": 0 },
+          "selected": false,
+          "type": "support"
+        },
+        {
+          "id": "18",
+          "data": {
+            "label": "some kids are really mean",
+            "score": "2",
+            "width": 300,
+            "diagramId": "node-3"
+          },
+          "position": { "x": 560, "y": 140 },
+          "selected": false,
+          "type": "critique"
+        }
+      ],
+      "edges": [
+        {
+          "id": "15",
+          "data": { "score": "-" },
+          "source": "16",
+          "target": "17",
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "supports"
+        },
+        {
+          "id": "16",
+          "data": { "score": "-" },
+          "source": "16",
+          "target": "18",
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "critiques"
+        }
+      ],
+      "type": "Claim"
+    },
+    "node-2": {
+      "nodes": [
+        {
+          "id": "19",
+          "data": {
+            "label": "\"abortion\" is important",
+            "score": "8",
+            "width": 300,
+            "diagramId": "node-2"
+          },
+          "position": { "x": 0, "y": 280 },
+          "selected": false,
+          "type": "rootClaim"
+        },
+        {
+          "id": "20",
+          "data": {
+            "label": "less risk to mother",
+            "score": "-",
+            "width": 300,
+            "diagramId": "node-2"
+          },
+          "position": { "x": 560, "y": 0 },
+          "selected": false,
+          "type": "support"
+        },
+        {
+          "id": "21",
+          "data": {
+            "label": "less pain for mother",
+            "score": "-",
+            "width": 300,
+            "diagramId": "node-2"
+          },
+          "position": { "x": 560, "y": 140 },
+          "selected": false,
+          "type": "support"
+        },
+        {
+          "id": "22",
+          "data": { "label": "bodily autonomy", "score": "-", "width": 300, "diagramId": "node-2" },
+          "position": { "x": 560, "y": 280 },
+          "selected": false,
+          "type": "support"
+        },
+        {
+          "id": "23",
+          "data": {
+            "label": "violates life rights of fetus",
+            "score": "-",
+            "width": 300,
+            "diagramId": "node-2"
+          },
+          "position": { "x": 560, "y": 420 },
+          "selected": false,
+          "type": "critique"
+        },
+        {
+          "id": "24",
+          "data": {
+            "label": "men should have stake as well",
+            "score": "-",
+            "width": 300,
+            "diagramId": "node-2"
+          },
+          "position": { "x": 560, "y": 560 },
+          "selected": false,
+          "type": "critique"
+        }
+      ],
+      "edges": [
+        {
+          "id": "17",
+          "data": { "score": "-" },
+          "source": "19",
+          "target": "20",
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "supports"
+        },
+        {
+          "id": "18",
+          "data": { "score": "-" },
+          "source": "19",
+          "target": "21",
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "supports"
+        },
+        {
+          "id": "19",
+          "data": { "score": "-" },
+          "source": "19",
+          "target": "22",
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "supports"
+        },
+        {
+          "id": "20",
+          "data": { "score": "-" },
+          "source": "19",
+          "target": "23",
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "critiques"
+        },
+        {
+          "id": "21",
+          "data": { "score": "-" },
+          "source": "19",
+          "target": "24",
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "critiques"
+        }
+      ],
+      "type": "Claim"
+    },
+    "edge-1": {
+      "nodes": [
+        {
+          "id": "25",
+          "data": {
+            "label": "\"abortion\" solves \"unwanted pregnancy\"",
+            "score": "7",
+            "width": 300,
+            "diagramId": "edge-1"
+          },
+          "position": { "x": 0, "y": 0 },
+          "selected": false,
+          "type": "rootClaim"
+        },
+        {
+          "id": "26",
+          "data": {
+            "label": "some cases too late for abortion",
+            "score": "-",
+            "width": 300,
+            "diagramId": "edge-1"
+          },
+          "position": { "x": 560, "y": 0 },
+          "selected": false,
+          "type": "critique"
+        }
+      ],
+      "edges": [
+        {
+          "id": "22",
+          "data": { "score": "-" },
+          "source": "25",
+          "target": "26",
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "critiques"
+        }
+      ],
+      "type": "Claim"
+    },
+    "edge-2": {
+      "nodes": [
+        {
+          "id": "27",
+          "data": {
+            "label": "\"adoption\" solves \"unwanted pregnancy\"",
+            "score": "5",
+            "width": 300,
+            "diagramId": "edge-2"
+          },
+          "position": { "x": 0, "y": 70 },
+          "selected": false,
+          "type": "rootClaim"
+        },
+        {
+          "id": "28",
+          "data": {
+            "label": "doesn't interfere with birth",
+            "score": "-",
+            "width": 300,
+            "diagramId": "edge-2"
+          },
+          "position": { "x": 560, "y": 0 },
+          "selected": false,
+          "type": "support"
+        },
+        {
+          "id": "29",
+          "data": {
+            "label": "mother still goes through pregnancy pains & costs",
+            "score": "-",
+            "width": 300,
+            "diagramId": "edge-2"
+          },
+          "position": { "x": 560, "y": 140 },
+          "selected": false,
+          "type": "critique"
+        }
+      ],
+      "edges": [
+        {
+          "id": "23",
+          "data": { "score": "-" },
+          "source": "27",
+          "target": "28",
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "supports"
+        },
+        {
+          "id": "24",
+          "data": { "score": "-" },
+          "source": "27",
+          "target": "29",
+          "type": "ScoreEdge",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "label": "critiques"
+        }
+      ],
+      "type": "Claim"
+    }
+  },
+  "activeDiagramId": "root",
+  "nextNodeId": 46,
+  "nextEdgeId": 73
+}
