@@ -28,6 +28,8 @@ export const EditableNode = ({ id, data, type }: NodeProps) => {
   const diagramType = useDiagramType(data.diagramId);
   const theme = useTheme();
 
+  if (!diagramType) return <></>;
+
   const orientation = orientations[diagramType];
 
   const nodeType = type as NodeType; // we always pass a NodeType from the diagram, but I'm not sure how to override react-flow's type to tell it that
@@ -54,7 +56,7 @@ export const EditableNode = ({ id, data, type }: NodeProps) => {
           <NodeTypeSpan>{_.startCase(nodeType)}</NodeTypeSpan>
         </NodeTypeDiv>
         <IndicatorDiv>
-          <CriteriaIndicator nodeId={id} />
+          <CriteriaIndicator nodeId={id} diagramId={data.diagramId} />
           <ScoreDial scorableId={id} scorableType="node" score={data.score} />
         </IndicatorDiv>
       </YEdgeDiv>

@@ -66,3 +66,7 @@ export const onlyParent = (node: Node, diagram: Diagram) => {
 
   return allParents[0];
 };
+
+export const edges = (node: Node, diagram: Diagram) => {
+  return diagram.edges.filter((edge) => edge.source === node.id || edge.target === node.id);
+};

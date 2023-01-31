@@ -13,7 +13,7 @@ import {
   layoutVisibleComponents,
 } from "../utils/diagram";
 import { RelationName, canCreateEdge, getRelation } from "../utils/edge";
-import { NodeType } from "../utils/nodes";
+import { NodeType, edges } from "../utils/nodes";
 import { DiagramStoreState, rootId, useDiagramStore } from "./store";
 
 export const getState = () => {
@@ -185,7 +185,7 @@ export const setScore = (scorableId: string, scorableType: ScorableType, score: 
       /* eslint-enable functional/immutable-data, no-param-reassign */
 
       // update parent scorable's score if this is a RootClaim
-      if (scorable.type === "RootClaim") {
+      if (scorable.type === "rootClaim") {
         const [parentScorableType, parentScorableId] = parseClaimDiagramId(state.activeDiagramId);
         const parentScorable = findScorable(
           state.diagrams[rootId], // assuming we won't support nested root claims, so parent will always be root
@@ -215,7 +215,7 @@ export const setScore = (scorableId: string, scorableType: ScorableType, score: 
   );
 };
 
-const doesDiagramExist = (diagramId: string) => {
+export const doesDiagramExist = (diagramId: string) => {
   return Object.keys(useDiagramStore.getState().diagrams).includes(diagramId);
 };
 
@@ -301,6 +301,44 @@ export const toggleShowCriteria = (nodeId: string) => {
       /* eslint-enable functional/immutable-data, no-param-reassign */
 
       const layoutedDiagram = layoutVisibleComponents(activeDiagram); // depends on showCriteria having been updated
+
+      /* eslint-disable functional/immutable-data, no-param-reassign */
+      activeDiagram.nodes = layoutedDiagram.nodes;
+      activeDiagram.edges = layoutedDiagram.edges;
+      /* eslint-enable functional/immutable-data, no-param-reassign */
+    },
+    false,
+    "toggleShowCriteria"
+  );
+};
+
+export const deleteNode = (nodeId: string) => {
+  useDiagramStore.setState(
+    (state) => {
+      const activeDiagram = state.diagrams[state.activeDiagramId];
+
+      const node = findNode(activeDiagram, nodeId);
+
+      if (node.type === "rootClaim") {
+        /* eslint-disable functional/immutable-data, no-param-reassign */
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete -- consider using a map instead of an object?
+        delete state.diagrams[state.activeDiagramId];
+        state.activeDiagramId = rootId;
+        /* eslint-enable functional/immutable-data, no-param-reassign */
+        return;
+      }
+
+      const nodeEdges = edges(node, activeDiagram);
+      const childDiagramId = getClaimDiagramId(node.id, "node");
+
+      /* eslint-disable functional/immutable-data, no-param-reassign */
+      activeDiagram.nodes = activeDiagram.nodes.filter((node) => node.id !== nodeId);
+      activeDiagram.edges = activeDiagram.edges.filter((edge) => !nodeEdges.includes(edge));
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete -- consider using a map instead of an object?
+      delete state.diagrams[childDiagramId];
+      /* eslint-enable functional/immutable-data, no-param-reassign */
+
+      const layoutedDiagram = layoutVisibleComponents(activeDiagram);
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
       activeDiagram.nodes = layoutedDiagram.nodes;
