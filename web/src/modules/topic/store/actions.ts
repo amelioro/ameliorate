@@ -14,7 +14,7 @@ import {
 } from "../utils/diagram";
 import { RelationName, canCreateEdge, getRelation } from "../utils/edge";
 import { NodeType, edges } from "../utils/nodes";
-import { DiagramStoreState, rootId, useDiagramStore } from "./store";
+import { DiagramStoreState, initialState, rootId, useDiagramStore } from "./store";
 
 export const getState = () => {
   return useDiagramStore.getState();
@@ -22,6 +22,10 @@ export const getState = () => {
 
 export const setState = (state: DiagramStoreState) => {
   useDiagramStore.setState(() => state);
+};
+
+export const resetState = () => {
+  useDiagramStore.setState(initialState, false, "resetState");
 };
 
 interface AddNodeProps {

@@ -25,7 +25,7 @@ export interface DiagramStoreState {
   nextEdgeId: number;
 }
 
-const initialState = {
+export const initialState = {
   diagrams: initialDiagrams,
   activeDiagramId: rootId,
   nextNodeId: 1, // 0 is taken by the initial node

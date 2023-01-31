@@ -1,10 +1,10 @@
-import { Download, ExpandMore, Upload } from "@mui/icons-material";
-import { AppBar, Button, IconButton, MenuItem, Toolbar } from "@mui/material";
+import { AutoStoriesOutlined, Download, ExpandMore, Upload } from "@mui/icons-material";
+import { AppBar, Button, Divider, IconButton, MenuItem, Toolbar } from "@mui/material";
 import fileDownload from "js-file-download";
 
 import { Menu } from "../../../../common/components/Menu/Menu";
 import { useMenu } from "../../../../common/hooks";
-import { getState, setState } from "../../store/actions";
+import { getState, resetState, setState } from "../../store/actions";
 import { DiagramStoreState } from "../../store/store";
 
 // TODO: might be useful to have downloaded state be more human editable;
@@ -60,6 +60,12 @@ export const TopicToolbar = () => {
         <IconButton color="inherit" component="label">
           <Upload />
           <input hidden accept=".json" type="file" onChange={uploadTopic} />
+        </IconButton>
+
+        <Divider orientation="vertical" />
+
+        <IconButton color="inherit" onClick={resetState}>
+          <AutoStoriesOutlined />
         </IconButton>
       </Toolbar>
     </AppBar>
