@@ -215,7 +215,7 @@ export const setScore = (scorableId: string, scorableType: ScorableType, score: 
   );
 };
 
-const doesDiagramExist = (diagramId: string) => {
+export const doesDiagramExist = (diagramId: string) => {
   return Object.keys(useDiagramStore.getState().diagrams).includes(diagramId);
 };
 

@@ -16,7 +16,7 @@ export const CriteriaIndicator = ({ nodeId, diagramId }: Props) => {
 
   const hasCriteria = nodeChildren.some((child) => child.type === "criterion");
 
-  if (node.type !== "problem" || !hasCriteria) {
+  if (node === null || node.type !== "problem" || !hasCriteria) {
     return <></>;
   }
 
