@@ -1,4 +1,6 @@
+import { throttle } from "lodash";
 import { useContext } from "react";
+import { temporal } from "zundo";
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
@@ -35,11 +37,22 @@ export const initialState = {
 // create atomic selectors for usage outside of store/ dir
 // this is only exported to allow actions to be extracted to a separate file
 export const useDiagramStore = create<DiagramStoreState>()(
-  persist(immer(devtools(() => initialState)), {
-    name: "diagram-storage",
-    version: 3,
-    migrate: migrate,
-  })
+  temporal(
+    persist(immer(devtools(() => initialState)), {
+      name: "diagram-storage",
+      version: 3,
+      migrate: migrate,
+    }),
+    {
+      // throttle temporal storage to group many rapid changes into one
+      // specific use case is for when typing in a node, to prevent each letter change from being stored
+      handleSet: (handleSet) => {
+        return throttle<typeof handleSet>((state) => {
+          handleSet(state);
+        }, 1000);
+      },
+    }
+  )
 );
 
 // create atomic selectors for usage outside of store/ dir
