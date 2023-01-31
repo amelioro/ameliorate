@@ -39,8 +39,6 @@ const loadExample = (exampleFileName: string) => {
 };
 
 export const TopicToolbar = () => {
-  // TODO: figure out how to extract a MUI menu component whose menu items close the menu on click
-  // in addition to the menu item's onClick handler
   const [anchorEl, menuIsOpen, openMenu, closeMenu] = useMenu();
 
   return (
