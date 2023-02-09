@@ -14,26 +14,26 @@ import {
 } from "../utils/diagram";
 import { RelationName, canCreateEdge, getRelation } from "../utils/edge";
 import { NodeType, edges } from "../utils/nodes";
-import { DiagramStoreState, initialState, rootId, useDiagramStore } from "./store";
+import { TopicStoreState, initialState, rootId, useTopicStore } from "./store";
 
 export const getState = () => {
-  return useDiagramStore.getState();
+  return useTopicStore.getState();
 };
 
-export const setState = (state: DiagramStoreState) => {
-  useDiagramStore.setState(() => state);
+export const setState = (state: TopicStoreState) => {
+  useTopicStore.setState(() => state);
 };
 
 export const resetState = () => {
-  useDiagramStore.setState(initialState, false, "resetState");
+  useTopicStore.setState(initialState, false, "resetState");
 };
 
 export const undo = () => {
-  useDiagramStore.temporal.getState().undo();
+  useTopicStore.temporal.getState().undo();
 };
 
 export const redo = () => {
-  useDiagramStore.temporal.getState().redo();
+  useTopicStore.temporal.getState().redo();
 };
 
 interface AddNodeProps {
@@ -44,7 +44,7 @@ interface AddNodeProps {
 }
 
 const createAndConnectNode = (
-  state: DiagramStoreState,
+  state: TopicStoreState,
   { fromNodeId, as, toNodeType, relation }: AddNodeProps
 ) => {
   /* eslint-disable functional/immutable-data, no-param-reassign */
@@ -63,7 +63,7 @@ const createAndConnectNode = (
 
 // if adding a criterion, connect to solutions
 // if adding a solution, connect to criteria
-const connectCriteriaToSolutions = (state: DiagramStoreState, newNode: Node, fromNode: Node) => {
+const connectCriteriaToSolutions = (state: TopicStoreState, newNode: Node, fromNode: Node) => {
   const activeDiagram = state.diagrams[state.activeDiagramId];
 
   const targetRelation: RelationName = newNode.type === "criterion" ? "solves" : "criterion for";
@@ -89,7 +89,7 @@ const connectCriteriaToSolutions = (state: DiagramStoreState, newNode: Node, fro
 // trying to keep state changes directly within this method,
 // but wasn't sure how to cleanly handle next node/edge id's without letting invoked methods use & mutate state for them
 export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) => {
-  useDiagramStore.setState(
+  useTopicStore.setState(
     (state) => {
       const activeDiagram = state.diagrams[state.activeDiagramId];
       const fromNode = findNode(activeDiagram, fromNodeId);
@@ -129,7 +129,7 @@ export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) 
 };
 
 export const connectNodes = (parentId: string | null, childId: string | null) => {
-  useDiagramStore.setState(
+  useTopicStore.setState(
     (state) => {
       const activeDiagram = state.diagrams[state.activeDiagramId];
 
@@ -161,7 +161,7 @@ export const connectNodes = (parentId: string | null, childId: string | null) =>
 };
 
 export const deselectNodes = () => {
-  useDiagramStore.setState(
+  useTopicStore.setState(
     (state) => {
       const activeDiagram = state.diagrams[state.activeDiagramId];
 
@@ -187,7 +187,7 @@ export const deselectNodes = () => {
 // keeping this in sync manually ain't great.
 // TODO: store scores in one place
 export const setScore = (scorableId: string, scorableType: ScorableType, score: Score) => {
-  useDiagramStore.setState(
+  useTopicStore.setState(
     (state) => {
       // update this node's score
       const activeDiagram = state.diagrams[state.activeDiagramId];
@@ -228,11 +228,11 @@ export const setScore = (scorableId: string, scorableType: ScorableType, score: 
 };
 
 export const doesDiagramExist = (diagramId: string) => {
-  return Object.keys(useDiagramStore.getState().diagrams).includes(diagramId);
+  return Object.keys(useTopicStore.getState().diagrams).includes(diagramId);
 };
 
 export const setOrCreateActiveDiagram = (scorableId: string, scorableType: ScorableType) => {
-  useDiagramStore.setState(
+  useTopicStore.setState(
     (state) => {
       const diagramId = getClaimDiagramId(scorableId, scorableType);
 
@@ -269,7 +269,7 @@ export const setOrCreateActiveDiagram = (scorableId: string, scorableType: Scora
 };
 
 export const setActiveDiagram = (diagramId: string) => {
-  useDiagramStore.setState(
+  useTopicStore.setState(
     (state) => {
       if (!doesDiagramExist(diagramId)) {
         throw new Error("diagram does not exist");
@@ -285,7 +285,7 @@ export const setActiveDiagram = (diagramId: string) => {
 };
 
 export const setNodeLabel = (nodeId: string, value: string) => {
-  useDiagramStore.setState(
+  useTopicStore.setState(
     (state) => {
       const activeDiagram = state.diagrams[state.activeDiagramId];
       const node = findNode(activeDiagram, nodeId);
@@ -300,7 +300,7 @@ export const setNodeLabel = (nodeId: string, value: string) => {
 };
 
 export const toggleShowCriteria = (nodeId: string) => {
-  useDiagramStore.setState(
+  useTopicStore.setState(
     (state) => {
       const activeDiagram = state.diagrams[state.activeDiagramId];
 
@@ -325,7 +325,7 @@ export const toggleShowCriteria = (nodeId: string) => {
 };
 
 export const deleteNode = (nodeId: string) => {
-  useDiagramStore.setState(
+  useTopicStore.setState(
     (state) => {
       const activeDiagram = state.diagrams[state.activeDiagramId];
 

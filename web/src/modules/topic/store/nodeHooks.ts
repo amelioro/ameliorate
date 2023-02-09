@@ -1,9 +1,9 @@
 import { findNode } from "../utils/diagram";
 import { children } from "../utils/nodes";
-import { useDiagramStoreAfterHydration } from "./store";
+import { useTopicStoreAfterHydration } from "./store";
 
 export const useNode = (nodeId: string, diagramId: string) => {
-  return useDiagramStoreAfterHydration((state) => {
+  return useTopicStoreAfterHydration((state) => {
     const diagram = state.diagrams[diagramId];
 
     // wrap in try/catch because findNode will error when useNode is triggered by a node deletion (zombie child issue)
@@ -16,7 +16,7 @@ export const useNode = (nodeId: string, diagramId: string) => {
 };
 
 export const useNodeChildren = (nodeId: string, diagramId: string) => {
-  return useDiagramStoreAfterHydration((state) => {
+  return useTopicStoreAfterHydration((state) => {
     const diagram = state.diagrams[diagramId];
 
     // wrap in try/catch because findNode will error when useNode is triggered by a node deletion (zombie child issue)

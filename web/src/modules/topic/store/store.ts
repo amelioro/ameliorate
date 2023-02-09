@@ -20,7 +20,7 @@ const initialDiagrams: Record<string, Diagram> = {
   },
 };
 
-export interface DiagramStoreState {
+export interface TopicStoreState {
   diagrams: Record<string, Diagram>;
   activeDiagramId: string;
   nextNodeId: number;
@@ -36,10 +36,10 @@ export const initialState = {
 
 // create atomic selectors for usage outside of store/ dir
 // this is only exported to allow actions to be extracted to a separate file
-export const useDiagramStore = create<DiagramStoreState>()(
+export const useTopicStore = create<TopicStoreState>()(
   temporal(
     persist(immer(devtools(() => initialState)), {
-      name: "diagram-storage",
+      name: "diagram-storage", // should probably be "topic-storage" but don't know how to migrate
       version: 3,
       migrate: migrate,
     }),
@@ -57,14 +57,14 @@ export const useDiagramStore = create<DiagramStoreState>()(
 
 // create atomic selectors for usage outside of store/ dir
 // this is only exported to allow hooks to be extracted to a separate file
-export const useDiagramStoreAfterHydration = ((selector, compare) => {
+export const useTopicStoreAfterHydration = ((selector, compare) => {
   /*
   This a fix to ensure zustand never hydrates the store before React hydrates the page.
   Without this, there is a mismatch between SSR/SSG and client side on first draw which produces
   an error.
   Thanks https://github.com/pmndrs/zustand/issues/1145#issuecomment-1247061387
    */
-  const store = useDiagramStore(selector, compare);
+  const store = useTopicStore(selector, compare);
 
   // unfortunately, useEffect triggers on first render of every component using this,
   // so when the page has already been loaded, any new component will be rendered for the first time with
@@ -73,20 +73,20 @@ export const useDiagramStoreAfterHydration = ((selector, compare) => {
   const isHydrated = useContext(HydrationContext);
 
   return isHydrated ? store : selector(initialState);
-}) as typeof useDiagramStore;
+}) as typeof useTopicStore;
 
 export const useActiveDiagramId = () => {
-  return useDiagramStoreAfterHydration((state) => state.activeDiagramId);
+  return useTopicStoreAfterHydration((state) => state.activeDiagramId);
 };
 
 export const useFilteredActiveDiagram = () => {
-  return useDiagramStoreAfterHydration((state) =>
+  return useTopicStoreAfterHydration((state) =>
     filterHiddenComponents(state.diagrams[state.activeDiagramId])
   );
 };
 
 export const useDiagramType = (diagramId: string) => {
-  return useDiagramStoreAfterHydration((state) => {
+  return useTopicStoreAfterHydration((state) => {
     // Zombie child issue, see https://github.com/pmndrs/zustand/issues/302
     // batchedUpdates isn't necessary because react already batches updates as of react 18
     // Batching doesn't fix this though because the error isn't when rendering, it's when checking the store's comparers
@@ -96,11 +96,11 @@ export const useDiagramType = (diagramId: string) => {
 };
 
 export const useRootTitle = () => {
-  return useDiagramStoreAfterHydration((state) => state.diagrams[rootId].nodes[0].data.label);
+  return useTopicStoreAfterHydration((state) => state.diagrams[rootId].nodes[0].data.label);
 };
 
 export const useClaimDiagramIdentifiers = () => {
-  return useDiagramStoreAfterHydration((state) =>
+  return useTopicStoreAfterHydration((state) =>
     Object.entries(state.diagrams)
       .filter(([id, _]) => id !== rootId)
       .map(([id, diagram]) => [id, diagram.nodes[0].data.label])
@@ -108,5 +108,5 @@ export const useClaimDiagramIdentifiers = () => {
 };
 
 export const useDoesDiagramExist = (diagramId: string) => {
-  return useDiagramStoreAfterHydration((state) => Object.keys(state.diagrams).includes(diagramId));
+  return useTopicStoreAfterHydration((state) => Object.keys(state.diagrams).includes(diagramId));
 };
