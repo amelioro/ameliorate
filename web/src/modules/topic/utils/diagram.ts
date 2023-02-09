@@ -107,7 +107,7 @@ export const findScorable = (diagram: Diagram, scorableId: string, scorableType:
   return scorableType === "node" ? findNode(diagram, scorableId) : findEdge(diagram, scorableId);
 };
 
-export const filterHiddenComponents = (diagram: Diagram) => {
+export const filterHiddenComponents = (diagram: Diagram): Diagram => {
   const shownNodes = diagram.nodes.filter((node) => {
     if (node.type !== "criterion") {
       return true;
