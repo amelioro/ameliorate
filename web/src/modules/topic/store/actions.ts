@@ -14,7 +14,7 @@ import {
 } from "../utils/diagram";
 import { RelationName, canCreateEdge, getRelation } from "../utils/edge";
 import { NodeType, edges } from "../utils/nodes";
-import { TopicStoreState, initialState, rootId, useTopicStore } from "./store";
+import { TopicStoreState, initialState, problemDiagramId, useTopicStore } from "./store";
 
 export const getState = () => {
   return useTopicStore.getState();
@@ -200,7 +200,7 @@ export const setScore = (scorableId: string, scorableType: ScorableType, score: 
       if (scorable.type === "rootClaim") {
         const [parentScorableType, parentScorableId] = parseClaimDiagramId(state.activeDiagramId);
         const parentScorable = findScorable(
-          state.diagrams[rootId], // assuming we won't support nested root claims, so parent will always be root
+          state.diagrams[problemDiagramId], // assuming we won't support nested root claims, so parent will always be root
           parentScorableId,
           parentScorableType
         );
@@ -335,7 +335,7 @@ export const deleteNode = (nodeId: string) => {
         /* eslint-disable functional/immutable-data, no-param-reassign */
         // eslint-disable-next-line @typescript-eslint/no-dynamic-delete -- consider using a map instead of an object?
         delete state.diagrams[state.activeDiagramId];
-        state.activeDiagramId = rootId;
+        state.activeDiagramId = problemDiagramId;
         /* eslint-enable functional/immutable-data, no-param-reassign */
         return;
       }

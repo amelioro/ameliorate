@@ -13,7 +13,7 @@ import {
 import { ContextMenu } from "../../../../common/components/Menu/Menu";
 import { openContextMenu } from "../../../../common/store/contextMenuActions";
 import { connectNodes, deselectNodes, setActiveDiagram } from "../../store/actions";
-import { rootId, useActiveDiagramId, useFilteredActiveDiagram } from "../../store/store";
+import { problemDiagramId, useActiveDiagramId, useFilteredActiveDiagram } from "../../store/store";
 import { type Edge, type Node } from "../../utils/diagram";
 import { type NodeType } from "../../utils/nodes";
 import { EditableNode } from "../EditableNode/EditableNode";
@@ -58,9 +58,9 @@ export const Diagram = () => {
   const nodes = activeDiagram.nodes;
   const edges = activeDiagram.edges;
 
-  const showCloseButton = activeDiagramId != rootId;
+  const showCloseButton = activeDiagramId != problemDiagramId;
   const closeButton = (
-    <PositionedIconButton onClick={() => setActiveDiagram(rootId)} color="primary">
+    <PositionedIconButton onClick={() => setActiveDiagram(problemDiagramId)} color="primary">
       <Cancel />
     </PositionedIconButton>
   );

@@ -12,7 +12,7 @@ import { useState } from "react";
 
 import { setActiveDiagram } from "../../store/actions";
 import {
-  rootId,
+  problemDiagramId,
   useActiveDiagramId,
   useClaimDiagramIdentifiers,
   useRootTitle,
@@ -57,8 +57,8 @@ export const TopicPane = () => {
           <List>
             <ListItem key="1" disablePadding>
               <StyledListItemButton
-                selected={activeDiagramId === rootId}
-                onClick={() => setActiveDiagram(rootId)}
+                selected={activeDiagramId === problemDiagramId}
+                onClick={() => setActiveDiagram(problemDiagramId)}
               >
                 <ListItemIcon>
                   <AutoStories />

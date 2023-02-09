@@ -11,10 +11,11 @@ import { doesDiagramExist } from "./actions";
 import { migrate } from "./migrate";
 
 export const rootId = "root";
+export const problemDiagramId = "root";
 
 const initialDiagrams: Record<string, Diagram> = {
-  [rootId]: {
-    nodes: [buildNode({ id: "0", type: "problem", diagramId: rootId })],
+  [problemDiagramId]: {
+    nodes: [buildNode({ id: "0", type: "problem", diagramId: problemDiagramId })],
     edges: [],
     type: "Problem",
   },
@@ -29,7 +30,7 @@ export interface TopicStoreState {
 
 export const initialState = {
   diagrams: initialDiagrams,
-  activeDiagramId: rootId,
+  activeDiagramId: problemDiagramId,
   nextNodeId: 1, // 0 is taken by the initial node
   nextEdgeId: 0,
 };
@@ -96,13 +97,15 @@ export const useDiagramType = (diagramId: string) => {
 };
 
 export const useRootTitle = () => {
-  return useTopicStoreAfterHydration((state) => state.diagrams[rootId].nodes[0].data.label);
+  return useTopicStoreAfterHydration(
+    (state) => state.diagrams[problemDiagramId].nodes[0].data.label
+  );
 };
 
 export const useClaimDiagramIdentifiers = () => {
   return useTopicStoreAfterHydration((state) =>
     Object.entries(state.diagrams)
-      .filter(([id, _]) => id !== rootId)
+      .filter(([id, _]) => id !== problemDiagramId)
       .map(([id, diagram]) => [id, diagram.nodes[0].data.label])
   );
 };
