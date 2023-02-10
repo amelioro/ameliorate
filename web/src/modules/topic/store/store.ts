@@ -15,6 +15,7 @@ export const problemDiagramId = "root";
 
 const initialDiagrams: Record<string, Diagram> = {
   [problemDiagramId]: {
+    id: problemDiagramId,
     nodes: [buildNode({ id: "0", type: "problem", diagramId: problemDiagramId })],
     edges: [],
     type: "Problem",
@@ -24,13 +25,15 @@ const initialDiagrams: Record<string, Diagram> = {
 export interface TopicStoreState {
   diagrams: Record<string, Diagram>;
   activeDiagramId: string;
+  activeClaimDiagramId: string | null;
   nextNodeId: number;
   nextEdgeId: number;
 }
 
-export const initialState = {
+export const initialState: TopicStoreState = {
   diagrams: initialDiagrams,
   activeDiagramId: problemDiagramId,
+  activeClaimDiagramId: null,
   nextNodeId: 1, // 0 is taken by the initial node
   nextEdgeId: 0,
 };
@@ -76,14 +79,8 @@ export const useTopicStoreAfterHydration = ((selector, compare) => {
   return isHydrated ? store : selector(initialState);
 }) as typeof useTopicStore;
 
-export const useActiveDiagramId = () => {
-  return useTopicStoreAfterHydration((state) => state.activeDiagramId);
-};
-
-export const useFilteredActiveDiagram = () => {
-  return useTopicStoreAfterHydration((state) =>
-    filterHiddenComponents(state.diagrams[state.activeDiagramId])
-  );
+export const useFilteredDiagram = (diagramId: string) => {
+  return useTopicStoreAfterHydration((state) => filterHiddenComponents(state.diagrams[diagramId]));
 };
 
 export const useDiagramType = (diagramId: string) => {
@@ -96,10 +93,19 @@ export const useDiagramType = (diagramId: string) => {
   });
 };
 
+// topic view id is the claim or problem diagram id
+export const useTopicViewId = () => {
+  return useTopicStoreAfterHydration((state) => state.activeClaimDiagramId ?? problemDiagramId);
+};
+
 export const useRootTitle = () => {
   return useTopicStoreAfterHydration(
     (state) => state.diagrams[problemDiagramId].nodes[0].data.label
   );
+};
+
+export const useActiveClaimDiagramId = () => {
+  return useTopicStoreAfterHydration((state) => state.activeClaimDiagramId);
 };
 
 export const useClaimDiagramIdentifiers = () => {

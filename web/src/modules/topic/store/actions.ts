@@ -36,6 +36,11 @@ export const redo = () => {
   useTopicStore.temporal.getState().redo();
 };
 
+const getActiveDiagram = (state: TopicStoreState) => {
+  const activeDiagramId = state.activeClaimDiagramId ?? problemDiagramId;
+  return state.diagrams[activeDiagramId];
+};
+
 interface AddNodeProps {
   fromNodeId: string;
   as: RelationDirection;
@@ -52,7 +57,8 @@ const createAndConnectNode = (
   const newEdgeId = `${state.nextEdgeId++}`;
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  const newNode = buildNode({ id: newNodeId, type: toNodeType, diagramId: state.activeDiagramId });
+  const activeDiagram = getActiveDiagram(state);
+  const newNode = buildNode({ id: newNodeId, type: toNodeType, diagramId: activeDiagram.id });
 
   const sourceNodeId = as === "Parent" ? newNodeId : fromNodeId;
   const targetNodeId = as === "Parent" ? fromNodeId : newNodeId;
@@ -64,14 +70,14 @@ const createAndConnectNode = (
 // if adding a criterion, connect to solutions
 // if adding a solution, connect to criteria
 const connectCriteriaToSolutions = (state: TopicStoreState, newNode: Node, fromNode: Node) => {
-  const activeDiagram = state.diagrams[state.activeDiagramId];
+  const problemDiagram = state.diagrams[problemDiagramId]; // solutions & criteria only will be in the problem diagram
 
   const targetRelation: RelationName = newNode.type === "criterion" ? "solves" : "criterion for";
 
-  const newCriterionEdges = activeDiagram.edges
+  const newCriterionEdges = problemDiagram.edges
     .filter((edge) => edge.source === fromNode.id && edge.label === targetRelation)
     .map((edge) => {
-      const targetNode = findNode(activeDiagram, edge.target);
+      const targetNode = findNode(problemDiagram, edge.target);
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
       const newCriterionEdgeId = `${state.nextEdgeId++}`;
@@ -91,7 +97,7 @@ const connectCriteriaToSolutions = (state: TopicStoreState, newNode: Node, fromN
 export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) => {
   useTopicStore.setState(
     (state) => {
-      const activeDiagram = state.diagrams[state.activeDiagramId];
+      const activeDiagram = getActiveDiagram(state);
       const fromNode = findNode(activeDiagram, fromNodeId);
 
       // create and connect node
@@ -131,7 +137,7 @@ export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) 
 export const connectNodes = (parentId: string | null, childId: string | null) => {
   useTopicStore.setState(
     (state) => {
-      const activeDiagram = state.diagrams[state.activeDiagramId];
+      const activeDiagram = getActiveDiagram(state);
 
       const parent = activeDiagram.nodes.find((node) => node.id === parentId);
       const child = activeDiagram.nodes.find((node) => node.id === childId);
@@ -163,7 +169,7 @@ export const connectNodes = (parentId: string | null, childId: string | null) =>
 export const deselectNodes = () => {
   useTopicStore.setState(
     (state) => {
-      const activeDiagram = state.diagrams[state.activeDiagramId];
+      const activeDiagram = getActiveDiagram(state);
 
       activeDiagram.nodes.forEach((node) => {
         // TODO: super jank - node.selected is always false, so setting to true ensures the change is fired (I think)
@@ -190,7 +196,7 @@ export const setScore = (scorableId: string, scorableType: ScorableType, score: 
   useTopicStore.setState(
     (state) => {
       // update this node's score
-      const activeDiagram = state.diagrams[state.activeDiagramId];
+      const activeDiagram = getActiveDiagram(state);
       const scorable = findScorable(activeDiagram, scorableId, scorableType);
       /* eslint-disable functional/immutable-data, no-param-reassign */
       scorable.data.score = score;
@@ -198,7 +204,7 @@ export const setScore = (scorableId: string, scorableType: ScorableType, score: 
 
       // update parent scorable's score if this is a RootClaim
       if (scorable.type === "rootClaim") {
-        const [parentScorableType, parentScorableId] = parseClaimDiagramId(state.activeDiagramId);
+        const [parentScorableType, parentScorableId] = parseClaimDiagramId(activeDiagram.id);
         const parentScorable = findScorable(
           state.diagrams[problemDiagramId], // assuming we won't support nested root claims, so parent will always be root
           parentScorableId,
@@ -231,14 +237,14 @@ export const doesDiagramExist = (diagramId: string) => {
   return Object.keys(useTopicStore.getState().diagrams).includes(diagramId);
 };
 
-export const setOrCreateActiveDiagram = (scorableId: string, scorableType: ScorableType) => {
+export const viewOrCreateClaimDiagram = (scorableId: string, scorableType: ScorableType) => {
   useTopicStore.setState(
     (state) => {
       const diagramId = getClaimDiagramId(scorableId, scorableType);
 
       // create claim diagram if it doesn't exist
       if (!doesDiagramExist(diagramId)) {
-        const activeDiagram = state.diagrams[state.activeDiagramId];
+        const activeDiagram = getActiveDiagram(state);
         const scorable = findScorable(activeDiagram, scorableId, scorableType);
         const label = getImplicitLabel(scorableId, scorableType, activeDiagram);
 
@@ -252,6 +258,7 @@ export const setOrCreateActiveDiagram = (scorableId: string, scorableType: Scora
         });
 
         state.diagrams[diagramId] = {
+          id: diagramId,
           nodes: [newNode],
           edges: [],
           type: "Claim",
@@ -260,34 +267,42 @@ export const setOrCreateActiveDiagram = (scorableId: string, scorableType: Scora
       }
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
-      state.activeDiagramId = diagramId;
+      state.activeClaimDiagramId = diagramId;
       /* eslint-enable functional/immutable-data, no-param-reassign */
     },
     false,
-    "setOrCreateActiveDiagram"
+    "viewOrCreateClaimDiagram"
   );
 };
 
-export const setActiveDiagram = (diagramId: string) => {
+export const viewClaimDiagram = (diagramId: string) => {
   useTopicStore.setState(
     (state) => {
-      if (!doesDiagramExist(diagramId)) {
-        throw new Error("diagram does not exist");
-      }
-
       /* eslint-disable functional/immutable-data, no-param-reassign */
-      state.activeDiagramId = diagramId;
+      state.activeClaimDiagramId = diagramId;
       /* eslint-enable functional/immutable-data, no-param-reassign */
     },
     false,
-    "setActiveDiagram"
+    "viewClaimDiagram"
+  );
+};
+
+export const closeClaimDiagram = () => {
+  useTopicStore.setState(
+    (state) => {
+      /* eslint-disable functional/immutable-data, no-param-reassign */
+      state.activeClaimDiagramId = null;
+      /* eslint-enable functional/immutable-data, no-param-reassign */
+    },
+    false,
+    "closeClaimDiagram"
   );
 };
 
 export const setNodeLabel = (nodeId: string, value: string) => {
   useTopicStore.setState(
     (state) => {
-      const activeDiagram = state.diagrams[state.activeDiagramId];
+      const activeDiagram = getActiveDiagram(state);
       const node = findNode(activeDiagram, nodeId);
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
@@ -302,9 +317,9 @@ export const setNodeLabel = (nodeId: string, value: string) => {
 export const toggleShowCriteria = (nodeId: string) => {
   useTopicStore.setState(
     (state) => {
-      const activeDiagram = state.diagrams[state.activeDiagramId];
+      const problemDiagram = state.diagrams[problemDiagramId]; // criteria nodes only live in problem diagram
 
-      const node = findNode(activeDiagram, nodeId);
+      const node = findNode(problemDiagram, nodeId);
       if (node.type !== "problem") throw new Error("node is not a problem");
       const problemNode = node as ProblemNode;
 
@@ -312,11 +327,11 @@ export const toggleShowCriteria = (nodeId: string) => {
       problemNode.data.showCriteria = !problemNode.data.showCriteria;
       /* eslint-enable functional/immutable-data, no-param-reassign */
 
-      const layoutedDiagram = layoutVisibleComponents(activeDiagram); // depends on showCriteria having been updated
+      const layoutedDiagram = layoutVisibleComponents(problemDiagram); // depends on showCriteria having been updated
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
-      activeDiagram.nodes = layoutedDiagram.nodes;
-      activeDiagram.edges = layoutedDiagram.edges;
+      problemDiagram.nodes = layoutedDiagram.nodes;
+      problemDiagram.edges = layoutedDiagram.edges;
       /* eslint-enable functional/immutable-data, no-param-reassign */
     },
     false,
@@ -327,15 +342,15 @@ export const toggleShowCriteria = (nodeId: string) => {
 export const deleteNode = (nodeId: string) => {
   useTopicStore.setState(
     (state) => {
-      const activeDiagram = state.diagrams[state.activeDiagramId];
+      const activeDiagram = getActiveDiagram(state);
 
       const node = findNode(activeDiagram, nodeId);
 
       if (node.type === "rootClaim") {
         /* eslint-disable functional/immutable-data, no-param-reassign */
         // eslint-disable-next-line @typescript-eslint/no-dynamic-delete -- consider using a map instead of an object?
-        delete state.diagrams[state.activeDiagramId];
-        state.activeDiagramId = problemDiagramId;
+        delete state.diagrams[activeDiagram.id];
+        state.activeClaimDiagramId = null;
         /* eslint-enable functional/immutable-data, no-param-reassign */
         return;
       }
@@ -359,5 +374,17 @@ export const deleteNode = (nodeId: string) => {
     },
     false,
     "toggleShowCriteria"
+  );
+};
+
+export const viewProblemDiagram = () => {
+  useTopicStore.setState(
+    (state) => {
+      /* eslint-disable functional/immutable-data, no-param-reassign */
+      state.activeClaimDiagramId = null;
+      /* eslint-enable functional/immutable-data, no-param-reassign */
+    },
+    false,
+    "viewProblemDiagram"
   );
 };

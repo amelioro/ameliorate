@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-import { setOrCreateActiveDiagram, setScore } from "../../store/actions";
+import { setScore, viewOrCreateClaimDiagram } from "../../store/actions";
 import { useDoesDiagramExist } from "../../store/store";
 import { getClaimDiagramId } from "../../utils/claim";
 import { type ScorableType, type Score, possibleScores } from "../../utils/diagram";
@@ -72,7 +72,7 @@ export const ScoreDial = ({ scorableId, scorableType, score }: ScoreDialProps) =
         <FloatingDiv radius={expansionRadius} buttonLength={buttonLength}></FloatingDiv>
 
         <MainButton
-          onClick={() => setOrCreateActiveDiagram(scorableId, scorableType)}
+          onClick={() => viewOrCreateClaimDiagram(scorableId, scorableType)}
           buttonLength={buttonLength}
           variant="contained"
           color="neutral"

@@ -12,8 +12,8 @@ import {
 
 import { ContextMenu } from "../../../../common/components/Menu/Menu";
 import { openContextMenu } from "../../../../common/store/contextMenuActions";
-import { connectNodes, deselectNodes, setActiveDiagram } from "../../store/actions";
-import { problemDiagramId, useActiveDiagramId, useFilteredActiveDiagram } from "../../store/store";
+import { closeClaimDiagram, connectNodes, deselectNodes } from "../../store/actions";
+import { useFilteredDiagram } from "../../store/store";
 import { type Edge, type Node } from "../../utils/diagram";
 import { type NodeType } from "../../utils/nodes";
 import { EditableNode } from "../EditableNode/EditableNode";
@@ -51,16 +51,20 @@ export interface EdgeProps extends DefaultEdgeProps {
   data?: Edge["data"];
 }
 
-export const Diagram = () => {
-  const activeDiagramId = useActiveDiagramId();
-  const activeDiagram = useFilteredActiveDiagram();
+interface DiagramProps {
+  diagramId: string;
+}
 
-  const nodes = activeDiagram.nodes;
-  const edges = activeDiagram.edges;
+export const Diagram = ({ diagramId }: DiagramProps) => {
+  const diagram = useFilteredDiagram(diagramId);
+
+  const nodes = diagram.nodes;
+  const edges = diagram.edges;
 
   const showCloseButton = activeDiagramId != problemDiagramId;
+  const showCloseButton = diagram.type === "Claim";
   const closeButton = (
-    <PositionedIconButton onClick={() => setActiveDiagram(problemDiagramId)} color="primary">
+    <PositionedIconButton onClick={() => closeClaimDiagram()} color="primary">
       <Cancel />
     </PositionedIconButton>
   );
@@ -83,7 +87,7 @@ export const Diagram = () => {
         onConnect={({ source, target }) => connectNodes(source, target)}
         onNodeContextMenu={(event: MouseEvent, node: FlowNode) => openContextMenu(event, { node })}
         nodesDraggable={false}
-        nodesConnectable={activeDiagram.type !== "Claim"} // claim diagram is a tree, so cannot connect existing nodes
+        nodesConnectable={diagram.type !== "Claim"} // claim diagram is a tree, so cannot connect existing nodes
       >
         <Background variant={BackgroundVariant.Dots} />
         {_(nodes).isEmpty() && emptyText}

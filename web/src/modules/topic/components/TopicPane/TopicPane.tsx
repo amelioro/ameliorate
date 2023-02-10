@@ -10,12 +10,12 @@ import {
 import { Collapse, List, ListItem, ListItemIcon, ListItemText, Toolbar } from "@mui/material";
 import { useState } from "react";
 
-import { setActiveDiagram } from "../../store/actions";
+import { viewClaimDiagram, viewProblemDiagram } from "../../store/actions";
 import {
   problemDiagramId,
-  useActiveDiagramId,
   useClaimDiagramIdentifiers,
   useRootTitle,
+  useTopicViewId,
 } from "../../store/store";
 import {
   NestedListItemButton,
@@ -29,7 +29,7 @@ export const TopicPane = () => {
   const [isTopicDrawerOpen, setIsTopicDrawerOpen] = useState(true);
   const [isClaimsListOpen, setIsClaimsListOpen] = useState(true);
 
-  const activeDiagramId = useActiveDiagramId();
+  const topicViewId = useTopicViewId();
 
   const rootTitle = useRootTitle();
   const claimDiagramIdentifiers = useClaimDiagramIdentifiers();
@@ -57,8 +57,8 @@ export const TopicPane = () => {
           <List>
             <ListItem key="1" disablePadding>
               <StyledListItemButton
-                selected={activeDiagramId === problemDiagramId}
-                onClick={() => setActiveDiagram(problemDiagramId)}
+                selected={topicViewId === problemDiagramId}
+                onClick={() => viewProblemDiagram()}
               >
                 <ListItemIcon>
                   <AutoStories />
@@ -90,8 +90,8 @@ export const TopicPane = () => {
                 {claimDiagramIdentifiers.map(([diagramId, diagramTitle]) => (
                   <ListItem key={diagramId} disablePadding>
                     <NestedListItemButton
-                      selected={activeDiagramId === diagramId}
-                      onClick={() => setActiveDiagram(diagramId)}
+                      selected={topicViewId === diagramId}
+                      onClick={() => viewClaimDiagram(diagramId)}
                     >
                       <ListItemIcon>
                         <Article />

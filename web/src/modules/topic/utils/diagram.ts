@@ -13,6 +13,7 @@ export const orientations: Record<DiagramType, Orientation> = {
 };
 
 export interface Diagram {
+  id: string;
   nodes: Node[];
   edges: Edge[];
   type: DiagramType;
