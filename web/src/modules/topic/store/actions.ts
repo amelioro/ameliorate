@@ -60,8 +60,8 @@ const createAndConnectNode = (
   const activeDiagram = getActiveDiagram(state);
   const newNode = buildNode({ id: newNodeId, type: toNodeType, diagramId: activeDiagram.id });
 
-  const sourceNodeId = as === "Parent" ? newNodeId : fromNodeId;
-  const targetNodeId = as === "Parent" ? fromNodeId : newNodeId;
+  const sourceNodeId = as === "parent" ? newNodeId : fromNodeId;
+  const targetNodeId = as === "parent" ? fromNodeId : newNodeId;
   const newEdge = buildEdge(newEdgeId, sourceNodeId, targetNodeId, relation);
 
   return [newNode, newEdge] as [Node, Edge];
@@ -261,7 +261,7 @@ export const viewOrCreateClaimDiagram = (scorableId: string, scorableType: Scora
           id: diagramId,
           nodes: [newNode],
           edges: [],
-          type: "Claim",
+          type: "claim",
         };
         /* eslint-enable functional/immutable-data, no-param-reassign */
       }

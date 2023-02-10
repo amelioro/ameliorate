@@ -11,35 +11,35 @@ export type RelationName =
   | "critiques";
 
 export interface Relation {
-  Parent: NodeType;
-  Child: NodeType;
+  parent: NodeType;
+  child: NodeType;
   name: RelationName;
 }
 
 // assumes that we're always pointing from child to parent
 export const relations: Relation[] = [
-  { Parent: "problem", Child: "problem", name: "causes" },
-  { Parent: "problem", Child: "solution", name: "solves" },
+  { parent: "problem", child: "problem", name: "causes" },
+  { parent: "problem", child: "solution", name: "solves" },
 
-  { Parent: "solution", Child: "problem", name: "created by" },
+  { parent: "solution", child: "problem", name: "created by" },
 
-  { Parent: "problem", Child: "criterion", name: "criterion for" },
-  { Parent: "criterion", Child: "solution", name: "embodies" },
+  { parent: "problem", child: "criterion", name: "criterion for" },
+  { parent: "criterion", child: "solution", name: "embodies" },
 
-  { Parent: "rootClaim", Child: "support", name: "supports" },
-  { Parent: "rootClaim", Child: "critique", name: "critiques" },
+  { parent: "rootClaim", child: "support", name: "supports" },
+  { parent: "rootClaim", child: "critique", name: "critiques" },
 
-  { Parent: "support", Child: "support", name: "supports" },
-  { Parent: "support", Child: "critique", name: "critiques" },
+  { parent: "support", child: "support", name: "supports" },
+  { parent: "support", child: "critique", name: "critiques" },
 
-  { Parent: "critique", Child: "support", name: "supports" },
-  { Parent: "critique", Child: "critique", name: "critiques" },
+  { parent: "critique", child: "support", name: "supports" },
+  { parent: "critique", child: "critique", name: "critiques" },
 ];
 
 export const claimNodeTypes = ["RootClaim", "Support", "Critique"];
 
-export const getRelation = (Parent: NodeType, Child: NodeType): Relation | undefined => {
-  return relations.find((relation) => relation.Parent === Parent && relation.Child === Child);
+export const getRelation = (parent: NodeType, child: NodeType): Relation | undefined => {
+  return relations.find((relation) => relation.parent === parent && relation.child === child);
 };
 
 type AddableNodes = {
@@ -47,26 +47,26 @@ type AddableNodes = {
 };
 const addableNodesFor: Record<NodeType, AddableNodes> = {
   problem: {
-    Parent: ["problem", "solution"],
-    Child: ["problem", "solution", "criterion"],
+    parent: ["problem", "solution"],
+    child: ["problem", "solution", "criterion"],
   },
   solution: {
-    Parent: ["problem"], // could have criteria, but need to select a specific problem for it & that requires design
-    Child: ["problem"],
+    parent: ["problem"], // could have criteria, but need to select a specific problem for it & that requires design
+    child: ["problem"],
   },
 
   // can't have multiple problems;
   // could have multiple solutions but unintuitive to add from criterion because solution would be tied to parent & all sibling criteria
-  criterion: { Parent: [], Child: [] },
+  criterion: { parent: [], child: [] },
 
   // claim diagram is a tree so claim nodes can't add parents
-  rootClaim: { Parent: [], Child: ["support", "critique"] },
-  support: { Parent: [], Child: ["support", "critique"] },
-  critique: { Parent: [], Child: ["support", "critique"] },
+  rootClaim: { parent: [], child: ["support", "critique"] },
+  support: { parent: [], child: ["support", "critique"] },
+  critique: { parent: [], child: ["support", "critique"] },
 };
 
 export const addableRelationsFrom = (nodeType: NodeType, addingAs: RelationDirection) => {
-  const fromDirection = addingAs === "Parent" ? "Child" : "Parent";
+  const fromDirection = addingAs === "parent" ? "child" : "parent";
   const addableNodes = addableNodesFor[nodeType][addingAs];
 
   const addableRelations = relations.filter(

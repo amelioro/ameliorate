@@ -4,12 +4,12 @@ import { RelationName, childNode, parentNode } from "./edge";
 import { Orientation, layout } from "./layout";
 import { NodeType, children, onlyParent } from "./nodes";
 
-export type DiagramType = "Problem" | "Claim";
-export type RelationDirection = "Parent" | "Child";
+export type DiagramType = "problem" | "claim";
+export type RelationDirection = "parent" | "child";
 
 export const orientations: Record<DiagramType, Orientation> = {
-  Problem: "TB",
-  Claim: "LR",
+  problem: "TB",
+  claim: "LR",
 };
 
 export interface Diagram {

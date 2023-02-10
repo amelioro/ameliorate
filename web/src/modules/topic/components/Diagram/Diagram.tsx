@@ -61,7 +61,7 @@ export const Diagram = ({ diagramId }: DiagramProps) => {
   const nodes = diagram.nodes;
   const edges = diagram.edges;
 
-  const showCloseButton = diagram.type === "Claim";
+  const showCloseButton = diagram.type === "claim";
   const closeButton = (
     <PositionedIconButton onClick={() => closeClaimDiagram()} color="primary">
       <Cancel />
@@ -86,7 +86,7 @@ export const Diagram = ({ diagramId }: DiagramProps) => {
         onConnect={({ source, target }) => connectNodes(source, target)}
         onNodeContextMenu={(event: MouseEvent, node: FlowNode) => openContextMenu(event, { node })}
         nodesDraggable={false}
-        nodesConnectable={diagram.type !== "Claim"} // claim diagram is a tree, so cannot connect existing nodes
+        nodesConnectable={diagram.type !== "claim"} // claim diagram is a tree, so cannot connect existing nodes
       >
         <Background variant={BackgroundVariant.Dots} />
         {_(nodes).isEmpty() && emptyText}

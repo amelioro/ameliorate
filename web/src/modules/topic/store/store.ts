@@ -19,7 +19,7 @@ const initialDiagrams: Record<string, Diagram> = {
     id: problemDiagramId,
     nodes: [buildNode({ id: "0", type: "problem", diagramId: problemDiagramId })],
     edges: [],
-    type: "Problem",
+    type: "problem",
   },
 };
 

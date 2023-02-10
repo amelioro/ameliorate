@@ -46,7 +46,7 @@ export const EditableNode = ({ id, data, type }: NodeProps) => {
       <AddNodeButtonGroupParent
         fromNodeId={id}
         fromNodeType={nodeType}
-        as="Parent"
+        as="parent"
         orientation={orientation}
       />
 
@@ -81,7 +81,7 @@ export const EditableNode = ({ id, data, type }: NodeProps) => {
       <AddNodeButtonGroupChild
         fromNodeId={id}
         fromNodeType={nodeType}
-        as="Child"
+        as="child"
         orientation={orientation}
       />
       <Handle type="source" position={orientation == "TB" ? Position.Bottom : Position.Right} />
