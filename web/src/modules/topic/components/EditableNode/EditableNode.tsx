@@ -8,6 +8,7 @@ import { useDiagramType } from "../../store/store";
 import { orientations } from "../../utils/diagram";
 import { NodeType, nodeDecorations } from "../../utils/nodes";
 import { CriteriaIndicator } from "../CriteriaIndicator/CriteriaIndicator";
+import { CriteriaTableIndicator } from "../CriteriaTableIndicator/CriteriaTableIndicator";
 import { NodeProps } from "../Diagram/Diagram";
 import { ScoreDial } from "../ScoreDial/ScoreDial";
 import {
@@ -56,6 +57,7 @@ export const EditableNode = ({ id, data, type }: NodeProps) => {
           <NodeTypeSpan>{_.startCase(nodeType)}</NodeTypeSpan>
         </NodeTypeDiv>
         <IndicatorDiv>
+          <CriteriaTableIndicator nodeId={id} diagramId={data.diagramId} />
           <CriteriaIndicator nodeId={id} diagramId={data.diagramId} />
           <ScoreDial scorableId={id} scorableType="node" score={data.score} />
         </IndicatorDiv>

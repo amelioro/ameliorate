@@ -25,7 +25,7 @@ const initialDiagrams: Record<string, Diagram> = {
 
 export interface TopicStoreState {
   diagrams: Record<string, Diagram>;
-  activeDiagramId: string;
+  activeTableProblemId: string | null;
   activeClaimDiagramId: string | null;
   nextNodeId: number;
   nextEdgeId: number;
@@ -33,7 +33,7 @@ export interface TopicStoreState {
 
 export const initialState: TopicStoreState = {
   diagrams: initialDiagrams,
-  activeDiagramId: problemDiagramId,
+  activeTableProblemId: null,
   activeClaimDiagramId: null,
   nextNodeId: 1, // 0 is taken by the initial node
   nextEdgeId: 0,
@@ -105,6 +105,10 @@ export const useRootTitle = () => {
 
 export const useActiveClaimDiagramId = () => {
   return useTopicStoreAfterHydration((state) => state.activeClaimDiagramId);
+};
+
+export const useActiveTableProblemId = () => {
+  return useTopicStoreAfterHydration((state) => state.activeTableProblemId);
 };
 
 export const useClaimDiagramIdentifiers = () => {

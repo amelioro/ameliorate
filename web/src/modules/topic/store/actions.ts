@@ -381,10 +381,24 @@ export const viewProblemDiagram = () => {
   useTopicStore.setState(
     (state) => {
       /* eslint-disable functional/immutable-data, no-param-reassign */
+      state.activeTableProblemId = null;
       state.activeClaimDiagramId = null;
       /* eslint-enable functional/immutable-data, no-param-reassign */
     },
     false,
     "viewProblemDiagram"
+  );
+};
+
+export const viewCriteriaTable = (problemNodeId: string) => {
+  useTopicStore.setState(
+    (state) => {
+      /* eslint-disable functional/immutable-data, no-param-reassign */
+      state.activeTableProblemId = problemNodeId;
+      state.activeClaimDiagramId = null;
+      /* eslint-enable functional/immutable-data, no-param-reassign */
+    },
+    false,
+    "viewCriteriaTable"
   );
 };
