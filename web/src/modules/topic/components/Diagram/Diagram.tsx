@@ -61,7 +61,6 @@ export const Diagram = ({ diagramId }: DiagramProps) => {
   const nodes = diagram.nodes;
   const edges = diagram.edges;
 
-  const showCloseButton = activeDiagramId != problemDiagramId;
   const showCloseButton = diagram.type === "Claim";
   const closeButton = (
     <PositionedIconButton onClick={() => closeClaimDiagram()} color="primary">

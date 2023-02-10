@@ -6,12 +6,15 @@ import { Menu } from "../../../../common/components/Menu/Menu";
 import { useMenu } from "../../../../common/hooks";
 import { getState, redo, resetState, setState, undo } from "../../store/actions";
 import { TopicStoreState } from "../../store/store";
+import { getTopicTitle } from "../../store/utils";
 
 // TODO: might be useful to have downloaded state be more human editable;
 // for this, probably should prettify the JSON, and remove position values (we can re-layout on import)
 const downloadTopic = () => {
   const topicState = getState();
-  fileDownload(JSON.stringify(topicState), `${topicState.activeDiagramId}.json`);
+  const topicTitle = getTopicTitle(topicState);
+  const sanitizedFileName = topicTitle.replace(/[^a-z0-9]/gi, "_").toLowerCase(); // thanks https://stackoverflow.com/a/8485137
+  fileDownload(JSON.stringify(topicState), `${sanitizedFileName}.json`);
 };
 
 const uploadTopic = (event: React.ChangeEvent<HTMLInputElement>) => {

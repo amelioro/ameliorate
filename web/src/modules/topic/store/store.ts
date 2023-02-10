@@ -9,6 +9,7 @@ import { HydrationContext } from "../../../pages/index";
 import { Diagram, buildNode, filterHiddenComponents } from "../utils/diagram";
 import { doesDiagramExist } from "./actions";
 import { migrate } from "./migrate";
+import { getTopicTitle } from "./utils";
 
 export const rootId = "root";
 export const problemDiagramId = "root";
@@ -99,9 +100,7 @@ export const useTopicViewId = () => {
 };
 
 export const useRootTitle = () => {
-  return useTopicStoreAfterHydration(
-    (state) => state.diagrams[problemDiagramId].nodes[0].data.label
-  );
+  return useTopicStoreAfterHydration((state) => getTopicTitle(state));
 };
 
 export const useActiveClaimDiagramId = () => {
