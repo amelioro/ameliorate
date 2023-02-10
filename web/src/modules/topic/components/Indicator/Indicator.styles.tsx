@@ -8,5 +8,6 @@ export const StyledButton = styled(Button)`
   min-width: ${indicatorLength}px;
   height: ${indicatorLength}px;
   margin-top: 2px;
+  margin-left: 2px;
   padding: 0px;
 `;
