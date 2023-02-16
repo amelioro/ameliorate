@@ -1,14 +1,16 @@
 import { Global } from "@emotion/react";
+import { Cancel } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import MaterialReactTable, { type MRT_ColumnDef } from "material-react-table";
 
+import { closeTable } from "../../store/actions";
 import { useCriterionSolutionEdges, useNode, useNodeChildren } from "../../store/nodeHooks";
 import { problemDiagramId } from "../../store/store";
 import { Edge, Node } from "../../utils/diagram";
 import { EdgeCell } from "../EdgeCell/EdgeCell";
 import { EditableNode } from "../EditableNode/EditableNode";
 import { NodeCell } from "../NodeCell/NodeCell";
-import { TitleDiv, tableStyles } from "./CriteriaTable.styles";
+import { PositionedIconButton, TitleDiv, tableStyles } from "./CriteriaTable.styles";
 
 const getCriterionSolutionEdge = (criterion: Node, solution: Node, edges: Edge[]) => {
   const edge = edges.find((edge) => edge.source === criterion.id && edge.target === solution.id);
@@ -81,6 +83,10 @@ export const CriteriaTable = ({ problemNodeId }: Props) => {
 
   return (
     <>
+      <PositionedIconButton onClick={() => closeTable()} color="primary">
+        <Cancel />
+      </PositionedIconButton>
+
       <TitleDiv>
         <Typography variant="h4">Criteria for solving:</Typography>
         {/* rename table cell to "not react flow"? */}

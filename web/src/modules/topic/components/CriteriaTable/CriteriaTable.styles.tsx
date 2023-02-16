@@ -1,5 +1,6 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
+import { IconButton } from "@mui/material";
 
 import { nodeWidth } from "../EditableNode/EditableNode.styles";
 
@@ -50,4 +51,10 @@ export const tableStyles = (numberOfColumns: number) => css`
       }
     }
   }
+`;
+
+export const PositionedIconButton = styled(IconButton)`
+  position: absolute;
+  z-index: 2;
+  right: 0;
 `;

@@ -299,6 +299,18 @@ export const closeClaimDiagram = () => {
   );
 };
 
+export const closeTable = () => {
+  useTopicStore.setState(
+    (state) => {
+      /* eslint-disable functional/immutable-data, no-param-reassign */
+      state.activeTableProblemId = null;
+      /* eslint-enable functional/immutable-data, no-param-reassign */
+    },
+    false,
+    "closeTable"
+  );
+};
+
 export const setNodeLabel = (nodeId: string, value: string) => {
   useTopicStore.setState(
     (state) => {
