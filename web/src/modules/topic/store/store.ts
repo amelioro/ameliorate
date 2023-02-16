@@ -96,7 +96,9 @@ export const useDiagramType = (diagramId: string) => {
 
 // topic view id is the claim or problem diagram id
 export const useTopicViewId = () => {
-  return useTopicStoreAfterHydration((state) => state.activeClaimDiagramId ?? problemDiagramId);
+  return useTopicStoreAfterHydration(
+    (state) => state.activeClaimDiagramId ?? state.activeTableProblemId ?? problemDiagramId
+  );
 };
 
 export const useRootTitle = () => {

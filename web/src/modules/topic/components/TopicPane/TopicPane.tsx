@@ -6,11 +6,14 @@ import {
   ExpandMore,
   LibraryBooks,
   Menu,
+  TableChart,
+  TableView,
 } from "@mui/icons-material";
 import { Collapse, List, ListItem, ListItemIcon, ListItemText, Toolbar } from "@mui/material";
 import { useState } from "react";
 
-import { viewClaimDiagram, viewProblemDiagram } from "../../store/actions";
+import { viewClaimDiagram, viewCriteriaTable, viewProblemDiagram } from "../../store/actions";
+import { useNodes } from "../../store/nodeHooks";
 import {
   problemDiagramId,
   useClaimDiagramIdentifiers,
@@ -28,11 +31,13 @@ import {
 export const TopicPane = () => {
   const [isTopicDrawerOpen, setIsTopicDrawerOpen] = useState(true);
   const [isClaimsListOpen, setIsClaimsListOpen] = useState(true);
+  const [isProblemsListOpen, setIsProblemsListOpen] = useState(true);
 
   const topicViewId = useTopicViewId();
 
   const rootTitle = useRootTitle();
   const claimDiagramIdentifiers = useClaimDiagramIdentifiers();
+  const problems = useNodes(problemDiagramId, (node) => node.type === "problem");
 
   const handleDrawerToggle = () => {
     if (isTopicDrawerOpen) {
@@ -67,6 +72,42 @@ export const TopicPane = () => {
               </StyledListItemButton>
             </ListItem>
             <ListItem key="2" disablePadding>
+              <StyledListItemButton onClick={() => setIsProblemsListOpen(!isProblemsListOpen)}>
+                <ListItemIcon>
+                  <TableView />
+                </ListItemIcon>
+                <ListItemText primary="Criteria" />
+                {isProblemsListOpen ? <ExpandLess /> : <ExpandMore />}
+              </StyledListItemButton>
+            </ListItem>
+            <Collapse in={isProblemsListOpen} timeout="auto" unmountOnExit>
+              <List disablePadding>
+                {problems.length === 0 && (
+                  <ListItem key="1" disablePadding>
+                    <NestedListItemButton disabled={true}>
+                      <ListItemIcon>
+                        <TableChart />
+                      </ListItemIcon>
+                      <ListItemText primary="No criteria yet!" />
+                    </NestedListItemButton>
+                  </ListItem>
+                )}
+                {problems.map(({ id: nodeId, data }) => (
+                  <ListItem key={nodeId} disablePadding>
+                    <NestedListItemButton
+                      selected={topicViewId === nodeId}
+                      onClick={() => viewCriteriaTable(nodeId)}
+                    >
+                      <ListItemIcon>
+                        <TableChart />
+                      </ListItemIcon>
+                      <ListItemText primary={data.label} />
+                    </NestedListItemButton>
+                  </ListItem>
+                ))}
+              </List>
+            </Collapse>
+            <ListItem key="3" disablePadding>
               <StyledListItemButton onClick={() => setIsClaimsListOpen(!isClaimsListOpen)}>
                 <ListItemIcon>
                   <LibraryBooks />

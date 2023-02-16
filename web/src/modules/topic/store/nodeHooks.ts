@@ -1,4 +1,4 @@
-import { findNode } from "../utils/diagram";
+import { Node, findNode } from "../utils/diagram";
 import { children } from "../utils/nodes";
 import { useTopicStoreAfterHydration } from "./store";
 
@@ -6,7 +6,7 @@ export const useNode = (nodeId: string, diagramId: string) => {
   return useTopicStoreAfterHydration((state) => {
     const diagram = state.diagrams[diagramId];
 
-    // wrap in try/catch because findNode will error when useNode is triggered by a node deletion (zombie child issue)
+    // wrap in try/catch because findNode will error when this is triggered by a node deletion (zombie child issue)
     try {
       return findNode(diagram, nodeId);
     } catch {
@@ -19,7 +19,7 @@ export const useNodeChildren = (nodeId: string, diagramId: string) => {
   return useTopicStoreAfterHydration((state) => {
     const diagram = state.diagrams[diagramId];
 
-    // wrap in try/catch because findNode will error when useNode is triggered by a node deletion (zombie child issue)
+    // wrap in try/catch because findNode will error when this is triggered by a node deletion (zombie child issue)
     try {
       const node = findNode(diagram, nodeId);
       return children(node, diagram);
@@ -28,3 +28,12 @@ export const useNodeChildren = (nodeId: string, diagramId: string) => {
     }
   });
 };
+
+export const useNodes = (diagramId: string, predicate: (node: Node) => boolean) => {
+  return useTopicStoreAfterHydration((state) => {
+    const diagram = state.diagrams[diagramId];
+
+    return diagram.nodes.filter(predicate);
+  });
+};
+
