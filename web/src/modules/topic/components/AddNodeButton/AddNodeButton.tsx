@@ -9,15 +9,18 @@ interface Props {
   as: RelationDirection;
   toNodeType: NodeType;
   relation: RelationName;
+  className?: string;
 }
 
-export const AddNodeButton = ({ fromNodeId, as, toNodeType, relation }: Props) => {
+export const AddNodeButton = ({ fromNodeId, as, toNodeType, relation, className }: Props) => {
   const decoration = nodeDecorations[toNodeType];
 
   return (
     <StyledButton
+      className={className}
       color={toNodeType}
       size="small"
+      variant="contained"
       onClick={() => addNode({ fromNodeId, as, toNodeType, relation })}
     >
       <decoration.NodeIcon />

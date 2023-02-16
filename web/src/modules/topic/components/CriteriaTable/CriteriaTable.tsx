@@ -10,7 +10,13 @@ import { Edge, Node } from "../../utils/diagram";
 import { EdgeCell } from "../EdgeCell/EdgeCell";
 import { EditableNode } from "../EditableNode/EditableNode";
 import { NodeCell } from "../NodeCell/NodeCell";
-import { PositionedIconButton, TitleDiv, tableStyles } from "./CriteriaTable.styles";
+import {
+  PositionedAddNodeButton,
+  PositionedIconButton,
+  TableDiv,
+  TitleDiv,
+  tableStyles,
+} from "./CriteriaTable.styles";
 
 const getCriterionSolutionEdge = (criterion: Node, solution: Node, edges: Edge[]) => {
   const edge = edges.find((edge) => edge.source === criterion.id && edge.target === solution.id);
@@ -93,21 +99,40 @@ export const CriteriaTable = ({ problemNodeId }: Props) => {
         <EditableNode node={problemNode} />
       </TitleDiv>
 
-      {/* Hard to tell if material-react-table is worth using because the cells are all custom components. */}
-      {/* It's doubtful that we'll use sorting/filtering... but pinning and re-ordering may come in handy. */}
-      <MaterialReactTable
-        columns={columns}
-        data={rowData}
-        enableColumnActions={false}
-        enablePagination={false}
-        enableBottomToolbar={false}
-        enableTopToolbar={false}
-        enableSorting={false}
-        muiTablePaperProps={{
-          className: "criteria-table-paper",
-        }}
-      />
-      <Global styles={tableStyles(columns.length)} />
+      <TableDiv numberOfColumns={columns.length}>
+        {/* Hard to tell if material-react-table is worth using because the cells are all custom components. */}
+        {/* It's doubtful that we'll use sorting/filtering... but pinning and re-ordering may come in handy. */}
+        <MaterialReactTable
+          columns={columns}
+          data={rowData}
+          enableColumnActions={false}
+          enablePagination={false}
+          enableBottomToolbar={false}
+          enableTopToolbar={false}
+          enableSorting={false}
+          muiTablePaperProps={{
+            className: "criteria-table-paper",
+          }}
+        />
+
+        <PositionedAddNodeButton
+          position="column"
+          fromNodeId={problemNodeId}
+          as="child"
+          toNodeType="criterion"
+          relation="criterion for"
+        />
+
+        <PositionedAddNodeButton
+          position="row"
+          fromNodeId={problemNodeId}
+          as="child"
+          toNodeType="solution"
+          relation="solves"
+        />
+      </TableDiv>
+
+      <Global styles={tableStyles} />
     </>
   );
 };

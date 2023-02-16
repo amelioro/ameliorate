@@ -2,6 +2,7 @@ import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { IconButton } from "@mui/material";
 
+import { AddNodeButton } from "../AddNodeButton/AddNodeButton";
 import { nodeWidth } from "../EditableNode/EditableNode.styles";
 
 export const TitleDiv = styled.div`
@@ -11,25 +12,16 @@ export const TitleDiv = styled.div`
   margin: 16px auto;
 `;
 
-export const tableStyles = (numberOfColumns: number) => css`
+export const tableStyles = css`
   // note: need two selectors to have higher precedence than MUI styles
   .criteria-table-paper {
-    left: 50%;
-    transform: translateX(-50%);
-    position: relative;
-
-    // Want to have table grow with columns, so we hardcode a total-width of table, but, if column widths
-    // are hardcoded as well, doing so will create a horizontal scrollbar whenever too many rows results in a vertical scrollbar.
-    // Therefore, the total-width will have a little extra space so that nodes are still >= min-width
-    // if vertical scrollbar is visible.
-    width: min(${nodeWidth * numberOfColumns + 20}px, 90%);
-
     .MuiTableContainer-root {
       // 96px is height of both toolbars
       // 100vh - 96px is the height of the index page space
-      // wanting to take roughly 90% of that space, we'll multiply by 0.9
+      // - (32px + 84px) is roughly the height that the problem title takes up
+      // wanting to take roughly 85% of that space, we'll multiply by 0.85
       // not sure how to do this directly based on parent height because the MUI table wraps this with a Paper container that is sized based on the table
-      max-height: calc((100vh - 96px) * 0.9);
+      max-height: calc((100vh - 96px - 32px - 84px) * 0.85);
     }
 
     table {
@@ -57,4 +49,56 @@ export const PositionedIconButton = styled(IconButton)`
   position: absolute;
   z-index: 2;
   right: 0;
+`;
+
+interface TableDivProps {
+  numberOfColumns: number;
+}
+
+const tableDivOptions = {
+  shouldForwardProp: (prop: string) => !["numberOfColumns"].includes(prop),
+};
+
+export const TableDiv = styled("div", tableDivOptions)<TableDivProps>`
+  ${({ numberOfColumns }) => {
+    return css`
+      left: 50%;
+      transform: translateX(-50%);
+      position: relative;
+
+      // Want to have table grow with columns, so we hardcode a total-width of table, but, if column widths
+      // are hardcoded as well, doing so will create a horizontal scrollbar whenever too many rows results in a vertical scrollbar.
+      // Therefore, the total-width will have a little extra space so that nodes are still >= min-width
+      // if vertical scrollbar is visible.
+      width: min(${nodeWidth * numberOfColumns + 20}px, 80%);
+    `;
+  }}
+`;
+
+interface AddNodeButtonProps {
+  position: "column" | "row";
+}
+
+const options = {
+  shouldForwardProp: (prop: string) => !["position"].includes(prop),
+};
+
+export const PositionedAddNodeButton = styled(AddNodeButton, options)<AddNodeButtonProps>`
+  position: absolute;
+
+  ${({ position }) => {
+    if (position === "column") {
+      return css`
+        bottom: 0;
+        left: 0;
+        transform: translate(0, 150%);
+      `;
+    } else {
+      return css`
+        right: 0;
+        top: 0;
+        transform: translate(150%, 0);
+      `;
+    }
+  }}
 `;
