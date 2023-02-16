@@ -2,9 +2,7 @@ import styled from "@emotion/styled";
 import { css } from "@mui/material";
 
 import { Orientation } from "../../utils/layout";
-import { NodeType } from "../../utils/nodes";
 import { AddNodeButtonGroup } from "../AddNodeButtonGroup/AddNodeButtonGroup";
-import { nodeWidth } from "../EditableNode/EditableNode.styles";
 
 const gap = 16;
 
@@ -70,14 +68,4 @@ export const AddNodeButtonGroupChild = styled(StyledAddNodeButtonGroup)<{
       `;
     }
   }}
-`;
-
-export const nodeStyles = (width: number, color: string, nodeType: NodeType) => css`
-  .react-flow__node-${nodeType} {
-    width: ${nodeWidth}px;
-
-    .react-flow__handle {
-      background: #1a192b;
-    }
-  }
 `;

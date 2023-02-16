@@ -6,6 +6,7 @@ import { useCriterionSolutionEdges, useNode, useNodeChildren } from "../../store
 import { problemDiagramId } from "../../store/store";
 import { Edge, Node } from "../../utils/diagram";
 import { EdgeCell } from "../EdgeCell/EdgeCell";
+import { EditableNode } from "../EditableNode/EditableNode";
 import { NodeCell } from "../NodeCell/NodeCell";
 import { TitleDiv, tableStyles } from "./CriteriaTable.styles";
 
@@ -83,7 +84,7 @@ export const CriteriaTable = ({ problemNodeId }: Props) => {
       <TitleDiv>
         <Typography variant="h4">Criteria for solving:</Typography>
         {/* rename table cell to "not react flow"? */}
-        <NodeCell node={problemNode} />
+        <EditableNode node={problemNode} />
       </TitleDiv>
 
       {/* Hard to tell if material-react-table is worth using because the cells are all custom components. */}

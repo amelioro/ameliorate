@@ -10,4 +10,8 @@ export const StyledDiv = styled.div`
   // Therefore, width will be kind-of fixed by being based on the table's hardcoded width.
   // We still keep a min-width to prevent node components from conflicting with each other.
   min-width: ${nodeWidth}px;
+
+  & > div {
+    width: auto; // override EditableNode's width to allow stretching
+  }
 `;

@@ -1,5 +1,3 @@
-import { Global } from "@emotion/react";
-import { useTheme } from "@mui/material";
 import _ from "lodash";
 import { Handle, Position } from "reactflow";
 
@@ -12,7 +10,6 @@ import {
   AddNodeButtonGroupChild,
   AddNodeButtonGroupParent,
   HoverBridgeDiv,
-  nodeStyles,
 } from "./FlowNode.styles";
 
 const convertToNode = (flowNode: NodeProps): Node => {
@@ -27,14 +24,11 @@ const convertToNode = (flowNode: NodeProps): Node => {
 
 export const FlowNode = (flowNode: NodeProps) => {
   const diagramType = useDiagramType(flowNode.data.diagramId);
-  const theme = useTheme();
 
   if (!diagramType) return <></>;
 
   const orientation = orientations[diagramType];
-
   const node = convertToNode(flowNode);
-  const color = theme.palette[node.type].main;
 
   return (
     <>
@@ -58,8 +52,6 @@ export const FlowNode = (flowNode: NodeProps) => {
         orientation={orientation}
       />
       <Handle type="source" position={orientation == "TB" ? Position.Bottom : Position.Right} />
-
-      <Global styles={nodeStyles(flowNode.data.width, color, node.type)} />
     </>
   );
 };
