@@ -64,12 +64,24 @@ export const buildNode = ({ id, label, score, type, diagramId }: BuildProps) => 
   }
 };
 
+export interface Edge {
+  id: string;
+  data: {
+    score: Score;
+  };
+  label: RelationName;
+  markerStart: { type: MarkerType; width: number; height: number };
+  source: string;
+  target: string;
+  type: "ScoreEdge";
+}
+
 export const buildEdge = (
   newEdgeId: string,
   sourceNodeId: string,
   targetNodeId: string,
   relation: RelationName
-) => {
+): Edge => {
   return {
     id: newEdgeId,
     data: {
@@ -83,7 +95,6 @@ export const buildEdge = (
     type: "ScoreEdge" as const,
   };
 };
-export type Edge = ReturnType<typeof buildEdge>;
 
 export type ScorableType = "node" | "edge";
 
