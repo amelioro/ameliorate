@@ -68,8 +68,8 @@ export const ScoreDial = ({ scorableId, scorableType, score }: ScoreDialProps) =
     <>
       <StyledDiv>
         {/* keep floating div as sibling to floating buttons so that each can be positioned relative to the MainButton */}
-        {floatingButtons}
         <FloatingDiv radius={expansionRadius} buttonLength={buttonLength}></FloatingDiv>
+        {floatingButtons}
 
         <MainButton
           onClick={() => viewOrCreateClaimDiagram(scorableId, scorableType)}

@@ -113,6 +113,7 @@ export const CriteriaTable = ({ problemNodeId }: Props) => {
           muiTablePaperProps={{
             className: "criteria-table-paper",
           }}
+          initialState={{ columnPinning: { left: ["criterion.data.label"] } }}
         />
 
         <PositionedAddNodeButton

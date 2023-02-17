@@ -26,9 +26,7 @@ const StyledButton = styled(Button, options)<StyledButtonProps>`
   border-radius: 50%;
 `;
 
-export const MainButton = styled(StyledButton)`
-  z-index: 2; // in front of floating buttons (to avoid hover interference during transition)
-`;
+export const MainButton = styled(StyledButton)``;
 
 interface FloatingButtonProps {
   position: {
@@ -42,7 +40,6 @@ export const FloatingButton = styled(StyledButton)<FloatingButtonProps>`
   position: absolute;
   visibility: hidden; // visibility works with transitions, display does not
   transition: all 0.5s; // would be nice to make this zoom rather than expand, not sure how to do that though (briefly looked at MUI's Zoom component)
-  z-index: 1;
 
   ${StyledDiv}:hover & {
     visibility: visible;
