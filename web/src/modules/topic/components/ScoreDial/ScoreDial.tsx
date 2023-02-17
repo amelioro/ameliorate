@@ -5,7 +5,7 @@ import { useDoesDiagramExist } from "../../store/store";
 import { getClaimDiagramId } from "../../utils/claim";
 import { type ScorableType, type Score, possibleScores } from "../../utils/diagram";
 import { indicatorLength } from "../../utils/nodes";
-import { FloatingButton, FloatingDiv, MainButton, StyledDiv } from "./ScoreDial.style";
+import { FloatingButton, FloatingDiv, MainButton, StyledDiv } from "./ScoreDial.styles";
 
 const getButtonPositions = (expansionRadius: number, numberOfButtons: number) => {
   const degreesPerScore = 360 / numberOfButtons;

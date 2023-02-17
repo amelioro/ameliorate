@@ -5,7 +5,7 @@ import { EdgeLabelRenderer, getBezierPath } from "reactflow";
 import { spaceBetweenNodes } from "../../utils/layout";
 import { EdgeProps } from "../Diagram/Diagram";
 import { ScoreDial } from "../ScoreDial/ScoreDial";
-import { StyledDiv } from "./ScoreEdge.style";
+import { StyledDiv } from "./ScoreEdge.styles";
 
 // base for custom edge taken from https://reactflow.dev/docs/examples/edges/edge-with-button/
 // TODO: upgrade react-flow and remove foreignObject jazz https://github.com/wbkd/react-flow/releases/tag/11.2.0
