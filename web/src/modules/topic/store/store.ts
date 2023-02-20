@@ -11,7 +11,6 @@ import { doesDiagramExist } from "./actions";
 import { migrate } from "./migrate";
 import { getTopicTitle } from "./utils";
 
-export const rootId = "root";
 export const problemDiagramId = "root";
 
 const initialDiagrams: Record<string, Diagram> = {
