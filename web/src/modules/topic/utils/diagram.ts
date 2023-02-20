@@ -24,7 +24,6 @@ export interface Node {
   data: {
     label: string;
     score: Score;
-    width: number;
     diagramId: string;
   };
   position: {
