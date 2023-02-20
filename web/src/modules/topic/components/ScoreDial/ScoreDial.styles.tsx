@@ -1,11 +1,5 @@
 import styled from "@emotion/styled";
-import { Button } from "@mui/material";
-
-export const StyledDiv = styled.div`
-  display: flex;
-  position: relative;
-  margin: 2px;
-`;
+import { Button, Popper, css } from "@mui/material";
 
 interface StyledButtonProps {
   buttonLength: number;
@@ -26,45 +20,28 @@ const StyledButton = styled(Button, options)<StyledButtonProps>`
   border-radius: 50%;
 `;
 
-export const MainButton = styled(StyledButton)``;
+export const MainButton = styled(StyledButton)`
+  margin: 2px;
+`;
 
 interface FloatingButtonProps {
   position: {
     x: number;
     y: number;
   };
-  buttonLength: number; // just forwarded
 }
 
-export const FloatingButton = styled(StyledButton)<FloatingButtonProps>`
-  position: absolute;
-  visibility: hidden; // visibility works with transitions, display does not
-  transition: all 0.5s; // would be nice to make this zoom rather than expand, not sure how to do that though (briefly looked at MUI's Zoom component)
+const floatingButtonOptions = {
+  shouldForwardProp: (prop: string) => !["position"].includes(prop),
+};
 
-  ${StyledDiv}:hover & {
-    visibility: visible;
-    transform: ${({ position }) => `translate(${position.x}px, ${position.y}px)`};
-  }
+export const FloatingButton = styled(StyledButton, floatingButtonOptions)<FloatingButtonProps>`
+  position: absolute;
+  transform: ${({ position }) => `translate(${position.x}px, ${position.y}px)`};
 `;
 
-interface FloatingDivProps {
-  radius: number;
-  buttonLength: number;
-}
-
-// keep floating buttons displayed while hovering within this
-export const FloatingDiv = styled.div<FloatingDivProps>`
-  position: absolute;
-  width: ${({ radius, buttonLength }) => `${radius * 2 + buttonLength}px`};
-  height: ${({ radius, buttonLength }) => `${radius * 2 + buttonLength}px`};
-  transform: ${({ buttonLength }) =>
-    // center around MainButton, then shift by half floating button width because lowest button is positioned from its top
-    `translate(-50%, -50%) translate(${buttonLength / 2}px, ${buttonLength / 2}px)`};
-  border-radius: 50%;
-  display: none;
-  z-index: 0; // render behind buttons
-
-  ${StyledDiv}:hover & {
-    display: inherit;
-  }
+export const StyledPopper = styled(Popper)`
+  ${({ theme }) => css`
+    z-index: ${theme.zIndex.tooltip}; // even in front of toolbars
+  `}
 `;
