@@ -18,7 +18,7 @@ import { type Edge, type Node } from "../../utils/diagram";
 import { type NodeType } from "../../utils/nodes";
 import { FlowNode } from "../FlowNode/FlowNode";
 import { ScoreEdge } from "../ScoreEdge/ScoreEdge";
-import { PositionedIconButton, StyledReactFlow } from "./Diagram.styles";
+import { PositionedCloseButton, StyledReactFlow } from "./Diagram.styles";
 
 const buildNodeComponent = (type: NodeType) => {
   // eslint-disable-next-line react/display-name -- react flow dynamically creates these components without name anyway
@@ -63,9 +63,9 @@ export const Diagram = ({ diagramId }: DiagramProps) => {
 
   const showCloseButton = diagram.type === "claim";
   const closeButton = (
-    <PositionedIconButton onClick={() => closeClaimDiagram()} color="primary">
+    <PositionedCloseButton onClick={() => closeClaimDiagram()} color="primary">
       <Cancel />
-    </PositionedIconButton>
+    </PositionedCloseButton>
   );
 
   const emptyText = <Typography variant="h5">Right-click to create</Typography>;

@@ -12,7 +12,7 @@ import { EditableNode } from "../EditableNode/EditableNode";
 import { NodeCell } from "../NodeCell/NodeCell";
 import {
   PositionedAddNodeButton,
-  PositionedIconButton,
+  PositionedCloseButton,
   TableDiv,
   TitleDiv,
   tableStyles,
@@ -89,9 +89,9 @@ export const CriteriaTable = ({ problemNodeId }: Props) => {
 
   return (
     <>
-      <PositionedIconButton onClick={() => closeTable()} color="primary">
+      <PositionedCloseButton onClick={() => closeTable()} color="primary">
         <Cancel />
-      </PositionedIconButton>
+      </PositionedCloseButton>
 
       <TitleDiv>
         <Typography variant="h4">Criteria for solving:</Typography>
