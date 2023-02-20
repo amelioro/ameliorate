@@ -3,7 +3,7 @@ import _ from "lodash";
 import { range } from "lodash";
 
 export const migrate = (persistedState: any, version: number) => {
-  const migrations = [migrate_0_to_1, migrate_1_to_2, migrate_2_to_3];
+  const migrations = [migrate_0_to_1, migrate_1_to_2, migrate_2_to_3, migrate_3_to_4];
 
   let state = persistedState;
 
@@ -73,6 +73,25 @@ const migrate_2_to_3 = (state: any) => {
       if (node.type === "problem") {
         node.data.showCriteria = true;
       }
+    });
+  });
+
+  return state;
+};
+
+const migrate_3_to_4 = (state: any) => {
+  // activeDiagramId -> activeClaimDiagramId, activeTableProblemId
+  state.activeClaimDiagramId = null;
+  state.activeTableProblemId = null;
+  delete state.activeDiagramId;
+
+  Object.values(state.diagrams).forEach((diagram: any) => {
+    // "Problem"->"problem" and "Claim"->"claim"
+    diagram.type = diagram.type.toLowerCase();
+
+    diagram.nodes.forEach((node: any) => {
+      // width removed from store (replaced with hardcoded value)
+      delete node.data.width;
     });
   });
 
