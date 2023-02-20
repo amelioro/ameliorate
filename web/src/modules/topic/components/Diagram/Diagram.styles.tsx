@@ -7,11 +7,10 @@ export const StyledReactFlow = styled(ReactFlow)`
   display: "flex";
   justify-content: "center";
   align-items: "center";
-  z-index: 1; // behind close button
 `;
 
-export const PositionedIconButton = styled(IconButton)`
+export const PositionedCloseButton = styled(IconButton)`
   position: absolute;
-  z-index: 2;
+  z-index: 1;
   right: 0;
 `;

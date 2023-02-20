@@ -7,7 +7,6 @@
           "data": {
             "label": "unwanted pregnancy",
             "score": "-",
-            "width": 300,
             "diagramId": "root",
             "showCriteria": false
           },
@@ -17,104 +16,84 @@
         },
         {
           "id": "2",
-          "data": { "label": "abortion", "score": "8", "width": 300, "diagramId": "root" },
+          "data": { "label": "abortion", "score": "8", "diagramId": "root" },
           "position": { "x": 0, "y": 244 },
           "selected": false,
           "type": "solution"
         },
         {
           "id": "3",
-          "data": { "label": "adoption", "score": "7", "width": 300, "diagramId": "root" },
+          "data": { "label": "adoption", "score": "7", "diagramId": "root" },
           "position": { "x": 350, "y": 244 },
           "selected": false,
           "type": "solution"
         },
         {
           "id": "35",
-          "data": { "label": "safe for mother", "score": "-", "width": 300, "diagramId": "root" },
+          "data": { "label": "safe for mother", "score": "-", "diagramId": "root" },
           "position": { "x": 1760, "y": 244 },
           "selected": false,
           "type": "criterion"
         },
         {
           "id": "36",
-          "data": {
-            "label": "inexpensive for mother",
-            "score": "-",
-            "width": 300,
-            "diagramId": "root"
-          },
+          "data": { "label": "inexpensive for mother", "score": "-", "diagramId": "root" },
           "position": { "x": 2110, "y": 244 },
           "selected": false,
           "type": "criterion"
         },
         {
           "id": "38",
-          "data": { "label": "safe for child", "score": "-", "width": 300, "diagramId": "root" },
+          "data": { "label": "safe for child", "score": "-", "diagramId": "root" },
           "position": { "x": 2460, "y": 244 },
           "selected": false,
           "type": "criterion"
         },
         {
           "id": "39",
-          "data": { "label": "mother has choice", "score": "-", "width": 300, "diagramId": "root" },
+          "data": { "label": "mother has choice", "score": "-", "diagramId": "root" },
           "position": { "x": 2810, "y": 244 },
           "selected": false,
           "type": "criterion"
         },
         {
           "id": "40",
-          "data": { "label": "father has choice", "score": "-", "width": 300, "diagramId": "root" },
+          "data": { "label": "father has choice", "score": "-", "diagramId": "root" },
           "position": { "x": 3160, "y": 244 },
           "selected": false,
           "type": "criterion"
         },
         {
           "id": "41",
-          "data": {
-            "label": "painless for mother",
-            "score": "-",
-            "width": 300,
-            "diagramId": "root"
-          },
+          "data": { "label": "painless for mother", "score": "-", "diagramId": "root" },
           "position": { "x": 3510, "y": 244 },
           "selected": false,
           "type": "criterion"
         },
         {
           "id": "42",
-          "data": {
-            "label": "inexpensive for society",
-            "score": "-",
-            "width": 300,
-            "diagramId": "root"
-          },
+          "data": { "label": "inexpensive for society", "score": "-", "diagramId": "root" },
           "position": { "x": 3860, "y": 244 },
           "selected": false,
           "type": "criterion"
         },
         {
           "id": "43",
-          "data": {
-            "label": "inexpensive for helpers",
-            "score": "-",
-            "width": 300,
-            "diagramId": "root"
-          },
+          "data": { "label": "inexpensive for helpers", "score": "-", "diagramId": "root" },
           "position": { "x": 4210, "y": 244 },
           "selected": false,
           "type": "criterion"
         },
         {
           "id": "44",
-          "data": { "label": "sex education", "score": "8", "width": 300, "diagramId": "root" },
+          "data": { "label": "sex education", "score": "8", "diagramId": "root" },
           "position": { "x": 700, "y": 244 },
           "selected": false,
           "type": "solution"
         },
         {
           "id": "45",
-          "data": { "label": "contraceptives", "score": "8", "width": 300, "diagramId": "root" },
+          "data": { "label": "contraceptives", "score": "8", "diagramId": "root" },
           "position": { "x": 1050, "y": 244 },
           "selected": false,
           "type": "solution"
@@ -518,18 +497,13 @@
           "type": "ScoreEdge"
         }
       ],
-      "type": "Problem"
+      "type": "problem"
     },
     "node-3": {
       "nodes": [
         {
           "id": "16",
-          "data": {
-            "label": "\"adoption\" is important",
-            "score": "7",
-            "width": 300,
-            "diagramId": "node-3"
-          },
+          "data": { "label": "\"adoption\" is important", "score": "7", "diagramId": "node-3" },
           "position": { "x": 0, "y": 70 },
           "selected": false,
           "type": "rootClaim"
@@ -539,7 +513,6 @@
           "data": {
             "label": "some people can't have kids otherwise",
             "score": "-",
-            "width": 300,
             "diagramId": "node-3"
           },
           "position": { "x": 560, "y": 0 },
@@ -548,12 +521,7 @@
         },
         {
           "id": "18",
-          "data": {
-            "label": "some kids are really mean",
-            "score": "2",
-            "width": 300,
-            "diagramId": "node-3"
-          },
+          "data": { "label": "some kids are really mean", "score": "2", "diagramId": "node-3" },
           "position": { "x": 560, "y": 140 },
           "selected": false,
           "type": "critique"
@@ -579,73 +547,48 @@
           "label": "critiques"
         }
       ],
-      "type": "Claim"
+      "type": "claim"
     },
     "node-2": {
       "nodes": [
         {
           "id": "19",
-          "data": {
-            "label": "\"abortion\" is important",
-            "score": "8",
-            "width": 300,
-            "diagramId": "node-2"
-          },
+          "data": { "label": "\"abortion\" is important", "score": "8", "diagramId": "node-2" },
           "position": { "x": 0, "y": 280 },
           "selected": false,
           "type": "rootClaim"
         },
         {
           "id": "20",
-          "data": {
-            "label": "less risk to mother",
-            "score": "-",
-            "width": 300,
-            "diagramId": "node-2"
-          },
+          "data": { "label": "less risk to mother", "score": "-", "diagramId": "node-2" },
           "position": { "x": 560, "y": 0 },
           "selected": false,
           "type": "support"
         },
         {
           "id": "21",
-          "data": {
-            "label": "less pain for mother",
-            "score": "-",
-            "width": 300,
-            "diagramId": "node-2"
-          },
+          "data": { "label": "less pain for mother", "score": "-", "diagramId": "node-2" },
           "position": { "x": 560, "y": 140 },
           "selected": false,
           "type": "support"
         },
         {
           "id": "22",
-          "data": { "label": "bodily autonomy", "score": "-", "width": 300, "diagramId": "node-2" },
+          "data": { "label": "bodily autonomy", "score": "-", "diagramId": "node-2" },
           "position": { "x": 560, "y": 280 },
           "selected": false,
           "type": "support"
         },
         {
           "id": "23",
-          "data": {
-            "label": "violates life rights of fetus",
-            "score": "-",
-            "width": 300,
-            "diagramId": "node-2"
-          },
+          "data": { "label": "violates life rights of fetus", "score": "-", "diagramId": "node-2" },
           "position": { "x": 560, "y": 420 },
           "selected": false,
           "type": "critique"
         },
         {
           "id": "24",
-          "data": {
-            "label": "men should have stake as well",
-            "score": "-",
-            "width": 300,
-            "diagramId": "node-2"
-          },
+          "data": { "label": "men should have stake as well", "score": "-", "diagramId": "node-2" },
           "position": { "x": 560, "y": 560 },
           "selected": false,
           "type": "critique"
@@ -698,7 +641,7 @@
           "label": "critiques"
         }
       ],
-      "type": "Claim"
+      "type": "claim"
     },
     "edge-1": {
       "nodes": [
@@ -707,7 +650,6 @@
           "data": {
             "label": "\"abortion\" solves \"unwanted pregnancy\"",
             "score": "7",
-            "width": 300,
             "diagramId": "edge-1"
           },
           "position": { "x": 0, "y": 0 },
@@ -719,7 +661,6 @@
           "data": {
             "label": "some cases too late for abortion",
             "score": "-",
-            "width": 300,
             "diagramId": "edge-1"
           },
           "position": { "x": 560, "y": 0 },
@@ -738,7 +679,7 @@
           "label": "critiques"
         }
       ],
-      "type": "Claim"
+      "type": "claim"
     },
     "edge-2": {
       "nodes": [
@@ -747,7 +688,6 @@
           "data": {
             "label": "\"adoption\" solves \"unwanted pregnancy\"",
             "score": "5",
-            "width": 300,
             "diagramId": "edge-2"
           },
           "position": { "x": 0, "y": 70 },
@@ -756,12 +696,7 @@
         },
         {
           "id": "28",
-          "data": {
-            "label": "doesn't interfere with birth",
-            "score": "-",
-            "width": 300,
-            "diagramId": "edge-2"
-          },
+          "data": { "label": "doesn't interfere with birth", "score": "-", "diagramId": "edge-2" },
           "position": { "x": 560, "y": 0 },
           "selected": false,
           "type": "support"
@@ -771,7 +706,6 @@
           "data": {
             "label": "mother still goes through pregnancy pains & costs",
             "score": "-",
-            "width": 300,
             "diagramId": "edge-2"
           },
           "position": { "x": 560, "y": 140 },
@@ -799,10 +733,11 @@
           "label": "critiques"
         }
       ],
-      "type": "Claim"
+      "type": "claim"
     }
   },
-  "activeDiagramId": "root",
+  "activeTableProblemId": null,
+  "activeClaimDiagramId": null,
   "nextNodeId": 46,
   "nextEdgeId": 73
 }

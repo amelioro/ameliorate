@@ -9,38 +9,42 @@ import { HydrationContext } from "../../../pages/index";
 import { Diagram, buildNode, filterHiddenComponents } from "../utils/diagram";
 import { doesDiagramExist } from "./actions";
 import { migrate } from "./migrate";
+import { getTopicTitle } from "./utils";
 
-export const rootId = "root";
+export const problemDiagramId = "root";
 
 const initialDiagrams: Record<string, Diagram> = {
-  [rootId]: {
-    nodes: [buildNode({ id: "0", type: "problem", diagramId: rootId })],
+  [problemDiagramId]: {
+    id: problemDiagramId,
+    nodes: [buildNode({ id: "0", type: "problem", diagramId: problemDiagramId })],
     edges: [],
-    type: "Problem",
+    type: "problem",
   },
 };
 
-export interface DiagramStoreState {
+export interface TopicStoreState {
   diagrams: Record<string, Diagram>;
-  activeDiagramId: string;
+  activeTableProblemId: string | null;
+  activeClaimDiagramId: string | null;
   nextNodeId: number;
   nextEdgeId: number;
 }
 
-export const initialState = {
+export const initialState: TopicStoreState = {
   diagrams: initialDiagrams,
-  activeDiagramId: rootId,
+  activeTableProblemId: null,
+  activeClaimDiagramId: null,
   nextNodeId: 1, // 0 is taken by the initial node
   nextEdgeId: 0,
 };
 
 // create atomic selectors for usage outside of store/ dir
 // this is only exported to allow actions to be extracted to a separate file
-export const useDiagramStore = create<DiagramStoreState>()(
+export const useTopicStore = create<TopicStoreState>()(
   temporal(
     persist(immer(devtools(() => initialState)), {
-      name: "diagram-storage",
-      version: 3,
+      name: "diagram-storage", // should probably be "topic-storage" but don't know how to migrate
+      version: 4,
       migrate: migrate,
     }),
     {
@@ -57,14 +61,14 @@ export const useDiagramStore = create<DiagramStoreState>()(
 
 // create atomic selectors for usage outside of store/ dir
 // this is only exported to allow hooks to be extracted to a separate file
-export const useDiagramStoreAfterHydration = ((selector, compare) => {
+export const useTopicStoreAfterHydration = ((selector, compare) => {
   /*
   This a fix to ensure zustand never hydrates the store before React hydrates the page.
   Without this, there is a mismatch between SSR/SSG and client side on first draw which produces
   an error.
   Thanks https://github.com/pmndrs/zustand/issues/1145#issuecomment-1247061387
    */
-  const store = useDiagramStore(selector, compare);
+  const store = useTopicStore(selector, compare);
 
   // unfortunately, useEffect triggers on first render of every component using this,
   // so when the page has already been loaded, any new component will be rendered for the first time with
@@ -73,20 +77,14 @@ export const useDiagramStoreAfterHydration = ((selector, compare) => {
   const isHydrated = useContext(HydrationContext);
 
   return isHydrated ? store : selector(initialState);
-}) as typeof useDiagramStore;
+}) as typeof useTopicStore;
 
-export const useActiveDiagramId = () => {
-  return useDiagramStoreAfterHydration((state) => state.activeDiagramId);
-};
-
-export const useFilteredActiveDiagram = () => {
-  return useDiagramStoreAfterHydration((state) =>
-    filterHiddenComponents(state.diagrams[state.activeDiagramId])
-  );
+export const useFilteredDiagram = (diagramId: string) => {
+  return useTopicStoreAfterHydration((state) => filterHiddenComponents(state.diagrams[diagramId]));
 };
 
 export const useDiagramType = (diagramId: string) => {
-  return useDiagramStoreAfterHydration((state) => {
+  return useTopicStoreAfterHydration((state) => {
     // Zombie child issue, see https://github.com/pmndrs/zustand/issues/302
     // batchedUpdates isn't necessary because react already batches updates as of react 18
     // Batching doesn't fix this though because the error isn't when rendering, it's when checking the store's comparers
@@ -95,18 +93,33 @@ export const useDiagramType = (diagramId: string) => {
   });
 };
 
+// topic view id is the claim or problem diagram id
+export const useTopicViewId = () => {
+  return useTopicStoreAfterHydration(
+    (state) => state.activeClaimDiagramId ?? state.activeTableProblemId ?? problemDiagramId
+  );
+};
+
 export const useRootTitle = () => {
-  return useDiagramStoreAfterHydration((state) => state.diagrams[rootId].nodes[0].data.label);
+  return useTopicStoreAfterHydration((state) => getTopicTitle(state));
+};
+
+export const useActiveClaimDiagramId = () => {
+  return useTopicStoreAfterHydration((state) => state.activeClaimDiagramId);
+};
+
+export const useActiveTableProblemId = () => {
+  return useTopicStoreAfterHydration((state) => state.activeTableProblemId);
 };
 
 export const useClaimDiagramIdentifiers = () => {
-  return useDiagramStoreAfterHydration((state) =>
+  return useTopicStoreAfterHydration((state) =>
     Object.entries(state.diagrams)
-      .filter(([id, _]) => id !== rootId)
+      .filter(([id, _]) => id !== problemDiagramId)
       .map(([id, diagram]) => [id, diagram.nodes[0].data.label])
   );
 };
 
 export const useDoesDiagramExist = (diagramId: string) => {
-  return useDiagramStoreAfterHydration((state) => Object.keys(state.diagrams).includes(diagramId));
+  return useTopicStoreAfterHydration((state) => Object.keys(state.diagrams).includes(diagramId));
 };

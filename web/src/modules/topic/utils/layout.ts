@@ -1,5 +1,6 @@
 import dagre from "dagre";
 
+import { nodeWidth } from "../components/EditableNode/EditableNode.styles";
 import { type Edge, type Node } from "../utils/diagram";
 
 export type Orientation = "TB" | "BT" | "LR" | "RL";
@@ -15,7 +16,7 @@ export const layout = (nodes: Node[], edges: Edge[], orientation: Orientation) =
   dagreGraph.setGraph({ rankdir: orientation, ranksep: spaceBetweenNodes });
 
   nodes.forEach((node) => {
-    dagreGraph.setNode(node.id, { width: node.data.width, height: height });
+    dagreGraph.setNode(node.id, { width: nodeWidth, height: height });
   });
 
   edges.forEach((edge) => {
@@ -34,7 +35,7 @@ export const layout = (nodes: Node[], edges: Edge[], orientation: Orientation) =
     return {
       ...node,
       position: {
-        x: nodeWithPosition.x - node.data.width / 2,
+        x: nodeWithPosition.x - nodeWidth / 2,
         y: nodeWithPosition.y - height / 2,
       },
     };

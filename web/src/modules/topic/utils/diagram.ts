@@ -4,15 +4,16 @@ import { RelationName, childNode, parentNode } from "./edge";
 import { Orientation, layout } from "./layout";
 import { NodeType, children, onlyParent } from "./nodes";
 
-export type DiagramType = "Problem" | "Claim";
-export type RelationDirection = "Parent" | "Child";
+export type DiagramType = "problem" | "claim";
+export type RelationDirection = "parent" | "child";
 
 export const orientations: Record<DiagramType, Orientation> = {
-  Problem: "TB",
-  Claim: "LR",
+  problem: "TB",
+  claim: "LR",
 };
 
 export interface Diagram {
+  id: string;
   nodes: Node[];
   edges: Edge[];
   type: DiagramType;
@@ -23,7 +24,6 @@ export interface Node {
   data: {
     label: string;
     score: Score;
-    width: number;
     diagramId: string;
   };
   position: {
@@ -63,12 +63,24 @@ export const buildNode = ({ id, label, score, type, diagramId }: BuildProps) => 
   }
 };
 
+export interface Edge {
+  id: string;
+  data: {
+    score: Score;
+  };
+  label: RelationName;
+  markerStart: { type: MarkerType; width: number; height: number };
+  source: string;
+  target: string;
+  type: "ScoreEdge";
+}
+
 export const buildEdge = (
   newEdgeId: string,
   sourceNodeId: string,
   targetNodeId: string,
   relation: RelationName
-) => {
+): Edge => {
   return {
     id: newEdgeId,
     data: {
@@ -82,7 +94,6 @@ export const buildEdge = (
     type: "ScoreEdge" as const,
   };
 };
-export type Edge = ReturnType<typeof buildEdge>;
 
 export type ScorableType = "node" | "edge";
 
@@ -107,7 +118,7 @@ export const findScorable = (diagram: Diagram, scorableId: string, scorableType:
   return scorableType === "node" ? findNode(diagram, scorableId) : findEdge(diagram, scorableId);
 };
 
-export const filterHiddenComponents = (diagram: Diagram) => {
+export const filterHiddenComponents = (diagram: Diagram): Diagram => {
   const shownNodes = diagram.nodes.filter((node) => {
     if (node.type !== "criterion") {
       return true;

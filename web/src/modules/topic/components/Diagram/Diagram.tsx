@@ -7,23 +7,23 @@ import {
   BackgroundVariant,
   type EdgeProps as DefaultEdgeProps,
   type NodeProps as DefaultNodeProps,
-  type Node as FlowNode,
+  type Node as FlowNodeState,
 } from "reactflow";
 
 import { ContextMenu } from "../../../../common/components/Menu/Menu";
 import { openContextMenu } from "../../../../common/store/contextMenuActions";
-import { connectNodes, deselectNodes, setActiveDiagram } from "../../store/actions";
-import { rootId, useActiveDiagramId, useFilteredActiveDiagram } from "../../store/store";
+import { closeClaimDiagram, connectNodes, deselectNodes } from "../../store/actions";
+import { useFilteredDiagram } from "../../store/store";
 import { type Edge, type Node } from "../../utils/diagram";
 import { type NodeType } from "../../utils/nodes";
-import { EditableNode } from "../EditableNode/EditableNode";
+import { FlowNode } from "../FlowNode/FlowNode";
 import { ScoreEdge } from "../ScoreEdge/ScoreEdge";
-import { PositionedIconButton, StyledReactFlow } from "./Diagram.styles";
+import { PositionedCloseButton, StyledReactFlow } from "./Diagram.styles";
 
 const buildNodeComponent = (type: NodeType) => {
   // eslint-disable-next-line react/display-name -- react flow dynamically creates these components without name anyway
   return (props: NodeProps) => {
-    return <EditableNode {...props} type={type} />;
+    return <FlowNode {...props} type={type} />;
   };
 };
 
@@ -51,18 +51,21 @@ export interface EdgeProps extends DefaultEdgeProps {
   data?: Edge["data"];
 }
 
-export const Diagram = () => {
-  const activeDiagramId = useActiveDiagramId();
-  const activeDiagram = useFilteredActiveDiagram();
+interface DiagramProps {
+  diagramId: string;
+}
 
-  const nodes = activeDiagram.nodes;
-  const edges = activeDiagram.edges;
+export const Diagram = ({ diagramId }: DiagramProps) => {
+  const diagram = useFilteredDiagram(diagramId);
 
-  const showCloseButton = activeDiagramId != rootId;
+  const nodes = diagram.nodes;
+  const edges = diagram.edges;
+
+  const showCloseButton = diagram.type === "claim";
   const closeButton = (
-    <PositionedIconButton onClick={() => setActiveDiagram(rootId)} color="primary">
+    <PositionedCloseButton onClick={() => closeClaimDiagram()} color="primary">
       <Cancel />
-    </PositionedIconButton>
+    </PositionedCloseButton>
   );
 
   const emptyText = <Typography variant="h5">Right-click to create</Typography>;
@@ -81,9 +84,11 @@ export const Diagram = () => {
         minZoom={0.25}
         onPaneClick={deselectNodes}
         onConnect={({ source, target }) => connectNodes(source, target)}
-        onNodeContextMenu={(event: MouseEvent, node: FlowNode) => openContextMenu(event, { node })}
+        onNodeContextMenu={(event: MouseEvent, node: FlowNodeState) =>
+          openContextMenu(event, { node })
+        }
         nodesDraggable={false}
-        nodesConnectable={activeDiagram.type !== "Claim"} // claim diagram is a tree, so cannot connect existing nodes
+        nodesConnectable={diagram.type !== "claim"} // claim diagram is a tree, so cannot connect existing nodes
       >
         <Background variant={BackgroundVariant.Dots} />
         {_(nodes).isEmpty() && emptyText}

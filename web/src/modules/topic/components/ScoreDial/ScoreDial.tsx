@@ -1,11 +1,12 @@
 import _ from "lodash";
+import { useState } from "react";
 
-import { setOrCreateActiveDiagram, setScore } from "../../store/actions";
+import { setScore, viewOrCreateClaimDiagram } from "../../store/actions";
 import { useDoesDiagramExist } from "../../store/store";
 import { getClaimDiagramId } from "../../utils/claim";
 import { type ScorableType, type Score, possibleScores } from "../../utils/diagram";
 import { indicatorLength } from "../../utils/nodes";
-import { FloatingButton, FloatingDiv, MainButton, StyledDiv } from "./ScoreDial.style";
+import { FloatingButton, MainButton, StyledPopper } from "./ScoreDial.styles";
 
 const getButtonPositions = (expansionRadius: number, numberOfButtons: number) => {
   const degreesPerScore = 360 / numberOfButtons;
@@ -42,6 +43,7 @@ interface ScoreDialProps {
 export const ScoreDial = ({ scorableId, scorableType, score }: ScoreDialProps) => {
   const childDiagramId = getClaimDiagramId(scorableId, scorableType);
   const doesDiagramExist = useDoesDiagramExist(childDiagramId);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const buttonLength = indicatorLength; //px
   const expansionRadius = 2 * buttonLength; // no collisions for fitting 11 elements
@@ -66,21 +68,38 @@ export const ScoreDial = ({ scorableId, scorableType, score }: ScoreDialProps) =
 
   return (
     <>
-      <StyledDiv>
-        {/* keep floating div as sibling to floating buttons so that each can be positioned relative to the MainButton */}
-        {floatingButtons}
-        <FloatingDiv radius={expansionRadius} buttonLength={buttonLength}></FloatingDiv>
+      <MainButton
+        onClick={() => viewOrCreateClaimDiagram(scorableId, scorableType)}
+        onMouseEnter={(event) => setAnchorEl(event.currentTarget)}
+        buttonLength={buttonLength}
+        variant="contained"
+        color="neutral"
+        sx={doesDiagramExist ? { border: 1 } : {}}
+      >
+        {score}
+      </MainButton>
 
-        <MainButton
-          onClick={() => setOrCreateActiveDiagram(scorableId, scorableType)}
-          buttonLength={buttonLength}
-          variant="contained"
-          color="neutral"
-          sx={doesDiagramExist ? { border: 1 } : {}}
-        >
-          {score}
-        </MainButton>
-      </StyledDiv>
+      <StyledPopper
+        id="simple-popper"
+        // Somewhat jank - right now the popper doesn't have a background, so MouseLeave triggers
+        // when moving mouse off of any of the buttons, which could be back towards the main button.
+        // I think the plan will be to use a whole pie menu instead of floating buttons,
+        // and that shouldn't have this problem.
+        onMouseLeave={() => setAnchorEl(null)}
+        modifiers={[
+          {
+            name: "offset",
+            options: {
+              // position centered on top of the main button https://popper.js.org/docs/v2/modifiers/offset/
+              offset: [(-1 * buttonLength) / 2, -1 * buttonLength],
+            },
+          },
+        ]}
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+      >
+        {floatingButtons}
+      </StyledPopper>
     </>
   );
 };

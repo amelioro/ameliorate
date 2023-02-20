@@ -7,7 +7,6 @@
           "data": {
             "label": "living location",
             "score": "-",
-            "width": 300,
             "diagramId": "root",
             "showCriteria": true
           },
@@ -17,73 +16,63 @@
         },
         {
           "id": "1",
-          "data": { "label": "madison", "score": "-", "width": 300, "diagramId": "root" },
+          "data": { "label": "madison", "score": "-", "diagramId": "root" },
           "position": { "x": 320, "y": 488 },
           "selected": false,
           "type": "solution"
         },
         {
           "id": "2",
-          "data": { "label": "chi - lakeview", "score": "-", "width": 300, "diagramId": "root" },
+          "data": { "label": "chi - lakeview", "score": "-", "diagramId": "root" },
           "position": { "x": 1120, "y": 488 },
           "selected": false,
           "type": "solution"
         },
         {
           "id": "3",
-          "data": {
-            "label": "chi - belmont gardens",
-            "score": "-",
-            "width": 300,
-            "diagramId": "root"
-          },
+          "data": { "label": "chi - belmont gardens", "score": "-", "diagramId": "root" },
           "position": { "x": 2360, "y": 488 },
           "selected": false,
           "type": "solution"
         },
         {
           "id": "4",
-          "data": {
-            "label": "chi - lincoln square",
-            "score": "-",
-            "width": 300,
-            "diagramId": "root"
-          },
+          "data": { "label": "chi - lincoln square", "score": "-", "diagramId": "root" },
           "position": { "x": 3160, "y": 488 },
           "selected": false,
           "type": "solution"
         },
         {
           "id": "5",
-          "data": { "label": "inexpensive", "score": "8", "width": 300, "diagramId": "root" },
+          "data": { "label": "inexpensive", "score": "8", "diagramId": "root" },
           "position": { "x": 1040, "y": 244 },
           "selected": false,
           "type": "criterion"
         },
         {
           "id": "6",
-          "data": { "label": "diverse", "score": "8", "width": 300, "diagramId": "root" },
+          "data": { "label": "diverse", "score": "8", "diagramId": "root" },
           "position": { "x": 1390, "y": 244 },
           "selected": false,
           "type": "criterion"
         },
         {
           "id": "7",
-          "data": { "label": "transit", "score": "6", "width": 300, "diagramId": "root" },
+          "data": { "label": "transit", "score": "6", "diagramId": "root" },
           "position": { "x": 1740, "y": 244 },
           "selected": false,
           "type": "criterion"
         },
         {
           "id": "8",
-          "data": { "label": "parking", "score": "6", "width": 300, "diagramId": "root" },
+          "data": { "label": "parking", "score": "6", "diagramId": "root" },
           "position": { "x": 2090, "y": 244 },
           "selected": false,
           "type": "criterion"
         },
         {
           "id": "9",
-          "data": { "label": "walkable", "score": "5", "width": 300, "diagramId": "root" },
+          "data": { "label": "walkable", "score": "5", "diagramId": "root" },
           "position": { "x": 2440, "y": 244 },
           "selected": false,
           "type": "criterion"
@@ -352,10 +341,11 @@
           "type": "ScoreEdge"
         }
       ],
-      "type": "Problem"
+      "type": "problem"
     }
   },
-  "activeDiagramId": "root",
+  "activeTableProblemId": null,
+  "activeClaimDiagramId": null,
   "nextNodeId": 10,
   "nextEdgeId": 29
 }

@@ -5,13 +5,16 @@ import fileDownload from "js-file-download";
 import { Menu } from "../../../../common/components/Menu/Menu";
 import { useMenu } from "../../../../common/hooks";
 import { getState, redo, resetState, setState, undo } from "../../store/actions";
-import { DiagramStoreState } from "../../store/store";
+import { TopicStoreState } from "../../store/store";
+import { getTopicTitle } from "../../store/utils";
 
 // TODO: might be useful to have downloaded state be more human editable;
 // for this, probably should prettify the JSON, and remove position values (we can re-layout on import)
 const downloadTopic = () => {
   const topicState = getState();
-  fileDownload(JSON.stringify(topicState), `${topicState.activeDiagramId}.json`);
+  const topicTitle = getTopicTitle(topicState);
+  const sanitizedFileName = topicTitle.replace(/[^a-z0-9]/gi, "_").toLowerCase(); // thanks https://stackoverflow.com/a/8485137
+  fileDownload(JSON.stringify(topicState), `${sanitizedFileName}.json`);
 };
 
 const uploadTopic = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,7 +23,7 @@ const uploadTopic = (event: React.ChangeEvent<HTMLInputElement>) => {
   event.target.files[0]
     .text()
     // TODO: validate that file JSON matches interface
-    .then((text) => setState(JSON.parse(text) as DiagramStoreState))
+    .then((text) => setState(JSON.parse(text) as TopicStoreState))
     .catch((error) => {
       console.log("error reading file: ", error);
       throw new Error("Failed to read file");
@@ -31,7 +34,7 @@ const loadExample = (exampleFileName: string) => {
   fetch(`/examples/${exampleFileName}`)
     .then((response) => response.json())
     // TODO: validate that file JSON matches interface
-    .then((exampleState) => setState(exampleState as DiagramStoreState))
+    .then((exampleState) => setState(exampleState as TopicStoreState))
     .catch((error) => {
       console.log("error loading example: ", error);
       throw new Error("Failed to load example");
