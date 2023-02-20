@@ -1,14 +1,25 @@
 import { Global } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import type { AppProps } from "next/app";
+import type { AppProps, NextWebVitalsMetric } from "next/app";
 import Head from "next/head";
+import { GoogleAnalytics, event } from "nextjs-google-analytics";
 
 import Layout from "../common/components/Layout";
 import { getThemeOptions } from "../common/theme";
 import { globals } from "../page_styles/_app.styles";
 
-function MyApp({ Component, pageProps }: AppProps) {
+// thanks https://github.com/MauricioRobayo/nextjs-google-analytics#web-vitals
+export const reportWebVitals = (metric: NextWebVitalsMetric) => {
+  event(metric.name, {
+    category: metric.label === "web-vital" ? "Web Vitals" : "Next.js custom metric",
+    value: Math.round(metric.name === "CLS" ? metric.value * 1000 : metric.value), // values must be integers
+    label: metric.id, // id unique to current page load
+    nonInteraction: true, // avoids affecting bounce rate.
+  });
+};
+
+const MyApp = ({ Component, pageProps }: AppProps) => {
   const theme = createTheme(getThemeOptions("light"));
 
   return (
@@ -22,6 +33,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
 
+      <GoogleAnalytics trackPageViews />
+
       <ThemeProvider theme={theme}>
         <CssBaseline />
 
@@ -33,6 +46,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Global styles={globals} />
     </>
   );
-}
+};
 
 export default MyApp;
