@@ -9,12 +9,21 @@ import {
   Typography,
 } from "@mui/material";
 import type { NextPage } from "next";
+import Head from "next/head";
 
 import { PaperMiddle } from "../page_styles/about.styles";
 
 const About: NextPage = () => {
   return (
     <>
+      <Head>
+        <title>about | ameliorate</title>
+        <meta
+          name="description"
+          content="Ameliorate is a tool that makes it easier to solve tough problems. Learn more about how ameliorate does this, its vision, mission, design principles, and roadmap."
+        />
+      </Head>
+
       <Box display="flex" justifyContent="center">
         <PaperMiddle>
           <Typography variant="h5">What is this?</Typography>
