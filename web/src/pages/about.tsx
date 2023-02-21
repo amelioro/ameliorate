@@ -9,12 +9,17 @@ import {
   Typography,
 } from "@mui/material";
 import type { NextPage } from "next";
+import Head from "next/head";
 
 import { PaperMiddle } from "../page_styles/about.styles";
 
 const About: NextPage = () => {
   return (
     <>
+      <Head>
+        <title>about | ameliorate</title>
+      </Head>
+
       <Box display="flex" justifyContent="center">
         <PaperMiddle>
           <Typography variant="h5">What is this?</Typography>

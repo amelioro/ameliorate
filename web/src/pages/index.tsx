@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import { NextPage } from "next";
+import Head from "next/head";
 import { createContext, useEffect, useState } from "react";
 
 import { CriteriaTable } from "../modules/topic/components/CriteriaTable/CriteriaTable";
@@ -21,6 +22,10 @@ const Page = () => {
 
   return (
     <>
+      <Head>
+        <title>solve problems | ameliorate</title>
+      </Head>
+
       <TopicToolbar />
       <Box flex={1}>
         <TopicPane />
