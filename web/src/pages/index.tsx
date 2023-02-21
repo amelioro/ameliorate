@@ -32,15 +32,22 @@ const Page = () => {
       </Head>
 
       <TopicToolbar />
-      <Box flex={1}>
+
+      <Box flex={1} position="relative">
         <TopicPane />
-        {/* how to get these diagrams to use different flow instances? i.e. independent saved viewport values */}
-        {claimDiagramId ? (
-          <Diagram diagramId={claimDiagramId} />
-        ) : tableProblemId ? (
-          <CriteriaTable problemNodeId={tableProblemId} />
-        ) : (
-          <Diagram diagramId={problemDiagramId} />
+
+        <Box width="100%" height="100%" position="absolute">
+          {tableProblemId ? (
+            <CriteriaTable problemNodeId={tableProblemId} />
+          ) : (
+            <Diagram diagramId={problemDiagramId} />
+          )}
+        </Box>
+
+        {claimDiagramId && (
+          <Box width="100%" height="100%" position="absolute">
+            <Diagram diagramId={claimDiagramId} />
+          </Box>
         )}
       </Box>
 
