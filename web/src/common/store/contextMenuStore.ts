@@ -1,6 +1,7 @@
-import { type Node as FlowNode } from "reactflow";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
+
+import { Node } from "../../modules/topic/utils/diagram";
 
 export interface MenuPosition {
   top: number;
@@ -8,7 +9,7 @@ export interface MenuPosition {
 }
 
 export interface Context {
-  node: FlowNode;
+  node: Node;
 }
 
 export interface ContextMenuStoreState {

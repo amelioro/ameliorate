@@ -1,6 +1,7 @@
 import { useTheme } from "@mui/material";
 import _ from "lodash";
 
+import { openContextMenu } from "../../../../common/store/contextMenuActions";
 import { setNodeLabel } from "../../store/actions";
 import { Node } from "../../utils/diagram";
 import { nodeDecorations } from "../../utils/nodes";
@@ -26,7 +27,11 @@ export const EditableNode = ({ node }: { node: Node }) => {
   const NodeIcon = nodeDecoration.NodeIcon;
 
   return (
-    <NodeDiv color={color} className={node.selected ? "selected" : ""}>
+    <NodeDiv
+      color={color}
+      className={node.selected ? "selected" : ""}
+      onContextMenu={(event) => openContextMenu(event, { node })}
+    >
       <YEdgeDiv>
         <NodeTypeDiv>
           <NodeIcon sx={{ width: "16px", height: "16px" }} />

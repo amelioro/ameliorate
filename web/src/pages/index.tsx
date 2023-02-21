@@ -3,6 +3,7 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { createContext, useEffect, useState } from "react";
 
+import { ContextMenu } from "../common/components/Menu/Menu";
 import { CriteriaTable } from "../modules/topic/components/CriteriaTable/CriteriaTable";
 import { Diagram } from "../modules/topic/components/Diagram/Diagram";
 import { TopicPane } from "../modules/topic/components/TopicPane/TopicPane";
@@ -42,6 +43,8 @@ const Page = () => {
           <Diagram diagramId={problemDiagramId} />
         )}
       </Box>
+
+      <ContextMenu />
     </>
   );
 };

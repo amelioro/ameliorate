@@ -1,17 +1,14 @@
 import { Cancel } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import _ from "lodash";
-import { ComponentType, MouseEvent } from "react";
+import { ComponentType } from "react";
 import {
   Background,
   BackgroundVariant,
   type EdgeProps as DefaultEdgeProps,
   type NodeProps as DefaultNodeProps,
-  type Node as FlowNodeState,
 } from "reactflow";
 
-import { ContextMenu } from "../../../../common/components/Menu/Menu";
-import { openContextMenu } from "../../../../common/store/contextMenuActions";
 import { closeClaimDiagram, connectNodes, deselectNodes } from "../../store/actions";
 import { useFilteredDiagram } from "../../store/store";
 import { type Edge, type Node } from "../../utils/diagram";
@@ -84,17 +81,12 @@ export const Diagram = ({ diagramId }: DiagramProps) => {
         minZoom={0.25}
         onPaneClick={deselectNodes}
         onConnect={({ source, target }) => connectNodes(source, target)}
-        onNodeContextMenu={(event: MouseEvent, node: FlowNodeState) =>
-          openContextMenu(event, { node })
-        }
         nodesDraggable={false}
         nodesConnectable={diagram.type !== "claim"} // claim diagram is a tree, so cannot connect existing nodes
       >
         <Background variant={BackgroundVariant.Dots} />
         {_(nodes).isEmpty() && emptyText}
       </StyledReactFlow>
-
-      <ContextMenu />
     </>
   );
 };
