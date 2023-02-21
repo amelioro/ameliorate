@@ -168,7 +168,8 @@
           "type": "ScoreEdge"
         }
       ],
-      "type": "problem"
+      "type": "problem",
+      "id": "root"
     }
   },
   "activeTableProblemId": null,

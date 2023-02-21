@@ -176,7 +176,8 @@
           "label": "solves"
         }
       ],
-      "type": "problem"
+      "type": "problem",
+      "id": "root"
     },
     "node-4": {
       "nodes": [
@@ -214,7 +215,8 @@
           "label": "supports"
         }
       ],
-      "type": "claim"
+      "type": "claim",
+      "id": "node-4"
     }
   },
   "activeTableProblemId": null,
