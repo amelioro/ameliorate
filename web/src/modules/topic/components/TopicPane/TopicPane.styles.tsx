@@ -16,7 +16,7 @@ export const PositionedDiv = styled.div`
   position: absolute;
 `;
 
-export const PositionedIconButton = styled(IconButton)`
+export const TogglePaneButton = styled(IconButton)`
   position: absolute;
   right: 0;
   transform: translateX(100%);

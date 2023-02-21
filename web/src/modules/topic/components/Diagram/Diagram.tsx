@@ -72,6 +72,7 @@ export const Diagram = ({ diagramId }: DiagramProps) => {
       {showCloseButton && closeButton}
 
       <StyledReactFlow
+        id={diagramId} // need unique ids to use multiple flow instances on the same page
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}
