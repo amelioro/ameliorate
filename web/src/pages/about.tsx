@@ -18,6 +18,10 @@ const About: NextPage = () => {
     <>
       <Head>
         <title>about | ameliorate</title>
+        <meta
+          name="description"
+          content="Ameliorate is a tool that makes it easier to solve tough problems. Learn more about how ameliorate does this, its vision, mission, design principles, and roadmap."
+        />
       </Head>
 
       <Box display="flex" justifyContent="center">
