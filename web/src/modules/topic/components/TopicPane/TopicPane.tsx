@@ -23,9 +23,9 @@ import {
 import {
   NestedListItemButton,
   PositionedDiv,
-  PositionedIconButton,
   StyledDrawer,
   StyledListItemButton,
+  TogglePaneButton,
 } from "./TopicPane.styles";
 
 export const TopicPane = () => {
@@ -51,9 +51,9 @@ export const TopicPane = () => {
     <>
       {/* div to enable menu button to be positioned to the right of the drawer */}
       <PositionedDiv>
-        <PositionedIconButton onClick={handleDrawerToggle} color="primary">
+        <TogglePaneButton onClick={handleDrawerToggle} color="primary">
           {isTopicDrawerOpen ? <ChevronLeft /> : <Menu />}
-        </PositionedIconButton>
+        </TogglePaneButton>
         {/* `permanent` because `persistent` adds transitions that conflict with our styles */}
         <StyledDrawer variant="permanent" open={isTopicDrawerOpen}>
           {/* Drawer's Paper height is full height of screen, so this toolbar exists to push the list below the two toolbars on the page */}
