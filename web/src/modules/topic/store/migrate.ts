@@ -85,7 +85,10 @@ const migrate_3_to_4 = (state: any) => {
   state.activeTableProblemId = null;
   delete state.activeDiagramId;
 
-  Object.values(state.diagrams).forEach((diagram: any) => {
+  Object.entries(state.diagrams).map(([diagramId, diagram]: [any, any]) => {
+    // set diagram id
+    diagram.id = diagramId;
+
     // "Problem"->"problem" and "Claim"->"claim"
     diagram.type = diagram.type.toLowerCase();
 

@@ -497,7 +497,8 @@
           "type": "ScoreEdge"
         }
       ],
-      "type": "problem"
+      "type": "problem",
+      "id": "root"
     },
     "node-3": {
       "nodes": [
@@ -547,7 +548,8 @@
           "label": "critiques"
         }
       ],
-      "type": "claim"
+      "type": "claim",
+      "id": "node-3"
     },
     "node-2": {
       "nodes": [
@@ -641,7 +643,8 @@
           "label": "critiques"
         }
       ],
-      "type": "claim"
+      "type": "claim",
+      "id": "node-2"
     },
     "edge-1": {
       "nodes": [
@@ -679,7 +682,8 @@
           "label": "critiques"
         }
       ],
-      "type": "claim"
+      "type": "claim",
+      "id": "edge-1"
     },
     "edge-2": {
       "nodes": [
@@ -733,7 +737,8 @@
           "label": "critiques"
         }
       ],
-      "type": "claim"
+      "type": "claim",
+      "id": "edge-2"
     }
   },
   "activeTableProblemId": null,

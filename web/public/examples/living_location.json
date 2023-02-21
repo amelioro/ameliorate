@@ -341,11 +341,12 @@
           "type": "ScoreEdge"
         }
       ],
-      "type": "problem"
+      "type": "problem",
+      "id": "root"
     }
   },
   "activeTableProblemId": null,
   "activeClaimDiagramId": null,
-  "nextNodeId": 10,
-  "nextEdgeId": 29
+  "nextNodeId": 11,
+  "nextEdgeId": 30
 }

@@ -48,7 +48,6 @@ export const buildNode = ({ id, label, score, type, diagramId }: BuildProps) => 
     data: {
       label: label ?? `text${id}`,
       score: score ?? ("-" as Score),
-      width: 300,
       diagramId: diagramId,
     },
     position: { x: 0, y: 0 }, // assume layout will adjust this
