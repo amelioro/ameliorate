@@ -1,3 +1,4 @@
+import { emitter } from "../../../common/event";
 import { getClaimDiagramId, getImplicitLabel, parseClaimDiagramId } from "../utils/claim";
 import {
   Edge,
@@ -123,6 +124,10 @@ export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) 
         nodes: activeDiagram.nodes.concat(newNode),
         edges: activeDiagram.edges.concat(newEdge),
       });
+
+      // trigger event so viewport can be updated.
+      // seems like there should be a cleaner way to do this - perhaps custom zustand middleware to emit for any action
+      emitter.emit("addNode", findNode(layoutedDiagram, newNode.id));
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
       activeDiagram.nodes = layoutedDiagram.nodes;
