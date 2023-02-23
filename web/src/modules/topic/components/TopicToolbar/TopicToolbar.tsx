@@ -59,10 +59,10 @@ export const TopicToolbar = () => {
           <MenuItem onClick={() => loadExample("world_hunger.json")}>World Hunger</MenuItem>
           <MenuItem onClick={() => loadExample("ameliorate.json")}>Ameliorate</MenuItem>
         </Menu>
-        <IconButton color="inherit" onClick={downloadTopic}>
+        <IconButton color="inherit" title="Download" aria-label="Download" onClick={downloadTopic}>
           <Download />
         </IconButton>
-        <IconButton color="inherit" component="label">
+        <IconButton color="inherit" component="label" title="Upload" aria-label="Upload">
           <Upload />
           <input hidden accept=".json" type="file" onChange={uploadTopic} />
         </IconButton>
@@ -73,13 +73,13 @@ export const TopicToolbar = () => {
         because it doesn't work with persist middleware.
         once this currently-in-progress PR merges, we should be able to do that easily!
         https://github.com/charkour/zundo/pull/61 */}
-        <IconButton color="inherit" onClick={undo}>
+        <IconButton color="inherit" title="Undo" aria-label="Undo" onClick={undo}>
           <Undo />
         </IconButton>
-        <IconButton color="inherit" onClick={redo}>
+        <IconButton color="inherit" title="Redo" aria-label="Redo" onClick={redo}>
           <Redo />
         </IconButton>
-        <IconButton color="inherit" onClick={resetState}>
+        <IconButton color="inherit" title="Reset" aria-label="Reset" onClick={resetState}>
           <AutoStoriesOutlined />
         </IconButton>
       </Toolbar>
