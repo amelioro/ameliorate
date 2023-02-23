@@ -1,14 +1,17 @@
 import { Cancel } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import _ from "lodash";
-import { ComponentType } from "react";
+import { ComponentType, useEffect } from "react";
 import {
   Background,
   BackgroundVariant,
   type EdgeProps as DefaultEdgeProps,
   type NodeProps as DefaultNodeProps,
+  ReactFlowProvider,
 } from "reactflow";
 
+import { emitter } from "../../../../common/event";
+import { useViewportUpdater } from "../../hooks/flow_hooks";
 import { closeClaimDiagram, connectNodes, deselectNodes } from "../../store/actions";
 import { useFilteredDiagram } from "../../store/store";
 import { type Edge, type Node } from "../../utils/diagram";
@@ -52,8 +55,9 @@ interface DiagramProps {
   diagramId: string;
 }
 
-export const Diagram = ({ diagramId }: DiagramProps) => {
+const DiagramWithoutProvider = ({ diagramId }: DiagramProps) => {
   const diagram = useFilteredDiagram(diagramId);
+  const { moveViewportToIncludeNode } = useViewportUpdater();
 
   const nodes = diagram.nodes;
   const edges = diagram.edges;
@@ -64,6 +68,11 @@ export const Diagram = ({ diagramId }: DiagramProps) => {
       <Cancel />
     </PositionedCloseButton>
   );
+
+  useEffect(() => {
+    const unbind = emitter.on("addNode", (node) => moveViewportToIncludeNode(node));
+    return () => unbind();
+  }, [moveViewportToIncludeNode]);
 
   const emptyText = <Typography variant="h5">Right-click to create</Typography>;
 
@@ -91,3 +100,10 @@ export const Diagram = ({ diagramId }: DiagramProps) => {
     </>
   );
 };
+
+export const Diagram = (props: DiagramProps) => (
+  // wrap in provider so we can use react-flow state https://reactflow.dev/docs/api/react-flow-provider/
+  <ReactFlowProvider>
+    <DiagramWithoutProvider {...props} />
+  </ReactFlowProvider>
+);

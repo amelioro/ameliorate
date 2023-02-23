@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { TextareaAutosize } from "@mui/material";
 
 export const nodeWidth = 300;
+export const nodeHeight = 84;
 
 export const YEdgeDiv = styled.div`
   display: flex;
