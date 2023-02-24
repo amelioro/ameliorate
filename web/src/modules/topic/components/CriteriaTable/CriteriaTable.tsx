@@ -54,7 +54,7 @@ const buildRows = (
 const buildColumns = (solutions: Node[]): MRT_ColumnDef<RowData>[] => {
   return [
     {
-      accessorKey: "criterion.data.label", // this is used for sorting/filtering, right?
+      accessorKey: "criterion.data.label", // this determines how cols should sort/filter
       header: "", // corner column header, and solutions are along the top
       Cell: ({ row }) => <NodeCell node={row.original.criterion as Node} />,
     },
@@ -95,7 +95,6 @@ export const CriteriaTable = ({ problemNodeId }: Props) => {
 
       <TitleDiv>
         <Typography variant="h4">Criteria for solving:</Typography>
-        {/* rename table cell to "not react flow"? */}
         <EditableNode node={problemNode} />
       </TitleDiv>
 
