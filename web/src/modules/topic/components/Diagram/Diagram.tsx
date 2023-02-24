@@ -70,9 +70,12 @@ const DiagramWithoutProvider = ({ diagramId }: DiagramProps) => {
   );
 
   useEffect(() => {
-    const unbind = emitter.on("addNode", (node) => moveViewportToIncludeNode(node));
+    const unbind = emitter.on("addNode", (node) => {
+      if (node.data.diagramId !== diagramId) return;
+      moveViewportToIncludeNode(node);
+    });
     return () => unbind();
-  }, [moveViewportToIncludeNode]);
+  }, [diagramId, moveViewportToIncludeNode]);
 
   const emptyText = <Typography variant="h5">Right-click to create</Typography>;
 
