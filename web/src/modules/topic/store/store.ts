@@ -5,7 +5,7 @@ import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
-import { HydrationContext } from "../../../pages/index";
+import { HydrationContext } from "../../../pages/index.page";
 import { Diagram, buildNode, filterHiddenComponents } from "../utils/diagram";
 import { doesDiagramExist } from "./actions";
 import { migrate } from "./migrate";
