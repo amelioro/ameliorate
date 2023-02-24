@@ -26,7 +26,7 @@ const StyledAddNodeButtonGroup = styled(AddNodeButtonGroup)`
 
   .react-flow__node:hover > &,
   .react-flow__node.selected > & {
-    display: inherit;
+    display: flex;
   }
 `;
 
