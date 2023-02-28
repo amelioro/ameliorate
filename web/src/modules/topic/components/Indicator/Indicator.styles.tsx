@@ -10,4 +10,8 @@ export const StyledButton = styled(Button)`
   margin-top: 2px;
   margin-left: 2px;
   padding: 0px;
+
+  &:hover > svg {
+    color: ${({ theme }) => theme.palette.neutral.dark};
+  }
 `;

@@ -25,12 +25,14 @@ declare module "@mui/material/styles" {
     primaryVariantDark: Palette["primary"];
     primaryVariantLight: Palette["primary"];
     neutral: Palette["primary"];
+    neutralContrast: Palette["primary"];
   }
 
   interface PaletteOptions extends NodeTypePaletteOptions {
     primaryVariantDark: PaletteOptions["primary"];
     primaryVariantLight: PaletteOptions["primary"];
     neutral: PaletteOptions["primary"];
+    neutralContrast: PaletteOptions["primary"];
   }
 }
 
@@ -41,18 +43,21 @@ declare module "@mui/material" {
     primaryVariantDark: true;
     primaryVariantLight: true;
     neutral: true;
+    neutralContrast: true;
   }
 
   interface AppBarPropsColorOverrides extends NodeTypeColors {
     primaryVariantDark: true;
     primaryVariantLight: true;
     neutral: true;
+    neutralContrast: true;
   }
 
   interface SvgIconPropsColorOverrides extends NodeTypeColors {
     primaryVariantDark: true;
     primaryVariantLight: true;
     neutral: true;
+    neutralContrast: true;
   }
 }
 /* eslint-disable @typescript-eslint/no-empty-interface */
@@ -90,6 +95,7 @@ const sharedPalette = {
   // use black contrast text for consistency with other node colors; accessibility tool indicates black is still accessible
   secondary: { main: secondary, contrastText: "rgba(0, 0, 0, 0.87)" },
   neutral: augmentColor({ color: { main: "#BDBDBD" } }), // gray is very neutral, somewhat arbitrarily chosen, no particular relation to the other colors
+  neutralContrast: augmentColor({ color: { main: "#000000" } }), // black contrasts with gray, separate from neutral.contrastText so that it gets its own augments I guess
   problem: augmentColor({ color: { main: secondary, contrastText: "rgba(0, 0, 0, 0.87)" } }),
   solution: augmentColor({ color: { main: primary } }),
   criterion: augmentColor({ color: { main: "#4AB885" } }), // mint: analogous to solution; between solution & support because criteria are kind of like supports for solutions

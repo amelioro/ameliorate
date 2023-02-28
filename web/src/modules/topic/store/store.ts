@@ -79,6 +79,10 @@ export const useTopicStoreAfterHydration = ((selector, compare) => {
   return isHydrated ? store : selector(initialState);
 }) as typeof useTopicStore;
 
+export const useDiagram = (diagramId: string) => {
+  return useTopicStoreAfterHydration((state) => state.diagrams[diagramId]);
+};
+
 export const useFilteredDiagram = (diagramId: string) => {
   return useTopicStoreAfterHydration((state) => filterHiddenComponents(state.diagrams[diagramId]));
 };
