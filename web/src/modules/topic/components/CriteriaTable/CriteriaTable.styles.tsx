@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { IconButton } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
 
 import { AddNodeButton } from "../AddNodeButton/AddNodeButton";
 import { nodeWidth } from "../EditableNode/EditableNode.styles";
@@ -60,12 +60,11 @@ const tableDivOptions = {
 };
 
 export const TableDiv = styled("div", tableDivOptions)<TableDivProps>`
+  left: 50%;
+  transform: translateX(-50%);
+  position: relative;
   ${({ numberOfColumns }) => {
     return css`
-      left: 50%;
-      transform: translateX(-50%);
-      position: relative;
-
       // Want to have table grow with columns, so we hardcode a total-width of table, but, if column widths
       // are hardcoded as well, doing so will create a horizontal scrollbar whenever too many rows results in a vertical scrollbar.
       // Therefore, the total-width will have a little extra space so that nodes are still >= min-width
@@ -85,7 +84,6 @@ const options = {
 
 export const PositionedAddNodeButton = styled(AddNodeButton, options)<AddNodeButtonProps>`
   position: absolute;
-
   ${({ position }) => {
     if (position === "column") {
       return css`
@@ -101,4 +99,10 @@ export const PositionedAddNodeButton = styled(AddNodeButton, options)<AddNodeBut
       `;
     }
   }}
+`;
+
+export const StyledTransposeTableButton = styled(Button)`
+  position: absolute;
+  top: 0;
+  left: 0;
 `;
