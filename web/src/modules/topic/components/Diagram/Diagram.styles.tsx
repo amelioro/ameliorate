@@ -9,7 +9,7 @@ export const StyledReactFlow = styled(ReactFlow)`
   align-items: center;
 
   // maintain some visual context when overlaying diagrams
-  background-color: rgba(255, 255, 255, 0.97);
+  background-color: rgba(255, 255, 255, 0.87);
 `;
 
 export const PositionedCloseButton = styled(IconButton)`
