@@ -1,5 +1,6 @@
 import { useTheme } from "@mui/material";
 import _ from "lodash";
+import { useEffect, useRef } from "react";
 
 import { openContextMenu } from "../../../../common/store/contextMenuActions";
 import { setNodeLabel } from "../../store/actions";
@@ -21,6 +22,15 @@ import {
 
 export const EditableNode = ({ node }: { node: Node }) => {
   const theme = useTheme();
+  const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
+  // TODO: BUG does not work nicely with the react-flow component. Focus is being taken away from the element after the component mounts.
+  useEffect(() => {
+    textAreaRef.current?.focus();
+    textAreaRef.current?.setSelectionRange(
+      textAreaRef.current.value.length,
+      textAreaRef.current.value.length
+    );
+  }, []);
 
   const nodeDecoration = nodeDecorations[node.type];
   const color = theme.palette[node.type].main;
@@ -46,6 +56,7 @@ export const EditableNode = ({ node }: { node: Node }) => {
       <MiddleDiv>
         <XEdgeDiv />
         <StyledTextareaAutosize
+          ref={textAreaRef}
           color={color}
           placeholder="Enter text..."
           // Will cause re-render on every keystroke because of onChange, hopefully this is fine.
