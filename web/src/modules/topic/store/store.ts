@@ -112,10 +112,10 @@ export const useActiveTableProblemId = () => {
   return useTopicStoreAfterHydration((state) => state.activeTableProblemId);
 };
 
-export const useClaimDiagramIdentifiers = () => {
+export const useClaimDiagramsWithExplicitClaims = () => {
   return useTopicStoreAfterHydration((state) =>
     Object.entries(state.diagrams)
-      .filter(([id, _]) => id !== problemDiagramId)
+      .filter(([id, diagram]) => id !== problemDiagramId && diagram.nodes.length > 1)
       .map(([id, diagram]) => [id, diagram.nodes[0].data.label])
   );
 };
