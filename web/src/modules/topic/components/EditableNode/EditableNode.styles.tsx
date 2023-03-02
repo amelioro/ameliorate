@@ -48,7 +48,8 @@ export const StyledTextareaAutosize = styled(TextareaAutosize)<StyledTextareaPro
   align-self: center;
   background-color: ${({ color }) => color};
   width: 100%;
-  font-size: 24px;
+  font-size: 20px;
+  font-family: inherit;
 `;
 
 interface NodeDivProps {

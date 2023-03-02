@@ -16,7 +16,7 @@ import { viewClaimDiagram, viewCriteriaTable, viewProblemDiagram } from "../../s
 import { useNodes } from "../../store/nodeHooks";
 import {
   problemDiagramId,
-  useClaimDiagramIdentifiers,
+  useClaimDiagramsWithExplicitClaims,
   useRootTitle,
   useTopicViewId,
 } from "../../store/store";
@@ -36,7 +36,7 @@ export const TopicPane = () => {
   const topicViewId = useTopicViewId();
 
   const rootTitle = useRootTitle();
-  const claimDiagramIdentifiers = useClaimDiagramIdentifiers();
+  const claimDiagramIdentifiers = useClaimDiagramsWithExplicitClaims();
   const problems = useNodes(problemDiagramId, (node) => node.type === "problem");
 
   const handleDrawerToggle = () => {
