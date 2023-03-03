@@ -29,6 +29,7 @@ type RowData = Record<string, Node | Edge>;
 //   [solution_id: string]: Edge,
 // }
 // but not sure how to type this because index signatures require _all_ properties to match the specified type
+
 const buildRows = (rowNodes: Node[], columnNodes: Node[], edges: Edge[]): RowData[] => {
   return rowNodes.map((rowNode) => {
     return {
