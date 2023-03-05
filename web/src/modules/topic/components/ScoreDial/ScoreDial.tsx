@@ -2,8 +2,6 @@ import _ from "lodash";
 import { useState } from "react";
 
 import { setScore, viewOrCreateClaimDiagram } from "../../store/actions";
-import { useDoesDiagramExist } from "../../store/store";
-import { getClaimDiagramId } from "../../utils/claim";
 import { type ScorableType, type Score, possibleScores } from "../../utils/diagram";
 import { indicatorLength } from "../../utils/nodes";
 import { FloatingButton, MainButton, StyledPopper } from "./ScoreDial.styles";
@@ -41,8 +39,6 @@ interface ScoreDialProps {
 // and button text is hard to fit in a small spot (i.e. corner of an EditableNode)
 // ... although... would "-" work well in a slider? want to allow the ability to deselect a score
 export const ScoreDial = ({ scorableId, scorableType, score }: ScoreDialProps) => {
-  const childDiagramId = getClaimDiagramId(scorableId, scorableType);
-  const doesDiagramExist = useDoesDiagramExist(childDiagramId);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const buttonLength = indicatorLength; //px
@@ -74,7 +70,6 @@ export const ScoreDial = ({ scorableId, scorableType, score }: ScoreDialProps) =
         buttonLength={buttonLength}
         variant="contained"
         color="neutral"
-        sx={doesDiagramExist ? { border: 1 } : {}}
       >
         {score}
       </MainButton>
