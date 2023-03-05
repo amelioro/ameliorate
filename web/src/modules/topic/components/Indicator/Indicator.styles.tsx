@@ -7,8 +7,7 @@ export const StyledButton = styled(Button)`
   width: ${indicatorLength}px;
   min-width: ${indicatorLength}px;
   height: ${indicatorLength}px;
-  margin-top: 2px;
-  margin-left: 2px;
+  margin-right: 2px;
   padding: 0px;
 
   &:hover > svg {

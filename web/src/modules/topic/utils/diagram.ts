@@ -62,6 +62,9 @@ export const buildNode = ({ id, label, score, type, diagramId }: BuildProps) => 
   }
 };
 
+// assumes that we always want to point from child to parent
+export const markerStart = { type: MarkerType.ArrowClosed, width: 30, height: 30 };
+
 export interface Edge {
   id: string;
   data: {
@@ -89,8 +92,7 @@ export const buildEdge = (
       diagramId: diagramId,
     },
     label: relation,
-    // assumes that we always want to point from child to parent
-    markerStart: { type: MarkerType.ArrowClosed, width: 30, height: 30 },
+    markerStart: markerStart,
     source: sourceNodeId,
     target: targetNodeId,
     type: "ScoreEdge" as const,
