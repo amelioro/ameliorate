@@ -20,9 +20,7 @@ const StyledButton = styled(Button, options)<StyledButtonProps>`
   border-radius: 50%;
 `;
 
-export const MainButton = styled(StyledButton)`
-  margin: 2px;
-`;
+export const MainButton = styled(StyledButton)``;
 
 interface FloatingButtonProps {
   position: {
