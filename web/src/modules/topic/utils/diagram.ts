@@ -66,6 +66,7 @@ export interface Edge {
   id: string;
   data: {
     score: Score;
+    diagramId: string;
   };
   label: RelationName;
   markerStart: { type: MarkerType; width: number; height: number };
@@ -78,12 +79,14 @@ export const buildEdge = (
   newEdgeId: string,
   sourceNodeId: string,
   targetNodeId: string,
-  relation: RelationName
+  relation: RelationName,
+  diagramId: string
 ): Edge => {
   return {
     id: newEdgeId,
     data: {
       score: "-" as Score,
+      diagramId: diagramId,
     },
     label: relation,
     // assumes that we always want to point from child to parent

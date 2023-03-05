@@ -3,7 +3,13 @@ import _ from "lodash";
 import { range } from "lodash";
 
 export const migrate = (persistedState: any, version: number) => {
-  const migrations = [migrate_0_to_1, migrate_1_to_2, migrate_2_to_3, migrate_3_to_4];
+  const migrations = [
+    migrate_0_to_1,
+    migrate_1_to_2,
+    migrate_2_to_3,
+    migrate_3_to_4,
+    migrate_4_to_5,
+  ];
 
   let state = persistedState;
 
@@ -95,6 +101,17 @@ const migrate_3_to_4 = (state: any) => {
     diagram.nodes.forEach((node: any) => {
       // width removed from store (replaced with hardcoded value)
       delete node.data.width;
+    });
+  });
+
+  return state;
+};
+
+const migrate_4_to_5 = (state: any) => {
+  Object.values(state.diagrams).forEach((diagram: any) => {
+    diagram.edges.forEach((edge: any) => {
+      // set diagramId on edges
+      edge.data.diagramId = diagram.id;
     });
   });
 

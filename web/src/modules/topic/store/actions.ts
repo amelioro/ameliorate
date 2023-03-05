@@ -63,7 +63,7 @@ const createAndConnectNode = (
 
   const sourceNodeId = as === "parent" ? newNodeId : fromNodeId;
   const targetNodeId = as === "parent" ? fromNodeId : newNodeId;
-  const newEdge = buildEdge(newEdgeId, sourceNodeId, targetNodeId, relation);
+  const newEdge = buildEdge(newEdgeId, sourceNodeId, targetNodeId, relation, activeDiagram.id);
 
   return [newNode, newEdge] as [Node, Edge];
 };
@@ -87,7 +87,13 @@ const connectCriteriaToSolutions = (state: TopicStoreState, newNode: Node, fromN
       const sourceNodeId = newNode.type === "criterion" ? newNode.id : targetNode.id;
       const targetNodeId = newNode.type === "criterion" ? targetNode.id : newNode.id;
 
-      return buildEdge(newCriterionEdgeId, sourceNodeId, targetNodeId, "embodies");
+      return buildEdge(
+        newCriterionEdgeId,
+        sourceNodeId,
+        targetNodeId,
+        "embodies",
+        problemDiagramId
+      );
     });
 
   return newCriterionEdges;
@@ -156,7 +162,7 @@ export const connectNodes = (parentId: string | null, childId: string | null) =>
 
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- canCreateEdge ensures relation is valid
       const relation = getRelation(parent.type, child.type)!;
-      const newEdge = buildEdge(newEdgeId, parent.id, child.id, relation.name);
+      const newEdge = buildEdge(newEdgeId, parent.id, child.id, relation.name, activeDiagram.id);
       const newEdges = activeDiagram.edges.concat(newEdge);
 
       const layoutedDiagram = layoutVisibleComponents({ ...activeDiagram, edges: newEdges });

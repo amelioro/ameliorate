@@ -87,7 +87,7 @@
       "edges": [
         {
           "id": "1",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "root" },
           "source": "0",
           "target": "2",
           "type": "ScoreEdge",
@@ -96,7 +96,7 @@
         },
         {
           "id": "2",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "root" },
           "source": "0",
           "target": "3",
           "type": "ScoreEdge",
@@ -105,7 +105,7 @@
         },
         {
           "id": "3",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "root" },
           "source": "0",
           "target": "4",
           "type": "ScoreEdge",
@@ -114,7 +114,7 @@
         },
         {
           "id": "4",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "root" },
           "source": "0",
           "target": "5",
           "type": "ScoreEdge",
@@ -123,7 +123,7 @@
         },
         {
           "id": "5",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "root" },
           "source": "2",
           "target": "6",
           "type": "ScoreEdge",
@@ -132,7 +132,7 @@
         },
         {
           "id": "6",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "root" },
           "source": "3",
           "target": "7",
           "type": "ScoreEdge",
@@ -141,7 +141,7 @@
         },
         {
           "id": "7",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "root" },
           "source": "4",
           "target": "8",
           "type": "ScoreEdge",
@@ -150,7 +150,7 @@
         },
         {
           "id": "8",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "root" },
           "source": "4",
           "target": "9",
           "type": "ScoreEdge",
@@ -159,7 +159,7 @@
         },
         {
           "id": "9",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "root" },
           "source": "4",
           "target": "10",
           "type": "ScoreEdge",
@@ -168,7 +168,7 @@
         },
         {
           "id": "10",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "root" },
           "source": "5",
           "target": "11",
           "type": "ScoreEdge",
@@ -207,7 +207,7 @@
       "edges": [
         {
           "id": "13",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "node-4" },
           "source": "14",
           "target": "15",
           "type": "ScoreEdge",

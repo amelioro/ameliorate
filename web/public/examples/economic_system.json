@@ -11,21 +11,21 @@
             "diagramId": "root",
             "showCriteria": true
           },
-          "position": { "x": 1195, "y": 0 },
+          "position": { "x": 940, "y": 0 },
           "selected": false,
           "type": "problem"
         },
         {
           "id": "1",
           "data": { "label": "\"True\" Capitalism", "score": "-", "diagramId": "root" },
-          "position": { "x": 430, "y": 488 },
+          "position": { "x": 320, "y": 488 },
           "selected": false,
           "type": "solution"
         },
         {
           "id": "2",
           "data": { "label": "Socialism", "score": "-", "diagramId": "root" },
-          "position": { "x": 1960, "y": 488 },
+          "position": { "x": 1560, "y": 488 },
           "selected": false,
           "type": "solution"
         },
@@ -36,7 +36,7 @@
             "score": "-",
             "diagramId": "root"
           },
-          "position": { "x": 320, "y": 244 },
+          "position": { "x": 240, "y": 244 },
           "selected": false,
           "type": "criterion"
         },
@@ -47,14 +47,14 @@
             "score": "-",
             "diagramId": "root"
           },
-          "position": { "x": 670, "y": 244 },
+          "position": { "x": 590, "y": 244 },
           "selected": false,
           "type": "criterion"
         },
         {
           "id": "23",
           "data": { "label": "Power in the right hands", "score": "-", "diagramId": "root" },
-          "position": { "x": 1020, "y": 244 },
+          "position": { "x": 940, "y": 244 },
           "selected": false,
           "type": "criterion"
         },
@@ -65,7 +65,7 @@
             "score": "1",
             "diagramId": "root"
           },
-          "position": { "x": 1370, "y": 244 },
+          "position": { "x": 1290, "y": 244 },
           "selected": false,
           "type": "criterion"
         },
@@ -76,14 +76,7 @@
             "score": "-",
             "diagramId": "root"
           },
-          "position": { "x": 1720, "y": 244 },
-          "selected": false,
-          "type": "criterion"
-        },
-        {
-          "id": "70",
-          "data": { "label": "text70", "score": "-", "diagramId": "root" },
-          "position": { "x": 2070, "y": 244 },
+          "position": { "x": 1640, "y": 244 },
           "selected": false,
           "type": "criterion"
         }
@@ -91,7 +84,7 @@
       "edges": [
         {
           "id": "0",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "root" },
           "label": "solves",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
@@ -100,7 +93,7 @@
         },
         {
           "id": "1",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "root" },
           "label": "solves",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
@@ -109,7 +102,7 @@
         },
         {
           "id": "7",
-          "data": { "score": "10" },
+          "data": { "score": "10", "diagramId": "root" },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "7",
@@ -118,7 +111,7 @@
         },
         {
           "id": "8",
-          "data": { "score": "1" },
+          "data": { "score": "1", "diagramId": "root" },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "7",
@@ -127,7 +120,7 @@
         },
         {
           "id": "6",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "root" },
           "label": "criterion for",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
@@ -136,7 +129,7 @@
         },
         {
           "id": "16",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "root" },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "19",
@@ -145,7 +138,7 @@
         },
         {
           "id": "17",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "root" },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "19",
@@ -154,7 +147,7 @@
         },
         {
           "id": "15",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "root" },
           "label": "criterion for",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
@@ -163,7 +156,7 @@
         },
         {
           "id": "21",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "root" },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "23",
@@ -172,7 +165,7 @@
         },
         {
           "id": "22",
-          "data": { "score": "3" },
+          "data": { "score": "3", "diagramId": "root" },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "23",
@@ -181,7 +174,7 @@
         },
         {
           "id": "20",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "root" },
           "label": "criterion for",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
@@ -190,7 +183,7 @@
         },
         {
           "id": "30",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "root" },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "33",
@@ -199,7 +192,7 @@
         },
         {
           "id": "31",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "root" },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "33",
@@ -208,7 +201,7 @@
         },
         {
           "id": "29",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "root" },
           "label": "criterion for",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
@@ -217,7 +210,7 @@
         },
         {
           "id": "33",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "root" },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "34",
@@ -226,7 +219,7 @@
         },
         {
           "id": "34",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "root" },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "34",
@@ -235,38 +228,11 @@
         },
         {
           "id": "32",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "root" },
           "label": "criterion for",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
           "target": "34",
-          "type": "ScoreEdge"
-        },
-        {
-          "id": "85",
-          "data": { "score": "-" },
-          "label": "embodies",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "70",
-          "target": "1",
-          "type": "ScoreEdge"
-        },
-        {
-          "id": "86",
-          "data": { "score": "-" },
-          "label": "embodies",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "70",
-          "target": "2",
-          "type": "ScoreEdge"
-        },
-        {
-          "id": "84",
-          "data": { "score": "-" },
-          "label": "criterion for",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "0",
-          "target": "70",
           "type": "ScoreEdge"
         }
       ],
@@ -362,7 +328,7 @@
       "edges": [
         {
           "id": "10",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "edge-7" },
           "label": "supports",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "11",
@@ -371,7 +337,7 @@
         },
         {
           "id": "41",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "edge-7" },
           "label": "critiques",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "11",
@@ -380,7 +346,7 @@
         },
         {
           "id": "42",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "edge-7" },
           "label": "supports",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "44",
@@ -389,7 +355,7 @@
         },
         {
           "id": "43",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "edge-7" },
           "label": "supports",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "44",
@@ -442,7 +408,7 @@
       "edges": [
         {
           "id": "11",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "edge-8" },
           "label": "critiques",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "13",
@@ -451,7 +417,7 @@
         },
         {
           "id": "13",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "edge-8" },
           "label": "critiques",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "13",
@@ -460,7 +426,7 @@
         },
         {
           "id": "14",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "edge-8" },
           "label": "supports",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "17",
@@ -520,7 +486,7 @@
       "edges": [
         {
           "id": "18",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "edge-16" },
           "label": "supports",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "20",
@@ -529,7 +495,7 @@
         },
         {
           "id": "27",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "edge-16" },
           "label": "supports",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "20",
@@ -579,7 +545,7 @@
       "edges": [
         {
           "id": "23",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "edge-22" },
           "label": "critiques",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "24",
@@ -588,7 +554,7 @@
         },
         {
           "id": "26",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "edge-22" },
           "label": "critiques",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "24",
@@ -638,7 +604,7 @@
       "edges": [
         {
           "id": "24",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "edge-21" },
           "label": "supports",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "26",
@@ -647,7 +613,7 @@
         },
         {
           "id": "25",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "edge-21" },
           "label": "supports",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "27",
@@ -704,7 +670,7 @@
       "edges": [
         {
           "id": "35",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "edge-33" },
           "label": "critiques",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "36",
@@ -772,7 +738,7 @@
       "edges": [
         {
           "id": "36",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "node-34" },
           "label": "supports",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "38",
@@ -781,7 +747,7 @@
         },
         {
           "id": "37",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "node-34" },
           "label": "critiques",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "38",
@@ -790,7 +756,7 @@
         },
         {
           "id": "38",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "node-34" },
           "label": "critiques",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "38",
@@ -799,7 +765,7 @@
         },
         {
           "id": "69",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "node-34" },
           "label": "critiques",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "39",
@@ -849,7 +815,7 @@
       "edges": [
         {
           "id": "44",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "node-33" },
           "label": "critiques",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "47",
@@ -858,7 +824,7 @@
         },
         {
           "id": "68",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "node-33" },
           "label": "critiques",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "47",
@@ -900,7 +866,7 @@
       "edges": [
         {
           "id": "70",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "edge-17" },
           "label": "supports",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "64",
@@ -909,7 +875,7 @@
         },
         {
           "id": "71",
-          "data": { "score": "-" },
+          "data": { "score": "-", "diagramId": "edge-17" },
           "label": "critiques",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "65",
