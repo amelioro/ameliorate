@@ -1,7 +1,8 @@
+import { ClickAwayListener } from "@mui/material";
 import _ from "lodash";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
-import { setScore, viewOrCreateClaimDiagram } from "../../store/actions";
+import { setScore } from "../../store/actions";
 import { type ScorableType, type Score, possibleScores } from "../../utils/diagram";
 import { indicatorLength } from "../../utils/nodes";
 import { FloatingButton, MainButton, StyledPopper } from "./ScoreDial.styles";
@@ -39,7 +40,9 @@ interface ScoreDialProps {
 // and button text is hard to fit in a small spot (i.e. corner of an EditableNode)
 // ... although... would "-" work well in a slider? want to allow the ability to deselect a score
 export const ScoreDial = ({ scorableId, scorableType, score }: ScoreDialProps) => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [selected, setSelected] = useState(false);
+  const [hovering, setHovering] = useState(false);
+  const mainButtonRef = useRef(null);
 
   const buttonLength = indicatorLength; //px
   const expansionRadius = 2 * buttonLength; // no collisions for fitting 11 elements
@@ -64,15 +67,18 @@ export const ScoreDial = ({ scorableId, scorableType, score }: ScoreDialProps) =
 
   return (
     <>
-      <MainButton
-        onClick={() => viewOrCreateClaimDiagram(scorableId, scorableType)}
-        onMouseEnter={(event) => setAnchorEl(event.currentTarget)}
-        buttonLength={buttonLength}
-        variant="contained"
-        color="neutral"
-      >
-        {score}
-      </MainButton>
+      <ClickAwayListener onClickAway={() => setSelected(false)}>
+        <MainButton
+          onClick={() => setSelected(!selected)}
+          onMouseEnter={() => setHovering(true)}
+          buttonLength={buttonLength}
+          variant="contained"
+          color="neutral"
+          ref={mainButtonRef}
+        >
+          {score}
+        </MainButton>
+      </ClickAwayListener>
 
       <StyledPopper
         id="simple-popper"
@@ -80,7 +86,7 @@ export const ScoreDial = ({ scorableId, scorableType, score }: ScoreDialProps) =
         // when moving mouse off of any of the buttons, which could be back towards the main button.
         // I think the plan will be to use a whole pie menu instead of floating buttons,
         // and that shouldn't have this problem.
-        onMouseLeave={() => setAnchorEl(null)}
+        onMouseLeave={() => setHovering(false)}
         modifiers={[
           {
             name: "offset",
@@ -90,8 +96,8 @@ export const ScoreDial = ({ scorableId, scorableType, score }: ScoreDialProps) =
             },
           },
         ]}
-        open={Boolean(anchorEl)}
-        anchorEl={anchorEl}
+        open={hovering || selected}
+        anchorEl={mainButtonRef.current}
       >
         {floatingButtons}
       </StyledPopper>
