@@ -1,5 +1,5 @@
 import { Edge } from "../../utils/diagram";
-import { EdgeIndicatorGroup } from "../EdgeIndicatorGroup/EdgeIndicatorGroup";
+import { EdgeIndicatorGroup } from "../Indicator/EdgeIndicatorGroup";
 import { StyledDiv } from "./EdgeCell.styles";
 
 export const EdgeCell = ({ edge }: { edge: Edge }) => {

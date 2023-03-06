@@ -1,9 +1,9 @@
 import { Box } from "@mui/material";
 
 import { Node } from "../../utils/diagram";
-import { NodeClaimIndicator } from "../ClaimIndicator/NodeClaimIndicator";
-import { CriteriaIndicator } from "../CriteriaIndicator/CriteriaIndicator";
-import { CriteriaTableIndicator } from "../CriteriaTableIndicator/CriteriaTableIndicator";
+import { CriteriaIndicator } from "../Indicator/CriteriaIndicator";
+import { CriteriaTableIndicator } from "../Indicator/CriteriaTableIndicator";
+import { NodeClaimIndicator } from "../Indicator/NodeClaimIndicator";
 import { ScoreDial } from "../ScoreDial/ScoreDial";
 
 export const NodeIndicatorGroup = ({ node }: { node: Node }) => {

@@ -1,6 +1,6 @@
 import { type Viewport, useReactFlow, useStore, useViewport } from "reactflow";
 
-import { nodeHeight, nodeWidth } from "../components/EditableNode/EditableNode.styles";
+import { nodeHeight, nodeWidth } from "../components/Node/EditableNode.styles";
 import { Node } from "../utils/diagram";
 
 const getViewportToIncludeNode = (

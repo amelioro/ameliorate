@@ -1,6 +1,6 @@
 import dagre from "dagre";
 
-import { nodeWidth } from "../components/EditableNode/EditableNode.styles";
+import { nodeWidth } from "../components/Node/EditableNode.styles";
 import { type Edge, type Node } from "../utils/diagram";
 
 export type Orientation = "TB" | "BT" | "LR" | "RL";

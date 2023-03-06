@@ -5,7 +5,7 @@ import { EdgeLabelRenderer, getBezierPath } from "reactflow";
 import { Edge, markerStart } from "../../utils/diagram";
 import { RelationName } from "../../utils/edge";
 import { EdgeProps } from "../Diagram/Diagram";
-import { EdgeIndicatorGroup } from "../EdgeIndicatorGroup/EdgeIndicatorGroup";
+import { EdgeIndicatorGroup } from "../Indicator/EdgeIndicatorGroup";
 import { StyledDiv } from "./ScoreEdge.styles";
 
 const convertToEdge = (flowEdge: EdgeProps): Edge => {

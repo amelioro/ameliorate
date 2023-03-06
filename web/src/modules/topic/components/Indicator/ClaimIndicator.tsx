@@ -3,7 +3,7 @@ import { Article, ArticleOutlined } from "@mui/icons-material";
 import { viewOrCreateClaimDiagram } from "../../store/actions";
 import { useExplicitClaimCount } from "../../store/arguableHooks";
 import { ArguableType } from "../../utils/diagram";
-import { Indicator } from "../Indicator/Indicator";
+import { Indicator } from "./Indicator";
 
 interface Props {
   arguableId: string;

@@ -2,8 +2,8 @@ import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { Button, IconButton } from "@mui/material";
 
-import { AddNodeButton } from "../AddNodeButton/AddNodeButton";
-import { nodeWidth } from "../EditableNode/EditableNode.styles";
+import { AddNodeButton } from "../Node/AddNodeButton";
+import { nodeWidth } from "../Node/EditableNode.styles";
 
 export const TitleDiv = styled.div`
   display: flex;

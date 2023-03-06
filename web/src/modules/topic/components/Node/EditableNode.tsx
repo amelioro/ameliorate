@@ -6,7 +6,7 @@ import { openContextMenu } from "../../../../common/store/contextMenuActions";
 import { setNodeLabel } from "../../store/actions";
 import { Node } from "../../utils/diagram";
 import { nodeDecorations } from "../../utils/nodes";
-import { NodeIndicatorGroup } from "../NodeIndicatorGroup/NodeIndicatorGroup";
+import { NodeIndicatorGroup } from "../Indicator/NodeIndicatorGroup";
 import {
   MiddleDiv,
   NodeDiv,

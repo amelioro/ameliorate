@@ -5,7 +5,7 @@ import { useDiagramType } from "../../store/store";
 import { Node, orientations } from "../../utils/diagram";
 import { NodeType } from "../../utils/nodes";
 import { NodeProps } from "../Diagram/Diagram";
-import { EditableNode } from "../EditableNode/EditableNode";
+import { EditableNode } from "../Node/EditableNode";
 import {
   AddNodeButtonGroupChild,
   AddNodeButtonGroupParent,

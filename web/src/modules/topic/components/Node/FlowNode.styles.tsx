@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { css } from "@mui/material";
 
 import { Orientation } from "../../utils/layout";
-import { AddNodeButtonGroup } from "../AddNodeButtonGroup/AddNodeButtonGroup";
+import { AddNodeButtonGroup } from "../Node/AddNodeButtonGroup";
 
 const gap = 16;
 

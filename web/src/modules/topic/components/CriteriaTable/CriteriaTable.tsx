@@ -9,9 +9,9 @@ import { useCriterionSolutionEdges, useNode, useNodeChildren } from "../../store
 import { problemDiagramId } from "../../store/store";
 import { Edge, Node } from "../../utils/diagram";
 import { getConnectingEdge } from "../../utils/edge";
-import { EdgeCell } from "../EdgeCell/EdgeCell";
-import { EditableNode } from "../EditableNode/EditableNode";
-import { NodeCell } from "../NodeCell/NodeCell";
+import { EdgeCell } from "../CriteriaTable/EdgeCell";
+import { NodeCell } from "../CriteriaTable/NodeCell";
+import { EditableNode } from "../Node/EditableNode";
 import {
   PositionedAddNodeButton,
   PositionedCloseButton,

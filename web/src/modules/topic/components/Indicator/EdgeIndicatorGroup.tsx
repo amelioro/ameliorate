@@ -1,5 +1,5 @@
 import { Edge } from "../../utils/diagram";
-import { EdgeClaimIndicator } from "../ClaimIndicator/EdgeClaimIndicator";
+import { EdgeClaimIndicator } from "../Indicator/EdgeClaimIndicator";
 import { ScoreDial } from "../ScoreDial/ScoreDial";
 
 export const EdgeIndicatorGroup = ({ edge }: { edge: Edge }) => {

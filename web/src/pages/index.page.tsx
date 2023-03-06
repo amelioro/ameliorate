@@ -6,8 +6,8 @@ import { createContext, useEffect, useState } from "react";
 import { ContextMenu } from "../common/components/Menu/Menu";
 import { CriteriaTable } from "../modules/topic/components/CriteriaTable/CriteriaTable";
 import { Diagram } from "../modules/topic/components/Diagram/Diagram";
-import { TopicPane } from "../modules/topic/components/TopicPane/TopicPane";
-import { TopicToolbar } from "../modules/topic/components/TopicToolbar/TopicToolbar";
+import { TopicPane } from "../modules/topic/components/Surface/TopicPane";
+import { TopicToolbar } from "../modules/topic/components/Surface/TopicToolbar";
 import {
   problemDiagramId,
   useActiveClaimDiagramId,
