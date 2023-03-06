@@ -1,21 +1,21 @@
 import { Article, ArticleOutlined } from "@mui/icons-material";
 
 import { viewOrCreateClaimDiagram } from "../../store/actions";
-import { useExplicitClaimCount } from "../../store/scorableHooks";
-import { ScorableType } from "../../utils/diagram";
+import { useExplicitClaimCount } from "../../store/arguableHooks";
+import { ArguableType } from "../../utils/diagram";
 import { Indicator } from "../Indicator/Indicator";
 
 interface Props {
-  scorableId: string;
-  scorableType: ScorableType;
+  arguableId: string;
+  arguableType: ArguableType; // rename to ArguableType
 }
 
-export const ClaimIndicator = ({ scorableId, scorableType }: Props) => {
-  const explicitClaimCount = useExplicitClaimCount(scorableId, scorableType);
+export const ClaimIndicator = ({ arguableId, arguableType }: Props) => {
+  const explicitClaimCount = useExplicitClaimCount(arguableId, arguableType);
 
   const Icon = explicitClaimCount > 0 ? Article : ArticleOutlined;
 
   return (
-    <Indicator Icon={Icon} onClick={() => viewOrCreateClaimDiagram(scorableId, scorableType)} />
+    <Indicator Icon={Icon} onClick={() => viewOrCreateClaimDiagram(arguableId, arguableType)} />
   );
 };

@@ -3,7 +3,7 @@ import _ from "lodash";
 import { useRef, useState } from "react";
 
 import { setScore } from "../../store/actions";
-import { type ScorableType, type Score, possibleScores } from "../../utils/diagram";
+import { type ArguableType, type Score, possibleScores } from "../../utils/diagram";
 import { indicatorLength } from "../../utils/nodes";
 import { FloatingButton, MainButton, StyledPopper } from "./ScoreDial.styles";
 
@@ -24,8 +24,8 @@ const getButtonPositions = (expansionRadius: number, numberOfButtons: number) =>
 };
 
 interface ScoreDialProps {
-  scorableId: string;
-  scorableType: ScorableType;
+  arguableId: string;
+  arguableType: ArguableType;
   score: Score;
 }
 
@@ -39,7 +39,7 @@ interface ScoreDialProps {
 // 11 buttons are too many to fit close to the main button without collisions,
 // and button text is hard to fit in a small spot (i.e. corner of an EditableNode)
 // ... although... would "-" work well in a slider? want to allow the ability to deselect a score
-export const ScoreDial = ({ scorableId, scorableType, score }: ScoreDialProps) => {
+export const ScoreDial = ({ arguableId, arguableType, score }: ScoreDialProps) => {
   const [selected, setSelected] = useState(false);
   const [hovering, setHovering] = useState(false);
   const mainButtonRef = useRef(null);
@@ -58,7 +58,7 @@ export const ScoreDial = ({ scorableId, scorableType, score }: ScoreDialProps) =
         key={possibleScore}
         variant="contained"
         color="neutral"
-        onClick={() => setScore(scorableId, scorableType, possibleScore)}
+        onClick={() => setScore(arguableId, arguableType, possibleScore)}
       >
         {possibleScore}
       </FloatingButton>

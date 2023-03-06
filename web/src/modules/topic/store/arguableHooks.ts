@@ -1,9 +1,9 @@
 import { getClaimDiagramId } from "../utils/claim";
-import { ScorableType } from "../utils/diagram";
+import { ArguableType } from "../utils/diagram";
 import { useTopicStoreAfterHydration } from "./store";
 
-export const useExplicitClaimCount = (scorableId: string, scorableType: ScorableType) => {
-  const claimDiagramId = getClaimDiagramId(scorableId, scorableType);
+export const useExplicitClaimCount = (arguableId: string, arguableType: ArguableType) => {
+  const claimDiagramId = getClaimDiagramId(arguableId, arguableType);
 
   return useTopicStoreAfterHydration((state) => {
     const claimDiagram = state.diagrams[claimDiagramId];

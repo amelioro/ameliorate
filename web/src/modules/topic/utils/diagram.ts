@@ -99,7 +99,7 @@ export const buildEdge = (
   };
 };
 
-export type ScorableType = "node" | "edge";
+export type ArguableType = "node" | "edge";
 
 export const possibleScores = ["-", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"] as const;
 export type Score = typeof possibleScores[number];
@@ -118,8 +118,8 @@ export const findEdge = (diagram: Diagram, edgeId: string) => {
   return edge;
 };
 
-export const findScorable = (diagram: Diagram, scorableId: string, scorableType: ScorableType) => {
-  return scorableType === "node" ? findNode(diagram, scorableId) : findEdge(diagram, scorableId);
+export const findArguable = (diagram: Diagram, arguableId: string, arguableType: ArguableType) => {
+  return arguableType === "node" ? findNode(diagram, arguableId) : findEdge(diagram, arguableId);
 };
 
 export const filterHiddenComponents = (diagram: Diagram): Diagram => {

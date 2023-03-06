@@ -6,7 +6,7 @@ export const EdgeIndicatorGroup = ({ edge }: { edge: Edge }) => {
   return (
     <div>
       <EdgeClaimIndicator edge={edge} />
-      <ScoreDial scorableId={edge.id} scorableType="edge" score={edge.data.score} />
+      <ScoreDial arguableId={edge.id} arguableType="edge" score={edge.data.score} />
     </div>
   );
 };

@@ -10,5 +10,5 @@ export const NodeClaimIndicator = ({ node }: Props) => {
   // don't render indicator for claim nodes because child claims are all already shown together in the claim view
   if (node.data.diagramId !== problemDiagramId) return <></>;
 
-  return <ClaimIndicator scorableId={node.id} scorableType="node" />;
+  return <ClaimIndicator arguableId={node.id} arguableType="node" />;
 };

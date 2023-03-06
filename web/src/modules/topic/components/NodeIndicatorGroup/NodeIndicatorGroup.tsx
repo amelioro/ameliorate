@@ -12,7 +12,7 @@ export const NodeIndicatorGroup = ({ node }: { node: Node }) => {
       <CriteriaTableIndicator nodeId={node.id} diagramId={node.data.diagramId} />
       <CriteriaIndicator nodeId={node.id} diagramId={node.data.diagramId} />
       <NodeClaimIndicator node={node} />
-      <ScoreDial scorableId={node.id} scorableType="node" score={node.data.score} />
+      <ScoreDial arguableId={node.id} arguableType="node" score={node.data.score} />
     </Box>
   );
 };
