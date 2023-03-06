@@ -5,7 +5,7 @@ import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
-import { HydrationContext } from "../../../pages/index";
+import { HydrationContext } from "../../../pages/index.page";
 import { Diagram, buildNode, filterHiddenComponents } from "../utils/diagram";
 import { doesDiagramExist } from "./actions";
 import { migrate } from "./migrate";
@@ -44,7 +44,7 @@ export const useTopicStore = create<TopicStoreState>()(
   temporal(
     persist(immer(devtools(() => initialState)), {
       name: "diagram-storage", // should probably be "topic-storage" but don't know how to migrate
-      version: 4,
+      version: 5,
       migrate: migrate,
     }),
     {
@@ -78,6 +78,10 @@ export const useTopicStoreAfterHydration = ((selector, compare) => {
 
   return isHydrated ? store : selector(initialState);
 }) as typeof useTopicStore;
+
+export const useDiagram = (diagramId: string) => {
+  return useTopicStoreAfterHydration((state) => state.diagrams[diagramId]);
+};
 
 export const useFilteredDiagram = (diagramId: string) => {
   return useTopicStoreAfterHydration((state) => filterHiddenComponents(state.diagrams[diagramId]));

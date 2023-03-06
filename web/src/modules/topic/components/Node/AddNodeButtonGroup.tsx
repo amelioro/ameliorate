@@ -4,7 +4,7 @@ import { type RelationDirection } from "../../utils/diagram";
 import { addableRelationsFrom } from "../../utils/edge";
 import { Orientation } from "../../utils/layout";
 import { NodeType } from "../../utils/nodes";
-import { AddNodeButton } from "../AddNodeButton/AddNodeButton";
+import { AddNodeButton } from "../Node/AddNodeButton";
 
 interface Props {
   className?: string;

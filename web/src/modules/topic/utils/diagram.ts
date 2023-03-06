@@ -62,10 +62,14 @@ export const buildNode = ({ id, label, score, type, diagramId }: BuildProps) => 
   }
 };
 
+// assumes that we always want to point from child to parent
+export const markerStart = { type: MarkerType.ArrowClosed, width: 30, height: 30 };
+
 export interface Edge {
   id: string;
   data: {
     score: Score;
+    diagramId: string;
   };
   label: RelationName;
   markerStart: { type: MarkerType; width: number; height: number };
@@ -78,23 +82,24 @@ export const buildEdge = (
   newEdgeId: string,
   sourceNodeId: string,
   targetNodeId: string,
-  relation: RelationName
+  relation: RelationName,
+  diagramId: string
 ): Edge => {
   return {
     id: newEdgeId,
     data: {
       score: "-" as Score,
+      diagramId: diagramId,
     },
     label: relation,
-    // assumes that we always want to point from child to parent
-    markerStart: { type: MarkerType.ArrowClosed, width: 30, height: 30 },
+    markerStart: markerStart,
     source: sourceNodeId,
     target: targetNodeId,
     type: "ScoreEdge" as const,
   };
 };
 
-export type ScorableType = "node" | "edge";
+export type ArguableType = "node" | "edge";
 
 export const possibleScores = ["-", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"] as const;
 export type Score = typeof possibleScores[number];
@@ -113,8 +118,8 @@ export const findEdge = (diagram: Diagram, edgeId: string) => {
   return edge;
 };
 
-export const findScorable = (diagram: Diagram, scorableId: string, scorableType: ScorableType) => {
-  return scorableType === "node" ? findNode(diagram, scorableId) : findEdge(diagram, scorableId);
+export const findArguable = (diagram: Diagram, arguableId: string, arguableType: ArguableType) => {
+  return arguableType === "node" ? findNode(diagram, arguableId) : findEdge(diagram, arguableId);
 };
 
 export const filterHiddenComponents = (diagram: Diagram): Diagram => {

@@ -6,11 +6,8 @@ import { openContextMenu } from "../../../../common/store/contextMenuActions";
 import { setNodeLabel } from "../../store/actions";
 import { Node } from "../../utils/diagram";
 import { nodeDecorations } from "../../utils/nodes";
-import { CriteriaIndicator } from "../CriteriaIndicator/CriteriaIndicator";
-import { CriteriaTableIndicator } from "../CriteriaTableIndicator/CriteriaTableIndicator";
-import { ScoreDial } from "../ScoreDial/ScoreDial";
+import { NodeIndicatorGroup } from "../Indicator/NodeIndicatorGroup";
 import {
-  IndicatorDiv,
   MiddleDiv,
   NodeDiv,
   NodeTypeDiv,
@@ -47,11 +44,7 @@ export const EditableNode = ({ node }: { node: Node }) => {
           <NodeIcon sx={{ width: "16px", height: "16px" }} />
           <NodeTypeSpan>{_.startCase(node.type)}</NodeTypeSpan>
         </NodeTypeDiv>
-        <IndicatorDiv>
-          <CriteriaTableIndicator nodeId={node.id} diagramId={node.data.diagramId} />
-          <CriteriaIndicator nodeId={node.id} diagramId={node.data.diagramId} />
-          <ScoreDial scorableId={node.id} scorableType="node" score={node.data.score} />
-        </IndicatorDiv>
+        <NodeIndicatorGroup node={node} />
       </YEdgeDiv>
       <MiddleDiv>
         <XEdgeDiv />

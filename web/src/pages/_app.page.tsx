@@ -7,7 +7,7 @@ import { GoogleAnalytics, event } from "nextjs-google-analytics";
 
 import Layout from "../common/components/Layout";
 import { getThemeOptions } from "../common/theme";
-import { globals } from "../page_styles/_app.styles";
+import { globals } from "./_app.styles";
 
 // thanks https://github.com/MauricioRobayo/nextjs-google-analytics#web-vitals
 export const reportWebVitals = (metric: NextWebVitalsMetric) => {

@@ -11,7 +11,7 @@ import {
 import type { NextPage } from "next";
 import Head from "next/head";
 
-import { PaperMiddle } from "../page_styles/about.styles";
+import { PaperMiddle } from "./about.styles";
 
 const About: NextPage = () => {
   return (

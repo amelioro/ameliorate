@@ -2,8 +2,8 @@ import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { Button, IconButton } from "@mui/material";
 
-import { AddNodeButton } from "../AddNodeButton/AddNodeButton";
-import { nodeWidth } from "../EditableNode/EditableNode.styles";
+import { AddNodeButton } from "../Node/AddNodeButton";
+import { nodeWidth } from "../Node/EditableNode.styles";
 
 export const TitleDiv = styled.div`
   display: flex;
@@ -39,7 +39,9 @@ export const tableStyles = css`
       .Mui-TableHeadCell-Content,
       .Mui-TableHeadCell-Content-Labels,
       .Mui-TableHeadCell-Content-Wrapper {
-        height: 100%; // also pretty troll, to allow head cell heights to expand to row height - non-head cells don't have wrappers like these so don't need this
+        // also pretty troll, to allow head cells to expand to row height and col width - non-head cells don't have wrappers like these so don't need this
+        height: 100%;
+        width: 100%;
       }
     }
   }

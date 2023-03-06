@@ -16,7 +16,7 @@ import { closeClaimDiagram, connectNodes, deselectNodes } from "../../store/acti
 import { useFilteredDiagram } from "../../store/store";
 import { type Edge, type Node } from "../../utils/diagram";
 import { type NodeType } from "../../utils/nodes";
-import { FlowNode } from "../FlowNode/FlowNode";
+import { FlowNode } from "../Node/FlowNode";
 import { ScoreEdge } from "../ScoreEdge/ScoreEdge";
 import { PositionedCloseButton, StyledReactFlow } from "./Diagram.styles";
 

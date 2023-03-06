@@ -1,16 +1,16 @@
 import { emitter } from "../../../common/event";
 import { getClaimDiagramId, getImplicitLabel, parseClaimDiagramId } from "../utils/claim";
 import {
+  ArguableType,
   Edge,
   Node,
   ProblemNode,
   RelationDirection,
-  ScorableType,
   Score,
   buildEdge,
   buildNode,
+  findArguable,
   findNode,
-  findScorable,
   layoutVisibleComponents,
 } from "../utils/diagram";
 import { RelationName, canCreateEdge, getRelation } from "../utils/edge";
@@ -63,7 +63,7 @@ const createAndConnectNode = (
 
   const sourceNodeId = as === "parent" ? newNodeId : fromNodeId;
   const targetNodeId = as === "parent" ? fromNodeId : newNodeId;
-  const newEdge = buildEdge(newEdgeId, sourceNodeId, targetNodeId, relation);
+  const newEdge = buildEdge(newEdgeId, sourceNodeId, targetNodeId, relation, activeDiagram.id);
 
   return [newNode, newEdge] as [Node, Edge];
 };
@@ -87,7 +87,13 @@ const connectCriteriaToSolutions = (state: TopicStoreState, newNode: Node, fromN
       const sourceNodeId = newNode.type === "criterion" ? newNode.id : targetNode.id;
       const targetNodeId = newNode.type === "criterion" ? targetNode.id : newNode.id;
 
-      return buildEdge(newCriterionEdgeId, sourceNodeId, targetNodeId, "embodies");
+      return buildEdge(
+        newCriterionEdgeId,
+        sourceNodeId,
+        targetNodeId,
+        "embodies",
+        problemDiagramId
+      );
     });
 
   return newCriterionEdges;
@@ -156,7 +162,7 @@ export const connectNodes = (parentId: string | null, childId: string | null) =>
 
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- canCreateEdge ensures relation is valid
       const relation = getRelation(parent.type, child.type)!;
-      const newEdge = buildEdge(newEdgeId, parent.id, child.id, relation.name);
+      const newEdge = buildEdge(newEdgeId, parent.id, child.id, relation.name, activeDiagram.id);
       const newEdges = activeDiagram.edges.concat(newEdge);
 
       const layoutedDiagram = layoutVisibleComponents({ ...activeDiagram, edges: newEdges });
@@ -192,37 +198,37 @@ export const deselectNodes = () => {
 };
 
 // score setting is way more work than it needs to be because one score can live in multiple places:
-// - on the scorable
-// - on the parent scorable (if this is a RootClaim)
+// - on the arguable
+// - on the parent arguable (if this is a RootClaim)
 // - on the child/implicit root claim (if it exists)
 // keeping this in sync manually ain't great.
 // TODO: store scores in one place
-export const setScore = (scorableId: string, scorableType: ScorableType, score: Score) => {
+export const setScore = (arguableId: string, arguableType: ArguableType, score: Score) => {
   useTopicStore.setState(
     (state) => {
       // update this node's score
       const activeDiagram = getActiveDiagram(state);
-      const scorable = findScorable(activeDiagram, scorableId, scorableType);
+      const arguable = findArguable(activeDiagram, arguableId, arguableType);
       /* eslint-disable functional/immutable-data, no-param-reassign */
-      scorable.data.score = score;
+      arguable.data.score = score;
       /* eslint-enable functional/immutable-data, no-param-reassign */
 
-      // update parent scorable's score if this is a RootClaim
-      if (scorable.type === "rootClaim") {
-        const [parentScorableType, parentScorableId] = parseClaimDiagramId(activeDiagram.id);
-        const parentScorable = findScorable(
+      // update parent arguable's score if this is a RootClaim
+      if (arguable.type === "rootClaim") {
+        const [parentArguableType, parentArguableId] = parseClaimDiagramId(activeDiagram.id);
+        const parentArguable = findArguable(
           state.diagrams[problemDiagramId], // assuming we won't support nested root claims, so parent will always be root
-          parentScorableId,
-          parentScorableType
+          parentArguableId,
+          parentArguableType
         );
 
         /* eslint-disable functional/immutable-data, no-param-reassign */
-        parentScorable.data.score = score;
+        parentArguable.data.score = score;
         /* eslint-enable functional/immutable-data, no-param-reassign */
       }
 
       // update implicit child claim's score if it exists
-      const childDiagramId = getClaimDiagramId(scorableId, scorableType);
+      const childDiagramId = getClaimDiagramId(arguableId, arguableType);
       if (doesDiagramExist(childDiagramId)) {
         const childDiagram = state.diagrams[childDiagramId];
         const childClaim = childDiagram.nodes.find((node) => node.type === "rootClaim");
@@ -242,22 +248,22 @@ export const doesDiagramExist = (diagramId: string) => {
   return Object.keys(useTopicStore.getState().diagrams).includes(diagramId);
 };
 
-export const viewOrCreateClaimDiagram = (scorableId: string, scorableType: ScorableType) => {
+export const viewOrCreateClaimDiagram = (arguableId: string, arguableType: ArguableType) => {
   useTopicStore.setState(
     (state) => {
-      const diagramId = getClaimDiagramId(scorableId, scorableType);
+      const diagramId = getClaimDiagramId(arguableId, arguableType);
 
       // create claim diagram if it doesn't exist
       if (!doesDiagramExist(diagramId)) {
         const activeDiagram = getActiveDiagram(state);
-        const scorable = findScorable(activeDiagram, scorableId, scorableType);
-        const label = getImplicitLabel(scorableId, scorableType, activeDiagram);
+        const arguable = findArguable(activeDiagram, arguableId, arguableType);
+        const label = getImplicitLabel(arguableId, arguableType, activeDiagram);
 
         /* eslint-disable functional/immutable-data, no-param-reassign */
         const newNode = buildNode({
           id: `${state.nextNodeId++}`,
           label: label,
-          score: scorable.data.score,
+          score: arguable.data.score,
           type: "rootClaim",
           diagramId: diagramId,
         });
