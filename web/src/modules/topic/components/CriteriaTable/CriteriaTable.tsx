@@ -57,7 +57,7 @@ const buildColumns = (columnNodes: Node[]): MRT_ColumnDef<RowData>[] => {
       (columnNode) =>
         ({
           accessorKey: `${columnNode.id}.data.score`, // we'll sort/filter edges by their score for now I guess
-          header: "Score",
+          header: "",
           Header: <NodeCell node={columnNode} />,
           Cell: ({ row }) => <EdgeCell edge={row.original[columnNode.id] as Edge} />,
         } as MRT_ColumnDef<RowData>)
