@@ -82,8 +82,8 @@ const darkPalette = {
   // },
 };
 
-const primary = "#4AB84E"; // apple (green): good, optimistic, let's solve things
-const secondary = "#B84AB4"; // deep fuchsia (purple): truth; complementary to primary
+const primary = "#006e1a"; // apple (green): good, optimistic, let's solve things
+const secondary = "#9b2f99"; // deep fuchsia (purple): truth; complementary to primary
 const { palette } = createTheme();
 const { augmentColor } = palette; // automatically creates light and dark colors too, thanks https://stackoverflow.com/a/69836010
 
@@ -94,14 +94,14 @@ const sharedPalette = {
   primaryVariantLight: { main: "#82CE84" }, // 200 lower than primary on material design color tool
   // use black contrast text for consistency with other node colors; accessibility tool indicates black is still accessible
   secondary: { main: secondary, contrastText: "rgba(0, 0, 0, 0.87)" },
-  neutral: augmentColor({ color: { main: "#BDBDBD" } }), // gray is very neutral, somewhat arbitrarily chosen, no particular relation to the other colors
-  neutralContrast: augmentColor({ color: { main: "#000000" } }), // black contrasts with gray, separate from neutral.contrastText so that it gets its own augments I guess
+  neutral: augmentColor({ color: { main: "#72796f" } }), // gray is very neutral, somewhat arbitrarily chosen, no particular relation to the other colors
+  neutralContrast: augmentColor({ color: { main: "#dee5d8" } }), // black contrasts with gray, separate from neutral.contrastText so that it gets its own augments I guess
   problem: augmentColor({ color: { main: secondary, contrastText: "rgba(0, 0, 0, 0.87)" } }),
   solution: augmentColor({ color: { main: primary } }),
-  criterion: augmentColor({ color: { main: "#4AB885" } }), // mint: analogous to solution; between solution & support because criteria are kind of like supports for solutions
-  rootClaim: augmentColor({ color: { main: "#DA9526" } }), // goldenrod (gold): somewhat neutral; analogous to critique
-  support: augmentColor({ color: { main: "#26C5DA" } }), // battery charged blue (cyan): non-green support-ish color; top color from https://zenoo.github.io/mui-theme-creator/
-  critique: augmentColor({ color: { main: "#DA3B26", contrastText: "rgba(0, 0, 0, 0.87)" } }), // vermilion (red-orange): opposing; complementary to support
+  criterion: augmentColor({ color: { main: "#775a00" } }), // mint: analogous to solution; between solution & support because criteria are kind of like supports for solutions
+  rootClaim: augmentColor({ color: { main: "#835500" } }), // goldenrod (gold): somewhat neutral; analogous to critique
+  support: augmentColor({ color: { main: "#006a69" } }), // battery charged blue (cyan): non-green support-ish color; top color from https://zenoo.github.io/mui-theme-creator/
+  critique: augmentColor({ color: { main: "#a14000", contrastText: "rgba(0, 0, 0, 0.87)" } }), // vermilion (red-orange): opposing; complementary to support
 };
 
 export const getThemeOptions = (mode: PaletteMode): ThemeOptions => ({
