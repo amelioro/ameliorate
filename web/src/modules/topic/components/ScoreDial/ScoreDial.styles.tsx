@@ -10,7 +10,7 @@ interface StyledButtonProps {
 const options = {
   shouldForwardProp: (prop: string) => !["buttonLength"].includes(prop),
 };
-const StyledButton = styled(Button, options)<StyledButtonProps>`
+export const StyledButton = styled(Button, options)<StyledButtonProps>`
   height: ${({ buttonLength }) => `${buttonLength}px`};
   width: ${({ buttonLength }) => `${buttonLength}px`};
   min-width: ${({ buttonLength }) => `${buttonLength}px`};
@@ -18,24 +18,6 @@ const StyledButton = styled(Button, options)<StyledButtonProps>`
   font-size: 16px;
   padding: 0px;
   border-radius: 50%;
-`;
-
-export const MainButton = styled(StyledButton)``;
-
-interface FloatingButtonProps {
-  position: {
-    x: number;
-    y: number;
-  };
-}
-
-const floatingButtonOptions = {
-  shouldForwardProp: (prop: string) => !["position"].includes(prop),
-};
-
-export const FloatingButton = styled(StyledButton, floatingButtonOptions)<FloatingButtonProps>`
-  position: absolute;
-  transform: ${({ position }) => `translate(${position.x}px, ${position.y}px)`};
 `;
 
 export const StyledPopper = styled(Popper)`
