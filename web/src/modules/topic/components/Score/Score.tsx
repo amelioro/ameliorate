@@ -4,8 +4,8 @@ import { useRef, useState } from "react";
 
 import { type ArguableType, type Score as ScoreData } from "../../utils/diagram";
 import { indicatorLength } from "../../utils/nodes";
-import { ScorePie } from "../ScorePie/ScorePie";
 import { StyledButton, StyledPopper } from "./Score.styles";
+import { ScorePie } from "./ScorePie";
 
 interface ScoreProps {
   arguableId: string;
