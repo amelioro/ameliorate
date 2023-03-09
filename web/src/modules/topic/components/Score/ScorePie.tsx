@@ -1,11 +1,12 @@
 import { useTheme } from "@emotion/react";
-import { Box } from "@mui/material";
+import { Box, type PaletteColor } from "@mui/material";
 import { useState } from "react";
 import { PieChart } from "react-minimal-pie-chart";
 import { Data } from "react-minimal-pie-chart/types/commonTypes";
 
 import { setScore } from "../../store/actions";
 import { ArguableType, Score, possibleScores } from "../../utils/diagram";
+import { scoreColors } from "./Score";
 
 interface Props {
   pieDiameter: number;
@@ -18,9 +19,12 @@ export const ScorePie = ({ pieDiameter, arguableId, arguableType }: Props) => {
   const [hovered, setHovered] = useState<number | undefined>(undefined);
 
   const data: Data = possibleScores.map((score, index) => {
+    const scoreColor = scoreColors[score];
+    const paletteColor = theme.palette[scoreColor] as PaletteColor; // not sure how to guarantee this type, since palette has non-PaletteColor keys
+
     return {
       value: 1,
-      color: hovered === index ? theme.palette.neutral.dark : theme.palette.neutral.main,
+      color: hovered === index ? paletteColor.dark : paletteColor.main,
       key: score,
     };
   });

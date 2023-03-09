@@ -1,4 +1,4 @@
-import { Box, ClickAwayListener } from "@mui/material";
+import { Box, type ButtonProps, ClickAwayListener, type Palette } from "@mui/material";
 import _ from "lodash";
 import { useRef, useState } from "react";
 
@@ -6,6 +6,19 @@ import { type ArguableType, type Score as ScoreData } from "../../utils/diagram"
 import { indicatorLength } from "../../utils/nodes";
 import { StyledButton, StyledPopper } from "./Score.styles";
 import { ScorePie } from "./ScorePie";
+
+export const scoreColors: Record<ScoreData, keyof Palette> = {
+  "-": "neutral",
+  "1": "critique1",
+  "2": "critique2",
+  "3": "critique3",
+  "4": "critique4",
+  "5": "neutral",
+  "6": "support4",
+  "7": "support3",
+  "8": "support2",
+  "9": "support1",
+};
 
 interface ScoreProps {
   arguableId: string;
@@ -24,6 +37,8 @@ export const Score = ({ arguableId, arguableType, score }: ScoreProps) => {
   const buttonLength = indicatorLength; //px
   const pieDiameter = 6 * buttonLength; // no collisions for fitting 11 elements
 
+  const scoreColor = scoreColors[score] as ButtonProps["color"]; // not sure how to type this without type assertion, while still being able to access palette with it
+
   return (
     <>
       <ClickAwayListener
@@ -39,7 +54,7 @@ export const Score = ({ arguableId, arguableType, score }: ScoreProps) => {
             onMouseEnter={() => setHovering(true)}
             buttonLength={buttonLength}
             variant="contained"
-            color="neutral"
+            color={scoreColor}
             ref={mainButtonRef}
           >
             {/* i bet material icons would look way nicer than this text... but material only has number icons 1-6 :( */}
@@ -74,7 +89,7 @@ export const Score = ({ arguableId, arguableType, score }: ScoreProps) => {
               onMouseEnter={() => setHovering(true)}
               buttonLength={buttonLength}
               variant="contained"
-              color="neutral"
+              color={scoreColor}
               style={{
                 position: "absolute",
                 left: "50%",
