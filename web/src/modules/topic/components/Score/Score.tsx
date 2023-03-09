@@ -2,6 +2,7 @@ import { Box, type ButtonProps, ClickAwayListener, type Palette } from "@mui/mat
 import _ from "lodash";
 import { useRef, useState } from "react";
 
+import { useTopicZoom } from "../../hooks/topicHooks";
 import { type ArguableType, type Score as ScoreData } from "../../utils/diagram";
 import { indicatorLength } from "../../utils/nodes";
 import { StyledButton, StyledPopper } from "./Score.styles";
@@ -30,6 +31,7 @@ interface ScoreProps {
 // but the main reason for creating a custom component are:
 // * allow actions to be positioned around the dial for even closer navigability to each one
 export const Score = ({ arguableId, arguableType, score }: ScoreProps) => {
+  const zoom = useTopicZoom();
   const [selected, setSelected] = useState(false);
   const [hovering, setHovering] = useState(false);
   const mainButtonRef = useRef(null);
@@ -61,6 +63,8 @@ export const Score = ({ arguableId, arguableType, score }: ScoreProps) => {
             {score}
           </StyledButton>
 
+          {/* jank: zoom needs to be manually applied to the popper & its children because it is not a child of the flow element */}
+          {/* cannot just apply scale to Popper because Popper sets transform in styles in order to position next to anchor, and scale affects that */}
           <StyledPopper
             id="simple-popper"
             onMouseLeave={() => setHovering(false)}
@@ -69,7 +73,7 @@ export const Score = ({ arguableId, arguableType, score }: ScoreProps) => {
                 name: "offset",
                 options: {
                   // position centered on top of the main button https://popper.js.org/docs/v2/modifiers/offset/
-                  offset: [0, -1 * ((indicatorLength * 6) / 2 + indicatorLength / 2)],
+                  offset: [0, -1 * ((pieDiameter * zoom) / 2 + (buttonLength * zoom) / 2)],
                 },
               },
             ]}
@@ -77,7 +81,7 @@ export const Score = ({ arguableId, arguableType, score }: ScoreProps) => {
             anchorEl={mainButtonRef.current}
           >
             <ScorePie
-              pieDiameter={pieDiameter}
+              pieDiameter={pieDiameter * zoom}
               arguableId={arguableId}
               arguableType={arguableType}
             />
@@ -94,7 +98,7 @@ export const Score = ({ arguableId, arguableType, score }: ScoreProps) => {
                 position: "absolute",
                 left: "50%",
                 top: "50%",
-                transform: "translate(-50%, -50%)",
+                transform: `translate(-50%, -50%) scale(${zoom})`,
               }}
             >
               {/* i bet material icons would look way nicer than this text... but material only has number icons 1-6 :( */}
