@@ -26,6 +26,7 @@ declare module "@mui/material/styles" {
     primaryVariantLight: Palette["primary"];
     neutral: Palette["primary"];
     neutralContrast: Palette["primary"];
+    paper: Palette["primary"];
     support1: Palette["primary"];
     support2: Palette["primary"];
     support3: Palette["primary"];
@@ -41,6 +42,7 @@ declare module "@mui/material/styles" {
     primaryVariantLight: PaletteOptions["primary"];
     neutral: PaletteOptions["primary"];
     neutralContrast: PaletteOptions["primary"];
+    paper: PaletteOptions["primary"];
     support1: PaletteOptions["primary"];
     support2: PaletteOptions["primary"];
     support3: PaletteOptions["primary"];
@@ -60,6 +62,7 @@ declare module "@mui/material" {
     primaryVariantLight: true;
     neutral: true;
     neutralContrast: true;
+    paper: true;
     support1: true;
     support2: true;
     support3: true;
@@ -75,6 +78,7 @@ declare module "@mui/material" {
     primaryVariantLight: true;
     neutral: true;
     neutralContrast: true;
+    paper: true;
     support1: true;
     support2: true;
     support3: true;
@@ -90,6 +94,7 @@ declare module "@mui/material" {
     primaryVariantLight: true;
     neutral: true;
     neutralContrast: true;
+    paper: true;
     support1: true;
     support2: true;
     support3: true;
@@ -138,6 +143,7 @@ const sharedPalette = {
   secondary: { main: secondary, contrastText: "rgba(0, 0, 0, 0.87)" },
   neutral: augmentColor({ color: { main: "#BDBDBD" } }), // gray is very neutral, somewhat arbitrarily chosen, no particular relation to the other colors
   neutralContrast: augmentColor({ color: { main: "#000000" } }), // black contrasts with gray, separate from neutral.contrastText so that it gets its own augments I guess
+  paper: augmentColor({ color: { main: "#fff" } }), // used for neutral-but-chosen score
   problem: augmentColor({ color: { main: secondary, contrastText: "rgba(0, 0, 0, 0.87)" } }),
   solution: augmentColor({ color: { main: primary } }),
   criterion: augmentColor({ color: { main: "#4AB885" } }), // mint: analogous to solution; between solution & support because criteria are kind of like supports for solutions

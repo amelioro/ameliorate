@@ -13,7 +13,7 @@ export const scoreColors: Record<ScoreData, keyof Palette> = {
   "2": "critique2",
   "3": "critique3",
   "4": "critique4",
-  "5": "neutral",
+  "5": "paper",
   "6": "support4",
   "7": "support3",
   "8": "support2",
