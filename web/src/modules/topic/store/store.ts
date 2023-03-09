@@ -123,7 +123,3 @@ export const useClaimDiagramsWithExplicitClaims = () => {
       .map(([id, diagram]) => [id, diagram.nodes[0].data.label])
   );
 };
-
-export const useDoesDiagramExist = (diagramId: string) => {
-  return useTopicStoreAfterHydration((state) => Object.keys(state.diagrams).includes(diagramId));
-};
