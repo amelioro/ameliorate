@@ -11,7 +11,7 @@ import {
 } from "reactflow";
 
 import { emitter } from "../../../../common/event";
-import { useViewportUpdater } from "../../hooks/flow_hooks";
+import { useViewportUpdater } from "../../hooks/flowHooks";
 import { closeClaimDiagram, connectNodes, deselectNodes } from "../../store/actions";
 import { useFilteredDiagram } from "../../store/store";
 import { type Edge, type Node } from "../../utils/diagram";
