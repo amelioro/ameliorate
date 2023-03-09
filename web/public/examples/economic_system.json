@@ -102,7 +102,7 @@
         },
         {
           "id": "7",
-          "data": { "score": "10", "diagramId": "root" },
+          "data": { "score": "9", "diagramId": "root" },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "7",
@@ -281,7 +281,7 @@
           "id": "11",
           "data": {
             "label": "\"\"True\" Capitalism\" embodies \"Discourages un...\"",
-            "score": "10",
+            "score": "9",
             "diagramId": "edge-7"
           },
           "position": { "x": 0, "y": 70 },
@@ -727,7 +727,7 @@
           "id": "63",
           "data": {
             "label": "Bad genes lead to unhappier people",
-            "score": "10",
+            "score": "9",
             "diagramId": "node-34"
           },
           "position": { "x": 1120, "y": 0 },
@@ -793,7 +793,7 @@
           "id": "48",
           "data": {
             "label": "Genetics correlate to success",
-            "score": "10",
+            "score": "9",
             "diagramId": "node-33"
           },
           "position": { "x": 560, "y": 0 },

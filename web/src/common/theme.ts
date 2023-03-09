@@ -26,6 +26,14 @@ declare module "@mui/material/styles" {
     primaryVariantLight: Palette["primary"];
     neutral: Palette["primary"];
     neutralContrast: Palette["primary"];
+    support1: Palette["primary"];
+    support2: Palette["primary"];
+    support3: Palette["primary"];
+    support4: Palette["primary"];
+    critique1: Palette["primary"];
+    critique2: Palette["primary"];
+    critique3: Palette["primary"];
+    critique4: Palette["primary"];
   }
 
   interface PaletteOptions extends NodeTypePaletteOptions {
@@ -33,6 +41,14 @@ declare module "@mui/material/styles" {
     primaryVariantLight: PaletteOptions["primary"];
     neutral: PaletteOptions["primary"];
     neutralContrast: PaletteOptions["primary"];
+    support1: PaletteOptions["primary"];
+    support2: PaletteOptions["primary"];
+    support3: PaletteOptions["primary"];
+    support4: PaletteOptions["primary"];
+    critique1: PaletteOptions["primary"];
+    critique2: PaletteOptions["primary"];
+    critique3: PaletteOptions["primary"];
+    critique4: PaletteOptions["primary"];
   }
 }
 
@@ -44,6 +60,14 @@ declare module "@mui/material" {
     primaryVariantLight: true;
     neutral: true;
     neutralContrast: true;
+    support1: true;
+    support2: true;
+    support3: true;
+    support4: true;
+    critique1: true;
+    critique2: true;
+    critique3: true;
+    critique4: true;
   }
 
   interface AppBarPropsColorOverrides extends NodeTypeColors {
@@ -51,6 +75,14 @@ declare module "@mui/material" {
     primaryVariantLight: true;
     neutral: true;
     neutralContrast: true;
+    support1: true;
+    support2: true;
+    support3: true;
+    support4: true;
+    critique1: true;
+    critique2: true;
+    critique3: true;
+    critique4: true;
   }
 
   interface SvgIconPropsColorOverrides extends NodeTypeColors {
@@ -58,6 +90,14 @@ declare module "@mui/material" {
     primaryVariantLight: true;
     neutral: true;
     neutralContrast: true;
+    support1: true;
+    support2: true;
+    support3: true;
+    support4: true;
+    critique1: true;
+    critique2: true;
+    critique3: true;
+    critique4: true;
   }
 }
 /* eslint-disable @typescript-eslint/no-empty-interface */
@@ -89,9 +129,11 @@ const { augmentColor } = palette; // automatically creates light and dark colors
 
 const sharedPalette = {
   primary: { main: primary },
+
   // material design recommends variants for contrasting UI elements, see Primary Colors at https://m2.material.io/design/color/the-color-system.html#color-theme-creation
   primaryVariantDark: { main: "#359639" }, // 200 higher than primary on material design color tool
   primaryVariantLight: { main: "#82CE84" }, // 200 lower than primary on material design color tool
+
   // use black contrast text for consistency with other node colors; accessibility tool indicates black is still accessible
   secondary: { main: secondary, contrastText: "rgba(0, 0, 0, 0.87)" },
   neutral: augmentColor({ color: { main: "#BDBDBD" } }), // gray is very neutral, somewhat arbitrarily chosen, no particular relation to the other colors
@@ -100,8 +142,21 @@ const sharedPalette = {
   solution: augmentColor({ color: { main: primary } }),
   criterion: augmentColor({ color: { main: "#4AB885" } }), // mint: analogous to solution; between solution & support because criteria are kind of like supports for solutions
   rootClaim: augmentColor({ color: { main: "#DA9526" } }), // goldenrod (gold): somewhat neutral; analogous to critique
-  support: augmentColor({ color: { main: "#26C5DA" } }), // battery charged blue (cyan): non-green support-ish color; top color from https://zenoo.github.io/mui-theme-creator/
-  critique: augmentColor({ color: { main: "#DA3B26", contrastText: "rgba(0, 0, 0, 0.87)" } }), // vermilion (red-orange): opposing; complementary to support
+
+  // Picked a non-green support-ish color (cyan) for support #26C5DA, grabbed its complement #DA2626 (red-orange) for critique,
+  // then entered those into the material 3 theme builder and grabbed 5 tones from each of those two colors' tonal palettes.
+  // The numbered support & critique colors are used for coloring scores.
+  // Material 3 theme builder: https://m3.material.io/theme-builder#/custom
+  support: augmentColor({ color: { main: "#0bbcd1" } }),
+  support1: augmentColor({ color: { main: "#47d8ee" } }),
+  support2: augmentColor({ color: { main: "#9af0ff" } }),
+  support3: augmentColor({ color: { main: "#d1f8ff" } }),
+  support4: augmentColor({ color: { main: "#edfcff" } }),
+  critique: augmentColor({ color: { main: "#ff553d", contrastText: "rgba(0, 0, 0, 0.87)" } }),
+  critique1: augmentColor({ color: { main: "#ff8a76", contrastText: "rgba(0, 0, 0, 0.87)" } }),
+  critique2: augmentColor({ color: { main: "#ffb4a7", contrastText: "rgba(0, 0, 0, 0.87)" } }),
+  critique3: augmentColor({ color: { main: "#ffdad4", contrastText: "rgba(0, 0, 0, 0.87)" } }),
+  critique4: augmentColor({ color: { main: "#ffedea", contrastText: "rgba(0, 0, 0, 0.87)" } }),
 };
 
 export const getThemeOptions = (mode: PaletteMode): ThemeOptions => ({
