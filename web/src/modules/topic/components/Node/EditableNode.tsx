@@ -42,7 +42,7 @@ export const EditableNode = ({ node }: { node: Node }) => {
       <YEdgeDiv>
         <NodeTypeDiv>
           <NodeIcon sx={{ width: "16px", height: "16px" }} />
-          <NodeTypeSpan>{_.startCase(node.type)}</NodeTypeSpan>
+          <NodeTypeSpan>{nodeDecoration.title}</NodeTypeSpan>
         </NodeTypeDiv>
         <NodeIndicatorGroup node={node} />
       </YEdgeDiv>

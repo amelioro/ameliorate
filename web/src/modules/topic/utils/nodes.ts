@@ -8,6 +8,7 @@ export const indicatorLength = 20; // px
 export type MuiIcon = typeof Extension;
 
 export interface NodeDecoration {
+  title: string;
   NodeIcon: MuiIcon;
 }
 
@@ -15,21 +16,27 @@ export type NodeType = "problem" | "solution" | "criterion" | "rootClaim" | "sup
 
 export const nodeDecorations: Record<NodeType, NodeDecoration> = {
   problem: {
+    title: "Problem",
     NodeIcon: Extension,
   },
   solution: {
+    title: "Solution",
     NodeIcon: Check,
   },
   criterion: {
+    title: "Criterion",
     NodeIcon: Ballot,
   },
   rootClaim: {
+    title: "Root Claim",
     NodeIcon: Article,
   },
   support: {
+    title: "Support",
     NodeIcon: ThumbUp,
   },
   critique: {
+    title: "Critique",
     NodeIcon: ThumbDown,
   },
 };
