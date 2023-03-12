@@ -1,4 +1,12 @@
-import { Article, Ballot, Check, Extension, ThumbDown, ThumbUp } from "@mui/icons-material";
+import {
+  Article,
+  Ballot,
+  Check,
+  Extension,
+  ThumbDown,
+  ThumbUp,
+  Widgets,
+} from "@mui/icons-material";
 
 import { Diagram, Node } from "./diagram";
 
@@ -12,7 +20,14 @@ export interface NodeDecoration {
   NodeIcon: MuiIcon;
 }
 
-export type NodeType = "problem" | "solution" | "criterion" | "rootClaim" | "support" | "critique";
+export type NodeType =
+  | "problem"
+  | "solution"
+  | "solutionComponent"
+  | "criterion"
+  | "rootClaim"
+  | "support"
+  | "critique";
 
 export const nodeDecorations: Record<NodeType, NodeDecoration> = {
   problem: {
@@ -22,6 +37,10 @@ export const nodeDecorations: Record<NodeType, NodeDecoration> = {
   solution: {
     title: "Solution",
     NodeIcon: Check,
+  },
+  solutionComponent: {
+    title: "Component",
+    NodeIcon: Widgets,
   },
   criterion: {
     title: "Criterion",

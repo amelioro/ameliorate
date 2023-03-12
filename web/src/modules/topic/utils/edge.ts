@@ -5,6 +5,7 @@ export type RelationName =
   | "causes"
   | "solves"
   | "created by"
+  | "has"
   | "criterion for"
   | "embodies"
   | "supports"
@@ -20,11 +21,15 @@ export interface Relation {
 export const relations: Relation[] = [
   { child: "problem", name: "causes", parent: "problem" },
   { child: "solution", name: "solves", parent: "problem" },
+  { child: "solutionComponent", name: "solves", parent: "problem" },
 
   { child: "problem", name: "created by", parent: "solution" },
+  { child: "problem", name: "created by", parent: "solutionComponent" },
+  { child: "solution", name: "has", parent: "solutionComponent" },
 
   { child: "criterion", name: "criterion for", parent: "problem" },
   { child: "solution", name: "embodies", parent: "criterion" },
+  { child: "solutionComponent", name: "embodies", parent: "criterion" },
 
   { child: "support", name: "supports", parent: "rootClaim" },
   { child: "critique", name: "critiques", parent: "rootClaim" },
@@ -51,7 +56,11 @@ const addableNodesFor: Record<NodeType, AddableNodes> = {
     child: ["problem", "solution", "criterion"],
   },
   solution: {
-    parent: ["problem"], // could have criteria, but need to select a specific problem for it & that requires design
+    parent: ["problem", "solutionComponent"], // could have criteria, but need to select a specific problem for it & that requires design
+    child: ["problem"],
+  },
+  solutionComponent: {
+    parent: ["problem"],
     child: ["problem"],
   },
 

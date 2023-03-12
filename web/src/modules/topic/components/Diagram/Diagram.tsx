@@ -31,6 +31,7 @@ const buildNodeComponent = (type: NodeType) => {
 const nodeTypes: Record<NodeType, ComponentType<NodeProps>> = {
   problem: buildNodeComponent("problem"),
   solution: buildNodeComponent("solution"),
+  solutionComponent: buildNodeComponent("solutionComponent"),
   criterion: buildNodeComponent("criterion"),
   rootClaim: buildNodeComponent("rootClaim"),
   support: buildNodeComponent("support"),
