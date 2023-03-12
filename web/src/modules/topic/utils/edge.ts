@@ -115,9 +115,12 @@ export const canCreateEdge = (diagram: Diagram, parent: Node, child: Node) => {
     return false;
   }
 
-  if (parent.type === "criterion" || child.type === "criterion") {
+  if (
+    (parent.type === "criterion" || child.type === "criterion") &&
+    [parent.type, child.type].some((type) => type === "problem" || type === "solution")
+  ) {
     console.log(
-      "cannot connect nodes: criteria is always already connected to as many nodes as it can"
+      "cannot connect nodes: criteria is always already connected to as many problems & solutions as it can"
     );
     return false;
   }
