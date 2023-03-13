@@ -35,10 +35,12 @@ const buildRows = (rowNodes: Node[], columnNodes: Node[], edges: Edge[]): RowDat
     return {
       rowNode,
       ...Object.fromEntries(
-        columnNodes.map((columnNode) => [
-          columnNode.id,
-          getConnectingEdge(rowNode, columnNode, edges),
-        ])
+        columnNodes.map((columnNode) => {
+          const edge = getConnectingEdge(rowNode, columnNode, edges);
+          if (!edge) throw new Error(`No edge found between ${rowNode.id} and ${columnNode.id}`);
+
+          return [columnNode.id, edge];
+        })
       ),
     };
   });

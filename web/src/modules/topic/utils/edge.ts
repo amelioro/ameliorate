@@ -147,7 +147,6 @@ export const getConnectingEdge = (node1: Node, node2: Node, edges: Edge[]) => {
       (edge.source === node1.id && edge.target === node2.id) ||
       (edge.source === node2.id && edge.target === node1.id)
   );
-  if (!edge) throw new Error(`No edge found between ${node1.id} and ${node2.id}`);
 
   return edge;
 };
