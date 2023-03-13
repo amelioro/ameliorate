@@ -4,7 +4,6 @@ import {
   ArguableType,
   Edge,
   Node,
-  ProblemNode,
   RelationDirection,
   Score,
   buildEdge,
@@ -400,17 +399,18 @@ export const setNodeLabel = (nodeId: string, value: string) => {
   );
 };
 
-export const toggleShowCriteria = (nodeId: string) => {
+export const toggleShowCriteria = (problemNodeId: string, show: boolean) => {
   useTopicStore.setState(
     (state) => {
       const problemDiagram = state.diagrams[problemDiagramId]; // criteria nodes only live in problem diagram
 
-      const node = findNode(problemDiagram, nodeId);
+      const node = findNode(problemDiagram, problemNodeId);
       if (node.type !== "problem") throw new Error("node is not a problem");
-      const problemNode = node as ProblemNode;
+
+      const criteria = children(node, problemDiagram).filter((child) => child.type === "criterion");
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
-      problemNode.data.showCriteria = !problemNode.data.showCriteria;
+      criteria.forEach((criterion) => (criterion.data.showing = show));
       /* eslint-enable functional/immutable-data, no-param-reassign */
 
       const layoutedDiagram = layoutVisibleComponents(problemDiagram); // depends on showCriteria having been updated

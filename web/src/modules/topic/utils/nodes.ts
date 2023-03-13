@@ -82,17 +82,6 @@ export const children = (node: Node, diagram: Diagram) => {
   });
 };
 
-// errors if node does not have only one parent
-export const onlyParent = (node: Node, diagram: Diagram) => {
-  const allParents = parents(node, diagram);
-
-  if (allParents.length !== 1) {
-    throw new Error(`has ${allParents.length} parents, expected one`);
-  }
-
-  return allParents[0];
-};
-
 export const edges = (node: Node, diagram: Diagram) => {
   return diagram.edges.filter((edge) => edge.source === node.id || edge.target === node.id);
 };

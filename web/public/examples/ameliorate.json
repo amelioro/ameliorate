@@ -8,7 +8,7 @@
             "label": "ameliorate annoying to use",
             "score": "-",
             "diagramId": "root",
-            "showCriteria": true
+            "showing": true
           },
           "position": { "x": 700, "y": 0 },
           "selected": false,
@@ -16,7 +16,12 @@
         },
         {
           "id": "2",
-          "data": { "label": "smooth viewport transitions", "score": "-", "diagramId": "root" },
+          "data": {
+            "label": "smooth viewport transitions",
+            "score": "-",
+            "diagramId": "root",
+            "showing": true
+          },
           "position": { "x": 0, "y": 244 },
           "selected": false,
           "type": "solution"
@@ -26,7 +31,8 @@
           "data": {
             "label": "auto-pan when diagram mostly off page",
             "score": "-",
-            "diagramId": "root"
+            "diagramId": "root",
+            "showing": true
           },
           "position": { "x": 350, "y": 244 },
           "selected": false,
@@ -38,7 +44,7 @@
             "label": "nodes positioned too widely when criteria involved",
             "score": "-",
             "diagramId": "root",
-            "showCriteria": true
+            "showing": true
           },
           "position": { "x": 700, "y": 244 },
           "selected": false,
@@ -50,7 +56,7 @@
             "label": "criteria make diagram too overwhelming",
             "score": "-",
             "diagramId": "root",
-            "showCriteria": true
+            "showing": true
           },
           "position": { "x": 1225, "y": 244 },
           "selected": false,
@@ -58,14 +64,24 @@
         },
         {
           "id": "6",
-          "data": { "label": "criteria table view", "score": "-", "diagramId": "root" },
+          "data": {
+            "label": "criteria table view",
+            "score": "-",
+            "diagramId": "root",
+            "showing": true
+          },
           "position": { "x": 1050, "y": 488 },
           "selected": false,
           "type": "solution"
         },
         {
           "id": "7",
-          "data": { "label": "improve layout algorithm", "score": "-", "diagramId": "root" },
+          "data": {
+            "label": "improve layout algorithm",
+            "score": "-",
+            "diagramId": "root",
+            "showing": true
+          },
           "position": { "x": 700, "y": 488 },
           "selected": false,
           "type": "solution"
@@ -75,7 +91,8 @@
           "data": {
             "label": "elevate edges when node selected",
             "score": "-",
-            "diagramId": "root"
+            "diagramId": "root",
+            "showing": true
           },
           "position": { "x": 1400, "y": 488 },
           "selected": false,
@@ -87,7 +104,7 @@
             "label": "score ux somewhat annoying",
             "score": "-",
             "diagramId": "root",
-            "showCriteria": true
+            "showing": true
           },
           "position": { "x": 1575, "y": 244 },
           "selected": false,

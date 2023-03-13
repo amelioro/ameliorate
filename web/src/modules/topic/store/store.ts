@@ -44,7 +44,7 @@ export const useTopicStore = create<TopicStoreState>()(
   temporal(
     persist(immer(devtools(() => initialState)), {
       name: "diagram-storage", // should probably be "topic-storage" but don't know how to migrate
-      version: 6,
+      version: 7,
       migrate: migrate,
     }),
     {
