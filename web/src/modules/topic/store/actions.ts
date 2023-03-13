@@ -4,7 +4,6 @@ import {
   ArguableType,
   Edge,
   Node,
-  ProblemNode,
   RelationDirection,
   Score,
   buildEdge,
@@ -13,8 +12,15 @@ import {
   findNode,
   layoutVisibleComponents,
 } from "../utils/diagram";
-import { RelationName, canCreateEdge, getRelation } from "../utils/edge";
-import { NodeType, edges } from "../utils/nodes";
+import {
+  Relation,
+  RelationName,
+  canCreateEdge,
+  getConnectingEdge,
+  getRelation,
+  implicitEdgeTypes,
+} from "../utils/edge";
+import { NodeType, children, edges, parents } from "../utils/node";
 import { TopicStoreState, initialState, problemDiagramId, useTopicStore } from "./store";
 
 export const getState = () => {
@@ -145,6 +151,65 @@ export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) 
   );
 };
 
+const createImplicitEdges = (state: TopicStoreState, parent: Node, child: Node) => {
+  const diagram = state.diagrams[parent.data.diagramId];
+
+  implicitEdgeTypes.forEach((implicitEdgeType) => {
+    // create parent implicit edges
+    if (
+      parent.type === implicitEdgeType.throughNodeType ||
+      child.type === implicitEdgeType.relation.child
+    ) {
+      parents(parent, diagram)
+        .filter((grandparent) => grandparent.type === implicitEdgeType.relation.parent)
+        .forEach((grandparent) => {
+          createEdgeAndImplicitEdges(state, grandparent, child, implicitEdgeType.relation);
+        });
+    }
+
+    // create child implicit edges
+    if (
+      child.type === implicitEdgeType.throughNodeType ||
+      parent.type === implicitEdgeType.relation.parent
+    ) {
+      children(child, diagram)
+        .filter((grandchild) => grandchild.type === implicitEdgeType.relation.child)
+        .forEach((grandchild) => {
+          createEdgeAndImplicitEdges(state, parent, grandchild, implicitEdgeType.relation);
+        });
+    }
+  });
+};
+
+// see algorithm pseudocode & example at https://github.com/amelioro/ameliorate/issues/66#issuecomment-1465078133
+const createEdgeAndImplicitEdges = (
+  state: TopicStoreState,
+  parent: Node,
+  child: Node,
+  relation: Relation
+) => {
+  const diagram = state.diagrams[parent.data.diagramId];
+
+  // assumes only one edge can exist between two notes - future may allow multiple edges of different relation type
+  if (getConnectingEdge(parent, child, diagram.edges) !== undefined) return diagram.edges;
+
+  /* eslint-disable functional/immutable-data, no-param-reassign */
+  const newEdgeId = `${state.nextEdgeId++}`;
+  /* eslint-enable functional/immutable-data, no-param-reassign */
+
+  const newEdge = buildEdge(newEdgeId, parent.id, child.id, relation.name, diagram.id);
+
+  /* eslint-disable functional/immutable-data, no-param-reassign */
+  diagram.edges = diagram.edges.concat(newEdge);
+  /* eslint-enable functional/immutable-data, no-param-reassign */
+
+  // indirectly recurses by calling this method after determining which implicit edges to create
+  // note: this modifies diagram.edges through `state` (via the line above)
+  createImplicitEdges(state, parent, child);
+
+  return diagram.edges;
+};
+
 export const connectNodes = (parentId: string | null, childId: string | null) => {
   useTopicStore.setState(
     (state) => {
@@ -156,16 +221,13 @@ export const connectNodes = (parentId: string | null, childId: string | null) =>
 
       if (!canCreateEdge(activeDiagram, parent, child)) return;
 
-      /* eslint-disable functional/immutable-data, no-param-reassign */
-      const newEdgeId = `${state.nextEdgeId++}`;
-      /* eslint-enable functional/immutable-data, no-param-reassign */
-
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- canCreateEdge ensures relation is valid
       const relation = getRelation(parent.type, child.type)!;
-      const newEdge = buildEdge(newEdgeId, parent.id, child.id, relation.name, activeDiagram.id);
-      const newEdges = activeDiagram.edges.concat(newEdge);
 
-      const layoutedDiagram = layoutVisibleComponents({ ...activeDiagram, edges: newEdges });
+      // modifies diagram.edges through `state`
+      createEdgeAndImplicitEdges(state, parent, child, relation);
+
+      const layoutedDiagram = layoutVisibleComponents(activeDiagram);
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
       activeDiagram.nodes = layoutedDiagram.nodes;
@@ -337,17 +399,18 @@ export const setNodeLabel = (nodeId: string, value: string) => {
   );
 };
 
-export const toggleShowCriteria = (nodeId: string) => {
+export const toggleShowCriteria = (problemNodeId: string, show: boolean) => {
   useTopicStore.setState(
     (state) => {
       const problemDiagram = state.diagrams[problemDiagramId]; // criteria nodes only live in problem diagram
 
-      const node = findNode(problemDiagram, nodeId);
+      const node = findNode(problemDiagram, problemNodeId);
       if (node.type !== "problem") throw new Error("node is not a problem");
-      const problemNode = node as ProblemNode;
+
+      const criteria = children(node, problemDiagram).filter((child) => child.type === "criterion");
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
-      problemNode.data.showCriteria = !problemNode.data.showCriteria;
+      criteria.forEach((criterion) => (criterion.data.showing = show));
       /* eslint-enable functional/immutable-data, no-param-reassign */
 
       const layoutedDiagram = layoutVisibleComponents(problemDiagram); // depends on showCriteria having been updated

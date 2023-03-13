@@ -15,7 +15,7 @@ import { useViewportUpdater } from "../../hooks/flowHooks";
 import { closeClaimDiagram, connectNodes, deselectNodes } from "../../store/actions";
 import { useFilteredDiagram } from "../../store/store";
 import { type Edge, type Node } from "../../utils/diagram";
-import { type NodeType } from "../../utils/nodes";
+import { type NodeType } from "../../utils/node";
 import { FlowNode } from "../Node/FlowNode";
 import { ScoreEdge } from "../ScoreEdge/ScoreEdge";
 import { PositionedCloseButton, StyledReactFlow } from "./Diagram.styles";
@@ -31,6 +31,7 @@ const buildNodeComponent = (type: NodeType) => {
 const nodeTypes: Record<NodeType, ComponentType<NodeProps>> = {
   problem: buildNodeComponent("problem"),
   solution: buildNodeComponent("solution"),
+  solutionComponent: buildNodeComponent("solutionComponent"),
   criterion: buildNodeComponent("criterion"),
   rootClaim: buildNodeComponent("rootClaim"),
   support: buildNodeComponent("support"),

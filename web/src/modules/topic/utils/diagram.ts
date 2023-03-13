@@ -1,8 +1,8 @@
 import { MarkerType } from "reactflow";
 
-import { RelationName, childNode, parentNode } from "./edge";
+import { RelationName, childNode, implicitEdgeTypes, parentNode } from "./edge";
 import { Orientation, layout } from "./layout";
-import { NodeType, children, onlyParent } from "./nodes";
+import { NodeType, children, parents } from "./node";
 
 export type DiagramType = "problem" | "claim";
 export type RelationDirection = "parent" | "child";
@@ -25,6 +25,7 @@ export interface Node {
     label: string;
     score: Score;
     diagramId: string;
+    showing: boolean;
   };
   position: {
     x: number;
@@ -33,7 +34,6 @@ export interface Node {
   selected: boolean;
   type: NodeType;
 }
-export type ProblemNode = Node & { data: { showCriteria: boolean } };
 
 interface BuildProps {
   id: string;
@@ -42,24 +42,21 @@ interface BuildProps {
   type: NodeType;
   diagramId: string;
 }
-export const buildNode = ({ id, label, score, type, diagramId }: BuildProps) => {
+export const buildNode = ({ id, label, score, type, diagramId }: BuildProps): Node => {
   const node = {
     id: id,
     data: {
       label: label ?? `text${id}`,
       score: score ?? ("-" as Score),
       diagramId: diagramId,
+      showing: true,
     },
     position: { x: 0, y: 0 }, // assume layout will adjust this
     selected: false,
     type: type,
   };
 
-  if (type === "problem") {
-    return { ...node, data: { ...node.data, showCriteria: true } } as ProblemNode;
-  } else {
-    return node as Node;
-  }
+  return node;
 };
 
 // assumes that we always want to point from child to parent
@@ -122,33 +119,43 @@ export const findArguable = (diagram: Diagram, arguableId: string, arguableType:
   return arguableType === "node" ? findNode(diagram, arguableId) : findEdge(diagram, arguableId);
 };
 
-export const filterHiddenComponents = (diagram: Diagram): Diagram => {
-  const shownNodes = diagram.nodes.filter((node) => {
-    if (node.type !== "criterion") {
-      return true;
-    }
+// see algorithm pseudocode & example at https://github.com/amelioro/ameliorate/issues/66#issuecomment-1465078133
+const isEdgeImplied = (edge: Edge, diagram: Diagram) => {
+  const edgeParent = parentNode(edge, diagram);
+  const edgeChild = childNode(edge, diagram);
 
-    const problemParent = onlyParent(node, diagram) as ProblemNode;
-    return problemParent.data.showCriteria;
+  return implicitEdgeTypes.some((implicitEdgeType) => {
+    const edgeCouldBeImplied =
+      edgeParent.type === implicitEdgeType.relation.parent &&
+      edgeChild.type === implicitEdgeType.relation.child;
+
+    if (!edgeCouldBeImplied) return false;
+
+    const childrenOfParent = children(edgeParent, diagram);
+    const parentsOfChild = parents(edgeChild, diagram);
+
+    const throughNodeAsChild = childrenOfParent.find(
+      (child) => child.type === implicitEdgeType.throughNodeType
+    );
+    const throughNodeAsParent = parentsOfChild.find(
+      (parent) => parent.type === implicitEdgeType.throughNodeType
+    );
+
+    const throughNodeConnectsParentAndChild =
+      throughNodeAsChild && throughNodeAsParent && throughNodeAsChild.data.showing;
+
+    return throughNodeConnectsParentAndChild;
   });
+};
+
+export const filterHiddenComponents = (diagram: Diagram): Diagram => {
+  const shownNodes = diagram.nodes.filter((node) => node.data.showing);
   const shownNodeIds = shownNodes.map((node) => node.id);
 
   const shownEdges = diagram.edges.filter((edge) => {
     if (!shownNodeIds.includes(edge.source) || !shownNodeIds.includes(edge.target)) return false;
 
-    const edgeParent = parentNode(edge, diagram);
-    const edgeChild = childNode(edge, diagram);
-
-    if (edgeParent.type !== "problem") return true;
-    const problemParent = edgeParent as ProblemNode;
-
-    const problemChildren = children(problemParent, diagram);
-    const problemHasCriteria = problemChildren.some((child) => child.type === "criterion");
-
-    // hide solution connections if showing criteria because criteria imply a connection to solution
-    if (problemParent.data.showCriteria && problemHasCriteria && edgeChild.type === "solution") {
-      return false;
-    }
+    if (isEdgeImplied(edge, diagram)) return false;
 
     return true;
   });

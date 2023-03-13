@@ -1,7 +1,7 @@
 import _ from "lodash";
 
 import { ArguableType, Diagram } from "./diagram";
-import { maxCharsPerLine } from "./nodes";
+import { maxCharsPerLine } from "./node";
 
 export const parseClaimDiagramId = (diagramId: string) => {
   return diagramId.split("-") as [ArguableType, string];

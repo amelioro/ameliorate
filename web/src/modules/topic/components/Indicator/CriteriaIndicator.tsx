@@ -2,7 +2,6 @@ import { Ballot, BallotOutlined } from "@mui/icons-material";
 
 import { toggleShowCriteria } from "../../store/actions";
 import { useNode, useNodeChildren } from "../../store/nodeHooks";
-import { ProblemNode } from "../../utils/diagram";
 import { Indicator } from "../Indicator/Indicator";
 
 interface Props {
@@ -14,15 +13,15 @@ export const CriteriaIndicator = ({ nodeId, diagramId }: Props) => {
   const node = useNode(nodeId, diagramId);
   const nodeChildren = useNodeChildren(nodeId, diagramId);
 
-  const hasCriteria = nodeChildren.some((child) => child.type === "criterion");
+  const criteria = nodeChildren.filter((child) => child.type === "criterion");
 
-  if (node === null || node.type !== "problem" || !hasCriteria) {
+  if (node === null || node.type !== "problem" || criteria.length === 0) {
     return <></>;
   }
 
-  const problemNode = node as ProblemNode;
+  const allCriteriaShown = criteria.every((child) => child.data.showing);
 
-  const Icon = problemNode.data.showCriteria ? Ballot : BallotOutlined;
+  const Icon = allCriteriaShown ? Ballot : BallotOutlined;
 
-  return <Indicator Icon={Icon} onClick={() => toggleShowCriteria(nodeId)} />;
+  return <Indicator Icon={Icon} onClick={() => toggleShowCriteria(nodeId, !allCriteriaShown)} />;
 };

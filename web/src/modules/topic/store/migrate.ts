@@ -10,6 +10,7 @@ export const migrate = (persistedState: any, version: number) => {
     migrate_3_to_4,
     migrate_4_to_5,
     migrate_5_to_6,
+    migrate_6_to_7,
   ];
 
   let state = persistedState;
@@ -133,6 +134,21 @@ const migrate_5_to_6 = (state: any) => {
       .forEach((edge: any) => {
         edge.data.score = "9";
       });
+  });
+
+  return state;
+};
+
+const migrate_6_to_7 = (state: any) => {
+  Object.values(state.diagrams).forEach((diagram: any) => {
+    // replace problem.showCriteria with node.showing
+    diagram.nodes.forEach((node: any) => {
+      node.data.showing = true;
+
+      if (node.type === "problem") {
+        delete node.data.showCriteria;
+      }
+    });
   });
 
   return state;

@@ -1,46 +1,88 @@
+import _ from "lodash";
+
 import { Diagram, Edge, Node, RelationDirection, findArguable } from "./diagram";
-import { NodeType } from "./nodes";
+import { NodeType } from "./node";
 
 export type RelationName =
   | "causes"
   | "solves"
   | "created by"
+  | "has"
   | "criterion for"
   | "embodies"
   | "supports"
   | "critiques";
 
-export interface Relation {
-  parent: NodeType;
-  child: NodeType;
-  name: RelationName;
-}
-
 // assumes that we're always pointing from child to parent
-export const relations: Relation[] = [
-  { parent: "problem", child: "problem", name: "causes" },
-  { parent: "problem", child: "solution", name: "solves" },
+export const relations = [
+  { child: "problem", name: "causes", parent: "problem" },
+  { child: "solution", name: "solves", parent: "problem" },
+  { child: "solutionComponent", name: "solves", parent: "problem" },
 
-  { parent: "solution", child: "problem", name: "created by" },
+  { child: "problem", name: "created by", parent: "solution" },
+  { child: "problem", name: "created by", parent: "solutionComponent" },
+  { child: "solution", name: "has", parent: "solutionComponent" },
 
-  { parent: "problem", child: "criterion", name: "criterion for" },
-  { parent: "criterion", child: "solution", name: "embodies" },
+  { child: "criterion", name: "criterion for", parent: "problem" },
+  { child: "solution", name: "embodies", parent: "criterion" },
+  { child: "solutionComponent", name: "embodies", parent: "criterion" },
 
-  { parent: "rootClaim", child: "support", name: "supports" },
-  { parent: "rootClaim", child: "critique", name: "critiques" },
+  { child: "support", name: "supports", parent: "rootClaim" },
+  { child: "critique", name: "critiques", parent: "rootClaim" },
 
-  { parent: "support", child: "support", name: "supports" },
-  { parent: "support", child: "critique", name: "critiques" },
+  { child: "support", name: "supports", parent: "support" },
+  { child: "critique", name: "critiques", parent: "support" },
 
-  { parent: "critique", child: "support", name: "supports" },
-  { parent: "critique", child: "critique", name: "critiques" },
-];
+  { child: "support", name: "supports", parent: "critique" },
+  { child: "critique", name: "critiques", parent: "critique" },
+] as const;
+
+export type Relation = typeof relations[number];
 
 export const claimNodeTypes = ["RootClaim", "Support", "Critique"];
 
 export const getRelation = (parent: NodeType, child: NodeType): Relation | undefined => {
   return relations.find((relation) => relation.parent === parent && relation.child === child);
 };
+
+const componentTypes: Partial<Record<NodeType, NodeType>> = {
+  solution: "solutionComponent",
+};
+
+// component nodes can connect to any node type that the composed node type can connect to,
+// and any connection to/from the component node implies a connection to/from the composed node
+// e.g. if a solution component connects to a problem, it's implied that the solution also connects
+// to the problem.
+const implicitComponentEdgeTypes: ImplicitEdgeType[] = Object.entries(componentTypes).flatMap(
+  ([nodeType, componentType]) => {
+    return relations
+      .filter(
+        ({ child, parent }) =>
+          [child, parent].includes(nodeType as NodeType) && ![child, parent].includes(componentType)
+      )
+      .map((relation) => ({
+        throughNodeType: componentType,
+        relation: relation,
+      }));
+  }
+);
+
+interface ImplicitEdgeType {
+  throughNodeType: NodeType;
+  relation: Relation;
+}
+
+export const implicitEdgeTypes: ImplicitEdgeType[] = [
+  {
+    throughNodeType: "criterion",
+    relation: { child: "solutionComponent", name: "solves", parent: "problem" },
+  },
+  {
+    throughNodeType: "criterion",
+    relation: { child: "solution", name: "solves", parent: "problem" },
+  },
+  ...implicitComponentEdgeTypes,
+];
 
 type AddableNodes = {
   [key in RelationDirection]: NodeType[];
@@ -51,7 +93,11 @@ const addableNodesFor: Record<NodeType, AddableNodes> = {
     child: ["problem", "solution", "criterion"],
   },
   solution: {
-    parent: ["problem"], // could have criteria, but need to select a specific problem for it & that requires design
+    parent: ["problem", "solutionComponent"], // could have criteria, but need to select a specific problem for it & that requires design
+    child: ["problem"],
+  },
+  solutionComponent: {
+    parent: ["problem"],
     child: ["problem"],
   },
 
@@ -106,9 +152,12 @@ export const canCreateEdge = (diagram: Diagram, parent: Node, child: Node) => {
     return false;
   }
 
-  if (parent.type === "criterion" || child.type === "criterion") {
+  if (
+    (parent.type === "criterion" || child.type === "criterion") &&
+    [parent.type, child.type].some((type) => type === "problem" || type === "solution")
+  ) {
     console.log(
-      "cannot connect nodes: criteria is always already connected to as many nodes as it can"
+      "cannot connect nodes: criteria is always already connected to as many problems & solutions as it can"
     );
     return false;
   }
@@ -135,7 +184,6 @@ export const getConnectingEdge = (node1: Node, node2: Node, edges: Edge[]) => {
       (edge.source === node1.id && edge.target === node2.id) ||
       (edge.source === node2.id && edge.target === node1.id)
   );
-  if (!edge) throw new Error(`No edge found between ${node1.id} and ${node2.id}`);
 
   return edge;
 };

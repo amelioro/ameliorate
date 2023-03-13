@@ -1,4 +1,12 @@
-import { Article, Ballot, Check, Extension, ThumbDown, ThumbUp } from "@mui/icons-material";
+import {
+  Article,
+  Ballot,
+  Check,
+  Extension,
+  ThumbDown,
+  ThumbUp,
+  Widgets,
+} from "@mui/icons-material";
 
 import { Diagram, Node } from "./diagram";
 
@@ -8,28 +16,46 @@ export const indicatorLength = 20; // px
 export type MuiIcon = typeof Extension;
 
 export interface NodeDecoration {
+  title: string;
   NodeIcon: MuiIcon;
 }
 
-export type NodeType = "problem" | "solution" | "criterion" | "rootClaim" | "support" | "critique";
+export type NodeType =
+  | "problem"
+  | "solution"
+  | "solutionComponent"
+  | "criterion"
+  | "rootClaim"
+  | "support"
+  | "critique";
 
 export const nodeDecorations: Record<NodeType, NodeDecoration> = {
   problem: {
+    title: "Problem",
     NodeIcon: Extension,
   },
   solution: {
+    title: "Solution",
     NodeIcon: Check,
   },
+  solutionComponent: {
+    title: "Component",
+    NodeIcon: Widgets,
+  },
   criterion: {
+    title: "Criterion",
     NodeIcon: Ballot,
   },
   rootClaim: {
+    title: "Root Claim",
     NodeIcon: Article,
   },
   support: {
+    title: "Support",
     NodeIcon: ThumbUp,
   },
   critique: {
+    title: "Critique",
     NodeIcon: ThumbDown,
   },
 };
@@ -54,17 +80,6 @@ export const children = (node: Node, diagram: Diagram) => {
 
     return node;
   });
-};
-
-// errors if node does not have only one parent
-export const onlyParent = (node: Node, diagram: Diagram) => {
-  const allParents = parents(node, diagram);
-
-  if (allParents.length !== 1) {
-    throw new Error(`has ${allParents.length} parents, expected one`);
-  }
-
-  return allParents[0];
 };
 
 export const edges = (node: Node, diagram: Diagram) => {

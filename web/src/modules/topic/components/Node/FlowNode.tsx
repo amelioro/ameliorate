@@ -3,7 +3,7 @@ import { Handle, Position } from "reactflow";
 
 import { useDiagramType } from "../../store/store";
 import { Node, orientations } from "../../utils/diagram";
-import { NodeType } from "../../utils/nodes";
+import { NodeType } from "../../utils/node";
 import { NodeProps } from "../Diagram/Diagram";
 import { EditableNode } from "../Node/EditableNode";
 import {

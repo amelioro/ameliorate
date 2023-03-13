@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import { openContextMenu } from "../../../../common/store/contextMenuActions";
 import { setNodeLabel } from "../../store/actions";
 import { Node } from "../../utils/diagram";
-import { nodeDecorations } from "../../utils/nodes";
+import { nodeDecorations } from "../../utils/node";
 import { NodeIndicatorGroup } from "../Indicator/NodeIndicatorGroup";
 import {
   MiddleDiv,
@@ -42,7 +42,7 @@ export const EditableNode = ({ node }: { node: Node }) => {
       <YEdgeDiv>
         <NodeTypeDiv>
           <NodeIcon sx={{ width: "16px", height: "16px" }} />
-          <NodeTypeSpan>{_.startCase(node.type)}</NodeTypeSpan>
+          <NodeTypeSpan>{nodeDecoration.title}</NodeTypeSpan>
         </NodeTypeDiv>
         <NodeIndicatorGroup node={node} />
       </YEdgeDiv>

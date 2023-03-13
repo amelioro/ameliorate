@@ -1,4 +1,4 @@
-import { MuiIcon } from "../../utils/nodes";
+import { MuiIcon } from "../../utils/node";
 import { StyledButton } from "./Indicator.styles";
 
 interface IndicatorProps {
