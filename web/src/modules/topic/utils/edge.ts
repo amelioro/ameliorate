@@ -45,7 +45,34 @@ export const getRelation = (parent: NodeType, child: NodeType): Relation | undef
   return relations.find((relation) => relation.parent === parent && relation.child === child);
 };
 
-export const implicitEdgeTypes: { throughNodeType: NodeType; relation: Relation }[] = [
+const componentTypes: Partial<Record<NodeType, NodeType>> = {
+  solution: "solutionComponent",
+};
+
+// component nodes can connect to any node type that the composed node type can connect to,
+// and any connection to/from the component node implies a connection to/from the composed node
+// e.g. if a solution component connects to a problem, it's implied that the solution also connects
+// to the problem.
+const implicitComponentEdgeTypes: ImplicitEdgeType[] = Object.entries(componentTypes).flatMap(
+  ([nodeType, componentType]) => {
+    return relations
+      .filter(
+        ({ child, parent }) =>
+          [child, parent].includes(nodeType as NodeType) && ![child, parent].includes(componentType)
+      )
+      .map((relation) => ({
+        throughNodeType: componentType,
+        relation: relation,
+      }));
+  }
+);
+
+interface ImplicitEdgeType {
+  throughNodeType: NodeType;
+  relation: Relation;
+}
+
+export const implicitEdgeTypes: ImplicitEdgeType[] = [
   {
     throughNodeType: "criterion",
     relation: { child: "solutionComponent", name: "solves", parent: "problem" },
@@ -54,6 +81,7 @@ export const implicitEdgeTypes: { throughNodeType: NodeType; relation: Relation 
     throughNodeType: "criterion",
     relation: { child: "solution", name: "solves", parent: "problem" },
   },
+  ...implicitComponentEdgeTypes,
 ];
 
 type AddableNodes = {
