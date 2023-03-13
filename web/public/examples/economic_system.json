@@ -11,7 +11,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 940, "y": 0 },
+          "position": { "x": 700, "y": 0 },
           "selected": false,
           "type": "problem"
         },
@@ -23,14 +23,14 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 320, "y": 488 },
+          "position": { "x": 350, "y": 732 },
           "selected": false,
           "type": "solution"
         },
         {
           "id": "2",
           "data": { "label": "Socialism", "score": "-", "diagramId": "root", "showing": true },
-          "position": { "x": 1560, "y": 488 },
+          "position": { "x": 1480, "y": 732 },
           "selected": false,
           "type": "solution"
         },
@@ -42,7 +42,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 240, "y": 244 },
+          "position": { "x": 350, "y": 244 },
           "selected": false,
           "type": "criterion"
         },
@@ -54,7 +54,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 590, "y": 244 },
+          "position": { "x": 795, "y": 244 },
           "selected": false,
           "type": "criterion"
         },
@@ -66,7 +66,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 940, "y": 244 },
+          "position": { "x": 1145, "y": 244 },
           "selected": false,
           "type": "criterion"
         },
@@ -78,7 +78,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 1290, "y": 244 },
+          "position": { "x": 0, "y": 244 },
           "selected": false,
           "type": "criterion"
         },
@@ -90,9 +90,57 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 1640, "y": 244 },
+          "position": { "x": 1655, "y": 244 },
           "selected": false,
           "type": "criterion"
+        },
+        {
+          "id": "72",
+          "data": {
+            "label": "No social support",
+            "score": "-",
+            "diagramId": "root",
+            "showing": true
+          },
+          "position": { "x": 175, "y": 488 },
+          "selected": false,
+          "type": "solutionComponent"
+        },
+        {
+          "id": "73",
+          "data": {
+            "label": "Everything privately owned",
+            "score": "-",
+            "diagramId": "root",
+            "showing": true
+          },
+          "position": { "x": 795, "y": 488 },
+          "selected": false,
+          "type": "solutionComponent"
+        },
+        {
+          "id": "76",
+          "data": {
+            "label": "Some private ownership",
+            "score": "-",
+            "diagramId": "root",
+            "showing": true
+          },
+          "position": { "x": 1305, "y": 488 },
+          "selected": false,
+          "type": "solutionComponent"
+        },
+        {
+          "id": "77",
+          "data": {
+            "label": "Universal Basic Income",
+            "score": "-",
+            "diagramId": "root",
+            "showing": true
+          },
+          "position": { "x": 1655, "y": 488 },
+          "selected": false,
+          "type": "solutionComponent"
         }
       ],
       "edges": [
@@ -248,6 +296,132 @@
           "source": "0",
           "target": "34",
           "type": "ScoreEdge"
+        },
+        {
+          "id": "87",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "has",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "72",
+          "target": "1",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "88",
+          "data": { "score": "1", "diagramId": "root" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "33",
+          "target": "72",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "89",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "solves",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "0",
+          "target": "72",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "90",
+          "data": { "score": "9", "diagramId": "root" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "7",
+          "target": "72",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "91",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "has",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "73",
+          "target": "1",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "92",
+          "data": { "score": "8", "diagramId": "root" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "19",
+          "target": "73",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "93",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "solves",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "0",
+          "target": "73",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "94",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "23",
+          "target": "73",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "95",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "has",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "76",
+          "target": "2",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "96",
+          "data": { "score": "7", "diagramId": "root" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "19",
+          "target": "76",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "97",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "solves",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "0",
+          "target": "76",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "98",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "has",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "77",
+          "target": "2",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "99",
+          "data": { "score": "7", "diagramId": "root" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "34",
+          "target": "77",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "100",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "solves",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "0",
+          "target": "77",
+          "type": "ScoreEdge"
         }
       ],
       "type": "problem"
@@ -306,18 +480,6 @@
           "type": "rootClaim"
         },
         {
-          "id": "12",
-          "data": {
-            "label": "No social support = people die",
-            "score": "-",
-            "diagramId": "edge-7",
-            "showing": true
-          },
-          "position": { "x": 560, "y": 0 },
-          "selected": false,
-          "type": "support"
-        },
-        {
           "id": "44",
           "data": {
             "label": "Gain from things not tied to work",
@@ -325,35 +487,26 @@
             "diagramId": "edge-7",
             "showing": true
           },
-          "position": { "x": 560, "y": 140 },
+          "position": { "x": 560, "y": 70 },
           "selected": false,
           "type": "critique"
         },
         {
           "id": "45",
           "data": { "label": "Inheritance", "score": "-", "diagramId": "edge-7", "showing": true },
-          "position": { "x": 1120, "y": 70 },
+          "position": { "x": 1120, "y": 0 },
           "selected": false,
           "type": "support"
         },
         {
           "id": "46",
           "data": { "label": "Stock", "score": "-", "diagramId": "edge-7", "showing": true },
-          "position": { "x": 1120, "y": 210 },
+          "position": { "x": 1120, "y": 140 },
           "selected": false,
           "type": "support"
         }
       ],
       "edges": [
-        {
-          "id": "10",
-          "data": { "score": "-", "diagramId": "edge-7" },
-          "label": "supports",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "11",
-          "target": "12",
-          "type": "ScoreEdge"
-        },
         {
           "id": "41",
           "data": { "score": "-", "diagramId": "edge-7" },
@@ -978,10 +1131,48 @@
       ],
       "edges": [],
       "type": "claim"
+    },
+    "edge-94": {
+      "id": "edge-94",
+      "nodes": [
+        {
+          "id": "74",
+          "data": {
+            "label": "\"Everything pri...\" embodies \"Power in the r...\"",
+            "score": "-",
+            "diagramId": "edge-94",
+            "showing": true
+          },
+          "position": { "x": 0, "y": 0 },
+          "selected": false,
+          "type": "rootClaim"
+        }
+      ],
+      "edges": [],
+      "type": "claim"
+    },
+    "edge-88": {
+      "id": "edge-88",
+      "nodes": [
+        {
+          "id": "75",
+          "data": {
+            "label": "\"No social support\" embodies \"Supports those...\"",
+            "score": "1",
+            "diagramId": "edge-88",
+            "showing": true
+          },
+          "position": { "x": 0, "y": 0 },
+          "selected": false,
+          "type": "rootClaim"
+        }
+      ],
+      "edges": [],
+      "type": "claim"
     }
   },
   "activeTableProblemId": null,
   "activeClaimDiagramId": null,
-  "nextNodeId": 72,
-  "nextEdgeId": 87
+  "nextNodeId": 78,
+  "nextEdgeId": 101
 }
