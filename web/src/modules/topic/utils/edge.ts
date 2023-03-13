@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 import { Diagram, Edge, Node, RelationDirection, findArguable } from "./diagram";
 import { NodeType } from "./nodes";
 
@@ -11,14 +13,8 @@ export type RelationName =
   | "supports"
   | "critiques";
 
-export interface Relation {
-  child: NodeType;
-  name: RelationName;
-  parent: NodeType;
-}
-
 // assumes that we're always pointing from child to parent
-export const relations: Relation[] = [
+export const relations = [
   { child: "problem", name: "causes", parent: "problem" },
   { child: "solution", name: "solves", parent: "problem" },
   { child: "solutionComponent", name: "solves", parent: "problem" },
@@ -39,13 +35,26 @@ export const relations: Relation[] = [
 
   { child: "support", name: "supports", parent: "critique" },
   { child: "critique", name: "critiques", parent: "critique" },
-];
+] as const;
+
+export type Relation = typeof relations[number];
 
 export const claimNodeTypes = ["RootClaim", "Support", "Critique"];
 
 export const getRelation = (parent: NodeType, child: NodeType): Relation | undefined => {
   return relations.find((relation) => relation.parent === parent && relation.child === child);
 };
+
+export const implicitEdgeTypes: { throughNodeType: NodeType; relation: Relation }[] = [
+  {
+    throughNodeType: "criterion",
+    relation: { child: "solutionComponent", name: "solves", parent: "problem" },
+  },
+  {
+    throughNodeType: "criterion",
+    relation: { child: "solution", name: "solves", parent: "problem" },
+  },
+];
 
 type AddableNodes = {
   [key in RelationDirection]: NodeType[];
