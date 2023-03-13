@@ -1,8 +1,8 @@
 import { MarkerType } from "reactflow";
 
-import { RelationName, childNode, parentNode } from "./edge";
+import { RelationName, childNode, implicitEdgeTypes, parentNode } from "./edge";
 import { Orientation, layout } from "./layout";
-import { NodeType, children, onlyParent } from "./nodes";
+import { NodeType, children, onlyParent, parents } from "./nodes";
 
 export type DiagramType = "problem" | "claim";
 export type RelationDirection = "parent" | "child";
@@ -122,6 +122,38 @@ export const findArguable = (diagram: Diagram, arguableId: string, arguableType:
   return arguableType === "node" ? findNode(diagram, arguableId) : findEdge(diagram, arguableId);
 };
 
+// see algorithm pseudocode & example at https://github.com/amelioro/ameliorate/issues/66#issuecomment-1465078133
+const isEdgeImplied = (edge: Edge, diagram: Diagram) => {
+  const edgeParent = parentNode(edge, diagram);
+  const edgeChild = childNode(edge, diagram);
+
+  return implicitEdgeTypes.some((implicitEdgeType) => {
+    const edgeCouldBeImplied =
+      edgeParent.type === implicitEdgeType.relation.parent &&
+      edgeChild.type === implicitEdgeType.relation.child;
+
+    if (!edgeCouldBeImplied) return false;
+
+    const childrenOfParent = children(edgeParent, diagram);
+    const parentsOfChild = parents(edgeChild, diagram);
+
+    const throughNodeAsChild = childrenOfParent.find(
+      (child) => child.type === implicitEdgeType.throughNodeType
+    );
+    const throughNodeAsParent = parentsOfChild.find(
+      (parent) => parent.type === implicitEdgeType.throughNodeType
+    );
+
+    // TODO: show/hide nodes based on data per node, not based on parent showNode data
+    const throughNodeIsShowing = (edgeParent as ProblemNode).data.showCriteria;
+
+    const throughNodeConnectsParentAndChild =
+      throughNodeAsChild && throughNodeAsParent && throughNodeIsShowing;
+
+    return throughNodeConnectsParentAndChild;
+  });
+};
+
 export const filterHiddenComponents = (diagram: Diagram): Diagram => {
   const shownNodes = diagram.nodes.filter((node) => {
     if (node.type !== "criterion") {
@@ -136,19 +168,7 @@ export const filterHiddenComponents = (diagram: Diagram): Diagram => {
   const shownEdges = diagram.edges.filter((edge) => {
     if (!shownNodeIds.includes(edge.source) || !shownNodeIds.includes(edge.target)) return false;
 
-    const edgeParent = parentNode(edge, diagram);
-    const edgeChild = childNode(edge, diagram);
-
-    if (edgeParent.type !== "problem") return true;
-    const problemParent = edgeParent as ProblemNode;
-
-    const problemChildren = children(problemParent, diagram);
-    const problemHasCriteria = problemChildren.some((child) => child.type === "criterion");
-
-    // hide solution connections if showing criteria because criteria imply a connection to solution
-    if (problemParent.data.showCriteria && problemHasCriteria && edgeChild.type === "solution") {
-      return false;
-    }
+    if (isEdgeImplied(edge, diagram)) return false;
 
     return true;
   });
