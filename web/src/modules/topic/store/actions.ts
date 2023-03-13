@@ -20,7 +20,7 @@ import {
   getRelation,
   implicitEdgeTypes,
 } from "../utils/edge";
-import { NodeType, children, edges, parents } from "../utils/nodes";
+import { NodeType, children, edges, parents } from "../utils/node";
 import { TopicStoreState, initialState, problemDiagramId, useTopicStore } from "./store";
 
 export const getState = () => {

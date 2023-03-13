@@ -2,7 +2,7 @@ import { MarkerType } from "reactflow";
 
 import { RelationName, childNode, implicitEdgeTypes, parentNode } from "./edge";
 import { Orientation, layout } from "./layout";
-import { NodeType, children, parents } from "./nodes";
+import { NodeType, children, parents } from "./node";
 
 export type DiagramType = "problem" | "claim";
 export type RelationDirection = "parent" | "child";

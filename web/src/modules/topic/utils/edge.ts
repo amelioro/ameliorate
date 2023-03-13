@@ -1,7 +1,7 @@
 import _ from "lodash";
 
 import { Diagram, Edge, Node, RelationDirection, findArguable } from "./diagram";
-import { NodeType } from "./nodes";
+import { NodeType } from "./node";
 
 export type RelationName =
   | "causes"

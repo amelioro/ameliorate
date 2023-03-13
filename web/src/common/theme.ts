@@ -10,7 +10,7 @@ import {
   createTheme,
 } from "@mui/material";
 
-import { NodeType } from "../modules/topic/utils/nodes";
+import { NodeType } from "../modules/topic/utils/node";
 
 // adding colors to theme documented at https://mui.com/material-ui/customization/palette/#adding-new-colors
 

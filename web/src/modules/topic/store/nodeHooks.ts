@@ -1,5 +1,5 @@
 import { Node, findNode } from "../utils/diagram";
-import { children } from "../utils/nodes";
+import { children } from "../utils/node";
 import { useTopicStoreAfterHydration } from "./store";
 
 export const useNode = (nodeId: string, diagramId: string) => {

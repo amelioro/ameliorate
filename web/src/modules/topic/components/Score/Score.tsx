@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 
 import { useTopicZoom } from "../../hooks/topicHooks";
 import { type ArguableType, type Score as ScoreData } from "../../utils/diagram";
-import { indicatorLength } from "../../utils/nodes";
+import { indicatorLength } from "../../utils/node";
 import { StyledButton, StyledPopper } from "./Score.styles";
 import { ScorePie } from "./ScorePie";
 

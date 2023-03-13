@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import { openContextMenu } from "../../../../common/store/contextMenuActions";
 import { setNodeLabel } from "../../store/actions";
 import { Node } from "../../utils/diagram";
-import { nodeDecorations } from "../../utils/nodes";
+import { nodeDecorations } from "../../utils/node";
 import { NodeIndicatorGroup } from "../Indicator/NodeIndicatorGroup";
 import {
   MiddleDiv,
