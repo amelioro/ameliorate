@@ -1,6 +1,7 @@
 import {
   Article,
   Ballot,
+  Bolt,
   Check,
   Extension,
   ThumbDown,
@@ -25,6 +26,7 @@ export type NodeType =
   | "solution"
   | "solutionComponent"
   | "criterion"
+  | "effect"
   | "rootClaim"
   | "support"
   | "critique";
@@ -45,6 +47,10 @@ export const nodeDecorations: Record<NodeType, NodeDecoration> = {
   criterion: {
     title: "Criterion",
     NodeIcon: Ballot,
+  },
+  effect: {
+    title: "Effect",
+    NodeIcon: Bolt,
   },
   rootClaim: {
     title: "Root Claim",

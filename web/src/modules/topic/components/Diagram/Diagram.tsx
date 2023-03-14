@@ -33,6 +33,7 @@ const nodeTypes: Record<NodeType, ComponentType<NodeProps>> = {
   solution: buildNodeComponent("solution"),
   solutionComponent: buildNodeComponent("solutionComponent"),
   criterion: buildNodeComponent("criterion"),
+  effect: buildNodeComponent("effect"),
   rootClaim: buildNodeComponent("rootClaim"),
   support: buildNodeComponent("support"),
   critique: buildNodeComponent("critique"),

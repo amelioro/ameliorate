@@ -9,6 +9,7 @@ import {
   type ThemeOptions,
   createTheme,
 } from "@mui/material";
+import { yellow } from "@mui/material/colors";
 
 import { NodeType } from "../modules/topic/utils/node";
 
@@ -149,6 +150,7 @@ const sharedPalette = {
   solution: augmentColor({ color: { main: primary } }),
   solutionComponent: augmentColor({ color: { main: primaryVariantLight } }),
   criterion: augmentColor({ color: { main: "#4AB885" } }), // mint: analogous to solution; between solution & support because criteria are kind of like supports for solutions
+  effect: augmentColor({ color: { main: yellow[500] } }), // random yellow that looks decent: somewhat similar to green/solution but also goes well with lightning bolt icon
   rootClaim: augmentColor({ color: { main: "#DA9526" } }), // goldenrod (gold): somewhat neutral; analogous to critique
 
   // Picked a non-green support-ish color (cyan) for support #26C5DA, grabbed its complement #DA2626 (red-orange) for critique,
