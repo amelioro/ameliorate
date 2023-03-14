@@ -66,6 +66,12 @@ npm run lint # from web/
 
 Note: skip precommit hooks (e.g. if you want to quickly commit a wip) with `git commit --no-verify`.
 
+To activate husky:
+
+```bash
+npx husky install # Activate commit hooks
+```
+
 ### Helpful VS Code settings
 
 - [extensions](https://github.com/amelioro/ameliorate/blob/main/.vscode/extensions.json) and [settings](https://github.com/amelioro/ameliorate/blob/main/.vscode/settings.json) for syntax highlighting, styling on save, making conventional commits, working with git
