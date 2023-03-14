@@ -11,7 +11,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 700, "y": 0 },
+          "position": { "x": 1050, "y": 0 },
           "selected": false,
           "type": "problem"
         },
@@ -23,14 +23,14 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 350, "y": 732 },
+          "position": { "x": 1385, "y": 976 },
           "selected": false,
           "type": "solution"
         },
         {
           "id": "2",
           "data": { "label": "Socialism", "score": "-", "diagramId": "root", "showing": true },
-          "position": { "x": 1480, "y": 732 },
+          "position": { "x": 175, "y": 732 },
           "selected": false,
           "type": "solution"
         },
@@ -38,11 +38,11 @@
           "id": "7",
           "data": {
             "label": "Discourages unsustainable lifestyles",
-            "score": "-",
+            "score": "8",
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 350, "y": 244 },
+          "position": { "x": 860, "y": 244 },
           "selected": false,
           "type": "criterion"
         },
@@ -54,7 +54,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 795, "y": 244 },
+          "position": { "x": 430, "y": 244 },
           "selected": false,
           "type": "criterion"
         },
@@ -66,7 +66,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 1145, "y": 244 },
+          "position": { "x": 1640, "y": 244 },
           "selected": false,
           "type": "criterion"
         },
@@ -78,7 +78,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 0, "y": 244 },
+          "position": { "x": 1210, "y": 244 },
           "selected": false,
           "type": "criterion"
         },
@@ -90,7 +90,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 1655, "y": 244 },
+          "position": { "x": 0, "y": 244 },
           "selected": false,
           "type": "criterion"
         },
@@ -102,7 +102,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 175, "y": 488 },
+          "position": { "x": 955, "y": 732 },
           "selected": false,
           "type": "solutionComponent"
         },
@@ -114,7 +114,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 795, "y": 488 },
+          "position": { "x": 1560, "y": 488 },
           "selected": false,
           "type": "solutionComponent"
         },
@@ -126,7 +126,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 1305, "y": 488 },
+          "position": { "x": 175, "y": 488 },
           "selected": false,
           "type": "solutionComponent"
         },
@@ -138,9 +138,21 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 1655, "y": 488 },
+          "position": { "x": 525, "y": 488 },
           "selected": false,
           "type": "solutionComponent"
+        },
+        {
+          "id": "79",
+          "data": {
+            "label": "Unsustainables die off",
+            "score": "9",
+            "diagramId": "root",
+            "showing": true
+          },
+          "position": { "x": 955, "y": 488 },
+          "selected": false,
+          "type": "effect"
         }
       ],
       "edges": [
@@ -422,6 +434,51 @@
           "source": "0",
           "target": "77",
           "type": "ScoreEdge"
+        },
+        {
+          "id": "104",
+          "data": { "score": "1", "diagramId": "root" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "7",
+          "target": "77",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "105",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "creates",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "79",
+          "target": "72",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "106",
+          "data": { "score": "1", "diagramId": "root" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "33",
+          "target": "79",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "107",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "solves",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "0",
+          "target": "79",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "108",
+          "data": { "score": "9", "diagramId": "root" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "7",
+          "target": "79",
+          "type": "ScoreEdge"
         }
       ],
       "type": "problem"
@@ -433,7 +490,7 @@
           "id": "8",
           "data": {
             "label": "\"Encourages unsustainable lifestyles\" is important",
-            "score": "-",
+            "score": "8",
             "diagramId": "node-7",
             "showing": true
           },
@@ -1173,6 +1230,6 @@
   },
   "activeTableProblemId": null,
   "activeClaimDiagramId": null,
-  "nextNodeId": 78,
-  "nextEdgeId": 101
+  "nextNodeId": 80,
+  "nextEdgeId": 109
 }
