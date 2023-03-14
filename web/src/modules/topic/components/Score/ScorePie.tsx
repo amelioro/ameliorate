@@ -42,6 +42,8 @@ export const ScorePie = ({ pieDiameter, arguableId, arguableType }: Props) => {
           userSelect: "none",
         })}
         segmentsStyle={(dataIndex) => ({
+          transform: hovered === dataIndex ? "scale(1.1)" : "",
+          transformOrigin: "center",
           transition: theme.transitions.create("all", {
             duration: theme.transitions.duration.shortest,
           }),
