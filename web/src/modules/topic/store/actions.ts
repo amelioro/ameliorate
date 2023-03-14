@@ -18,7 +18,7 @@ import {
   canCreateEdge,
   getConnectingEdge,
   getRelation,
-  implicitEdgeTypes,
+  impliedRelations,
 } from "../utils/edge";
 import { NodeType, children, edges, parents } from "../utils/node";
 import { TopicStoreState, initialState, problemDiagramId, useTopicStore } from "./store";
@@ -151,38 +151,38 @@ export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) 
   );
 };
 
-const createImplicitEdges = (state: TopicStoreState, parent: Node, child: Node) => {
+const createImpliedEdges = (state: TopicStoreState, parent: Node, child: Node) => {
   const diagram = state.diagrams[parent.data.diagramId];
 
-  implicitEdgeTypes.forEach((implicitEdgeType) => {
-    // create parent implicit edges
+  impliedRelations.forEach((impliedRelation) => {
+    // create parent implied edges
     if (
-      parent.type === implicitEdgeType.throughNodeType ||
-      child.type === implicitEdgeType.relation.child
+      parent.type === impliedRelation.throughNodeType ||
+      child.type === impliedRelation.relation.child
     ) {
       parents(parent, diagram)
-        .filter((grandparent) => grandparent.type === implicitEdgeType.relation.parent)
+        .filter((grandparent) => grandparent.type === impliedRelation.relation.parent)
         .forEach((grandparent) => {
-          createEdgeAndImplicitEdges(state, grandparent, child, implicitEdgeType.relation);
+          createEdgeAndImpliedEdges(state, grandparent, child, impliedRelation.relation);
         });
     }
 
-    // create child implicit edges
+    // create child implied edges
     if (
-      child.type === implicitEdgeType.throughNodeType ||
-      parent.type === implicitEdgeType.relation.parent
+      child.type === impliedRelation.throughNodeType ||
+      parent.type === impliedRelation.relation.parent
     ) {
       children(child, diagram)
-        .filter((grandchild) => grandchild.type === implicitEdgeType.relation.child)
+        .filter((grandchild) => grandchild.type === impliedRelation.relation.child)
         .forEach((grandchild) => {
-          createEdgeAndImplicitEdges(state, parent, grandchild, implicitEdgeType.relation);
+          createEdgeAndImpliedEdges(state, parent, grandchild, impliedRelation.relation);
         });
     }
   });
 };
 
 // see algorithm pseudocode & example at https://github.com/amelioro/ameliorate/issues/66#issuecomment-1465078133
-const createEdgeAndImplicitEdges = (
+const createEdgeAndImpliedEdges = (
   state: TopicStoreState,
   parent: Node,
   child: Node,
@@ -205,7 +205,7 @@ const createEdgeAndImplicitEdges = (
 
   // indirectly recurses by calling this method after determining which implicit edges to create
   // note: this modifies diagram.edges through `state` (via the line above)
-  createImplicitEdges(state, parent, child);
+  createImpliedEdges(state, parent, child);
 
   return diagram.edges;
 };
@@ -225,7 +225,7 @@ export const connectNodes = (parentId: string | null, childId: string | null) =>
       const relation = getRelation(parent.type, child.type)!;
 
       // modifies diagram.edges through `state`
-      createEdgeAndImplicitEdges(state, parent, child, relation);
+      createEdgeAndImpliedEdges(state, parent, child, relation);
 
       const layoutedDiagram = layoutVisibleComponents(activeDiagram);
 

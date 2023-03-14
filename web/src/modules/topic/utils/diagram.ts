@@ -1,6 +1,6 @@
 import { MarkerType } from "reactflow";
 
-import { RelationName, childNode, implicitEdgeTypes, parentNode } from "./edge";
+import { RelationName, childNode, impliedRelations, parentNode } from "./edge";
 import { Orientation, layout } from "./layout";
 import { NodeType, children, parents } from "./node";
 
@@ -124,10 +124,10 @@ const isEdgeImplied = (edge: Edge, diagram: Diagram) => {
   const edgeParent = parentNode(edge, diagram);
   const edgeChild = childNode(edge, diagram);
 
-  return implicitEdgeTypes.some((implicitEdgeType) => {
+  return impliedRelations.some((impliedRelation) => {
     const edgeCouldBeImplied =
-      edgeParent.type === implicitEdgeType.relation.parent &&
-      edgeChild.type === implicitEdgeType.relation.child;
+      edgeParent.type === impliedRelation.relation.parent &&
+      edgeChild.type === impliedRelation.relation.child;
 
     if (!edgeCouldBeImplied) return false;
 
@@ -135,10 +135,10 @@ const isEdgeImplied = (edge: Edge, diagram: Diagram) => {
     const parentsOfChild = parents(edgeChild, diagram);
 
     const throughNodeAsChild = childrenOfParent.find(
-      (child) => child.type === implicitEdgeType.throughNodeType
+      (child) => child.type === impliedRelation.throughNodeType
     );
     const throughNodeAsParent = parentsOfChild.find(
-      (parent) => parent.type === implicitEdgeType.throughNodeType
+      (parent) => parent.type === impliedRelation.throughNodeType
     );
 
     const throughNodeConnectsParentAndChild =

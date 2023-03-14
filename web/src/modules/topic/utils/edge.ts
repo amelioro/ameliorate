@@ -59,7 +59,7 @@ const componentTypes: Partial<Record<NodeType, NodeType>> = {
 // and any connection to/from the component node implies a connection to/from the composed node
 // e.g. if a solution component connects to a problem, it's implied that the solution also connects
 // to the problem.
-const implicitComponentEdgeTypes: ImplicitEdgeType[] = Object.entries(componentTypes).flatMap(
+const impliedComponentRelations: ImpliedRelation[] = Object.entries(componentTypes).flatMap(
   ([nodeType, componentType]) => {
     return relations
       .filter(
@@ -73,12 +73,12 @@ const implicitComponentEdgeTypes: ImplicitEdgeType[] = Object.entries(componentT
   }
 );
 
-interface ImplicitEdgeType {
+interface ImpliedRelation {
   throughNodeType: NodeType;
   relation: Relation;
 }
 
-export const implicitEdgeTypes: ImplicitEdgeType[] = [
+export const impliedRelations: ImpliedRelation[] = [
   {
     throughNodeType: "criterion",
     relation: { child: "solution", name: "solves", parent: "problem" },
@@ -115,7 +115,7 @@ export const implicitEdgeTypes: ImplicitEdgeType[] = [
     throughNodeType: "effect",
     relation: { child: "problem", name: "created by", parent: "solutionComponent" },
   },
-  ...implicitComponentEdgeTypes,
+  ...impliedComponentRelations,
 ];
 
 type AddableNodes = {
