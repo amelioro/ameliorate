@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Button, Popper, css } from "@mui/material";
+import { Box, Button, Popper, css } from "@mui/material";
 
 interface StyledButtonProps {
   buttonLength: number;
@@ -21,7 +21,12 @@ export const StyledButton = styled(Button, options)<StyledButtonProps>`
 `;
 
 export const StyledPopper = styled(Popper)`
+  border-radius: 50%;
   ${({ theme }) => css`
     z-index: ${theme.zIndex.tooltip}; // even in front of toolbars
   `}
+`;
+
+export const StyledBox = styled(Box)`
+  pointer-events: none;
 `;
