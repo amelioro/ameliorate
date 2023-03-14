@@ -9,6 +9,7 @@ export type RelationName =
   | "created by"
   | "has"
   | "criterion for"
+  | "creates"
   | "embodies"
   | "supports"
   | "critiques";
@@ -18,14 +19,19 @@ export const relations = [
   { child: "problem", name: "causes", parent: "problem" },
   { child: "solution", name: "solves", parent: "problem" },
   { child: "solutionComponent", name: "solves", parent: "problem" },
+  { child: "effect", name: "solves", parent: "problem" },
 
   { child: "problem", name: "created by", parent: "solution" },
   { child: "problem", name: "created by", parent: "solutionComponent" },
+  { child: "problem", name: "created by", parent: "effect" },
   { child: "solution", name: "has", parent: "solutionComponent" },
+  { child: "solution", name: "creates", parent: "effect" },
+  { child: "solutionComponent", name: "creates", parent: "effect" },
 
   { child: "criterion", name: "criterion for", parent: "problem" },
   { child: "solution", name: "embodies", parent: "criterion" },
   { child: "solutionComponent", name: "embodies", parent: "criterion" },
+  { child: "effect", name: "embodies", parent: "criterion" },
 
   { child: "support", name: "supports", parent: "rootClaim" },
   { child: "critique", name: "critiques", parent: "rootClaim" },
@@ -75,11 +81,39 @@ interface ImplicitEdgeType {
 export const implicitEdgeTypes: ImplicitEdgeType[] = [
   {
     throughNodeType: "criterion",
+    relation: { child: "solution", name: "solves", parent: "problem" },
+  },
+  {
+    throughNodeType: "criterion",
     relation: { child: "solutionComponent", name: "solves", parent: "problem" },
   },
   {
     throughNodeType: "criterion",
+    relation: { child: "effect", name: "solves", parent: "problem" },
+  },
+  {
+    throughNodeType: "effect",
     relation: { child: "solution", name: "solves", parent: "problem" },
+  },
+  {
+    throughNodeType: "effect",
+    relation: { child: "solutionComponent", name: "solves", parent: "problem" },
+  },
+  {
+    throughNodeType: "effect",
+    relation: { child: "solution", name: "embodies", parent: "criterion" },
+  },
+  {
+    throughNodeType: "effect",
+    relation: { child: "solutionComponent", name: "embodies", parent: "criterion" },
+  },
+  {
+    throughNodeType: "effect",
+    relation: { child: "problem", name: "created by", parent: "solution" },
+  },
+  {
+    throughNodeType: "effect",
+    relation: { child: "problem", name: "created by", parent: "solutionComponent" },
   },
   ...implicitComponentEdgeTypes,
 ];
@@ -93,17 +127,19 @@ const addableNodesFor: Record<NodeType, AddableNodes> = {
     child: ["problem", "solution", "criterion"],
   },
   solution: {
-    parent: ["problem", "solutionComponent"], // could have criteria, but need to select a specific problem for it & that requires design
+    parent: ["problem", "solutionComponent", "effect"], // could have criteria, but need to select a specific problem for it & that requires design
     child: ["problem"],
   },
   solutionComponent: {
-    parent: ["problem"],
+    parent: ["problem", "effect"],
     child: ["problem"],
   },
 
   // can't have multiple problems;
   // could have multiple solutions but unintuitive to add from criterion because solution would be tied to parent & all sibling criteria
   criterion: { parent: [], child: [] },
+
+  effect: { parent: [], child: ["problem"] },
 
   // claim diagram is a tree so claim nodes can't add parents
   rootClaim: { parent: [], child: ["support", "critique"] },
