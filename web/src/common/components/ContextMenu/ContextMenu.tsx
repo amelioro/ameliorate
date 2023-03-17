@@ -3,6 +3,7 @@ import { Menu as MuiMenu } from "@mui/material";
 import { closeContextMenu } from "../../store/contextMenuActions";
 import { useAnchorPosition, useContextMenuContext } from "../../store/contextMenuStore";
 import { DeleteNodeMenuItem } from "./DeleteNodeMenuItem";
+import { ShowCriteriaMenuItem } from "./ShowCriteriaMenuItem";
 
 export const ContextMenu = () => {
   const anchorPosition = useAnchorPosition();
@@ -15,6 +16,7 @@ export const ContextMenu = () => {
   // create these based on what's set in the context
   const menuItems = (
     <>
+      <ShowCriteriaMenuItem node={contextMenuContext.node} />
       <DeleteNodeMenuItem node={contextMenuContext.node} />
     </>
   );
