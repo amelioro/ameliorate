@@ -1,9 +1,8 @@
-import { MenuItem, Menu as MuiMenu } from "@mui/material";
+import { Menu as MuiMenu } from "@mui/material";
 
-import { deleteNode } from "../../../modules/topic/store/actions";
 import { closeContextMenu } from "../../store/contextMenuActions";
 import { useAnchorPosition, useContextMenuContext } from "../../store/contextMenuStore";
-import { addCloseOnClick } from "../Menu/Menu";
+import { DeleteNodeMenuItem } from "./DeleteNodeMenuItem";
 
 export const ContextMenu = () => {
   const anchorPosition = useAnchorPosition();
@@ -15,16 +14,10 @@ export const ContextMenu = () => {
 
   // create these based on what's set in the context
   const menuItems = (
-    <MenuItem
-      onClick={() => {
-        deleteNode(contextMenuContext.node.id);
-      }}
-    >
-      Delete node
-    </MenuItem>
+    <>
+      <DeleteNodeMenuItem node={contextMenuContext.node} />
+    </>
   );
-
-  const menuItemsWithCloseOnClick = addCloseOnClick(closeContextMenu, menuItems);
 
   return (
     <MuiMenu
@@ -33,7 +26,7 @@ export const ContextMenu = () => {
       open={isOpen}
       onClose={closeContextMenu}
     >
-      {menuItemsWithCloseOnClick}
+      {menuItems}
     </MuiMenu>
   );
 };
