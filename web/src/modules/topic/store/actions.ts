@@ -459,7 +459,28 @@ export const deleteNode = (nodeId: string) => {
       /* eslint-enable functional/immutable-data, no-param-reassign */
     },
     false,
-    "toggleShowCriteria"
+    "deleteNode"
+  );
+};
+
+export const deleteEdge = (edgeId: string) => {
+  useTopicStore.setState(
+    (state) => {
+      const activeDiagram = getActiveDiagram(state);
+
+      /* eslint-disable functional/immutable-data, no-param-reassign */
+      activeDiagram.edges = activeDiagram.edges.filter((edge) => edge.id !== edgeId);
+      /* eslint-enable functional/immutable-data, no-param-reassign */
+
+      const layoutedDiagram = layoutVisibleComponents(activeDiagram);
+
+      /* eslint-disable functional/immutable-data, no-param-reassign */
+      activeDiagram.nodes = layoutedDiagram.nodes;
+      activeDiagram.edges = layoutedDiagram.edges;
+      /* eslint-enable functional/immutable-data, no-param-reassign */
+    },
+    false,
+    "deleteEdge"
   );
 };
 

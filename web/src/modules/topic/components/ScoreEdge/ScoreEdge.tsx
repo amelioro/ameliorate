@@ -2,6 +2,7 @@ import { Typography } from "@mui/material";
 import React from "react";
 import { EdgeLabelRenderer, getBezierPath } from "reactflow";
 
+import { openContextMenu } from "../../../../common/store/contextMenuActions";
 import { Edge, markerStart } from "../../utils/diagram";
 import { RelationName } from "../../utils/edge";
 import { EdgeProps } from "../Diagram/Diagram";
@@ -51,7 +52,11 @@ export const ScoreEdge = (flowEdge: EdgeProps) => {
       />
       {/* see for example usage https://reactflow.dev/docs/api/edges/edge-label-renderer/ */}
       <EdgeLabelRenderer>
-        <StyledDiv labelX={labelX} labelY={labelY}>
+        <StyledDiv
+          labelX={labelX}
+          labelY={labelY}
+          onContextMenu={(event) => openContextMenu(event, { edge })}
+        >
           <Typography variant="body1" margin="0">
             {flowEdge.label}
           </Typography>
