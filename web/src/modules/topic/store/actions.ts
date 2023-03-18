@@ -459,7 +459,7 @@ export const deleteNode = (nodeId: string) => {
       /* eslint-enable functional/immutable-data, no-param-reassign */
     },
     false,
-    "toggleShowCriteria"
+    "deleteNode"
   );
 };
 
