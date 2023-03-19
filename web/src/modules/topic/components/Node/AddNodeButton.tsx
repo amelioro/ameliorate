@@ -1,3 +1,5 @@
+import { Tooltip } from "@mui/material";
+
 import { addNode } from "../../store/actions";
 import { type RelationDirection } from "../../utils/diagram";
 import { RelationName } from "../../utils/edge";
@@ -16,14 +18,16 @@ export const AddNodeButton = ({ fromNodeId, as, toNodeType, relation, className 
   const decoration = nodeDecorations[toNodeType];
 
   return (
-    <StyledButton
-      className={className}
-      color={toNodeType}
-      size="small"
-      variant="contained"
-      onClick={() => addNode({ fromNodeId, as, toNodeType, relation })}
-    >
-      <decoration.NodeIcon />
-    </StyledButton>
+    <Tooltip title={`Add new ${decoration.title}`}>
+      <StyledButton
+        className={className}
+        color={toNodeType}
+        size="small"
+        variant="contained"
+        onClick={() => addNode({ fromNodeId, as, toNodeType, relation })}
+      >
+        <decoration.NodeIcon />
+      </StyledButton>
+    </Tooltip>
   );
 };
