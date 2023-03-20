@@ -1,6 +1,6 @@
 import { MarkerType } from "reactflow";
 
-import { RelationName, childNode, impliedRelations, parentNode } from "./edge";
+import { RelationName, childNode, parentNode, shortcutRelations } from "./edge";
 import { Orientation, layout } from "./layout";
 import { NodeType, children, parents } from "./node";
 
@@ -120,31 +120,31 @@ export const findArguable = (diagram: Diagram, arguableId: string, arguableType:
 };
 
 // see algorithm pseudocode & example at https://github.com/amelioro/ameliorate/issues/66#issuecomment-1465078133
-const isEdgeImplied = (edge: Edge, diagram: Diagram) => {
+const isEdgeAShortcut = (edge: Edge, diagram: Diagram) => {
   const edgeParent = parentNode(edge, diagram);
   const edgeChild = childNode(edge, diagram);
 
-  return impliedRelations.some((impliedRelation) => {
-    const edgeCouldBeImplied =
-      edgeParent.type === impliedRelation.relation.parent &&
-      edgeChild.type === impliedRelation.relation.child;
+  return shortcutRelations.some((shortcutRelation) => {
+    const edgeCouldBeAShortcut =
+      edgeParent.type === shortcutRelation.relation.parent &&
+      edgeChild.type === shortcutRelation.relation.child;
 
-    if (!edgeCouldBeImplied) return false;
+    if (!edgeCouldBeAShortcut) return false;
 
     const childrenOfParent = children(edgeParent, diagram);
     const parentsOfChild = parents(edgeChild, diagram);
 
-    const throughNodeAsChild = childrenOfParent.find(
-      (child) => child.type === impliedRelation.throughNodeType
+    const detourNodeAsChild = childrenOfParent.find(
+      (child) => child.type === shortcutRelation.detourNodeType
     );
-    const throughNodeAsParent = parentsOfChild.find(
-      (parent) => parent.type === impliedRelation.throughNodeType
+    const detourNodeAsParent = parentsOfChild.find(
+      (parent) => parent.type === shortcutRelation.detourNodeType
     );
 
-    const throughNodeConnectsParentAndChild =
-      throughNodeAsChild && throughNodeAsParent && throughNodeAsChild.data.showing;
+    const detourNodeConnectsParentAndChild =
+      detourNodeAsChild && detourNodeAsParent && detourNodeAsChild.data.showing;
 
-    return throughNodeConnectsParentAndChild;
+    return detourNodeConnectsParentAndChild;
   });
 };
 
@@ -155,7 +155,7 @@ export const filterHiddenComponents = (diagram: Diagram): Diagram => {
   const shownEdges = diagram.edges.filter((edge) => {
     if (!shownNodeIds.includes(edge.source) || !shownNodeIds.includes(edge.target)) return false;
 
-    if (isEdgeImplied(edge, diagram)) return false;
+    if (isEdgeAShortcut(edge, diagram)) return false;
 
     return true;
   });

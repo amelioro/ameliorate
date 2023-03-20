@@ -18,7 +18,7 @@ import {
   canCreateEdge,
   getConnectingEdge,
   getRelation,
-  impliedRelations,
+  shortcutRelations,
 } from "../utils/edge";
 import { NodeType, children, edges, parents } from "../utils/node";
 import { TopicStoreState, initialState, problemDiagramId, useTopicStore } from "./store";
@@ -151,31 +151,31 @@ export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) 
   );
 };
 
-const createImpliedEdges = (state: TopicStoreState, parent: Node, child: Node) => {
+const createShortcutEdges = (state: TopicStoreState, parent: Node, child: Node) => {
   const diagram = state.diagrams[parent.data.diagramId];
 
-  impliedRelations.forEach((impliedRelation) => {
+  shortcutRelations.forEach((shortcutRelation) => {
     // create parent implied edges
     if (
-      parent.type === impliedRelation.throughNodeType ||
-      child.type === impliedRelation.relation.child
+      parent.type === shortcutRelation.detourNodeType &&
+      child.type === shortcutRelation.relation.child
     ) {
       parents(parent, diagram)
-        .filter((grandparent) => grandparent.type === impliedRelation.relation.parent)
+        .filter((grandparent) => grandparent.type === shortcutRelation.relation.parent)
         .forEach((grandparent) => {
-          createEdgeAndImpliedEdges(state, grandparent, child, impliedRelation.relation);
+          createEdgeAndImpliedEdges(state, grandparent, child, shortcutRelation.relation);
         });
     }
 
     // create child implied edges
     if (
-      child.type === impliedRelation.throughNodeType ||
-      parent.type === impliedRelation.relation.parent
+      child.type === shortcutRelation.detourNodeType &&
+      parent.type === shortcutRelation.relation.parent
     ) {
       children(child, diagram)
-        .filter((grandchild) => grandchild.type === impliedRelation.relation.child)
+        .filter((grandchild) => grandchild.type === shortcutRelation.relation.child)
         .forEach((grandchild) => {
-          createEdgeAndImpliedEdges(state, parent, grandchild, impliedRelation.relation);
+          createEdgeAndImpliedEdges(state, parent, grandchild, shortcutRelation.relation);
         });
     }
   });
@@ -205,7 +205,7 @@ const createEdgeAndImpliedEdges = (
 
   // indirectly recurses by calling this method after determining which implicit edges to create
   // note: this modifies diagram.edges through `state` (via the line above)
-  createImpliedEdges(state, parent, child);
+  createShortcutEdges(state, parent, child);
 
   return diagram.edges;
 };

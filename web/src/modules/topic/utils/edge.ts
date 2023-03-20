@@ -59,7 +59,7 @@ const componentTypes: Partial<Record<NodeType, NodeType>> = {
 // and any connection to/from the component node implies a connection to/from the composed node
 // e.g. if a solution component connects to a problem, it's implied that the solution also connects
 // to the problem.
-const impliedComponentRelations: ImpliedRelation[] = Object.entries(componentTypes).flatMap(
+const shortcutComponentRelations: ShortcutRelation[] = Object.entries(componentTypes).flatMap(
   ([nodeType, componentType]) => {
     return relations
       .filter(
@@ -67,55 +67,55 @@ const impliedComponentRelations: ImpliedRelation[] = Object.entries(componentTyp
           [child, parent].includes(nodeType as NodeType) && ![child, parent].includes(componentType)
       )
       .map((relation) => ({
-        throughNodeType: componentType,
+        detourNodeType: componentType,
         relation: relation,
       }));
   }
 );
 
-interface ImpliedRelation {
-  throughNodeType: NodeType;
+interface ShortcutRelation {
+  detourNodeType: NodeType;
   relation: Relation;
 }
 
-export const impliedRelations: ImpliedRelation[] = [
+export const shortcutRelations: ShortcutRelation[] = [
   {
-    throughNodeType: "criterion",
+    detourNodeType: "criterion",
     relation: { child: "solution", name: "solves", parent: "problem" },
   },
   {
-    throughNodeType: "criterion",
+    detourNodeType: "criterion",
     relation: { child: "solutionComponent", name: "solves", parent: "problem" },
   },
   {
-    throughNodeType: "criterion",
+    detourNodeType: "criterion",
     relation: { child: "effect", name: "solves", parent: "problem" },
   },
   {
-    throughNodeType: "effect",
+    detourNodeType: "effect",
     relation: { child: "solution", name: "solves", parent: "problem" },
   },
   {
-    throughNodeType: "effect",
+    detourNodeType: "effect",
     relation: { child: "solutionComponent", name: "solves", parent: "problem" },
   },
   {
-    throughNodeType: "effect",
+    detourNodeType: "effect",
     relation: { child: "solution", name: "embodies", parent: "criterion" },
   },
   {
-    throughNodeType: "effect",
+    detourNodeType: "effect",
     relation: { child: "solutionComponent", name: "embodies", parent: "criterion" },
   },
   {
-    throughNodeType: "effect",
+    detourNodeType: "effect",
     relation: { child: "problem", name: "created by", parent: "solution" },
   },
   {
-    throughNodeType: "effect",
+    detourNodeType: "effect",
     relation: { child: "problem", name: "created by", parent: "solutionComponent" },
   },
-  ...impliedComponentRelations,
+  ...shortcutComponentRelations,
 ];
 
 type AddableNodes = {
