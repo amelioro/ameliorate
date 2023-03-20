@@ -13,6 +13,7 @@ import {
   useActiveClaimDiagramId,
   useActiveTableProblemId,
 } from "../modules/topic/store/store";
+import { WorkspaceBox } from "./index.styles";
 
 export const HydrationContext = createContext(false);
 
@@ -33,7 +34,7 @@ const Page = () => {
 
       <TopicToolbar />
 
-      <Box flex={1} position="relative">
+      <WorkspaceBox height="100%" position="relative">
         <TopicPane />
 
         <Box width="100%" height="100%" position="absolute">
@@ -49,7 +50,7 @@ const Page = () => {
             <Diagram diagramId={claimDiagramId} />
           </Box>
         )}
-      </Box>
+      </WorkspaceBox>
 
       <ContextMenu />
     </>

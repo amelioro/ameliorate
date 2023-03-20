@@ -1,8 +1,13 @@
 import { Global } from "@emotion/react";
 import { Cancel, PivotTableChart } from "@mui/icons-material";
-import { Typography } from "@mui/material";
-import MaterialReactTable, { type MRT_ColumnDef } from "material-react-table";
-import { useState } from "react";
+import { Button, IconButton, Tooltip } from "@mui/material";
+import MaterialReactTable, {
+  type MRT_ColumnDef,
+  MRT_FullScreenToggleButton,
+  type MRT_TableInstance,
+  MRT_ToggleGlobalFilterButton,
+} from "material-react-table";
+import React, { useState } from "react";
 
 import { closeTable } from "../../store/actions";
 import { useCriterionSolutionEdges, useNode, useNodeChildren } from "../../store/nodeHooks";
@@ -11,15 +16,8 @@ import { Edge, Node } from "../../utils/diagram";
 import { getConnectingEdge } from "../../utils/edge";
 import { EdgeCell } from "../CriteriaTable/EdgeCell";
 import { NodeCell } from "../CriteriaTable/NodeCell";
-import { EditableNode } from "../Node/EditableNode";
-import {
-  PositionedAddNodeButton,
-  PositionedCloseButton,
-  StyledTransposeTableButton,
-  TableDiv,
-  TitleDiv,
-  tableStyles,
-} from "./CriteriaTable.styles";
+import { AddNodeButton } from "../Node/AddNodeButton";
+import { tableStyles } from "./CriteriaTable.styles";
 
 type RowData = Record<string, Node | Edge>;
 
@@ -29,7 +27,6 @@ type RowData = Record<string, Node | Edge>;
 //   [solution_id: string]: Edge,
 // }
 // but not sure how to type this because index signatures require _all_ properties to match the specified type
-
 const buildRows = (rowNodes: Node[], columnNodes: Node[], edges: Edge[]): RowData[] => {
   return rowNodes.map((rowNode) => {
     return {
@@ -46,11 +43,12 @@ const buildRows = (rowNodes: Node[], columnNodes: Node[], edges: Edge[]): RowDat
   });
 };
 
-const buildColumns = (columnNodes: Node[]): MRT_ColumnDef<RowData>[] => {
+const buildColumns = (problemNode: Node, columnNodes: Node[]): MRT_ColumnDef<RowData>[] => {
   return [
     {
       accessorKey: "rowNode.data.label", // this determines how cols should sort/filter
       header: "", // corner column header, and solutions are along the top
+      Header: <NodeCell node={problemNode} />,
       Cell: ({ row }) => {
         return <NodeCell node={row.original.rowNode as Node} />;
       },
@@ -86,63 +84,65 @@ export const CriteriaTable = ({ problemNodeId }: Props) => {
   const columnNodes = useSolutionsForColumns ? solutions : criteria;
 
   const rowData = buildRows(rowNodes, columnNodes, criterionSolutionEdges);
-  const columnData = buildColumns(columnNodes);
+  const columnData = buildColumns(problemNode, columnNodes);
 
-  return (
-    <>
-      <PositionedCloseButton onClick={() => closeTable()} color="primary">
-        <Cancel />
-      </PositionedCloseButton>
+  const ToolBarActions = (table: MRT_TableInstance<RowData>) => {
+    return (
+      <>
+        <MRT_ToggleGlobalFilterButton table={table}></MRT_ToggleGlobalFilterButton>
 
-      <TitleDiv>
-        <Typography variant="h4">Criteria for solving:</Typography>
-        <EditableNode node={problemNode} />
-      </TitleDiv>
-
-      <TableDiv numberOfColumns={columnData.length}>
-        {/* Hard to tell if material-react-table is worth using because the cells are all custom components. */}
-        {/* It's doubtful that we'll use sorting/filtering... but pinning and re-ordering may come in handy. */}
-        <MaterialReactTable
-          columns={columnData}
-          data={rowData}
-          enableColumnActions={false}
-          enablePagination={false}
-          enableBottomToolbar={false}
-          enableTopToolbar={false}
-          enableSorting={false}
-          muiTablePaperProps={{
-            className: "criteria-table-paper",
-          }}
-          initialState={{ columnPinning: { left: ["rowNode.data.label"] } }}
+        <AddNodeButton
+          fromNodeId={problemNodeId}
+          as="child"
+          toNodeType="solution"
+          relation="solves"
         />
 
-        <StyledTransposeTableButton
-          size="small"
-          variant="contained"
-          color="neutral"
-          onClick={() => setUseSolutionsForColumns(!useSolutionsForColumns)}
-        >
-          <PivotTableChart />
-        </StyledTransposeTableButton>
-
-        <PositionedAddNodeButton
-          position={useSolutionsForColumns ? "column" : "row"}
+        <AddNodeButton
           fromNodeId={problemNodeId}
           as="child"
           toNodeType="criterion"
           relation="criterion for"
         />
 
-        <PositionedAddNodeButton
-          position={useSolutionsForColumns ? "row" : "column"}
-          fromNodeId={problemNodeId}
-          as="child"
-          toNodeType="solution"
-          relation="solves"
-        />
-      </TableDiv>
+        <Tooltip title="Transpose Table">
+          <Button
+            size="small"
+            variant="contained"
+            color="neutral"
+            onClick={() => setUseSolutionsForColumns(!useSolutionsForColumns)}
+          >
+            <PivotTableChart />
+          </Button>
+        </Tooltip>
 
+        <MRT_FullScreenToggleButton table={table} />
+        <Tooltip title="Close">
+          <IconButton onClick={() => closeTable()} color="primary">
+            <Cancel />
+          </IconButton>
+        </Tooltip>
+      </>
+    );
+  };
+
+  return (
+    <>
       <Global styles={tableStyles} />
+      <MaterialReactTable
+        columns={columnData}
+        data={rowData}
+        enableColumnActions={false}
+        enablePagination={false}
+        enableBottomToolbar={false}
+        renderToolbarInternalActions={({ table }) => ToolBarActions(table)}
+        enableSorting={false}
+        enableStickyHeader={true}
+        muiTablePaperProps={{
+          className: "criteria-table-paper",
+        }}
+        initialState={{ columnPinning: { left: ["rowNode.data.label"] } }}
+      />
     </>
   );
 };
