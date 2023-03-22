@@ -175,16 +175,6 @@ export const canCreateEdge = (diagram: Diagram, parent: Node, child: Node) => {
     return false;
   }
 
-  if (
-    (parent.type === "criterion" || child.type === "criterion") &&
-    [parent.type, child.type].some((type) => type === "problem" || type === "solution")
-  ) {
-    console.log(
-      "cannot connect nodes: criteria is always already connected to as many problems & solutions as it can"
-    );
-    return false;
-  }
-
   if (!relation) {
     console.log("cannot connect nodes: nodes don't form a valid relation");
     return false;

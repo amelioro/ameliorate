@@ -142,6 +142,9 @@ const createShortcutEdges = (state: TopicStoreState, parent: Node, child: Node) 
   const diagram = state.diagrams[parent.data.diagramId];
 
   // assumes relation.name is unique per parent & child combination
+  // note: this logic doesn't necessarily need to run when adding nodes, since criteria are the only
+  // detours, and all edges there are created automatically, but we do need it to run when connecting
+  // nodes, because criteria edges can be deleted and re-added
   shortcutRelations.forEach((shortcutRelation) => {
     // create parent implied edges
     if (
