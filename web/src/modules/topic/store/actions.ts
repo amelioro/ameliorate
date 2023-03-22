@@ -2,7 +2,6 @@ import { emitter } from "../../../common/event";
 import { getClaimDiagramId, getImplicitLabel, parseClaimDiagramId } from "../utils/claim";
 import {
   ArguableType,
-  Edge,
   Node,
   RelationDirection,
   Score,
@@ -10,6 +9,7 @@ import {
   buildNode,
   findArguable,
   findNode,
+  getNodesComposedBy,
   layoutVisibleComponents,
 } from "../utils/diagram";
 import {
@@ -18,7 +18,7 @@ import {
   canCreateEdge,
   getConnectingEdge,
   getRelation,
-  impliedRelations,
+  shortcutRelations,
 } from "../utils/edge";
 import { NodeType, children, edges, parents } from "../utils/node";
 import { TopicStoreState, initialState, problemDiagramId, useTopicStore } from "./store";
@@ -48,30 +48,19 @@ const getActiveDiagram = (state: TopicStoreState) => {
   return state.diagrams[activeDiagramId];
 };
 
-interface AddNodeProps {
-  fromNodeId: string;
-  as: RelationDirection;
-  toNodeType: NodeType;
-  relation: RelationName;
-}
-
-const createAndConnectNode = (
-  state: TopicStoreState,
-  { fromNodeId, as, toNodeType, relation }: AddNodeProps
-) => {
+const createNode = (state: TopicStoreState, toNodeType: NodeType) => {
   /* eslint-disable functional/immutable-data, no-param-reassign */
   const newNodeId = `${state.nextNodeId++}`;
-  const newEdgeId = `${state.nextEdgeId++}`;
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   const activeDiagram = getActiveDiagram(state);
   const newNode = buildNode({ id: newNodeId, type: toNodeType, diagramId: activeDiagram.id });
 
-  const sourceNodeId = as === "parent" ? newNodeId : fromNodeId;
-  const targetNodeId = as === "parent" ? fromNodeId : newNodeId;
-  const newEdge = buildEdge(newEdgeId, sourceNodeId, targetNodeId, relation, activeDiagram.id);
+  /* eslint-disable functional/immutable-data, no-param-reassign */
+  activeDiagram.nodes.push(newNode);
+  /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  return [newNode, newEdge] as [Node, Edge];
+  return newNode;
 };
 
 // if adding a criterion, connect to solutions
@@ -102,11 +91,18 @@ const connectCriteriaToSolutions = (state: TopicStoreState, newNode: Node, fromN
       );
     });
 
-  return newCriterionEdges;
+  /* eslint-disable functional/immutable-data, no-param-reassign */
+  problemDiagram.edges.push(...newCriterionEdges);
+  /* eslint-enable functional/immutable-data, no-param-reassign */
 };
 
-// trying to keep state changes directly within this method,
-// but wasn't sure how to cleanly handle next node/edge id's without letting invoked methods use & mutate state for them
+interface AddNodeProps {
+  fromNodeId: string;
+  as: RelationDirection;
+  toNodeType: NodeType;
+  relation: Relation;
+}
+
 export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) => {
   useTopicStore.setState(
     (state) => {
@@ -114,28 +110,19 @@ export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) 
       const fromNode = findNode(activeDiagram, fromNodeId);
 
       // create and connect node
-      const [newNode, newEdge] = createAndConnectNode(state, {
-        fromNodeId,
-        as,
-        toNodeType,
-        relation,
-      });
+      const newNode = createNode(state, toNodeType);
+
+      const parentNode = as === "parent" ? newNode : fromNode;
+      const childNode = as === "parent" ? fromNode : newNode;
+      createEdgeAndImpliedEdges(state, parentNode, childNode, relation);
 
       // connect criteria
       if (["criterion", "solution"].includes(newNode.type) && fromNode.type === "problem") {
-        const newCriterionEdges = connectCriteriaToSolutions(state, newNode, fromNode);
-
-        /* eslint-disable functional/immutable-data, no-param-reassign */
-        activeDiagram.edges.push(...newCriterionEdges);
-        /* eslint-enable functional/immutable-data, no-param-reassign */
+        connectCriteriaToSolutions(state, newNode, fromNode);
       }
 
       // re-layout
-      const layoutedDiagram = layoutVisibleComponents({
-        ...activeDiagram,
-        nodes: activeDiagram.nodes.concat(newNode),
-        edges: activeDiagram.edges.concat(newEdge),
-      });
+      const layoutedDiagram = layoutVisibleComponents(activeDiagram);
 
       // trigger event so viewport can be updated.
       // seems like there should be a cleaner way to do this - perhaps custom zustand middleware to emit for any action
@@ -151,33 +138,58 @@ export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) 
   );
 };
 
-const createImpliedEdges = (state: TopicStoreState, parent: Node, child: Node) => {
+const createShortcutEdges = (state: TopicStoreState, parent: Node, child: Node) => {
   const diagram = state.diagrams[parent.data.diagramId];
 
-  impliedRelations.forEach((impliedRelation) => {
+  // assumes relation.name is unique per parent & child combination
+  // note: this logic doesn't necessarily need to run when adding nodes, since criteria are the only
+  // detours, and all edges there are created automatically, but we do need it to run when connecting
+  // nodes, because criteria edges can be deleted and re-added
+  shortcutRelations.forEach((shortcutRelation) => {
     // create parent implied edges
     if (
-      parent.type === impliedRelation.throughNodeType ||
-      child.type === impliedRelation.relation.child
+      parent.type === shortcutRelation.detourNodeType &&
+      child.type === shortcutRelation.relation.child
     ) {
       parents(parent, diagram)
-        .filter((grandparent) => grandparent.type === impliedRelation.relation.parent)
+        .filter((grandparent) => grandparent.type === shortcutRelation.relation.parent)
         .forEach((grandparent) => {
-          createEdgeAndImpliedEdges(state, grandparent, child, impliedRelation.relation);
+          createEdgeAndImpliedEdges(state, grandparent, child, shortcutRelation.relation);
         });
     }
 
     // create child implied edges
     if (
-      child.type === impliedRelation.throughNodeType ||
-      parent.type === impliedRelation.relation.parent
+      child.type === shortcutRelation.detourNodeType &&
+      parent.type === shortcutRelation.relation.parent
     ) {
       children(child, diagram)
-        .filter((grandchild) => grandchild.type === impliedRelation.relation.child)
+        .filter((grandchild) => grandchild.type === shortcutRelation.relation.child)
         .forEach((grandchild) => {
-          createEdgeAndImpliedEdges(state, parent, grandchild, impliedRelation.relation);
+          createEdgeAndImpliedEdges(state, parent, grandchild, shortcutRelation.relation);
         });
     }
+  });
+};
+
+const createEdgesImpliedByComposition = (
+  state: TopicStoreState,
+  parent: Node,
+  child: Node,
+  relation: Relation
+) => {
+  const diagram = state.diagrams[parent.data.diagramId];
+
+  const nodesComposedByParent = getNodesComposedBy(parent, diagram);
+  nodesComposedByParent.forEach((nodeComposedByParent) => {
+    const relationForComposed = { ...relation, parent: nodeComposedByParent.type } as Relation;
+    createEdgeAndImpliedEdges(state, nodeComposedByParent, child, relationForComposed);
+  });
+
+  const nodesComposedByChild = getNodesComposedBy(child, diagram);
+  nodesComposedByChild.forEach((nodeComposedByChild) => {
+    const relationForComposed = { ...relation, child: nodeComposedByChild.type } as Relation;
+    createEdgeAndImpliedEdges(state, parent, nodeComposedByChild, relationForComposed);
   });
 };
 
@@ -203,9 +215,10 @@ const createEdgeAndImpliedEdges = (
   diagram.edges = diagram.edges.concat(newEdge);
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  // indirectly recurses by calling this method after determining which implicit edges to create
-  // note: this modifies diagram.edges through `state` (via the line above)
-  createImpliedEdges(state, parent, child);
+  // these indirectly recurse by calling this method after determining which implied edges to create
+  // note: they modify diagram.edges through `state` (via the line above)
+  createShortcutEdges(state, parent, child);
+  createEdgesImpliedByComposition(state, parent, child, relation);
 
   return diagram.edges;
 };

@@ -15,13 +15,11 @@ export const ContextMenu = () => {
   const isOpen = Boolean(anchorPosition);
 
   // create these based on what's set in the context
-  const menuItems = (
-    <>
-      {contextMenuContext.node && <ShowCriteriaMenuItem node={contextMenuContext.node} />}
-      {contextMenuContext.node && <DeleteNodeMenuItem node={contextMenuContext.node} />}
-      {contextMenuContext.edge && <DeleteEdgeMenuItem edge={contextMenuContext.edge} />}
-    </>
-  );
+  const menuItems = [
+    contextMenuContext.node && <ShowCriteriaMenuItem node={contextMenuContext.node} key={1} />,
+    contextMenuContext.node && <DeleteNodeMenuItem node={contextMenuContext.node} key={2} />,
+    contextMenuContext.edge && <DeleteEdgeMenuItem edge={contextMenuContext.edge} key={3} />,
+  ];
 
   return (
     <MuiMenu

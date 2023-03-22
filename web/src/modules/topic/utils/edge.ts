@@ -51,71 +51,34 @@ export const getRelation = (parent: NodeType, child: NodeType): Relation | undef
   return relations.find((relation) => relation.parent === parent && relation.child === child);
 };
 
-const componentTypes: Partial<Record<NodeType, NodeType>> = {
-  solution: "solutionComponent",
-};
+export const composedRelations: Relation[] = [
+  { child: "solution", name: "has", parent: "solutionComponent" },
+];
 
-// component nodes can connect to any node type that the composed node type can connect to,
-// and any connection to/from the component node implies a connection to/from the composed node
-// e.g. if a solution component connects to a problem, it's implied that the solution also connects
-// to the problem.
-const impliedComponentRelations: ImpliedRelation[] = Object.entries(componentTypes).flatMap(
-  ([nodeType, componentType]) => {
-    return relations
-      .filter(
-        ({ child, parent }) =>
-          [child, parent].includes(nodeType as NodeType) && ![child, parent].includes(componentType)
-      )
-      .map((relation) => ({
-        throughNodeType: componentType,
-        relation: relation,
-      }));
-  }
-);
-
-interface ImpliedRelation {
-  throughNodeType: NodeType;
+interface ShortcutRelation {
+  detourNodeType: NodeType;
   relation: Relation;
 }
 
-export const impliedRelations: ImpliedRelation[] = [
+/**
+ * Shortcut relations are implied through detour nodes.
+ *
+ * e.g. a criterion is a detour for a solution-solves-problem relation because if a solution embodies
+ * the criterion and the criterion is for a problem, then the solution solves the problem
+ */
+export const shortcutRelations: ShortcutRelation[] = [
   {
-    throughNodeType: "criterion",
+    detourNodeType: "criterion",
     relation: { child: "solution", name: "solves", parent: "problem" },
   },
   {
-    throughNodeType: "criterion",
+    detourNodeType: "criterion",
     relation: { child: "solutionComponent", name: "solves", parent: "problem" },
   },
   {
-    throughNodeType: "criterion",
+    detourNodeType: "criterion",
     relation: { child: "effect", name: "solves", parent: "problem" },
   },
-  {
-    throughNodeType: "effect",
-    relation: { child: "solution", name: "solves", parent: "problem" },
-  },
-  {
-    throughNodeType: "effect",
-    relation: { child: "solutionComponent", name: "solves", parent: "problem" },
-  },
-  {
-    throughNodeType: "effect",
-    relation: { child: "solution", name: "embodies", parent: "criterion" },
-  },
-  {
-    throughNodeType: "effect",
-    relation: { child: "solutionComponent", name: "embodies", parent: "criterion" },
-  },
-  {
-    throughNodeType: "effect",
-    relation: { child: "problem", name: "created by", parent: "solution" },
-  },
-  {
-    throughNodeType: "effect",
-    relation: { child: "problem", name: "created by", parent: "solutionComponent" },
-  },
-  ...impliedComponentRelations,
 ];
 
 type AddableNodes = {
@@ -157,7 +120,7 @@ export const addableRelationsFrom = (nodeType: NodeType, addingAs: RelationDirec
 
   const formattedRelations = addableRelations.map((relation) => ({
     toNodeType: relation[addingAs],
-    relation: relation.name,
+    relation,
   }));
 
   return formattedRelations;
@@ -185,16 +148,6 @@ export const canCreateEdge = (diagram: Diagram, parent: Node, child: Node) => {
 
   if (claimNodeTypes.includes(parent.type)) {
     console.log("cannot connect nodes: claim diagram is a tree so claim nodes can't add parents");
-    return false;
-  }
-
-  if (
-    (parent.type === "criterion" || child.type === "criterion") &&
-    [parent.type, child.type].some((type) => type === "problem" || type === "solution")
-  ) {
-    console.log(
-      "cannot connect nodes: criteria is always already connected to as many problems & solutions as it can"
-    );
     return false;
   }
 
