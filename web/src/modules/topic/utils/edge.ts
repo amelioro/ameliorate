@@ -79,30 +79,6 @@ export const shortcutRelations: ShortcutRelation[] = [
     detourNodeType: "criterion",
     relation: { child: "effect", name: "solves", parent: "problem" },
   },
-  {
-    detourNodeType: "effect",
-    relation: { child: "solution", name: "solves", parent: "problem" },
-  },
-  {
-    detourNodeType: "effect",
-    relation: { child: "solutionComponent", name: "solves", parent: "problem" },
-  },
-  {
-    detourNodeType: "effect",
-    relation: { child: "solution", name: "embodies", parent: "criterion" },
-  },
-  {
-    detourNodeType: "effect",
-    relation: { child: "solutionComponent", name: "embodies", parent: "criterion" },
-  },
-  {
-    detourNodeType: "effect",
-    relation: { child: "problem", name: "created by", parent: "solution" },
-  },
-  {
-    detourNodeType: "effect",
-    relation: { child: "problem", name: "created by", parent: "solutionComponent" },
-  },
 ];
 
 type AddableNodes = {
