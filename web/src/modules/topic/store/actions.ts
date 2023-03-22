@@ -1,5 +1,3 @@
-import _ from "lodash";
-
 import { emitter } from "../../../common/event";
 import { getClaimDiagramId, getImplicitLabel, parseClaimDiagramId } from "../utils/claim";
 import {
@@ -195,13 +193,13 @@ const createEdgesImpliedByComposition = (
 
   const nodesComposedByParent = getNodesComposedBy(parent, diagram);
   nodesComposedByParent.forEach((nodeComposedByParent) => {
-    const relationForComposed = _.assign(relation, { parent: nodeComposedByParent.type });
+    const relationForComposed = { ...relation, parent: nodeComposedByParent.type } as Relation;
     createEdgeAndImpliedEdges(state, nodeComposedByParent, child, relationForComposed);
   });
 
   const nodesComposedByChild = getNodesComposedBy(child, diagram);
   nodesComposedByChild.forEach((nodeComposedByChild) => {
-    const relationForComposed = _.assign(relation, { child: nodeComposedByChild.type });
+    const relationForComposed = { ...relation, child: nodeComposedByChild.type } as Relation;
     createEdgeAndImpliedEdges(state, parent, nodeComposedByChild, relationForComposed);
   });
 };
