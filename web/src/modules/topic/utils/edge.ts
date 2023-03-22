@@ -144,7 +144,7 @@ export const addableRelationsFrom = (nodeType: NodeType, addingAs: RelationDirec
 
   const formattedRelations = addableRelations.map((relation) => ({
     toNodeType: relation[addingAs],
-    relation: relation.name,
+    relation,
   }));
 
   return formattedRelations;

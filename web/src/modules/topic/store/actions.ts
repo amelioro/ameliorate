@@ -2,7 +2,6 @@ import { emitter } from "../../../common/event";
 import { getClaimDiagramId, getImplicitLabel, parseClaimDiagramId } from "../utils/claim";
 import {
   ArguableType,
-  Edge,
   Node,
   RelationDirection,
   Score,
@@ -49,30 +48,19 @@ const getActiveDiagram = (state: TopicStoreState) => {
   return state.diagrams[activeDiagramId];
 };
 
-interface AddNodeProps {
-  fromNodeId: string;
-  as: RelationDirection;
-  toNodeType: NodeType;
-  relation: RelationName;
-}
-
-const createAndConnectNode = (
-  state: TopicStoreState,
-  { fromNodeId, as, toNodeType, relation }: AddNodeProps
-) => {
+const createNode = (state: TopicStoreState, toNodeType: NodeType) => {
   /* eslint-disable functional/immutable-data, no-param-reassign */
   const newNodeId = `${state.nextNodeId++}`;
-  const newEdgeId = `${state.nextEdgeId++}`;
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   const activeDiagram = getActiveDiagram(state);
   const newNode = buildNode({ id: newNodeId, type: toNodeType, diagramId: activeDiagram.id });
 
-  const sourceNodeId = as === "parent" ? newNodeId : fromNodeId;
-  const targetNodeId = as === "parent" ? fromNodeId : newNodeId;
-  const newEdge = buildEdge(newEdgeId, sourceNodeId, targetNodeId, relation, activeDiagram.id);
+  /* eslint-disable functional/immutable-data, no-param-reassign */
+  activeDiagram.nodes.push(newNode);
+  /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  return [newNode, newEdge] as [Node, Edge];
+  return newNode;
 };
 
 // if adding a criterion, connect to solutions
@@ -108,6 +96,13 @@ const connectCriteriaToSolutions = (state: TopicStoreState, newNode: Node, fromN
   /* eslint-enable functional/immutable-data, no-param-reassign */
 };
 
+interface AddNodeProps {
+  fromNodeId: string;
+  as: RelationDirection;
+  toNodeType: NodeType;
+  relation: Relation;
+}
+
 export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) => {
   useTopicStore.setState(
     (state) => {
@@ -115,12 +110,11 @@ export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) 
       const fromNode = findNode(activeDiagram, fromNodeId);
 
       // create and connect node
-      const [newNode, newEdge] = createAndConnectNode(state, {
-        fromNodeId,
-        as,
-        toNodeType,
-        relation,
-      });
+      const newNode = createNode(state, toNodeType);
+
+      const parentNode = as === "parent" ? newNode : fromNode;
+      const childNode = as === "parent" ? fromNode : newNode;
+      createEdgeAndImpliedEdges(state, parentNode, childNode, relation);
 
       // connect criteria
       if (["criterion", "solution"].includes(newNode.type) && fromNode.type === "problem") {
@@ -128,11 +122,7 @@ export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) 
       }
 
       // re-layout
-      const layoutedDiagram = layoutVisibleComponents({
-        ...activeDiagram,
-        nodes: activeDiagram.nodes.concat(newNode),
-        edges: activeDiagram.edges.concat(newEdge),
-      });
+      const layoutedDiagram = layoutVisibleComponents(activeDiagram);
 
       // trigger event so viewport can be updated.
       // seems like there should be a cleaner way to do this - perhaps custom zustand middleware to emit for any action

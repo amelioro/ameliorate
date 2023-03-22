@@ -2,7 +2,7 @@ import { Tooltip } from "@mui/material";
 
 import { addNode } from "../../store/actions";
 import { type RelationDirection } from "../../utils/diagram";
-import { RelationName } from "../../utils/edge";
+import { Relation } from "../../utils/edge";
 import { NodeType, nodeDecorations } from "../../utils/node";
 import { StyledButton } from "./AddNodeButton.styles";
 
@@ -10,7 +10,7 @@ interface Props {
   fromNodeId: string;
   as: RelationDirection;
   toNodeType: NodeType;
-  relation: RelationName;
+  relation: Relation;
   className?: string;
 }
 
