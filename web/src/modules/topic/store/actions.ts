@@ -103,11 +103,11 @@ const connectCriteriaToSolutions = (state: TopicStoreState, newNode: Node, fromN
       );
     });
 
-  return newCriterionEdges;
+  /* eslint-disable functional/immutable-data, no-param-reassign */
+  problemDiagram.edges.push(...newCriterionEdges);
+  /* eslint-enable functional/immutable-data, no-param-reassign */
 };
 
-// trying to keep state changes directly within this method,
-// but wasn't sure how to cleanly handle next node/edge id's without letting invoked methods use & mutate state for them
 export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) => {
   useTopicStore.setState(
     (state) => {
@@ -124,11 +124,7 @@ export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) 
 
       // connect criteria
       if (["criterion", "solution"].includes(newNode.type) && fromNode.type === "problem") {
-        const newCriterionEdges = connectCriteriaToSolutions(state, newNode, fromNode);
-
-        /* eslint-disable functional/immutable-data, no-param-reassign */
-        activeDiagram.edges.push(...newCriterionEdges);
-        /* eslint-enable functional/immutable-data, no-param-reassign */
+        connectCriteriaToSolutions(state, newNode, fromNode);
       }
 
       // re-layout
