@@ -51,33 +51,21 @@ export const getRelation = (parent: NodeType, child: NodeType): Relation | undef
   return relations.find((relation) => relation.parent === parent && relation.child === child);
 };
 
-const componentTypes: Partial<Record<NodeType, NodeType>> = {
-  solution: "solutionComponent",
-};
-
-// component nodes can connect to any node type that the composed node type can connect to,
-// and any connection to/from the component node implies a connection to/from the composed node
-// e.g. if a solution component connects to a problem, it's implied that the solution also connects
-// to the problem.
-const shortcutComponentRelations: ShortcutRelation[] = Object.entries(componentTypes).flatMap(
-  ([nodeType, componentType]) => {
-    return relations
-      .filter(
-        ({ child, parent }) =>
-          [child, parent].includes(nodeType as NodeType) && ![child, parent].includes(componentType)
-      )
-      .map((relation) => ({
-        detourNodeType: componentType,
-        relation: relation,
-      }));
-  }
-);
+export const composedRelations: Relation[] = [
+  { child: "solution", name: "has", parent: "solutionComponent" },
+];
 
 interface ShortcutRelation {
   detourNodeType: NodeType;
   relation: Relation;
 }
 
+/**
+ * Shortcut relations are implied through detour nodes.
+ *
+ * e.g. a criterion is a detour for a solution-solves-problem relation because if a solution embodies
+ * the criterion and the criterion is for a problem, then the solution solves the problem
+ */
 export const shortcutRelations: ShortcutRelation[] = [
   {
     detourNodeType: "criterion",
@@ -115,7 +103,6 @@ export const shortcutRelations: ShortcutRelation[] = [
     detourNodeType: "effect",
     relation: { child: "problem", name: "created by", parent: "solutionComponent" },
   },
-  ...shortcutComponentRelations,
 ];
 
 type AddableNodes = {

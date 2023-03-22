@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 import { emitter } from "../../../common/event";
 import { getClaimDiagramId, getImplicitLabel, parseClaimDiagramId } from "../utils/claim";
 import {
@@ -10,6 +12,7 @@ import {
   buildNode,
   findArguable,
   findNode,
+  getNodesComposedBy,
   layoutVisibleComponents,
 } from "../utils/diagram";
 import {
@@ -154,6 +157,7 @@ export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) 
 const createShortcutEdges = (state: TopicStoreState, parent: Node, child: Node) => {
   const diagram = state.diagrams[parent.data.diagramId];
 
+  // assumes relation.name is unique per parent & child combination
   shortcutRelations.forEach((shortcutRelation) => {
     // create parent implied edges
     if (
@@ -181,6 +185,27 @@ const createShortcutEdges = (state: TopicStoreState, parent: Node, child: Node) 
   });
 };
 
+const createEdgesImpliedByComposition = (
+  state: TopicStoreState,
+  parent: Node,
+  child: Node,
+  relation: Relation
+) => {
+  const diagram = state.diagrams[parent.data.diagramId];
+
+  const nodesComposedByParent = getNodesComposedBy(parent, diagram);
+  nodesComposedByParent.forEach((nodeComposedByParent) => {
+    const relationForComposed = _.assign(relation, { parent: nodeComposedByParent.type });
+    createEdgeAndImpliedEdges(state, nodeComposedByParent, child, relationForComposed);
+  });
+
+  const nodesComposedByChild = getNodesComposedBy(child, diagram);
+  nodesComposedByChild.forEach((nodeComposedByChild) => {
+    const relationForComposed = _.assign(relation, { child: nodeComposedByChild.type });
+    createEdgeAndImpliedEdges(state, parent, nodeComposedByChild, relationForComposed);
+  });
+};
+
 // see algorithm pseudocode & example at https://github.com/amelioro/ameliorate/issues/66#issuecomment-1465078133
 const createEdgeAndImpliedEdges = (
   state: TopicStoreState,
@@ -203,9 +228,10 @@ const createEdgeAndImpliedEdges = (
   diagram.edges = diagram.edges.concat(newEdge);
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  // indirectly recurses by calling this method after determining which implicit edges to create
-  // note: this modifies diagram.edges through `state` (via the line above)
+  // these indirectly recurse by calling this method after determining which implied edges to create
+  // note: they modify diagram.edges through `state` (via the line above)
   createShortcutEdges(state, parent, child);
+  createEdgesImpliedByComposition(state, parent, child, relation);
 
   return diagram.edges;
 };

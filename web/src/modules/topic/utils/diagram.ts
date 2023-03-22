@@ -1,6 +1,6 @@
 import { MarkerType } from "reactflow";
 
-import { RelationName, childNode, parentNode, shortcutRelations } from "./edge";
+import { RelationName, childNode, composedRelations, parentNode, shortcutRelations } from "./edge";
 import { Orientation, layout } from "./layout";
 import { NodeType, children, parents } from "./node";
 
@@ -70,8 +70,8 @@ export interface Edge {
   };
   label: RelationName;
   markerStart: { type: MarkerType; width: number; height: number };
-  source: string;
-  target: string;
+  source: string; // source === parent if arrows point from bottom to top
+  target: string; // target === child if arrows point from bottom to top
   type: "ScoreEdge";
 }
 
@@ -117,6 +117,20 @@ export const findEdge = (diagram: Diagram, edgeId: string) => {
 
 export const findArguable = (diagram: Diagram, arguableId: string, arguableType: ArguableType) => {
   return arguableType === "node" ? findNode(diagram, arguableId) : findEdge(diagram, arguableId);
+};
+
+export const getNodesComposedBy = (node: Node, diagram: Diagram) => {
+  return composedRelations.flatMap((composedRelation) => {
+    const composingEdges = diagram.edges.filter((edge) => {
+      return edge.source === node.id && edge.label === composedRelation.name;
+    });
+
+    const potentialComposedNodes = composingEdges.map((edge) => findNode(diagram, edge.target));
+
+    return potentialComposedNodes
+      .filter((node) => node.type === composedRelation.child)
+      .map((node) => node);
+  });
 };
 
 // see algorithm pseudocode & example at https://github.com/amelioro/ameliorate/issues/66#issuecomment-1465078133
