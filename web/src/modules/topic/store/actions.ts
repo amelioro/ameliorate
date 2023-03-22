@@ -181,15 +181,19 @@ const createEdgesImpliedByComposition = (
   const diagram = state.diagrams[parent.data.diagramId];
 
   const nodesComposedByParent = getNodesComposedBy(parent, diagram);
-  nodesComposedByParent.forEach((nodeComposedByParent) => {
-    const relationForComposed = { ...relation, parent: nodeComposedByParent.type } as Relation;
-    createEdgeAndImpliedEdges(state, nodeComposedByParent, child, relationForComposed);
+  nodesComposedByParent.forEach((composedNode) => {
+    const relationForComposed = getRelation(composedNode.type, relation.child, relation.name);
+    if (!relationForComposed) return;
+
+    createEdgeAndImpliedEdges(state, composedNode, child, relationForComposed);
   });
 
   const nodesComposedByChild = getNodesComposedBy(child, diagram);
-  nodesComposedByChild.forEach((nodeComposedByChild) => {
-    const relationForComposed = { ...relation, child: nodeComposedByChild.type } as Relation;
-    createEdgeAndImpliedEdges(state, parent, nodeComposedByChild, relationForComposed);
+  nodesComposedByChild.forEach((composedNode) => {
+    const relationForComposed = getRelation(relation.parent, composedNode.type, relation.name);
+    if (!relationForComposed) return;
+
+    createEdgeAndImpliedEdges(state, parent, composedNode, relationForComposed);
   });
 };
 

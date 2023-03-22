@@ -47,8 +47,19 @@ export type Relation = typeof relations[number];
 
 export const claimNodeTypes = ["RootClaim", "Support", "Critique"];
 
-export const getRelation = (parent: NodeType, child: NodeType): Relation | undefined => {
-  return relations.find((relation) => relation.parent === parent && relation.child === child);
+export const getRelation = (
+  parent: NodeType,
+  child: NodeType,
+  relationName?: RelationName
+): Relation | undefined => {
+  if (relationName) {
+    return relations.find(
+      (relation) =>
+        relation.parent === parent && relation.child === child && relation.name === relationName
+    );
+  } else {
+    return relations.find((relation) => relation.parent === parent && relation.child === child);
+  }
 };
 
 export const composedRelations: Relation[] = [
