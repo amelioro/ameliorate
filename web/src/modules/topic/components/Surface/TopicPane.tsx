@@ -12,7 +12,6 @@ import {
 import { Collapse, List, ListItem, ListItemIcon, ListItemText, Toolbar } from "@mui/material";
 import { useState } from "react";
 
-import { viewClaimDiagram, viewCriteriaTable, viewProblemDiagram } from "../../store/actions";
 import { useNodes } from "../../store/nodeHooks";
 import {
   problemDiagramId,
@@ -20,6 +19,7 @@ import {
   useRootTitle,
   useTopicViewId,
 } from "../../store/store";
+import { viewClaimDiagram, viewCriteriaTable, viewProblemDiagram } from "../../store/viewActions";
 import {
   NestedListItemButton,
   PositionedDiv,

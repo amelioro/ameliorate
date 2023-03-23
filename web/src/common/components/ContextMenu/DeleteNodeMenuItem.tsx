@@ -1,4 +1,4 @@
-import { deleteNode } from "../../../modules/topic/store/actions";
+import { deleteNode } from "../../../modules/topic/store/createDeleteActions";
 import { Node } from "../../../modules/topic/utils/diagram";
 import { CloseOnClickMenuItem } from "./CloseOnClickMenuItem";
 

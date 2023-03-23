@@ -4,8 +4,8 @@ import fileDownload from "js-file-download";
 
 import { Menu } from "../../../../common/components/Menu/Menu";
 import { useMenu } from "../../../../common/hooks";
-import { getState, redo, resetState, setState, undo } from "../../store/actions";
 import { TopicStoreState } from "../../store/store";
+import { getState, redo, resetState, setState, undo } from "../../store/utilActions";
 import { getTopicTitle } from "../../store/utils";
 
 // TODO: might be useful to have downloaded state be more human editable;

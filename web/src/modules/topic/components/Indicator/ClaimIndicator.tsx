@@ -1,7 +1,7 @@
 import { Article, ArticleOutlined } from "@mui/icons-material";
 
-import { viewOrCreateClaimDiagram } from "../../store/actions";
 import { useExplicitClaimCount } from "../../store/arguableHooks";
+import { viewOrCreateClaimDiagram } from "../../store/viewActions";
 import { ArguableType } from "../../utils/diagram";
 import { Indicator } from "./Indicator";
 

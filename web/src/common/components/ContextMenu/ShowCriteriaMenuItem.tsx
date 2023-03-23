@@ -1,5 +1,5 @@
-import { toggleShowCriteria } from "../../../modules/topic/store/actions";
 import { useNodeChildren } from "../../../modules/topic/store/nodeHooks";
+import { toggleShowCriteria } from "../../../modules/topic/store/viewActions";
 import { Node } from "../../../modules/topic/utils/diagram";
 import { CloseOnClickMenuItem } from "./CloseOnClickMenuItem";
 

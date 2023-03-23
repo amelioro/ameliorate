@@ -1,6 +1,6 @@
 import { Tooltip } from "@mui/material";
 
-import { addNode } from "../../store/actions";
+import { addNode } from "../../store/createDeleteActions";
 import { type RelationDirection } from "../../utils/diagram";
 import { Relation } from "../../utils/edge";
 import { NodeType, nodeDecorations } from "../../utils/node";

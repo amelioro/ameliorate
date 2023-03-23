@@ -1,4 +1,4 @@
-import { deleteEdge } from "../../../modules/topic/store/actions";
+import { deleteEdge } from "../../../modules/topic/store/createDeleteActions";
 import { problemDiagramId } from "../../../modules/topic/store/store";
 import { Edge } from "../../../modules/topic/utils/diagram";
 import { CloseOnClickMenuItem } from "./CloseOnClickMenuItem";
