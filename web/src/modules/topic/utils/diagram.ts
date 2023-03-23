@@ -67,6 +67,7 @@ export interface Edge {
   data: {
     score: Score;
     diagramId: string;
+    showing: boolean;
   };
   label: RelationName;
   markerStart: { type: MarkerType; width: number; height: number };
@@ -87,6 +88,7 @@ export const buildEdge = (
     data: {
       score: "-" as Score,
       diagramId: diagramId,
+      showing: true,
     },
     label: relation,
     markerStart: markerStart,

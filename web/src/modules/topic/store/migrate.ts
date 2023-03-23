@@ -11,6 +11,7 @@ export const migrate = (persistedState: any, version: number) => {
     migrate_4_to_5,
     migrate_5_to_6,
     migrate_6_to_7,
+    migrate_7_to_8,
   ];
 
   let state = persistedState;
@@ -148,6 +149,17 @@ const migrate_6_to_7 = (state: any) => {
       if (node.type === "problem") {
         delete node.data.showCriteria;
       }
+    });
+  });
+
+  return state;
+};
+
+const migrate_7_to_8 = (state: any) => {
+  Object.values(state.diagrams).forEach((diagram: any) => {
+    // add edge.showing
+    diagram.edges.forEach((edge: any) => {
+      edge.data.showing = true;
     });
   });
 

@@ -114,7 +114,7 @@
       "edges": [
         {
           "id": "1",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "solves",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
@@ -123,7 +123,7 @@
         },
         {
           "id": "2",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "solves",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
@@ -132,7 +132,7 @@
         },
         {
           "id": "3",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "causes",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
@@ -141,7 +141,7 @@
         },
         {
           "id": "4",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "causes",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
@@ -150,7 +150,7 @@
         },
         {
           "id": "5",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "solves",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "5",
@@ -159,7 +159,7 @@
         },
         {
           "id": "6",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "solves",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "4",
@@ -168,7 +168,7 @@
         },
         {
           "id": "7",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "solves",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "5",
@@ -177,7 +177,7 @@
         },
         {
           "id": "8",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "causes",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
