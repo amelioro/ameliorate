@@ -4,6 +4,7 @@ import { closeContextMenu } from "../../store/contextMenuActions";
 import { useAnchorPosition, useContextMenuContext } from "../../store/contextMenuStore";
 import { DeleteEdgeMenuItem } from "./DeleteEdgeMenuItem";
 import { DeleteNodeMenuItem } from "./DeleteNodeMenuItem";
+import { ShowComponentsMenuItem } from "./ShowComponentsMenuItem";
 import { ShowCriteriaMenuItem } from "./ShowCriteriaMenuItem";
 
 export const ContextMenu = () => {
@@ -16,9 +17,10 @@ export const ContextMenu = () => {
 
   // create these based on what's set in the context
   const menuItems = [
-    contextMenuContext.node && <ShowCriteriaMenuItem node={contextMenuContext.node} key={1} />,
-    contextMenuContext.node && <DeleteNodeMenuItem node={contextMenuContext.node} key={2} />,
-    contextMenuContext.edge && <DeleteEdgeMenuItem edge={contextMenuContext.edge} key={3} />,
+    contextMenuContext.node && <ShowComponentsMenuItem node={contextMenuContext.node} key={1} />,
+    contextMenuContext.node && <ShowCriteriaMenuItem node={contextMenuContext.node} key={2} />,
+    contextMenuContext.node && <DeleteNodeMenuItem node={contextMenuContext.node} key={3} />,
+    contextMenuContext.edge && <DeleteEdgeMenuItem edge={contextMenuContext.edge} key={4} />,
   ];
 
   return (
