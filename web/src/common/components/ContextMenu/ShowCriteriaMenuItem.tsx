@@ -1,5 +1,5 @@
 import { useNodeChildren } from "../../../modules/topic/store/nodeHooks";
-import { toggleShowCriteria } from "../../../modules/topic/store/viewActions";
+import { toggleShowNeighbors } from "../../../modules/topic/store/viewActions";
 import { Node } from "../../../modules/topic/utils/diagram";
 import { CloseOnClickMenuItem } from "./CloseOnClickMenuItem";
 
@@ -15,7 +15,9 @@ export const ShowCriteriaMenuItem = ({ node }: { node: Node }) => {
   const allCriteriaShown = criteria.every((child) => child.data.showing);
 
   return (
-    <CloseOnClickMenuItem onClick={() => toggleShowCriteria(node.id, !allCriteriaShown)}>
+    <CloseOnClickMenuItem
+      onClick={() => toggleShowNeighbors(node.id, "criterion", "child", !allCriteriaShown)}
+    >
       {allCriteriaShown ? "Hide criteria" : "Show criteria"}
     </CloseOnClickMenuItem>
   );

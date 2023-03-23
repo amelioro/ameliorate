@@ -1,12 +1,13 @@
 import { getClaimDiagramId, getImplicitLabel } from "../utils/claim";
 import {
   ArguableType,
+  RelationDirection,
   buildNode,
   findArguable,
   findNode,
   layoutVisibleComponents,
 } from "../utils/diagram";
-import { children } from "../utils/node";
+import { NodeType, children, parents } from "../utils/node";
 import { doesDiagramExist } from "./actions";
 import { problemDiagramId, useTopicStore } from "./store";
 import { getActiveDiagram } from "./utils";
@@ -85,18 +86,27 @@ export const closeTable = () => {
   );
 };
 
-export const toggleShowCriteria = (problemNodeId: string, show: boolean) => {
+export const toggleShowNeighbors = (
+  nodeId: string,
+  neighborType: NodeType,
+  direction: RelationDirection,
+  show: boolean
+) => {
   useTopicStore.setState(
     (state) => {
-      const problemDiagram = state.diagrams[problemDiagramId]; // criteria nodes only live in problem diagram
+      const problemDiagram = state.diagrams[problemDiagramId]; // assuming we're only show/hiding from problem diagram
 
-      const node = findNode(problemDiagram, problemNodeId);
-      if (node.type !== "problem") throw new Error("node is not a problem");
+      const node = findNode(problemDiagram, nodeId);
 
-      const criteria = children(node, problemDiagram).filter((child) => child.type === "criterion");
+      const neighborsInDirection =
+        direction === "parent" ? parents(node, problemDiagram) : children(node, problemDiagram);
+
+      const neighborsToToggle = neighborsInDirection.filter(
+        (neighbor) => neighbor.type === neighborType
+      );
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
-      criteria.forEach((criterion) => (criterion.data.showing = show));
+      neighborsToToggle.forEach((neighbor) => (neighbor.data.showing = show));
       /* eslint-enable functional/immutable-data, no-param-reassign */
 
       const layoutedDiagram = layoutVisibleComponents(problemDiagram); // depends on showCriteria having been updated
@@ -107,7 +117,7 @@ export const toggleShowCriteria = (problemNodeId: string, show: boolean) => {
       /* eslint-enable functional/immutable-data, no-param-reassign */
     },
     false,
-    "toggleShowCriteria"
+    "toggleShowNeighbors"
   );
 };
 
