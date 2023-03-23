@@ -1,7 +1,7 @@
 import { TableChart, TableChartOutlined } from "@mui/icons-material";
 
-import { viewCriteriaTable } from "../../store/actions";
 import { useNode, useNodeChildren } from "../../store/nodeHooks";
+import { viewCriteriaTable } from "../../store/viewActions";
 import { Indicator } from "../Indicator/Indicator";
 
 interface Props {

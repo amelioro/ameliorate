@@ -5,3 +5,8 @@ export const getTopicTitle = (state: TopicStoreState) => {
   const rootProblem = rootDiagram.nodes[0];
   return rootProblem.data.label;
 };
+
+export const getActiveDiagram = (state: TopicStoreState) => {
+  const activeDiagramId = state.activeClaimDiagramId ?? problemDiagramId;
+  return state.diagrams[activeDiagramId];
+};

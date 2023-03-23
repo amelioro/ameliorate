@@ -9,9 +9,9 @@ import MaterialReactTable, {
 } from "material-react-table";
 import React, { useState } from "react";
 
-import { closeTable } from "../../store/actions";
 import { useCriterionSolutionEdges, useNode, useNodeChildren } from "../../store/nodeHooks";
 import { problemDiagramId } from "../../store/store";
+import { closeTable } from "../../store/viewActions";
 import { Edge, Node } from "../../utils/diagram";
 import { getConnectingEdge } from "../../utils/edge";
 import { EdgeCell } from "../CriteriaTable/EdgeCell";

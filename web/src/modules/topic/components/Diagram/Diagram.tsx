@@ -12,8 +12,10 @@ import {
 
 import { emitter } from "../../../../common/event";
 import { useViewportUpdater } from "../../hooks/flowHooks";
-import { closeClaimDiagram, connectNodes, deselectNodes } from "../../store/actions";
+import { deselectNodes } from "../../store/actions";
+import { connectNodes } from "../../store/createDeleteActions";
 import { useFilteredDiagram } from "../../store/store";
+import { closeClaimDiagram } from "../../store/viewActions";
 import { type Edge, type Node } from "../../utils/diagram";
 import { type NodeType } from "../../utils/node";
 import { FlowNode } from "../Node/FlowNode";
