@@ -138,40 +138,6 @@ export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) 
   );
 };
 
-const createShortcutEdges = (state: TopicStoreState, parent: Node, child: Node) => {
-  const diagram = state.diagrams[parent.data.diagramId];
-
-  // assumes relation.name is unique per parent & child combination
-  // note: this logic doesn't necessarily need to run when adding nodes, since criteria are the only
-  // detours, and all edges there are created automatically, but we do need it to run when connecting
-  // nodes, because criteria edges can be deleted and re-added
-  shortcutRelations.forEach((shortcutRelation) => {
-    // create parent implied edges
-    if (
-      parent.type === shortcutRelation.detourNodeType &&
-      child.type === shortcutRelation.relation.child
-    ) {
-      parents(parent, diagram)
-        .filter((grandparent) => grandparent.type === shortcutRelation.relation.parent)
-        .forEach((grandparent) => {
-          createEdgeAndImpliedEdges(state, grandparent, child, shortcutRelation.relation);
-        });
-    }
-
-    // create child implied edges
-    if (
-      child.type === shortcutRelation.detourNodeType &&
-      parent.type === shortcutRelation.relation.parent
-    ) {
-      children(child, diagram)
-        .filter((grandchild) => grandchild.type === shortcutRelation.relation.child)
-        .forEach((grandchild) => {
-          createEdgeAndImpliedEdges(state, parent, grandchild, shortcutRelation.relation);
-        });
-    }
-  });
-};
-
 const createEdgesImpliedByComposition = (
   state: TopicStoreState,
   parent: Node,
@@ -219,9 +185,8 @@ const createEdgeAndImpliedEdges = (
   diagram.edges = diagram.edges.concat(newEdge);
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  // these indirectly recurse by calling this method after determining which implied edges to create
-  // note: they modify diagram.edges through `state` (via the line above)
-  createShortcutEdges(state, parent, child);
+  // indirectly recurses by calling this method after determining which implied edges to create
+  // note: modifies diagram.edges through `state` (via the line above)
   createEdgesImpliedByComposition(state, parent, child, relation);
 
   return diagram.edges;
