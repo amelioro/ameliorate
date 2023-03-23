@@ -12,15 +12,8 @@ import {
   getNodesComposedBy,
   layoutVisibleComponents,
 } from "../utils/diagram";
-import {
-  Relation,
-  RelationName,
-  canCreateEdge,
-  getConnectingEdge,
-  getRelation,
-  shortcutRelations,
-} from "../utils/edge";
-import { NodeType, children, edges, parents } from "../utils/node";
+import { Relation, canCreateEdge, getConnectingEdge, getRelation } from "../utils/edge";
+import { NodeType, children, edges } from "../utils/node";
 import { TopicStoreState, initialState, problemDiagramId, useTopicStore } from "./store";
 
 export const getState = () => {
@@ -65,22 +58,28 @@ const createNode = (state: TopicStoreState, toNodeType: NodeType) => {
 
 // if adding a criterion, connect to solutions
 // if adding a solution, connect to criteria
-const connectCriteriaToSolutions = (state: TopicStoreState, newNode: Node, fromNode: Node) => {
+const connectCriteriaToSolutions = (state: TopicStoreState, newNode: Node, problemNode: Node) => {
   const problemDiagram = state.diagrams[problemDiagramId]; // solutions & criteria only will be in the problem diagram
 
-  const targetRelation: RelationName = newNode.type === "criterion" ? "solves" : "criterion for";
+  const targetRelation: Relation =
+    newNode.type === "criterion"
+      ? { child: "solution", name: "solves", parent: "problem" }
+      : { child: "criterion", name: "criterion for", parent: "problem" };
 
   const newCriterionEdges = problemDiagram.edges
-    .filter((edge) => edge.source === fromNode.id && edge.label === targetRelation)
+    .filter(
+      (edge) =>
+        edge.source === problemNode.id &&
+        edge.label === targetRelation.name &&
+        findNode(problemDiagram, edge.target).type === targetRelation.child
+    )
     .map((edge) => {
-      const targetNode = findNode(problemDiagram, edge.target);
-
       /* eslint-disable functional/immutable-data, no-param-reassign */
       const newCriterionEdgeId = `${state.nextEdgeId++}`;
       /* eslint-enable functional/immutable-data, no-param-reassign */
 
-      const sourceNodeId = newNode.type === "criterion" ? newNode.id : targetNode.id;
-      const targetNodeId = newNode.type === "criterion" ? targetNode.id : newNode.id;
+      const sourceNodeId = newNode.type === "criterion" ? newNode.id : edge.target;
+      const targetNodeId = newNode.type === "criterion" ? edge.target : newNode.id;
 
       return buildEdge(
         newCriterionEdgeId,
