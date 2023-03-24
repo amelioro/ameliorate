@@ -210,8 +210,9 @@ const isEdgeAShortcut = (edge: Edge, diagram: Diagram) => {
       (parent) => parent.type === shortcutRelation.detourNodeType
     );
 
-    const detourNodeConnectsParentAndChild =
-      detourNodeAsChild && detourNodeAsParent && detourNodeAsChild.data.showing;
+    // note: does not check if detour node is showing - this is so that hidden shortcut edges
+    // can still be shown when a detour node is hidden
+    const detourNodeConnectsParentAndChild = detourNodeAsChild && detourNodeAsParent;
 
     return detourNodeConnectsParentAndChild;
   });
