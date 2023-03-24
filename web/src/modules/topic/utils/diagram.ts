@@ -135,6 +135,13 @@ export const getNodesComposedBy = (node: Node, diagram: Diagram) => {
   });
 };
 
+/**
+ * general philosophy on hiding components, to minimize confusion:
+ * - do not automatically hide components that have already been shown, unless the user chooses to hide them
+ * - always visually indicate hidden components some way
+ * - always allow the user to explicitly show/hide components that can be hidden
+ * - feel free to hide components when they're created if they're implied and have not been shown yet
+ */
 export const filterHiddenComponents = (diagram: Diagram): Diagram => {
   const shownNodes = diagram.nodes.filter((node) => node.data.showing);
   const shownNodeIds = shownNodes.map((node) => node.id);
