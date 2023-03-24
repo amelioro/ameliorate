@@ -7,15 +7,15 @@ import { Data } from "react-minimal-pie-chart/types/commonTypes";
 import { setScore } from "../../store/actions";
 import { ArguableType, Score, possibleScores } from "../../utils/diagram";
 import { scoreColors } from "./Score";
-import { StyledBox } from "./Score.styles";
+import { CircleDiv } from "./Score.styles";
 
 interface Props {
-  pieDiameter: number;
+  circleDiameter: number;
   arguableId: string;
   arguableType: ArguableType;
 }
 
-export const ScorePie = ({ pieDiameter, arguableId, arguableType }: Props) => {
+export const ScorePie = ({ circleDiameter, arguableId, arguableType }: Props) => {
   const theme = useTheme();
   const [hovered, setHovered] = useState<number | undefined>(undefined);
 
@@ -31,7 +31,7 @@ export const ScorePie = ({ pieDiameter, arguableId, arguableType }: Props) => {
   });
 
   return (
-    <StyledBox display="flex" width={pieDiameter} height={pieDiameter}>
+    <CircleDiv circleDiameter={circleDiameter}>
       <PieChart
         data={data}
         radius={45} // is relative to viewbox size [100, 100]
@@ -57,6 +57,6 @@ export const ScorePie = ({ pieDiameter, arguableId, arguableType }: Props) => {
         onClick={(_, dataIndex) => setScore(arguableId, arguableType, data[dataIndex].key as Score)}
         background="white"
       />
-    </StyledBox>
+    </CircleDiv>
   );
 };
