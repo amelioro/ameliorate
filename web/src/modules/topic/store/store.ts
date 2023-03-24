@@ -116,6 +116,12 @@ export const useActiveTableProblemId = () => {
   return useTopicStoreAfterHydration((state) => state.activeTableProblemId);
 };
 
+export const useIsTableActive = () => {
+  return useTopicStoreAfterHydration(
+    (state) => state.activeClaimDiagramId === null && state.activeTableProblemId !== null
+  );
+};
+
 export const useClaimDiagramsWithExplicitClaims = () => {
   return useTopicStoreAfterHydration((state) =>
     Object.entries(state.diagrams)

@@ -163,3 +163,20 @@ export const viewCriteriaTable = (problemNodeId: string) => {
     "viewCriteriaTable"
   );
 };
+
+export const relayout = () => {
+  useTopicStore.setState(
+    (state) => {
+      const activeDiagram = getActiveDiagram(state);
+
+      const layoutedDiagram = layoutVisibleComponents(activeDiagram);
+
+      /* eslint-disable functional/immutable-data, no-param-reassign */
+      activeDiagram.nodes = layoutedDiagram.nodes;
+      activeDiagram.edges = layoutedDiagram.edges;
+      /* eslint-enable functional/immutable-data, no-param-reassign */
+    },
+    false,
+    "relayout"
+  );
+};

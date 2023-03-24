@@ -1,12 +1,21 @@
-import { AutoStoriesOutlined, Download, ExpandMore, Redo, Undo, Upload } from "@mui/icons-material";
+import {
+  AlignVerticalTop,
+  AutoStoriesOutlined,
+  Download,
+  ExpandMore,
+  Redo,
+  Undo,
+  Upload,
+} from "@mui/icons-material";
 import { AppBar, Button, Divider, IconButton, MenuItem, Toolbar } from "@mui/material";
 import fileDownload from "js-file-download";
 
 import { Menu } from "../../../../common/components/Menu/Menu";
 import { useMenu } from "../../../../common/hooks";
-import { TopicStoreState } from "../../store/store";
+import { TopicStoreState, useIsTableActive } from "../../store/store";
 import { getState, redo, resetState, setState, undo } from "../../store/utilActions";
 import { getTopicTitle } from "../../store/utils";
+import { relayout } from "../../store/viewActions";
 
 // TODO: might be useful to have downloaded state be more human editable;
 // for this, probably should prettify the JSON, and remove position values (we can re-layout on import)
@@ -43,10 +52,13 @@ const loadExample = (exampleFileName: string) => {
 
 export const TopicToolbar = () => {
   const [anchorEl, menuIsOpen, openMenu, closeMenu] = useMenu();
+  const isTableActive = useIsTableActive();
 
   return (
     <AppBar position="sticky" color="primaryVariantLight">
       <Toolbar variant="dense">
+        {/* load actions */}
+
         <Button color="inherit" onClick={openMenu}>
           Examples
           <ExpandMore />
@@ -69,6 +81,7 @@ export const TopicToolbar = () => {
         </IconButton>
 
         <Divider orientation="vertical" />
+        {/* diagram state change actions */}
 
         {/* TODO: disable undo/redo when there's nothing to undo/redo; right now can't use hooks for temporal state
         because it doesn't work with persist middleware.
@@ -83,6 +96,20 @@ export const TopicToolbar = () => {
         <IconButton color="inherit" title="Reset" aria-label="Reset" onClick={resetState}>
           <AutoStoriesOutlined />
         </IconButton>
+
+        {!isTableActive && <Divider orientation="vertical" />}
+        {/* view actions */}
+
+        {!isTableActive && (
+          <IconButton
+            color="inherit"
+            title="Recalculate layout"
+            aria-label="Recalculate layout"
+            onClick={relayout}
+          >
+            <AlignVerticalTop />
+          </IconButton>
+        )}
       </Toolbar>
     </AppBar>
   );
