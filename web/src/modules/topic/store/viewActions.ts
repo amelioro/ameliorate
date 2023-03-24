@@ -109,7 +109,7 @@ export const toggleShowNeighbors = (
       neighborsToToggle.forEach((neighbor) => (neighbor.data.showing = show));
       /* eslint-enable functional/immutable-data, no-param-reassign */
 
-      const layoutedDiagram = layoutVisibleComponents(problemDiagram); // depends on showCriteria having been updated
+      const layoutedDiagram = layoutVisibleComponents(problemDiagram); // depends on showing having been updated
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
       problemDiagram.nodes = layoutedDiagram.nodes;
