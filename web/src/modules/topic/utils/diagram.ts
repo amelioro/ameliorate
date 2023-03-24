@@ -1,8 +1,8 @@
 import { MarkerType } from "reactflow";
 
-import { RelationName, childNode, composedRelations, parentNode, shortcutRelations } from "./edge";
+import { RelationName, composedRelations } from "./edge";
 import { Orientation, layout } from "./layout";
-import { NodeType, children, parents } from "./node";
+import { NodeType } from "./node";
 
 export type DiagramType = "problem" | "claim";
 export type RelationDirection = "parent" | "child";
@@ -81,14 +81,15 @@ export const buildEdge = (
   sourceNodeId: string,
   targetNodeId: string,
   relation: RelationName,
-  diagramId: string
+  diagramId: string,
+  showing?: boolean
 ): Edge => {
   return {
     id: newEdgeId,
     data: {
       score: "-" as Score,
       diagramId: diagramId,
-      showing: true,
+      showing: showing === undefined ? true : showing,
     },
     label: relation,
     markerStart: markerStart,
