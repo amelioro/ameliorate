@@ -187,3 +187,32 @@ export const getConnectingEdge = (node1: Node, node2: Node, edges: Edge[]) => {
 
   return edge;
 };
+
+// see algorithm pseudocode & example at https://github.com/amelioro/ameliorate/issues/66#issuecomment-1465078133
+const isEdgeAShortcut = (edge: Edge, diagram: Diagram) => {
+  const edgeParent = parentNode(edge, diagram);
+  const edgeChild = childNode(edge, diagram);
+
+  return shortcutRelations.some((shortcutRelation) => {
+    const edgeCouldBeAShortcut =
+      edgeParent.type === shortcutRelation.relation.parent &&
+      edgeChild.type === shortcutRelation.relation.child;
+
+    if (!edgeCouldBeAShortcut) return false;
+
+    const childrenOfParent = children(edgeParent, diagram);
+    const parentsOfChild = parents(edgeChild, diagram);
+
+    const detourNodeAsChild = childrenOfParent.find(
+      (child) => child.type === shortcutRelation.detourNodeType
+    );
+    const detourNodeAsParent = parentsOfChild.find(
+      (parent) => parent.type === shortcutRelation.detourNodeType
+    );
+
+    const detourNodeConnectsParentAndChild =
+      detourNodeAsChild && detourNodeAsParent && detourNodeAsChild.data.showing;
+
+    return detourNodeConnectsParentAndChild;
+  });
+};
