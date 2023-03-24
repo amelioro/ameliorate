@@ -20,7 +20,7 @@ export const viewOrCreateClaimDiagram = (arguableId: string, arguableType: Argua
       // create claim diagram if it doesn't exist
       if (!getDiagram(diagramId)) {
         const activeDiagram = getActiveDiagram(state);
-        const arguable = findArguable(activeDiagram, arguableId, arguableType);
+        const arguable = findArguable(arguableId, arguableType, activeDiagram);
         const label = getImplicitLabel(arguableId, arguableType, activeDiagram);
 
         /* eslint-disable functional/immutable-data, no-param-reassign */
@@ -97,7 +97,7 @@ export const toggleShowNeighbors = (
     (state) => {
       const problemDiagram = state.diagrams[problemDiagramId]; // assuming we're only show/hiding from problem diagram
 
-      const node = findNode(problemDiagram, nodeId);
+      const node = findNode(nodeId, problemDiagram);
 
       const neighborsInDirection =
         direction === "parent" ? parents(node, problemDiagram) : children(node, problemDiagram);

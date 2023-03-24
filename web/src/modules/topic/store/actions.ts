@@ -34,7 +34,7 @@ export const setScore = (arguableId: string, arguableType: ArguableType, score: 
     (state) => {
       // update this node's score
       const activeDiagram = getActiveDiagram(state);
-      const arguable = findArguable(activeDiagram, arguableId, arguableType);
+      const arguable = findArguable(arguableId, arguableType, activeDiagram);
       /* eslint-disable functional/immutable-data, no-param-reassign */
       arguable.data.score = score;
       /* eslint-enable functional/immutable-data, no-param-reassign */
@@ -43,9 +43,9 @@ export const setScore = (arguableId: string, arguableType: ArguableType, score: 
       if (arguable.type === "rootClaim") {
         const [parentArguableType, parentArguableId] = parseClaimDiagramId(activeDiagram.id);
         const parentArguable = findArguable(
-          state.diagrams[problemDiagramId], // assuming we won't support nested root claims, so parent will always be root
           parentArguableId,
-          parentArguableType
+          parentArguableType,
+          state.diagrams[problemDiagramId] // assuming we won't support nested root claims, so parent will always be root
         );
 
         /* eslint-disable functional/immutable-data, no-param-reassign */
@@ -78,7 +78,7 @@ export const setNodeLabel = (nodeId: string, value: string) => {
   useTopicStore.setState(
     (state) => {
       const activeDiagram = getActiveDiagram(state);
-      const node = findNode(activeDiagram, nodeId);
+      const node = findNode(nodeId, activeDiagram);
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
       node.data.label = value;

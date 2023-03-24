@@ -8,7 +8,7 @@ export const useNode = (nodeId: string, diagramId: string) => {
 
     // wrap in try/catch because findNode will error when this is triggered by a node deletion (zombie child issue)
     try {
-      return findNode(diagram, nodeId);
+      return findNode(nodeId, diagram);
     } catch {
       return null;
     }
@@ -21,7 +21,7 @@ export const useNodeChildren = (nodeId: string, diagramId: string) => {
 
     // wrap in try/catch because findNode will error when this is triggered by a node deletion (zombie child issue)
     try {
-      const node = findNode(diagram, nodeId);
+      const node = findNode(nodeId, diagram);
       return children(node, diagram);
     } catch {
       return [];
@@ -35,7 +35,7 @@ export const useNodeParents = (nodeId: string, diagramId: string) => {
 
     // wrap in try/catch because findNode will error when this is triggered by a node deletion (zombie child issue)
     try {
-      const node = findNode(diagram, nodeId);
+      const node = findNode(nodeId, diagram);
       return parents(node, diagram);
     } catch {
       return [];
@@ -57,7 +57,7 @@ export const useCriterionSolutionEdges = (problemNodeId: string, diagramId: stri
 
     // wrap in try/catch because findNode will error when this is triggered by a node deletion (zombie child issue)
     try {
-      const problemNode = findNode(diagram, problemNodeId);
+      const problemNode = findNode(problemNodeId, diagram);
       if (problemNode.type !== "problem") throw new Error("node is not a problem node");
 
       const nodeChildren = children(problemNode, diagram);

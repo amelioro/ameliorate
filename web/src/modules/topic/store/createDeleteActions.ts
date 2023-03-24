@@ -44,7 +44,7 @@ const connectCriteriaToSolutions = (state: TopicStoreState, newNode: Node, probl
       (edge) =>
         edge.source === problemNode.id &&
         edge.label === targetRelation.name &&
-        findNode(problemDiagram, edge.target).type === targetRelation.child
+        findNode(edge.target, problemDiagram).type === targetRelation.child
     )
     .map((edge) => {
       /* eslint-disable functional/immutable-data, no-param-reassign */
@@ -79,7 +79,7 @@ export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) 
   useTopicStore.setState(
     (state) => {
       const activeDiagram = getActiveDiagram(state);
-      const fromNode = findNode(activeDiagram, fromNodeId);
+      const fromNode = findNode(fromNodeId, activeDiagram);
 
       // create and connect node
       const newNode = createNode(state, toNodeType);
@@ -98,7 +98,7 @@ export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) 
 
       // trigger event so viewport can be updated.
       // seems like there should be a cleaner way to do this - perhaps custom zustand middleware to emit for any action
-      emitter.emit("addNode", findNode(layoutedDiagram, newNode.id));
+      emitter.emit("addNode", findNode(newNode.id, layoutedDiagram));
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
       activeDiagram.nodes = layoutedDiagram.nodes;
@@ -202,7 +202,7 @@ export const deleteNode = (nodeId: string) => {
     (state) => {
       const activeDiagram = getActiveDiagram(state);
 
-      const node = findNode(activeDiagram, nodeId);
+      const node = findNode(nodeId, activeDiagram);
 
       if (node.type === "rootClaim") {
         /* eslint-disable functional/immutable-data, no-param-reassign */

@@ -173,11 +173,11 @@ export const canCreateEdge = (diagram: Diagram, parent: Node, child: Node) => {
 };
 
 export const parentNode = (edge: Edge, diagram: Diagram) => {
-  return findNode(diagram, edge.source);
+  return findNode(edge.source, diagram);
 };
 
 export const childNode = (edge: Edge, diagram: Diagram) => {
-  return findNode(diagram, edge.target);
+  return findNode(edge.target, diagram);
 };
 
 export const getConnectingEdge = (node1: Node, node2: Node, edges: Edge[]) => {

@@ -104,22 +104,22 @@ export type ArguableType = "node" | "edge";
 export const possibleScores = ["-", "1", "2", "3", "4", "5", "6", "7", "8", "9"] as const;
 export type Score = typeof possibleScores[number];
 
-export const findNode = (diagram: Diagram, nodeId: string) => {
+export const findNode = (nodeId: string, diagram: Diagram) => {
   const node = diagram.nodes.find((node) => node.id === nodeId);
   if (!node) throw new Error("node not found");
 
   return node;
 };
 
-export const findEdge = (diagram: Diagram, edgeId: string) => {
+export const findEdge = (edgeId: string, diagram: Diagram) => {
   const edge = diagram.edges.find((edge) => edge.id === edgeId);
   if (!edge) throw new Error("edge not found");
 
   return edge;
 };
 
-export const findArguable = (diagram: Diagram, arguableId: string, arguableType: ArguableType) => {
-  return arguableType === "node" ? findNode(diagram, arguableId) : findEdge(diagram, arguableId);
+export const findArguable = (arguableId: string, arguableType: ArguableType, diagram: Diagram) => {
+  return arguableType === "node" ? findNode(arguableId, diagram) : findEdge(arguableId, diagram);
 };
 
 export const getNodesComposedBy = (node: Node, diagram: Diagram) => {
@@ -128,7 +128,7 @@ export const getNodesComposedBy = (node: Node, diagram: Diagram) => {
       return edge.source === node.id && edge.label === composedRelation.name;
     });
 
-    const potentialComposedNodes = composingEdges.map((edge) => findNode(diagram, edge.target));
+    const potentialComposedNodes = composingEdges.map((edge) => findNode(edge.target, diagram));
 
     return potentialComposedNodes
       .filter((node) => node.type === composedRelation.child)
