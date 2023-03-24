@@ -10,6 +10,7 @@ import {
 } from "@mui/icons-material";
 
 import { Diagram, Node } from "./diagram";
+import { componentTypes } from "./edge";
 
 export const maxCharsPerLine = 19; // measured by typing "a"'s in a node textbox
 export const indicatorLength = 20; // px
@@ -86,6 +87,10 @@ export const children = (node: Node, diagram: Diagram) => {
 
     return node;
   });
+};
+
+export const components = (node: Node, diagram: Diagram) => {
+  return parents(node, diagram).filter((parent) => componentTypes.includes(parent.type));
 };
 
 export const edges = (node: Node, diagram: Diagram) => {

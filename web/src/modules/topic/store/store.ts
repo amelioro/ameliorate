@@ -7,7 +7,7 @@ import { immer } from "zustand/middleware/immer";
 
 import { HydrationContext } from "../../../pages/index.page";
 import { Diagram, buildNode, filterHiddenComponents } from "../utils/diagram";
-import { doesDiagramExist } from "./actions";
+import { getDiagram } from "./actions";
 import { migrate } from "./migrate";
 import { getTopicTitle } from "./utils";
 
@@ -92,7 +92,7 @@ export const useDiagramType = (diagramId: string) => {
     // Zombie child issue, see https://github.com/pmndrs/zustand/issues/302
     // batchedUpdates isn't necessary because react already batches updates as of react 18
     // Batching doesn't fix this though because the error isn't when rendering, it's when checking the store's comparers
-    if (!doesDiagramExist(diagramId)) return null;
+    if (!getDiagram(diagramId)) return null;
     return state.diagrams[diagramId].type;
   });
 };

@@ -1,7 +1,7 @@
 import _ from "lodash";
 
-import { Diagram, Edge, Node, RelationDirection, findArguable } from "./diagram";
-import { NodeType } from "./node";
+import { Diagram, Edge, Node, RelationDirection, findNode } from "./diagram";
+import { NodeType, children, components, parents } from "./node";
 
 export type RelationName =
   | "causes"
@@ -65,6 +65,8 @@ export const getRelation = (
 export const composedRelations: Relation[] = [
   { child: "solution", name: "has", parent: "solutionComponent" },
 ];
+
+export const componentTypes = composedRelations.map((relation) => relation.parent);
 
 interface ShortcutRelation {
   detourNodeType: NodeType;
@@ -189,7 +191,7 @@ export const getConnectingEdge = (node1: Node, node2: Node, edges: Edge[]) => {
 };
 
 // see algorithm pseudocode & example at https://github.com/amelioro/ameliorate/issues/66#issuecomment-1465078133
-const isEdgeAShortcut = (edge: Edge, diagram: Diagram) => {
+export const isEdgeAShortcut = (edge: Edge, diagram: Diagram) => {
   const edgeParent = parentNode(edge, diagram);
   const edgeChild = childNode(edge, diagram);
 
@@ -216,4 +218,35 @@ const isEdgeAShortcut = (edge: Edge, diagram: Diagram) => {
 
     return detourNodeConnectsParentAndChild;
   });
+};
+
+/**
+ * note: does not check if component node is showing - this is so that hidden implied edges
+ * can still be shown when a component node is hidden
+ */
+export const isEdgeImpliedByComposition = (edge: Edge, diagram: Diagram) => {
+  const edgeParent = parentNode(edge, diagram);
+  const edgeChild = childNode(edge, diagram);
+
+  // check implied through parent
+  const componentsOfParent = components(edgeParent, diagram);
+  const impliedThroughParentComponent = componentsOfParent.some((component) => {
+    return diagram.edges.some(
+      (edge) =>
+        edge.source === component.id && edge.label === edge.label && edge.target === edgeChild.id
+    );
+  });
+
+  if (impliedThroughParentComponent) return true;
+
+  // check implied through child
+  const componentsOfChild = components(edgeChild, diagram);
+  const impliedThroughChildComponent = componentsOfChild.some((component) => {
+    return diagram.edges.some(
+      (edge) =>
+        edge.target === component.id && edge.label === edge.label && edge.source === edgeParent.id
+    );
+  });
+
+  return impliedThroughChildComponent;
 };

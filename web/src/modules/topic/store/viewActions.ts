@@ -8,7 +8,7 @@ import {
   layoutVisibleComponents,
 } from "../utils/diagram";
 import { NodeType, children, parents } from "../utils/node";
-import { doesDiagramExist } from "./actions";
+import { getDiagram } from "./actions";
 import { problemDiagramId, useTopicStore } from "./store";
 import { getActiveDiagram } from "./utils";
 
@@ -18,7 +18,7 @@ export const viewOrCreateClaimDiagram = (arguableId: string, arguableType: Argua
       const diagramId = getClaimDiagramId(arguableId, arguableType);
 
       // create claim diagram if it doesn't exist
-      if (!doesDiagramExist(diagramId)) {
+      if (!getDiagram(diagramId)) {
         const activeDiagram = getActiveDiagram(state);
         const arguable = findArguable(activeDiagram, arguableId, arguableType);
         const label = getImplicitLabel(arguableId, arguableType, activeDiagram);
@@ -118,6 +118,22 @@ export const toggleShowNeighbors = (
     },
     false,
     "toggleShowNeighbors"
+  );
+};
+
+export const toggleShowEdges = (edgeIds: string[], show: boolean) => {
+  useTopicStore.setState(
+    (state) => {
+      const problemDiagram = state.diagrams[problemDiagramId]; // assuming we're only show/hiding from problem diagram
+
+      const edges = problemDiagram.edges.filter((edge) => edgeIds.includes(edge.id));
+
+      /* eslint-disable functional/immutable-data, no-param-reassign */
+      edges.forEach((edge) => (edge.data.showing = show));
+      /* eslint-enable functional/immutable-data, no-param-reassign */
+    },
+    false,
+    "toggleShowEdges"
   );
 };
 

@@ -1,5 +1,5 @@
 import { getClaimDiagramId, parseClaimDiagramId } from "../utils/claim";
-import { ArguableType, Score, findArguable, findNode } from "../utils/diagram";
+import { ArguableType, Diagram, Score, findArguable, findNode } from "../utils/diagram";
 import { problemDiagramId, useTopicStore } from "./store";
 import { getActiveDiagram } from "./utils";
 
@@ -55,7 +55,7 @@ export const setScore = (arguableId: string, arguableType: ArguableType, score: 
 
       // update implicit child claim's score if it exists
       const childDiagramId = getClaimDiagramId(arguableId, arguableType);
-      if (doesDiagramExist(childDiagramId)) {
+      if (getDiagram(childDiagramId)) {
         const childDiagram = state.diagrams[childDiagramId];
         const childClaim = childDiagram.nodes.find((node) => node.type === "rootClaim");
         if (!childClaim) throw new Error("child claim not found");
@@ -70,8 +70,8 @@ export const setScore = (arguableId: string, arguableType: ArguableType, score: 
   );
 };
 
-export const doesDiagramExist = (diagramId: string) => {
-  return Object.keys(useTopicStore.getState().diagrams).includes(diagramId);
+export const getDiagram = (diagramId: string) => {
+  return useTopicStore.getState().diagrams[diagramId] as Diagram | undefined;
 };
 
 export const setNodeLabel = (nodeId: string, value: string) => {

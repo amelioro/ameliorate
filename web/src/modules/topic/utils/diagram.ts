@@ -142,9 +142,7 @@ export const filterHiddenComponents = (diagram: Diagram): Diagram => {
   const shownEdges = diagram.edges.filter((edge) => {
     if (!shownNodeIds.includes(edge.source) || !shownNodeIds.includes(edge.target)) return false;
 
-    if (isEdgeAShortcut(edge, diagram)) return false;
-
-    return true;
+    return edge.data.showing;
   });
 
   return { ...diagram, nodes: shownNodes, edges: shownEdges };
