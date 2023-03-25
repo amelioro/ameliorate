@@ -69,7 +69,7 @@ export const CircleDiv = styled("div", circleOptions)<CircleProps>`
   transform: translate(-50%, -50%);
 
   border-radius: 50%;
-  pointer-events: none;
+  overflow: hidden;
 
   height: ${({ circleDiameter }) => `${circleDiameter}px`};
   width: ${({ circleDiameter }) => `${circleDiameter}px`};
