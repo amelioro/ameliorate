@@ -1,3 +1,4 @@
+import { Global } from "@emotion/react";
 import { Box } from "@mui/material";
 import { NextPage } from "next";
 import Head from "next/head";
@@ -13,7 +14,7 @@ import {
   useActiveClaimDiagramId,
   useActiveTableProblemId,
 } from "../modules/topic/store/store";
-import { WorkspaceBox } from "./index.styles";
+import { WorkspaceBox, workspaceStyles } from "./index.styles";
 
 export const HydrationContext = createContext(false);
 
@@ -34,7 +35,7 @@ const Page = () => {
 
       <TopicToolbar />
 
-      <WorkspaceBox height="100%" position="relative">
+      <WorkspaceBox>
         <TopicPane />
 
         <Box width="100%" height="100%" position="absolute">
@@ -50,6 +51,8 @@ const Page = () => {
             <Diagram diagramId={claimDiagramId} />
           </Box>
         )}
+        {/* prevents body scrolling when  workspace is rendered*/}
+        <Global styles={workspaceStyles} />
       </WorkspaceBox>
 
       <ContextMenu />
