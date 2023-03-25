@@ -1,5 +1,5 @@
 import { getClaimDiagramId, parseClaimDiagramId } from "../utils/claim";
-import { ArguableType, Score, findArguable, findNode } from "../utils/diagram";
+import { ArguableType, Diagram, Score, findArguable, findNode } from "../utils/diagram";
 import { problemDiagramId, useTopicStore } from "./store";
 import { getActiveDiagram } from "./utils";
 
@@ -34,7 +34,7 @@ export const setScore = (arguableId: string, arguableType: ArguableType, score: 
     (state) => {
       // update this node's score
       const activeDiagram = getActiveDiagram(state);
-      const arguable = findArguable(activeDiagram, arguableId, arguableType);
+      const arguable = findArguable(arguableId, arguableType, activeDiagram);
       /* eslint-disable functional/immutable-data, no-param-reassign */
       arguable.data.score = score;
       /* eslint-enable functional/immutable-data, no-param-reassign */
@@ -43,9 +43,9 @@ export const setScore = (arguableId: string, arguableType: ArguableType, score: 
       if (arguable.type === "rootClaim") {
         const [parentArguableType, parentArguableId] = parseClaimDiagramId(activeDiagram.id);
         const parentArguable = findArguable(
-          state.diagrams[problemDiagramId], // assuming we won't support nested root claims, so parent will always be root
           parentArguableId,
-          parentArguableType
+          parentArguableType,
+          state.diagrams[problemDiagramId] // assuming we won't support nested root claims, so parent will always be root
         );
 
         /* eslint-disable functional/immutable-data, no-param-reassign */
@@ -55,7 +55,7 @@ export const setScore = (arguableId: string, arguableType: ArguableType, score: 
 
       // update implicit child claim's score if it exists
       const childDiagramId = getClaimDiagramId(arguableId, arguableType);
-      if (doesDiagramExist(childDiagramId)) {
+      if (getDiagram(childDiagramId)) {
         const childDiagram = state.diagrams[childDiagramId];
         const childClaim = childDiagram.nodes.find((node) => node.type === "rootClaim");
         if (!childClaim) throw new Error("child claim not found");
@@ -70,15 +70,15 @@ export const setScore = (arguableId: string, arguableType: ArguableType, score: 
   );
 };
 
-export const doesDiagramExist = (diagramId: string) => {
-  return Object.keys(useTopicStore.getState().diagrams).includes(diagramId);
+export const getDiagram = (diagramId: string) => {
+  return useTopicStore.getState().diagrams[diagramId] as Diagram | undefined;
 };
 
 export const setNodeLabel = (nodeId: string, value: string) => {
   useTopicStore.setState(
     (state) => {
       const activeDiagram = getActiveDiagram(state);
-      const node = findNode(activeDiagram, nodeId);
+      const node = findNode(nodeId, activeDiagram);
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
       node.data.label = value;

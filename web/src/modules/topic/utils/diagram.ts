@@ -1,8 +1,8 @@
 import { MarkerType } from "reactflow";
 
-import { RelationName, childNode, composedRelations, parentNode, shortcutRelations } from "./edge";
+import { RelationName, composedRelations } from "./edge";
 import { Orientation, layout } from "./layout";
-import { NodeType, children, parents } from "./node";
+import { NodeType } from "./node";
 
 export type DiagramType = "problem" | "claim";
 export type RelationDirection = "parent" | "child";
@@ -67,6 +67,7 @@ export interface Edge {
   data: {
     score: Score;
     diagramId: string;
+    showing: boolean;
   };
   label: RelationName;
   markerStart: { type: MarkerType; width: number; height: number };
@@ -80,13 +81,15 @@ export const buildEdge = (
   sourceNodeId: string,
   targetNodeId: string,
   relation: RelationName,
-  diagramId: string
+  diagramId: string,
+  showing?: boolean
 ): Edge => {
   return {
     id: newEdgeId,
     data: {
       score: "-" as Score,
       diagramId: diagramId,
+      showing: showing === undefined ? true : showing,
     },
     label: relation,
     markerStart: markerStart,
@@ -101,22 +104,22 @@ export type ArguableType = "node" | "edge";
 export const possibleScores = ["-", "1", "2", "3", "4", "5", "6", "7", "8", "9"] as const;
 export type Score = typeof possibleScores[number];
 
-export const findNode = (diagram: Diagram, nodeId: string) => {
+export const findNode = (nodeId: string, diagram: Diagram) => {
   const node = diagram.nodes.find((node) => node.id === nodeId);
   if (!node) throw new Error("node not found");
 
   return node;
 };
 
-export const findEdge = (diagram: Diagram, edgeId: string) => {
+export const findEdge = (edgeId: string, diagram: Diagram) => {
   const edge = diagram.edges.find((edge) => edge.id === edgeId);
   if (!edge) throw new Error("edge not found");
 
   return edge;
 };
 
-export const findArguable = (diagram: Diagram, arguableId: string, arguableType: ArguableType) => {
-  return arguableType === "node" ? findNode(diagram, arguableId) : findEdge(diagram, arguableId);
+export const findArguable = (arguableId: string, arguableType: ArguableType, diagram: Diagram) => {
+  return arguableType === "node" ? findNode(arguableId, diagram) : findEdge(arguableId, diagram);
 };
 
 export const getNodesComposedBy = (node: Node, diagram: Diagram) => {
@@ -125,7 +128,7 @@ export const getNodesComposedBy = (node: Node, diagram: Diagram) => {
       return edge.source === node.id && edge.label === composedRelation.name;
     });
 
-    const potentialComposedNodes = composingEdges.map((edge) => findNode(diagram, edge.target));
+    const potentialComposedNodes = composingEdges.map((edge) => findNode(edge.target, diagram));
 
     return potentialComposedNodes
       .filter((node) => node.type === composedRelation.child)
@@ -133,35 +136,13 @@ export const getNodesComposedBy = (node: Node, diagram: Diagram) => {
   });
 };
 
-// see algorithm pseudocode & example at https://github.com/amelioro/ameliorate/issues/66#issuecomment-1465078133
-const isEdgeAShortcut = (edge: Edge, diagram: Diagram) => {
-  const edgeParent = parentNode(edge, diagram);
-  const edgeChild = childNode(edge, diagram);
-
-  return shortcutRelations.some((shortcutRelation) => {
-    const edgeCouldBeAShortcut =
-      edgeParent.type === shortcutRelation.relation.parent &&
-      edgeChild.type === shortcutRelation.relation.child;
-
-    if (!edgeCouldBeAShortcut) return false;
-
-    const childrenOfParent = children(edgeParent, diagram);
-    const parentsOfChild = parents(edgeChild, diagram);
-
-    const detourNodeAsChild = childrenOfParent.find(
-      (child) => child.type === shortcutRelation.detourNodeType
-    );
-    const detourNodeAsParent = parentsOfChild.find(
-      (parent) => parent.type === shortcutRelation.detourNodeType
-    );
-
-    const detourNodeConnectsParentAndChild =
-      detourNodeAsChild && detourNodeAsParent && detourNodeAsChild.data.showing;
-
-    return detourNodeConnectsParentAndChild;
-  });
-};
-
+/**
+ * general philosophy on hiding components, to minimize confusion:
+ * - do not automatically hide components that have already been shown, unless the user chooses to hide them
+ * - always visually indicate hidden components some way
+ * - always allow the user to explicitly show/hide components that can be hidden
+ * - feel free to hide components when they're created if they're implied and have not been shown yet
+ */
 export const filterHiddenComponents = (diagram: Diagram): Diagram => {
   const shownNodes = diagram.nodes.filter((node) => node.data.showing);
   const shownNodeIds = shownNodes.map((node) => node.id);
@@ -169,9 +150,7 @@ export const filterHiddenComponents = (diagram: Diagram): Diagram => {
   const shownEdges = diagram.edges.filter((edge) => {
     if (!shownNodeIds.includes(edge.source) || !shownNodeIds.includes(edge.target)) return false;
 
-    if (isEdgeAShortcut(edge, diagram)) return false;
-
-    return true;
+    return edge.data.showing;
   });
 
   return { ...diagram, nodes: shownNodes, edges: shownEdges };

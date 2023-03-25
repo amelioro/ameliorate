@@ -158,7 +158,7 @@
       "edges": [
         {
           "id": "0",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "solves",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
@@ -167,7 +167,7 @@
         },
         {
           "id": "1",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "solves",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
@@ -176,7 +176,7 @@
         },
         {
           "id": "7",
-          "data": { "score": "9", "diagramId": "root" },
+          "data": { "score": "9", "diagramId": "root", "showing": true },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "7",
@@ -185,7 +185,7 @@
         },
         {
           "id": "8",
-          "data": { "score": "1", "diagramId": "root" },
+          "data": { "score": "1", "diagramId": "root", "showing": true },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "7",
@@ -194,7 +194,7 @@
         },
         {
           "id": "6",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "criterion for",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
@@ -203,7 +203,7 @@
         },
         {
           "id": "16",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "19",
@@ -212,7 +212,7 @@
         },
         {
           "id": "17",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "19",
@@ -221,7 +221,7 @@
         },
         {
           "id": "15",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "criterion for",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
@@ -230,7 +230,7 @@
         },
         {
           "id": "21",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "23",
@@ -239,7 +239,7 @@
         },
         {
           "id": "22",
-          "data": { "score": "3", "diagramId": "root" },
+          "data": { "score": "3", "diagramId": "root", "showing": true },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "23",
@@ -248,7 +248,7 @@
         },
         {
           "id": "20",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "criterion for",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
@@ -257,7 +257,7 @@
         },
         {
           "id": "30",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "33",
@@ -266,7 +266,7 @@
         },
         {
           "id": "31",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "33",
@@ -275,7 +275,7 @@
         },
         {
           "id": "29",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "criterion for",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
@@ -284,7 +284,7 @@
         },
         {
           "id": "33",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "34",
@@ -293,7 +293,7 @@
         },
         {
           "id": "34",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "34",
@@ -302,7 +302,7 @@
         },
         {
           "id": "32",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "criterion for",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
@@ -311,7 +311,7 @@
         },
         {
           "id": "87",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "has",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "72",
@@ -320,7 +320,7 @@
         },
         {
           "id": "88",
-          "data": { "score": "1", "diagramId": "root" },
+          "data": { "score": "1", "diagramId": "root", "showing": true },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "33",
@@ -329,7 +329,7 @@
         },
         {
           "id": "89",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "solves",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
@@ -338,7 +338,7 @@
         },
         {
           "id": "90",
-          "data": { "score": "9", "diagramId": "root" },
+          "data": { "score": "9", "diagramId": "root", "showing": true },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "7",
@@ -347,7 +347,7 @@
         },
         {
           "id": "91",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "has",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "73",
@@ -356,7 +356,7 @@
         },
         {
           "id": "92",
-          "data": { "score": "8", "diagramId": "root" },
+          "data": { "score": "8", "diagramId": "root", "showing": true },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "19",
@@ -365,7 +365,7 @@
         },
         {
           "id": "93",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "solves",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
@@ -374,7 +374,7 @@
         },
         {
           "id": "94",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "23",
@@ -383,7 +383,7 @@
         },
         {
           "id": "95",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "has",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "76",
@@ -392,7 +392,7 @@
         },
         {
           "id": "96",
-          "data": { "score": "7", "diagramId": "root" },
+          "data": { "score": "7", "diagramId": "root", "showing": true },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "19",
@@ -401,7 +401,7 @@
         },
         {
           "id": "97",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "solves",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
@@ -410,7 +410,7 @@
         },
         {
           "id": "98",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "has",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "77",
@@ -419,7 +419,7 @@
         },
         {
           "id": "99",
-          "data": { "score": "7", "diagramId": "root" },
+          "data": { "score": "7", "diagramId": "root", "showing": true },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "34",
@@ -428,7 +428,7 @@
         },
         {
           "id": "100",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "solves",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
@@ -437,7 +437,7 @@
         },
         {
           "id": "104",
-          "data": { "score": "1", "diagramId": "root" },
+          "data": { "score": "1", "diagramId": "root", "showing": true },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "7",
@@ -446,7 +446,7 @@
         },
         {
           "id": "105",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "creates",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "79",
@@ -455,7 +455,7 @@
         },
         {
           "id": "106",
-          "data": { "score": "1", "diagramId": "root" },
+          "data": { "score": "1", "diagramId": "root", "showing": true },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "33",
@@ -464,7 +464,7 @@
         },
         {
           "id": "107",
-          "data": { "score": "-", "diagramId": "root" },
+          "data": { "score": "-", "diagramId": "root", "showing": true },
           "label": "solves",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
@@ -473,7 +473,7 @@
         },
         {
           "id": "108",
-          "data": { "score": "9", "diagramId": "root" },
+          "data": { "score": "9", "diagramId": "root", "showing": true },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "7",
@@ -566,7 +566,7 @@
       "edges": [
         {
           "id": "41",
-          "data": { "score": "-", "diagramId": "edge-7" },
+          "data": { "score": "-", "diagramId": "edge-7", "showing": true },
           "label": "critiques",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "11",
@@ -575,7 +575,7 @@
         },
         {
           "id": "42",
-          "data": { "score": "-", "diagramId": "edge-7" },
+          "data": { "score": "-", "diagramId": "edge-7", "showing": true },
           "label": "supports",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "44",
@@ -584,7 +584,7 @@
         },
         {
           "id": "43",
-          "data": { "score": "-", "diagramId": "edge-7" },
+          "data": { "score": "-", "diagramId": "edge-7", "showing": true },
           "label": "supports",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "44",
@@ -649,7 +649,7 @@
       "edges": [
         {
           "id": "11",
-          "data": { "score": "-", "diagramId": "edge-8" },
+          "data": { "score": "-", "diagramId": "edge-8", "showing": true },
           "label": "critiques",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "13",
@@ -658,7 +658,7 @@
         },
         {
           "id": "13",
-          "data": { "score": "-", "diagramId": "edge-8" },
+          "data": { "score": "-", "diagramId": "edge-8", "showing": true },
           "label": "critiques",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "13",
@@ -667,7 +667,7 @@
         },
         {
           "id": "14",
-          "data": { "score": "-", "diagramId": "edge-8" },
+          "data": { "score": "-", "diagramId": "edge-8", "showing": true },
           "label": "supports",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "17",
@@ -739,7 +739,7 @@
       "edges": [
         {
           "id": "18",
-          "data": { "score": "-", "diagramId": "edge-16" },
+          "data": { "score": "-", "diagramId": "edge-16", "showing": true },
           "label": "supports",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "20",
@@ -748,7 +748,7 @@
         },
         {
           "id": "27",
-          "data": { "score": "-", "diagramId": "edge-16" },
+          "data": { "score": "-", "diagramId": "edge-16", "showing": true },
           "label": "supports",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "20",
@@ -801,7 +801,7 @@
       "edges": [
         {
           "id": "23",
-          "data": { "score": "-", "diagramId": "edge-22" },
+          "data": { "score": "-", "diagramId": "edge-22", "showing": true },
           "label": "critiques",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "24",
@@ -810,7 +810,7 @@
         },
         {
           "id": "26",
-          "data": { "score": "-", "diagramId": "edge-22" },
+          "data": { "score": "-", "diagramId": "edge-22", "showing": true },
           "label": "critiques",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "24",
@@ -863,7 +863,7 @@
       "edges": [
         {
           "id": "24",
-          "data": { "score": "-", "diagramId": "edge-21" },
+          "data": { "score": "-", "diagramId": "edge-21", "showing": true },
           "label": "supports",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "26",
@@ -872,7 +872,7 @@
         },
         {
           "id": "25",
-          "data": { "score": "-", "diagramId": "edge-21" },
+          "data": { "score": "-", "diagramId": "edge-21", "showing": true },
           "label": "supports",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "27",
@@ -932,7 +932,7 @@
       "edges": [
         {
           "id": "35",
-          "data": { "score": "-", "diagramId": "edge-33" },
+          "data": { "score": "-", "diagramId": "edge-33", "showing": true },
           "label": "critiques",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "36",
@@ -1009,7 +1009,7 @@
       "edges": [
         {
           "id": "36",
-          "data": { "score": "-", "diagramId": "node-34" },
+          "data": { "score": "-", "diagramId": "node-34", "showing": true },
           "label": "supports",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "38",
@@ -1018,7 +1018,7 @@
         },
         {
           "id": "37",
-          "data": { "score": "-", "diagramId": "node-34" },
+          "data": { "score": "-", "diagramId": "node-34", "showing": true },
           "label": "critiques",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "38",
@@ -1027,7 +1027,7 @@
         },
         {
           "id": "38",
-          "data": { "score": "-", "diagramId": "node-34" },
+          "data": { "score": "-", "diagramId": "node-34", "showing": true },
           "label": "critiques",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "38",
@@ -1036,7 +1036,7 @@
         },
         {
           "id": "69",
-          "data": { "score": "-", "diagramId": "node-34" },
+          "data": { "score": "-", "diagramId": "node-34", "showing": true },
           "label": "critiques",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "39",
@@ -1089,7 +1089,7 @@
       "edges": [
         {
           "id": "44",
-          "data": { "score": "-", "diagramId": "node-33" },
+          "data": { "score": "-", "diagramId": "node-33", "showing": true },
           "label": "critiques",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "47",
@@ -1098,7 +1098,7 @@
         },
         {
           "id": "68",
-          "data": { "score": "-", "diagramId": "node-33" },
+          "data": { "score": "-", "diagramId": "node-33", "showing": true },
           "label": "critiques",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "47",
@@ -1151,7 +1151,7 @@
       "edges": [
         {
           "id": "70",
-          "data": { "score": "-", "diagramId": "edge-17" },
+          "data": { "score": "-", "diagramId": "edge-17", "showing": true },
           "label": "supports",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "64",
@@ -1160,7 +1160,7 @@
         },
         {
           "id": "71",
-          "data": { "score": "-", "diagramId": "edge-17" },
+          "data": { "score": "-", "diagramId": "edge-17", "showing": true },
           "label": "critiques",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "65",
