@@ -32,6 +32,7 @@ const tooltipItems = (
             display="flex"
             alignItems="center"
             sx={!shown ? { backgroundColor: "rgb(90, 90, 90)" } : {}}
+            key={`${typeLabel}-${shownLabel}`}
           >
             <IconButton
               onClick={() => toggleShowNeighbors(parentNodeId, nodeType, direction, !shown)}
