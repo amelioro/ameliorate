@@ -1,7 +1,8 @@
-import { Handle, Position } from "reactflow";
+import { Position } from "reactflow";
 
 import { RelationDirection } from "../../utils/diagram";
 import { Orientation } from "../../utils/layout";
+import { StyledHandle } from "./NodeHandle.styles";
 
 interface Props {
   direction: RelationDirection;
@@ -20,5 +21,5 @@ export const NodeHandle = ({ direction, orientation }: Props) => {
       ? Position.Bottom
       : Position.Right;
 
-  return <Handle type={type} position={position} />;
+  return <StyledHandle type={type} position={position} />;
 };
