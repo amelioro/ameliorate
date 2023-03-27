@@ -7,7 +7,6 @@ import { DeleteNodeMenuItem } from "./DeleteNodeMenuItem";
 import { ShowComponentsMenuItem } from "./ShowComponentsMenuItem";
 import { ShowCriteriaMenuItem } from "./ShowCriteriaMenuItem";
 import { ShowEffectsMenuItem } from "./ShowEffectsMenuItem";
-import { ShowImpliedEdgesMenuItem } from "./ShowImpliedEdgesMenuItem";
 
 export const ContextMenu = () => {
   const anchorPosition = useAnchorPosition();
@@ -22,7 +21,6 @@ export const ContextMenu = () => {
     contextMenuContext.node && <ShowComponentsMenuItem node={contextMenuContext.node} key={1} />,
     contextMenuContext.node && <ShowCriteriaMenuItem node={contextMenuContext.node} key={2} />,
     contextMenuContext.node && <ShowEffectsMenuItem node={contextMenuContext.node} key={3} />,
-    contextMenuContext.node && <ShowImpliedEdgesMenuItem node={contextMenuContext.node} key={4} />,
     contextMenuContext.node && <DeleteNodeMenuItem node={contextMenuContext.node} key={5} />,
     contextMenuContext.edge && <DeleteEdgeMenuItem edge={contextMenuContext.edge} key={6} />,
   ];

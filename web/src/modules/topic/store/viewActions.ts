@@ -122,22 +122,6 @@ export const toggleShowNeighbors = (
   );
 };
 
-export const toggleShowEdges = (edgeIds: string[], show: boolean) => {
-  useTopicStore.setState(
-    (state) => {
-      const problemDiagram = state.diagrams[problemDiagramId]; // assuming we're only show/hiding from problem diagram
-
-      const edges = problemDiagram.edges.filter((edge) => edgeIds.includes(edge.id));
-
-      /* eslint-disable functional/immutable-data, no-param-reassign */
-      edges.forEach((edge) => (edge.data.showing = show));
-      /* eslint-enable functional/immutable-data, no-param-reassign */
-    },
-    false,
-    "toggleShowEdges"
-  );
-};
-
 export const viewProblemDiagram = () => {
   useTopicStore.setState(
     (state) => {
