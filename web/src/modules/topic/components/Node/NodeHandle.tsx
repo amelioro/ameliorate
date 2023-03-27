@@ -76,7 +76,7 @@ export const NodeHandle = ({ node, direction, orientation }: Props) => {
       : Position.Right;
 
   return (
-    <Tooltip title={tooltipNotes.length > 0 ? <>{tooltipNotes}</> : ""}>
+    <Tooltip title={tooltipNotes.length > 0 ? <>{tooltipNotes}</> : ""} disableFocusListener>
       <StyledHandle
         type={type}
         position={position}
