@@ -1,5 +1,4 @@
 import _ from "lodash";
-import { Handle, Position } from "reactflow";
 
 import { useDiagramType } from "../../store/store";
 import { Node, orientations } from "../../utils/diagram";
@@ -11,6 +10,7 @@ import {
   AddNodeButtonGroupParent,
   HoverBridgeDiv,
 } from "./FlowNode.styles";
+import { NodeHandle } from "./NodeHandle";
 
 const convertToNode = (flowNode: NodeProps): Node => {
   return {
@@ -34,7 +34,7 @@ export const FlowNode = (flowNode: NodeProps) => {
     <>
       <HoverBridgeDiv />
 
-      <Handle type="target" position={orientation == "TB" ? Position.Top : Position.Left} />
+      <NodeHandle direction="parent" orientation={orientation} />
       {/* should this use react-flow's NodeToolbar? seems like it'd automatically handle positioning */}
       <AddNodeButtonGroupParent
         fromNodeId={flowNode.id}
@@ -51,7 +51,7 @@ export const FlowNode = (flowNode: NodeProps) => {
         as="child"
         orientation={orientation}
       />
-      <Handle type="source" position={orientation == "TB" ? Position.Bottom : Position.Right} />
+      <NodeHandle direction="child" orientation={orientation} />
     </>
   );
 };
