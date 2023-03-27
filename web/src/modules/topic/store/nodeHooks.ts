@@ -1,4 +1,4 @@
-import { Node, findNode } from "../utils/diagram";
+import { Node, RelationDirection, findNode } from "../utils/diagram";
 import { children, parents } from "../utils/node";
 import { useTopicStoreAfterHydration } from "./store";
 
@@ -69,6 +69,20 @@ export const useCriterionSolutionEdges = (problemNodeId: string, diagramId: stri
       return diagram.edges.filter((edge) => {
         return criteriaIds.includes(edge.source) && solutionIds.includes(edge.target);
       });
+    } catch {
+      return [];
+    }
+  });
+};
+
+export const useNeighbors = (nodeId: string, direction: RelationDirection, diagramId: string) => {
+  return useTopicStoreAfterHydration((state) => {
+    const diagram = state.diagrams[diagramId];
+
+    // wrap in try/catch because findNode will error when this is triggered by a node deletion (zombie child issue)
+    try {
+      const node = findNode(nodeId, diagram);
+      return direction === "parent" ? parents(node, diagram) : children(node, diagram);
     } catch {
       return [];
     }

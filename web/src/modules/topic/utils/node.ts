@@ -32,6 +32,8 @@ export type NodeType =
   | "support"
   | "critique";
 
+export const hideableNodeTypes: NodeType[] = ["criterion", "effect", "solutionComponent"];
+
 export const nodeDecorations: Record<NodeType, NodeDecoration> = {
   problem: {
     title: "Problem",
