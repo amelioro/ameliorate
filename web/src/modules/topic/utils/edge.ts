@@ -45,7 +45,7 @@ export const relations = [
 
 export type Relation = typeof relations[number];
 
-export const claimNodeTypes = ["RootClaim", "Support", "Critique"];
+export const claimNodeTypes: NodeType[] = ["rootClaim", "support", "critique"];
 
 export const getRelation = (
   parent: NodeType,
