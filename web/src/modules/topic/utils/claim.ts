@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-import { ArguableType, Diagram, findArguable } from "./diagram";
+import { ArguableType, Diagram, Edge, findArguable } from "./diagram";
 import { maxCharsPerLine } from "./node";
 
 export const parseClaimDiagramId = (diagramId: string) => {
@@ -15,6 +15,16 @@ export const getRootArguable = (claimDiagramId: string, problemDiagram: Diagram)
   const [parentArguableType, parentArguableId] = parseClaimDiagramId(claimDiagramId);
   const arguable = findArguable(parentArguableId, parentArguableType, problemDiagram);
   return arguable;
+};
+
+// TODO: this should work for arguables. annoying to do without knowing the arguable type though.
+// this will be much easier after adding the child claim diagram pointer to Arguable
+export const hasClaims = (edge: Edge, diagram: Diagram, claimDiagrams: Diagram[]) => {
+  const claimDiagramId = getClaimDiagramId(edge.id, "edge");
+  const claimDiagram = claimDiagrams.find((diagram) => diagram.id === claimDiagramId);
+  if (!claimDiagram) return false;
+
+  return claimDiagram.nodes.length > 1; // one node will be the implicit claim, don't count that
 };
 
 // "parent" meaning the node or edge implies the claim

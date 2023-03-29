@@ -1,6 +1,6 @@
 import { MarkerType } from "reactflow";
 
-import { RelationName, composedRelations } from "./edge";
+import { RelationName, composedRelations, isEdgeImplied } from "./edge";
 import { Orientation, layout } from "./layout";
 import { NodeType } from "./node";
 
@@ -64,6 +64,8 @@ export const buildNode = ({ id, label, score, type, diagramId }: BuildProps): No
 // assumes that we always want to point from child to parent
 export const markerStart = { type: MarkerType.ArrowClosed, width: 30, height: 30 };
 
+// TODO: add pointer to child claim diagram & own diagram
+// this will reduce a ton of extra calculation & param passing
 export interface Edge {
   id: string;
   data: {
@@ -155,14 +157,14 @@ export const filterHiddenComponents = (diagram: Diagram): Diagram => {
   return { ...diagram, nodes: shownNodes, edges: shownEdges };
 };
 
-export const layoutVisibleComponents = (diagram: Diagram) => {
+export const layoutVisibleComponents = (diagram: Diagram, claimDiagrams: Diagram[]) => {
   // filter
   const displayDiagram = filterHiddenComponents(diagram);
 
   // layout only the displayed components
   const { layoutedNodes } = layout(
     displayDiagram.nodes,
-    displayDiagram.edges,
+    displayDiagram.edges.filter((edge) => !isEdgeImplied(edge, displayDiagram, claimDiagrams)), // implied edges shouldn't affect layout
     orientations[diagram.type]
   );
 

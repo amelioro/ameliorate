@@ -11,7 +11,7 @@ import {
 import { NodeType, children, parents } from "../utils/node";
 import { getDiagram } from "./actions";
 import { useTopicStore } from "./store";
-import { getActiveDiagram } from "./utils";
+import { getActiveDiagram, getClaimDiagrams } from "./utils";
 
 export const viewOrCreateClaimDiagram = (arguableId: string, arguableType: ArguableType) => {
   useTopicStore.setState(
@@ -111,7 +111,7 @@ export const toggleShowNeighbors = (
       neighborsToToggle.forEach((neighbor) => (neighbor.data.showing = show));
       /* eslint-enable functional/immutable-data, no-param-reassign */
 
-      const layoutedDiagram = layoutVisibleComponents(problemDiagram); // depends on showing having been updated
+      const layoutedDiagram = layoutVisibleComponents(problemDiagram, getClaimDiagrams(state)); // depends on showing having been updated
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
       problemDiagram.nodes = layoutedDiagram.nodes;
@@ -154,7 +154,7 @@ export const relayout = () => {
     (state) => {
       const activeDiagram = getActiveDiagram(state);
 
-      const layoutedDiagram = layoutVisibleComponents(activeDiagram);
+      const layoutedDiagram = layoutVisibleComponents(activeDiagram, getClaimDiagrams(state));
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
       activeDiagram.nodes = layoutedDiagram.nodes;
