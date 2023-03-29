@@ -1,7 +1,6 @@
 import _ from "lodash";
 
 import { ArguableType, Diagram, Edge, findArguable } from "./diagram";
-import { maxCharsPerLine } from "./node";
 
 export const parseClaimDiagramId = (diagramId: string) => {
   return diagramId.split("-") as [ArguableType, string];
@@ -37,10 +36,7 @@ export const getImplicitLabel = (
     const parentNode = parentArguableDiagram.nodes.find((node) => node.id === parentArguableId);
     if (!parentNode) throw new Error("parent not found");
 
-    const maxLabelLength = maxCharsPerLine * 2 - `""`.length; // hardcoded chars will fit in one line, so label can have the other two lines
-    const truncatedNodeLabel = _.truncate(parentNode.data.label, { length: maxLabelLength });
-
-    return `"${truncatedNodeLabel}" is important`;
+    return `"${parentNode.data.label}" is important`;
   } else {
     const parentEdge = parentArguableDiagram.edges.find((edge) => edge.id === parentArguableId);
     if (!parentEdge) throw new Error("parent not found");
@@ -49,11 +45,6 @@ export const getImplicitLabel = (
     const targetNode = parentArguableDiagram.nodes.find((node) => node.id === parentEdge.target);
     if (!sourceNode || !targetNode) throw new Error("edge nodes not found");
 
-    const maxLabelLength = maxCharsPerLine - `""`.length; // hardcoded chars will fit in one line, so both labels can have their own line
-
-    const truncatedSourceLabel = _.truncate(sourceNode.data.label, { length: maxLabelLength });
-    const truncatedTargetLabel = _.truncate(targetNode.data.label, { length: maxLabelLength });
-
-    return `"${truncatedTargetLabel}" ${parentEdge.label} "${truncatedSourceLabel}"`;
+    return `"${targetNode.data.label}" ${parentEdge.label} "${sourceNode.data.label}"`;
   }
 };
