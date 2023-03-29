@@ -1,6 +1,5 @@
 import { deleteEdge } from "../../../modules/topic/store/createDeleteActions";
-import { problemDiagramId } from "../../../modules/topic/store/store";
-import { Edge } from "../../../modules/topic/utils/diagram";
+import { Edge, problemDiagramId } from "../../../modules/topic/utils/diagram";
 import { CloseOnClickMenuItem } from "./CloseOnClickMenuItem";
 
 export const DeleteEdgeMenuItem = ({ edge }: { edge: Edge }) => {

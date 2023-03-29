@@ -12,6 +12,8 @@ export const orientations: Record<DiagramType, Orientation> = {
   claim: "LR",
 };
 
+export const problemDiagramId = "root";
+
 export interface Diagram {
   id: string;
   nodes: Node[];

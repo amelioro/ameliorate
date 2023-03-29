@@ -1,4 +1,5 @@
-import { TopicStoreState, problemDiagramId } from "./store";
+import { problemDiagramId } from "../utils/diagram";
+import { TopicStoreState } from "./store";
 
 export const getTopicTitle = (state: TopicStoreState) => {
   const rootDiagram = state.diagrams[problemDiagramId];

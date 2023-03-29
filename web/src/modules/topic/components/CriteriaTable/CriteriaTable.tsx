@@ -10,9 +10,8 @@ import MaterialReactTable, {
 import React, { useState } from "react";
 
 import { useCriterionSolutionEdges, useNode, useNodeChildren } from "../../store/nodeHooks";
-import { problemDiagramId } from "../../store/store";
 import { closeTable } from "../../store/viewActions";
-import { Edge, Node } from "../../utils/diagram";
+import { Edge, Node, problemDiagramId } from "../../utils/diagram";
 import { getConnectingEdge } from "../../utils/edge";
 import { EdgeCell } from "../CriteriaTable/EdgeCell";
 import { NodeCell } from "../CriteriaTable/NodeCell";

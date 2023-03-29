@@ -14,12 +14,12 @@ import { useState } from "react";
 
 import { useNodes } from "../../store/nodeHooks";
 import {
-  problemDiagramId,
   useClaimDiagramsWithExplicitClaims,
   useRootTitle,
   useTopicViewId,
 } from "../../store/store";
 import { viewClaimDiagram, viewCriteriaTable, viewProblemDiagram } from "../../store/viewActions";
+import { problemDiagramId } from "../../utils/diagram";
 import {
   NestedListItemButton,
   PositionedDiv,

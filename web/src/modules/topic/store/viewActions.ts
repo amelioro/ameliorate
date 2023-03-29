@@ -6,10 +6,11 @@ import {
   findArguable,
   findNode,
   layoutVisibleComponents,
+  problemDiagramId,
 } from "../utils/diagram";
 import { NodeType, children, parents } from "../utils/node";
 import { getDiagram } from "./actions";
-import { problemDiagramId, useTopicStore } from "./store";
+import { useTopicStore } from "./store";
 import { getActiveDiagram } from "./utils";
 
 export const viewOrCreateClaimDiagram = (arguableId: string, arguableType: ArguableType) => {

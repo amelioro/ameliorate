@@ -6,12 +6,10 @@ import { devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 import { HydrationContext } from "../../../pages/index.page";
-import { Diagram, buildNode, filterHiddenComponents } from "../utils/diagram";
+import { Diagram, buildNode, filterHiddenComponents, problemDiagramId } from "../utils/diagram";
 import { getDiagram } from "./actions";
 import { migrate } from "./migrate";
 import { getTopicTitle } from "./utils";
-
-export const problemDiagramId = "root";
 
 const initialDiagrams: Record<string, Diagram> = {
   [problemDiagramId]: {

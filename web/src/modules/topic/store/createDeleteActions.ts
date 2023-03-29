@@ -8,10 +8,11 @@ import {
   findNode,
   getNodesComposedBy,
   layoutVisibleComponents,
+  problemDiagramId,
 } from "../utils/diagram";
 import { Relation, canCreateEdge, getConnectingEdge, getRelation } from "../utils/edge";
 import { NodeType, edges } from "../utils/node";
-import { TopicStoreState, problemDiagramId, useTopicStore } from "./store";
+import { TopicStoreState, useTopicStore } from "./store";
 import { getActiveDiagram } from "./utils";
 
 const createNode = (state: TopicStoreState, toNodeType: NodeType) => {

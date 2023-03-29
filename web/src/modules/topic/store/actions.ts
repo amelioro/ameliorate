@@ -1,6 +1,13 @@
 import { getClaimDiagramId, parseClaimDiagramId } from "../utils/claim";
-import { ArguableType, Diagram, Score, findArguable, findNode } from "../utils/diagram";
-import { problemDiagramId, useTopicStore } from "./store";
+import {
+  ArguableType,
+  Diagram,
+  Score,
+  findArguable,
+  findNode,
+  problemDiagramId,
+} from "../utils/diagram";
+import { useTopicStore } from "./store";
 import { getActiveDiagram } from "./utils";
 
 export const deselectNodes = () => {
