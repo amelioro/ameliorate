@@ -69,7 +69,6 @@ export interface Edge {
   data: {
     score: Score;
     diagramId: string;
-    showing: boolean;
   };
   label: RelationName;
   markerStart: { type: MarkerType; width: number; height: number };
@@ -83,15 +82,13 @@ export const buildEdge = (
   sourceNodeId: string,
   targetNodeId: string,
   relation: RelationName,
-  diagramId: string,
-  showing?: boolean
+  diagramId: string
 ): Edge => {
   return {
     id: newEdgeId,
     data: {
       score: "-" as Score,
       diagramId: diagramId,
-      showing: showing === undefined ? true : showing,
     },
     label: relation,
     markerStart: markerStart,
@@ -152,7 +149,7 @@ export const filterHiddenComponents = (diagram: Diagram): Diagram => {
   const shownEdges = diagram.edges.filter((edge) => {
     if (!shownNodeIds.includes(edge.source) || !shownNodeIds.includes(edge.target)) return false;
 
-    return edge.data.showing;
+    return true;
   });
 
   return { ...diagram, nodes: shownNodes, edges: shownEdges };

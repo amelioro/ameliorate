@@ -111,9 +111,6 @@ export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) 
   );
 };
 
-/**
- * implied composition edges are hidden by default
- */
 const createEdgesImpliedByComposition = (
   state: TopicStoreState,
   parent: Node,
@@ -127,7 +124,7 @@ const createEdgesImpliedByComposition = (
     const relationForComposed = getRelation(composedNode.type, relation.child, relation.name);
     if (!relationForComposed) return;
 
-    createEdgeAndImpliedEdges(state, composedNode, child, relationForComposed, false);
+    createEdgeAndImpliedEdges(state, composedNode, child, relationForComposed);
   });
 
   const nodesComposedByChild = getNodesComposedBy(child, diagram);
@@ -135,7 +132,7 @@ const createEdgesImpliedByComposition = (
     const relationForComposed = getRelation(relation.parent, composedNode.type, relation.name);
     if (!relationForComposed) return;
 
-    createEdgeAndImpliedEdges(state, parent, composedNode, relationForComposed, false);
+    createEdgeAndImpliedEdges(state, parent, composedNode, relationForComposed);
   });
 };
 
@@ -144,8 +141,7 @@ const createEdgeAndImpliedEdges = (
   state: TopicStoreState,
   parent: Node,
   child: Node,
-  relation: Relation,
-  showing?: boolean
+  relation: Relation
 ) => {
   const diagram = state.diagrams[parent.data.diagramId];
 
@@ -156,7 +152,7 @@ const createEdgeAndImpliedEdges = (
   const newEdgeId = `${state.nextEdgeId++}`;
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  const newEdge = buildEdge(newEdgeId, parent.id, child.id, relation.name, diagram.id, showing);
+  const newEdge = buildEdge(newEdgeId, parent.id, child.id, relation.name, diagram.id);
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   diagram.edges = diagram.edges.concat(newEdge);
