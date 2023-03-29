@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-import { ArguableType, Diagram } from "./diagram";
+import { ArguableType, Diagram, findArguable } from "./diagram";
 import { maxCharsPerLine } from "./node";
 
 export const parseClaimDiagramId = (diagramId: string) => {
@@ -9,6 +9,12 @@ export const parseClaimDiagramId = (diagramId: string) => {
 
 export const getClaimDiagramId = (parentArguableId: string, parentArguableType: ArguableType) => {
   return `${parentArguableType}-${parentArguableId}`;
+};
+
+export const getRootArguable = (claimDiagramId: string, problemDiagram: Diagram) => {
+  const [parentArguableType, parentArguableId] = parseClaimDiagramId(claimDiagramId);
+  const arguable = findArguable(parentArguableId, parentArguableType, problemDiagram);
+  return arguable;
 };
 
 // "parent" meaning the node or edge implies the claim
