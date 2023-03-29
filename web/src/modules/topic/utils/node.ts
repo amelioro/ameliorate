@@ -12,7 +12,6 @@ import {
 import { Diagram, Node } from "./diagram";
 import { componentTypes } from "./edge";
 
-export const maxCharsPerLine = 19; // measured by typing "a"'s in a node textbox
 export const indicatorLength = 20; // px
 
 export type MuiIcon = typeof Extension;

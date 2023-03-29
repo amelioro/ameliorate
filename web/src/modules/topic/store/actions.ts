@@ -1,6 +1,13 @@
-import { getClaimDiagramId, parseClaimDiagramId } from "../utils/claim";
-import { ArguableType, Diagram, Score, findArguable, findNode } from "../utils/diagram";
-import { problemDiagramId, useTopicStore } from "./store";
+import { getClaimDiagramId, getRootArguable } from "../utils/claim";
+import {
+  ArguableType,
+  Diagram,
+  Score,
+  findArguable,
+  findNode,
+  problemDiagramId,
+} from "../utils/diagram";
+import { useTopicStore } from "./store";
 import { getActiveDiagram } from "./utils";
 
 export const deselectNodes = () => {
@@ -41,13 +48,8 @@ export const setScore = (arguableId: string, arguableType: ArguableType, score: 
 
       // update parent arguable's score if this is a RootClaim
       if (arguable.type === "rootClaim") {
-        const [parentArguableType, parentArguableId] = parseClaimDiagramId(activeDiagram.id);
-        const parentArguable = findArguable(
-          parentArguableId,
-          parentArguableType,
-          state.diagrams[problemDiagramId] // assuming we won't support nested root claims, so parent will always be root
-        );
-
+        // assuming we won't support nested root claims, so parent will always be root
+        const parentArguable = getRootArguable(activeDiagram.id, state.diagrams[problemDiagramId]);
         /* eslint-disable functional/immutable-data, no-param-reassign */
         parentArguable.data.score = score;
         /* eslint-enable functional/immutable-data, no-param-reassign */

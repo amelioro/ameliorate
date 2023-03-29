@@ -1,6 +1,7 @@
 import _ from "lodash";
 
-import { Diagram, Edge, Node, RelationDirection, findNode } from "./diagram";
+import { hasClaims } from "./claim";
+import { Diagram, Edge, Node, RelationDirection, findNode, problemDiagramId } from "./diagram";
 import { NodeType, children, components, parents } from "./node";
 
 export type RelationName =
@@ -45,7 +46,7 @@ export const relations = [
 
 export type Relation = typeof relations[number];
 
-export const claimNodeTypes = ["RootClaim", "Support", "Critique"];
+export const claimNodeTypes: NodeType[] = ["rootClaim", "support", "critique"];
 
 export const getRelation = (
   parent: NodeType,
@@ -249,4 +250,11 @@ export const isEdgeImpliedByComposition = (edge: Edge, diagram: Diagram) => {
   });
 
   return impliedThroughChildComponent;
+};
+
+export const isEdgeImplied = (edge: Edge, displayDiagram: Diagram, claimDiagrams: Diagram[]) => {
+  if (displayDiagram.id !== problemDiagramId) return false;
+  if (edge.data.score !== "-" || hasClaims(edge, displayDiagram, claimDiagrams)) return false;
+
+  return isEdgeAShortcut(edge, displayDiagram) || isEdgeImpliedByComposition(edge, displayDiagram);
 };

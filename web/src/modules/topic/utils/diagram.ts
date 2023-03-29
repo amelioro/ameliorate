@@ -1,6 +1,6 @@
 import { MarkerType } from "reactflow";
 
-import { RelationName, composedRelations } from "./edge";
+import { RelationName, composedRelations, isEdgeImplied } from "./edge";
 import { Orientation, layout } from "./layout";
 import { NodeType } from "./node";
 
@@ -11,6 +11,8 @@ export const orientations: Record<DiagramType, Orientation> = {
   problem: "TB",
   claim: "LR",
 };
+
+export const problemDiagramId = "root";
 
 export interface Diagram {
   id: string;
@@ -62,12 +64,13 @@ export const buildNode = ({ id, label, score, type, diagramId }: BuildProps): No
 // assumes that we always want to point from child to parent
 export const markerStart = { type: MarkerType.ArrowClosed, width: 30, height: 30 };
 
+// TODO: add pointer to child claim diagram & own diagram
+// this will reduce a ton of extra calculation & param passing
 export interface Edge {
   id: string;
   data: {
     score: Score;
     diagramId: string;
-    showing: boolean;
   };
   label: RelationName;
   markerStart: { type: MarkerType; width: number; height: number };
@@ -81,15 +84,13 @@ export const buildEdge = (
   sourceNodeId: string,
   targetNodeId: string,
   relation: RelationName,
-  diagramId: string,
-  showing?: boolean
+  diagramId: string
 ): Edge => {
   return {
     id: newEdgeId,
     data: {
       score: "-" as Score,
       diagramId: diagramId,
-      showing: showing === undefined ? true : showing,
     },
     label: relation,
     markerStart: markerStart,
@@ -143,27 +144,38 @@ export const getNodesComposedBy = (node: Node, diagram: Diagram) => {
  * - always allow the user to explicitly show/hide components that can be hidden
  * - feel free to hide components when they're created if they're implied and have not been shown yet
  */
-export const filterHiddenComponents = (diagram: Diagram): Diagram => {
+export const filterHiddenComponents = (
+  diagram: Diagram,
+  claimDiagrams: Diagram[],
+  showImpliedEdges: boolean
+): Diagram => {
   const shownNodes = diagram.nodes.filter((node) => node.data.showing);
   const shownNodeIds = shownNodes.map((node) => node.id);
 
   const shownEdges = diagram.edges.filter((edge) => {
     if (!shownNodeIds.includes(edge.source) || !shownNodeIds.includes(edge.target)) return false;
 
-    return edge.data.showing;
+    return true;
   });
 
-  return { ...diagram, nodes: shownNodes, edges: shownEdges };
+  // edges are implied based on other shown nodes & edges, so filter those before filtering implied edges
+  const shownEdgesAfterImpliedFilter = shownEdges.filter(
+    (edge) =>
+      showImpliedEdges ||
+      !isEdgeImplied(edge, { ...diagram, nodes: shownNodes, edges: shownEdges }, claimDiagrams)
+  );
+
+  return { ...diagram, nodes: shownNodes, edges: shownEdgesAfterImpliedFilter };
 };
 
-export const layoutVisibleComponents = (diagram: Diagram) => {
+export const layoutVisibleComponents = (diagram: Diagram, claimDiagrams: Diagram[]) => {
   // filter
-  const displayDiagram = filterHiddenComponents(diagram);
+  const displayDiagram = filterHiddenComponents(diagram, claimDiagrams, true);
 
   // layout only the displayed components
   const { layoutedNodes } = layout(
     displayDiagram.nodes,
-    displayDiagram.edges,
+    displayDiagram.edges.filter((edge) => !isEdgeImplied(edge, displayDiagram, claimDiagrams)), // implied edges shouldn't affect layout
     orientations[diagram.type]
   );
 

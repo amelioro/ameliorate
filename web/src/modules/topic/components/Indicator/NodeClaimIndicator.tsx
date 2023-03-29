@@ -1,5 +1,4 @@
-import { problemDiagramId } from "../../store/store";
-import { Node } from "../../utils/diagram";
+import { Node, problemDiagramId } from "../../utils/diagram";
 import { ClaimIndicator } from "./ClaimIndicator";
 
 interface Props {

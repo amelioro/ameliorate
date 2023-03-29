@@ -6,11 +6,12 @@ import {
   findArguable,
   findNode,
   layoutVisibleComponents,
+  problemDiagramId,
 } from "../utils/diagram";
 import { NodeType, children, parents } from "../utils/node";
 import { getDiagram } from "./actions";
-import { problemDiagramId, useTopicStore } from "./store";
-import { getActiveDiagram } from "./utils";
+import { useTopicStore } from "./store";
+import { getActiveDiagram, getClaimDiagrams } from "./utils";
 
 export const viewOrCreateClaimDiagram = (arguableId: string, arguableType: ArguableType) => {
   useTopicStore.setState(
@@ -110,7 +111,7 @@ export const toggleShowNeighbors = (
       neighborsToToggle.forEach((neighbor) => (neighbor.data.showing = show));
       /* eslint-enable functional/immutable-data, no-param-reassign */
 
-      const layoutedDiagram = layoutVisibleComponents(problemDiagram); // depends on showing having been updated
+      const layoutedDiagram = layoutVisibleComponents(problemDiagram, getClaimDiagrams(state)); // depends on showing having been updated
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
       problemDiagram.nodes = layoutedDiagram.nodes;
@@ -119,22 +120,6 @@ export const toggleShowNeighbors = (
     },
     false,
     "toggleShowNeighbors"
-  );
-};
-
-export const toggleShowEdges = (edgeIds: string[], show: boolean) => {
-  useTopicStore.setState(
-    (state) => {
-      const problemDiagram = state.diagrams[problemDiagramId]; // assuming we're only show/hiding from problem diagram
-
-      const edges = problemDiagram.edges.filter((edge) => edgeIds.includes(edge.id));
-
-      /* eslint-disable functional/immutable-data, no-param-reassign */
-      edges.forEach((edge) => (edge.data.showing = show));
-      /* eslint-enable functional/immutable-data, no-param-reassign */
-    },
-    false,
-    "toggleShowEdges"
   );
 };
 
@@ -164,12 +149,20 @@ export const viewCriteriaTable = (problemNodeId: string) => {
   );
 };
 
+export const toggleShowImpliedEdges = (show: boolean) => {
+  useTopicStore.setState((state) => {
+    /* eslint-disable functional/immutable-data, no-param-reassign */
+    state.showImpliedEdges = show;
+    /* eslint-enable functional/immutable-data, no-param-reassign */
+  });
+};
+
 export const relayout = () => {
   useTopicStore.setState(
     (state) => {
       const activeDiagram = getActiveDiagram(state);
 
-      const layoutedDiagram = layoutVisibleComponents(activeDiagram);
+      const layoutedDiagram = layoutVisibleComponents(activeDiagram, getClaimDiagrams(state));
 
       /* eslint-disable functional/immutable-data, no-param-reassign */
       activeDiagram.nodes = layoutedDiagram.nodes;

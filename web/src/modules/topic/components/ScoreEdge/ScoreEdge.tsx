@@ -3,11 +3,12 @@ import React from "react";
 import { EdgeLabelRenderer, getBezierPath } from "reactflow";
 
 import { openContextMenu } from "../../../../common/store/contextMenuActions";
+import { useIsImplied } from "../../store/edgeHooks";
 import { Edge, markerStart } from "../../utils/diagram";
 import { RelationName } from "../../utils/edge";
 import { EdgeProps } from "../Diagram/Diagram";
 import { EdgeIndicatorGroup } from "../Indicator/EdgeIndicatorGroup";
-import { StyledDiv } from "./ScoreEdge.styles";
+import { StyledDiv, StyledPath } from "./ScoreEdge.styles";
 
 const convertToEdge = (flowEdge: EdgeProps): Edge => {
   return {
@@ -29,6 +30,9 @@ const convertToEdge = (flowEdge: EdgeProps): Edge => {
 
 // base for custom edge taken from https://reactflow.dev/docs/examples/edges/edge-with-button/
 export const ScoreEdge = (flowEdge: EdgeProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- flowEdge should always have data
+  const isImplied = useIsImplied(flowEdge.id, flowEdge.data!.diagramId);
+
   const [edgePath, labelX, labelY] = getBezierPath({
     sourceX: flowEdge.sourceX,
     sourceY: flowEdge.sourceY,
@@ -42,13 +46,14 @@ export const ScoreEdge = (flowEdge: EdgeProps) => {
 
   return (
     <>
-      <path
+      <StyledPath
         id={flowEdge.id}
         style={flowEdge.style}
         className="react-flow__edge-path"
         d={edgePath}
         markerStart={flowEdge.markerStart}
         markerEnd={flowEdge.markerEnd}
+        isImplied={isImplied}
       />
       {/* see for example usage https://reactflow.dev/docs/api/edges/edge-label-renderer/ */}
       <EdgeLabelRenderer>
@@ -56,6 +61,7 @@ export const ScoreEdge = (flowEdge: EdgeProps) => {
           labelX={labelX}
           labelY={labelY}
           onContextMenu={(event) => openContextMenu(event, { edge })}
+          isImplied={isImplied}
         >
           <Typography variant="body1" margin="0">
             {flowEdge.label}

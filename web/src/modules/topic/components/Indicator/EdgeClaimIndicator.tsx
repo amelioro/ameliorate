@@ -1,5 +1,4 @@
-import { problemDiagramId } from "../../store/store";
-import { Edge } from "../../utils/diagram";
+import { Edge, problemDiagramId } from "../../utils/diagram";
 import { ClaimIndicator } from "./ClaimIndicator";
 
 interface Props {

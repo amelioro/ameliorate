@@ -6,12 +6,10 @@ import { devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 import { HydrationContext } from "../../../pages/index.page";
-import { Diagram, buildNode, filterHiddenComponents } from "../utils/diagram";
+import { Diagram, buildNode, filterHiddenComponents, problemDiagramId } from "../utils/diagram";
 import { getDiagram } from "./actions";
 import { migrate } from "./migrate";
-import { getTopicTitle } from "./utils";
-
-export const problemDiagramId = "root";
+import { getClaimDiagrams, getTopicTitle } from "./utils";
 
 const initialDiagrams: Record<string, Diagram> = {
   [problemDiagramId]: {
@@ -28,6 +26,7 @@ export interface TopicStoreState {
   activeClaimDiagramId: string | null;
   nextNodeId: number;
   nextEdgeId: number;
+  showImpliedEdges: boolean;
 }
 
 export const initialState: TopicStoreState = {
@@ -36,6 +35,7 @@ export const initialState: TopicStoreState = {
   activeClaimDiagramId: null,
   nextNodeId: 1, // 0 is taken by the initial node
   nextEdgeId: 0,
+  showImpliedEdges: true,
 };
 
 // create atomic selectors for usage outside of store/ dir
@@ -44,7 +44,7 @@ export const useTopicStore = create<TopicStoreState>()(
   temporal(
     persist(immer(devtools(() => initialState)), {
       name: "diagram-storage", // should probably be "topic-storage" but don't know how to migrate
-      version: 8,
+      version: 10,
       migrate: migrate,
     }),
     {
@@ -84,7 +84,13 @@ export const useDiagram = (diagramId: string) => {
 };
 
 export const useFilteredDiagram = (diagramId: string) => {
-  return useTopicStoreAfterHydration((state) => filterHiddenComponents(state.diagrams[diagramId]));
+  return useTopicStoreAfterHydration((state) =>
+    filterHiddenComponents(
+      state.diagrams[diagramId],
+      getClaimDiagrams(state),
+      state.showImpliedEdges
+    )
+  );
 };
 
 export const useDiagramType = (diagramId: string) => {
@@ -128,4 +134,8 @@ export const useClaimDiagramsWithExplicitClaims = () => {
       .filter(([id, diagram]) => id !== problemDiagramId && diagram.nodes.length > 1)
       .map(([id, diagram]) => [id, diagram.nodes[0].data.label])
   );
+};
+
+export const useShowImpliedEdges = () => {
+  return useTopicStoreAfterHydration((state) => state.showImpliedEdges);
 };

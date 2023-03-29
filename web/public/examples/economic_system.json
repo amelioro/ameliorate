@@ -11,79 +11,12 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 1050, "y": 0 },
+          "position": { "x": 1585, "y": 0 },
           "selected": false,
           "type": "problem"
         },
         {
           "id": "1",
-          "data": {
-            "label": "\"True\" Capitalism",
-            "score": "-",
-            "diagramId": "root",
-            "showing": true
-          },
-          "position": { "x": 1385, "y": 976 },
-          "selected": false,
-          "type": "solution"
-        },
-        {
-          "id": "2",
-          "data": { "label": "Socialism", "score": "-", "diagramId": "root", "showing": true },
-          "position": { "x": 175, "y": 732 },
-          "selected": false,
-          "type": "solution"
-        },
-        {
-          "id": "7",
-          "data": {
-            "label": "Discourages unsustainable lifestyles",
-            "score": "8",
-            "diagramId": "root",
-            "showing": true
-          },
-          "position": { "x": 860, "y": 244 },
-          "selected": false,
-          "type": "criterion"
-        },
-        {
-          "id": "19",
-          "data": {
-            "label": "Encourages quality of production",
-            "score": "-",
-            "diagramId": "root",
-            "showing": true
-          },
-          "position": { "x": 430, "y": 244 },
-          "selected": false,
-          "type": "criterion"
-        },
-        {
-          "id": "23",
-          "data": {
-            "label": "Power in the right hands",
-            "score": "-",
-            "diagramId": "root",
-            "showing": true
-          },
-          "position": { "x": 1640, "y": 244 },
-          "selected": false,
-          "type": "criterion"
-        },
-        {
-          "id": "33",
-          "data": {
-            "label": "Supports those who cannot support themselves",
-            "score": "1",
-            "diagramId": "root",
-            "showing": true
-          },
-          "position": { "x": 1210, "y": 244 },
-          "selected": false,
-          "type": "criterion"
-        },
-        {
-          "id": "34",
           "data": {
             "label": "Does not discriminate based on birth",
             "score": "-",
@@ -95,62 +28,129 @@
           "type": "criterion"
         },
         {
-          "id": "72",
+          "id": "2",
           "data": {
-            "label": "No social support",
+            "label": "Encourages quality of production",
             "score": "-",
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 955, "y": 732 },
+          "position": { "x": 427.5, "y": 244 },
           "selected": false,
-          "type": "solutionComponent"
+          "type": "criterion"
         },
         {
-          "id": "73",
+          "id": "3",
           "data": {
-            "label": "Everything privately owned",
+            "label": "Discourages unsustainable lifestyles",
+            "score": "8",
+            "diagramId": "root",
+            "showing": true
+          },
+          "position": { "x": 1505, "y": 244 },
+          "selected": false,
+          "type": "criterion"
+        },
+        {
+          "id": "4",
+          "data": {
+            "label": "Supports those who cannot support themselves",
+            "score": "1",
+            "diagramId": "root",
+            "showing": true
+          },
+          "position": { "x": 2275, "y": 244 },
+          "selected": false,
+          "type": "criterion"
+        },
+        {
+          "id": "5",
+          "data": {
+            "label": "Power in the right hands",
             "score": "-",
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 1560, "y": 488 },
+          "position": { "x": 2672.5, "y": 488 },
           "selected": false,
-          "type": "solutionComponent"
+          "type": "criterion"
         },
         {
-          "id": "76",
+          "id": "6",
+          "data": { "label": "Socialism", "score": "-", "diagramId": "root", "showing": true },
+          "position": { "x": 1122.5, "y": 732 },
+          "selected": false,
+          "type": "solution"
+        },
+        {
+          "id": "7",
+          "data": {
+            "label": "\"True\" Capitalism",
+            "score": "-",
+            "diagramId": "root",
+            "showing": true
+          },
+          "position": { "x": 1570, "y": 976 },
+          "selected": false,
+          "type": "solution"
+        },
+        {
+          "id": "8",
           "data": {
             "label": "Some private ownership",
             "score": "-",
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 175, "y": 488 },
+          "position": { "x": 530, "y": 488 },
           "selected": false,
           "type": "solutionComponent"
         },
         {
-          "id": "77",
+          "id": "9",
           "data": {
             "label": "Universal Basic Income",
             "score": "-",
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 525, "y": 488 },
+          "position": { "x": 880, "y": 488 },
           "selected": false,
           "type": "solutionComponent"
         },
         {
-          "id": "79",
+          "id": "10",
+          "data": {
+            "label": "Everything privately owned",
+            "score": "-",
+            "diagramId": "root",
+            "showing": true
+          },
+          "position": { "x": 1582.5, "y": 732 },
+          "selected": false,
+          "type": "solutionComponent"
+        },
+        {
+          "id": "11",
+          "data": {
+            "label": "No social support",
+            "score": "-",
+            "diagramId": "root",
+            "showing": true
+          },
+          "position": { "x": 2162.5, "y": 732 },
+          "selected": false,
+          "type": "solutionComponent"
+        },
+        {
+          "id": "12",
           "data": {
             "label": "Unsustainables die off",
             "score": "9",
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 955, "y": 488 },
+          "position": { "x": 2162.5, "y": 488 },
           "selected": false,
           "type": "effect"
         }
@@ -158,8 +158,8 @@
       "edges": [
         {
           "id": "0",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
-          "label": "solves",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "criterion for",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
           "target": "1",
@@ -167,369 +167,409 @@
         },
         {
           "id": "1",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
-          "label": "solves",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "criterion for",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
           "target": "2",
           "type": "ScoreEdge"
         },
         {
-          "id": "7",
-          "data": { "score": "9", "diagramId": "root", "showing": true },
-          "label": "embodies",
+          "id": "2",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "criterion for",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "7",
-          "target": "1",
+          "source": "0",
+          "target": "3",
           "type": "ScoreEdge"
         },
         {
-          "id": "8",
-          "data": { "score": "1", "diagramId": "root", "showing": true },
-          "label": "embodies",
+          "id": "3",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "criterion for",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "7",
-          "target": "2",
+          "source": "0",
+          "target": "4",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "4",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "criterion for",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "0",
+          "target": "5",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "5",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "solves",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "0",
+          "target": "6",
           "type": "ScoreEdge"
         },
         {
           "id": "6",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
-          "label": "criterion for",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "1",
+          "target": "6",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "7",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "2",
+          "target": "6",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "8",
+          "data": { "score": "1", "diagramId": "root" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "3",
+          "target": "6",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "9",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "4",
+          "target": "6",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "10",
+          "data": { "score": "3", "diagramId": "root" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "5",
+          "target": "6",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "11",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "solves",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
           "target": "7",
           "type": "ScoreEdge"
         },
         {
-          "id": "16",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
+          "id": "12",
+          "data": { "score": "-", "diagramId": "root" },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "19",
-          "target": "1",
+          "source": "1",
+          "target": "7",
           "type": "ScoreEdge"
         },
         {
-          "id": "17",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
+          "id": "13",
+          "data": { "score": "-", "diagramId": "root" },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "19",
-          "target": "2",
+          "source": "2",
+          "target": "7",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "14",
+          "data": { "score": "9", "diagramId": "root" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "3",
+          "target": "7",
           "type": "ScoreEdge"
         },
         {
           "id": "15",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
-          "label": "criterion for",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "0",
-          "target": "19",
+          "source": "4",
+          "target": "7",
           "type": "ScoreEdge"
         },
         {
-          "id": "21",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
+          "id": "16",
+          "data": { "score": "-", "diagramId": "root" },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "23",
-          "target": "1",
+          "source": "5",
+          "target": "7",
           "type": "ScoreEdge"
         },
         {
-          "id": "22",
-          "data": { "score": "3", "diagramId": "root", "showing": true },
-          "label": "embodies",
+          "id": "17",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "has",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "23",
-          "target": "2",
+          "source": "8",
+          "target": "6",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "18",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "has",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "9",
+          "target": "6",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "19",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "has",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "10",
+          "target": "7",
           "type": "ScoreEdge"
         },
         {
           "id": "20",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
-          "label": "criterion for",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "has",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "0",
-          "target": "23",
+          "source": "11",
+          "target": "7",
           "type": "ScoreEdge"
         },
         {
-          "id": "30",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
+          "id": "21",
+          "data": { "score": "-", "diagramId": "root" },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "33",
-          "target": "1",
+          "source": "2",
+          "target": "8",
           "type": "ScoreEdge"
         },
         {
-          "id": "31",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
+          "id": "22",
+          "data": { "score": "-", "diagramId": "root" },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "33",
-          "target": "2",
+          "source": "3",
+          "target": "9",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "23",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "1",
+          "target": "9",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "24",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "4",
+          "target": "11",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "25",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "3",
+          "target": "11",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "26",
+          "data": { "score": "8", "diagramId": "root" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "2",
+          "target": "10",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "27",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "embodies",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "5",
+          "target": "10",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "28",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "creates",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "12",
+          "target": "11",
           "type": "ScoreEdge"
         },
         {
           "id": "29",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
-          "label": "criterion for",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "0",
-          "target": "33",
-          "type": "ScoreEdge"
-        },
-        {
-          "id": "33",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
-          "label": "embodies",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "34",
-          "target": "1",
-          "type": "ScoreEdge"
-        },
-        {
-          "id": "34",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
-          "label": "embodies",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "34",
-          "target": "2",
-          "type": "ScoreEdge"
-        },
-        {
-          "id": "32",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
-          "label": "criterion for",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "0",
-          "target": "34",
-          "type": "ScoreEdge"
-        },
-        {
-          "id": "87",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
-          "label": "has",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "72",
-          "target": "1",
-          "type": "ScoreEdge"
-        },
-        {
-          "id": "88",
-          "data": { "score": "1", "diagramId": "root", "showing": true },
-          "label": "embodies",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "33",
-          "target": "72",
-          "type": "ScoreEdge"
-        },
-        {
-          "id": "89",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
-          "label": "solves",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "0",
-          "target": "72",
-          "type": "ScoreEdge"
-        },
-        {
-          "id": "90",
-          "data": { "score": "9", "diagramId": "root", "showing": true },
-          "label": "embodies",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "7",
-          "target": "72",
-          "type": "ScoreEdge"
-        },
-        {
-          "id": "91",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
-          "label": "has",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "73",
-          "target": "1",
-          "type": "ScoreEdge"
-        },
-        {
-          "id": "92",
-          "data": { "score": "8", "diagramId": "root", "showing": true },
-          "label": "embodies",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "19",
-          "target": "73",
-          "type": "ScoreEdge"
-        },
-        {
-          "id": "93",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
-          "label": "solves",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "0",
-          "target": "73",
-          "type": "ScoreEdge"
-        },
-        {
-          "id": "94",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
-          "label": "embodies",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "23",
-          "target": "73",
-          "type": "ScoreEdge"
-        },
-        {
-          "id": "95",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
-          "label": "has",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "76",
-          "target": "2",
-          "type": "ScoreEdge"
-        },
-        {
-          "id": "96",
-          "data": { "score": "7", "diagramId": "root", "showing": true },
-          "label": "embodies",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "19",
-          "target": "76",
-          "type": "ScoreEdge"
-        },
-        {
-          "id": "97",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
-          "label": "solves",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "0",
-          "target": "76",
-          "type": "ScoreEdge"
-        },
-        {
-          "id": "98",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
-          "label": "has",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "77",
-          "target": "2",
-          "type": "ScoreEdge"
-        },
-        {
-          "id": "99",
-          "data": { "score": "7", "diagramId": "root", "showing": true },
-          "label": "embodies",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "34",
-          "target": "77",
-          "type": "ScoreEdge"
-        },
-        {
-          "id": "100",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
-          "label": "solves",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "0",
-          "target": "77",
-          "type": "ScoreEdge"
-        },
-        {
-          "id": "104",
-          "data": { "score": "1", "diagramId": "root", "showing": true },
-          "label": "embodies",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "7",
-          "target": "77",
-          "type": "ScoreEdge"
-        },
-        {
-          "id": "105",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
+          "data": { "score": "-", "diagramId": "root" },
           "label": "creates",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "79",
-          "target": "72",
+          "source": "12",
+          "target": "7",
           "type": "ScoreEdge"
         },
         {
-          "id": "106",
-          "data": { "score": "1", "diagramId": "root", "showing": true },
+          "id": "30",
+          "data": { "score": "9", "diagramId": "root" },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "33",
-          "target": "79",
+          "source": "3",
+          "target": "12",
           "type": "ScoreEdge"
         },
         {
-          "id": "107",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
-          "label": "solves",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "0",
-          "target": "79",
-          "type": "ScoreEdge"
-        },
-        {
-          "id": "108",
-          "data": { "score": "9", "diagramId": "root", "showing": true },
+          "id": "31",
+          "data": { "score": "1", "diagramId": "root" },
           "label": "embodies",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "7",
-          "target": "79",
+          "source": "4",
+          "target": "12",
           "type": "ScoreEdge"
         }
       ],
       "type": "problem"
     },
-    "node-7": {
-      "id": "node-7",
+    "edge-30": {
+      "id": "edge-30",
       "nodes": [
         {
-          "id": "8",
+          "id": "14",
           "data": {
-            "label": "\"Encourages unsustainable lifestyles\" is important",
-            "score": "8",
-            "diagramId": "node-7",
-            "showing": true
-          },
-          "position": { "x": 0, "y": 0 },
-          "selected": false,
-          "type": "rootClaim"
-        }
-      ],
-      "edges": [],
-      "type": "claim"
-    },
-    "edge-6": {
-      "id": "edge-6",
-      "nodes": [
-        {
-          "id": "9",
-          "data": {
-            "label": "\"Discourages un...\" criterion for \"Economic system\"",
-            "score": "-",
-            "diagramId": "edge-6",
-            "showing": true
-          },
-          "position": { "x": 0, "y": 0 },
-          "selected": false,
-          "type": "rootClaim"
-        }
-      ],
-      "edges": [],
-      "type": "claim"
-    },
-    "edge-7": {
-      "id": "edge-7",
-      "nodes": [
-        {
-          "id": "11",
-          "data": {
-            "label": "\"\"True\" Capitalism\" embodies \"Discourages un...\"",
+            "label": "\"Unsustainables die off\" embodies \"Discourages unsustainable lifestyles\"",
             "score": "9",
-            "diagramId": "edge-7",
+            "diagramId": "edge-30",
+            "showing": true
+          },
+          "position": { "x": 0, "y": 0 },
+          "selected": false,
+          "type": "rootClaim"
+        }
+      ],
+      "edges": [],
+      "type": "claim"
+    },
+    "edge-26": {
+      "id": "edge-26",
+      "nodes": [
+        {
+          "id": "15",
+          "data": {
+            "label": "\"Everything privately owned\" embodies \"Encourages quality of production\"",
+            "score": "8",
+            "diagramId": "edge-26",
+            "showing": true
+          },
+          "position": { "x": 0, "y": 0 },
+          "selected": false,
+          "type": "rootClaim"
+        }
+      ],
+      "edges": [],
+      "type": "claim"
+    },
+    "edge-22": {
+      "id": "edge-22",
+      "nodes": [
+        {
+          "id": "16",
+          "data": {
+            "label": "\"Universal Basic Income\" embodies \"Discourages unsustainable lifestyles\"",
+            "score": "-",
+            "diagramId": "edge-22",
+            "showing": true
+          },
+          "position": { "x": 0, "y": 0 },
+          "selected": false,
+          "type": "rootClaim"
+        }
+      ],
+      "edges": [],
+      "type": "claim"
+    },
+    "edge-27": {
+      "id": "edge-27",
+      "nodes": [
+        {
+          "id": "17",
+          "data": {
+            "label": "\"Everything privately owned\" embodies \"Power in the right hands\"",
+            "score": "-",
+            "diagramId": "edge-27",
+            "showing": true
+          },
+          "position": { "x": 0, "y": 0 },
+          "selected": false,
+          "type": "rootClaim"
+        }
+      ],
+      "edges": [],
+      "type": "claim"
+    },
+    "edge-31": {
+      "id": "edge-31",
+      "nodes": [
+        {
+          "id": "18",
+          "data": {
+            "label": "\"Unsustainables die off\" embodies \"Supports those who cannot support themselves\"",
+            "score": "1",
+            "diagramId": "edge-31",
+            "showing": true
+          },
+          "position": { "x": 0, "y": 0 },
+          "selected": false,
+          "type": "rootClaim"
+        }
+      ],
+      "edges": [],
+      "type": "claim"
+    },
+    "node-10": {
+      "id": "node-10",
+      "nodes": [
+        {
+          "id": "19",
+          "data": {
+            "label": "\"Everything privately owned\" is important",
+            "score": "-",
+            "diagramId": "node-10",
+            "showing": true
+          },
+          "position": { "x": 0, "y": 0 },
+          "selected": false,
+          "type": "rootClaim"
+        }
+      ],
+      "edges": [],
+      "type": "claim"
+    },
+    "edge-10": {
+      "id": "edge-10",
+      "nodes": [
+        {
+          "id": "20",
+          "data": {
+            "label": "\"Socialism\" embodies \"Power in the right hands\"",
+            "score": "3",
+            "diagramId": "edge-10",
             "showing": true
           },
           "position": { "x": 0, "y": 70 },
@@ -539,9 +579,195 @@
         {
           "id": "44",
           "data": {
+            "label": "Decides for others without self consequence",
+            "score": "-",
+            "diagramId": "edge-10",
+            "showing": true
+          },
+          "position": { "x": 560, "y": 0 },
+          "selected": false,
+          "type": "critique"
+        },
+        {
+          "id": "45",
+          "data": {
+            "label": "No system to exclude bad deciders",
+            "score": "-",
+            "diagramId": "edge-10",
+            "showing": true
+          },
+          "position": { "x": 560, "y": 140 },
+          "selected": false,
+          "type": "critique"
+        }
+      ],
+      "edges": [
+        {
+          "id": "48",
+          "data": { "score": "-", "diagramId": "edge-10" },
+          "label": "critiques",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "20",
+          "target": "44",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "49",
+          "data": { "score": "-", "diagramId": "edge-10" },
+          "label": "critiques",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "20",
+          "target": "45",
+          "type": "ScoreEdge"
+        }
+      ],
+      "type": "claim"
+    },
+    "node-4": {
+      "id": "node-4",
+      "nodes": [
+        {
+          "id": "21",
+          "data": {
+            "label": "\"Supports those who cannot support themselves\" is important",
+            "score": "1",
+            "diagramId": "node-4",
+            "showing": true
+          },
+          "position": { "x": 0, "y": 70 },
+          "selected": false,
+          "type": "rootClaim"
+        },
+        {
+          "id": "22",
+          "data": {
+            "label": "Genetics correlate to success",
+            "score": "-",
+            "diagramId": "node-4",
+            "showing": true
+          },
+          "position": { "x": 560, "y": 0 },
+          "selected": false,
+          "type": "critique"
+        },
+        {
+          "id": "23",
+          "data": {
+            "label": "Dependents will breed more dependents",
+            "score": "-",
+            "diagramId": "node-4",
+            "showing": true
+          },
+          "position": { "x": 560, "y": 140 },
+          "selected": false,
+          "type": "critique"
+        }
+      ],
+      "edges": [
+        {
+          "id": "32",
+          "data": { "score": "-", "diagramId": "node-4" },
+          "label": "critiques",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "21",
+          "target": "22",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "33",
+          "data": { "score": "-", "diagramId": "node-4" },
+          "label": "critiques",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "21",
+          "target": "23",
+          "type": "ScoreEdge"
+        }
+      ],
+      "type": "claim"
+    },
+    "edge-16": {
+      "id": "edge-16",
+      "nodes": [
+        {
+          "id": "24",
+          "data": {
+            "label": "\"\"True\" Capitalism\" embodies \"Power in the right hands\"",
+            "score": "-",
+            "diagramId": "edge-16",
+            "showing": true
+          },
+          "position": { "x": 0, "y": 0 },
+          "selected": false,
+          "type": "rootClaim"
+        },
+        {
+          "id": "25",
+          "data": {
+            "label": "Wealthy people are the best decision makers",
+            "score": "-",
+            "diagramId": "edge-16",
+            "showing": true
+          },
+          "position": { "x": 560, "y": 0 },
+          "selected": false,
+          "type": "support"
+        },
+        {
+          "id": "26",
+          "data": {
+            "label": "Capitalist wealth implies they knew what people wanted",
+            "score": "-",
+            "diagramId": "edge-16",
+            "showing": true
+          },
+          "position": { "x": 1120, "y": 0 },
+          "selected": false,
+          "type": "support"
+        }
+      ],
+      "edges": [
+        {
+          "id": "34",
+          "data": { "score": "-", "diagramId": "edge-16" },
+          "label": "supports",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "24",
+          "target": "25",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "35",
+          "data": { "score": "-", "diagramId": "edge-16" },
+          "label": "supports",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "25",
+          "target": "26",
+          "type": "ScoreEdge"
+        }
+      ],
+      "type": "claim"
+    },
+    "edge-14": {
+      "id": "edge-14",
+      "nodes": [
+        {
+          "id": "27",
+          "data": {
+            "label": "\"\"True\" Capitalism\" embodies \"Discourages unsustainable lifestyles\"",
+            "score": "9",
+            "diagramId": "edge-14",
+            "showing": true
+          },
+          "position": { "x": 0, "y": 70 },
+          "selected": false,
+          "type": "rootClaim"
+        },
+        {
+          "id": "28",
+          "data": {
             "label": "Gain from things not tied to work",
             "score": "-",
-            "diagramId": "edge-7",
+            "diagramId": "edge-14",
             "showing": true
           },
           "position": { "x": 560, "y": 70 },
@@ -549,15 +775,15 @@
           "type": "critique"
         },
         {
-          "id": "45",
-          "data": { "label": "Inheritance", "score": "-", "diagramId": "edge-7", "showing": true },
+          "id": "29",
+          "data": { "label": "Inheritance", "score": "-", "diagramId": "edge-14", "showing": true },
           "position": { "x": 1120, "y": 0 },
           "selected": false,
           "type": "support"
         },
         {
-          "id": "46",
-          "data": { "label": "Stock", "score": "-", "diagramId": "edge-7", "showing": true },
+          "id": "30",
+          "data": { "label": "Stock", "score": "-", "diagramId": "edge-14", "showing": true },
           "position": { "x": 1120, "y": 140 },
           "selected": false,
           "type": "support"
@@ -565,30 +791,133 @@
       ],
       "edges": [
         {
-          "id": "41",
-          "data": { "score": "-", "diagramId": "edge-7", "showing": true },
+          "id": "36",
+          "data": { "score": "-", "diagramId": "edge-14" },
           "label": "critiques",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "11",
-          "target": "44",
+          "source": "27",
+          "target": "28",
           "type": "ScoreEdge"
         },
         {
-          "id": "42",
-          "data": { "score": "-", "diagramId": "edge-7", "showing": true },
+          "id": "37",
+          "data": { "score": "-", "diagramId": "edge-14" },
           "label": "supports",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "44",
-          "target": "45",
+          "source": "28",
+          "target": "29",
           "type": "ScoreEdge"
         },
         {
-          "id": "43",
-          "data": { "score": "-", "diagramId": "edge-7", "showing": true },
+          "id": "38",
+          "data": { "score": "-", "diagramId": "edge-14" },
           "label": "supports",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "44",
-          "target": "46",
+          "source": "28",
+          "target": "30",
+          "type": "ScoreEdge"
+        }
+      ],
+      "type": "claim"
+    },
+    "edge-12": {
+      "id": "edge-12",
+      "nodes": [
+        {
+          "id": "31",
+          "data": {
+            "label": "\"\"True\" Capitalism\" embodies \"Does not discriminate based on birth\"",
+            "score": "-",
+            "diagramId": "edge-12",
+            "showing": true
+          },
+          "position": { "x": 0, "y": 0 },
+          "selected": false,
+          "type": "rootClaim"
+        },
+        {
+          "id": "32",
+          "data": {
+            "label": "Born into wealth gives people a better chance",
+            "score": "-",
+            "diagramId": "edge-12",
+            "showing": true
+          },
+          "position": { "x": 560, "y": 0 },
+          "selected": false,
+          "type": "critique"
+        }
+      ],
+      "edges": [
+        {
+          "id": "39",
+          "data": { "score": "-", "diagramId": "edge-12" },
+          "label": "critiques",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "31",
+          "target": "32",
+          "type": "ScoreEdge"
+        }
+      ],
+      "type": "claim"
+    },
+    "edge-13": {
+      "id": "edge-13",
+      "nodes": [
+        {
+          "id": "33",
+          "data": {
+            "label": "\"\"True\" Capitalism\" embodies \"Encourages quality of production\"",
+            "score": "-",
+            "diagramId": "edge-13",
+            "showing": true
+          },
+          "position": { "x": 0, "y": 70 },
+          "selected": false,
+          "type": "rootClaim"
+        },
+        {
+          "id": "34",
+          "data": {
+            "label": "Companies must compete",
+            "score": "-",
+            "diagramId": "edge-13",
+            "showing": true
+          },
+          "position": { "x": 560, "y": 0 },
+          "selected": false,
+          "type": "support"
+        },
+        {
+          "id": "35",
+          "data": {
+            "label": "Innovation is rewarded",
+            "score": "-",
+            "diagramId": "edge-13",
+            "showing": true
+          },
+          "position": { "x": 560, "y": 140 },
+          "selected": false,
+          "type": "support"
+        }
+      ],
+      "edges": [
+        {
+          "id": "40",
+          "data": { "score": "-", "diagramId": "edge-13" },
+          "label": "supports",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "33",
+          "target": "34",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "41",
+          "data": { "score": "-", "diagramId": "edge-13" },
+          "label": "supports",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "33",
+          "target": "35",
           "type": "ScoreEdge"
         }
       ],
@@ -598,9 +927,9 @@
       "id": "edge-8",
       "nodes": [
         {
-          "id": "13",
+          "id": "36",
           "data": {
-            "label": "\"Socialism\" embodies \"Discourages un...\"",
+            "label": "\"Socialism\" embodies \"Discourages unsustainable lifestyles\"",
             "score": "1",
             "diagramId": "edge-8",
             "showing": true
@@ -610,7 +939,7 @@
           "type": "rootClaim"
         },
         {
-          "id": "14",
+          "id": "37",
           "data": {
             "label": "Social welfare",
             "score": "-",
@@ -622,7 +951,7 @@
           "type": "critique"
         },
         {
-          "id": "17",
+          "id": "38",
           "data": {
             "label": "Public schools teach counter-productive things",
             "score": "-",
@@ -634,7 +963,7 @@
           "type": "critique"
         },
         {
-          "id": "18",
+          "id": "39",
           "data": {
             "label": "Anti-reproduction sentiments",
             "score": "-",
@@ -648,30 +977,92 @@
       ],
       "edges": [
         {
-          "id": "11",
-          "data": { "score": "-", "diagramId": "edge-8", "showing": true },
+          "id": "42",
+          "data": { "score": "-", "diagramId": "edge-8" },
           "label": "critiques",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "13",
-          "target": "14",
+          "source": "36",
+          "target": "37",
           "type": "ScoreEdge"
         },
         {
-          "id": "13",
-          "data": { "score": "-", "diagramId": "edge-8", "showing": true },
+          "id": "43",
+          "data": { "score": "-", "diagramId": "edge-8" },
           "label": "critiques",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "13",
-          "target": "17",
+          "source": "36",
+          "target": "38",
           "type": "ScoreEdge"
         },
         {
-          "id": "14",
-          "data": { "score": "-", "diagramId": "edge-8", "showing": true },
+          "id": "44",
+          "data": { "score": "-", "diagramId": "edge-8" },
           "label": "supports",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "17",
-          "target": "18",
+          "source": "38",
+          "target": "39",
+          "type": "ScoreEdge"
+        }
+      ],
+      "type": "claim"
+    },
+    "edge-7": {
+      "id": "edge-7",
+      "nodes": [
+        {
+          "id": "40",
+          "data": {
+            "label": "\"Socialism\" embodies \"Encourages quality of production\"",
+            "score": "-",
+            "diagramId": "edge-7",
+            "showing": true
+          },
+          "position": { "x": 0, "y": 0 },
+          "selected": false,
+          "type": "rootClaim"
+        },
+        {
+          "id": "41",
+          "data": {
+            "label": "Can offer capped incentives",
+            "score": "-",
+            "diagramId": "edge-7",
+            "showing": true
+          },
+          "position": { "x": 560, "y": 0 },
+          "selected": false,
+          "type": "support"
+        },
+        {
+          "id": "42",
+          "data": {
+            "label": "Capping prevents meritocracy",
+            "score": "-",
+            "diagramId": "edge-7",
+            "showing": true
+          },
+          "position": { "x": 1120, "y": 0 },
+          "selected": false,
+          "type": "critique"
+        }
+      ],
+      "edges": [
+        {
+          "id": "45",
+          "data": { "score": "-", "diagramId": "edge-7" },
+          "label": "supports",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "40",
+          "target": "41",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "46",
+          "data": { "score": "-", "diagramId": "edge-7" },
+          "label": "critiques",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "41",
+          "target": "42",
           "type": "ScoreEdge"
         }
       ],
@@ -681,276 +1072,11 @@
       "id": "node-1",
       "nodes": [
         {
-          "id": "15",
-          "data": {
-            "label": "\"\"True\" Capitalism\" is important",
-            "score": "-",
-            "diagramId": "node-1",
-            "showing": true
-          },
-          "position": { "x": 0, "y": 0 },
-          "selected": false,
-          "type": "rootClaim"
-        }
-      ],
-      "edges": [],
-      "type": "claim"
-    },
-    "edge-16": {
-      "id": "edge-16",
-      "nodes": [
-        {
-          "id": "20",
-          "data": {
-            "label": "\"\"True\" Capitalism\" embodies \"Encourages qua...\"",
-            "score": "-",
-            "diagramId": "edge-16",
-            "showing": true
-          },
-          "position": { "x": 0, "y": 70 },
-          "selected": false,
-          "type": "rootClaim"
-        },
-        {
-          "id": "21",
-          "data": {
-            "label": "Companies must compete",
-            "score": "-",
-            "diagramId": "edge-16",
-            "showing": true
-          },
-          "position": { "x": 560, "y": 0 },
-          "selected": false,
-          "type": "support"
-        },
-        {
-          "id": "30",
-          "data": {
-            "label": "Innovation is rewarded",
-            "score": "-",
-            "diagramId": "edge-16",
-            "showing": true
-          },
-          "position": { "x": 560, "y": 140 },
-          "selected": false,
-          "type": "support"
-        }
-      ],
-      "edges": [
-        {
-          "id": "18",
-          "data": { "score": "-", "diagramId": "edge-16", "showing": true },
-          "label": "supports",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "20",
-          "target": "21",
-          "type": "ScoreEdge"
-        },
-        {
-          "id": "27",
-          "data": { "score": "-", "diagramId": "edge-16", "showing": true },
-          "label": "supports",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "20",
-          "target": "30",
-          "type": "ScoreEdge"
-        }
-      ],
-      "type": "claim"
-    },
-    "edge-22": {
-      "id": "edge-22",
-      "nodes": [
-        {
-          "id": "24",
-          "data": {
-            "label": "\"Socialism\" embodies \"Power in the r...\"",
-            "score": "3",
-            "diagramId": "edge-22",
-            "showing": true
-          },
-          "position": { "x": 0, "y": 70 },
-          "selected": false,
-          "type": "rootClaim"
-        },
-        {
-          "id": "25",
-          "data": {
-            "label": "Decides for others without self consequence",
-            "score": "-",
-            "diagramId": "edge-22",
-            "showing": true
-          },
-          "position": { "x": 560, "y": 0 },
-          "selected": false,
-          "type": "critique"
-        },
-        {
-          "id": "29",
-          "data": {
-            "label": "No system to exclude bad deciders",
-            "score": "-",
-            "diagramId": "edge-22",
-            "showing": true
-          },
-          "position": { "x": 560, "y": 140 },
-          "selected": false,
-          "type": "critique"
-        }
-      ],
-      "edges": [
-        {
-          "id": "23",
-          "data": { "score": "-", "diagramId": "edge-22", "showing": true },
-          "label": "critiques",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "24",
-          "target": "25",
-          "type": "ScoreEdge"
-        },
-        {
-          "id": "26",
-          "data": { "score": "-", "diagramId": "edge-22", "showing": true },
-          "label": "critiques",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "24",
-          "target": "29",
-          "type": "ScoreEdge"
-        }
-      ],
-      "type": "claim"
-    },
-    "edge-21": {
-      "id": "edge-21",
-      "nodes": [
-        {
-          "id": "26",
-          "data": {
-            "label": "\"\"True\" Capitalism\" embodies \"Power in the r...\"",
-            "score": "-",
-            "diagramId": "edge-21",
-            "showing": true
-          },
-          "position": { "x": 0, "y": 0 },
-          "selected": false,
-          "type": "rootClaim"
-        },
-        {
-          "id": "27",
-          "data": {
-            "label": "Wealthy people are the best decision makers",
-            "score": "-",
-            "diagramId": "edge-21",
-            "showing": true
-          },
-          "position": { "x": 560, "y": 0 },
-          "selected": false,
-          "type": "support"
-        },
-        {
-          "id": "28",
-          "data": {
-            "label": "Capitalist wealth implies they knew what people wanted",
-            "score": "-",
-            "diagramId": "edge-21",
-            "showing": true
-          },
-          "position": { "x": 1120, "y": 0 },
-          "selected": false,
-          "type": "support"
-        }
-      ],
-      "edges": [
-        {
-          "id": "24",
-          "data": { "score": "-", "diagramId": "edge-21", "showing": true },
-          "label": "supports",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "26",
-          "target": "27",
-          "type": "ScoreEdge"
-        },
-        {
-          "id": "25",
-          "data": { "score": "-", "diagramId": "edge-21", "showing": true },
-          "label": "supports",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "27",
-          "target": "28",
-          "type": "ScoreEdge"
-        }
-      ],
-      "type": "claim"
-    },
-    "edge-30": {
-      "id": "edge-30",
-      "nodes": [
-        {
-          "id": "35",
-          "data": {
-            "label": "\"\"True\" Capitalism\" embodies \"Supports those...\"",
-            "score": "-",
-            "diagramId": "edge-30",
-            "showing": true
-          },
-          "position": { "x": 0, "y": 0 },
-          "selected": false,
-          "type": "rootClaim"
-        }
-      ],
-      "edges": [],
-      "type": "claim"
-    },
-    "edge-33": {
-      "id": "edge-33",
-      "nodes": [
-        {
-          "id": "36",
-          "data": {
-            "label": "\"\"True\" Capitalism\" embodies \"Does not discr...\"",
-            "score": "-",
-            "diagramId": "edge-33",
-            "showing": true
-          },
-          "position": { "x": 0, "y": 0 },
-          "selected": false,
-          "type": "rootClaim"
-        },
-        {
-          "id": "37",
-          "data": {
-            "label": "Born into wealth gives people a better chance",
-            "score": "-",
-            "diagramId": "edge-33",
-            "showing": true
-          },
-          "position": { "x": 560, "y": 0 },
-          "selected": false,
-          "type": "critique"
-        }
-      ],
-      "edges": [
-        {
-          "id": "35",
-          "data": { "score": "-", "diagramId": "edge-33", "showing": true },
-          "label": "critiques",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "36",
-          "target": "37",
-          "type": "ScoreEdge"
-        }
-      ],
-      "type": "claim"
-    },
-    "node-34": {
-      "id": "node-34",
-      "nodes": [
-        {
-          "id": "38",
+          "id": "46",
           "data": {
             "label": "\"Does not discriminate based on birth\" is important",
             "score": "-",
-            "diagramId": "node-34",
+            "diagramId": "node-1",
             "showing": true
           },
           "position": { "x": 0, "y": 140 },
@@ -958,11 +1084,11 @@
           "type": "rootClaim"
         },
         {
-          "id": "39",
+          "id": "47",
           "data": {
             "label": "Everyone should have a chance in society",
             "score": "-",
-            "diagramId": "node-34",
+            "diagramId": "node-1",
             "showing": true
           },
           "position": { "x": 560, "y": 0 },
@@ -970,11 +1096,11 @@
           "type": "support"
         },
         {
-          "id": "40",
+          "id": "48",
           "data": {
             "label": "Incentives can be useful",
             "score": "-",
-            "diagramId": "node-34",
+            "diagramId": "node-1",
             "showing": true
           },
           "position": { "x": 560, "y": 140 },
@@ -982,11 +1108,11 @@
           "type": "critique"
         },
         {
-          "id": "41",
+          "id": "49",
           "data": {
             "label": "Equality must be balanced against other values",
             "score": "-",
-            "diagramId": "node-34",
+            "diagramId": "node-1",
             "showing": true
           },
           "position": { "x": 560, "y": 280 },
@@ -994,11 +1120,11 @@
           "type": "critique"
         },
         {
-          "id": "63",
+          "id": "50",
           "data": {
             "label": "Bad genes lead to unhappier people",
-            "score": "9",
-            "diagramId": "node-34",
+            "score": "-",
+            "diagramId": "node-1",
             "showing": true
           },
           "position": { "x": 1120, "y": 0 },
@@ -1008,228 +1134,48 @@
       ],
       "edges": [
         {
-          "id": "36",
-          "data": { "score": "-", "diagramId": "node-34", "showing": true },
+          "id": "50",
+          "data": { "score": "-", "diagramId": "node-1" },
           "label": "supports",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "38",
-          "target": "39",
+          "source": "46",
+          "target": "47",
           "type": "ScoreEdge"
         },
         {
-          "id": "37",
-          "data": { "score": "-", "diagramId": "node-34", "showing": true },
+          "id": "51",
+          "data": { "score": "-", "diagramId": "node-1" },
           "label": "critiques",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "38",
-          "target": "40",
-          "type": "ScoreEdge"
-        },
-        {
-          "id": "38",
-          "data": { "score": "-", "diagramId": "node-34", "showing": true },
-          "label": "critiques",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "38",
-          "target": "41",
-          "type": "ScoreEdge"
-        },
-        {
-          "id": "69",
-          "data": { "score": "-", "diagramId": "node-34", "showing": true },
-          "label": "critiques",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "39",
-          "target": "63",
-          "type": "ScoreEdge"
-        }
-      ],
-      "type": "claim"
-    },
-    "node-33": {
-      "id": "node-33",
-      "nodes": [
-        {
-          "id": "47",
-          "data": {
-            "label": "\"Supports those who cannot support...\" is important",
-            "score": "1",
-            "diagramId": "node-33",
-            "showing": true
-          },
-          "position": { "x": 0, "y": 70 },
-          "selected": false,
-          "type": "rootClaim"
-        },
-        {
-          "id": "48",
-          "data": {
-            "label": "Genetics correlate to success",
-            "score": "9",
-            "diagramId": "node-33",
-            "showing": true
-          },
-          "position": { "x": 560, "y": 0 },
-          "selected": false,
-          "type": "critique"
-        },
-        {
-          "id": "62",
-          "data": {
-            "label": "Dependents will breed more dependents",
-            "score": "-",
-            "diagramId": "node-33",
-            "showing": true
-          },
-          "position": { "x": 560, "y": 140 },
-          "selected": false,
-          "type": "critique"
-        }
-      ],
-      "edges": [
-        {
-          "id": "44",
-          "data": { "score": "-", "diagramId": "node-33", "showing": true },
-          "label": "critiques",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "47",
+          "source": "46",
           "target": "48",
           "type": "ScoreEdge"
         },
         {
-          "id": "68",
-          "data": { "score": "-", "diagramId": "node-33", "showing": true },
+          "id": "52",
+          "data": { "score": "-", "diagramId": "node-1" },
+          "label": "critiques",
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "46",
+          "target": "49",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "53",
+          "data": { "score": "-", "diagramId": "node-1" },
           "label": "critiques",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "47",
-          "target": "62",
+          "target": "50",
           "type": "ScoreEdge"
         }
       ],
-      "type": "claim"
-    },
-    "edge-17": {
-      "id": "edge-17",
-      "nodes": [
-        {
-          "id": "64",
-          "data": {
-            "label": "\"Socialism\" embodies \"Encourages qua...\"",
-            "score": "-",
-            "diagramId": "edge-17",
-            "showing": true
-          },
-          "position": { "x": 0, "y": 0 },
-          "selected": false,
-          "type": "rootClaim"
-        },
-        {
-          "id": "65",
-          "data": {
-            "label": "Can offer capped incentives",
-            "score": "-",
-            "diagramId": "edge-17",
-            "showing": true
-          },
-          "position": { "x": 560, "y": 0 },
-          "selected": false,
-          "type": "support"
-        },
-        {
-          "id": "66",
-          "data": {
-            "label": "Capping prevents meritocracy",
-            "score": "-",
-            "diagramId": "edge-17",
-            "showing": true
-          },
-          "position": { "x": 1120, "y": 0 },
-          "selected": false,
-          "type": "critique"
-        }
-      ],
-      "edges": [
-        {
-          "id": "70",
-          "data": { "score": "-", "diagramId": "edge-17", "showing": true },
-          "label": "supports",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "64",
-          "target": "65",
-          "type": "ScoreEdge"
-        },
-        {
-          "id": "71",
-          "data": { "score": "-", "diagramId": "edge-17", "showing": true },
-          "label": "critiques",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "source": "65",
-          "target": "66",
-          "type": "ScoreEdge"
-        }
-      ],
-      "type": "claim"
-    },
-    "edge-31": {
-      "id": "edge-31",
-      "nodes": [
-        {
-          "id": "71",
-          "data": {
-            "label": "\"Socialism\" embodies \"Supports those...\"",
-            "score": "-",
-            "diagramId": "edge-31",
-            "showing": true
-          },
-          "position": { "x": 0, "y": 0 },
-          "selected": false,
-          "type": "rootClaim"
-        }
-      ],
-      "edges": [],
-      "type": "claim"
-    },
-    "edge-94": {
-      "id": "edge-94",
-      "nodes": [
-        {
-          "id": "74",
-          "data": {
-            "label": "\"Everything pri...\" embodies \"Power in the r...\"",
-            "score": "-",
-            "diagramId": "edge-94",
-            "showing": true
-          },
-          "position": { "x": 0, "y": 0 },
-          "selected": false,
-          "type": "rootClaim"
-        }
-      ],
-      "edges": [],
-      "type": "claim"
-    },
-    "edge-88": {
-      "id": "edge-88",
-      "nodes": [
-        {
-          "id": "75",
-          "data": {
-            "label": "\"No social support\" embodies \"Supports those...\"",
-            "score": "1",
-            "diagramId": "edge-88",
-            "showing": true
-          },
-          "position": { "x": 0, "y": 0 },
-          "selected": false,
-          "type": "rootClaim"
-        }
-      ],
-      "edges": [],
       "type": "claim"
     }
   },
   "activeTableProblemId": null,
   "activeClaimDiagramId": null,
-  "nextNodeId": 80,
-  "nextEdgeId": 109
+  "nextNodeId": 51,
+  "nextEdgeId": 54,
+  "showImpliedEdges": true
 }

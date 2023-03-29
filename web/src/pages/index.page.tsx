@@ -9,11 +9,8 @@ import { CriteriaTable } from "../modules/topic/components/CriteriaTable/Criteri
 import { Diagram } from "../modules/topic/components/Diagram/Diagram";
 import { TopicPane } from "../modules/topic/components/Surface/TopicPane";
 import { TopicToolbar } from "../modules/topic/components/Surface/TopicToolbar";
-import {
-  problemDiagramId,
-  useActiveClaimDiagramId,
-  useActiveTableProblemId,
-} from "../modules/topic/store/store";
+import { useActiveClaimDiagramId, useActiveTableProblemId } from "../modules/topic/store/store";
+import { problemDiagramId } from "../modules/topic/utils/diagram";
 import { WorkspaceBox, workspaceStyles } from "./index.styles";
 
 export const HydrationContext = createContext(false);
