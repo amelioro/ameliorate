@@ -144,7 +144,11 @@ export const getNodesComposedBy = (node: Node, diagram: Diagram) => {
  * - always allow the user to explicitly show/hide components that can be hidden
  * - feel free to hide components when they're created if they're implied and have not been shown yet
  */
-export const filterHiddenComponents = (diagram: Diagram): Diagram => {
+export const filterHiddenComponents = (
+  diagram: Diagram,
+  claimDiagrams: Diagram[],
+  showImpliedEdges: boolean
+): Diagram => {
   const shownNodes = diagram.nodes.filter((node) => node.data.showing);
   const shownNodeIds = shownNodes.map((node) => node.id);
 
@@ -154,12 +158,19 @@ export const filterHiddenComponents = (diagram: Diagram): Diagram => {
     return true;
   });
 
-  return { ...diagram, nodes: shownNodes, edges: shownEdges };
+  // edges are implied based on other shown nodes & edges, so filter those before filtering implied edges
+  const shownEdgesAfterImpliedFilter = shownEdges.filter(
+    (edge) =>
+      showImpliedEdges ||
+      !isEdgeImplied(edge, { ...diagram, nodes: shownNodes, edges: shownEdges }, claimDiagrams)
+  );
+
+  return { ...diagram, nodes: shownNodes, edges: shownEdgesAfterImpliedFilter };
 };
 
 export const layoutVisibleComponents = (diagram: Diagram, claimDiagrams: Diagram[]) => {
   // filter
-  const displayDiagram = filterHiddenComponents(diagram);
+  const displayDiagram = filterHiddenComponents(diagram, claimDiagrams, true);
 
   // layout only the displayed components
   const { layoutedNodes } = layout(

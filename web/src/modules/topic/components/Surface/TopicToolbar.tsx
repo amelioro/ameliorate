@@ -4,6 +4,7 @@ import {
   Download,
   ExpandMore,
   Redo,
+  Route,
   Undo,
   Upload,
 } from "@mui/icons-material";
@@ -12,10 +13,11 @@ import fileDownload from "js-file-download";
 
 import { Menu } from "../../../../common/components/Menu/Menu";
 import { useMenu } from "../../../../common/hooks";
-import { TopicStoreState, useIsTableActive } from "../../store/store";
+import { TopicStoreState, useIsTableActive, useShowImpliedEdges } from "../../store/store";
 import { getState, redo, resetState, setState, undo } from "../../store/utilActions";
 import { getTopicTitle } from "../../store/utils";
-import { relayout } from "../../store/viewActions";
+import { relayout, toggleShowImpliedEdges } from "../../store/viewActions";
+import { StyledToggleButton } from "./TopicToolbar.styles";
 
 // TODO: might be useful to have downloaded state be more human editable;
 // for this, probably should prettify the JSON, and remove position values (we can re-layout on import)
@@ -53,6 +55,7 @@ const loadExample = (exampleFileName: string) => {
 export const TopicToolbar = () => {
   const [anchorEl, menuIsOpen, openMenu, closeMenu] = useMenu();
   const isTableActive = useIsTableActive();
+  const showImpliedEdges = useShowImpliedEdges();
 
   return (
     <AppBar position="sticky" color="primaryVariantLight">
@@ -97,18 +100,32 @@ export const TopicToolbar = () => {
           <AutoStoriesOutlined />
         </IconButton>
 
-        {!isTableActive && <Divider orientation="vertical" />}
         {/* view actions */}
-
         {!isTableActive && (
-          <IconButton
-            color="inherit"
-            title="Recalculate layout"
-            aria-label="Recalculate layout"
-            onClick={relayout}
-          >
-            <AlignVerticalTop />
-          </IconButton>
+          <>
+            <Divider orientation="vertical" />
+
+            <IconButton
+              color="inherit"
+              title="Recalculate layout"
+              aria-label="Recalculate layout"
+              onClick={relayout}
+            >
+              <AlignVerticalTop />
+            </IconButton>
+
+            <StyledToggleButton
+              value={showImpliedEdges}
+              title="Show implied edges"
+              aria-label="Show implied edges"
+              color="secondary"
+              size="small"
+              selected={showImpliedEdges}
+              onClick={() => toggleShowImpliedEdges(!showImpliedEdges)}
+            >
+              <Route />
+            </StyledToggleButton>
+          </>
         )}
       </Toolbar>
     </AppBar>

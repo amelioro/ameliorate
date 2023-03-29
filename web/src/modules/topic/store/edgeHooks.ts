@@ -10,7 +10,7 @@ export const useIsImplied = (edgeId: string, diagramId: string) => {
 
     try {
       const edge = findEdge(edgeId, diagram);
-      const displayDiagram = filterHiddenComponents(diagram);
+      const displayDiagram = filterHiddenComponents(diagram, getClaimDiagrams(state), true);
       return isEdgeImplied(edge, displayDiagram, getClaimDiagrams(state));
     } catch {
       return false;

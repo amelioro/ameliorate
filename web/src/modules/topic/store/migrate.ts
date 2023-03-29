@@ -13,6 +13,7 @@ export const migrate = (persistedState: any, version: number) => {
     migrate_6_to_7,
     migrate_7_to_8,
     migrate_8_to_9,
+    migrate_9_to_10,
   ];
 
   let state = persistedState;
@@ -175,5 +176,10 @@ const migrate_8_to_9 = (state: any) => {
     });
   });
 
+  return state;
+};
+
+const migrate_9_to_10 = (state: any) => {
+  state.showImpliedEdges = true;
   return state;
 };

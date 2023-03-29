@@ -149,6 +149,14 @@ export const viewCriteriaTable = (problemNodeId: string) => {
   );
 };
 
+export const toggleShowImpliedEdges = (show: boolean) => {
+  useTopicStore.setState((state) => {
+    /* eslint-disable functional/immutable-data, no-param-reassign */
+    state.showImpliedEdges = show;
+    /* eslint-enable functional/immutable-data, no-param-reassign */
+  });
+};
+
 export const relayout = () => {
   useTopicStore.setState(
     (state) => {
