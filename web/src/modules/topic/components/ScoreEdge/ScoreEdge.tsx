@@ -19,6 +19,8 @@ const convertToEdge = (flowEdge: EdgeProps): Edge => {
     label: flowEdge.label! as RelationName,
     /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- this should never be null?
+    selected: flowEdge.selected!,
     // janky, not grabbing from flow edge because flow edge converts this to some URL format that idk how to convert;
     // but this value is currently always constant so it should be fine
     markerStart: markerStart,

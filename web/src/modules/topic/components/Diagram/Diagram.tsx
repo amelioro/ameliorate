@@ -7,16 +7,20 @@ import {
   BackgroundVariant,
   type EdgeProps as DefaultEdgeProps,
   type NodeProps as DefaultNodeProps,
+  type EdgeChange,
+  type EdgeSelectionChange,
+  type NodeChange,
+  type NodeSelectionChange,
   ReactFlowProvider,
 } from "reactflow";
 
 import { emitter } from "../../../../common/event";
 import { useViewportUpdater } from "../../hooks/flowHooks";
-import { deselectNodes } from "../../store/actions";
+import { setSelected } from "../../store/actions";
 import { connectNodes } from "../../store/createDeleteActions";
 import { useFilteredDiagram } from "../../store/store";
 import { closeClaimDiagram } from "../../store/viewActions";
-import { type Edge, type Node } from "../../utils/diagram";
+import { ArguableType, type Edge, type Node } from "../../utils/diagram";
 import { type NodeType } from "../../utils/node";
 import { FlowNode } from "../Node/FlowNode";
 import { ScoreEdge } from "../ScoreEdge/ScoreEdge";
@@ -54,6 +58,14 @@ export interface EdgeProps extends DefaultEdgeProps {
   // can't figure out how to amend this to make it non-nullable, since react-flow's Edge is defined as a type, not an interface
   data?: Edge["data"];
 }
+
+const onArguableChange = (changes: (NodeChange | EdgeChange)[], arguableType: ArguableType) => {
+  const selectChanges = changes.filter((change) => change.type === "select") as
+    | NodeSelectionChange[]
+    | EdgeSelectionChange[];
+
+  if (selectChanges.length > 0) setSelected(selectChanges, arguableType);
+};
 
 interface DiagramProps {
   diagramId: string;
@@ -96,8 +108,9 @@ const DiagramWithoutProvider = ({ diagramId }: DiagramProps) => {
         fitView
         fitViewOptions={{ maxZoom: 1 }}
         minZoom={0.25}
-        onPaneClick={deselectNodes}
         onConnect={({ source, target }) => connectNodes(source, target)}
+        onEdgesChange={(changes) => onArguableChange(changes, "edge")}
+        onNodesChange={(changes) => onArguableChange(changes, "node")}
         nodesDraggable={false}
         nodesConnectable={diagram.type !== "claim"} // claim diagram is a tree, so cannot connect existing nodes
       >

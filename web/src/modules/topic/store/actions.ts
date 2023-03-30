@@ -1,3 +1,5 @@
+import { type EdgeSelectionChange, type NodeSelectionChange } from "reactflow";
+
 import { getClaimDiagramId, getRootArguable } from "../utils/claim";
 import {
   ArguableType,
@@ -9,26 +11,6 @@ import {
 } from "../utils/diagram";
 import { useTopicStore } from "./store";
 import { getActiveDiagram } from "./utils";
-
-export const deselectNodes = () => {
-  useTopicStore.setState(
-    (state) => {
-      const activeDiagram = getActiveDiagram(state);
-
-      activeDiagram.nodes.forEach((node) => {
-        // TODO: super jank - node.selected is always false, so setting to true ensures the change is fired (I think)
-        // somehow returning { ...node, selected: false } without immer was actually working as well...
-        // probably should change how we're using `selected`
-        /* eslint-disable functional/immutable-data, no-param-reassign */
-        node.selected = true;
-        node.selected = false;
-        /* eslint-enable functional/immutable-data, no-param-reassign */
-      });
-    },
-    false,
-    "deselectNodes"
-  );
-};
 
 // score setting is way more work than it needs to be because one score can live in multiple places:
 // - on the arguable
@@ -88,5 +70,26 @@ export const setNodeLabel = (nodeId: string, value: string) => {
     },
     false,
     "setNodeLabel"
+  );
+};
+
+export const setSelected = (
+  selectChanges: NodeSelectionChange[] | EdgeSelectionChange[],
+  arguableType: ArguableType
+) => {
+  useTopicStore.setState(
+    (state) => {
+      const activeDiagram = getActiveDiagram(state);
+
+      selectChanges.forEach((selectChange) => {
+        const arguable = findArguable(selectChange.id, arguableType, activeDiagram);
+
+        /* eslint-disable functional/immutable-data, no-param-reassign */
+        arguable.selected = selectChange.selected;
+        /* eslint-enable functional/immutable-data, no-param-reassign */
+      });
+    },
+    false,
+    "setSelected"
   );
 };
