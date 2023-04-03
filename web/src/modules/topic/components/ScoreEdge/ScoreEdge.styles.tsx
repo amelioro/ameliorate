@@ -31,6 +31,7 @@ const divOptions = {
 
 export const StyledDiv = styled("div", divOptions)<DivProps>`
   pointer-events: all;
+  cursor: pointer;
 
   display: flex;
   flex-direction: column;

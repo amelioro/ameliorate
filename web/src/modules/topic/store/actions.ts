@@ -6,6 +6,7 @@ import {
   Diagram,
   Score,
   findArguable,
+  findEdge,
   findNode,
   problemDiagramId,
 } from "../utils/diagram";
@@ -91,5 +92,20 @@ export const setSelected = (
     },
     false,
     "setSelected"
+  );
+};
+
+export const setSelectedEdge = (edgeId: string) => {
+  useTopicStore.setState(
+    (state) => {
+      const activeDiagram = getActiveDiagram(state);
+      const edge = findEdge(edgeId, activeDiagram);
+
+      /* eslint-disable functional/immutable-data, no-param-reassign */
+      edge.selected = true;
+      /* eslint-enable functional/immutable-data, no-param-reassign */
+    },
+    false,
+    "setSelectedEdge"
   );
 };

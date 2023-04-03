@@ -62,6 +62,7 @@ export const ScoreEdge = (flowEdge: EdgeProps) => {
         <StyledDiv
           labelX={labelX}
           labelY={labelY}
+          onClick={() => setSelectedEdge(edge.id)}
           onContextMenu={(event) => openContextMenu(event, { edge })}
           isImplied={isImplied}
         >
