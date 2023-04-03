@@ -17,7 +17,7 @@ import {
   YEdgeDiv,
 } from "./EditableNode.styles";
 
-export const EditableNode = ({ node }: { node: Node }) => {
+export const EditableNode = ({ node, className = "" }: { node: Node; className?: string }) => {
   const theme = useTheme();
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
   // TODO: BUG does not work nicely with the react-flow component. Focus is being taken away from the element after the component mounts.
@@ -36,7 +36,7 @@ export const EditableNode = ({ node }: { node: Node }) => {
   return (
     <NodeDiv
       color={color}
-      className={node.selected ? "selected" : ""}
+      className={className + (node.selected ? " selected" : "")}
       onContextMenu={(event) => openContextMenu(event, { node })}
     >
       <YEdgeDiv>

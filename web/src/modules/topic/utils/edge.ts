@@ -181,6 +181,10 @@ export const childNode = (edge: Edge, diagram: Diagram) => {
   return findNode(edge.target, diagram);
 };
 
+export const nodes = (edge: Edge, diagram: Diagram) => {
+  return [parentNode(edge, diagram), childNode(edge, diagram)];
+};
+
 export const getConnectingEdge = (node1: Node, node2: Node, edges: Edge[]) => {
   const edge = edges.find(
     (edge) =>

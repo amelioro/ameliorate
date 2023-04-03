@@ -73,6 +73,7 @@ export interface Edge {
     diagramId: string;
   };
   label: RelationName;
+  selected: boolean;
   markerStart: { type: MarkerType; width: number; height: number };
   source: string; // source === parent if arrows point from bottom to top
   target: string; // target === child if arrows point from bottom to top
@@ -93,6 +94,7 @@ export const buildEdge = (
       diagramId: diagramId,
     },
     label: relation,
+    selected: false,
     markerStart: markerStart,
     source: sourceNodeId,
     target: targetNodeId,

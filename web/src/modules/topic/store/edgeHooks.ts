@@ -1,5 +1,5 @@
 import { Diagram, filterHiddenComponents, findEdge } from "../utils/diagram";
-import { isEdgeImplied } from "../utils/edge";
+import { isEdgeImplied, nodes } from "../utils/edge";
 import { useTopicStoreAfterHydration } from "./store";
 import { getClaimDiagrams } from "./utils";
 
@@ -12,6 +12,19 @@ export const useIsImplied = (edgeId: string, diagramId: string) => {
       const edge = findEdge(edgeId, diagram);
       const displayDiagram = filterHiddenComponents(diagram, getClaimDiagrams(state), true);
       return isEdgeImplied(edge, displayDiagram, getClaimDiagrams(state));
+    } catch {
+      return false;
+    }
+  });
+};
+
+export const useIsNodeSelected = (edgeId: string, diagramId: string) => {
+  return useTopicStoreAfterHydration((state) => {
+    const diagram = state.diagrams[diagramId];
+
+    try {
+      const edge = findEdge(edgeId, diagram);
+      return nodes(edge, diagram).some((node) => node.selected);
     } catch {
       return false;
     }

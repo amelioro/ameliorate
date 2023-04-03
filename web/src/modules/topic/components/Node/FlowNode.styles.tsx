@@ -1,8 +1,11 @@
 import styled from "@emotion/styled";
 import { css } from "@mui/material";
 
+import { Node } from "../../utils/diagram";
 import { Orientation } from "../../utils/layout";
+import { zIndex } from "../Diagram/Diagram.styles";
 import { AddNodeButtonGroup } from "../Node/AddNodeButtonGroup";
+import { EditableNode } from "./EditableNode";
 
 const gap = 16;
 
@@ -69,3 +72,45 @@ export const AddNodeButtonGroupChild = styled(StyledAddNodeButtonGroup)<{
     }
   }}
 `;
+
+interface NodeProps {
+  node: Node;
+  isNeighborSelected: boolean;
+  isEdgeSelected: boolean;
+  isAnyArguableSelected: boolean;
+}
+
+const options = {
+  shouldForwardProp: (prop: string) =>
+    !["isNeighborSelected", "isEdgeSelected", "isAnyArguableSelected"].includes(prop),
+};
+
+export const StyledEditableNode = styled(EditableNode, options)<NodeProps>`
+  ${({ theme, node, isNeighborSelected, isEdgeSelected, isAnyArguableSelected }) => {
+    if (node.selected) {
+      return css``;
+    } else if (isNeighborSelected || isEdgeSelected) {
+      return css`
+        border-color: ${theme.palette.info.main};
+        z-index: ${zIndex.arguableWhenNeighborSelected};
+      `;
+    } else if (isAnyArguableSelected) {
+      return css`
+        opacity: 0.5;
+      `;
+    }
+  }};
+`;
+
+export const nodeStyles = (node: Node, isNeighborSelected: boolean) => {
+  return css`
+    // reactflow sets z-index on its node wrapper, so we can't just set z-index on our node div
+    .react-flow__node[data-id="${node.id}"] {
+      z-index: ${node.selected
+        ? zIndex.arguableWhenSelected
+        : isNeighborSelected
+        ? zIndex.arguableWhenNeighborSelected
+        : 0} !important; // !important to override because reactflow sets z-index via style attribute
+    }
+  `;
+};
