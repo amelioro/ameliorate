@@ -1,14 +1,18 @@
+import { Global } from "@emotion/react";
 import _ from "lodash";
 
+import { useIsAnyArguableSelected } from "../../store/arguableHooks";
+import { useIsEdgeSelected, useIsNeighborSelected } from "../../store/nodeHooks";
 import { useDiagramType } from "../../store/store";
 import { Node, orientations } from "../../utils/diagram";
 import { NodeType } from "../../utils/node";
 import { NodeProps } from "../Diagram/Diagram";
-import { EditableNode } from "../Node/EditableNode";
 import {
   AddNodeButtonGroupChild,
   AddNodeButtonGroupParent,
   HoverBridgeDiv,
+  StyledEditableNode,
+  nodeStyles,
 } from "./FlowNode.styles";
 import { NodeHandle } from "./NodeHandle";
 
@@ -24,6 +28,9 @@ const convertToNode = (flowNode: NodeProps): Node => {
 
 export const FlowNode = (flowNode: NodeProps) => {
   const diagramType = useDiagramType(flowNode.data.diagramId);
+  const isNeighborSelected = useIsNeighborSelected(flowNode.id, flowNode.data.diagramId);
+  const isEdgeSelected = useIsEdgeSelected(flowNode.id, flowNode.data.diagramId);
+  const isAnyArguableSelected = useIsAnyArguableSelected();
 
   if (!diagramType) return <></>;
 
@@ -32,6 +39,8 @@ export const FlowNode = (flowNode: NodeProps) => {
 
   return (
     <>
+      <Global styles={nodeStyles(node, isNeighborSelected)} />
+
       <HoverBridgeDiv />
 
       <NodeHandle node={node} direction="parent" orientation={orientation} />
@@ -43,7 +52,12 @@ export const FlowNode = (flowNode: NodeProps) => {
         orientation={orientation}
       />
 
-      <EditableNode node={convertToNode(flowNode)} />
+      <StyledEditableNode
+        node={node}
+        isNeighborSelected={isNeighborSelected}
+        isEdgeSelected={isEdgeSelected}
+        isAnyArguableSelected={isAnyArguableSelected}
+      />
 
       <AddNodeButtonGroupChild
         fromNodeId={flowNode.id}

@@ -90,6 +90,10 @@ export const children = (node: Node, diagram: Diagram) => {
   });
 };
 
+export const neighbors = (node: Node, diagram: Diagram) => {
+  return [...parents(node, diagram), ...children(node, diagram)];
+};
+
 export const components = (node: Node, diagram: Diagram) => {
   return parents(node, diagram).filter((parent) => componentTypes.includes(parent.type));
 };

@@ -3,7 +3,9 @@ import React from "react";
 import { EdgeLabelRenderer, getBezierPath } from "reactflow";
 
 import { openContextMenu } from "../../../../common/store/contextMenuActions";
-import { useIsImplied } from "../../store/edgeHooks";
+import { setSelectedEdge } from "../../store/actions";
+import { useIsAnyArguableSelected } from "../../store/arguableHooks";
+import { useIsImplied, useIsNodeSelected } from "../../store/edgeHooks";
 import { Edge, markerStart } from "../../utils/diagram";
 import { RelationName } from "../../utils/edge";
 import { EdgeProps } from "../Diagram/Diagram";
@@ -32,8 +34,11 @@ const convertToEdge = (flowEdge: EdgeProps): Edge => {
 
 // base for custom edge taken from https://reactflow.dev/docs/examples/edges/edge-with-button/
 export const ScoreEdge = (flowEdge: EdgeProps) => {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- flowEdge should always have data
-  const isImplied = useIsImplied(flowEdge.id, flowEdge.data!.diagramId);
+  const edge = convertToEdge(flowEdge);
+
+  const isImplied = useIsImplied(edge.id, edge.data.diagramId);
+  const isNodeSelected = useIsNodeSelected(edge.id, edge.data.diagramId);
+  const isAnyArguableSelected = useIsAnyArguableSelected();
 
   const [edgePath, labelX, labelY] = getBezierPath({
     sourceX: flowEdge.sourceX,
@@ -44,8 +49,6 @@ export const ScoreEdge = (flowEdge: EdgeProps) => {
     targetPosition: flowEdge.targetPosition,
   });
 
-  const edge = convertToEdge(flowEdge);
-
   return (
     <>
       <StyledPath
@@ -55,6 +58,9 @@ export const ScoreEdge = (flowEdge: EdgeProps) => {
         d={edgePath}
         markerStart={flowEdge.markerStart}
         markerEnd={flowEdge.markerEnd}
+        isEdgeSelected={edge.selected}
+        isNodeSelected={isNodeSelected}
+        isAnyArguableSelected={isAnyArguableSelected}
         isImplied={isImplied}
       />
       {/* see for example usage https://reactflow.dev/docs/api/edges/edge-label-renderer/ */}
@@ -64,6 +70,9 @@ export const ScoreEdge = (flowEdge: EdgeProps) => {
           labelY={labelY}
           onClick={() => setSelectedEdge(edge.id)}
           onContextMenu={(event) => openContextMenu(event, { edge })}
+          isEdgeSelected={edge.selected}
+          isNodeSelected={isNodeSelected}
+          isAnyArguableSelected={isAnyArguableSelected}
           isImplied={isImplied}
         >
           <Typography variant="body1" margin="0">

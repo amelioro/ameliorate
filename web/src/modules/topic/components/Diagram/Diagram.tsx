@@ -17,6 +17,7 @@ import {
 import { emitter } from "../../../../common/event";
 import { useViewportUpdater } from "../../hooks/flowHooks";
 import { setSelected } from "../../store/actions";
+import { useIsAnyArguableSelected } from "../../store/arguableHooks";
 import { connectNodes } from "../../store/createDeleteActions";
 import { useFilteredDiagram } from "../../store/store";
 import { closeClaimDiagram } from "../../store/viewActions";
@@ -74,6 +75,7 @@ interface DiagramProps {
 const DiagramWithoutProvider = ({ diagramId }: DiagramProps) => {
   const diagram = useFilteredDiagram(diagramId);
   const { moveViewportToIncludeNode } = useViewportUpdater();
+  const isAnyArguableSelected = useIsAnyArguableSelected();
 
   const nodes = diagram.nodes;
   const edges = diagram.edges;
@@ -113,6 +115,7 @@ const DiagramWithoutProvider = ({ diagramId }: DiagramProps) => {
         onNodesChange={(changes) => onArguableChange(changes, "node")}
         nodesDraggable={false}
         nodesConnectable={diagram.type !== "claim"} // claim diagram is a tree, so cannot connect existing nodes
+        isAnyArguableSelected={isAnyArguableSelected}
       >
         <Background variant={BackgroundVariant.Dots} />
         {_(nodes).isEmpty() && emptyText}
