@@ -4,6 +4,8 @@ import { CloseOnClickMenuItem } from "./CloseOnClickMenuItem";
 
 export const DeleteNodeMenuItem = ({ node }: { node: Node }) => {
   return (
-    <CloseOnClickMenuItem onClick={() => deleteNode(node.id)}>Delete node</CloseOnClickMenuItem>
+    <CloseOnClickMenuItem onClick={() => void deleteNode(node.id)}>
+      Delete node
+    </CloseOnClickMenuItem>
   );
 };

@@ -17,6 +17,7 @@
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.10.12",
     "dagre": "^0.8.5",
+    "elkjs": "^0.8.2",
     "js-file-download": "^0.4.12",
     "lodash": "^4.17.21",
     "material-react-table": "^1.7.3",
@@ -28,6 +29,7 @@
     "react-dom": "18.2.0",
     "react-minimal-pie-chart": "^8.4.0",
     "reactflow": "^11.6.1",
+    "web-worker": "^1.2.0",
     "zundo": "^2.0.0-beta.10",
     "zustand": "^4.3.2"
   },

@@ -76,7 +76,7 @@ interface AddNodeProps {
   relation: Relation;
 }
 
-export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) => {
+export const addNode = async ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) => {
   const state = getDuplicateState();
 
   const activeDiagram = getActiveDiagram(state);
@@ -95,7 +95,7 @@ export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) 
   }
 
   // re-layout
-  const layoutedDiagram = layoutVisibleComponents(activeDiagram, getClaimDiagrams(state));
+  const layoutedDiagram = await layoutVisibleComponents(activeDiagram, getClaimDiagrams(state));
 
   // trigger event so viewport can be updated.
   // seems like there should be a cleaner way to do this - perhaps custom zustand middleware to emit for any action
@@ -164,7 +164,7 @@ const createEdgeAndImpliedEdges = (
   return diagram.edges;
 };
 
-export const connectNodes = (parentId: string | null, childId: string | null) => {
+export const connectNodes = async (parentId: string | null, childId: string | null) => {
   const state = getDuplicateState();
 
   const activeDiagram = getActiveDiagram(state);
@@ -181,7 +181,7 @@ export const connectNodes = (parentId: string | null, childId: string | null) =>
   // modifies diagram.edges through `state`
   createEdgeAndImpliedEdges(state, parent, child, relation);
 
-  const layoutedDiagram = layoutVisibleComponents(activeDiagram, getClaimDiagrams(state));
+  const layoutedDiagram = await layoutVisibleComponents(activeDiagram, getClaimDiagrams(state));
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   activeDiagram.nodes = layoutedDiagram.nodes;
@@ -191,7 +191,7 @@ export const connectNodes = (parentId: string | null, childId: string | null) =>
   useTopicStore.setState(state, false, "connectNodes");
 };
 
-export const deleteNode = (nodeId: string) => {
+export const deleteNode = async (nodeId: string) => {
   const state = getDuplicateState();
 
   const activeDiagram = getActiveDiagram(state);
@@ -217,7 +217,7 @@ export const deleteNode = (nodeId: string) => {
   delete state.diagrams[childDiagramId];
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  const layoutedDiagram = layoutVisibleComponents(activeDiagram, getClaimDiagrams(state));
+  const layoutedDiagram = await layoutVisibleComponents(activeDiagram, getClaimDiagrams(state));
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   activeDiagram.nodes = layoutedDiagram.nodes;
@@ -227,7 +227,7 @@ export const deleteNode = (nodeId: string) => {
   useTopicStore.setState(state, false, "deleteNode");
 };
 
-export const deleteEdge = (edgeId: string) => {
+export const deleteEdge = async (edgeId: string) => {
   const state = getDuplicateState();
 
   const activeDiagram = getActiveDiagram(state);
@@ -236,7 +236,7 @@ export const deleteEdge = (edgeId: string) => {
   activeDiagram.edges = activeDiagram.edges.filter((edge) => edge.id !== edgeId);
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  const layoutedDiagram = layoutVisibleComponents(activeDiagram, getClaimDiagrams(state));
+  const layoutedDiagram = await layoutVisibleComponents(activeDiagram, getClaimDiagrams(state));
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   activeDiagram.nodes = layoutedDiagram.nodes;

@@ -10,21 +10,21 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 1740, "y": 0 },
+          "position": { "x": 652, "y": 12 },
           "selected": false,
           "type": "problem"
         },
         {
           "id": "1",
           "data": { "label": "madison", "score": "-", "diagramId": "root", "showing": true },
-          "position": { "x": 320, "y": 488 },
+          "position": { "x": 167, "y": 437.55555555555554 },
           "selected": false,
           "type": "solution"
         },
         {
           "id": "2",
           "data": { "label": "chi - lakeview", "score": "-", "diagramId": "root", "showing": true },
-          "position": { "x": 1120, "y": 488 },
+          "position": { "x": 487, "y": 437.55555555555554 },
           "selected": false,
           "type": "solution"
         },
@@ -36,7 +36,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 2360, "y": 488 },
+          "position": { "x": 817, "y": 437.55555555555554 },
           "selected": false,
           "type": "solution"
         },
@@ -48,42 +48,42 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 3160, "y": 488 },
+          "position": { "x": 1137, "y": 437.55555555555554 },
           "selected": false,
           "type": "solution"
         },
         {
           "id": "5",
           "data": { "label": "inexpensive", "score": "8", "diagramId": "root", "showing": true },
-          "position": { "x": 1040, "y": 244 },
+          "position": { "x": 12, "y": 216 },
           "selected": false,
           "type": "criterion"
         },
         {
           "id": "6",
           "data": { "label": "diverse", "score": "8", "diagramId": "root", "showing": true },
-          "position": { "x": 1390, "y": 244 },
+          "position": { "x": 332, "y": 216 },
           "selected": false,
           "type": "criterion"
         },
         {
           "id": "7",
           "data": { "label": "transit", "score": "6", "diagramId": "root", "showing": true },
-          "position": { "x": 1740, "y": 244 },
+          "position": { "x": 652, "y": 216 },
           "selected": false,
           "type": "criterion"
         },
         {
           "id": "8",
           "data": { "label": "parking", "score": "6", "diagramId": "root", "showing": true },
-          "position": { "x": 2090, "y": 244 },
+          "position": { "x": 972, "y": 216 },
           "selected": false,
           "type": "criterion"
         },
         {
           "id": "9",
           "data": { "label": "walkable", "score": "5", "diagramId": "root", "showing": true },
-          "position": { "x": 2440, "y": 244 },
+          "position": { "x": 1292, "y": 216 },
           "selected": false,
           "type": "criterion"
         }
@@ -358,5 +358,6 @@
   "activeTableProblemId": null,
   "activeClaimDiagramId": null,
   "nextNodeId": 11,
-  "nextEdgeId": 30
+  "nextEdgeId": 30,
+  "showImpliedEdges": true
 }

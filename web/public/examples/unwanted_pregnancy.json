@@ -10,21 +10,21 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 525, "y": 0 },
+          "position": { "x": 492, "y": 12 },
           "selected": false,
           "type": "problem"
         },
         {
           "id": "2",
           "data": { "label": "abortion", "score": "8", "diagramId": "root", "showing": true },
-          "position": { "x": 0, "y": 244 },
+          "position": { "x": 12, "y": 209.33333333333334 },
           "selected": false,
           "type": "solution"
         },
         {
           "id": "3",
           "data": { "label": "adoption", "score": "7", "diagramId": "root", "showing": true },
-          "position": { "x": 350, "y": 244 },
+          "position": { "x": 332, "y": 209.33333333333334 },
           "selected": false,
           "type": "solution"
         },
@@ -127,14 +127,14 @@
         {
           "id": "44",
           "data": { "label": "sex education", "score": "8", "diagramId": "root", "showing": true },
-          "position": { "x": 700, "y": 244 },
+          "position": { "x": 652, "y": 209.33333333333334 },
           "selected": false,
           "type": "solution"
         },
         {
           "id": "45",
           "data": { "label": "contraceptives", "score": "8", "diagramId": "root", "showing": true },
-          "position": { "x": 1050, "y": 244 },
+          "position": { "x": 972, "y": 209.33333333333334 },
           "selected": false,
           "type": "solution"
         }
@@ -550,7 +550,7 @@
             "diagramId": "node-3",
             "showing": true
           },
-          "position": { "x": 0, "y": 70 },
+          "position": { "x": 12, "y": 67 },
           "selected": false,
           "type": "rootClaim"
         },
@@ -562,7 +562,7 @@
             "diagramId": "node-3",
             "showing": true
           },
-          "position": { "x": 560, "y": 0 },
+          "position": { "x": 448.1851851851852, "y": 12 },
           "selected": false,
           "type": "support"
         },
@@ -574,7 +574,7 @@
             "diagramId": "node-3",
             "showing": true
           },
-          "position": { "x": 560, "y": 140 },
+          "position": { "x": 448.1851851851852, "y": 122 },
           "selected": false,
           "type": "critique"
         }
@@ -612,7 +612,7 @@
             "diagramId": "node-2",
             "showing": true
           },
-          "position": { "x": 0, "y": 280 },
+          "position": { "x": 12, "y": 232 },
           "selected": false,
           "type": "rootClaim"
         },
@@ -624,7 +624,7 @@
             "diagramId": "node-2",
             "showing": true
           },
-          "position": { "x": 560, "y": 0 },
+          "position": { "x": 452.6296296296296, "y": 12 },
           "selected": false,
           "type": "support"
         },
@@ -636,7 +636,7 @@
             "diagramId": "node-2",
             "showing": true
           },
-          "position": { "x": 560, "y": 140 },
+          "position": { "x": 452.6296296296296, "y": 122 },
           "selected": false,
           "type": "support"
         },
@@ -648,7 +648,7 @@
             "diagramId": "node-2",
             "showing": true
           },
-          "position": { "x": 560, "y": 280 },
+          "position": { "x": 452.6296296296296, "y": 232 },
           "selected": false,
           "type": "support"
         },
@@ -660,7 +660,7 @@
             "diagramId": "node-2",
             "showing": true
           },
-          "position": { "x": 560, "y": 420 },
+          "position": { "x": 452.6296296296296, "y": 342 },
           "selected": false,
           "type": "critique"
         },
@@ -672,7 +672,7 @@
             "diagramId": "node-2",
             "showing": true
           },
-          "position": { "x": 560, "y": 560 },
+          "position": { "x": 452.6296296296296, "y": 452 },
           "selected": false,
           "type": "critique"
         }
@@ -737,7 +737,7 @@
             "diagramId": "edge-1",
             "showing": true
           },
-          "position": { "x": 0, "y": 0 },
+          "position": { "x": 12, "y": 12 },
           "selected": false,
           "type": "rootClaim"
         },
@@ -749,7 +749,7 @@
             "diagramId": "edge-1",
             "showing": true
           },
-          "position": { "x": 560, "y": 0 },
+          "position": { "x": 447, "y": 12 },
           "selected": false,
           "type": "critique"
         }
@@ -778,7 +778,7 @@
             "diagramId": "edge-2",
             "showing": true
           },
-          "position": { "x": 0, "y": 70 },
+          "position": { "x": 12, "y": 67 },
           "selected": false,
           "type": "rootClaim"
         },
@@ -790,7 +790,7 @@
             "diagramId": "edge-2",
             "showing": true
           },
-          "position": { "x": 560, "y": 0 },
+          "position": { "x": 448.1851851851852, "y": 12 },
           "selected": false,
           "type": "support"
         },
@@ -802,7 +802,7 @@
             "diagramId": "edge-2",
             "showing": true
           },
-          "position": { "x": 560, "y": 140 },
+          "position": { "x": 448.1851851851852, "y": 122 },
           "selected": false,
           "type": "critique"
         }
@@ -834,5 +834,6 @@
   "activeTableProblemId": null,
   "activeClaimDiagramId": null,
   "nextNodeId": 46,
-  "nextEdgeId": 73
+  "nextEdgeId": 73,
+  "showImpliedEdges": true
 }

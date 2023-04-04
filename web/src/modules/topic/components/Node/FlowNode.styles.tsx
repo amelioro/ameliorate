@@ -37,7 +37,7 @@ export const AddNodeButtonGroupParent = styled(StyledAddNodeButtonGroup)<{
   orientation: Orientation;
 }>`
   ${({ orientation }) => {
-    if (orientation === "TB") {
+    if (orientation === "DOWN") {
       return css`
         left: 50%;
         top: 0;
@@ -57,7 +57,7 @@ export const AddNodeButtonGroupChild = styled(StyledAddNodeButtonGroup)<{
   orientation: Orientation;
 }>`
   ${({ orientation }) => {
-    if (orientation === "TB") {
+    if (orientation === "DOWN") {
       return css`
         left: 50%;
         bottom: 0;

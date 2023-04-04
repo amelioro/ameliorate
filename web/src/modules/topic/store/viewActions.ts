@@ -62,7 +62,7 @@ export const closeTable = () => {
 };
 
 // potential TODO: could show components that were hidden due to being implied by the now-hidden neighbor
-export const toggleShowNeighbors = (
+export const toggleShowNeighbors = async (
   nodeId: string,
   neighborType: NodeType,
   direction: RelationDirection,
@@ -85,7 +85,7 @@ export const toggleShowNeighbors = (
   neighborsToToggle.forEach((neighbor) => (neighbor.data.showing = show));
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  const layoutedDiagram = layoutVisibleComponents(problemDiagram, getClaimDiagrams(state)); // depends on showing having been updated
+  const layoutedDiagram = await layoutVisibleComponents(problemDiagram, getClaimDiagrams(state)); // depends on showing having been updated
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   problemDiagram.nodes = layoutedDiagram.nodes;
@@ -115,12 +115,12 @@ export const toggleShowImpliedEdges = (show: boolean) => {
   useTopicStore.setState({ showImpliedEdges: show }, false, "toggleShowImpliedEdges");
 };
 
-export const relayout = () => {
+export const relayout = async () => {
   const state = getDuplicateState();
 
   const activeDiagram = getActiveDiagram(state);
 
-  const layoutedDiagram = layoutVisibleComponents(activeDiagram, getClaimDiagrams(state));
+  const layoutedDiagram = await layoutVisibleComponents(activeDiagram, getClaimDiagrams(state));
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   activeDiagram.nodes = layoutedDiagram.nodes;

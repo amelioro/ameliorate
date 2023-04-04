@@ -24,7 +24,7 @@ export const AddNodeButton = ({ fromNodeId, as, toNodeType, relation, className 
         color={toNodeType}
         size="small"
         variant="contained"
-        onClick={() => addNode({ fromNodeId, as, toNodeType, relation })}
+        onClick={() => void addNode({ fromNodeId, as, toNodeType, relation })}
       >
         <decoration.NodeIcon />
       </StyledButton>

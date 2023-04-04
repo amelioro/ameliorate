@@ -7,6 +7,8 @@ export const DeleteEdgeMenuItem = ({ edge }: { edge: Edge }) => {
   if (edge.data.diagramId !== problemDiagramId) return <></>;
 
   return (
-    <CloseOnClickMenuItem onClick={() => deleteEdge(edge.id)}>Delete edge</CloseOnClickMenuItem>
+    <CloseOnClickMenuItem onClick={() => void deleteEdge(edge.id)}>
+      Delete edge
+    </CloseOnClickMenuItem>
   );
 };
