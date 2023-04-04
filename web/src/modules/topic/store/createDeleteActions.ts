@@ -93,7 +93,11 @@ export const addNode = async ({ fromNodeId, as, toNodeType, relation }: AddNodeP
   createEdgeAndImpliedEdges(state, parentNode, childNode, relation);
 
   // connect criteria
-  if (["criterion", "solution"].includes(newNode.type) && fromNode.type === "problem") {
+  if (
+    ["criterion", "solution"].includes(newNode.type) &&
+    fromNode.type === "problem" &&
+    as === "child"
+  ) {
     connectCriteriaToSolutions(state, newNode, fromNode);
   }
 
