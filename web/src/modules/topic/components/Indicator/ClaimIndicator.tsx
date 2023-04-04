@@ -16,6 +16,13 @@ export const ClaimIndicator = ({ arguableId, arguableType }: Props) => {
   const Icon = explicitClaimCount > 0 ? Article : ArticleOutlined;
 
   return (
-    <Indicator Icon={Icon} onClick={() => viewOrCreateClaimDiagram(arguableId, arguableType)} />
+    <Indicator
+      Icon={Icon}
+      onClick={(event) => {
+        // prevent setting the node as selected because we're about to navigate away from this diagram
+        event.stopPropagation();
+        viewOrCreateClaimDiagram(arguableId, arguableType);
+      }}
+    />
   );
 };
