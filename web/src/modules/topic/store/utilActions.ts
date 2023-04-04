@@ -5,7 +5,7 @@ export const getState = () => {
 };
 
 export const setState = (state: TopicStoreState) => {
-  useTopicStore.setState(() => state);
+  useTopicStore.setState(state, false, "setState");
 };
 
 export const resetState = () => {
