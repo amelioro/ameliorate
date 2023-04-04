@@ -6,7 +6,6 @@ import {
   Diagram,
   Score,
   findArguable,
-  findEdge,
   findNode,
   problemDiagramId,
 } from "../utils/diagram";
@@ -89,15 +88,20 @@ export const setSelected = (
   useTopicStore.setState(state, false, "setSelected");
 };
 
-export const setSelectedEdge = (edgeId: string) => {
+export const setSelectedArguable = (arguableId: string, arguableType: ArguableType) => {
   const state = getDuplicateState();
 
   const activeDiagram = getActiveDiagram(state);
-  const edge = findEdge(edgeId, activeDiagram);
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
-  edge.selected = true;
+  activeDiagram.nodes = activeDiagram.nodes.map((node) => ({ ...node, selected: false }));
+  activeDiagram.edges = activeDiagram.edges.map((edge) => ({ ...edge, selected: false }));
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  useTopicStore.setState(state, false, "setSelectedEdge");
+  const arguable = findArguable(arguableId, arguableType, activeDiagram);
+  /* eslint-disable functional/immutable-data, no-param-reassign */
+  arguable.selected = true;
+  /* eslint-enable functional/immutable-data, no-param-reassign */
+
+  useTopicStore.setState(state, false, "setSelectedArguable");
 };
