@@ -17,7 +17,6 @@
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.10.12",
     "dagre": "^0.8.5",
-    "immer": "^9.0.16",
     "js-file-download": "^0.4.12",
     "lodash": "^4.17.21",
     "material-react-table": "^1.7.3",
