@@ -22,12 +22,14 @@ export const EditableNode = ({ node, className = "" }: { node: Node; className?:
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
   // TODO: BUG does not work nicely with the react-flow component. Focus is being taken away from the element after the component mounts.
   useEffect(() => {
+    if (!node.selected) return;
+
     textAreaRef.current?.focus();
     textAreaRef.current?.setSelectionRange(
       textAreaRef.current.value.length,
       textAreaRef.current.value.length
     );
-  }, []);
+  }, [node.selected]);
 
   const nodeDecoration = nodeDecorations[node.type];
   const color = theme.palette[node.type].main;
