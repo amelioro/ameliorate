@@ -1,42 +1,54 @@
-import dagre from "dagre";
+import ELK, { ElkNode, LayoutOptions } from "elkjs";
 
 import { nodeWidth } from "../components/Node/EditableNode.styles";
 import { type Edge, type Node } from "../utils/diagram";
 
-export type Orientation = "TB" | "BT" | "LR" | "RL";
-export const spaceBetweenNodes = 130;
+export type Orientation = "DOWN" | "UP" | "RIGHT" | "LEFT";
 
-// mostly from https://reactflow.dev/docs/examples/layout/dagre/
-export const layout = (nodes: Node[], edges: Edge[], orientation: Orientation) => {
-  const dagreGraph = new dagre.graphlib.Graph();
+const elk = new ELK();
+
+export const layout = async (nodes: Node[], edges: Edge[], orientation: Orientation) => {
+  // see support layout options at https://www.eclipse.org/elk/reference/algorithms/org-eclipse-elk-layered.html
+  const layoutOptions: LayoutOptions = {
+    algorithm: "layered",
+    "elk.direction": orientation,
+    // results in a more centered layout - seems to moreso ignore edges when laying out
+    "elk.edgeRouting": "POLYLINE",
+    // preserve order if layout is already good enough
+    "elk.layered.considerModelOrder.strategy": "NODES_AND_EDGES",
+    // not sure why larger value is needed for horizontal orientation, but it is; probably one/some of the other spacing options
+    "elk.layered.spacing.nodeNodeBetweenLayers": orientation === "DOWN" ? "90" : "135",
+  };
+
   const height = 90; // grab size from node, but how? size adjusts based on input rows
 
-  dagreGraph.setDefaultEdgeLabel(() => ({}));
+  const graph: ElkNode = {
+    id: "elkgraph",
+    children: nodes.map((node) => {
+      return { id: node.id, width: nodeWidth, height: height };
+    }),
+    edges: edges.map((edge) => {
+      return { id: edge.id, sources: [edge.source], targets: [edge.target] };
+    }),
+  };
 
-  dagreGraph.setGraph({ rankdir: orientation, ranksep: spaceBetweenNodes });
-
-  nodes.forEach((node) => {
-    dagreGraph.setNode(node.id, { width: nodeWidth, height: height });
+  const layoutedGraph = await elk.layout(graph, {
+    layoutOptions,
+    logging: true,
+    measureExecutionTime: true,
   });
-
-  edges.forEach((edge) => {
-    // TODO: there's still overlap when connecting existing nodes
-    // height is hardcoded pixel height of text based on font size
-    dagreGraph.setEdge(edge.source, edge.target, { width: spaceBetweenNodes, height: 24 });
-  });
-
-  dagre.layout(dagreGraph);
 
   const layoutedNodes = nodes.map((node) => {
-    const nodeWithPosition = dagreGraph.node(node.id);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- we just added children above, so they should still exist
+    const nodeWithPosition = layoutedGraph.children!.find((child) => child.id === node.id)!;
 
-    // We are shifting the dagre node position (anchor=center center) to the top left
-    // so it matches the React Flow node anchor point (top left).
     return {
       ...node,
       position: {
-        x: nodeWithPosition.x - nodeWidth / 2,
-        y: nodeWithPosition.y - height / 2,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        x: nodeWithPosition.x!,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        y: nodeWithPosition.y!,
       },
     };
   });

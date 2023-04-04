@@ -110,7 +110,7 @@ const DiagramWithoutProvider = ({ diagramId }: DiagramProps) => {
         fitView
         fitViewOptions={{ maxZoom: 1 }}
         minZoom={0.25}
-        onConnect={({ source, target }) => connectNodes(source, target)}
+        onConnect={({ source, target }) => void connectNodes(source, target)}
         onEdgesChange={(changes) => onArguableChange(changes, "edge")}
         onNodesChange={(changes) => onArguableChange(changes, "node")}
         nodesDraggable={false}

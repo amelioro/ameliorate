@@ -30,7 +30,7 @@ export const AddNodeButtonGroup = ({
       variant="contained"
       aria-label="add node button group"
       className={className}
-      orientation={orientation === "TB" ? "horizontal" : "vertical"}
+      orientation={orientation === "DOWN" ? "horizontal" : "vertical"}
     >
       {addableRelations.map(({ toNodeType, relation }) => (
         <AddNodeButton

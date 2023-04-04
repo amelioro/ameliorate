@@ -1,9 +1,11 @@
+import { MouseEventHandler } from "react";
+
 import { MuiIcon } from "../../utils/node";
 import { StyledButton } from "./Indicator.styles";
 
 interface IndicatorProps {
   Icon: MuiIcon;
-  onClick?: () => void;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
 export const Indicator = ({ Icon, onClick }: IndicatorProps) => {

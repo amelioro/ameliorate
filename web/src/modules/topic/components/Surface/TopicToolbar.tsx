@@ -109,7 +109,7 @@ export const TopicToolbar = () => {
               color="inherit"
               title="Recalculate layout"
               aria-label="Recalculate layout"
-              onClick={relayout}
+              onClick={() => void relayout()}
             >
               <AlignVerticalTop />
             </IconButton>

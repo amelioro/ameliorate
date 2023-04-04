@@ -8,8 +8,8 @@ export type DiagramType = "problem" | "claim";
 export type RelationDirection = "parent" | "child";
 
 export const orientations: Record<DiagramType, Orientation> = {
-  problem: "TB",
-  claim: "LR",
+  problem: "DOWN",
+  claim: "RIGHT",
 };
 
 export const problemDiagramId = "root";
@@ -170,12 +170,12 @@ export const filterHiddenComponents = (
   return { ...diagram, nodes: shownNodes, edges: shownEdgesAfterImpliedFilter };
 };
 
-export const layoutVisibleComponents = (diagram: Diagram, claimDiagrams: Diagram[]) => {
+export const layoutVisibleComponents = async (diagram: Diagram, claimDiagrams: Diagram[]) => {
   // filter
   const displayDiagram = filterHiddenComponents(diagram, claimDiagrams, true);
 
   // layout only the displayed components
-  const { layoutedNodes } = layout(
+  const { layoutedNodes } = await layout(
     displayDiagram.nodes,
     displayDiagram.edges.filter((edge) => !isEdgeImplied(edge, displayDiagram, claimDiagrams)), // implied edges shouldn't affect layout
     orientations[diagram.type]

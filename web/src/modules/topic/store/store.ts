@@ -3,7 +3,6 @@ import { useContext } from "react";
 import { temporal } from "zundo";
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
-import { immer } from "zustand/middleware/immer";
 
 import { HydrationContext } from "../../../pages/index.page";
 import { Diagram, buildNode, filterHiddenComponents, problemDiagramId } from "../utils/diagram";
@@ -42,11 +41,14 @@ export const initialState: TopicStoreState = {
 // this is only exported to allow actions to be extracted to a separate file
 export const useTopicStore = create<TopicStoreState>()(
   temporal(
-    persist(immer(devtools(() => initialState)), {
-      name: "diagram-storage", // should probably be "topic-storage" but don't know how to migrate
-      version: 10,
-      migrate: migrate,
-    }),
+    persist(
+      devtools(() => initialState),
+      {
+        name: "diagram-storage", // should probably be "topic-storage" but don't know how to migrate
+        version: 10,
+        migrate: migrate,
+      }
+    ),
     {
       // throttle temporal storage to group many rapid changes into one
       // specific use case is for when typing in a node, to prevent each letter change from being stored

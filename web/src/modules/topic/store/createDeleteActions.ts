@@ -13,7 +13,7 @@ import {
 import { Relation, canCreateEdge, getConnectingEdge, getRelation } from "../utils/edge";
 import { NodeType, edges } from "../utils/node";
 import { TopicStoreState, useTopicStore } from "./store";
-import { getActiveDiagram, getClaimDiagrams } from "./utils";
+import { getActiveDiagram, getClaimDiagrams, getDuplicateState } from "./utils";
 
 const createNode = (state: TopicStoreState, toNodeType: NodeType) => {
   /* eslint-disable functional/immutable-data, no-param-reassign */
@@ -24,7 +24,10 @@ const createNode = (state: TopicStoreState, toNodeType: NodeType) => {
   const newNode = buildNode({ id: newNodeId, type: toNodeType, diagramId: activeDiagram.id });
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
-  activeDiagram.nodes.push(newNode);
+  activeDiagram.nodes = [
+    ...activeDiagram.nodes.map((node) => ({ ...node, selected: false })),
+    { ...newNode, selected: true },
+  ];
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   return newNode;
@@ -76,39 +79,42 @@ interface AddNodeProps {
   relation: Relation;
 }
 
-export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) => {
-  useTopicStore.setState(
-    (state) => {
-      const activeDiagram = getActiveDiagram(state);
-      const fromNode = findNode(fromNodeId, activeDiagram);
+export const addNode = async ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) => {
+  const state = getDuplicateState();
 
-      // create and connect node
-      const newNode = createNode(state, toNodeType);
+  const activeDiagram = getActiveDiagram(state);
+  const fromNode = findNode(fromNodeId, activeDiagram);
 
-      const parentNode = as === "parent" ? newNode : fromNode;
-      const childNode = as === "parent" ? fromNode : newNode;
-      createEdgeAndImpliedEdges(state, parentNode, childNode, relation);
+  // create and connect node
+  const newNode = createNode(state, toNodeType);
 
-      // connect criteria
-      if (["criterion", "solution"].includes(newNode.type) && fromNode.type === "problem") {
-        connectCriteriaToSolutions(state, newNode, fromNode);
-      }
+  const parentNode = as === "parent" ? newNode : fromNode;
+  const childNode = as === "parent" ? fromNode : newNode;
+  createEdgeAndImpliedEdges(state, parentNode, childNode, relation);
 
-      // re-layout
-      const layoutedDiagram = layoutVisibleComponents(activeDiagram, getClaimDiagrams(state));
+  // connect criteria
+  if (
+    ["criterion", "solution"].includes(newNode.type) &&
+    fromNode.type === "problem" &&
+    as === "child"
+  ) {
+    connectCriteriaToSolutions(state, newNode, fromNode);
+  }
 
-      // trigger event so viewport can be updated.
-      // seems like there should be a cleaner way to do this - perhaps custom zustand middleware to emit for any action
-      emitter.emit("addNode", findNode(newNode.id, layoutedDiagram));
+  // re-layout
+  const layoutedDiagram = await layoutVisibleComponents(activeDiagram, getClaimDiagrams(state));
 
-      /* eslint-disable functional/immutable-data, no-param-reassign */
-      activeDiagram.nodes = layoutedDiagram.nodes;
-      activeDiagram.edges = layoutedDiagram.edges;
-      /* eslint-enable functional/immutable-data, no-param-reassign */
-    },
-    false,
-    "addNode" // little gross, seems like this should be inferrable from method name
-  );
+  // trigger event so viewport can be updated.
+  // seems like there should be a cleaner way to do this - perhaps custom zustand middleware to emit for any action
+  emitter.emit("addNode", findNode(newNode.id, layoutedDiagram));
+
+  /* eslint-disable functional/immutable-data, no-param-reassign */
+  activeDiagram.nodes = layoutedDiagram.nodes;
+  activeDiagram.edges = layoutedDiagram.edges;
+  /* eslint-enable functional/immutable-data, no-param-reassign */
+
+  // TODO: can we infer the action name from the method name?
+  useTopicStore.setState(state, false, "addNode");
 };
 
 const createEdgesImpliedByComposition = (
@@ -165,90 +171,84 @@ const createEdgeAndImpliedEdges = (
   return diagram.edges;
 };
 
-export const connectNodes = (parentId: string | null, childId: string | null) => {
-  useTopicStore.setState(
-    (state) => {
-      const activeDiagram = getActiveDiagram(state);
+export const connectNodes = async (parentId: string | null, childId: string | null) => {
+  const state = getDuplicateState();
 
-      const parent = activeDiagram.nodes.find((node) => node.id === parentId);
-      const child = activeDiagram.nodes.find((node) => node.id === childId);
-      if (!parent || !child) throw new Error("parent or child not found");
+  const activeDiagram = getActiveDiagram(state);
 
-      if (!canCreateEdge(activeDiagram, parent, child)) return;
+  const parent = activeDiagram.nodes.find((node) => node.id === parentId);
+  const child = activeDiagram.nodes.find((node) => node.id === childId);
+  if (!parent || !child) throw new Error("parent or child not found");
 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- canCreateEdge ensures relation is valid
-      const relation = getRelation(parent.type, child.type)!;
+  if (!canCreateEdge(activeDiagram, parent, child)) return;
 
-      // modifies diagram.edges through `state`
-      createEdgeAndImpliedEdges(state, parent, child, relation);
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- canCreateEdge ensures relation is valid
+  const relation = getRelation(parent.type, child.type)!;
 
-      const layoutedDiagram = layoutVisibleComponents(activeDiagram, getClaimDiagrams(state));
+  // modifies diagram.edges through `state`
+  createEdgeAndImpliedEdges(state, parent, child, relation);
 
-      /* eslint-disable functional/immutable-data, no-param-reassign */
-      activeDiagram.nodes = layoutedDiagram.nodes;
-      activeDiagram.edges = layoutedDiagram.edges;
-      /* eslint-enable functional/immutable-data, no-param-reassign */
-    },
-    false,
-    "connectNodes"
-  );
+  const layoutedDiagram = await layoutVisibleComponents(activeDiagram, getClaimDiagrams(state));
+
+  /* eslint-disable functional/immutable-data, no-param-reassign */
+  activeDiagram.nodes = layoutedDiagram.nodes;
+  activeDiagram.edges = layoutedDiagram.edges;
+  /* eslint-enable functional/immutable-data, no-param-reassign */
+
+  useTopicStore.setState(state, false, "connectNodes");
 };
 
-export const deleteNode = (nodeId: string) => {
-  useTopicStore.setState(
-    (state) => {
-      const activeDiagram = getActiveDiagram(state);
+export const deleteNode = async (nodeId: string) => {
+  const state = getDuplicateState();
 
-      const node = findNode(nodeId, activeDiagram);
+  const activeDiagram = getActiveDiagram(state);
 
-      if (node.type === "rootClaim") {
-        /* eslint-disable functional/immutable-data, no-param-reassign */
-        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete -- consider using a map instead of an object?
-        delete state.diagrams[activeDiagram.id];
-        state.activeClaimDiagramId = null;
-        /* eslint-enable functional/immutable-data, no-param-reassign */
-        return;
-      }
+  const node = findNode(nodeId, activeDiagram);
 
-      const nodeEdges = edges(node, activeDiagram);
-      const childDiagramId = getClaimDiagramId(node.id, "node");
+  if (node.type === "rootClaim") {
+    /* eslint-disable functional/immutable-data, no-param-reassign */
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete -- consider using a map instead of an object?
+    delete state.diagrams[activeDiagram.id];
+    state.activeClaimDiagramId = null;
+    /* eslint-enable functional/immutable-data, no-param-reassign */
+    return;
+  }
 
-      /* eslint-disable functional/immutable-data, no-param-reassign */
-      activeDiagram.nodes = activeDiagram.nodes.filter((node) => node.id !== nodeId);
-      activeDiagram.edges = activeDiagram.edges.filter((edge) => !nodeEdges.includes(edge));
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete -- consider using a map instead of an object?
-      delete state.diagrams[childDiagramId];
-      /* eslint-enable functional/immutable-data, no-param-reassign */
+  const nodeEdges = edges(node, activeDiagram);
+  const childDiagramId = getClaimDiagramId(node.id, "node");
 
-      const layoutedDiagram = layoutVisibleComponents(activeDiagram, getClaimDiagrams(state));
+  /* eslint-disable functional/immutable-data, no-param-reassign */
+  activeDiagram.nodes = activeDiagram.nodes.filter((node) => node.id !== nodeId);
+  activeDiagram.edges = activeDiagram.edges.filter((edge) => !nodeEdges.includes(edge));
+  // eslint-disable-next-line @typescript-eslint/no-dynamic-delete -- consider using a map instead of an object?
+  delete state.diagrams[childDiagramId];
+  /* eslint-enable functional/immutable-data, no-param-reassign */
 
-      /* eslint-disable functional/immutable-data, no-param-reassign */
-      activeDiagram.nodes = layoutedDiagram.nodes;
-      activeDiagram.edges = layoutedDiagram.edges;
-      /* eslint-enable functional/immutable-data, no-param-reassign */
-    },
-    false,
-    "deleteNode"
-  );
+  const layoutedDiagram = await layoutVisibleComponents(activeDiagram, getClaimDiagrams(state));
+
+  /* eslint-disable functional/immutable-data, no-param-reassign */
+  activeDiagram.nodes = layoutedDiagram.nodes;
+  activeDiagram.edges = layoutedDiagram.edges;
+  /* eslint-enable functional/immutable-data, no-param-reassign */
+
+  useTopicStore.setState(state, false, "deleteNode");
 };
 
-export const deleteEdge = (edgeId: string) => {
-  useTopicStore.setState(
-    (state) => {
-      const activeDiagram = getActiveDiagram(state);
+export const deleteEdge = async (edgeId: string) => {
+  const state = getDuplicateState();
 
-      /* eslint-disable functional/immutable-data, no-param-reassign */
-      activeDiagram.edges = activeDiagram.edges.filter((edge) => edge.id !== edgeId);
-      /* eslint-enable functional/immutable-data, no-param-reassign */
+  const activeDiagram = getActiveDiagram(state);
 
-      const layoutedDiagram = layoutVisibleComponents(activeDiagram, getClaimDiagrams(state));
+  /* eslint-disable functional/immutable-data, no-param-reassign */
+  activeDiagram.edges = activeDiagram.edges.filter((edge) => edge.id !== edgeId);
+  /* eslint-enable functional/immutable-data, no-param-reassign */
 
-      /* eslint-disable functional/immutable-data, no-param-reassign */
-      activeDiagram.nodes = layoutedDiagram.nodes;
-      activeDiagram.edges = layoutedDiagram.edges;
-      /* eslint-enable functional/immutable-data, no-param-reassign */
-    },
-    false,
-    "deleteEdge"
-  );
+  const layoutedDiagram = await layoutVisibleComponents(activeDiagram, getClaimDiagrams(state));
+
+  /* eslint-disable functional/immutable-data, no-param-reassign */
+  activeDiagram.nodes = layoutedDiagram.nodes;
+  activeDiagram.edges = layoutedDiagram.edges;
+  /* eslint-enable functional/immutable-data, no-param-reassign */
+
+  useTopicStore.setState(state, false, "deleteEdge");
 };

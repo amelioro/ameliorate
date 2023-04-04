@@ -35,7 +35,7 @@ const tooltipItems = (
             key={`${typeLabel}-${shownLabel}`}
           >
             <IconButton
-              onClick={() => toggleShowNeighbors(parentNodeId, nodeType, direction, !shown)}
+              onClick={() => void toggleShowNeighbors(parentNodeId, nodeType, direction, !shown)}
             >
               {shown ? <Visibility /> : <VisibilityOff />}
             </IconButton>
@@ -68,10 +68,10 @@ export const NodeHandle = ({ node, direction, orientation }: Props) => {
 
   const position =
     direction === "parent"
-      ? orientation === "TB"
+      ? orientation === "DOWN"
         ? Position.Top
         : Position.Left
-      : orientation === "TB"
+      : orientation === "DOWN"
       ? Position.Bottom
       : Position.Right;
 

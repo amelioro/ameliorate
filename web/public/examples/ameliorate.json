@@ -10,7 +10,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 700, "y": 0 },
+          "position": { "x": 652, "y": 12 },
           "selected": false,
           "type": "problem"
         },
@@ -22,7 +22,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 0, "y": 244 },
+          "position": { "x": 12, "y": 223.11111111111111 },
           "selected": false,
           "type": "solution"
         },
@@ -34,7 +34,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 350, "y": 244 },
+          "position": { "x": 332, "y": 223.11111111111111 },
           "selected": false,
           "type": "solution"
         },
@@ -46,7 +46,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 700, "y": 244 },
+          "position": { "x": 652, "y": 223.11111111111111 },
           "selected": false,
           "type": "problem"
         },
@@ -58,7 +58,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 1225, "y": 244 },
+          "position": { "x": 1132, "y": 223.11111111111111 },
           "selected": false,
           "type": "problem"
         },
@@ -70,7 +70,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 1050, "y": 488 },
+          "position": { "x": 972, "y": 408 },
           "selected": false,
           "type": "solution"
         },
@@ -82,7 +82,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 700, "y": 488 },
+          "position": { "x": 652, "y": 408 },
           "selected": false,
           "type": "solution"
         },
@@ -94,7 +94,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 1400, "y": 488 },
+          "position": { "x": 1292, "y": 408 },
           "selected": false,
           "type": "solution"
         },
@@ -106,7 +106,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 1575, "y": 244 },
+          "position": { "x": 1452, "y": 223.11111111111111 },
           "selected": false,
           "type": "problem"
         }
@@ -192,5 +192,6 @@
   "activeTableProblemId": null,
   "activeClaimDiagramId": null,
   "nextNodeId": 10,
-  "nextEdgeId": 9
+  "nextEdgeId": 9,
+  "showImpliedEdges": true
 }

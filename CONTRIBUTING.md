@@ -41,7 +41,7 @@ Reading up on the tech listed in the [Built with](https://github.com/amelioro/am
 Known deviations from standard usage of the above tech:
 
 - The directory structure mostly follows the guidance in [this blog post](https://dev.to/vadorequest/a-2021-guide-about-structuring-your-next-js-project-in-a-flexible-and-efficient-way-472) for using modules for a nextjs project, except this is planned to be a mono-repo, so the root contains configs that are expected to be used across projects, and the rest currently lives in web/.
-- zustand: [only export custom hooks](https://tkdodo.eu/blog/working-with-zustand#only-export-custom-hooks), and [separate actions from the store](https://docs.pmnd.rs/zustand/guides/practice-with-no-store-actions)
+- zustand: see [store/patterns.md](https://github.com/amelioro/ameliorate/blob/main/web/src/modules/topic/store/patterns.md)
 - emotion: styled components are stored in co-located .styles.tsx files
 
 ## Working with the code

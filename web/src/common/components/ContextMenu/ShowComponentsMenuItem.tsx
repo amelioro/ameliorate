@@ -17,7 +17,7 @@ export const ShowComponentsMenuItem = ({ node }: { node: Node }) => {
   return (
     <CloseOnClickMenuItem
       onClick={() =>
-        toggleShowNeighbors(node.id, "solutionComponent", "parent", !allComponentsShown)
+        void toggleShowNeighbors(node.id, "solutionComponent", "parent", !allComponentsShown)
       }
     >
       {allComponentsShown ? "Hide components" : "Show components"}

@@ -11,7 +11,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 1585, "y": 0 },
+          "position": { "x": 462, "y": 12 },
           "selected": false,
           "type": "problem"
         },
@@ -23,7 +23,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 0, "y": 244 },
+          "position": { "x": 197.57142857142858, "y": 224.0920634920635 },
           "selected": false,
           "type": "criterion"
         },
@@ -35,7 +35,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 427.5, "y": 244 },
+          "position": { "x": 543.0714285714286, "y": 224.0920634920635 },
           "selected": false,
           "type": "criterion"
         },
@@ -47,7 +47,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 1505, "y": 244 },
+          "position": { "x": 964.0714285714286, "y": 224.0920634920635 },
           "selected": false,
           "type": "criterion"
         },
@@ -59,7 +59,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 2275, "y": 244 },
+          "position": { "x": 1284.0714285714287, "y": 224.0920634920635 },
           "selected": false,
           "type": "criterion"
         },
@@ -71,14 +71,14 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 2672.5, "y": 488 },
+          "position": { "x": 23, "y": 419.0349206349206 },
           "selected": false,
           "type": "criterion"
         },
         {
           "id": "6",
           "data": { "label": "Socialism", "score": "-", "diagramId": "root", "showing": true },
-          "position": { "x": 1122.5, "y": 732 },
+          "position": { "x": 684.0714285714286, "y": 620.3206349206348 },
           "selected": false,
           "type": "solution"
         },
@@ -90,7 +90,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 1570, "y": 976 },
+          "position": { "x": 272.07142857142856, "y": 839.3714285714284 },
           "selected": false,
           "type": "solution"
         },
@@ -102,7 +102,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 530, "y": 488 },
+          "position": { "x": 797.8571428571429, "y": 419.0349206349206 },
           "selected": false,
           "type": "solutionComponent"
         },
@@ -114,7 +114,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 880, "y": 488 },
+          "position": { "x": 477.8571428571429, "y": 419.0349206349206 },
           "selected": false,
           "type": "solutionComponent"
         },
@@ -126,7 +126,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 1582.5, "y": 732 },
+          "position": { "x": 103, "y": 620.3206349206348 },
           "selected": false,
           "type": "solutionComponent"
         },
@@ -138,7 +138,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 2162.5, "y": 732 },
+          "position": { "x": 1257.857142857143, "y": 620.3206349206348 },
           "selected": false,
           "type": "solutionComponent"
         },
@@ -150,7 +150,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 2162.5, "y": 488 },
+          "position": { "x": 1253.5714285714287, "y": 419.0349206349206 },
           "selected": false,
           "type": "effect"
         }
@@ -572,7 +572,7 @@
             "diagramId": "edge-10",
             "showing": true
           },
-          "position": { "x": 0, "y": 70 },
+          "position": { "x": 12, "y": 67 },
           "selected": false,
           "type": "rootClaim"
         },
@@ -584,7 +584,7 @@
             "diagramId": "edge-10",
             "showing": true
           },
-          "position": { "x": 560, "y": 0 },
+          "position": { "x": 448.1851851851852, "y": 12 },
           "selected": false,
           "type": "critique"
         },
@@ -596,7 +596,7 @@
             "diagramId": "edge-10",
             "showing": true
           },
-          "position": { "x": 560, "y": 140 },
+          "position": { "x": 448.1851851851852, "y": 122 },
           "selected": false,
           "type": "critique"
         }
@@ -634,7 +634,7 @@
             "diagramId": "node-4",
             "showing": true
           },
-          "position": { "x": 0, "y": 70 },
+          "position": { "x": 12, "y": 67 },
           "selected": false,
           "type": "rootClaim"
         },
@@ -646,7 +646,7 @@
             "diagramId": "node-4",
             "showing": true
           },
-          "position": { "x": 560, "y": 0 },
+          "position": { "x": 448.1851851851852, "y": 12 },
           "selected": false,
           "type": "critique"
         },
@@ -658,7 +658,7 @@
             "diagramId": "node-4",
             "showing": true
           },
-          "position": { "x": 560, "y": 140 },
+          "position": { "x": 448.1851851851852, "y": 122 },
           "selected": false,
           "type": "critique"
         }
@@ -696,7 +696,7 @@
             "diagramId": "edge-16",
             "showing": true
           },
-          "position": { "x": 0, "y": 0 },
+          "position": { "x": 12, "y": 12 },
           "selected": false,
           "type": "rootClaim"
         },
@@ -708,7 +708,7 @@
             "diagramId": "edge-16",
             "showing": true
           },
-          "position": { "x": 560, "y": 0 },
+          "position": { "x": 447, "y": 12 },
           "selected": false,
           "type": "support"
         },
@@ -720,7 +720,7 @@
             "diagramId": "edge-16",
             "showing": true
           },
-          "position": { "x": 1120, "y": 0 },
+          "position": { "x": 882, "y": 12 },
           "selected": false,
           "type": "support"
         }
@@ -758,7 +758,7 @@
             "diagramId": "edge-14",
             "showing": true
           },
-          "position": { "x": 0, "y": 70 },
+          "position": { "x": 12, "y": 67 },
           "selected": false,
           "type": "rootClaim"
         },
@@ -770,21 +770,21 @@
             "diagramId": "edge-14",
             "showing": true
           },
-          "position": { "x": 560, "y": 70 },
+          "position": { "x": 447, "y": 67 },
           "selected": false,
           "type": "critique"
         },
         {
           "id": "29",
           "data": { "label": "Inheritance", "score": "-", "diagramId": "edge-14", "showing": true },
-          "position": { "x": 1120, "y": 0 },
+          "position": { "x": 883.1851851851852, "y": 12 },
           "selected": false,
           "type": "support"
         },
         {
           "id": "30",
           "data": { "label": "Stock", "score": "-", "diagramId": "edge-14", "showing": true },
-          "position": { "x": 1120, "y": 140 },
+          "position": { "x": 883.1851851851852, "y": 122 },
           "selected": false,
           "type": "support"
         }
@@ -831,7 +831,7 @@
             "diagramId": "edge-12",
             "showing": true
           },
-          "position": { "x": 0, "y": 0 },
+          "position": { "x": 12, "y": 12 },
           "selected": false,
           "type": "rootClaim"
         },
@@ -843,7 +843,7 @@
             "diagramId": "edge-12",
             "showing": true
           },
-          "position": { "x": 560, "y": 0 },
+          "position": { "x": 447, "y": 12 },
           "selected": false,
           "type": "critique"
         }
@@ -872,7 +872,7 @@
             "diagramId": "edge-13",
             "showing": true
           },
-          "position": { "x": 0, "y": 70 },
+          "position": { "x": 12, "y": 67 },
           "selected": false,
           "type": "rootClaim"
         },
@@ -884,7 +884,7 @@
             "diagramId": "edge-13",
             "showing": true
           },
-          "position": { "x": 560, "y": 0 },
+          "position": { "x": 448.1851851851852, "y": 12 },
           "selected": false,
           "type": "support"
         },
@@ -896,7 +896,7 @@
             "diagramId": "edge-13",
             "showing": true
           },
-          "position": { "x": 560, "y": 140 },
+          "position": { "x": 448.1851851851852, "y": 122 },
           "selected": false,
           "type": "support"
         }
@@ -934,7 +934,7 @@
             "diagramId": "edge-8",
             "showing": true
           },
-          "position": { "x": 0, "y": 70 },
+          "position": { "x": 12, "y": 67 },
           "selected": false,
           "type": "rootClaim"
         },
@@ -946,7 +946,7 @@
             "diagramId": "edge-8",
             "showing": true
           },
-          "position": { "x": 560, "y": 0 },
+          "position": { "x": 448.1851851851852, "y": 12 },
           "selected": false,
           "type": "critique"
         },
@@ -958,7 +958,7 @@
             "diagramId": "edge-8",
             "showing": true
           },
-          "position": { "x": 560, "y": 140 },
+          "position": { "x": 448.1851851851852, "y": 122 },
           "selected": false,
           "type": "critique"
         },
@@ -970,7 +970,7 @@
             "diagramId": "edge-8",
             "showing": true
           },
-          "position": { "x": 1120, "y": 140 },
+          "position": { "x": 883.1851851851852, "y": 122 },
           "selected": false,
           "type": "support"
         }
@@ -1017,7 +1017,7 @@
             "diagramId": "edge-7",
             "showing": true
           },
-          "position": { "x": 0, "y": 0 },
+          "position": { "x": 12, "y": 12 },
           "selected": false,
           "type": "rootClaim"
         },
@@ -1029,7 +1029,7 @@
             "diagramId": "edge-7",
             "showing": true
           },
-          "position": { "x": 560, "y": 0 },
+          "position": { "x": 447, "y": 12 },
           "selected": false,
           "type": "support"
         },
@@ -1041,7 +1041,7 @@
             "diagramId": "edge-7",
             "showing": true
           },
-          "position": { "x": 1120, "y": 0 },
+          "position": { "x": 882, "y": 12 },
           "selected": false,
           "type": "critique"
         }
@@ -1079,7 +1079,7 @@
             "diagramId": "node-1",
             "showing": true
           },
-          "position": { "x": 0, "y": 140 },
+          "position": { "x": 12, "y": 122 },
           "selected": false,
           "type": "rootClaim"
         },
@@ -1091,7 +1091,7 @@
             "diagramId": "node-1",
             "showing": true
           },
-          "position": { "x": 560, "y": 0 },
+          "position": { "x": 449.5925925925926, "y": 12 },
           "selected": false,
           "type": "support"
         },
@@ -1103,7 +1103,7 @@
             "diagramId": "node-1",
             "showing": true
           },
-          "position": { "x": 560, "y": 140 },
+          "position": { "x": 449.5925925925926, "y": 122 },
           "selected": false,
           "type": "critique"
         },
@@ -1115,7 +1115,7 @@
             "diagramId": "node-1",
             "showing": true
           },
-          "position": { "x": 560, "y": 280 },
+          "position": { "x": 449.5925925925926, "y": 232 },
           "selected": false,
           "type": "critique"
         },
@@ -1127,7 +1127,7 @@
             "diagramId": "node-1",
             "showing": true
           },
-          "position": { "x": 1120, "y": 0 },
+          "position": { "x": 884.5925925925926, "y": 12 },
           "selected": false,
           "type": "critique"
         }

@@ -16,7 +16,7 @@ export const ShowEffectsMenuItem = ({ node }: { node: Node }) => {
 
   return (
     <CloseOnClickMenuItem
-      onClick={() => toggleShowNeighbors(node.id, "effect", "parent", !allEffectsShown)}
+      onClick={() => void toggleShowNeighbors(node.id, "effect", "parent", !allEffectsShown)}
     >
       {allEffectsShown ? "Hide effects" : "Show effects"}
     </CloseOnClickMenuItem>

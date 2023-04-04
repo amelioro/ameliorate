@@ -3,7 +3,7 @@ import React from "react";
 import { EdgeLabelRenderer, getBezierPath } from "reactflow";
 
 import { openContextMenu } from "../../../../common/store/contextMenuActions";
-import { setSelectedEdge } from "../../store/actions";
+import { setSelectedArguable } from "../../store/actions";
 import { useIsAnyArguableSelected } from "../../store/arguableHooks";
 import { useIsImplied, useIsNodeSelected } from "../../store/edgeHooks";
 import { Edge, markerStart } from "../../utils/diagram";
@@ -68,7 +68,7 @@ export const ScoreEdge = (flowEdge: EdgeProps) => {
         <StyledDiv
           labelX={labelX}
           labelY={labelY}
-          onClick={() => setSelectedEdge(edge.id)}
+          onClick={() => setSelectedArguable(edge.id, "edge")}
           onContextMenu={(event) => openContextMenu(event, { edge })}
           isEdgeSelected={edge.selected}
           isNodeSelected={isNodeSelected}

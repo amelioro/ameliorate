@@ -3,7 +3,7 @@ import _ from "lodash";
 import { useEffect, useRef } from "react";
 
 import { openContextMenu } from "../../../../common/store/contextMenuActions";
-import { setNodeLabel } from "../../store/actions";
+import { setNodeLabel, setSelectedArguable } from "../../store/actions";
 import { Node } from "../../utils/diagram";
 import { nodeDecorations } from "../../utils/node";
 import { NodeIndicatorGroup } from "../Indicator/NodeIndicatorGroup";
@@ -22,12 +22,14 @@ export const EditableNode = ({ node, className = "" }: { node: Node; className?:
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
   // TODO: BUG does not work nicely with the react-flow component. Focus is being taken away from the element after the component mounts.
   useEffect(() => {
+    if (!node.selected) return;
+
     textAreaRef.current?.focus();
     textAreaRef.current?.setSelectionRange(
       textAreaRef.current.value.length,
       textAreaRef.current.value.length
     );
-  }, []);
+  }, [node.selected]);
 
   const nodeDecoration = nodeDecorations[node.type];
   const color = theme.palette[node.type].main;
@@ -37,6 +39,7 @@ export const EditableNode = ({ node, className = "" }: { node: Node; className?:
     <NodeDiv
       color={color}
       className={className + (node.selected ? " selected" : "")}
+      onClick={() => setSelectedArguable(node.id, "node")}
       onContextMenu={(event) => openContextMenu(event, { node })}
     >
       <YEdgeDiv>
