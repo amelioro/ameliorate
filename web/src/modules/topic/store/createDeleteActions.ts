@@ -24,7 +24,10 @@ const createNode = (state: TopicStoreState, toNodeType: NodeType) => {
   const newNode = buildNode({ id: newNodeId, type: toNodeType, diagramId: activeDiagram.id });
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
-  activeDiagram.nodes.push(newNode);
+  activeDiagram.nodes = [
+    ...activeDiagram.nodes.map((node) => ({ ...node, selected: false })),
+    { ...newNode, selected: true },
+  ];
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   return newNode;
