@@ -1,6 +1,6 @@
 import { type ButtonProps, type Palette } from "@mui/material";
 import _ from "lodash";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { useTopicZoom } from "../../hooks/topicHooks";
 import { type ArguableType, type Score as ScoreData } from "../../utils/diagram";
@@ -34,10 +34,17 @@ export const Score = ({ arguableId, arguableType, score }: ScoreProps) => {
   const zoomRatio = useTopicZoom();
   const [selected, setSelected] = useState(false);
   const [hovering, setHovering] = useState(false);
-  const mainButtonRef = useRef(null);
+  const [refButtonHeight, setRefButtonHeight] = useState(0);
+  const mainButtonRef = useRef<HTMLButtonElement | null>(null);
 
-  const buttonLength = indicatorLength; //px
-  const buttonLengthScaled = buttonLength * zoomRatio; //px * zoom
+  useEffect(() => {
+    if (mainButtonRef.current?.clientHeight) {
+      setRefButtonHeight(mainButtonRef.current.clientHeight);
+    }
+  }, [mainButtonRef]);
+
+  const buttonLength = indicatorLength; //rem
+  const buttonLengthScaled = buttonLength * zoomRatio; //rem * zoom
   const circleDiameter = 6 * buttonLengthScaled; // no collisions for fitting 10 elements
 
   const scoreColor = scoreColors[score] as ButtonProps["color"]; // not sure how to type this without type assertion, while still being able to access palette with it
@@ -86,7 +93,7 @@ export const Score = ({ arguableId, arguableType, score }: ScoreProps) => {
             name: "offset",
             options: {
               // position centered on top of the main button https://popper.js.org/docs/v2/modifiers/offset/
-              offset: [0, -buttonLengthScaled],
+              offset: [0, -refButtonHeight * zoomRatio],
             },
           },
         ]}
@@ -104,9 +111,8 @@ export const Score = ({ arguableId, arguableType, score }: ScoreProps) => {
           buttonLength={buttonLengthScaled}
           variant="contained"
           color={scoreColor}
-          fontScaler={zoomRatio}
+          zoomRatio={zoomRatio}
         >
-          {/* <Box sx={{ transform: `scale(${zoomRatio})` }}>{score}</Box> */}
           {/* i bet material icons would look way nicer than this text... but material only has number icons 1-6 :( */}
           {score}
         </StyledButton>

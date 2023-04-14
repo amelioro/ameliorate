@@ -4,9 +4,9 @@ import { Button } from "@mui/material";
 import { indicatorLength } from "../../utils/node";
 
 export const StyledButton = styled(Button)`
-  width: ${indicatorLength}px;
-  min-width: ${indicatorLength}px;
-  height: ${indicatorLength}px;
+  width: ${indicatorLength}rem;
+  min-width: ${indicatorLength}rem;
+  height: ${indicatorLength}rem;
   margin-right: 2px;
   padding: 0px;
 
