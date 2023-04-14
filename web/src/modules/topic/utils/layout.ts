@@ -1,6 +1,6 @@
 import ELK, { ElkNode, LayoutOptions } from "elkjs";
 
-import { nodeWidth } from "../components/Node/EditableNode.styles";
+import { nodeWidthPx } from "../components/Node/EditableNode.styles";
 import { type Edge, type Node } from "../utils/diagram";
 
 export type Orientation = "DOWN" | "UP" | "RIGHT" | "LEFT";
@@ -25,7 +25,7 @@ export const layout = async (nodes: Node[], edges: Edge[], orientation: Orientat
   const graph: ElkNode = {
     id: "elkgraph",
     children: nodes.map((node) => {
-      return { id: node.id, width: nodeWidth, height: height };
+      return { id: node.id, width: nodeWidthPx, height: height };
     }),
     edges: edges.map((edge) => {
       return { id: edge.id, sources: [edge.source], targets: [edge.target] };

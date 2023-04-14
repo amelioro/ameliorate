@@ -1,8 +1,12 @@
 import styled from "@emotion/styled";
 import { TextareaAutosize } from "@mui/material";
 
-export const nodeWidth = 300;
-export const nodeHeight = 84;
+import { htmlDefaultFontSize } from "../../../../pages/_document.page";
+
+const nodeWidthRem = 16;
+
+export const nodeWidthPx = nodeWidthRem * htmlDefaultFontSize;
+export const nodeHeightPx = 66;
 
 export const YEdgeDiv = styled.div`
   display: flex;
@@ -17,8 +21,8 @@ export const NodeTypeDiv = styled.div`
 `;
 
 export const NodeTypeSpan = styled.span`
-  font-size: 16px;
-  line-height: 16px;
+  font-size: 0.875rem;
+  line-height: 1;
   padding-left: 4px;
 `;
 
@@ -50,7 +54,7 @@ export const StyledTextareaAutosize = styled(TextareaAutosize)<StyledTextareaPro
   align-self: center;
   background-color: ${({ color }) => color};
   width: 100%;
-  font-size: 20px;
+  font-size: 1rem;
   font-family: inherit;
 `;
 
@@ -64,7 +68,7 @@ const options = {
 
 /* some copied from https://github.com/wbkd/react-flow/blob/147656b22f577bb4141664d000e62ada9b490473/src/theme-default.css#L42-L77 */
 export const NodeDiv = styled("div", options)<NodeDivProps>`
-  width: ${nodeWidth}px;
+  width: clamp(200px, 11rem, ${nodeWidthPx}px);
   height: 100%; // allow expanding for use with table cells
 
   background: ${({ color }) => color};

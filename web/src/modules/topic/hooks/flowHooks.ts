@@ -1,6 +1,6 @@
 import { type Viewport, useReactFlow, useStore, useViewport } from "reactflow";
 
-import { nodeHeight, nodeWidth } from "../components/Node/EditableNode.styles";
+import { nodeHeightPx, nodeWidthPx } from "../components/Node/EditableNode.styles";
 import { Node } from "../utils/diagram";
 
 const getViewportToIncludeNode = (
@@ -14,8 +14,8 @@ const getViewportToIncludeNode = (
   const scaledDistanceToKeepNodeInViewport = distanceToKeepNodeInViewport * viewport.zoom;
   const scaledNodeX = node.position.x * viewport.zoom;
   const scaledNodeY = node.position.y * viewport.zoom;
-  const scaledNodeWidth = nodeWidth * viewport.zoom;
-  const scaledNodeHeight = nodeHeight * viewport.zoom;
+  const scaledNodeWidth = nodeWidthPx * viewport.zoom;
+  const scaledNodeHeight = nodeHeightPx * viewport.zoom;
 
   const viewportXForNodeWithinLeftBounds = scaledDistanceToKeepNodeInViewport - scaledNodeX;
   const viewportXForNodeWithinRightBounds =
