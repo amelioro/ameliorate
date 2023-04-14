@@ -13,7 +13,6 @@ import {
   NodeTypeDiv,
   NodeTypeSpan,
   StyledTextareaAutosize,
-  XEdgeDiv,
   YEdgeDiv,
 } from "./EditableNode.styles";
 
@@ -50,7 +49,6 @@ export const EditableNode = ({ node, className = "" }: { node: Node; className?:
         <NodeIndicatorGroup node={node} />
       </YEdgeDiv>
       <MiddleDiv>
-        <XEdgeDiv />
         <StyledTextareaAutosize
           ref={textAreaRef}
           color={color}
@@ -64,9 +62,7 @@ export const EditableNode = ({ node, className = "" }: { node: Node; className?:
           onChange={(event) => setNodeLabel(node.id, event.target.value)}
           className="nopan" // allow regular text input drag functionality without using reactflow's pan behavior
         />
-        <XEdgeDiv />
       </MiddleDiv>
-      <YEdgeDiv />
     </NodeDiv>
   );
 };

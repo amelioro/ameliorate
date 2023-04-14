@@ -34,6 +34,8 @@ export const XEdgeDiv = styled.div`
 export const MiddleDiv = styled.div`
   display: flex;
   flex-grow: 1; // fill out remaining space with this div because it contains the textarea
+  padding: 8px;
+  margin-bottom: 8px;
 `;
 
 interface StyledTextareaProps {
