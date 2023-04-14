@@ -28,7 +28,7 @@ interface DrawerProps {
   open: boolean;
 }
 
-const width = "300px";
+const width = "min(18.75rem, 100vw - 2rem)";
 const options = {
   // `open` adds different transitions if passed to Material component
   shouldForwardProp: (prop: string) => !["open"].includes(prop),
