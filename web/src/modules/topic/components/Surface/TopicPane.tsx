@@ -9,7 +9,7 @@ import {
   TableChart,
   TableView,
 } from "@mui/icons-material";
-import { Collapse, List, ListItem, ListItemIcon, ListItemText, Toolbar } from "@mui/material";
+import { Collapse, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import { useState } from "react";
 
 import { useNodes } from "../../store/nodeHooks";
@@ -56,9 +56,6 @@ export const TopicPane = () => {
         </TogglePaneButton>
         {/* `permanent` because `persistent` adds transitions that conflict with our styles */}
         <StyledDrawer variant="permanent" open={isTopicDrawerOpen}>
-          {/* Drawer's Paper height is full height of screen, so this toolbar exists to push the list below the two toolbars on the page */}
-          <Toolbar variant="dense" />
-          <Toolbar variant="dense" />
           <List>
             <ListItem key="1" disablePadding>
               <StyledListItemButton

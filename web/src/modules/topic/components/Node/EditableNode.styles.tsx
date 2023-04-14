@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
 import { TextareaAutosize } from "@mui/material";
 
-export const nodeWidth = 300;
-export const nodeHeight = 84;
+export const nodeWidth = 176;
+export const nodeHeight = 66;
 
 export const YEdgeDiv = styled.div`
   display: flex;
@@ -17,8 +17,8 @@ export const NodeTypeDiv = styled.div`
 `;
 
 export const NodeTypeSpan = styled.span`
-  font-size: 16px;
-  line-height: 16px;
+  font-size: 14px;
+  line-height: 1;
   padding-left: 4px;
 `;
 
@@ -34,6 +34,7 @@ export const XEdgeDiv = styled.div`
 export const MiddleDiv = styled.div`
   display: flex;
   flex-grow: 1; // fill out remaining space with this div because it contains the textarea
+  padding: 4px 4px 8px;
 `;
 
 interface StyledTextareaProps {
@@ -48,7 +49,8 @@ export const StyledTextareaAutosize = styled(TextareaAutosize)<StyledTextareaPro
   align-self: center;
   background-color: ${({ color }) => color};
   width: 100%;
-  font-size: 20px;
+  font-size: 16px;
+  line-height: 1;
   font-family: inherit;
 `;
 
