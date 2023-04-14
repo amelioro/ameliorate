@@ -14,6 +14,7 @@ export const NestedListItemButton = styled(StyledListItemButton)`
 export const PositionedDiv = styled.div`
   display: flex;
   position: absolute;
+  height: 100%;
 `;
 
 export const TogglePaneButton = styled(IconButton)`
@@ -40,14 +41,16 @@ const options = {
 export const StyledDrawer = styled(Drawer, options)<DrawerProps>`
   // paper uses 'transform' for transition by default, but I wasn't sure how to match that in the parent Drawer div,
   // so we're using 'width' for both instead, as done in https://mui.com/material-ui/react-drawer/#mini-variant-drawer
-  width: ${({ open }) => (open ? width : "0px")};
+  width: ${({ open }) => (open ? width : "0")};
   transition: ${({ theme }) => theme.transitions.create(["width"])};
   white-space: nowrap; // prevent wrapping during drawer transition
 
   & .MuiDrawer-paper {
     z-index: ${({ theme }) => theme.zIndex.appBar - 1};
-    width: ${({ open }) => (open ? width : "0px")};
+    width: ${({ open }) => (open ? width : "0")};
     transition: ${({ theme }) => theme.transitions.create(["width"])};
     overflow-x: hidden; // prevent scrollbar during drawer transition
+    // allows the drawer to start at parent position, as opposed to MUI's default fixed positioning starting from top of page
+    position: relative;
   }
 `;
