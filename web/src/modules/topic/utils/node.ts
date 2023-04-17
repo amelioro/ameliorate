@@ -12,7 +12,7 @@ import {
 import { Diagram, Node } from "./diagram";
 import { componentTypes } from "./edge";
 
-export const indicatorLength = 20; // px
+export const indicatorLengthRem = 1.25; // rem
 
 export type MuiIcon = typeof Extension;
 
