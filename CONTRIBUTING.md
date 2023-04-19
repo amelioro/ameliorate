@@ -60,6 +60,10 @@ To run linting:
 npm run lint # from web/
 ```
 
+### UX / UI style
+
+For user experience & user interface design, please read [uxui-guidelines](./web/docs/uxui-guidelines.md)
+
 ### Conventional commits
 
 [Conventional commits](https://www.conventionalcommits.org/) is a standard format for commit messages, used to aid readability of commit history. This commit message format, with [these commit types](https://github.com/amelioro/ameliorate/blob/main/commitlint.config.js), is enforced in a precommit hook via [commitlint](https://github.com/conventional-changelog/commitlint) and [husky](https://github.com/typicode/husky/).
