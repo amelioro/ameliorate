@@ -1,13 +1,21 @@
 import { css } from "@emotion/react";
 
-const tableToolbarHeightPx = "56px";
+// values set by mui and material-react-table
+const iconHeight = "1.5rem";
+const iconPadding = "16px";
+const toolbarPadding = "1rem";
+const toolbarMinimumHeight = "3.5rem";
 
 export const tableStyles = css`
   // note: need two selectors to have higher precedence than MUI styles
   .criteria-table-paper {
-    height: calc(100% - ${tableToolbarHeightPx});
+    height: 100%;
+
     .MuiTableContainer-root {
-      max-height: 100%;
+      max-height: min(
+        100% - ${iconHeight} - ${iconPadding} - ${toolbarPadding},
+        100% - ${toolbarMinimumHeight}
+      );
       /* MUI-Paper is not sized dynamically with the total table. 
         Because of this; directly applying the box shadow from MUI-paper onto table */
       box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14),

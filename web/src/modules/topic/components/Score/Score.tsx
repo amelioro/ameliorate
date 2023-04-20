@@ -2,9 +2,10 @@ import { type ButtonProps, type Palette } from "@mui/material";
 import _ from "lodash";
 import { useRef, useState } from "react";
 
+import { htmlDefaultFontSize } from "../../../../pages/_document.page";
 import { useTopicZoom } from "../../hooks/topicHooks";
 import { type ArguableType, type Score as ScoreData } from "../../utils/diagram";
-import { indicatorLength } from "../../utils/node";
+import { indicatorLengthRem } from "../../utils/node";
 import { BackdropPopper, ScorePopper, StyledButton } from "./Score.styles";
 import { ScorePie } from "./ScorePie";
 
@@ -34,11 +35,14 @@ export const Score = ({ arguableId, arguableType, score }: ScoreProps) => {
   const zoomRatio = useTopicZoom();
   const [selected, setSelected] = useState(false);
   const [hovering, setHovering] = useState(false);
-  const mainButtonRef = useRef(null);
+  const mainButtonRef = useRef<HTMLButtonElement | null>(null);
 
-  const buttonLength = indicatorLength; //px
-  const buttonLengthScaled = buttonLength * zoomRatio; //px * zoom
-  const circleDiameter = 6 * buttonLengthScaled; // no collisions for fitting 10 elements
+  const buttonLengthRem = indicatorLengthRem; //rem
+  const buttonLengthRemScaled = buttonLengthRem * zoomRatio; //rem * zoom
+  const circleDiameter = 6 * buttonLengthRemScaled; // no collisions for fitting 10 elements
+
+  const buttonHeightPx =
+    mainButtonRef.current?.clientHeight ?? buttonLengthRem * htmlDefaultFontSize;
 
   const scoreColor = scoreColors[score] as ButtonProps["color"]; // not sure how to type this without type assertion, while still being able to access palette with it
 
@@ -47,7 +51,7 @@ export const Score = ({ arguableId, arguableType, score }: ScoreProps) => {
       <StyledButton
         onClick={() => setSelected(true)}
         onMouseEnter={() => setHovering(true)}
-        buttonLength={buttonLength}
+        buttonLength={buttonLengthRem}
         variant="contained"
         color={scoreColor}
         ref={mainButtonRef}
@@ -86,7 +90,7 @@ export const Score = ({ arguableId, arguableType, score }: ScoreProps) => {
             name: "offset",
             options: {
               // position centered on top of the main button https://popper.js.org/docs/v2/modifiers/offset/
-              offset: [0, -buttonLengthScaled],
+              offset: [0, -buttonHeightPx * zoomRatio],
             },
           },
         ]}
@@ -101,12 +105,11 @@ export const Score = ({ arguableId, arguableType, score }: ScoreProps) => {
         {/* TODO: extract ScoreButton component for reuse - couldn't figure out how to get forwardref to work */}
         <StyledButton
           onClick={() => setSelected(!selected)}
-          buttonLength={buttonLengthScaled}
+          buttonLength={buttonLengthRemScaled}
           variant="contained"
           color={scoreColor}
-          fontScaler={zoomRatio}
+          zoomRatio={zoomRatio}
         >
-          {/* <Box sx={{ transform: `scale(${zoomRatio})` }}>{score}</Box> */}
           {/* i bet material icons would look way nicer than this text... but material only has number icons 1-6 :( */}
           {score}
         </StyledButton>

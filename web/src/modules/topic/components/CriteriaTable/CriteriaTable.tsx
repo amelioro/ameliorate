@@ -128,6 +128,7 @@ export const CriteriaTable = ({ problemNodeId }: Props) => {
   return (
     <>
       <Global styles={tableStyles} />
+
       <MaterialReactTable
         columns={columnData}
         data={rowData}
@@ -137,6 +138,8 @@ export const CriteriaTable = ({ problemNodeId }: Props) => {
         renderToolbarInternalActions={({ table }) => ToolBarActions(table)}
         enableSorting={false}
         enableStickyHeader={true}
+        // not very well documented in the library, but this drop zone takes up space for unknown reasons.
+        positionToolbarDropZone="none"
         muiTablePaperProps={{
           className: "criteria-table-paper",
         }}

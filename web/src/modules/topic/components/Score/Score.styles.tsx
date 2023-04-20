@@ -3,20 +3,20 @@ import { Button, Popper, css } from "@mui/material";
 
 interface StyledButtonProps {
   buttonLength: number;
-  fontScaler?: number;
+  zoomRatio?: number;
 }
 
 // seems like MUI automatically forwards invalid props to underlying HTML components?
 // this seems wrong, or at least that it shouldn't be the default
 const buttonOptions = {
-  shouldForwardProp: (prop: string) => !["buttonLength", "fontScaler"].includes(prop),
+  shouldForwardProp: (prop: string) => !["buttonLength", "zoomRatio"].includes(prop),
 };
 export const StyledButton = styled(Button, buttonOptions)<StyledButtonProps>`
-  height: ${({ buttonLength }) => `${buttonLength}px`};
-  width: ${({ buttonLength }) => `${buttonLength}px`};
-  min-width: ${({ buttonLength }) => `${buttonLength}px`};
-  line-height: ${({ fontScaler = 1 }) => `${16 * fontScaler}px`};
-  font-size: ${({ fontScaler = 1 }) => `${16 * fontScaler}px`};
+  height: ${({ buttonLength }) => `${buttonLength}rem`};
+  width: ${({ buttonLength }) => `${buttonLength}rem`};
+  min-width: ${({ buttonLength }) => `${buttonLength}rem`};
+  line-height: ${({ zoomRatio = 1 }) => `${zoomRatio}rem`};
+  font-size: ${({ zoomRatio = 1 }) => `${zoomRatio}rem`};
   padding: 0px;
   border-radius: 50%;
 `;
@@ -71,6 +71,6 @@ export const CircleDiv = styled("div", circleOptions)<CircleProps>`
   border-radius: 50%;
   overflow: hidden;
 
-  height: ${({ circleDiameter }) => `${circleDiameter}px`};
-  width: ${({ circleDiameter }) => `${circleDiameter}px`};
+  height: ${({ circleDiameter }) => `${circleDiameter}rem`};
+  width: ${({ circleDiameter }) => `${circleDiameter}rem`};
 `;

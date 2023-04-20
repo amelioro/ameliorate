@@ -1,6 +1,6 @@
 import ELK, { ElkNode, LayoutOptions } from "elkjs";
 
-import { nodeWidth } from "../components/Node/EditableNode.styles";
+import { nodeHeightPx, nodeWidthPx } from "../components/Node/EditableNode.styles";
 import { type Edge, type Node } from "../utils/diagram";
 
 export type Orientation = "DOWN" | "UP" | "RIGHT" | "LEFT";
@@ -16,16 +16,15 @@ export const layout = async (nodes: Node[], edges: Edge[], orientation: Orientat
     "elk.edgeRouting": "POLYLINE",
     // preserve order if layout is already good enough
     "elk.layered.considerModelOrder.strategy": "NODES_AND_EDGES",
-    // not sure why larger value is needed for horizontal orientation, but it is; probably one/some of the other spacing options
+    // these spacings are just what roughly seem to look good
     "elk.layered.spacing.nodeNodeBetweenLayers": orientation === "DOWN" ? "90" : "135",
+    "elk.spacing.nodeNode": orientation === "DOWN" ? "20" : "50",
   };
-
-  const height = 90; // grab size from node, but how? size adjusts based on input rows
 
   const graph: ElkNode = {
     id: "elkgraph",
     children: nodes.map((node) => {
-      return { id: node.id, width: nodeWidth, height: height };
+      return { id: node.id, width: nodeWidthPx, height: nodeHeightPx };
     }),
     edges: edges.map((edge) => {
       return { id: edge.id, sources: [edge.source], targets: [edge.target] };
