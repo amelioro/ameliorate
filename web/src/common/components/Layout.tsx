@@ -27,6 +27,8 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
   const theme = useTheme();
   const githubIconSrc =
     theme.palette.mode == "light" ? "/GitHub-Mark-64px.png" : "/GitHub-Mark-Light-64px.png";
+  const discordIconSrc =
+    theme.palette.mode == "light" ? "/icon_clyde_black_RGB.png" : "/icon_clyde_white_RGB.png";
 
   return (
     <>
@@ -39,6 +41,9 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
               {/* <NavLink href="/mine">my understandings</NavLink> */}
               <NavLink href="/about">about</NavLink>
               {/* <NavLink href="/login">login</NavLink> */}
+              <NavLink href="https://discord.gg/m86TjZdrwS" display="flex">
+                <Image src={discordIconSrc} height={24} width={32} alt="discord link" />
+              </NavLink>
               <NavLink href="https://github.com/amelioro/ameliorate" display="flex">
                 <Image src={githubIconSrc} height={32} width={32} alt="github link" />
               </NavLink>
