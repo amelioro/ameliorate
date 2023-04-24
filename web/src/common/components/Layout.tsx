@@ -41,7 +41,7 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
               {/* <NavLink href="/mine">my understandings</NavLink> */}
               <NavLink href="/about">about</NavLink>
               {/* <NavLink href="/login">login</NavLink> */}
-              <NavLink href="https://discord.gg/m86TjZdrwS" display="flex">
+              <NavLink href="https://discord.gg/3KhdyJkTWT" display="flex">
                 <Image src={discordIconSrc} height={24} width={32} alt="discord link" />
               </NavLink>
               <NavLink href="https://github.com/amelioro/ameliorate" display="flex">
