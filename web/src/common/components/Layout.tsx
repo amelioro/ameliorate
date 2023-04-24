@@ -28,7 +28,7 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
   const githubIconSrc =
     theme.palette.mode == "light" ? "/GitHub-Mark-64px.png" : "/GitHub-Mark-Light-64px.png";
   const discordIconSrc =
-    theme.palette.mode == "light" ? "/icon_clyde_black_RGB.png" : "/icon_clyde_white_RGB.png";
+    theme.palette.mode == "light" ? "/Discord-Mark-Black.png" : "/Discord-Mark-White.png";
 
   return (
     <>
