@@ -10,11 +10,12 @@ import {
 } from "@mui/icons-material";
 import { AppBar, Button, Divider, IconButton, MenuItem, Toolbar } from "@mui/material";
 import fileDownload from "js-file-download";
+import { StorageValue } from "zustand/middleware";
 
 import { Menu } from "../../../../common/components/Menu/Menu";
 import { useMenu } from "../../../../common/hooks";
 import { TopicStoreState, useIsTableActive, useShowImpliedEdges } from "../../store/store";
-import { getState, redo, resetState, setState, undo } from "../../store/utilActions";
+import { getPersistState, redo, resetState, setState, undo } from "../../store/utilActions";
 import { getTopicTitle } from "../../store/utils";
 import { relayout, toggleShowImpliedEdges } from "../../store/viewActions";
 import { StyledToggleButton } from "./TopicToolbar.styles";
@@ -22,10 +23,13 @@ import { StyledToggleButton } from "./TopicToolbar.styles";
 // TODO: might be useful to have downloaded state be more human editable;
 // for this, probably should prettify the JSON, and remove position values (we can re-layout on import)
 const downloadTopic = () => {
-  const topicState = getState();
+  const persistState = getPersistState();
+
+  const topicState = persistState.state;
   const topicTitle = getTopicTitle(topicState);
   const sanitizedFileName = topicTitle.replace(/[^a-z0-9]/gi, "_").toLowerCase(); // thanks https://stackoverflow.com/a/8485137
-  fileDownload(JSON.stringify(topicState), `${sanitizedFileName}.json`);
+
+  fileDownload(JSON.stringify(persistState), `${sanitizedFileName}.json`);
 };
 
 const uploadTopic = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,8 +37,11 @@ const uploadTopic = (event: React.ChangeEvent<HTMLInputElement>) => {
 
   event.target.files[0]
     .text()
-    // TODO: validate that file JSON matches interface
-    .then((text) => setState(JSON.parse(text) as TopicStoreState))
+    .then((text) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- TODO: validate that JSON matches interface
+      const persistState = JSON.parse(text) as StorageValue<TopicStoreState>;
+      setState(persistState.state);
+    })
     .catch((error) => {
       console.log("error reading file: ", error);
       throw new Error("Failed to read file");
@@ -45,7 +52,10 @@ const loadExample = (exampleFileName: string) => {
   fetch(`/examples/${exampleFileName}`)
     .then((response) => response.json())
     // TODO: validate that file JSON matches interface
-    .then((exampleState) => setState(exampleState as TopicStoreState))
+    .then((loadedJson) => {
+      const persistState = loadedJson as StorageValue<TopicStoreState>;
+      setState(persistState.state);
+    })
     .catch((error) => {
       console.log("error loading example: ", error);
       throw new Error("Failed to load example");
