@@ -1,260 +1,491 @@
 {
-  "diagrams": {
-    "root": {
-      "nodes": [
-        {
-          "id": "0",
-          "data": { "label": "world hunger", "score": "-", "diagramId": "root", "showing": true },
-          "position": { "x": 652, "y": 12 },
-          "selected": false,
-          "type": "problem"
-        },
-        {
-          "id": "2",
-          "data": {
-            "label": "region internally uncooperative",
-            "score": "-",
-            "diagramId": "root",
-            "showing": true
+  "state": {
+    "diagrams": {
+      "root": {
+        "nodes": [
+          {
+            "id": "0",
+            "data": { "label": "world hunger", "score": "-", "diagramId": "root", "showing": true },
+            "position": { "x": 404, "y": 12 },
+            "selected": false,
+            "type": "problem"
           },
-          "position": { "x": 12, "y": 230.66666666666669 },
-          "selected": false,
-          "type": "problem"
-        },
-        {
-          "id": "3",
-          "data": {
-            "label": "cannot afford importing food",
-            "score": "-",
-            "diagramId": "root",
-            "showing": true
+          {
+            "id": "2",
+            "data": {
+              "label": "region internally uncooperative",
+              "score": "-",
+              "diagramId": "root",
+              "showing": true
+            },
+            "position": { "x": 12, "y": 215.84 },
+            "selected": false,
+            "type": "problem"
           },
-          "position": { "x": 332, "y": 230.66666666666669 },
-          "selected": false,
-          "type": "problem"
-        },
-        {
-          "id": "4",
-          "data": {
-            "label": "poor food production",
-            "score": "8",
-            "diagramId": "root",
-            "showing": true
+          {
+            "id": "3",
+            "data": {
+              "label": "cannot afford importing food",
+              "score": "-",
+              "diagramId": "root",
+              "showing": true
+            },
+            "position": { "x": 208, "y": 215.84 },
+            "selected": false,
+            "type": "problem"
           },
-          "position": { "x": 972, "y": 230.66666666666669 },
-          "selected": false,
-          "type": "problem"
-        },
-        {
-          "id": "5",
-          "data": {
-            "label": "poor food transportation logistics",
-            "score": "-",
-            "diagramId": "root",
-            "showing": true
+          {
+            "id": "4",
+            "data": {
+              "label": "poor food production",
+              "score": "8",
+              "diagramId": "root",
+              "showing": true
+            },
+            "position": { "x": 600, "y": 215.84 },
+            "selected": false,
+            "type": "problem"
           },
-          "position": { "x": 1612, "y": 230.66666666666669 },
-          "selected": false,
-          "type": "problem"
-        },
-        {
-          "id": "6",
-          "data": { "label": "send diplomats", "score": "-", "diagramId": "root", "showing": true },
-          "position": { "x": 12, "y": 421.55555555555554 },
-          "selected": false,
-          "type": "solution"
-        },
-        {
-          "id": "7",
-          "data": { "label": "donate food", "score": "-", "diagramId": "root", "showing": true },
-          "position": { "x": 332, "y": 421.55555555555554 },
-          "selected": false,
-          "type": "solution"
-        },
-        {
-          "id": "8",
-          "data": {
-            "label": "fund agricultural research",
-            "score": "-",
-            "diagramId": "root",
-            "showing": true
+          {
+            "id": "5",
+            "data": {
+              "label": "poor food transportation logistics",
+              "score": "-",
+              "diagramId": "root",
+              "showing": true
+            },
+            "position": { "x": 992, "y": 215.84 },
+            "selected": false,
+            "type": "problem"
           },
-          "position": { "x": 652, "y": 421.55555555555554 },
-          "selected": false,
-          "type": "solution"
-        },
-        {
-          "id": "9",
-          "data": {
-            "label": "donate agriculture tech",
-            "score": "-",
-            "diagramId": "root",
-            "showing": true
+          {
+            "id": "6",
+            "data": {
+              "label": "send diplomats",
+              "score": "-",
+              "diagramId": "root",
+              "showing": true
+            },
+            "position": { "x": 12, "y": 406.90666666666664 },
+            "selected": false,
+            "type": "solution"
           },
-          "position": { "x": 972, "y": 421.55555555555554 },
-          "selected": false,
-          "type": "solution"
-        },
-        {
-          "id": "10",
-          "data": { "label": "train farmers", "score": "-", "diagramId": "root", "showing": true },
-          "position": { "x": 1292, "y": 421.55555555555554 },
-          "selected": false,
-          "type": "solution"
-        },
-        {
-          "id": "11",
-          "data": {
-            "label": "train logistics engineers",
-            "score": "-",
-            "diagramId": "root",
-            "showing": true
+          {
+            "id": "7",
+            "data": { "label": "donate food", "score": "-", "diagramId": "root", "showing": true },
+            "position": { "x": 208, "y": 406.90666666666664 },
+            "selected": false,
+            "type": "solution"
           },
-          "position": { "x": 1612, "y": 421.55555555555554 },
-          "selected": false,
-          "type": "solution"
-        }
-      ],
-      "edges": [
-        {
-          "id": "1",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
-          "source": "0",
-          "target": "2",
-          "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "label": "causes"
-        },
-        {
-          "id": "2",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
-          "source": "0",
-          "target": "3",
-          "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "label": "causes"
-        },
-        {
-          "id": "3",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
-          "source": "0",
-          "target": "4",
-          "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "label": "causes"
-        },
-        {
-          "id": "4",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
-          "source": "0",
-          "target": "5",
-          "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "label": "causes"
-        },
-        {
-          "id": "5",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
-          "source": "2",
-          "target": "6",
-          "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "label": "solves"
-        },
-        {
-          "id": "6",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
-          "source": "3",
-          "target": "7",
-          "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "label": "solves"
-        },
-        {
-          "id": "7",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
-          "source": "4",
-          "target": "8",
-          "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "label": "solves"
-        },
-        {
-          "id": "8",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
-          "source": "4",
-          "target": "9",
-          "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "label": "solves"
-        },
-        {
-          "id": "9",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
-          "source": "4",
-          "target": "10",
-          "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "label": "solves"
-        },
-        {
-          "id": "10",
-          "data": { "score": "-", "diagramId": "root", "showing": true },
-          "source": "5",
-          "target": "11",
-          "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "label": "solves"
-        }
-      ],
-      "type": "problem",
-      "id": "root"
+          {
+            "id": "8",
+            "data": {
+              "label": "fund agricultural research",
+              "score": "5",
+              "diagramId": "root",
+              "showing": true
+            },
+            "position": { "x": 404, "y": 406.90666666666664 },
+            "selected": false,
+            "type": "solution"
+          },
+          {
+            "id": "9",
+            "data": {
+              "label": "donate agriculture tech",
+              "score": "7",
+              "diagramId": "root",
+              "showing": true
+            },
+            "position": { "x": 600, "y": 406.90666666666664 },
+            "selected": false,
+            "type": "solution"
+          },
+          {
+            "id": "10",
+            "data": {
+              "label": "train farmers",
+              "score": "6",
+              "diagramId": "root",
+              "showing": true
+            },
+            "position": { "x": 796, "y": 406.90666666666664 },
+            "selected": false,
+            "type": "solution"
+          },
+          {
+            "id": "11",
+            "data": {
+              "label": "train logistics engineers",
+              "score": "-",
+              "diagramId": "root",
+              "showing": true
+            },
+            "position": { "x": 992, "y": 406.90666666666664 },
+            "selected": false,
+            "type": "solution"
+          },
+          {
+            "id": "17",
+            "data": {
+              "label": "short-term benefit",
+              "score": "9",
+              "diagramId": "root",
+              "showing": false
+            },
+            "position": { "x": 404, "y": 413.44 },
+            "selected": false,
+            "type": "criterion"
+          },
+          {
+            "id": "18",
+            "data": {
+              "label": "long-term benefit",
+              "score": "7",
+              "diagramId": "root",
+              "showing": false
+            },
+            "position": { "x": 600, "y": 413.44 },
+            "selected": false,
+            "type": "criterion"
+          },
+          {
+            "id": "19",
+            "data": {
+              "label": "short-term cost",
+              "score": "6",
+              "diagramId": "root",
+              "showing": false
+            },
+            "position": { "x": 796, "y": 413.44 },
+            "selected": false,
+            "type": "criterion"
+          },
+          {
+            "id": "20",
+            "data": {
+              "label": "long-term cost",
+              "score": "7",
+              "diagramId": "root",
+              "showing": false
+            },
+            "position": { "x": 991.9999999999999, "y": 413.44 },
+            "selected": false,
+            "type": "criterion"
+          }
+        ],
+        "edges": [
+          {
+            "id": "1",
+            "data": { "score": "-", "diagramId": "root", "showing": true },
+            "source": "0",
+            "target": "2",
+            "type": "ScoreEdge",
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "label": "causes",
+            "selected": false
+          },
+          {
+            "id": "2",
+            "data": { "score": "-", "diagramId": "root", "showing": true },
+            "source": "0",
+            "target": "3",
+            "type": "ScoreEdge",
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "label": "causes",
+            "selected": false
+          },
+          {
+            "id": "3",
+            "data": { "score": "-", "diagramId": "root", "showing": true },
+            "source": "0",
+            "target": "4",
+            "type": "ScoreEdge",
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "label": "causes",
+            "selected": false
+          },
+          {
+            "id": "4",
+            "data": { "score": "-", "diagramId": "root", "showing": true },
+            "source": "0",
+            "target": "5",
+            "type": "ScoreEdge",
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "label": "causes",
+            "selected": false
+          },
+          {
+            "id": "5",
+            "data": { "score": "-", "diagramId": "root", "showing": true },
+            "source": "2",
+            "target": "6",
+            "type": "ScoreEdge",
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "label": "addresses",
+            "selected": false
+          },
+          {
+            "id": "6",
+            "data": { "score": "-", "diagramId": "root", "showing": true },
+            "source": "3",
+            "target": "7",
+            "type": "ScoreEdge",
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "label": "addresses",
+            "selected": false
+          },
+          {
+            "id": "7",
+            "data": { "score": "-", "diagramId": "root", "showing": true },
+            "source": "4",
+            "target": "8",
+            "type": "ScoreEdge",
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "label": "addresses",
+            "selected": false
+          },
+          {
+            "id": "8",
+            "data": { "score": "-", "diagramId": "root", "showing": true },
+            "source": "4",
+            "target": "9",
+            "type": "ScoreEdge",
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "label": "addresses",
+            "selected": false
+          },
+          {
+            "id": "9",
+            "data": { "score": "-", "diagramId": "root", "showing": true },
+            "source": "4",
+            "target": "10",
+            "type": "ScoreEdge",
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "label": "addresses",
+            "selected": false
+          },
+          {
+            "id": "10",
+            "data": { "score": "-", "diagramId": "root", "showing": true },
+            "source": "5",
+            "target": "11",
+            "type": "ScoreEdge",
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "label": "addresses",
+            "selected": false
+          },
+          {
+            "id": "15",
+            "data": { "score": "-", "diagramId": "root" },
+            "label": "criterion for",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "4",
+            "target": "17",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "16",
+            "data": { "score": "3", "diagramId": "root" },
+            "label": "embodies",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "17",
+            "target": "8",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "17",
+            "data": { "score": "8", "diagramId": "root" },
+            "label": "embodies",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "17",
+            "target": "9",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "18",
+            "data": { "score": "7", "diagramId": "root" },
+            "label": "embodies",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "17",
+            "target": "10",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "19",
+            "data": { "score": "-", "diagramId": "root" },
+            "label": "criterion for",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "4",
+            "target": "18",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "20",
+            "data": { "score": "8", "diagramId": "root" },
+            "label": "embodies",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "18",
+            "target": "8",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "21",
+            "data": { "score": "6", "diagramId": "root" },
+            "label": "embodies",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "18",
+            "target": "9",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "22",
+            "data": { "score": "7", "diagramId": "root" },
+            "label": "embodies",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "18",
+            "target": "10",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "23",
+            "data": { "score": "-", "diagramId": "root" },
+            "label": "criterion for",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "4",
+            "target": "19",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "24",
+            "data": { "score": "4", "diagramId": "root" },
+            "label": "embodies",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "19",
+            "target": "8",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "25",
+            "data": { "score": "1", "diagramId": "root" },
+            "label": "embodies",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "19",
+            "target": "9",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "26",
+            "data": { "score": "6", "diagramId": "root" },
+            "label": "embodies",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "19",
+            "target": "10",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "27",
+            "data": { "score": "-", "diagramId": "root" },
+            "label": "criterion for",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "4",
+            "target": "20",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "28",
+            "data": { "score": "2", "diagramId": "root" },
+            "label": "embodies",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "20",
+            "target": "8",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "29",
+            "data": { "score": "7", "diagramId": "root" },
+            "label": "embodies",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "20",
+            "target": "9",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "30",
+            "data": { "score": "-", "diagramId": "root" },
+            "label": "embodies",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "20",
+            "target": "10",
+            "type": "ScoreEdge"
+          }
+        ],
+        "type": "problem",
+        "id": "root"
+      },
+      "node-4": {
+        "nodes": [
+          {
+            "id": "14",
+            "data": {
+              "label": "\"poor food production\" is important",
+              "score": "8",
+              "diagramId": "node-4",
+              "showing": true
+            },
+            "position": { "x": 12, "y": 12 },
+            "selected": false,
+            "type": "rootClaim"
+          },
+          {
+            "id": "15",
+            "data": {
+              "label": "required to be self-sufficient",
+              "score": "-",
+              "diagramId": "node-4",
+              "showing": true
+            },
+            "position": { "x": 447, "y": 12 },
+            "selected": false,
+            "type": "support"
+          }
+        ],
+        "edges": [
+          {
+            "id": "13",
+            "data": { "score": "-", "diagramId": "node-4", "showing": true },
+            "source": "14",
+            "target": "15",
+            "type": "ScoreEdge",
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "label": "supports"
+          }
+        ],
+        "type": "claim",
+        "id": "node-4"
+      }
     },
-    "node-4": {
-      "nodes": [
-        {
-          "id": "14",
-          "data": {
-            "label": "\"poor food production\" is important",
-            "score": "-",
-            "diagramId": "node-4",
-            "showing": true
-          },
-          "position": { "x": 12, "y": 12 },
-          "selected": false,
-          "type": "rootClaim"
-        },
-        {
-          "id": "15",
-          "data": {
-            "label": "required to be self-sufficient",
-            "score": "-",
-            "diagramId": "node-4",
-            "showing": true
-          },
-          "position": { "x": 447, "y": 12 },
-          "selected": false,
-          "type": "support"
-        }
-      ],
-      "edges": [
-        {
-          "id": "13",
-          "data": { "score": "-", "diagramId": "node-4", "showing": true },
-          "source": "14",
-          "target": "15",
-          "type": "ScoreEdge",
-          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "label": "supports"
-        }
-      ],
-      "type": "claim",
-      "id": "node-4"
-    }
+    "activeTableProblemId": null,
+    "activeClaimDiagramId": null,
+    "nextNodeId": 21,
+    "nextEdgeId": 31,
+    "showImpliedEdges": true
   },
-  "activeTableProblemId": null,
-  "activeClaimDiagramId": "node-4",
-  "nextNodeId": 16,
-  "nextEdgeId": 14,
-  "showImpliedEdges": true
+  "version": 11
 }

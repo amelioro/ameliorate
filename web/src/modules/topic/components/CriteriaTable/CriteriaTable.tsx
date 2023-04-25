@@ -94,7 +94,7 @@ export const CriteriaTable = ({ problemNodeId }: Props) => {
           fromNodeId={problemNodeId}
           as="child"
           toNodeType="solution"
-          relation={{ child: "solution", name: "solves", parent: "problem" }}
+          relation={{ child: "solution", name: "addresses", parent: "problem" }}
         />
 
         <AddNodeButton
