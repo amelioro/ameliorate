@@ -73,7 +73,6 @@ export const TopicToolbar = () => {
             Unwanted Pregnancy
           </MenuItem>
           <MenuItem onClick={() => loadExample("world_hunger.json")}>World Hunger</MenuItem>
-          <MenuItem onClick={() => loadExample("ameliorate.json")}>Ameliorate</MenuItem>
         </Menu>
         <IconButton color="inherit" title="Download" aria-label="Download" onClick={downloadTopic}>
           <Download />
