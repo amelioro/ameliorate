@@ -5,7 +5,7 @@
         {
           "id": "0",
           "data": { "label": "world hunger", "score": "-", "diagramId": "root", "showing": true },
-          "position": { "x": 652, "y": 12 },
+          "position": { "x": 404, "y": 12 },
           "selected": false,
           "type": "problem"
         },
@@ -17,7 +17,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 12, "y": 230.66666666666669 },
+          "position": { "x": 12, "y": 215.84 },
           "selected": false,
           "type": "problem"
         },
@@ -29,7 +29,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 332, "y": 230.66666666666669 },
+          "position": { "x": 208, "y": 215.84 },
           "selected": false,
           "type": "problem"
         },
@@ -41,7 +41,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 972, "y": 230.66666666666669 },
+          "position": { "x": 600, "y": 215.84 },
           "selected": false,
           "type": "problem"
         },
@@ -53,21 +53,21 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 1612, "y": 230.66666666666669 },
+          "position": { "x": 992, "y": 215.84 },
           "selected": false,
           "type": "problem"
         },
         {
           "id": "6",
           "data": { "label": "send diplomats", "score": "-", "diagramId": "root", "showing": true },
-          "position": { "x": 12, "y": 421.55555555555554 },
+          "position": { "x": 12, "y": 406.90666666666664 },
           "selected": false,
           "type": "solution"
         },
         {
           "id": "7",
           "data": { "label": "donate food", "score": "-", "diagramId": "root", "showing": true },
-          "position": { "x": 332, "y": 421.55555555555554 },
+          "position": { "x": 208, "y": 406.90666666666664 },
           "selected": false,
           "type": "solution"
         },
@@ -75,11 +75,11 @@
           "id": "8",
           "data": {
             "label": "fund agricultural research",
-            "score": "-",
+            "score": "5",
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 652, "y": 421.55555555555554 },
+          "position": { "x": 404, "y": 406.90666666666664 },
           "selected": false,
           "type": "solution"
         },
@@ -87,18 +87,18 @@
           "id": "9",
           "data": {
             "label": "donate agriculture tech",
-            "score": "-",
+            "score": "7",
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 972, "y": 421.55555555555554 },
+          "position": { "x": 600, "y": 406.90666666666664 },
           "selected": false,
           "type": "solution"
         },
         {
           "id": "10",
-          "data": { "label": "train farmers", "score": "-", "diagramId": "root", "showing": true },
-          "position": { "x": 1292, "y": 421.55555555555554 },
+          "data": { "label": "train farmers", "score": "6", "diagramId": "root", "showing": true },
+          "position": { "x": 796, "y": 406.90666666666664 },
           "selected": false,
           "type": "solution"
         },
@@ -110,9 +110,57 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 1612, "y": 421.55555555555554 },
+          "position": { "x": 992, "y": 406.90666666666664 },
           "selected": false,
           "type": "solution"
+        },
+        {
+          "id": "17",
+          "data": {
+            "label": "short-term benefit",
+            "score": "9",
+            "diagramId": "root",
+            "showing": false
+          },
+          "position": { "x": 404, "y": 413.44 },
+          "selected": false,
+          "type": "criterion"
+        },
+        {
+          "id": "18",
+          "data": {
+            "label": "long-term benefit",
+            "score": "7",
+            "diagramId": "root",
+            "showing": false
+          },
+          "position": { "x": 600, "y": 413.44 },
+          "selected": false,
+          "type": "criterion"
+        },
+        {
+          "id": "19",
+          "data": {
+            "label": "short-term cost",
+            "score": "6",
+            "diagramId": "root",
+            "showing": false
+          },
+          "position": { "x": 796, "y": 413.44 },
+          "selected": false,
+          "type": "criterion"
+        },
+        {
+          "id": "20",
+          "data": {
+            "label": "long-term cost",
+            "score": "7",
+            "diagramId": "root",
+            "showing": false
+          },
+          "position": { "x": 991.9999999999999, "y": 413.44 },
+          "selected": false,
+          "type": "criterion"
         }
       ],
       "edges": [
@@ -123,7 +171,8 @@
           "target": "2",
           "type": "ScoreEdge",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "label": "causes"
+          "label": "causes",
+          "selected": false
         },
         {
           "id": "2",
@@ -132,7 +181,8 @@
           "target": "3",
           "type": "ScoreEdge",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "label": "causes"
+          "label": "causes",
+          "selected": false
         },
         {
           "id": "3",
@@ -141,7 +191,8 @@
           "target": "4",
           "type": "ScoreEdge",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "label": "causes"
+          "label": "causes",
+          "selected": false
         },
         {
           "id": "4",
@@ -150,7 +201,8 @@
           "target": "5",
           "type": "ScoreEdge",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "label": "causes"
+          "label": "causes",
+          "selected": false
         },
         {
           "id": "5",
@@ -159,7 +211,8 @@
           "target": "6",
           "type": "ScoreEdge",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "label": "solves"
+          "label": "addresses",
+          "selected": false
         },
         {
           "id": "6",
@@ -168,7 +221,8 @@
           "target": "7",
           "type": "ScoreEdge",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "label": "solves"
+          "label": "addresses",
+          "selected": false
         },
         {
           "id": "7",
@@ -177,7 +231,8 @@
           "target": "8",
           "type": "ScoreEdge",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "label": "solves"
+          "label": "addresses",
+          "selected": false
         },
         {
           "id": "8",
@@ -186,7 +241,8 @@
           "target": "9",
           "type": "ScoreEdge",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "label": "solves"
+          "label": "addresses",
+          "selected": false
         },
         {
           "id": "9",
@@ -195,7 +251,8 @@
           "target": "10",
           "type": "ScoreEdge",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "label": "solves"
+          "label": "addresses",
+          "selected": false
         },
         {
           "id": "10",
@@ -204,7 +261,168 @@
           "target": "11",
           "type": "ScoreEdge",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "label": "solves"
+          "label": "addresses",
+          "selected": false
+        },
+        {
+          "id": "15",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "criterion for",
+          "selected": false,
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "4",
+          "target": "17",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "16",
+          "data": { "score": "3", "diagramId": "root" },
+          "label": "embodies",
+          "selected": false,
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "17",
+          "target": "8",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "17",
+          "data": { "score": "8", "diagramId": "root" },
+          "label": "embodies",
+          "selected": false,
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "17",
+          "target": "9",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "18",
+          "data": { "score": "7", "diagramId": "root" },
+          "label": "embodies",
+          "selected": false,
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "17",
+          "target": "10",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "19",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "criterion for",
+          "selected": false,
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "4",
+          "target": "18",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "20",
+          "data": { "score": "8", "diagramId": "root" },
+          "label": "embodies",
+          "selected": false,
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "18",
+          "target": "8",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "21",
+          "data": { "score": "6", "diagramId": "root" },
+          "label": "embodies",
+          "selected": false,
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "18",
+          "target": "9",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "22",
+          "data": { "score": "7", "diagramId": "root" },
+          "label": "embodies",
+          "selected": false,
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "18",
+          "target": "10",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "23",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "criterion for",
+          "selected": false,
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "4",
+          "target": "19",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "24",
+          "data": { "score": "4", "diagramId": "root" },
+          "label": "embodies",
+          "selected": false,
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "19",
+          "target": "8",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "25",
+          "data": { "score": "1", "diagramId": "root" },
+          "label": "embodies",
+          "selected": false,
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "19",
+          "target": "9",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "26",
+          "data": { "score": "6", "diagramId": "root" },
+          "label": "embodies",
+          "selected": false,
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "19",
+          "target": "10",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "27",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "criterion for",
+          "selected": false,
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "4",
+          "target": "20",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "28",
+          "data": { "score": "2", "diagramId": "root" },
+          "label": "embodies",
+          "selected": false,
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "20",
+          "target": "8",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "29",
+          "data": { "score": "7", "diagramId": "root" },
+          "label": "embodies",
+          "selected": false,
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "20",
+          "target": "9",
+          "type": "ScoreEdge"
+        },
+        {
+          "id": "30",
+          "data": { "score": "-", "diagramId": "root" },
+          "label": "embodies",
+          "selected": false,
+          "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+          "source": "20",
+          "target": "10",
+          "type": "ScoreEdge"
         }
       ],
       "type": "problem",
@@ -216,7 +434,7 @@
           "id": "14",
           "data": {
             "label": "\"poor food production\" is important",
-            "score": "-",
+            "score": "8",
             "diagramId": "node-4",
             "showing": true
           },
@@ -253,8 +471,8 @@
     }
   },
   "activeTableProblemId": null,
-  "activeClaimDiagramId": "node-4",
-  "nextNodeId": 16,
-  "nextEdgeId": 14,
+  "activeClaimDiagramId": null,
+  "nextNodeId": 21,
+  "nextEdgeId": 31,
   "showImpliedEdges": true
 }

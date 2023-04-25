@@ -10,21 +10,21 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 492, "y": 12 },
+          "position": { "x": 306, "y": 12 },
           "selected": false,
           "type": "problem"
         },
         {
           "id": "2",
           "data": { "label": "abortion", "score": "8", "diagramId": "root", "showing": true },
-          "position": { "x": 12, "y": 209.33333333333334 },
+          "position": { "x": 12, "y": 206.04 },
           "selected": false,
           "type": "solution"
         },
         {
           "id": "3",
           "data": { "label": "adoption", "score": "7", "diagramId": "root", "showing": true },
-          "position": { "x": 332, "y": 209.33333333333334 },
+          "position": { "x": 208, "y": 206.04 },
           "selected": false,
           "type": "solution"
         },
@@ -127,14 +127,14 @@
         {
           "id": "44",
           "data": { "label": "sex education", "score": "8", "diagramId": "root", "showing": true },
-          "position": { "x": 652, "y": 209.33333333333334 },
+          "position": { "x": 404, "y": 206.04 },
           "selected": false,
           "type": "solution"
         },
         {
           "id": "45",
           "data": { "label": "contraceptives", "score": "8", "diagramId": "root", "showing": true },
-          "position": { "x": 972, "y": 209.33333333333334 },
+          "position": { "x": 600, "y": 206.04 },
           "selected": false,
           "type": "solution"
         }
@@ -147,7 +147,7 @@
           "target": "2",
           "type": "ScoreEdge",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "label": "solves"
+          "label": "addresses"
         },
         {
           "id": "2",
@@ -156,7 +156,7 @@
           "target": "3",
           "type": "ScoreEdge",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
-          "label": "solves"
+          "label": "addresses"
         },
         {
           "id": "31",
@@ -449,7 +449,7 @@
         {
           "id": "55",
           "data": { "score": "-", "diagramId": "root", "showing": true },
-          "label": "solves",
+          "label": "addresses",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
           "target": "44",
@@ -530,7 +530,7 @@
         {
           "id": "64",
           "data": { "score": "-", "diagramId": "root", "showing": true },
-          "label": "solves",
+          "label": "addresses",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
           "target": "45",

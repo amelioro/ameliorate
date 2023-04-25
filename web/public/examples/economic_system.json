@@ -11,7 +11,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 462, "y": 12 },
+          "position": { "x": 295.6333333333333, "y": 12 },
           "selected": false,
           "type": "problem"
         },
@@ -23,7 +23,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 197.57142857142858, "y": 224.0920634920635 },
+          "position": { "x": 134.0952380952382, "y": 213.18873015873015 },
           "selected": false,
           "type": "criterion"
         },
@@ -35,7 +35,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 543.0714285714286, "y": 224.0920634920635 },
+          "position": { "x": 345.2619047619048, "y": 213.18873015873015 },
           "selected": false,
           "type": "criterion"
         },
@@ -47,7 +47,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 964.0714285714286, "y": 224.0920634920635 },
+          "position": { "x": 613.9619047619049, "y": 213.18873015873015 },
           "selected": false,
           "type": "criterion"
         },
@@ -59,7 +59,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 1284.0714285714287, "y": 224.0920634920635 },
+          "position": { "x": 809.9619047619049, "y": 213.18873015873015 },
           "selected": false,
           "type": "criterion"
         },
@@ -71,14 +71,14 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 23, "y": 419.0349206349206 },
+          "position": { "x": 23, "y": 406.5493650793651 },
           "selected": false,
           "type": "criterion"
         },
         {
           "id": "6",
           "data": { "label": "Socialism", "score": "-", "diagramId": "root", "showing": true },
-          "position": { "x": 684.0714285714286, "y": 620.3206349206348 },
+          "position": { "x": 434.59523809523813, "y": 602.7073015873016 },
           "selected": false,
           "type": "solution"
         },
@@ -90,7 +90,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 272.07142857142856, "y": 839.3714285714284 },
+          "position": { "x": 177.59523809523807, "y": 806.8192063492063 },
           "selected": false,
           "type": "solution"
         },
@@ -102,7 +102,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 797.8571428571429, "y": 419.0349206349206 },
+          "position": { "x": 501.1428571428572, "y": 406.5493650793651 },
           "selected": false,
           "type": "solutionComponent"
         },
@@ -114,7 +114,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 477.8571428571429, "y": 419.0349206349206 },
+          "position": { "x": 305.14285714285717, "y": 406.5493650793651 },
           "selected": false,
           "type": "solutionComponent"
         },
@@ -126,7 +126,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 103, "y": 620.3206349206348 },
+          "position": { "x": 72, "y": 602.7073015873016 },
           "selected": false,
           "type": "solutionComponent"
         },
@@ -138,7 +138,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 1257.857142857143, "y": 620.3206349206348 },
+          "position": { "x": 783.8095238095239, "y": 602.7073015873016 },
           "selected": false,
           "type": "solutionComponent"
         },
@@ -150,7 +150,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 1253.5714285714287, "y": 419.0349206349206 },
+          "position": { "x": 790.1952380952382, "y": 406.5493650793651 },
           "selected": false,
           "type": "effect"
         }
@@ -204,7 +204,7 @@
         {
           "id": "5",
           "data": { "score": "-", "diagramId": "root" },
-          "label": "solves",
+          "label": "addresses",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
           "target": "6",
@@ -258,7 +258,7 @@
         {
           "id": "11",
           "data": { "score": "-", "diagramId": "root" },
-          "label": "solves",
+          "label": "addresses",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
           "target": "7",

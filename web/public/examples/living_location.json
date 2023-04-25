@@ -10,21 +10,21 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 652, "y": 12 },
+          "position": { "x": 404.00000000000006, "y": 12 },
           "selected": false,
           "type": "problem"
         },
         {
           "id": "1",
           "data": { "label": "madison", "score": "-", "diagramId": "root", "showing": true },
-          "position": { "x": 167, "y": 437.55555555555554 },
+          "position": { "x": 107.06666666666672, "y": 414.36 },
           "selected": false,
           "type": "solution"
         },
         {
           "id": "2",
           "data": { "label": "chi - lakeview", "score": "-", "diagramId": "root", "showing": true },
-          "position": { "x": 487, "y": 437.55555555555554 },
+          "position": { "x": 303.0666666666667, "y": 414.36 },
           "selected": false,
           "type": "solution"
         },
@@ -36,7 +36,7 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 817, "y": 437.55555555555554 },
+          "position": { "x": 504.9333333333334, "y": 414.36 },
           "selected": false,
           "type": "solution"
         },
@@ -48,42 +48,42 @@
             "diagramId": "root",
             "showing": true
           },
-          "position": { "x": 1137, "y": 437.55555555555554 },
+          "position": { "x": 700.9333333333334, "y": 414.36 },
           "selected": false,
           "type": "solution"
         },
         {
           "id": "5",
           "data": { "label": "inexpensive", "score": "8", "diagramId": "root", "showing": true },
-          "position": { "x": 12, "y": 216 },
+          "position": { "x": 12, "y": 209.11111111111111 },
           "selected": false,
           "type": "criterion"
         },
         {
           "id": "6",
           "data": { "label": "diverse", "score": "8", "diagramId": "root", "showing": true },
-          "position": { "x": 332, "y": 216 },
+          "position": { "x": 208, "y": 209.11111111111111 },
           "selected": false,
           "type": "criterion"
         },
         {
           "id": "7",
           "data": { "label": "transit", "score": "6", "diagramId": "root", "showing": true },
-          "position": { "x": 652, "y": 216 },
+          "position": { "x": 404.00000000000006, "y": 209.11111111111111 },
           "selected": false,
           "type": "criterion"
         },
         {
           "id": "8",
           "data": { "label": "parking", "score": "6", "diagramId": "root", "showing": true },
-          "position": { "x": 972, "y": 216 },
+          "position": { "x": 600, "y": 209.11111111111111 },
           "selected": false,
           "type": "criterion"
         },
         {
           "id": "9",
           "data": { "label": "walkable", "score": "5", "diagramId": "root", "showing": true },
-          "position": { "x": 1292, "y": 216 },
+          "position": { "x": 796.0000000000001, "y": 209.11111111111111 },
           "selected": false,
           "type": "criterion"
         }
@@ -92,7 +92,7 @@
         {
           "id": "0",
           "data": { "score": "-", "diagramId": "root", "showing": true },
-          "label": "solves",
+          "label": "addresses",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
           "target": "1",
@@ -101,7 +101,7 @@
         {
           "id": "1",
           "data": { "score": "-", "diagramId": "root", "showing": true },
-          "label": "solves",
+          "label": "addresses",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
           "target": "2",
@@ -110,7 +110,7 @@
         {
           "id": "2",
           "data": { "score": "-", "diagramId": "root", "showing": true },
-          "label": "solves",
+          "label": "addresses",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
           "target": "3",
@@ -119,7 +119,7 @@
         {
           "id": "3",
           "data": { "score": "-", "diagramId": "root", "showing": true },
-          "label": "solves",
+          "label": "addresses",
           "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
           "source": "0",
           "target": "4",
