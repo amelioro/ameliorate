@@ -14,6 +14,7 @@ import { StorageValue } from "zustand/middleware";
 
 import { Menu } from "../../../../common/components/Menu/Menu";
 import { useMenu } from "../../../../common/hooks";
+import { migrate } from "../../store/migrate";
 import { TopicStoreState, useIsTableActive, useShowImpliedEdges } from "../../store/store";
 import { getPersistState, redo, resetState, setState, undo } from "../../store/utilActions";
 import { getTopicTitle } from "../../store/utils";
@@ -40,7 +41,13 @@ const uploadTopic = (event: React.ChangeEvent<HTMLInputElement>) => {
     .then((text) => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- TODO: validate that JSON matches interface
       const persistState = JSON.parse(text) as StorageValue<TopicStoreState>;
-      setState(persistState.state);
+      if (!persistState.version) {
+        throw new Error("No version found in file, cannot migrate old state");
+      }
+
+      const migratedState = migrate(persistState.state, persistState.version) as TopicStoreState;
+
+      setState(migratedState);
     })
     .catch((error) => {
       console.log("error reading file: ", error);
