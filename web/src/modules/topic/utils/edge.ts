@@ -6,7 +6,7 @@ import { NodeType, children, components, parents } from "./node";
 
 export type RelationName =
   | "causes"
-  | "solves"
+  | "addresses"
   | "created by"
   | "has"
   | "criterion for"
@@ -18,9 +18,9 @@ export type RelationName =
 // assumes that we're always pointing from child to parent
 export const relations = [
   { child: "problem", name: "causes", parent: "problem" },
-  { child: "solution", name: "solves", parent: "problem" },
-  { child: "solutionComponent", name: "solves", parent: "problem" },
-  { child: "effect", name: "solves", parent: "problem" },
+  { child: "solution", name: "addresses", parent: "problem" },
+  { child: "solutionComponent", name: "addresses", parent: "problem" },
+  { child: "effect", name: "addresses", parent: "problem" },
 
   { child: "problem", name: "created by", parent: "solution" },
   { child: "problem", name: "created by", parent: "solutionComponent" },
@@ -77,21 +77,21 @@ interface ShortcutRelation {
 /**
  * Shortcut relations are implied through detour nodes.
  *
- * e.g. a criterion is a detour for a solution-solves-problem relation because if a solution embodies
- * the criterion and the criterion is for a problem, then the solution solves the problem
+ * e.g. a criterion is a detour for a solution-addresses-problem relation because if a solution embodies
+ * the criterion and the criterion is for a problem, then the solution addresses the problem
  */
 export const shortcutRelations: ShortcutRelation[] = [
   {
     detourNodeType: "criterion",
-    relation: { child: "solution", name: "solves", parent: "problem" },
+    relation: { child: "solution", name: "addresses", parent: "problem" },
   },
   {
     detourNodeType: "criterion",
-    relation: { child: "solutionComponent", name: "solves", parent: "problem" },
+    relation: { child: "solutionComponent", name: "addresses", parent: "problem" },
   },
   {
     detourNodeType: "criterion",
-    relation: { child: "effect", name: "solves", parent: "problem" },
+    relation: { child: "effect", name: "addresses", parent: "problem" },
   },
 ];
 

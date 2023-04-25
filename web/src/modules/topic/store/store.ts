@@ -45,7 +45,7 @@ export const useTopicStore = create<TopicStoreState>()(
       devtools(() => initialState),
       {
         name: "diagram-storage", // should probably be "topic-storage" but don't know how to migrate
-        version: 10,
+        version: 11,
         migrate: migrate,
       }
     ),

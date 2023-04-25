@@ -40,7 +40,7 @@ const connectCriteriaToSolutions = (state: TopicStoreState, newNode: Node, probl
 
   const targetRelation: Relation =
     newNode.type === "criterion"
-      ? { child: "solution", name: "solves", parent: "problem" }
+      ? { child: "solution", name: "addresses", parent: "problem" }
       : { child: "criterion", name: "criterion for", parent: "problem" };
 
   const newCriterionEdges = problemDiagram.edges
