@@ -14,6 +14,7 @@ export const migrate = (persistedState: any, version: number) => {
     migrate_7_to_8,
     migrate_8_to_9,
     migrate_9_to_10,
+    migrate_10_to_11,
   ];
 
   let state = persistedState;
@@ -181,5 +182,18 @@ const migrate_8_to_9 = (state: any) => {
 
 const migrate_9_to_10 = (state: any) => {
   state.showImpliedEdges = true;
+  return state;
+};
+
+const migrate_10_to_11 = (state: any) => {
+  Object.values(state.diagrams).forEach((diagram: any) => {
+    diagram.edges.forEach((edge: any) => {
+      // rename edge "solves" -> "addresses"
+      if (edge.label === "solves") {
+        edge.label = "addresses";
+      }
+    });
+  });
+
   return state;
 };
