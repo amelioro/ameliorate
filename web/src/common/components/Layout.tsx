@@ -32,19 +32,22 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
   const facebookIconSrc =
     theme.palette.mode == "light" ? "/Facebook-Icon-Black.png" : "/Facebook-Icon-White.png";
 
-
   return (
     <>
       <AppBar position="sticky">
         <Toolbar variant="dense">
           <Box flex="1" display="flex" justifyContent="space-between" alignItems="center">
-            <NavLink href="/">ameliorate</NavLink>
             <Box display="flex" gap="15px" alignItems="center">
-              {/* <NavLink href="/new">create understanding</NavLink> */}
-              {/* <NavLink href="/mine">my understandings</NavLink> */}
+              <NavLink href="/">ameliorate</NavLink>
+              <NavLink href="/solve">solve</NavLink>
+            </Box>
+
+            <Box display="flex" gap="15px" alignItems="center">
               <NavLink href="/about">about</NavLink>
-              {/* <NavLink href="/login">login</NavLink> */}
-              <NavLink href="https://www.facebook.com/profile.php?id=100091844721178" display="flex">
+              <NavLink
+                href="https://www.facebook.com/profile.php?id=100091844721178"
+                display="flex"
+              >
                 <Image src={facebookIconSrc} height={32} width={32} alt="facebook link" />
               </NavLink>
               <NavLink href="https://discord.gg/3KhdyJkTWT" display="flex">
