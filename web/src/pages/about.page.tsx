@@ -42,8 +42,8 @@ const About: NextPage = () => {
             The core idea is that you can map pieces of solutions to pieces of problems, compare the
             tradeoffs of each solution, and everything that you're claiming implicitly (e.g. this
             piece of the problem is the most important thing to solve, this piece of the solution
-            solves that problem) can clearly be justified and critiqued, in an off-to-the-side but
-            easy-to-access way.
+            addresses that problem) can clearly be justified and critiqued, in an off-to-the-side
+            but easy-to-access way.
           </Typography>
 
           <Typography variant="body1">
