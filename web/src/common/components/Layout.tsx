@@ -45,7 +45,7 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
               <NavLink href="/about">about</NavLink>
               {/* <NavLink href="/login">login</NavLink> */}
               <NavLink href="https://www.facebook.com/profile.php?id=100091844721178" display="flex">
-                <Image src={facebookIconSrc} height={24} width={32} alt="facebook link" />
+                <Image src={facebookIconSrc} height={32} width={32} alt="facebook link" />
               </NavLink>
               <NavLink href="https://discord.gg/3KhdyJkTWT" display="flex">
                 <Image src={discordIconSrc} height={24} width={32} alt="discord link" />
