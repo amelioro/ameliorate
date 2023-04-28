@@ -54,7 +54,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/alextilot"><img src="https://avatars.githubusercontent.com/u/34109200?v=4?s=100" width="100px;" alt="Alex Tilot"/><br /><sub><b>Alex Tilot</b></sub></a><br /><a href="https://github.com/amelioro/ameliorate/commits?author=alextilot" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/alextilot"><img src="https://avatars.githubusercontent.com/u/34109200?v=4?s=100" width="100px;" alt="Alex Tilot"/><br /><sub><b>Alex Tilot</b></sub></a><br /><a href="https://github.com/amelioro/ameliorate/commits?author=alextilot" title="Documentation">📖</a> <a href="#a11y-alextilot" title="Accessibility">️️️️♿️</a> <a href="https://github.com/amelioro/ameliorate/commits?author=alextilot" title="Code">💻</a> <a href="#design-alextilot" title="Design">🎨</a></td>
     </tr>
   </tbody>
 </table>
