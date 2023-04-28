@@ -1,0 +1,27 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "CatGuardian",
+      "name": "CatGuardian",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7755283?v=4",
+      "profile": "https://github.com/CatGuardian",
+      "contributions": [
+        "design",
+        "projectManagement",
+        "ideas"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "skipCi": true,
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "projectName": "ameliorate",
+  "projectOwner": "amelioro"
+}
