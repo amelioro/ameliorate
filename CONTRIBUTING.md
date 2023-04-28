@@ -14,7 +14,7 @@ This project adheres to the Contributor Covenant [code of conduct](https://githu
 
 Check out the [first issues filter](https://github.com/orgs/amelioro/projects/2/views/7) in the project backlog - `good first issue`s have a narrow scope and are expected to entail a small number of changes, and `ok first issue`s have a narrow scope, but are expected to be a bit tougher. You can check out the unfiltered [backlog](https://github.com/orgs/amelioro/projects/2/views/1) if you're feeling daring, plucky, or if this isn't your first rodeo. The backlog should be prioritized, but you don't need to limit yourself to the top.
 
-Feel free to clarify any issues via commenting or asking in Discord. When you find an issue you want to work on, assign yourself to it so that nobody else spends time duplicating work on it.
+Feel free to clarify any issues via commenting or asking in [Discord](https://discord.gg/3KhdyJkTWT). When you find an issue you want to work on, assign yourself to it so that nobody else spends time duplicating work on it.
 
 ## Running the project
 
@@ -43,7 +43,7 @@ Reading up on the tech listed in the [Built with](https://github.com/amelioro/am
 Known deviations from standard usage of the above tech:
 
 - The directory structure mostly follows the guidance in [this blog post](https://dev.to/vadorequest/a-2021-guide-about-structuring-your-next-js-project-in-a-flexible-and-efficient-way-472) for using modules for a nextjs project, except this is planned to be a mono-repo, so the root contains configs that are expected to be used across projects, and the rest currently lives in web/.
-- zustand: see [docs/statement-management.md](https://github.com/amelioro/ameliorate/blob/main/web/docs/state-management.md)
+- zustand: see [docs/state-management.md](https://github.com/amelioro/ameliorate/blob/main/web/docs/state-management.md)
 - emotion: styled components are stored in co-located .styles.tsx files
 
 ## Working with the code
