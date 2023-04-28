@@ -18,6 +18,17 @@
         "question",
         "review"
       ]
+    },
+    {
+      "login": "CatGuardian",
+      "name": "CatGuardian",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7755283?v=4",
+      "profile": "https://github.com/CatGuardian",
+      "contributions": [
+        "design",
+        "projectManagement",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,

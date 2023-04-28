@@ -51,6 +51,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
   <tbody>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/keyserj"><img src="https://avatars.githubusercontent.com/u/13872370?v=4?s=100" width="100px;" alt="Joel Keyser"/><br /><sub><b>Joel Keyser</b></sub></a><br /><a href="https://github.com/amelioro/ameliorate/commits?author=keyserj" title="Code">💻</a> <a href="#design-keyserj" title="Design">🎨</a> <a href="#ideas-keyserj" title="Ideas, Planning, & Feedback">🤔</a> <a href="#question-keyserj" title="Answering Questions">💬</a> <a href="https://github.com/amelioro/ameliorate/pulls?q=is%3Apr+reviewed-by%3Akeyserj" title="Reviewed Pull Requests">👀</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/CatGuardian"><img src="https://avatars.githubusercontent.com/u/7755283?v=4?s=100" width="100px;" alt="CatGuardian"/><br /><sub><b>CatGuardian</b></sub></a><br /><a href="#design-CatGuardian" title="Design">🎨</a> <a href="#projectManagement-CatGuardian" title="Project Management">📆</a> <a href="#ideas-CatGuardian" title="Ideas, Planning, & Feedback">🤔</a></td>
     </tr>
   </tbody>
 </table>
