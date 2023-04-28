@@ -1,6 +1,5 @@
 # ameliorate
-
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/amelioro/ameliorate/blob/main/LICENSE) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blueviolet.svg)](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md) [![Chat](https://img.shields.io/discord/1057707973482401892?label=chat&logo=discord)](https://discord.gg/3KhdyJkTWT)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/amelioro/ameliorate/blob/main/LICENSE) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blueviolet.svg)](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md) [![All Contributors](https://img.shields.io/github/all-contributors/amelioro/ameliorate?color=ee8449&style=flat-square)](#contributors) [![Chat](https://img.shields.io/discord/1057707973482401892?label=chat&logo=discord)](https://discord.gg/3KhdyJkTWT)
 
 [ameliorate](https://www.ameliorate.app/) is a tool for solving controversial problems. With it, you can:
 
@@ -45,6 +44,21 @@ See the [Contributor's Guide](https://github.com/amelioro/ameliorate/blob/main/C
 ## Contributors ✨
 
 Thanks go to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/keyserj"><img src="https://avatars.githubusercontent.com/u/13872370?v=4?s=100" width="100px;" alt="Joel Keyser"/><br /><sub><b>Joel Keyser</b></sub></a><br /><a href="https://github.com/amelioro/ameliorate/commits?author=keyserj" title="Code">💻</a> <a href="#design-keyserj" title="Design">🎨</a> <a href="#ideas-keyserj" title="Ideas, Planning, & Feedback">🤔</a> <a href="#question-keyserj" title="Answering Questions">💬</a> <a href="https://github.com/amelioro/ameliorate/pulls?q=is%3Apr+reviewed-by%3Akeyserj" title="Reviewed Pull Requests">👀</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
