@@ -2,6 +2,8 @@
 
 🔥🙂 Welcome, and thanks for considering contributing! 🙂🔥
 
+All contributors (with GitHub accounts) will be acknowledged by being added to the [Contributors section](https://github.com/amelioro/ameliorate#contributors-) in the README 🙂. Please feel free to [add yourself](https://allcontributors.org/docs/en/bot/usage#all-contributors-add) if you were missed, or reach out if you prefer not to be acknowledged in this way (reply to the comment that tags you when you're being added).
+
 If you're new to open source, you'll probably find [this open source guide](https://opensource.guide/how-to-contribute) useful.
 
 ## Code of Conduct
