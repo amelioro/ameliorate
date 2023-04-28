@@ -1,9 +1,5 @@
 # ameliorate
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
-
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/amelioro/ameliorate/blob/main/LICENSE) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blueviolet.svg)](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md) [![Chat](https://img.shields.io/discord/1057707973482401892?label=chat&logo=discord)](https://discord.gg/3KhdyJkTWT)
+[![All Contributors](https://img.shields.io/github/all-contributors/amelioro/ameliorate?color=ee8449&style=flat-square)](#contributors) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/amelioro/ameliorate/blob/main/LICENSE) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blueviolet.svg)](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md) [![Chat](https://img.shields.io/discord/1057707973482401892?label=chat&logo=discord)](https://discord.gg/3KhdyJkTWT)
 
 [ameliorate](https://www.ameliorate.app/) is a tool for solving controversial problems. With it, you can:
 
