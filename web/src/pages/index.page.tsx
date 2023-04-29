@@ -1,75 +1,60 @@
-import { Global } from "@emotion/react";
-import { Box } from "@mui/material";
-import { NextPage } from "next";
+import { ArrowDownward } from "@mui/icons-material";
+import { Box, Button, Divider, Typography } from "@mui/material";
+import type { NextPage } from "next";
 import Head from "next/head";
-import { createContext, useEffect, useState } from "react";
+import Link from "next/link";
 
-import { ContextMenu } from "../common/components/ContextMenu/ContextMenu";
-import { CriteriaTable } from "../modules/topic/components/CriteriaTable/CriteriaTable";
-import { Diagram } from "../modules/topic/components/Diagram/Diagram";
-import { TopicPane } from "../modules/topic/components/Surface/TopicPane";
-import { TopicToolbar } from "../modules/topic/components/Surface/TopicToolbar";
-import { useActiveClaimDiagramId, useActiveTableProblemId } from "../modules/topic/store/store";
-import { problemDiagramId } from "../modules/topic/utils/diagram";
-import { WorkspaceBox, workspaceStyles } from "./index.styles";
+import { YoutubeEmbed } from "../common/components/YoutubeEmbed/YoutubeEmbed";
+import { StyledBox } from "./index.style";
 
-export const HydrationContext = createContext(false);
-
-// extract component so that it can use the store after hydration
-const Page = () => {
-  const tableProblemId = useActiveTableProblemId();
-  const claimDiagramId = useActiveClaimDiagramId();
-
+const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>solve problems | ameliorate</title>
+        <title>home | ameliorate</title>
         <meta
           name="description"
-          content="Ameliorate is a tool that makes it easier to solve tough problems. It helps you reason around hard decisions, and enables that reasoning to be shared and improved. Create your own problem map, and start solving today."
+          content="Ameliorate is a tool that makes it easier to solve tough problems by helping communicate about and mutually understand them."
         />
       </Head>
 
-      <TopicToolbar />
+      <StyledBox>
+        <Typography variant="h3" color="primary">
+          Ameliorate
+        </Typography>
 
-      <WorkspaceBox>
-        <TopicPane />
+        <Typography variant="h5">
+          Understand ourselves. Understand each other. Grow together.
+        </Typography>
 
-        <Box width="100%" height="100%" position="absolute">
-          {tableProblemId ? (
-            <CriteriaTable problemNodeId={tableProblemId} />
-          ) : (
-            <Diagram diagramId={problemDiagramId} />
-          )}
+        <Typography variant="body1">
+          A tool for communicating about and mutually understanding tough problems
+        </Typography>
+
+        <Box display="flex" margin="0.75rem">
+          <Link href="/solve" passHref>
+            <Button variant="contained">Solve</Button>
+          </Link>
+          <Button
+            variant="outlined"
+            endIcon={<ArrowDownward />}
+            href="#how-it-works"
+            sx={{ marginLeft: "0.5rem" }}
+          >
+            See how it works
+          </Button>
         </Box>
+      </StyledBox>
 
-        {claimDiagramId && (
-          // Criteria Table has header (z-index:2); expectation: overlay the component
-          <Box width="100%" height="100%" position="absolute" zIndex="2">
-            <Diagram diagramId={claimDiagramId} />
-          </Box>
-        )}
-        {/* prevents body scrolling when  workspace is rendered*/}
-        <Global styles={workspaceStyles} />
-      </WorkspaceBox>
+      <Divider />
 
-      <ContextMenu />
+      <section id="how-it-works">
+        <StyledBox>
+          <Typography variant="h4">How it works</Typography>
+          <YoutubeEmbed embedId="ScMzIvxBSi4" />
+        </StyledBox>
+      </section>
     </>
-  );
-};
-
-const Home: NextPage = () => {
-  // required to prevent hydration mismatch with usage of zustand's persist middleware
-  // see explanation in `useDiagramStoreAfterHydration`
-  const [isHydrated, setHydrated] = useState(false);
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
-
-  return (
-    <HydrationContext.Provider value={isHydrated}>
-      <Page />
-    </HydrationContext.Provider>
   );
 };
 
