@@ -6,6 +6,10 @@ export const globals = css`
     text-decoration: none;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   #__next {
     height: 100vh;
     display: flex;
