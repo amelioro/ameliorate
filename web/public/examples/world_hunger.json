@@ -18,7 +18,7 @@
               "diagramId": "root",
               "showing": true
             },
-            "position": { "x": 12, "y": 215.84 },
+            "position": { "x": 12, "y": 260.5929411764706 },
             "selected": false,
             "type": "problem"
           },
@@ -30,7 +30,7 @@
               "diagramId": "root",
               "showing": true
             },
-            "position": { "x": 208, "y": 215.84 },
+            "position": { "x": 208, "y": 260.5929411764706 },
             "selected": false,
             "type": "problem"
           },
@@ -42,7 +42,7 @@
               "diagramId": "root",
               "showing": true
             },
-            "position": { "x": 600, "y": 215.84 },
+            "position": { "x": 600, "y": 260.5929411764706 },
             "selected": false,
             "type": "problem"
           },
@@ -54,7 +54,7 @@
               "diagramId": "root",
               "showing": true
             },
-            "position": { "x": 992, "y": 215.84 },
+            "position": { "x": 992, "y": 260.5929411764706 },
             "selected": false,
             "type": "problem"
           },
@@ -66,14 +66,14 @@
               "diagramId": "root",
               "showing": true
             },
-            "position": { "x": 12, "y": 406.90666666666664 },
+            "position": { "x": 12, "y": 500.16941176470584 },
             "selected": false,
             "type": "solution"
           },
           {
             "id": "7",
             "data": { "label": "donate food", "score": "-", "diagramId": "root", "showing": true },
-            "position": { "x": 208, "y": 406.90666666666664 },
+            "position": { "x": 208, "y": 500.16941176470584 },
             "selected": false,
             "type": "solution"
           },
@@ -85,7 +85,7 @@
               "diagramId": "root",
               "showing": true
             },
-            "position": { "x": 404, "y": 406.90666666666664 },
+            "position": { "x": 404, "y": 500.16941176470584 },
             "selected": false,
             "type": "solution"
           },
@@ -97,7 +97,7 @@
               "diagramId": "root",
               "showing": true
             },
-            "position": { "x": 600, "y": 406.90666666666664 },
+            "position": { "x": 600, "y": 500.16941176470584 },
             "selected": false,
             "type": "solution"
           },
@@ -109,7 +109,7 @@
               "diagramId": "root",
               "showing": true
             },
-            "position": { "x": 796, "y": 406.90666666666664 },
+            "position": { "x": 796, "y": 500.16941176470584 },
             "selected": false,
             "type": "solution"
           },
@@ -121,7 +121,7 @@
               "diagramId": "root",
               "showing": true
             },
-            "position": { "x": 992, "y": 406.90666666666664 },
+            "position": { "x": 992, "y": 500.16941176470584 },
             "selected": false,
             "type": "solution"
           },

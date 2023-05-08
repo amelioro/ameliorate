@@ -17,7 +17,7 @@ export const layout = async (nodes: Node[], edges: Edge[], orientation: Orientat
     // preserve order if layout is already good enough
     "elk.layered.considerModelOrder.strategy": "NODES_AND_EDGES",
     // these spacings are just what roughly seem to look good
-    "elk.layered.spacing.nodeNodeBetweenLayers": orientation === "DOWN" ? "120" : "135",
+    "elk.layered.spacing.nodeNodeBetweenLayers": orientation === "DOWN" ? "170" : "220",
     "elk.spacing.nodeNode": orientation === "DOWN" ? "20" : "50",
   };
 
