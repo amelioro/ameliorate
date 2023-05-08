@@ -24,7 +24,7 @@
               "diagramId": "root",
               "showing": true
             },
-            "position": { "x": 134.0952380952382, "y": 213.18873015873015 },
+            "position": { "x": 134.0952380952382, "y": 258.7214565826331 },
             "selected": false,
             "type": "criterion"
           },
@@ -36,7 +36,7 @@
               "diagramId": "root",
               "showing": true
             },
-            "position": { "x": 345.2619047619048, "y": 213.18873015873015 },
+            "position": { "x": 345.2619047619048, "y": 258.7214565826331 },
             "selected": false,
             "type": "criterion"
           },
@@ -48,7 +48,7 @@
               "diagramId": "root",
               "showing": true
             },
-            "position": { "x": 613.9619047619049, "y": 213.18873015873015 },
+            "position": { "x": 613.9619047619049, "y": 258.7214565826331 },
             "selected": false,
             "type": "criterion"
           },
@@ -60,7 +60,7 @@
               "diagramId": "root",
               "showing": true
             },
-            "position": { "x": 809.9619047619049, "y": 213.18873015873015 },
+            "position": { "x": 809.9619047619049, "y": 258.7214565826331 },
             "selected": false,
             "type": "criterion"
           },
@@ -72,14 +72,14 @@
               "diagramId": "root",
               "showing": true
             },
-            "position": { "x": 23, "y": 406.5493650793651 },
+            "position": { "x": 23, "y": 499.91719887955185 },
             "selected": false,
             "type": "criterion"
           },
           {
             "id": "6",
             "data": { "label": "Socialism", "score": "-", "diagramId": "root", "showing": true },
-            "position": { "x": 434.59523809523813, "y": 602.7073015873016 },
+            "position": { "x": 434.59523809523813, "y": 743.0875070028012 },
             "selected": false,
             "type": "solution"
           },
@@ -91,7 +91,7 @@
               "diagramId": "root",
               "showing": true
             },
-            "position": { "x": 177.59523809523807, "y": 806.8192063492063 },
+            "position": { "x": 177.59523809523807, "y": 991.872380952381 },
             "selected": false,
             "type": "solution"
           },
@@ -103,7 +103,7 @@
               "diagramId": "root",
               "showing": true
             },
-            "position": { "x": 501.1428571428572, "y": 406.5493650793651 },
+            "position": { "x": 501.1428571428572, "y": 499.91719887955185 },
             "selected": false,
             "type": "solutionComponent"
           },
@@ -115,7 +115,7 @@
               "diagramId": "root",
               "showing": true
             },
-            "position": { "x": 305.14285714285717, "y": 406.5493650793651 },
+            "position": { "x": 305.14285714285717, "y": 499.91719887955185 },
             "selected": false,
             "type": "solutionComponent"
           },
@@ -127,7 +127,7 @@
               "diagramId": "root",
               "showing": true
             },
-            "position": { "x": 72, "y": 602.7073015873016 },
+            "position": { "x": 72, "y": 743.0875070028012 },
             "selected": false,
             "type": "solutionComponent"
           },
@@ -139,7 +139,7 @@
               "diagramId": "root",
               "showing": true
             },
-            "position": { "x": 783.8095238095239, "y": 602.7073015873016 },
+            "position": { "x": 783.8095238095239, "y": 743.0875070028012 },
             "selected": false,
             "type": "solutionComponent"
           },
@@ -151,7 +151,7 @@
               "diagramId": "root",
               "showing": true
             },
-            "position": { "x": 790.1952380952382, "y": 406.5493650793651 },
+            "position": { "x": 790.1952380952382, "y": 499.91719887955185 },
             "selected": false,
             "type": "effect"
           }

@@ -18,7 +18,7 @@
           {
             "id": "1",
             "data": { "label": "madison", "score": "-", "diagramId": "root", "showing": true },
-            "position": { "x": 107.06666666666672, "y": 414.36 },
+            "position": { "x": 107.06666666666672, "y": 505.4305882352941 },
             "selected": false,
             "type": "solution"
           },
@@ -30,7 +30,7 @@
               "diagramId": "root",
               "showing": true
             },
-            "position": { "x": 303.0666666666667, "y": 414.36 },
+            "position": { "x": 303.0666666666667, "y": 505.4305882352941 },
             "selected": false,
             "type": "solution"
           },
@@ -42,7 +42,7 @@
               "diagramId": "root",
               "showing": true
             },
-            "position": { "x": 504.9333333333334, "y": 414.36 },
+            "position": { "x": 504.9333333333334, "y": 505.4305882352941 },
             "selected": false,
             "type": "solution"
           },
@@ -54,42 +54,42 @@
               "diagramId": "root",
               "showing": true
             },
-            "position": { "x": 700.9333333333334, "y": 414.36 },
+            "position": { "x": 700.9333333333334, "y": 505.4305882352941 },
             "selected": false,
             "type": "solution"
           },
           {
             "id": "5",
             "data": { "label": "inexpensive", "score": "8", "diagramId": "root", "showing": true },
-            "position": { "x": 12, "y": 209.11111111111111 },
+            "position": { "x": 12, "y": 255.84313725490196 },
             "selected": false,
             "type": "criterion"
           },
           {
             "id": "6",
             "data": { "label": "diverse", "score": "8", "diagramId": "root", "showing": true },
-            "position": { "x": 208, "y": 209.11111111111111 },
+            "position": { "x": 208, "y": 255.84313725490196 },
             "selected": false,
             "type": "criterion"
           },
           {
             "id": "7",
             "data": { "label": "transit", "score": "6", "diagramId": "root", "showing": true },
-            "position": { "x": 404.00000000000006, "y": 209.11111111111111 },
+            "position": { "x": 404.00000000000006, "y": 255.84313725490196 },
             "selected": false,
             "type": "criterion"
           },
           {
             "id": "8",
             "data": { "label": "parking", "score": "6", "diagramId": "root", "showing": true },
-            "position": { "x": 600, "y": 209.11111111111111 },
+            "position": { "x": 600, "y": 255.84313725490196 },
             "selected": false,
             "type": "criterion"
           },
           {
             "id": "9",
             "data": { "label": "walkable", "score": "5", "diagramId": "root", "showing": true },
-            "position": { "x": 796.0000000000001, "y": 209.11111111111111 },
+            "position": { "x": 796.0000000000001, "y": 255.84313725490196 },
             "selected": false,
             "type": "criterion"
           }
