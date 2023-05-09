@@ -10,6 +10,25 @@ If you're new to open source, you'll probably find [this open source guide](http
 
 This project adheres to the Contributor Covenant [code of conduct](https://github.com/amelioro/ameliorate/blob/main/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
 
+## Providing feedback
+There's plenty of room for improvement in this project, and any ideas, suggestions, concerns, etc, are greatly appreciated! Reach out any way you know how, but here are a few mediums you can use:
+- [Discord](https://discord.gg/3KhdyJkTWT) - this is a casual way to mention something & have easy back-and-forth; there’s also specifically a channel for #ideas-and-feedback
+- [GitHub Issues](https://github.com/amelioro/ameliorate/issues) - slightly more formal than Discord, but this is the system used for managing the project’s work, so if you create an issue, you can track its status
+- Email ameliorate.app@gmail.com - easy to use if you’re unfamiliar with Discord/GitHub
+
+And here are some things that come to mind that’d be particularly useful for to share about:
+- Anything in the experience that feels awkward
+- Bugs
+- Feature ideas
+- UI design advice
+- Problem information that doesn’t feel like it fits within the available node & edge types
+- Resources related to reaching mutual understanding & making decisions
+- Similar tools
+- Coding practices
+- Community building
+
+There are also [quite a few ideas](https://github.com/orgs/amelioro/projects/2/views/9) that haven’t been fully thought out that could use some brain power, some specifically [needing technical design](https://github.com/amelioro/ameliorate/labels/needs%20tech%20design) and some [needing feature/UX design](https://github.com/amelioro/ameliorate/labels/needs%20ux%20design).
+
 ## Finding an issue to work on
 
 Check out the [first issues filter](https://github.com/orgs/amelioro/projects/2/views/7) in the project backlog - `good first issue`s have a narrow scope and are expected to entail a small number of changes, and `ok first issue`s have a narrow scope, but are expected to be a bit tougher. You can check out the unfiltered [backlog](https://github.com/orgs/amelioro/projects/2/views/1) if you're feeling daring, plucky, or if this isn't your first rodeo. The backlog should be prioritized, but you don't need to limit yourself to the top.
