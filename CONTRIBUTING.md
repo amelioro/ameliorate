@@ -35,6 +35,8 @@ Check out the [first issues filter](https://github.com/orgs/amelioro/projects/2/
 
 Feel free to clarify any issues via commenting or asking in [Discord](https://discord.gg/3KhdyJkTWT). When you find an issue you want to work on, assign yourself to it so that nobody else spends time duplicating work on it.
 
+Note: be particularly wary of [issues with a "needs [x]" label](https://github.com/orgs/amelioro/projects/2/views/9) - these are expected to require significant design efforts.
+
 ## Running the project
 
 Make sure you have [git](https://git-scm.com/downloads) and [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) installed.
