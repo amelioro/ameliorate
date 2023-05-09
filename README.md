@@ -1,19 +1,23 @@
 # ameliorate
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/amelioro/ameliorate/blob/main/LICENSE) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blueviolet.svg)](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md) [![All Contributors](https://img.shields.io/github/all-contributors/amelioro/ameliorate?color=ee8449&style=flat-square)](#contributors-) [![Chat](https://img.shields.io/discord/1057707973482401892?label=chat&logo=discord)](https://discord.gg/3KhdyJkTWT)
 
-[ameliorate](https://www.ameliorate.app/) is a tool for solving controversial problems. With it, you can:
+[ameliorate](https://www.ameliorate.app/) is a tool for communicating about and mutually understanding tough problems. With it, you can:
 
 - map pieces of solutions to pieces of problems
-- compare the tradeoffs of each solution (🚧)
-- clearly justify and critique anything that you're claiming implicitly in an off-to-the-side but easy-to-access way
+<img src="https://github.com/amelioro/ameliorate/assets/13872370/afd66799-b447-44f0-8f13-c333cc28eb5e" width="800"/>
 
-![image](https://user-images.githubusercontent.com/13872370/209835504-19d074d7-8445-41ad-8680-067ba61648b3.png)
+- compare the tradeoffs of each solution
+<img src="https://github.com/amelioro/ameliorate/assets/13872370/ecef0cc0-d7fe-446b-99ef-bdfc60a81012" width="800"/>
+
+- clearly justify and critique anything that you're claiming implicitly in an off-to-the-side but easy-to-access way
+<img src="https://github.com/amelioro/ameliorate/assets/13872370/b21853e3-9f8d-437b-add3-7861c4b2fad2" width="800"/>
+
 
 See the [about](https://www.ameliorate.app/about) page for more details about purpose, vision, and mission.
 
 ## Roadmap
 
-Check out the [Miro Feature Map](https://miro.com/app/board/uXjVODhExZM=/?share_link_id=328679592737) for a long-term roadmap, or the [GitHub Project](https://github.com/orgs/amelioro/projects/2/views/1) for a shorter-term, prioritized list of issues.
+Check out the [GitHub Project](https://github.com/orgs/amelioro/projects/2/views/1) for an organized, prioritized list of issues.
 
 ## Built with
 
