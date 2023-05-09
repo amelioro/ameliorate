@@ -39,6 +39,7 @@ Use GitHub's [issues](https://github.com/amelioro/ameliorate/issues) to submit a
 See the [Contributor's Guide](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md) for
 
 - [Code of Conduct](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md#code-of-conduct)
+- [Providing feedback](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md#providing-feedback)
 - [Finding an issue to work on](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md#finding-an-issue-to-work-on)
 - [Running the project](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md#running-the-project)
 - [Codebase overview](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md#codebase-overview)
