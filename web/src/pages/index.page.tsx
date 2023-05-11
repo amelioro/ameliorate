@@ -51,7 +51,7 @@ const Home: NextPage = () => {
       <section id="how-it-works">
         <StyledBox>
           <Typography variant="h4">How it works</Typography>
-          <YoutubeEmbed embedId="ScMzIvxBSi4" />
+          <YoutubeEmbed embedId="yM8RrwQWeJc" />
         </StyledBox>
       </section>
     </>
