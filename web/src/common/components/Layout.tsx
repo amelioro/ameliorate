@@ -7,6 +7,7 @@ import Link from "./Link";
 
 interface NavLinkProps {
   href: string;
+  target?: string;
   display?: string;
   children: ReactNode;
 }
@@ -15,9 +16,9 @@ interface LayoutProps {
   children: ReactNode;
 }
 
-const NavLink = ({ href, display, children }: NavLinkProps) => {
+const NavLink = ({ href, target, display, children }: NavLinkProps) => {
   return (
-    <Link href={href} display={display} color="text" underline="none">
+    <Link href={href} target={target} display={display} color="text" underline="none">
       {children}
     </Link>
   );
@@ -38,22 +39,29 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
         <Toolbar variant="dense">
           <Box flex="1" display="flex" justifyContent="space-between" alignItems="center">
             <Box display="flex" gap="15px" alignItems="center">
-              <NavLink href="/">ameliorate</NavLink>
-              <NavLink href="/solve">solve</NavLink>
+              <NavLink href="/">Ameliorate</NavLink>
+              <NavLink href="/solve">Solve</NavLink>
             </Box>
 
             <Box display="flex" gap="15px" alignItems="center">
-              <NavLink href="/about">about</NavLink>
+              <NavLink
+                href="https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md#providing-feedback"
+                target="_blank"
+              >
+                Feedback
+              </NavLink>
+              <NavLink href="/about">About</NavLink>
               <NavLink
                 href="https://www.facebook.com/profile.php?id=100091844721178"
+                target="_blank"
                 display="flex"
               >
                 <Image src={facebookIconSrc} height={32} width={32} alt="facebook link" />
               </NavLink>
-              <NavLink href="https://discord.gg/3KhdyJkTWT" display="flex">
+              <NavLink href="https://discord.gg/3KhdyJkTWT" target="_blank" display="flex">
                 <Image src={discordIconSrc} height={24} width={32} alt="discord link" />
               </NavLink>
-              <NavLink href="https://github.com/amelioro/ameliorate" display="flex">
+              <NavLink href="https://github.com/amelioro/ameliorate" target="_blank" display="flex">
                 <Image src={githubIconSrc} height={32} width={32} alt="github link" />
               </NavLink>
             </Box>
