@@ -39,12 +39,12 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
         <Toolbar variant="dense">
           <Box flex="1" display="flex" justifyContent="space-between" alignItems="center">
             <Box display="flex" gap="15px" alignItems="center">
-              <NavLink href="/">ameliorate</NavLink>
-              <NavLink href="/solve">solve</NavLink>
+              <NavLink href="/">Ameliorate</NavLink>
+              <NavLink href="/solve">Solve</NavLink>
             </Box>
 
             <Box display="flex" gap="15px" alignItems="center">
-              <NavLink href="/about">about</NavLink>
+              <NavLink href="/about">About</NavLink>
               <NavLink
                 href="https://www.facebook.com/profile.php?id=100091844721178"
                 target="_blank"
