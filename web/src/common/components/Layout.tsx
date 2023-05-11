@@ -44,6 +44,12 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
             </Box>
 
             <Box display="flex" gap="15px" alignItems="center">
+              <NavLink
+                href="https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md#providing-feedback"
+                target="_blank"
+              >
+                Feedback
+              </NavLink>
               <NavLink href="/about">About</NavLink>
               <NavLink
                 href="https://www.facebook.com/profile.php?id=100091844721178"
