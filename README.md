@@ -1,17 +1,17 @@
 # ameliorate
+
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/amelioro/ameliorate/blob/main/LICENSE) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blueviolet.svg)](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md) [![All Contributors](https://img.shields.io/github/all-contributors/amelioro/ameliorate?color=ee8449&style=flat-square)](#contributors-) [![Chat](https://img.shields.io/discord/1057707973482401892?label=chat&logo=discord)](https://discord.gg/3KhdyJkTWT)
 
-[ameliorate](https://www.ameliorate.app/) is a tool for communicating about and mutually understanding tough problems. With it, you can:
+[ameliorate](https://www.ameliorate.app/) is a tool for discussing and mutually understanding tough problems. With it, you can:
 
 - map pieces of solutions to pieces of problems
-<img src="https://github.com/amelioro/ameliorate/assets/13872370/afd66799-b447-44f0-8f13-c333cc28eb5e" width="800"/>
+  <img src="https://github.com/amelioro/ameliorate/assets/13872370/afd66799-b447-44f0-8f13-c333cc28eb5e" width="800"/>
 
 - compare the tradeoffs of each solution
-<img src="https://github.com/amelioro/ameliorate/assets/13872370/ecef0cc0-d7fe-446b-99ef-bdfc60a81012" width="800"/>
+  <img src="https://github.com/amelioro/ameliorate/assets/13872370/ecef0cc0-d7fe-446b-99ef-bdfc60a81012" width="800"/>
 
 - clearly justify and critique anything that you're claiming implicitly in an off-to-the-side but easy-to-access way
-<img src="https://github.com/amelioro/ameliorate/assets/13872370/b21853e3-9f8d-437b-add3-7861c4b2fad2" width="800"/>
-
+  <img src="https://github.com/amelioro/ameliorate/assets/13872370/b21853e3-9f8d-437b-add3-7861c4b2fad2" width="800"/>
 
 See the [about](https://www.ameliorate.app/about) page for more details about purpose, vision, and mission.
 
@@ -49,6 +49,7 @@ See the [Contributor's Guide](https://github.com/amelioro/ameliorate/blob/main/C
 ## Contributors ✨
 
 Thanks go to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->

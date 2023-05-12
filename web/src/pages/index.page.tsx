@@ -28,7 +28,7 @@ const Home: NextPage = () => {
         </Typography>
 
         <Typography variant="body1">
-          A tool for communicating about and mutually understanding tough problems
+          A tool for discussing and mutually understanding tough problems
         </Typography>
 
         <Box display="flex" margin="0.75rem">
