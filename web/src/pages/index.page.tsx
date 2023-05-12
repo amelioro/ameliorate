@@ -14,7 +14,7 @@ const Home: NextPage = () => {
         <title>home | ameliorate</title>
         <meta
           name="description"
-          content="Ameliorate is a tool that makes it easier to solve tough problems by helping communicate about and mutually understand them."
+          content="Ameliorate is a tool that makes it easier to discuss and mutually understand tough problems."
         />
       </Head>
 
