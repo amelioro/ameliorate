@@ -26,6 +26,18 @@ const About: NextPage = () => {
 
       <Box display="flex" justifyContent="center">
         <PaperMiddle>
+          <Typography variant="body1">
+            Check out the
+            <Link
+              href="https://medium.com/@keyser.joel/a-dream-to-ameliorate-547353f37945"
+              target="_blank"
+            >
+              announcement blog post
+            </Link>
+            for an in-depth explanation of the tool's ideas, along with the motivation, goals, and
+            plans for the tool.
+          </Typography>
+
           <Typography variant="h5">What is this?</Typography>
           <Typography variant="body1">
             This is a tool for solving controversial problems.
@@ -65,13 +77,13 @@ const About: NextPage = () => {
           <Typography variant="h5">Vision</Typography>
           <Typography variant="body1">Imagine a world where...</Typography>
           <Typography variant="body1">
-            ... you never had to leave a conversation frustrated that you weren't understood, or
-            that you couldn't understand someone else.
+            ... you never have to leave a conversation frustrated that you aren't understood, or
+            that you can't understand someone else.
           </Typography>
 
           <Typography variant="body1">
-            ... politicians and citizens of diverse perspectives could work together and be
-            satisfied with decisions intended to better society.
+            ... politicians and citizens of diverse perspectives can work together and be satisfied
+            with decisions intended to better society.
           </Typography>
 
           <Typography variant="body1">
