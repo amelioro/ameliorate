@@ -26,6 +26,18 @@ const About: NextPage = () => {
 
       <Box display="flex" justifyContent="center">
         <PaperMiddle>
+          <Typography variant="body1">
+            Check out the
+            <Link
+              href="https://medium.com/@keyser.joel/a-dream-to-ameliorate-547353f37945"
+              target="_blank"
+            >
+              announcement blog post
+            </Link>
+            for an in-depth explanation of the tool's ideas, along with the motivation, goals, and
+            plans for the tool.
+          </Typography>
+
           <Typography variant="h5">What is this?</Typography>
           <Typography variant="body1">
             This is a tool for solving controversial problems.
