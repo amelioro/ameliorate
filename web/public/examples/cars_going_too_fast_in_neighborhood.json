@@ -1,0 +1,436 @@
+{
+  "state": {
+    "diagrams": {
+      "root": {
+        "id": "root",
+        "nodes": [
+          {
+            "id": "0",
+            "data": {
+              "label": "cars going too fast in neighborhood",
+              "score": "9",
+              "diagramId": "root",
+              "showing": true
+            },
+            "position": { "x": 306, "y": 12 },
+            "selected": false,
+            "type": "problem"
+          },
+          {
+            "id": "3",
+            "data": { "label": "stoplight", "score": "6", "diagramId": "root", "showing": true },
+            "position": { "x": 12, "y": 497.2423529411765 },
+            "selected": false,
+            "type": "solution"
+          },
+          {
+            "id": "4",
+            "data": { "label": "stop sign", "score": "7", "diagramId": "root", "showing": true },
+            "position": { "x": 208, "y": 497.2423529411765 },
+            "selected": false,
+            "type": "solution"
+          },
+          {
+            "id": "5",
+            "data": { "label": "speed bump", "score": "2", "diagramId": "root", "showing": true },
+            "position": { "x": 404, "y": 497.2423529411765 },
+            "selected": false,
+            "type": "solution"
+          },
+          {
+            "id": "6",
+            "data": {
+              "label": "\"kids at play\" sign",
+              "score": "6",
+              "diagramId": "root",
+              "showing": true
+            },
+            "position": { "x": 600, "y": 497.2423529411765 },
+            "selected": false,
+            "type": "solution"
+          },
+          {
+            "id": "7",
+            "data": { "label": "inexpensive", "score": "8", "diagramId": "root", "showing": true },
+            "position": { "x": 101.19999999999997, "y": 251.7835294117647 },
+            "selected": false,
+            "type": "criterion"
+          },
+          {
+            "id": "8",
+            "data": {
+              "label": "conveys reasoning to slow down",
+              "score": "6",
+              "diagramId": "root",
+              "showing": true
+            },
+            "position": { "x": 306, "y": 251.7835294117647 },
+            "selected": false,
+            "type": "criterion"
+          },
+          {
+            "id": "9",
+            "data": {
+              "label": "actually gets cars to slow down",
+              "score": "9",
+              "diagramId": "root",
+              "showing": true
+            },
+            "position": { "x": 506.4, "y": 251.7835294117647 },
+            "selected": false,
+            "type": "criterion"
+          }
+        ],
+        "edges": [
+          {
+            "id": "1",
+            "data": { "score": "-", "diagramId": "root" },
+            "label": "addresses",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "0",
+            "target": "3",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "2",
+            "data": { "score": "-", "diagramId": "root" },
+            "label": "addresses",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "0",
+            "target": "4",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "3",
+            "data": { "score": "-", "diagramId": "root" },
+            "label": "addresses",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "0",
+            "target": "5",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "4",
+            "data": { "score": "-", "diagramId": "root" },
+            "label": "addresses",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "0",
+            "target": "6",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "5",
+            "data": { "score": "-", "diagramId": "root" },
+            "label": "criterion for",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "0",
+            "target": "7",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "6",
+            "data": { "score": "3", "diagramId": "root" },
+            "label": "embodies",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "7",
+            "target": "3",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "7",
+            "data": { "score": "7", "diagramId": "root" },
+            "label": "embodies",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "7",
+            "target": "4",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "8",
+            "data": { "score": "8", "diagramId": "root" },
+            "label": "embodies",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "7",
+            "target": "5",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "9",
+            "data": { "score": "7", "diagramId": "root" },
+            "label": "embodies",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "7",
+            "target": "6",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "10",
+            "data": { "score": "-", "diagramId": "root" },
+            "label": "criterion for",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "0",
+            "target": "8",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "11",
+            "data": { "score": "-", "diagramId": "root" },
+            "label": "embodies",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "8",
+            "target": "3",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "12",
+            "data": { "score": "-", "diagramId": "root" },
+            "label": "embodies",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "8",
+            "target": "4",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "13",
+            "data": { "score": "-", "diagramId": "root" },
+            "label": "embodies",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "8",
+            "target": "5",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "14",
+            "data": { "score": "9", "diagramId": "root" },
+            "label": "embodies",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "8",
+            "target": "6",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "15",
+            "data": { "score": "-", "diagramId": "root" },
+            "label": "criterion for",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "0",
+            "target": "9",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "16",
+            "data": { "score": "9", "diagramId": "root" },
+            "label": "embodies",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "9",
+            "target": "3",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "17",
+            "data": { "score": "9", "diagramId": "root" },
+            "label": "embodies",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "9",
+            "target": "4",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "18",
+            "data": { "score": "9", "diagramId": "root" },
+            "label": "embodies",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "9",
+            "target": "5",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "19",
+            "data": { "score": "6", "diagramId": "root" },
+            "label": "embodies",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "9",
+            "target": "6",
+            "type": "ScoreEdge"
+          }
+        ],
+        "type": "problem"
+      },
+      "node-0": {
+        "id": "node-0",
+        "nodes": [
+          {
+            "id": "1",
+            "data": {
+              "label": "\"cars going too fast in neighborhood\" is important",
+              "score": "9",
+              "diagramId": "node-0",
+              "showing": true
+            },
+            "position": { "x": 12, "y": 128 },
+            "selected": false,
+            "type": "rootClaim"
+          },
+          {
+            "id": "2",
+            "data": {
+              "label": "little kids live here and can be hit",
+              "score": "-",
+              "diagramId": "node-0",
+              "showing": true
+            },
+            "position": { "x": 409.8090909090909, "y": 12 },
+            "selected": false,
+            "type": "support"
+          },
+          {
+            "id": "10",
+            "data": {
+              "label": "we measured traffic years ago, and it wasn't a problem",
+              "score": "-",
+              "diagramId": "node-0",
+              "showing": true
+            },
+            "position": { "x": 409.8090909090909, "y": 128 },
+            "selected": false,
+            "type": "critique"
+          },
+          {
+            "id": "11",
+            "data": {
+              "label": "visually see cars zipping by all the time",
+              "score": "-",
+              "diagramId": "node-0",
+              "showing": true
+            },
+            "position": { "x": 409.8090909090909, "y": 244 },
+            "selected": false,
+            "type": "support"
+          },
+          {
+            "id": "12",
+            "data": {
+              "label": "recent gentrification beyond bottom of hill giving reason to zoom",
+              "score": "-",
+              "diagramId": "node-0",
+              "showing": true
+            },
+            "position": { "x": 805.8090909090909, "y": 128 },
+            "selected": false,
+            "type": "critique"
+          }
+        ],
+        "edges": [
+          {
+            "id": "0",
+            "data": { "score": "-", "diagramId": "node-0" },
+            "label": "supports",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "1",
+            "target": "2",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "20",
+            "data": { "score": "-", "diagramId": "node-0" },
+            "label": "critiques",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "1",
+            "target": "10",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "21",
+            "data": { "score": "-", "diagramId": "node-0" },
+            "label": "supports",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "1",
+            "target": "11",
+            "type": "ScoreEdge"
+          },
+          {
+            "id": "22",
+            "data": { "score": "-", "diagramId": "node-0" },
+            "label": "critiques",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "10",
+            "target": "12",
+            "type": "ScoreEdge"
+          }
+        ],
+        "type": "claim"
+      },
+      "node-5": {
+        "id": "node-5",
+        "nodes": [
+          {
+            "id": "13",
+            "data": {
+              "label": "\"speed bump\" is important",
+              "score": "2",
+              "diagramId": "node-5",
+              "showing": true
+            },
+            "position": { "x": 12, "y": 12 },
+            "selected": false,
+            "type": "rootClaim"
+          },
+          {
+            "id": "14",
+            "data": {
+              "label": "thoroughfare for emergency vehicles",
+              "score": "-",
+              "diagramId": "node-5",
+              "showing": true
+            },
+            "position": { "x": 408, "y": 12 },
+            "selected": false,
+            "type": "critique"
+          }
+        ],
+        "edges": [
+          {
+            "id": "23",
+            "data": { "score": "-", "diagramId": "node-5" },
+            "label": "critiques",
+            "selected": false,
+            "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
+            "source": "13",
+            "target": "14",
+            "type": "ScoreEdge"
+          }
+        ],
+        "type": "claim"
+      }
+    },
+    "activeTableProblemId": null,
+    "activeClaimDiagramId": null,
+    "nextNodeId": 15,
+    "nextEdgeId": 24,
+    "showImpliedEdges": true
+  },
+  "version": 11
+}
