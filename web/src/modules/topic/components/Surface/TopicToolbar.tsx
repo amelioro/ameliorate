@@ -84,6 +84,9 @@ export const TopicToolbar = () => {
           <ExpandMore />
         </Button>
         <Menu anchorEl={anchorEl} isOpen={menuIsOpen} closeMenu={closeMenu}>
+          <MenuItem onClick={() => loadExample("cars_going_too_fast_in_neighborhood.json")}>
+            Cars Going Too Fast
+          </MenuItem>
           <MenuItem onClick={() => loadExample("economic_system.json")}>Economic System</MenuItem>
           <MenuItem onClick={() => loadExample("living_location.json")}>Living Location</MenuItem>
           <MenuItem onClick={() => loadExample("unwanted_pregnancy.json")}>
