@@ -14,6 +14,7 @@ export const Indicator = ({ Icon, title, onClick }: IndicatorProps) => {
   return (
     // black outline looks a bit weird on the table icon, not sure how to easily fix though
     // also hover color diff for black is impossible to see, so a custom hover is added to darken the gray instead
+    // see permalink for a few attempted variations in comments https://github.com/amelioro/ameliorate/blob/a6001b43b30a57b47acc67ce4065c4122d7929a8/web/src/modules/topic/components/Indicator/Indicator.tsx#L28-L54
     <Tooltip title={title}>
       <StyledButton
         variant="contained"
@@ -24,33 +25,5 @@ export const Indicator = ({ Icon, title, onClick }: IndicatorProps) => {
         <Icon color="neutral" />
       </StyledButton>
     </Tooltip>
-
-    // hard to tell which variant & color combo works best
-    // want to use neutral generally, but not stand out too much (contained with neutral color stands out because of heavy black to fill in icon)
-    // and have a clearly visible hover
-    // below are the variants that have been considered:
-
-    // passing nodeType color doesn't work for edges
-    // <StyledButton variant="contained" color={nodeType} onClick={onClick} disabled={!onClick}>
-    //   <Icon color="neutral" />
-    // </StyledButton>
-
-    // text variant hover doesn't do anything?
-    // <StyledButton variant="text" color={nodeType} onClick={onClick} disabled={!onClick}>
-    //   <Icon color="neutral" />
-    // </StyledButton>
-
-    // outlined variant adds border that feels awkward (halfway to being a shadow) and hover only increases border, so it's hard to see
-    // <StyledButton variant="outlined" color="neutral" onClick={onClick} disabled={!onClick}>
-    //   <Icon color="neutral" />
-    // </StyledButton>
-
-    // this follows the MUI example, but I can't actually see the hover at all
-    // <StyledIconButton onClick={onClick} disabled={!onClick}>
-    //   <Icon color="neutralContrast" />
-    // </StyledIconButton>
-
-    // no hover effect (this isn't even a button)
-    // <Icon />
   );
 };
