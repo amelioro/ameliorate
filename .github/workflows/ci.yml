@@ -13,5 +13,7 @@ jobs:
       - uses: actions/setup-node@v3
       - run: npm ci
       - run: npm run check-types
+      - run: npm run check-pretty
+        if: always() # get formatting errors even if there are errors above
       - run: npm run lint
-        if: always() # get lint errors even if there are type errors
+        if: always() # get lint errors even if there are errors above
