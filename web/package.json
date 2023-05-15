@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "check-types": "tsc --noEmit",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "check-types": "tsc --noEmit",
+    "check-pretty": "prettier --check .",
     "lint": "next lint --format stylish",
     "storybook": "sb dev -p 6006",
     "build-storybook": "sb build"

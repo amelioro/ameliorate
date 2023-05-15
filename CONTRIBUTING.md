@@ -11,12 +11,15 @@ If you're new to open source, you'll probably find [this open source guide](http
 This project adheres to the Contributor Covenant [code of conduct](https://github.com/amelioro/ameliorate/blob/main/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
 
 ## Providing feedback
+
 There's plenty of room for improvement in this project, and any ideas, suggestions, concerns, etc, are greatly appreciated! Reach out any way you know how, but here are a few mediums you can use:
+
 - [Discord](https://discord.gg/3KhdyJkTWT) - this is a casual way to mention something & have easy back-and-forth; there’s also specifically a channel for #ideas-and-feedback
 - [GitHub Issues](https://github.com/amelioro/ameliorate/issues) - slightly more formal than Discord, but this is the system used for managing the project’s work, so if you create an issue, you can track its status
 - Email ameliorate.app@gmail.com - easy to use if you’re unfamiliar with Discord/GitHub
 
 And here are some things that come to mind that’d be particularly useful for to share about:
+
 - Anything in the experience that feels awkward
 - Bugs
 - Feature ideas
@@ -47,9 +50,12 @@ Clone & install dependencies:
 git clone https://github.com/amelioro/ameliorate.git
 cd ameliorate
 npm install # repo-wide dependencies
+npx husky install # activate commit hooks
 cd web
 npm install # project-specific dependencies
 ```
+
+(see [Commit hooks](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md#commit-hooks) section for explanation of commit hooks)
 
 Serve web project on localhost:
 
@@ -83,25 +89,25 @@ To run linting:
 npm run lint # from web/
 ```
 
+### Commit hooks
+
+This project uses commit hooks to automate some tasks, and these are managed via [husky](https://github.com/typicode/husky/). These tasks live in the [.husky/ directory](https://github.com/amelioro/ameliorate/tree/main/.husky), and are explained below. If you want to skip commit hooks (e.g. if you want to quickly commit a wip), you can run `git commit --no-verify`.
+
+#### Conventional commits
+
+[Conventional commits](https://www.conventionalcommits.org/) is a standard format for commit messages, used to aid readability of commit history. This commit message format, with [these commit types](https://github.com/amelioro/ameliorate/blob/main/commitlint.config.js), is enforced in a commit hook via [commitlint](https://github.com/conventional-changelog/commitlint).
+
+#### Prettier
+
+Code formatting is managed by [prettier](https://prettier.io/), which is automatically run in a commit hook via [lint-staged](https://github.com/okonet/lint-staged).
+
 ### UX / UI style
 
 For user experience & user interface design, please read [uxui-guidelines.md](./web/docs/uxui-guidelines.md).
 
-### Conventional commits
-
-[Conventional commits](https://www.conventionalcommits.org/) is a standard format for commit messages, used to aid readability of commit history. This commit message format, with [these commit types](https://github.com/amelioro/ameliorate/blob/main/commitlint.config.js), is enforced in a precommit hook via [commitlint](https://github.com/conventional-changelog/commitlint) and [husky](https://github.com/typicode/husky/).
-
-Note: skip precommit hooks (e.g. if you want to quickly commit a wip) with `git commit --no-verify`.
-
-To activate husky:
-
-```bash
-npx husky install # Activate commit hooks
-```
-
 ### Helpful VS Code settings
 
-- [extensions](https://github.com/amelioro/ameliorate/blob/main/.vscode/extensions.json) and [settings](https://github.com/amelioro/ameliorate/blob/main/.vscode/settings.json) for syntax highlighting, styling on save, making conventional commits, working with git
+- [extensions](https://github.com/amelioro/ameliorate/blob/main/.vscode/extensions.json) and [settings](https://github.com/amelioro/ameliorate/blob/main/.vscode/settings.json) for syntax highlighting, styling on save, making conventional commits, working with git; you should be prompted to install these extensions when you open the repo for the first time in vscode
 - [tasks](https://github.com/amelioro/ameliorate/blob/main/.vscode/tasks.json) - run to view ts & linting errors in the vscode problem window
 
 ## PR process
