@@ -1,3 +1,4 @@
+import Tooltip from "@mui/material/Tooltip";
 import { MouseEventHandler } from "react";
 
 import { MuiIcon } from "../../utils/node";
@@ -5,16 +6,24 @@ import { StyledButton } from "./Indicator.styles";
 
 interface IndicatorProps {
   Icon: MuiIcon;
+  title: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
-export const Indicator = ({ Icon, onClick }: IndicatorProps) => {
+export const Indicator = ({ Icon, title, onClick }: IndicatorProps) => {
   return (
     // black outline looks a bit weird on the table icon, not sure how to easily fix though
     // also hover color diff for black is impossible to see, so a custom hover is added to darken the gray instead
-    <StyledButton variant="contained" color="neutralContrast" onClick={onClick} disabled={!onClick}>
-      <Icon color="neutral" />
-    </StyledButton>
+    <Tooltip title={title}>
+      <StyledButton
+        variant="contained"
+        color="neutralContrast"
+        onClick={onClick}
+        disabled={!onClick}
+      >
+        <Icon color="neutral" />
+      </StyledButton>
+    </Tooltip>
 
     // hard to tell which variant & color combo works best
     // want to use neutral generally, but not stand out too much (contained with neutral color stands out because of heavy black to fill in icon)

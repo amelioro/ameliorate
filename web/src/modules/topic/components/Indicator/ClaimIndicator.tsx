@@ -18,6 +18,7 @@ export const ClaimIndicator = ({ arguableId, arguableType }: Props) => {
   return (
     <Indicator
       Icon={Icon}
+      title={"View claims"}
       onClick={(event) => {
         // prevent setting the node as selected because we're about to navigate away from this diagram
         event.stopPropagation();

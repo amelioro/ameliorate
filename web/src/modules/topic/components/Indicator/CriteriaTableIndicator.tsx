@@ -21,5 +21,11 @@ export const CriteriaTableIndicator = ({ nodeId, diagramId }: Props) => {
 
   const Icon = hasCriteria ? TableChart : TableChartOutlined;
 
-  return <Indicator Icon={Icon} onClick={() => viewCriteriaTable(nodeId)} />;
+  return (
+    <Indicator
+      Icon={Icon}
+      title={"View criteria table"}
+      onClick={() => viewCriteriaTable(nodeId)}
+    />
+  );
 };
