@@ -99,7 +99,7 @@ Note: skip precommit hooks (e.g. if you want to quickly commit a wip) with `git 
 
 ### Helpful VS Code settings
 
-- [extensions](https://github.com/amelioro/ameliorate/blob/main/.vscode/extensions.json) and [settings](https://github.com/amelioro/ameliorate/blob/main/.vscode/settings.json) for syntax highlighting, styling on save, making conventional commits, working with git
+- [extensions](https://github.com/amelioro/ameliorate/blob/main/.vscode/extensions.json) and [settings](https://github.com/amelioro/ameliorate/blob/main/.vscode/settings.json) for syntax highlighting, styling on save, making conventional commits, working with git; you should be prompted to install these extensions when you open the repo for the first time in vscode
 - [tasks](https://github.com/amelioro/ameliorate/blob/main/.vscode/tasks.json) - run to view ts & linting errors in the vscode problem window
 
 ## PR process
