@@ -55,6 +55,8 @@ cd web
 npm install # project-specific dependencies
 ```
 
+(see [Commit hooks](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md#commit-hooks) section for explanation of commit hooks)
+
 Serve web project on localhost:
 
 ```bash
@@ -87,15 +89,21 @@ To run linting:
 npm run lint # from web/
 ```
 
+### Commit hooks
+
+This project uses commit hooks to automate some tasks, and these are managed via [husky](https://github.com/typicode/husky/). These tasks live in the [.husky/ directory](https://github.com/amelioro/ameliorate/tree/main/.husky), and are explained below. If you want to skip commit hooks (e.g. if you want to quickly commit a wip), you can run `git commit --no-verify`.
+
+#### Conventional commits
+
+[Conventional commits](https://www.conventionalcommits.org/) is a standard format for commit messages, used to aid readability of commit history. This commit message format, with [these commit types](https://github.com/amelioro/ameliorate/blob/main/commitlint.config.js), is enforced in a commit hook via [commitlint](https://github.com/conventional-changelog/commitlint).
+
+#### Prettier
+
+Code formatting is managed by [prettier](https://prettier.io/), which is automatically run in a commit hook via [lint-staged](https://github.com/okonet/lint-staged).
+
 ### UX / UI style
 
 For user experience & user interface design, please read [uxui-guidelines.md](./web/docs/uxui-guidelines.md).
-
-### Conventional commits
-
-[Conventional commits](https://www.conventionalcommits.org/) is a standard format for commit messages, used to aid readability of commit history. This commit message format, with [these commit types](https://github.com/amelioro/ameliorate/blob/main/commitlint.config.js), is enforced in a precommit hook via [commitlint](https://github.com/conventional-changelog/commitlint) and [husky](https://github.com/typicode/husky/).
-
-Note: skip precommit hooks (e.g. if you want to quickly commit a wip) with `git commit --no-verify`.
 
 ### Helpful VS Code settings
 
