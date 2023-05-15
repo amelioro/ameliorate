@@ -1,5 +1,4 @@
 import { TableChart, TableChartOutlined } from "@mui/icons-material";
-import Tooltip from "@mui/material/Tooltip";
 import React from "react";
 
 import { useNode, useNodeChildren } from "../../store/nodeHooks";
@@ -20,16 +19,14 @@ export const CriteriaTableIndicator = ({ nodeId, diagramId }: Props) => {
   if (node === null || node.type !== "problem") {
     return <></>;
   }
-  
+
   const Icon = hasCriteria ? TableChart : TableChartOutlined;
-   
-     
+
   return (
-    <Tooltip title="View criteria table">
-
-    <Indicator  Icon={Icon} onClick={() => viewCriteriaTable(nodeId)}  />
-        
-    </Tooltip>
+    <Indicator
+      Icon={Icon}
+      title={"view criteria table"}
+      onClick={() => viewCriteriaTable(nodeId)}
+    />
   );
-
 };
