@@ -25,7 +25,7 @@ export const CriteriaTableIndicator = ({ nodeId, diagramId }: Props) => {
   return (
     <Indicator
       Icon={Icon}
-      title={"view criteria table"}
+      title={"View criteria table"}
       onClick={() => viewCriteriaTable(nodeId)}
     />
   );
