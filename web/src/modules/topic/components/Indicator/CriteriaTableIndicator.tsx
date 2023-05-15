@@ -1,5 +1,4 @@
 import { TableChart, TableChartOutlined } from "@mui/icons-material";
-import React from "react";
 
 import { useNode, useNodeChildren } from "../../store/nodeHooks";
 import { viewCriteriaTable } from "../../store/viewActions";
