@@ -10,6 +10,10 @@ export const getProblemDiagram = (state: TopicStoreState) => {
   return getDiagramOrThrow(state, problemDiagramId);
 };
 
+export const getDiagram = (state: TopicStoreState, diagramId: string) => {
+  return state.diagrams[diagramId];
+};
+
 export const getDiagramOrThrow = (state: TopicStoreState, diagramId: string) => {
   const diagram = state.diagrams[diagramId];
   if (!diagram) throw new Error(`Diagram ${diagramId} not found in state`);

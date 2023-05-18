@@ -3,7 +3,13 @@ import { type EdgeSelectionChange, type NodeSelectionChange } from "reactflow";
 import { getClaimDiagramId, getRootArguable } from "../utils/claim";
 import { ArguableType, Score, findArguable, findNode } from "../utils/diagram";
 import { useTopicStore } from "./store";
-import { getActiveDiagram, getDiagramOrThrow, getDuplicateState, getProblemDiagram } from "./utils";
+import {
+  getActiveDiagram,
+  getDiagram,
+  getDiagramOrThrow,
+  getDuplicateState,
+  getProblemDiagram,
+} from "./utils";
 
 // score setting is way more work than it needs to be because one score can live in multiple places:
 // - on the arguable
@@ -33,7 +39,7 @@ export const setScore = (arguableId: string, arguableType: ArguableType, score: 
 
   // update implicit child claim's score if it exists
   const childDiagramId = getClaimDiagramId(arguableId, arguableType);
-  if (getDiagram(childDiagramId)) {
+  if (getDiagram(state, childDiagramId)) {
     const childDiagram = getDiagramOrThrow(state, childDiagramId);
     const childClaim = childDiagram.nodes.find((node) => node.type === "rootClaim");
     if (!childClaim) throw new Error("child claim not found");
@@ -44,10 +50,6 @@ export const setScore = (arguableId: string, arguableType: ArguableType, score: 
   }
 
   useTopicStore.setState(state, false, "setScore");
-};
-
-export const getDiagram = (diagramId: string) => {
-  return useTopicStore.getState().diagrams[diagramId];
 };
 
 export const setNodeLabel = (nodeId: string, value: string) => {

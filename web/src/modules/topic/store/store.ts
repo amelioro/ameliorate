@@ -12,9 +12,8 @@ import {
   getDiagramTitle,
   problemDiagramId,
 } from "../utils/diagram";
-import { getDiagram } from "./actions";
 import { migrate } from "./migrate";
-import { getClaimDiagrams, getDiagramOrThrow, getTopicTitle } from "./utils";
+import { getClaimDiagrams, getDiagram, getDiagramOrThrow, getTopicTitle } from "./utils";
 
 const initialDiagrams: Record<string, Diagram> = {
   [problemDiagramId]: {
@@ -103,9 +102,9 @@ export const useDiagramType = (diagramId: string) => {
     // Zombie child issue, see https://github.com/amelioro/ameliorate/blob/main/web/docs/state-management.md#zombie-child-issue
     // batchedUpdates isn't necessary because react already batches updates as of react 18
     // Batching doesn't fix this though because the error isn't when rendering, it's when checking the store's comparers
-    if (!getDiagram(diagramId)) return null;
+    const diagram = getDiagram(state, diagramId);
+    if (!diagram) return null;
 
-    const diagram = getDiagramOrThrow(state, diagramId);
     return diagram.type;
   });
 };

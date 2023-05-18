@@ -8,9 +8,14 @@ import {
   layoutVisibleComponents,
 } from "../utils/diagram";
 import { NodeType, children, parents } from "../utils/node";
-import { getDiagram } from "./actions";
 import { useTopicStore } from "./store";
-import { getActiveDiagram, getClaimDiagrams, getDuplicateState, getProblemDiagram } from "./utils";
+import {
+  getActiveDiagram,
+  getClaimDiagrams,
+  getDiagram,
+  getDuplicateState,
+  getProblemDiagram,
+} from "./utils";
 
 export const viewOrCreateClaimDiagram = (arguableId: string, arguableType: ArguableType) => {
   const state = getDuplicateState();
@@ -18,7 +23,7 @@ export const viewOrCreateClaimDiagram = (arguableId: string, arguableType: Argua
   const diagramId = getClaimDiagramId(arguableId, arguableType);
 
   // create claim diagram if it doesn't exist
-  if (!getDiagram(diagramId)) {
+  if (!getDiagram(state, diagramId)) {
     const activeDiagram = getActiveDiagram(state);
     const arguable = findArguable(arguableId, arguableType, activeDiagram);
     const label = getImplicitLabel(arguableId, arguableType, activeDiagram);
