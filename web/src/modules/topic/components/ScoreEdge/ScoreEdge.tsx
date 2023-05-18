@@ -9,6 +9,7 @@ import { useIsImplied, useIsNodeSelected } from "../../store/edgeHooks";
 import { Edge, markerStart } from "../../utils/diagram";
 import { RelationName } from "../../utils/edge";
 import { EdgeProps } from "../Diagram/Diagram";
+import { Spotlight } from "../Diagram/Diagram.styles";
 import { EdgeIndicatorGroup } from "../Indicator/EdgeIndicatorGroup";
 import { StyledDiv, StyledPath } from "./ScoreEdge.styles";
 
@@ -40,6 +41,14 @@ export const ScoreEdge = (flowEdge: EdgeProps) => {
   const isNodeSelected = useIsNodeSelected(edge.id, edge.data.diagramId);
   const isAnyArguableSelected = useIsAnyArguableSelected();
 
+  const spotlight: Spotlight = edge.selected
+    ? "primary"
+    : isNodeSelected
+    ? "secondary"
+    : isAnyArguableSelected || isImplied
+    ? "background"
+    : "normal";
+
   const [edgePath, labelX, labelY] = getBezierPath({
     sourceX: flowEdge.sourceX,
     sourceY: flowEdge.sourceY,
@@ -58,10 +67,7 @@ export const ScoreEdge = (flowEdge: EdgeProps) => {
         d={edgePath}
         markerStart={flowEdge.markerStart}
         markerEnd={flowEdge.markerEnd}
-        isEdgeSelected={edge.selected}
-        isNodeSelected={isNodeSelected}
-        isAnyArguableSelected={isAnyArguableSelected}
-        isImplied={isImplied}
+        spotlight={spotlight}
       />
       {/* see for example usage https://reactflow.dev/docs/api/edges/edge-label-renderer/ */}
       <EdgeLabelRenderer>
@@ -70,10 +76,7 @@ export const ScoreEdge = (flowEdge: EdgeProps) => {
           labelY={labelY}
           onClick={() => setSelectedArguable(edge.id, "edge")}
           onContextMenu={(event) => openContextMenu(event, { edge })}
-          isEdgeSelected={edge.selected}
-          isNodeSelected={isNodeSelected}
-          isAnyArguableSelected={isAnyArguableSelected}
-          isImplied={isImplied}
+          spotlight={spotlight}
         >
           <Typography variant="body1" margin="0">
             {flowEdge.label}

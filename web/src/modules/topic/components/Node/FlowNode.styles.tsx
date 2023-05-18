@@ -3,7 +3,7 @@ import { css } from "@mui/material";
 
 import { Node } from "../../utils/diagram";
 import { Orientation } from "../../utils/layout";
-import { zIndex } from "../Diagram/Diagram.styles";
+import { Spotlight, zIndex } from "../Diagram/Diagram.styles";
 import { AddNodeButtonGroup } from "../Node/AddNodeButtonGroup";
 import { EditableNode } from "./EditableNode";
 
@@ -74,27 +74,23 @@ export const AddNodeButtonGroupChild = styled(StyledAddNodeButtonGroup)<{
 `;
 
 interface NodeProps {
-  node: Node;
-  isNeighborSelected: boolean;
-  isEdgeSelected: boolean;
-  isAnyArguableSelected: boolean;
+  spotlight: Spotlight;
 }
 
 const options = {
-  shouldForwardProp: (prop: string) =>
-    !["isNeighborSelected", "isEdgeSelected", "isAnyArguableSelected"].includes(prop),
+  shouldForwardProp: (prop: string) => !["spotlight"].includes(prop),
 };
 
 export const StyledEditableNode = styled(EditableNode, options)<NodeProps>`
-  ${({ theme, node, isNeighborSelected, isEdgeSelected, isAnyArguableSelected }) => {
-    if (node.selected) {
+  ${({ theme, spotlight }) => {
+    if (spotlight === "primary") {
       return css``;
-    } else if (isNeighborSelected || isEdgeSelected) {
+    } else if (spotlight === "secondary") {
       return css`
         border-color: ${theme.palette.info.main};
-        z-index: ${zIndex.arguableWhenNeighborSelected};
+        z-index: ${zIndex.secondary};
       `;
-    } else if (isAnyArguableSelected) {
+    } else if (spotlight === "background") {
       return css`
         opacity: 0.5;
       `;
@@ -102,14 +98,14 @@ export const StyledEditableNode = styled(EditableNode, options)<NodeProps>`
   }};
 `;
 
-export const nodeStyles = (node: Node, isNeighborSelected: boolean) => {
+export const nodeStyles = (node: Node, spotlight: Spotlight) => {
   return css`
     // reactflow sets z-index on its node wrapper, so we can't just set z-index on our node div
     .react-flow__node[data-id="${node.id}"] {
-      z-index: ${node.selected
-        ? zIndex.arguableWhenSelected
-        : isNeighborSelected
-        ? zIndex.arguableWhenNeighborSelected
+      z-index: ${spotlight === "primary"
+        ? zIndex.primary
+        : spotlight === "secondary"
+        ? zIndex.secondary
         : 0} !important; // !important to override because reactflow sets z-index via style attribute
     }
   `;

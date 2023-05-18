@@ -7,6 +7,7 @@ import { useDiagramType } from "../../store/store";
 import { Node, orientations } from "../../utils/diagram";
 import { NodeType } from "../../utils/node";
 import { NodeProps } from "../Diagram/Diagram";
+import { Spotlight } from "../Diagram/Diagram.styles";
 import {
   AddNodeButtonGroupChild,
   AddNodeButtonGroupParent,
@@ -37,9 +38,17 @@ export const FlowNode = (flowNode: NodeProps) => {
   const orientation = orientations[diagramType];
   const node = convertToNode(flowNode);
 
+  const spotlight: Spotlight = node.selected
+    ? "primary"
+    : isNeighborSelected || isEdgeSelected
+    ? "secondary"
+    : isAnyArguableSelected
+    ? "background"
+    : "normal";
+
   return (
     <>
-      <Global styles={nodeStyles(node, isNeighborSelected)} />
+      <Global styles={nodeStyles(node, spotlight)} />
 
       <HoverBridgeDiv />
 
@@ -52,12 +61,7 @@ export const FlowNode = (flowNode: NodeProps) => {
         orientation={orientation}
       />
 
-      <StyledEditableNode
-        node={node}
-        isNeighborSelected={isNeighborSelected}
-        isEdgeSelected={isEdgeSelected}
-        isAnyArguableSelected={isAnyArguableSelected}
-      />
+      <StyledEditableNode node={node} spotlight={spotlight} />
 
       <AddNodeButtonGroupChild
         fromNodeId={flowNode.id}

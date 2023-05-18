@@ -1,38 +1,30 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
-import { zIndex } from "../Diagram/Diagram.styles";
+import { Spotlight, zIndex } from "../Diagram/Diagram.styles";
 
 interface PathProps {
-  isEdgeSelected: boolean;
-  isNodeSelected: boolean;
-  isAnyArguableSelected: boolean;
-  isImplied: boolean;
+  spotlight: Spotlight;
 }
 
 const pathOptions = {
-  shouldForwardProp: (prop: string) =>
-    !["isEdgeSelected", "isNodeSelected", "isAnyArguableSelected", "isImplied"].includes(prop),
+  shouldForwardProp: (prop: string) => !["spotlight"].includes(prop),
 };
 
 export const StyledPath = styled("path", pathOptions)<PathProps>`
   &.react-flow__edge-path {
-    ${({ theme, isEdgeSelected, isNodeSelected, isAnyArguableSelected, isImplied }) => {
-      if (isEdgeSelected) {
+    ${({ theme, spotlight }) => {
+      if (spotlight === "primary") {
         return css`
           opacity: 1;
         `;
-      } else if (isNodeSelected) {
+      } else if (spotlight === "secondary") {
         return css`
           // marker should be styled too but reactflow's default only styles this, and that's probably
           // because marker styles need to be specified when creating the marker element, without css
           stroke: ${theme.palette.info.main};
         `;
-      } else if (isAnyArguableSelected) {
-        return css`
-          opacity: 0.5;
-        `;
-      } else if (isImplied) {
+      } else if (spotlight === "background") {
         return css`
           opacity: 0.5;
         `;
@@ -44,22 +36,11 @@ export const StyledPath = styled("path", pathOptions)<PathProps>`
 interface DivProps {
   labelX: number;
   labelY: number;
-  isEdgeSelected: boolean;
-  isNodeSelected: boolean;
-  isAnyArguableSelected: boolean;
-  isImplied: boolean;
+  spotlight: Spotlight;
 }
 
 const divOptions = {
-  shouldForwardProp: (prop: string) =>
-    ![
-      "labelX",
-      "labelY",
-      "isEdgeSelected",
-      "isNodeSelected",
-      "isAnyArguableSelected",
-      "isImplied",
-    ].includes(prop),
+  shouldForwardProp: (prop: string) => !["labelX", "labelY", "spotlight"].includes(prop),
 };
 
 export const StyledDiv = styled("div", divOptions)<DivProps>`
@@ -81,25 +62,21 @@ export const StyledDiv = styled("div", divOptions)<DivProps>`
     transform: translate(-50%, -50%) translate(${labelX}px, ${labelY}px);
   `}
 
-  ${({ theme, isEdgeSelected, isNodeSelected, isAnyArguableSelected, isImplied }) => {
-    if (isEdgeSelected) {
+  ${({ theme, spotlight }) => {
+    if (spotlight === "primary") {
       return css`
         border-color: #555;
-        z-index: ${zIndex.arguableWhenSelected};
+        z-index: ${zIndex.primary};
       `;
-    } else if (isNodeSelected) {
+    } else if (spotlight === "secondary") {
       return css`
         border-color: ${theme.palette.info.main};
-        z-index: ${zIndex.arguableWhenNeighborSelected};
+        z-index: ${zIndex.secondary};
       `;
-    } else if (isAnyArguableSelected) {
+    } else if (spotlight === "background") {
       return css`
         opacity: 0.5;
-      `;
-    } else if (isImplied) {
-      return css`
-        opacity: 0.5;
-        z-index: ${zIndex.impliedEdge};
+        z-index: ${zIndex.background};
       `;
     }
   }}
