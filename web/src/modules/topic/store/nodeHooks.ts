@@ -1,13 +1,13 @@
+import { errorWithData } from "../../../common/errorHandling";
 import { Node, RelationDirection, findNode } from "../utils/diagram";
 import { children, edges, neighbors, parents } from "../utils/node";
 import { useTopicStoreAfterHydration } from "./store";
+import { getDiagramOrThrow } from "./utils";
 
 export const useNode = (nodeId: string, diagramId: string) => {
   return useTopicStoreAfterHydration((state) => {
-    const diagram = state.diagrams[diagramId];
-
-    // wrap in try/catch because findNode will error when this is triggered by a node deletion (zombie child issue)
     try {
+      const diagram = getDiagramOrThrow(state, diagramId);
       return findNode(nodeId, diagram);
     } catch {
       return null;
@@ -17,10 +17,8 @@ export const useNode = (nodeId: string, diagramId: string) => {
 
 export const useNodeChildren = (nodeId: string, diagramId: string) => {
   return useTopicStoreAfterHydration((state) => {
-    const diagram = state.diagrams[diagramId];
-
-    // wrap in try/catch because findNode will error when this is triggered by a node deletion (zombie child issue)
     try {
+      const diagram = getDiagramOrThrow(state, diagramId);
       const node = findNode(nodeId, diagram);
       return children(node, diagram);
     } catch {
@@ -31,10 +29,8 @@ export const useNodeChildren = (nodeId: string, diagramId: string) => {
 
 export const useNodeParents = (nodeId: string, diagramId: string) => {
   return useTopicStoreAfterHydration((state) => {
-    const diagram = state.diagrams[diagramId];
-
-    // wrap in try/catch because findNode will error when this is triggered by a node deletion (zombie child issue)
     try {
+      const diagram = getDiagramOrThrow(state, diagramId);
       const node = findNode(nodeId, diagram);
       return parents(node, diagram);
     } catch {
@@ -45,20 +41,23 @@ export const useNodeParents = (nodeId: string, diagramId: string) => {
 
 export const useNodes = (diagramId: string, predicate: (node: Node) => boolean) => {
   return useTopicStoreAfterHydration((state) => {
-    const diagram = state.diagrams[diagramId];
-
-    return diagram.nodes.filter(predicate);
+    try {
+      const diagram = getDiagramOrThrow(state, diagramId);
+      return diagram.nodes.filter(predicate);
+    } catch {
+      return [];
+    }
   });
 };
 
 export const useCriterionSolutionEdges = (problemNodeId: string, diagramId: string) => {
   return useTopicStoreAfterHydration((state) => {
-    const diagram = state.diagrams[diagramId];
-
-    // wrap in try/catch because findNode will error when this is triggered by a node deletion (zombie child issue)
     try {
+      const diagram = getDiagramOrThrow(state, diagramId);
       const problemNode = findNode(problemNodeId, diagram);
-      if (problemNode.type !== "problem") throw new Error("node is not a problem node");
+      if (problemNode.type !== "problem") {
+        throw errorWithData("node is not a problem node", problemNode);
+      }
 
       const nodeChildren = children(problemNode, diagram);
       const criteria = nodeChildren.filter((node) => node.type === "criterion");
@@ -77,10 +76,8 @@ export const useCriterionSolutionEdges = (problemNodeId: string, diagramId: stri
 
 export const useNeighbors = (nodeId: string, direction: RelationDirection, diagramId: string) => {
   return useTopicStoreAfterHydration((state) => {
-    const diagram = state.diagrams[diagramId];
-
-    // wrap in try/catch because findNode will error when this is triggered by a node deletion (zombie child issue)
     try {
+      const diagram = getDiagramOrThrow(state, diagramId);
       const node = findNode(nodeId, diagram);
       return direction === "parent" ? parents(node, diagram) : children(node, diagram);
     } catch {
@@ -91,10 +88,8 @@ export const useNeighbors = (nodeId: string, direction: RelationDirection, diagr
 
 export const useIsNeighborSelected = (nodeId: string, diagramId: string) => {
   return useTopicStoreAfterHydration((state) => {
-    const diagram = state.diagrams[diagramId];
-
-    // wrap in try/catch because findNode will error when this is triggered by a node deletion (zombie child issue)
     try {
+      const diagram = getDiagramOrThrow(state, diagramId);
       const node = findNode(nodeId, diagram);
       return neighbors(node, diagram).some((node) => node.selected);
     } catch {
@@ -105,10 +100,8 @@ export const useIsNeighborSelected = (nodeId: string, diagramId: string) => {
 
 export const useIsEdgeSelected = (nodeId: string, diagramId: string) => {
   return useTopicStoreAfterHydration((state) => {
-    const diagram = state.diagrams[diagramId];
-
-    // wrap in try/catch because findNode will error when this is triggered by a node deletion (zombie child issue)
     try {
+      const diagram = getDiagramOrThrow(state, diagramId);
       const node = findNode(nodeId, diagram);
       return edges(node, diagram).some((edge) => edge.selected);
     } catch {

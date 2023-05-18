@@ -9,6 +9,7 @@ import MaterialReactTable, {
 } from "material-react-table";
 import React, { useState } from "react";
 
+import { errorWithData } from "../../../../common/errorHandling";
 import { useCriterionSolutionEdges, useNode, useNodeChildren } from "../../store/nodeHooks";
 import { closeTable } from "../../store/viewActions";
 import { Edge, Node, problemDiagramId } from "../../utils/diagram";
@@ -33,7 +34,9 @@ const buildRows = (rowNodes: Node[], columnNodes: Node[], edges: Edge[]): RowDat
       ...Object.fromEntries(
         columnNodes.map((columnNode) => {
           const edge = getConnectingEdge(rowNode, columnNode, edges);
-          if (!edge) throw new Error(`No edge found between ${rowNode.id} and ${columnNode.id}`);
+          if (!edge) {
+            throw errorWithData(`No edge found between ${rowNode.id} and ${columnNode.id}`, edges);
+          }
 
           return [columnNode.id, edge];
         })

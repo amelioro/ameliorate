@@ -20,8 +20,10 @@ export const migrate = (persistedState: any, version: number) => {
   let state = persistedState;
 
   // thanks for this style to migrate one version at a time https://github.com/pmndrs/zustand/issues/984#issuecomment-1144661466
-  range(version, migrations.length).forEach((i) => {
-    state = migrations[i](state);
+  migrations.forEach((migration, i) => {
+    if (i >= version) {
+      state = migration(state);
+    }
   });
 
   return state;

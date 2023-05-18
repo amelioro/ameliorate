@@ -13,6 +13,7 @@ import fileDownload from "js-file-download";
 import { StorageValue } from "zustand/middleware";
 
 import { Menu } from "../../../../common/components/Menu/Menu";
+import { errorWithData } from "../../../../common/errorHandling";
 import { useMenu } from "../../../../common/hooks";
 import { migrate } from "../../store/migrate";
 import { TopicStoreState, useIsTableActive, useShowImpliedEdges } from "../../store/store";
@@ -34,15 +35,18 @@ const downloadTopic = () => {
 };
 
 const uploadTopic = (event: React.ChangeEvent<HTMLInputElement>) => {
-  if (event.target.files === null || event.target.files.length === 0) return;
+  if (event.target.files === null) return;
 
-  event.target.files[0]
+  const file = event.target.files[0];
+  if (!file) return;
+
+  file
     .text()
     .then((text) => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- TODO: validate that JSON matches interface
       const persistState = JSON.parse(text) as StorageValue<TopicStoreState>;
       if (!persistState.version) {
-        throw new Error("No version found in file, cannot migrate old state");
+        throw errorWithData("No version found in file, cannot migrate old state", persistState);
       }
 
       const migratedState = migrate(persistState.state, persistState.version) as TopicStoreState;
@@ -50,8 +54,7 @@ const uploadTopic = (event: React.ChangeEvent<HTMLInputElement>) => {
       setState(migratedState);
     })
     .catch((error) => {
-      console.log("error reading file: ", error);
-      throw new Error("Failed to read file");
+      throw errorWithData("Failed to read file", error);
     });
 };
 
@@ -64,8 +67,7 @@ const loadExample = (exampleFileName: string) => {
       setState(persistState.state);
     })
     .catch((error) => {
-      console.log("error loading example: ", error);
-      throw new Error("Failed to load example");
+      throw errorWithData("Failed to load example", error);
     });
 };
 

@@ -10,11 +10,13 @@ import "reactflow/dist/style.css";
  * nodes (z-index: 0);
  */
 export const zIndex = {
-  impliedEdge: -1,
+  background: -1,
   svgWhenAnyArguableSelected: 1,
-  arguableWhenNeighborSelected: 2,
-  arguableWhenSelected: 3,
+  secondary: 2,
+  primary: 3,
 };
+
+export type Spotlight = "primary" | "secondary" | "normal" | "background";
 
 interface FlowProps {
   isAnyArguableSelected: boolean;
