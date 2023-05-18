@@ -46,6 +46,7 @@ interface StyledTextareaProps {
 }
 
 export const StyledTextareaAutosize = styled(TextareaAutosize)<StyledTextareaProps>`
+  padding: 0;
   border: 0;
   resize: none;
   outline: none;
