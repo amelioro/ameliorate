@@ -1,5 +1,6 @@
 import { type EdgeSelectionChange, type NodeSelectionChange } from "reactflow";
 
+import { errorWithData } from "../../../common/errorHandling";
 import { getClaimDiagramId, getRootArguable } from "../utils/claim";
 import { ArguableType, Score, findArguable, findNode } from "../utils/diagram";
 import { useTopicStore } from "./store";
@@ -42,7 +43,7 @@ export const setScore = (arguableId: string, arguableType: ArguableType, score: 
   if (getDiagram(state, childDiagramId)) {
     const childDiagram = getDiagramOrThrow(state, childDiagramId);
     const childClaim = childDiagram.nodes.find((node) => node.type === "rootClaim");
-    if (!childClaim) throw new Error("child claim not found");
+    if (!childClaim) throw errorWithData("child claim not found", childDiagram);
 
     /* eslint-disable functional/immutable-data, no-param-reassign */
     childClaim.data.score = score;

@@ -9,6 +9,7 @@ import {
   Widgets,
 } from "@mui/icons-material";
 
+import { errorWithData } from "../../../common/errorHandling";
 import { Diagram, Node } from "./diagram";
 import { componentTypes } from "./edge";
 
@@ -74,7 +75,7 @@ export const parents = (node: Node, diagram: Diagram) => {
 
   return parentEdges.map((edge) => {
     const node = diagram.nodes.find((node) => edge.source === node.id);
-    if (!node) throw new Error(`node ${edge.source} not found`);
+    if (!node) throw errorWithData(`node ${edge.source} not found`, diagram);
 
     return node;
   });
@@ -84,7 +85,7 @@ export const children = (node: Node, diagram: Diagram) => {
   const childEdges = diagram.edges.filter((edge) => edge.source === node.id);
   return childEdges.map((edge) => {
     const node = diagram.nodes.find((node) => edge.target === node.id);
-    if (!node) throw new Error(`node ${edge.target} not found`);
+    if (!node) throw errorWithData(`node ${edge.target} not found`, diagram);
 
     return node;
   });

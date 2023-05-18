@@ -1,5 +1,6 @@
 import _ from "lodash";
 
+import { errorWithData } from "../../../common/errorHandling";
 import { ArguableType, Diagram, Edge, findArguable } from "./diagram";
 
 export const parseClaimDiagramId = (diagramId: string) => {
@@ -34,16 +35,22 @@ export const getImplicitLabel = (
 ): string => {
   if (parentArguableType === "node") {
     const parentNode = parentArguableDiagram.nodes.find((node) => node.id === parentArguableId);
-    if (!parentNode) throw new Error("parent not found");
+    if (!parentNode) {
+      throw errorWithData("parent not found", parentArguableId, parentArguableDiagram);
+    }
 
     return `"${parentNode.data.label}" is important`;
   } else {
     const parentEdge = parentArguableDiagram.edges.find((edge) => edge.id === parentArguableId);
-    if (!parentEdge) throw new Error("parent not found");
+    if (!parentEdge) {
+      throw errorWithData("parent not found", parentArguableId, parentArguableDiagram);
+    }
 
     const sourceNode = parentArguableDiagram.nodes.find((node) => node.id === parentEdge.source);
     const targetNode = parentArguableDiagram.nodes.find((node) => node.id === parentEdge.target);
-    if (!sourceNode || !targetNode) throw new Error("edge nodes not found");
+    if (!sourceNode || !targetNode) {
+      throw errorWithData("edge nodes not found", parentEdge, parentArguableDiagram);
+    }
 
     return `"${targetNode.data.label}" ${parentEdge.label} "${sourceNode.data.label}"`;
   }

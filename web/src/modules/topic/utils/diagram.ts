@@ -1,5 +1,6 @@
 import { MarkerType } from "reactflow";
 
+import { errorWithData } from "../../../common/errorHandling";
 import { RelationName, composedRelations, isEdgeImplied } from "./edge";
 import { Orientation, layout } from "./layout";
 import { NodeType } from "./node";
@@ -109,14 +110,14 @@ export type Score = typeof possibleScores[number];
 
 export const findNode = (nodeId: string, diagram: Diagram) => {
   const node = diagram.nodes.find((node) => node.id === nodeId);
-  if (!node) throw new Error("node not found");
+  if (!node) throw errorWithData("node not found", nodeId, diagram);
 
   return node;
 };
 
 export const findEdge = (edgeId: string, diagram: Diagram) => {
   const edge = diagram.edges.find((edge) => edge.id === edgeId);
-  if (!edge) throw new Error("edge not found");
+  if (!edge) throw errorWithData("edge not found", edgeId, diagram);
 
   return edge;
 };
@@ -141,7 +142,7 @@ export const getNodesComposedBy = (node: Node, diagram: Diagram) => {
 
 export const getDiagramTitle = (diagram: Diagram) => {
   const rootNode = diagram.nodes[0];
-  if (!rootNode) throw new Error(`diagram ${diagram.id} has no root node`);
+  if (!rootNode) throw errorWithData("diagram has no root node", diagram);
 
   return rootNode.data.label;
 };

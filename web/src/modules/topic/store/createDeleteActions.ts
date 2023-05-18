@@ -1,3 +1,4 @@
+import { errorWithData } from "../../../common/errorHandling";
 import { emitter } from "../../../common/event";
 import { getClaimDiagramId } from "../utils/claim";
 import {
@@ -184,7 +185,9 @@ export const connectNodes = async (parentId: string | null, childId: string | nu
 
   const parent = activeDiagram.nodes.find((node) => node.id === parentId);
   const child = activeDiagram.nodes.find((node) => node.id === childId);
-  if (!parent || !child) throw new Error("parent or child not found");
+  if (!parent || !child) {
+    throw errorWithData("parent or child not found", parentId, childId, activeDiagram);
+  }
 
   if (!canCreateEdge(activeDiagram, parent, child)) return;
 

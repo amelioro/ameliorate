@@ -1,3 +1,4 @@
+import { errorWithData } from "../../../common/errorHandling";
 import { Node, RelationDirection, findNode } from "../utils/diagram";
 import { children, edges, neighbors, parents } from "../utils/node";
 import { useTopicStoreAfterHydration } from "./store";
@@ -54,7 +55,9 @@ export const useCriterionSolutionEdges = (problemNodeId: string, diagramId: stri
     try {
       const diagram = getDiagramOrThrow(state, diagramId);
       const problemNode = findNode(problemNodeId, diagram);
-      if (problemNode.type !== "problem") throw new Error("node is not a problem node");
+      if (problemNode.type !== "problem") {
+        throw errorWithData("node is not a problem node", problemNode);
+      }
 
       const nodeChildren = children(problemNode, diagram);
       const criteria = nodeChildren.filter((node) => node.type === "criterion");
