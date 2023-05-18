@@ -1,16 +1,9 @@
 import { type EdgeSelectionChange, type NodeSelectionChange } from "reactflow";
 
 import { getClaimDiagramId, getRootArguable } from "../utils/claim";
-import {
-  ArguableType,
-  Diagram,
-  Score,
-  findArguable,
-  findNode,
-  problemDiagramId,
-} from "../utils/diagram";
+import { ArguableType, Score, findArguable, findNode } from "../utils/diagram";
 import { useTopicStore } from "./store";
-import { getActiveDiagram, getDuplicateState } from "./utils";
+import { getActiveDiagram, getDiagramOrThrow, getDuplicateState, getProblemDiagram } from "./utils";
 
 // score setting is way more work than it needs to be because one score can live in multiple places:
 // - on the arguable
@@ -30,8 +23,9 @@ export const setScore = (arguableId: string, arguableType: ArguableType, score: 
 
   // update parent arguable's score if this is a RootClaim
   if (arguable.type === "rootClaim") {
+    const problemDiagram = getProblemDiagram(state);
     // assuming we won't support nested root claims, so parent will always be root
-    const parentArguable = getRootArguable(activeDiagram.id, state.diagrams[problemDiagramId]);
+    const parentArguable = getRootArguable(activeDiagram.id, problemDiagram);
     /* eslint-disable functional/immutable-data, no-param-reassign */
     parentArguable.data.score = score;
     /* eslint-enable functional/immutable-data, no-param-reassign */
@@ -40,7 +34,7 @@ export const setScore = (arguableId: string, arguableType: ArguableType, score: 
   // update implicit child claim's score if it exists
   const childDiagramId = getClaimDiagramId(arguableId, arguableType);
   if (getDiagram(childDiagramId)) {
-    const childDiagram = state.diagrams[childDiagramId];
+    const childDiagram = getDiagramOrThrow(state, childDiagramId);
     const childClaim = childDiagram.nodes.find((node) => node.type === "rootClaim");
     if (!childClaim) throw new Error("child claim not found");
 
@@ -53,7 +47,7 @@ export const setScore = (arguableId: string, arguableType: ArguableType, score: 
 };
 
 export const getDiagram = (diagramId: string) => {
-  return useTopicStore.getState().diagrams[diagramId] as Diagram | undefined;
+  return useTopicStore.getState().diagrams[diagramId];
 };
 
 export const setNodeLabel = (nodeId: string, value: string) => {

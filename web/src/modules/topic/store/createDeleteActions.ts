@@ -13,7 +13,13 @@ import {
 import { Relation, canCreateEdge, getConnectingEdge, getRelation } from "../utils/edge";
 import { NodeType, edges } from "../utils/node";
 import { TopicStoreState, useTopicStore } from "./store";
-import { getActiveDiagram, getClaimDiagrams, getDuplicateState } from "./utils";
+import {
+  getActiveDiagram,
+  getClaimDiagrams,
+  getDiagramOrThrow,
+  getDuplicateState,
+  getProblemDiagram,
+} from "./utils";
 
 const createNode = (state: TopicStoreState, toNodeType: NodeType) => {
   /* eslint-disable functional/immutable-data, no-param-reassign */
@@ -36,7 +42,7 @@ const createNode = (state: TopicStoreState, toNodeType: NodeType) => {
 // if adding a criterion, connect to solutions
 // if adding a solution, connect to criteria
 const connectCriteriaToSolutions = (state: TopicStoreState, newNode: Node, problemNode: Node) => {
-  const problemDiagram = state.diagrams[problemDiagramId]; // solutions & criteria only will be in the problem diagram
+  const problemDiagram = getProblemDiagram(state); // solutions & criteria only will be in the problem diagram
 
   const targetRelation: Relation =
     newNode.type === "criterion"
@@ -123,7 +129,7 @@ const createEdgesImpliedByComposition = (
   child: Node,
   relation: Relation
 ) => {
-  const diagram = state.diagrams[parent.data.diagramId];
+  const diagram = getDiagramOrThrow(state, parent.data.diagramId);
 
   const nodesComposedByParent = getNodesComposedBy(parent, diagram);
   nodesComposedByParent.forEach((composedNode) => {
@@ -149,7 +155,7 @@ const createEdgeAndImpliedEdges = (
   child: Node,
   relation: Relation
 ) => {
-  const diagram = state.diagrams[parent.data.diagramId];
+  const diagram = getDiagramOrThrow(state, parent.data.diagramId);
 
   // assumes only one edge can exist between two notes - future may allow multiple edges of different relation type
   if (getConnectingEdge(parent, child, diagram.edges) !== undefined) return diagram.edges;

@@ -54,7 +54,11 @@ export const ScorePie = ({ circleDiameter, arguableId, arguableType }: Props) =>
         startAngle={-90 - 360 / possibleScores.length / 2} // shift first slice to top center
         onMouseOver={(_, dataIndex) => setHovered(dataIndex)}
         onMouseOut={(_) => setHovered(undefined)}
-        onClick={(_, dataIndex) => setScore(arguableId, arguableType, data[dataIndex].key as Score)}
+        onClick={(_, dataIndex) => {
+          const segmentData = data[dataIndex];
+          if (!segmentData) throw new Error(`invalid pie segment dataIndex ${dataIndex}`);
+          setScore(arguableId, arguableType, segmentData.key as Score);
+        }}
         background="white"
       />
     </CircleDiv>

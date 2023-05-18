@@ -5,10 +5,16 @@ import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
 import { HydrationContext } from "../../../pages/solve.page";
-import { Diagram, buildNode, filterHiddenComponents, problemDiagramId } from "../utils/diagram";
+import {
+  Diagram,
+  buildNode,
+  filterHiddenComponents,
+  getDiagramTitle,
+  problemDiagramId,
+} from "../utils/diagram";
 import { getDiagram } from "./actions";
 import { migrate } from "./migrate";
-import { getClaimDiagrams, getTopicTitle } from "./utils";
+import { getClaimDiagrams, getDiagramOrThrow, getTopicTitle } from "./utils";
 
 const initialDiagrams: Record<string, Diagram> = {
   [problemDiagramId]: {
@@ -86,13 +92,10 @@ export const useDiagram = (diagramId: string) => {
 };
 
 export const useFilteredDiagram = (diagramId: string) => {
-  return useTopicStoreAfterHydration((state) =>
-    filterHiddenComponents(
-      state.diagrams[diagramId],
-      getClaimDiagrams(state),
-      state.showImpliedEdges
-    )
-  );
+  return useTopicStoreAfterHydration((state) => {
+    const diagram = getDiagramOrThrow(state, diagramId);
+    return filterHiddenComponents(diagram, getClaimDiagrams(state), state.showImpliedEdges);
+  });
 };
 
 export const useDiagramType = (diagramId: string) => {
@@ -101,7 +104,9 @@ export const useDiagramType = (diagramId: string) => {
     // batchedUpdates isn't necessary because react already batches updates as of react 18
     // Batching doesn't fix this though because the error isn't when rendering, it's when checking the store's comparers
     if (!getDiagram(diagramId)) return null;
-    return state.diagrams[diagramId].type;
+
+    const diagram = getDiagramOrThrow(state, diagramId);
+    return diagram.type;
   });
 };
 
@@ -134,7 +139,7 @@ export const useClaimDiagramsWithExplicitClaims = () => {
   return useTopicStoreAfterHydration((state) =>
     Object.entries(state.diagrams)
       .filter(([id, diagram]) => id !== problemDiagramId && diagram.nodes.length > 1)
-      .map(([id, diagram]) => [id, diagram.nodes[0].data.label])
+      .map(([id, diagram]) => [id, getDiagramTitle(diagram)] as [string, string])
   );
 };
 

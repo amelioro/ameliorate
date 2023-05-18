@@ -139,6 +139,13 @@ export const getNodesComposedBy = (node: Node, diagram: Diagram) => {
   });
 };
 
+export const getDiagramTitle = (diagram: Diagram) => {
+  const rootNode = diagram.nodes[0];
+  if (!rootNode) throw new Error(`diagram ${diagram.id} has no root node`);
+
+  return rootNode.data.label;
+};
+
 /**
  * general philosophy on hiding components, to minimize confusion:
  * - do not automatically hide components that have already been shown, unless the user chooses to hide them

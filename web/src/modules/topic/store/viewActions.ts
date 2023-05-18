@@ -6,12 +6,11 @@ import {
   findArguable,
   findNode,
   layoutVisibleComponents,
-  problemDiagramId,
 } from "../utils/diagram";
 import { NodeType, children, parents } from "../utils/node";
 import { getDiagram } from "./actions";
 import { useTopicStore } from "./store";
-import { getActiveDiagram, getClaimDiagrams, getDuplicateState } from "./utils";
+import { getActiveDiagram, getClaimDiagrams, getDuplicateState, getProblemDiagram } from "./utils";
 
 export const viewOrCreateClaimDiagram = (arguableId: string, arguableType: ArguableType) => {
   const state = getDuplicateState();
@@ -70,7 +69,7 @@ export const toggleShowNeighbors = async (
 ) => {
   const state = getDuplicateState();
 
-  const problemDiagram = state.diagrams[problemDiagramId]; // assuming we're only show/hiding from problem diagram
+  const problemDiagram = getProblemDiagram(state); // assuming we're only show/hiding from problem diagram
 
   const node = findNode(nodeId, problemDiagram);
 

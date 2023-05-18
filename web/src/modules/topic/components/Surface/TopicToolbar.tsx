@@ -34,9 +34,12 @@ const downloadTopic = () => {
 };
 
 const uploadTopic = (event: React.ChangeEvent<HTMLInputElement>) => {
-  if (event.target.files === null || event.target.files.length === 0) return;
+  if (event.target.files === null) return;
 
-  event.target.files[0]
+  const file = event.target.files[0];
+  if (!file) return;
+
+  file
     .text()
     .then((text) => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- TODO: validate that JSON matches interface
