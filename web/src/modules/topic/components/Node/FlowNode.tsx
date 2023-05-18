@@ -52,7 +52,7 @@ export const FlowNode = (flowNode: NodeProps) => {
 
       <HoverBridgeDiv />
 
-      <NodeHandle node={node} direction="parent" orientation={orientation} />
+      <NodeHandle node={node} direction="parent" orientation={orientation} spotlight={spotlight} />
       {/* should this use react-flow's NodeToolbar? seems like it'd automatically handle positioning */}
       <AddNodeButtonGroupParent
         fromNodeId={flowNode.id}
@@ -69,7 +69,7 @@ export const FlowNode = (flowNode: NodeProps) => {
         as="child"
         orientation={orientation}
       />
-      <NodeHandle node={node} direction="child" orientation={orientation} />
+      <NodeHandle node={node} direction="child" orientation={orientation} spotlight={spotlight} />
     </>
   );
 };
