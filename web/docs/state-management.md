@@ -38,3 +38,8 @@ These are functions that subscribe to changes in the state
     return useTopicStore((state) => state.diagrams[diagramId]);
   };
   ```
+
+### Zombie child issue
+
+- hooks should generally not throw errors, particularly due to the [zombie child issue](https://github.com/pmndrs/zustand/issues/302)
+  - e.g. if a node is deleted from state, the node's component will have a re-render triggered due to the state change, but hooks looking for that node will not find it; in this case, the hook should just return something that doesn't error - the node's component will soon be removed from the DOM by re-render of the parent Diagram component

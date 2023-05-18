@@ -100,7 +100,7 @@ export const useFilteredDiagram = (diagramId: string) => {
 
 export const useDiagramType = (diagramId: string) => {
   return useTopicStoreAfterHydration((state) => {
-    // Zombie child issue, see https://github.com/pmndrs/zustand/issues/302
+    // Zombie child issue, see https://github.com/amelioro/ameliorate/blob/main/web/docs/state-management.md#zombie-child-issue
     // batchedUpdates isn't necessary because react already batches updates as of react 18
     // Batching doesn't fix this though because the error isn't when rendering, it's when checking the store's comparers
     if (!getDiagram(diagramId)) return null;
