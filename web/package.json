@@ -28,6 +28,7 @@
     "pluralize": "^8.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-material-ui-carousel": "^3.4.2",
     "react-minimal-pie-chart": "^8.4.0",
     "reactflow": "^11.6.1",
     "web-worker": "^1.2.0",

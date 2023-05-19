@@ -2,10 +2,14 @@ import { ArrowDownward } from "@mui/icons-material";
 import { Box, Button, Divider, Typography } from "@mui/material";
 import type { NextPage } from "next";
 import Head from "next/head";
+import Image from "next/image";
 import NextLink from "next/link";
 
+import comparingSolutions from "../../public/Comparing-Solutions.png";
+import justifyingAndCritiquingClaims from "../../public/Justifying-And-Critiquing-Claims.png";
+import mappingSolutionsToProblems from "../../public/Mapping-Solutions-To-Problems.png";
 import { YoutubeEmbed } from "../common/components/YoutubeEmbed/YoutubeEmbed";
-import { StyledBox } from "./index.style";
+import { StyledBox, StyledCarousel } from "./index.style";
 
 const Home: NextPage = () => {
   return (
@@ -51,7 +55,27 @@ const Home: NextPage = () => {
       <section id="how-it-works">
         <StyledBox>
           <Typography variant="h4">How it works</Typography>
-          <YoutubeEmbed embedId="yM8RrwQWeJc" />
+          <StyledCarousel autoPlay={false} navButtonsAlwaysVisible={true}>
+            <YoutubeEmbed embedId="yM8RrwQWeJc" />
+            <Image
+              src={mappingSolutionsToProblems}
+              alt="mapping solutions to problems"
+              fill
+              sizes="(max-width: 1165px) 100vw, 1165px" // max-width of the carousel
+            />
+            <Image
+              src={comparingSolutions}
+              alt="comparing solutions"
+              fill
+              sizes="(max-width: 1165px) 100vw, 1165px"
+            />
+            <Image
+              src={justifyingAndCritiquingClaims}
+              alt="justifying and critiquing claims"
+              fill
+              sizes="(max-width: 1165px) 100vw, 1165px"
+            />
+          </StyledCarousel>
         </StyledBox>
       </section>
     </>
