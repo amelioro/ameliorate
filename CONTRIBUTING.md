@@ -95,7 +95,7 @@ This project uses commit hooks to automate some tasks, and these are managed via
 
 #### Conventional commits
 
-[Conventional commits](https://www.conventionalcommits.org/) is a standard format for commit messages, used to aid readability of commit history. This commit message format, with [these commit types](https://github.com/amelioro/ameliorate/blob/main/commitlint.config.js), is enforced in a commit hook via [commitlint](https://github.com/conventional-changelog/commitlint).
+[Conventional commits](https://www.conventionalcommits.org/) is a standard format for commit messages, used to aid readability of commit history. The format is `<type>[optional scope]: <description>` and an example commit message looks like `feat(header): add link to feedback page`. This commit message format, with [these commit types](https://github.com/amelioro/ameliorate/blob/main/commitlint.config.js), is enforced in a commit hook and github action via [commitlint](https://github.com/conventional-changelog/commitlint).
 
 #### Prettier
 
