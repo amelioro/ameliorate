@@ -1,5 +1,7 @@
 module.exports = {
   extends: ["@commitlint/config-conventional"],
+  helpUrl:
+    "https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md#conventional-commits",
   rules: {
     "type-enum": [
       2,
