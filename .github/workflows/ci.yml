@@ -3,6 +3,13 @@ name: ci
 on: pull_request
 
 jobs:
+  commitlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: wagoid/commitlint-github-action@v5
   lint:
     runs-on: ubuntu-latest
     defaults:
@@ -17,3 +24,4 @@ jobs:
         if: always() # get formatting errors even if there are errors above
       - run: npm run lint
         if: always() # get lint errors even if there are errors above
+
