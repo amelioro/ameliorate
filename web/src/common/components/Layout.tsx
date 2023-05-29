@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import Image from "next/image";
 import { ReactNode } from "react";
 
-import Link from "./Link";
+import { Link } from "./Link";
 
 interface NavLinkProps {
   href: string;
