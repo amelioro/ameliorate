@@ -2,7 +2,7 @@ import { ArrowDownward } from "@mui/icons-material";
 import { Box, Button, Divider, Typography } from "@mui/material";
 import type { NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
+import NextLink from "next/link";
 
 import { YoutubeEmbed } from "../common/components/YoutubeEmbed/YoutubeEmbed";
 import { StyledBox } from "./index.style";
@@ -32,9 +32,9 @@ const Home: NextPage = () => {
         </Typography>
 
         <Box display="flex" margin="0.75rem">
-          <Link href="/solve" passHref>
-            <Button variant="contained">Solve</Button>
-          </Link>
+          <Button variant="contained" LinkComponent={NextLink} href="/solve">
+            Solve
+          </Button>
           <Button
             variant="outlined"
             endIcon={<ArrowDownward />}
