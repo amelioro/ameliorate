@@ -62,6 +62,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://ameliadutta.netlify.app/"><img src="https://avatars.githubusercontent.com/u/49182604?v=4?s=100" width="100px;" alt="Amelia Dutta"/><br /><sub><b>Amelia Dutta</b></sub></a><br /><a href="https://github.com/amelioro/ameliorate/commits?author=amelia2802" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://blog.lumid.live"><img src="https://avatars.githubusercontent.com/u/46597093?v=4?s=100" width="100px;" alt="Hanson Sin"/><br /><sub><b>Hanson Sin</b></sub></a><br /><a href="https://github.com/amelioro/ameliorate/commits?author=HansonSin" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/tarunsamanta2k20"><img src="https://avatars.githubusercontent.com/u/55488549?v=4?s=100" width="100px;" alt="Tarun Samanta"/><br /><sub><b>Tarun Samanta</b></sub></a><br /><a href="https://github.com/amelioro/ameliorate/commits?author=tarunsamanta2k20" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/kaiseradr"><img src="https://avatars.githubusercontent.com/u/62675315?v=4?s=100" width="100px;" alt="Adrian"/><br /><sub><b>Adrian</b></sub></a><br /><a href="https://github.com/amelioro/ameliorate/commits?author=kaiseradr" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
