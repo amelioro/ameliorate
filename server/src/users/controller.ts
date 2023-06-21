@@ -7,17 +7,17 @@ export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto): string {
-    return `create user with data ${JSON.stringify(createUserDto)}`;
+  async create(@Body() createUserDto: CreateUserDto) {
+    return await this.usersService.create(createUserDto);
   }
 
   @Get('username/:username')
-  findByUsername(@Param('username') username: string): string {
-    return `return user with username: ${username}`;
+  async findByUsername(@Param('username') username: string) {
+    return await this.usersService.findByUsername(username);
   }
 
   @Get('authId/:authId')
-  findByAuthId(@Param('authId') authId: string): string {
-    return `return user with authId: ${authId}`;
+  async findByAuthId(@Param('authId') authId: string) {
+    return await this.usersService.findByAuthId(authId);
   }
 }

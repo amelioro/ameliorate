@@ -8,29 +8,32 @@ import {
   Post,
 } from '@nestjs/common';
 import { CreateTopicDto } from './create.dto';
+import { TopicsService } from './service';
 
 @Controller('topics')
 export class TopicsController {
+  constructor(private topicsService: TopicsService) {}
+
   @Post()
-  create(@Body() createTopicDto: CreateTopicDto): string {
-    return `create topic with data ${JSON.stringify(createTopicDto)}`;
+  async create(@Body() createTopicDto: CreateTopicDto) {
+    return await this.topicsService.create(createTopicDto.title, 1);
   }
 
   @Get(':username')
-  findAllByUsername(@Param('username') username: string): string {
-    return `return topics for user with username: ${username}`;
+  async findAllByUsername(@Param('username') username: string) {
+    return await this.topicsService.findAllByUsername(username);
   }
 
   @Get(':username/:title')
-  findByUsernameAndTitle(
+  async findByUsernameAndTitle(
     @Param('username') username: string,
     @Param('title') title: string,
-  ): string {
-    return `return topic for user with username: ${username} and with title ${title}`;
+  ) {
+    return await this.topicsService.findByUsernameAndTitle(username, title);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number): string {
-    return `delete topic with id ${id}`;
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    return await this.topicsService.delete(id);
   }
 }
