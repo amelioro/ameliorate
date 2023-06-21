@@ -6,15 +6,18 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateTopicDto } from './create.dto';
 import { TopicsService } from './service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('topics')
 export class TopicsController {
   constructor(private topicsService: TopicsService) {}
 
   @Post()
+  @UseGuards(AuthGuard('jwt'))
   async create(@Body() createTopicDto: CreateTopicDto) {
     return await this.topicsService.create(createTopicDto.title, 1);
   }
@@ -33,6 +36,7 @@ export class TopicsController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard('jwt'))
   async delete(@Param('id', ParseIntPipe) id: number) {
     return await this.topicsService.delete(id);
   }

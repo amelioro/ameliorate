@@ -7,12 +7,14 @@ import { User } from './users/entity';
 import { Topic } from './topics/entity';
 import { TopicsService } from './topics/service';
 import { jsDbConfig } from './db/config';
+import { AuthzModule } from './authz/authz.module';
 
 // managing modules is a waste of time
 @Module({
   imports: [
     TypeOrmModule.forRoot(jsDbConfig),
     TypeOrmModule.forFeature([User, Topic]),
+    AuthzModule,
   ],
   controllers: [UsersController, TopicsController],
   providers: [UsersService, TopicsService],
