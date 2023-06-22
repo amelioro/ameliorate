@@ -1,5 +1,5 @@
 import { Matches, validateOrReject } from 'class-validator';
-import { User } from '../users/entity';
+import { User } from '../users/user.entity';
 import {
   Entity,
   Column,
@@ -10,6 +10,7 @@ import {
   BeforeInsert,
   BeforeUpdate,
 } from 'typeorm';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 
 @Entity()
 @Index('topics_title_user_key', ['title', 'user'], { unique: true })
@@ -23,6 +24,7 @@ export class Topic {
 
   @ManyToOne(() => User, (user) => user.topics, { nullable: false })
   @JoinColumn()
+  @ApiPropertyOptional()
   user: User;
 
   // annoying that this is something to set up manually

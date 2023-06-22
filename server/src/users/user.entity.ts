@@ -1,5 +1,5 @@
 import { Matches, validateOrReject } from 'class-validator';
-import { Topic } from '../topics/entity'; // why did this auto import using incorrect src/topics path
+import { Topic } from '../topics/topic.entity'; // why did this auto import using incorrect src/topics path
 import {
   Entity,
   Column,
@@ -9,6 +9,7 @@ import {
   BeforeInsert,
   BeforeUpdate,
 } from 'typeorm';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 
 @Entity()
 @Index('users_username_key', ['username'], { unique: true }) // tragic that this doesn't actually include the cols in the index name
@@ -26,6 +27,7 @@ export class User {
   authId: string;
 
   @OneToMany(() => Topic, (topic) => topic.user)
+  @ApiPropertyOptional()
   topics: Topic[];
 
   // annoying that this is something to set up manually
