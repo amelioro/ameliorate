@@ -6,6 +6,9 @@ const nextConfig = {
   pageExtensions: ["page.tsx", "page.ts", "page.jsx", "page.js"],
   reactStrictMode: true,
   swcMinify: true,
+  experimental: {
+    externalDir: true,
+  },
 };
 
 module.exports = nextConfig;
