@@ -32,6 +32,7 @@
     "@nestjs/typeorm": "^10.0.0",
     "class-validator": "^0.14.0",
     "jwks-rsa": "^3.0.1",
+    "openapi-zod-client": "^1.7.1",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
     "pg": "^8.11.0",
