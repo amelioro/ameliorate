@@ -4,7 +4,9 @@ import { Button, IconButton, Tooltip } from "@mui/material";
 import {
   type MRT_ColumnDef,
   MRT_FullScreenToggleButton,
+  MRT_ShowHideColumnsButton,
   type MRT_TableInstance,
+  MRT_ToggleFiltersButton,
   MRT_ToggleGlobalFilterButton,
   MaterialReactTable,
 } from "material-react-table";
@@ -46,12 +48,24 @@ const buildRows = (rowNodes: Node[], columnNodes: Node[], edges: Edge[]): RowDat
   });
 };
 
-const buildColumns = (problemNode: Node, columnNodes: Node[]): MRT_ColumnDef<RowData>[] => {
+interface FilterDetails {
+  rowTitles: string[];
+  rowType: "criteria" | "solutions";
+}
+
+const buildColumns = (
+  problemNode: Node,
+  columnNodes: Node[],
+  filterDetails: FilterDetails
+): MRT_ColumnDef<RowData>[] => {
   return [
     {
       accessorKey: "rowNode.data.label", // this determines how cols should sort/filter
-      header: "", // corner column header, and solutions are along the top
+      header: filterDetails.rowType,
       Header: <NodeCell node={problemNode} />,
+      filterVariant: "multi-select",
+      filterSelectOptions: filterDetails.rowTitles,
+      enableHiding: false,
       Cell: ({ row }) => {
         return <NodeCell node={row.original.rowNode as Node} />;
       },
@@ -60,8 +74,9 @@ const buildColumns = (problemNode: Node, columnNodes: Node[]): MRT_ColumnDef<Row
       (columnNode) =>
         ({
           accessorKey: `${columnNode.id}.data.score`, // we'll sort/filter edges by their score for now I guess
-          header: "",
+          header: columnNode.data.label,
           Header: <NodeCell node={columnNode} />,
+          enableColumnFilter: false,
           Cell: ({ row }) => <EdgeCell edge={row.original[columnNode.id] as Edge} />,
         } as MRT_ColumnDef<RowData>)
     ),
@@ -86,13 +101,21 @@ export const CriteriaTable = ({ problemNodeId }: Props) => {
   const rowNodes = useSolutionsForColumns ? criteria : solutions;
   const columnNodes = useSolutionsForColumns ? solutions : criteria;
 
+  const filterDetails = {
+    rowTitles: rowNodes.map((node) => node.data.label),
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- hmm casting is necessary for some reason
+    rowType: (useSolutionsForColumns ? "criteria" : "solutions") as "criteria" | "solutions",
+  };
+
   const rowData = buildRows(rowNodes, columnNodes, criterionSolutionEdges);
-  const columnData = buildColumns(problemNode, columnNodes);
+  const columnData = buildColumns(problemNode, columnNodes, filterDetails);
 
   const ToolBarActions = (table: MRT_TableInstance<RowData>) => {
     return (
       <>
-        <MRT_ToggleGlobalFilterButton table={table}></MRT_ToggleGlobalFilterButton>
+        <MRT_ToggleGlobalFilterButton table={table} />
+        <MRT_ToggleFiltersButton table={table} />
+        <MRT_ShowHideColumnsButton table={table} />
 
         <AddNodeButton
           fromNodeId={problemNodeId}
@@ -147,7 +170,13 @@ export const CriteriaTable = ({ problemNodeId }: Props) => {
         muiTablePaperProps={{
           className: "criteria-table-paper",
         }}
-        initialState={{ columnPinning: { left: ["rowNode.data.label"] } }}
+        initialState={{
+          columnPinning: { left: ["rowNode.data.label"] },
+          // columnOrder is defaulted to all cols, but then we'd have to maintain columnOrder when new cols are added
+          // defaulting this to empty should be fine until we want column reordering, then I think we'll have to maintain that
+          // manually, in order to have new columns included (new columns i.e. from transposing)
+          columnOrder: [],
+        }}
       />
     </>
   );

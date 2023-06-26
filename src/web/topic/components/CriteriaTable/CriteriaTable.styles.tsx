@@ -41,6 +41,10 @@ export const tableStyles = css`
         height: 100%;
         width: 100%;
       }
+
+      .Mui-TableHeadCell-Content-Labels > span {
+        display: none; // hide filter icon because it displays awkwardly outside of node in cell
+      }
     }
   }
 `;
