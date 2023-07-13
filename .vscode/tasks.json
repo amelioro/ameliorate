@@ -3,18 +3,17 @@
   "tasks": [
     {
       "type": "typescript",
-      "tsconfig": "web/tsconfig.json",
+      "tsconfig": "tsconfig.json",
       "option": "watch",
       "problemMatcher": ["$tsc-watch"],
       "group": "build",
-      "label": "tsc: watch - web/tsconfig.json"
+      "label": "tsc: watch - tsconfig.json"
     },
     {
       "type": "npm",
       "script": "lint",
-      "path": "web",
       "problemMatcher": ["$eslint-stylish"],
-      "label": "npm: lint - web",
+      "label": "npm: lint",
       "detail": "next lint"
     }
   ]

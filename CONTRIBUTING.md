@@ -49,18 +49,16 @@ Clone & install dependencies:
 ```bash
 git clone https://github.com/amelioro/ameliorate.git
 cd ameliorate
-npm install # repo-wide dependencies
+npm install
 npx husky install # activate commit hooks
-cd web
-npm install # project-specific dependencies
 ```
 
 (see [Commit hooks](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md#commit-hooks) section for explanation of commit hooks)
 
-Serve web project on localhost:
+Serve project on localhost:
 
 ```bash
-npm run dev # from web/
+npm run dev
 ```
 
 ## Codebase overview
@@ -69,24 +67,21 @@ Reading up on the tech listed in the [Built with](https://github.com/amelioro/am
 
 Known deviations from standard usage of the above tech:
 
-- The directory structure mostly follows the guidance in [this blog post](https://dev.to/vadorequest/a-2021-guide-about-structuring-your-next-js-project-in-a-flexible-and-efficient-way-472) for using modules for a nextjs project, except this is planned to be a mono-repo, so the root contains configs that are expected to be used across projects, and the rest currently lives in web/.
-- zustand: see [docs/state-management.md](https://github.com/amelioro/ameliorate/blob/main/web/docs/state-management.md)
+- zustand: see [docs/state-management.md](https://github.com/amelioro/ameliorate/blob/main/docs/state-management.md)
 - emotion: styled components are stored in co-located .styles.tsx files
 
 ## Working with the code
 
-Generally, the recommended setup is VS Code from the repo's root directory, with a terminal open in the web/ directory.
-
-Most IDE-related settings are configured for working with vscode from the repo's root directory - known settings that might be problematic if not using vscode in the root directory: [eslint](https://github.com/amelioro/ameliorate/blob/6bd2e83b26b06f6894689ae0a10864743daed771/web/.eslintrc.json#L94), vscode eslint [config](https://github.com/amelioro/ameliorate/blob/6bd2e83b26b06f6894689ae0a10864743daed771/.vscode/settings.json#L5), vscode [tasks](https://github.com/amelioro/ameliorate/blob/main/.vscode/tasks.json).
+Generally, tooling has been set up to work with VS Code.
 
 ### Code style
 
-The eslint [config](https://github.com/amelioro/ameliorate/blob/main/web/.eslintrc.json) is pretty strict, most notably the [functional config](https://github.com/amelioro/ameliorate/blob/6bd2e83b26b06f6894689ae0a10864743daed771/web/.eslintrc.json#L42-L52). Strictness here is open for discussion, but being initially strict seemed like a good way to start (and learn some code styling practices, for the case of the extended configs).
+The eslint [config](https://github.com/amelioro/ameliorate/blob/main/.eslintrc.json) is pretty strict, most notably the [functional config](https://github.com/amelioro/ameliorate/blob/6bd2e83b26b06f6894689ae0a10864743daed771/web/.eslintrc.json#L42-L52). Strictness here is open for discussion, but being initially strict seemed like a good way to start (and learn some code styling practices, for the case of the extended configs).
 
 To run linting:
 
 ```bash
-npm run lint # from web/
+npm run lint
 ```
 
 ### Commit hooks
@@ -103,7 +98,7 @@ Code formatting is managed by [prettier](https://prettier.io/), which is automat
 
 ### UX / UI style
 
-For user experience & user interface design, please read [uxui-guidelines.md](./web/docs/uxui-guidelines.md).
+For user experience & user interface design, please read [uxui-guidelines.md](./docs/uxui-guidelines.md).
 
 ### Helpful VS Code settings
 
