@@ -82,9 +82,12 @@ Core directory structure (here are helpful docs on how nextjs uses directories t
 ```
 src/
 ├─ api/: code for the api server
+│ ├─ routers/: defines trpc endpoints
 ├─ common/: used in both front and back end, e.g. zod schema validations
 ├─ db/: e.g. migrations, db schema
 ├─ pages/: nextjs uses this dir to serve pages; these will use code in src/web/
+│ ├─ api/: nextjs uses this dir to serve api routes; these will use code in src/api/
+│   ├─ trpc/[trpc].page.ts: handles all trpc endpoints defined in src/api/routers/
 ├─ web/: code for the UI components
 ```
 

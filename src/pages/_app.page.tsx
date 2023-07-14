@@ -7,6 +7,7 @@ import { GoogleAnalytics, event } from "nextjs-google-analytics";
 
 import Layout from "../web/common/components/Layout";
 import { getThemeOptions } from "../web/common/theme";
+import { trpc } from "../web/common/trpc";
 import { globals } from "./_app.styles";
 
 // thanks https://github.com/MauricioRobayo/nextjs-google-analytics#web-vitals
@@ -48,4 +49,4 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   );
 };
 
-export default MyApp;
+export default trpc.withTRPC(MyApp);

@@ -25,6 +25,7 @@ Backend:
 
 - [prisma](https://www.prisma.io/) - database querying & schema management
 - [neon](https://neon.tech) - hosting managed database
+- [trpc](https://trpc.io/) - type-safe endpoints
 
 Frontend:
 
@@ -38,6 +39,7 @@ Both:
 
 - [typescript](https://www.typescriptlang.org/)
 - [nextjs](https://nextjs.org/) - web framework (front & back)
+- [zod](https://github.com/colinhacks/zod) - runtime json schema validation
 - [netlify](https://netlify.com/) - deploying web & api server
 
 ## Contributing
