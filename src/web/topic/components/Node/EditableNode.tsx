@@ -15,6 +15,7 @@ import {
   YEdgeDiv,
 } from "./EditableNode.styles";
 
+// TODO: should not re-render when node position changes
 export const EditableNode = ({ node, className = "" }: { node: Node; className?: string }) => {
   const theme = useTheme();
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -56,6 +57,8 @@ export const EditableNode = ({ node, className = "" }: { node: Node; className?:
           // Was previously using defaultValue to avoid this, but that caused text to not update
           // when rendering for the second time (1. post-hydration value updating, see store, or
           // 2. when importing a new diagram but the node id's are the same).
+          // Also tried using onBlur and setting value via useEffect & useRef, but for some reason that triggered
+          // "TextareaAutosize" too many renders error, even though console.log showed each node only rendering twice.
           value={node.data.label}
           maxRows={3}
           onChange={(event) => setNodeLabel(node.id, event.target.value)}

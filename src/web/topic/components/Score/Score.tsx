@@ -30,6 +30,7 @@ interface ScoreProps {
 // similar to MUI speed dial (https://mui.com/material-ui/react-speed-dial/),
 // but the main reason for creating a custom component are:
 // * allow actions to be positioned around the dial for even closer navigability to each one
+// TODO: should not re-render on every viewport change, only when zoom changes
 export const Score = ({ arguableId, arguableType, score }: ScoreProps) => {
   const zoomRatio = useTopicZoom();
   const [selected, setSelected] = useState(false);
