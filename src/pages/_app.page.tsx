@@ -1,3 +1,4 @@
+import { UserProvider as AuthUserProvider } from "@auth0/nextjs-auth0/client";
 import { Global } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
@@ -40,9 +41,12 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
 
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <AuthUserProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </AuthUserProvider>
+
         <ReactQueryDevtools />
       </ThemeProvider>
 

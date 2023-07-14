@@ -42,6 +42,7 @@ Both:
 - [nextjs](https://nextjs.org/) - web framework (front & back)
 - [zod](https://github.com/colinhacks/zod) - runtime json schema validation
 - [netlify](https://netlify.com/) - deploying web & api server
+- [auth0](https://auth0.com/) - user authentication
 
 ## Contributing
 
