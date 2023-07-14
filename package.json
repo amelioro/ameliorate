@@ -32,6 +32,8 @@
     "@mui/material": "^5.10.12",
     "@next/bundle-analyzer": "^13.4.9",
     "@prisma/client": "^5.0.0",
+    "@tanstack/react-query": "^4.29.12",
+    "@tanstack/react-query-devtools": "^4.29.12",
     "@trpc/client": "^10.28.1",
     "@trpc/next": "^10.28.1",
     "@trpc/react-query": "^10.28.1",

@@ -34,6 +34,7 @@ Frontend:
 - [zustand](https://github.com/pmndrs/zustand) - component state management
 - [emotion](https://emotion.sh/docs/introduction) - styling components
 - [material ui](https://mui.com/) - theming, component library
+- [react query](https://react-query.tanstack.com/) - querying api
 
 Both:
 

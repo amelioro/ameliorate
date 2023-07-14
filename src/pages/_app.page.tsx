@@ -1,6 +1,7 @@
 import { Global } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { AppProps, NextWebVitalsMetric } from "next/app";
 import Head from "next/head";
 import { GoogleAnalytics, event } from "nextjs-google-analytics";
@@ -42,6 +43,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         <Layout>
           <Component {...pageProps} />
         </Layout>
+        <ReactQueryDevtools />
       </ThemeProvider>
 
       <Global styles={globals} />

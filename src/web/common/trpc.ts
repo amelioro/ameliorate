@@ -1,3 +1,4 @@
+import { QueryClient } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
 import superjson from "superjson";
@@ -16,6 +17,14 @@ function getBaseUrl() {
   // assume localhost
   return `http://localhost:${process.env.PORT ?? 3000}`;
 }
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 export const trpc = createTRPCNext<AppRouter>({
   config(_opts) {
@@ -37,6 +46,7 @@ export const trpc = createTRPCNext<AppRouter>({
         }),
       ],
       transformer: superjson,
+      queryClient: queryClient,
     };
   },
   /**
