@@ -12,9 +12,6 @@ jobs:
       - uses: wagoid/commitlint-github-action@v5
   lint:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: web
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
