@@ -35,6 +35,7 @@ Frontend:
 - [emotion](https://emotion.sh/docs/introduction) - styling components
 - [material ui](https://mui.com/) - theming, component library
 - [react query](https://react-query.tanstack.com/) - querying api
+- [react hook form](https://react-hook-form.com/) - form validation
 
 Both:
 
