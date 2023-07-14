@@ -42,7 +42,7 @@ Note: be particularly wary of [issues with a "needs [x]" label](https://github.c
 
 ## Running the project
 
-Make sure you have [git](https://git-scm.com/downloads) and [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) installed.
+Make sure you have [git](https://git-scm.com/downloads), [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm), and [docker](https://docs.docker.com/get-docker/) installed.
 
 Clone & install dependencies:
 
@@ -51,6 +51,13 @@ git clone https://github.com/amelioro/ameliorate.git
 cd ameliorate
 npm install
 npx husky install # activate commit hooks
+```
+
+Set up database:
+
+```bash
+npm run db:start # start container running postgres
+npm run migration:deploy # ensure db schema is up-to-date
 ```
 
 (see [Commit hooks](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md#commit-hooks) section for explanation of commit hooks)
@@ -69,6 +76,17 @@ Known deviations from standard usage of the above tech:
 
 - zustand: see [docs/state-management.md](https://github.com/amelioro/ameliorate/blob/main/docs/state-management.md)
 - emotion: styled components are stored in co-located .styles.tsx files
+
+Core directory structure (here are helpful docs on how nextjs uses directories to serve [pages](https://nextjs.org/docs/pages/building-your-application/routing/pages-and-layouts) and [api routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes)):
+
+```
+src/
+├─ api/: code for the api server
+├─ common/: used in both front and back end, e.g. zod schema validations
+├─ db/: e.g. migrations, db schema
+├─ pages/: nextjs uses this dir to serve pages; these will use code in src/web/
+├─ web/: code for the UI components
+```
 
 ## Working with the code
 
@@ -99,6 +117,18 @@ Code formatting is managed by [prettier](https://prettier.io/), which is automat
 ### UX / UI style
 
 For user experience & user interface design, please read [uxui-guidelines.md](./docs/uxui-guidelines.md).
+
+### Managing database schema
+
+Use `npm run migration:deploy` to run migrations on your db that haven't been run yet.
+
+If you're writing migrations:
+
+- `npm run migration:run` can be used to run migrations and ensure your db schema hasn't diverged; WARNING: this will drop and recreate your db if it has diverged
+- `npm run migration:rollback` to rollback the last migration that's been run on your db
+- `npm run migration:generate` to generate an up & down migration based on changes you've made in `schema.prisma`
+- each migration should either fully succeed or fully fail - prefer small migrations, but if you have multiple statements running in one migration, wrap them with `BEGIN;` and `COMMIT;` to ensure the statements are run in a single transaction
+- right now, only maintainers have credentials to the test database, so make a comment on the PR or in Discord to request migrations be run on the test database (an easier solution can be considered if this becomes a painpoint)
 
 ### Helpful VS Code settings
 

@@ -1,6 +1,13 @@
 {
+  "//": [
+    "This is where comments in this file can go, thanks to https://stackoverflow.com/a/14221781 for the idea",
+    "scripts/postinstall: prisma generate is needed because of https://www.prisma.io/docs/guides/other/troubleshooting-orm/help-articles/netlify-caching-issue"
+  ],
   "name": "ameliorate",
   "version": "0.1.0",
+  "prisma": {
+    "schema": "src/db/schema.prisma"
+  },
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -10,7 +17,13 @@
     "check-pretty": "prettier --check .",
     "lint": "next lint --format stylish",
     "storybook": "sb dev -p 6006",
-    "build-storybook": "sb build"
+    "build-storybook": "sb build",
+    "db:start": "bash ./scripts/dbStart.sh",
+    "migration:generate": "tsx scripts/generateMigration.ts",
+    "migration:rollback": "tsx scripts/rollbackMigration.ts",
+    "migration:run": "prisma migrate dev",
+    "migration:deploy": "prisma migrate deploy",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@emotion/react": "^11.10.0",
@@ -18,6 +31,7 @@
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.10.12",
     "@next/bundle-analyzer": "^13.4.9",
+    "@prisma/client": "^5.0.0",
     "elkjs": "^0.8.2",
     "js-file-download": "^0.4.12",
     "lodash": "^4.17.21",
@@ -41,6 +55,7 @@
     "@commitlint/cli": "^17.1.2",
     "@commitlint/config-conventional": "^17.1.0",
     "@emotion/babel-plugin": "^11.10.5",
+    "@sindresorhus/slugify": "^2.2.1",
     "@storybook/addon-actions": "^7.0.0-alpha.47",
     "@storybook/addon-essentials": "^7.0.0-alpha.47",
     "@storybook/addon-interactions": "^7.0.0-alpha.47",
@@ -50,25 +65,32 @@
     "@storybook/react-webpack5": "^7.0.0-alpha.47",
     "@storybook/testing-library": "^0.0.14-next.0",
     "@types/dagre": "^0.7.48",
+    "@types/dateformat": "^5.0.0",
     "@types/lodash": "^4.14.184",
     "@types/node": "18.6.3",
     "@types/pluralize": "^0.0.29",
     "@types/react": "18.0.15",
     "@types/react-dom": "18.0.6",
+    "@types/yargs": "^17.0.24",
     "@typescript-eslint/eslint-plugin": "^5.38.1",
     "@typescript-eslint/parser": "^5.38.1",
     "babel-loader": "^8.3.0",
+    "dateformat": "^5.0.3",
     "eslint": "8.21.0",
     "eslint-config-next": "^13.4.4",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-functional": "^4.4.1",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-storybook": "^0.6.7",
+    "execa": "^7.1.1",
     "husky": "^8.0.1",
     "lint-staged": "^13.2.2",
     "prettier": "2.7.1",
+    "prisma": "^5.0.0",
     "storybook": "^7.0.0-alpha.47",
     "storybook-addon-next": "^1.6.10",
-    "typescript": "4.7.4"
+    "tsx": "^3.12.7",
+    "typescript": "4.7.4",
+    "yargs": "^17.7.2"
   }
 }

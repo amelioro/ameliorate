@@ -21,14 +21,24 @@ Check out the [GitHub Project](https://github.com/orgs/amelioro/projects/2/views
 
 ## Built with
 
-- [typescript](https://www.typescriptlang.org/)
+Backend:
+
+- [prisma](https://www.prisma.io/) - database querying & schema management
+- [neon](https://neon.tech) - hosting managed database
+
+Frontend:
+
 - [react](https://reactjs.org/) - building components
-- [nextjs](https://nextjs.org/) - frontend framework
-- [netlify](https://netlify.com/) - deploying web server
 - [react flow](https://reactflow.dev/) - diagram component
 - [zustand](https://github.com/pmndrs/zustand) - component state management
 - [emotion](https://emotion.sh/docs/introduction) - styling components
 - [material ui](https://mui.com/) - theming, component library
+
+Both:
+
+- [typescript](https://www.typescriptlang.org/)
+- [nextjs](https://nextjs.org/) - web framework (front & back)
+- [netlify](https://netlify.com/) - deploying web & api server
 
 ## Contributing
 
