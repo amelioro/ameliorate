@@ -1,4 +1,4 @@
-import { throttle } from "lodash";
+import throttle from "lodash/throttle";
 import { useContext } from "react";
 import { temporal } from "zundo";
 import { create } from "zustand";

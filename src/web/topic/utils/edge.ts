@@ -1,5 +1,3 @@
-import _ from "lodash";
-
 import { hasClaims } from "./claim";
 import { Diagram, Edge, Node, RelationDirection, findNode, problemDiagramId } from "./diagram";
 import { NodeType, children, components, parents } from "./node";

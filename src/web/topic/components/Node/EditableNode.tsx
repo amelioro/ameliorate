@@ -1,5 +1,4 @@
 import { useTheme } from "@mui/material";
-import _ from "lodash";
 import { useEffect, useRef } from "react";
 
 import { openContextMenu } from "../../../common/store/contextMenuActions";

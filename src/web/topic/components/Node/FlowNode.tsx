@@ -1,5 +1,4 @@
 import { Global } from "@emotion/react";
-import _ from "lodash";
 
 import { useIsAnyArguableSelected } from "../../store/arguableHooks";
 import { useIsEdgeSelected, useIsNeighborSelected } from "../../store/nodeHooks";

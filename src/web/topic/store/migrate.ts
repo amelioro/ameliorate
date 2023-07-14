@@ -1,6 +1,5 @@
 /* eslint-disable -- don't really care to make this file meet eslint standards */
-import _ from "lodash";
-import { range } from "lodash";
+import camelCase from "lodash/camelCase";
 
 export const migrate = (persistedState: any, version: number) => {
   const migrations = [
@@ -73,7 +72,7 @@ const migrate_1_to_2 = (state: any) => {
   Object.values(state.diagrams).forEach((diagram: any) => {
     diagram.nodes.forEach((node: any) => {
       // change type to lowercase
-      node.type = _.camelCase(node.type);
+      node.type = camelCase(node.type);
     });
   });
 

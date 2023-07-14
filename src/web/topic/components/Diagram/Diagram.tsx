@@ -1,6 +1,6 @@
 import { Cancel } from "@mui/icons-material";
 import { Typography } from "@mui/material";
-import _ from "lodash";
+import isEmpty from "lodash/isEmpty";
 import { ComponentType, useEffect } from "react";
 import {
   Background,
@@ -118,7 +118,7 @@ const DiagramWithoutProvider = ({ diagramId }: DiagramProps) => {
         isAnyArguableSelected={isAnyArguableSelected}
       >
         <Background variant={BackgroundVariant.Dots} />
-        {_(nodes).isEmpty() && emptyText}
+        {isEmpty(nodes) && emptyText}
       </StyledReactFlow>
     </>
   );

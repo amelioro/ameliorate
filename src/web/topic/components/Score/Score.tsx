@@ -1,5 +1,4 @@
 import { type ButtonProps, type Palette } from "@mui/material";
-import _ from "lodash";
 import { useRef, useState } from "react";
 
 import { htmlDefaultFontSize } from "../../../../pages/_document.page";

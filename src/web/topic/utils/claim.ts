@@ -1,5 +1,3 @@
-import _ from "lodash";
-
 import { errorWithData } from "../../common/errorHandling";
 import { ArguableType, Diagram, Edge, findArguable } from "./diagram";
 
