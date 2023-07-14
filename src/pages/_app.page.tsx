@@ -25,7 +25,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
     <>
       <Head>
-        <title>ameliorate</title>
+        <title>Ameliorate</title>
         <meta name="description" content="Solve problems" />
         <link rel="icon" href="/favicon.ico" />
 

@@ -23,7 +23,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>solve problems | ameliorate</title>
+        <title>Solve problems | Ameliorate</title>
         <meta
           name="description"
           content="Ameliorate is a tool that makes it easier to solve tough problems. It helps you reason around hard decisions, and enables that reasoning to be shared and improved. Create your own problem map, and start solving today."
