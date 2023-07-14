@@ -18,7 +18,6 @@
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.10.12",
     "@next/bundle-analyzer": "^13.4.9",
-    "dagre": "^0.8.5",
     "elkjs": "^0.8.2",
     "js-file-download": "^0.4.12",
     "lodash": "^4.17.21",
