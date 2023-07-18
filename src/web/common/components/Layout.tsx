@@ -3,6 +3,7 @@ import { NextPage } from "next";
 import Image from "next/image";
 import { ReactNode } from "react";
 
+import { useSessionUser } from "../hooks";
 import { Link } from "./Link";
 
 interface NavLinkProps {
@@ -26,6 +27,16 @@ const NavLink = ({ href, target, display, children }: NavLinkProps) => {
 
 const Layout: NextPage<LayoutProps> = ({ children }) => {
   const theme = useTheme();
+
+  // How to always populate user from the server if logged in? should be possible https://auth0.github.io/nextjs-auth0/types/client_use_user.UserProviderProps.html
+  // Without doing so, there's a brief flicker of "Log in" before it changes to "Log out" on the client
+  // Potentially use getInitialProps in _app.tsx because that's for all pages but it seems like that'd
+  // remove automatic usage of static pages https://nextjs.org/docs/pages/api-reference/functions/get-initial-props
+  const { sessionUser, authUser } = useSessionUser();
+
+  const isAuthed = authUser != null;
+  const isLoggedIn = sessionUser != null;
+
   const githubIconSrc =
     theme.palette.mode == "light" ? "/GitHub-Mark-64px.png" : "/GitHub-Mark-Light-64px.png";
   const discordIconSrc =
@@ -40,7 +51,8 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
           <Box flex="1" display="flex" justifyContent="space-between" alignItems="center">
             <Box display="flex" gap="15px" alignItems="center">
               <NavLink href="/">Ameliorate</NavLink>
-              <NavLink href="/solve">Solve</NavLink>
+              {!isLoggedIn && <NavLink href="/solve">Solve</NavLink>}
+              {isLoggedIn && <NavLink href={`/${sessionUser.username}`}>My Topics</NavLink>}
             </Box>
 
             <Box display="flex" gap="15px" alignItems="center">
@@ -51,6 +63,20 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
                 Feedback
               </NavLink>
               <NavLink href="/about">About</NavLink>
+              {/* TODO: always render once backend is done being set up */}
+              {process.env.NODE_ENV != "production" && (
+                <NavLink
+                  href={
+                    isLoggedIn
+                      ? "/api/auth/logout"
+                      : isAuthed
+                      ? "/choose-username"
+                      : "/api/auth/login"
+                  }
+                >
+                  {isLoggedIn ? "Log out" : isAuthed ? "Username" : "Log in"}
+                </NavLink>
+              )}
               <NavLink
                 href="https://www.facebook.com/profile.php?id=100091844721178"
                 target="_blank"

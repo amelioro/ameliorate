@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  // DATABASE_URL will use pooling for deployed environments, so we need to set a DIRECT_URL as well.
+  // I guess serverless functions will otherwise result in many connections
+  // Prisma docs: https://www.prisma.io/docs/guides/performance-and-optimization/connection-management/configure-pg-bouncer
+  // Neon docs: https://neon.tech/docs/guides/prisma
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique @db.VarChar(39)
+  authId    String   @unique @db.VarChar
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  topics Topic[]
+
+  @@map("users")
+}
+
+model Topic {
+  id        Int      @id @default(autoincrement())
+  title     String   @db.VarChar(100)
+  userId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([title, userId])
+  @@map("topics")
+}

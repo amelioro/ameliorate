@@ -1,12 +1,15 @@
+import { UserProvider as AuthUserProvider } from "@auth0/nextjs-auth0/client";
 import { Global } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { AppProps, NextWebVitalsMetric } from "next/app";
 import Head from "next/head";
 import { GoogleAnalytics, event } from "nextjs-google-analytics";
 
 import Layout from "../web/common/components/Layout";
 import { getThemeOptions } from "../web/common/theme";
+import { trpc } from "../web/common/trpc";
 import { globals } from "./_app.styles";
 
 // thanks https://github.com/MauricioRobayo/nextjs-google-analytics#web-vitals
@@ -38,9 +41,13 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
 
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <AuthUserProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </AuthUserProvider>
+
+        <ReactQueryDevtools />
       </ThemeProvider>
 
       <Global styles={globals} />
@@ -48,4 +55,4 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   );
 };
 
-export default MyApp;
+export default trpc.withTRPC(MyApp);

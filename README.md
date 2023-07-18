@@ -21,14 +21,29 @@ Check out the [GitHub Project](https://github.com/orgs/amelioro/projects/2/views
 
 ## Built with
 
-- [typescript](https://www.typescriptlang.org/)
+Backend:
+
+- [prisma](https://www.prisma.io/) - database querying & schema management
+- [neon](https://neon.tech) - hosting managed database
+- [trpc](https://trpc.io/) - type-safe endpoints
+
+Frontend:
+
 - [react](https://reactjs.org/) - building components
-- [nextjs](https://nextjs.org/) - frontend framework
-- [netlify](https://netlify.com/) - deploying web server
 - [react flow](https://reactflow.dev/) - diagram component
 - [zustand](https://github.com/pmndrs/zustand) - component state management
 - [emotion](https://emotion.sh/docs/introduction) - styling components
 - [material ui](https://mui.com/) - theming, component library
+- [react query](https://react-query.tanstack.com/) - querying api
+- [react hook form](https://react-hook-form.com/) - form validation
+
+Both:
+
+- [typescript](https://www.typescriptlang.org/)
+- [nextjs](https://nextjs.org/) - web framework (front & back)
+- [zod](https://github.com/colinhacks/zod) - runtime json schema validation
+- [netlify](https://netlify.com/) - deploying web & api server
+- [auth0](https://auth0.com/) - user authentication
 
 ## Contributing
 
