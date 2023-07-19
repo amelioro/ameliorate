@@ -4,19 +4,7 @@ import { createTRPCNext } from "@trpc/next";
 import superjson from "superjson";
 
 import type { AppRouter } from "../../api/routers/_app";
-
-function getBaseUrl() {
-  if (typeof window !== "undefined")
-    // browser should use relative path
-    return "";
-
-  if (process.env.DEPLOY_PRIME_URL)
-    // reference for netlify.com
-    return process.env.DEPLOY_PRIME_URL;
-
-  // assume localhost
-  return `http://localhost:${process.env.PORT ?? 3000}`;
-}
+import { getBaseUrl } from "../../common/utils";
 
 const queryClient = new QueryClient({
   defaultOptions: {
