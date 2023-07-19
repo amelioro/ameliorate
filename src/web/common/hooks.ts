@@ -45,5 +45,9 @@ export const useSessionUser = () => {
   // ensure we return null if the user is not authenticated (i.e. after logout, don't continue using the cached user)
   const sessionUser = authUser ? findUserByAuthId.data : null;
 
-  return { sessionUser: sessionUser, authUser: authUser, isLoading: findUserByAuthId.isLoading };
+  return {
+    sessionUser: sessionUser,
+    authUser: authUser,
+    isLoading: findUserByAuthId.isFetching && findUserByAuthId.isLoading, // return isLoading: false if not fetching, e.g. if user isn't authenticated
+  };
 };
