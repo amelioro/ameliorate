@@ -56,4 +56,4 @@ const generateMigration = async () => {
 // not sure how to use top-level await without messing with project config
 generateMigration()
   .then(() => console.log("done running generate script"))
-  .catch(() => "issues running generate script");
+  .catch((error) => console.log("issues running generate script, error: \n", error));
