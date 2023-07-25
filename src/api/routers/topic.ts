@@ -20,7 +20,7 @@ export const topicRouter = router({
       return await prisma.topic.findFirst({
         where: {
           title: opts.input.title,
-          user: {
+          creator: {
             username: opts.input.username,
           },
         },
@@ -34,7 +34,7 @@ export const topicRouter = router({
       return await prisma.topic.create({
         data: {
           title: opts.input.title,
-          userId: opts.ctx.user.id,
+          creatorId: opts.ctx.user.id,
         },
       });
     }),
@@ -44,7 +44,7 @@ export const topicRouter = router({
     .input(topicSchema.pick({ id: true, title: true }))
     .mutation(async (opts) => {
       const topic = await prisma.topic.findUniqueOrThrow({ where: { id: opts.input.id } });
-      if (opts.ctx.user.id !== topic.userId) throw new TRPCError({ code: "FORBIDDEN" });
+      if (opts.ctx.user.id !== topic.creatorId) throw new TRPCError({ code: "FORBIDDEN" });
 
       return await prisma.topic.update({
         where: { id: opts.input.id },
@@ -59,7 +59,7 @@ export const topicRouter = router({
     .input(topicSchema.pick({ id: true }))
     .mutation(async (opts) => {
       const topic = await prisma.topic.findUniqueOrThrow({ where: { id: opts.input.id } });
-      if (opts.ctx.user.id !== topic.userId) throw new TRPCError({ code: "FORBIDDEN" });
+      if (opts.ctx.user.id !== topic.creatorId) throw new TRPCError({ code: "FORBIDDEN" });
 
       await prisma.topic.delete({ where: { id: opts.input.id } });
 

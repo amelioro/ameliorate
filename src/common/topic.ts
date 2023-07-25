@@ -16,5 +16,5 @@ export const topicSchema = z.object({
       (topic) => !reservedSecondLevelEndpointNames.includes(topic.toLocaleLowerCase()),
       (topic) => ({ message: `${topic} is a reserved title.` })
     ),
-  userId: z.number(),
+  creatorId: z.number(), // user id
 });
