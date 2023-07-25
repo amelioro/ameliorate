@@ -127,7 +127,7 @@ Use `npm run migration:deploy` to run migrations on your db that haven't been ru
 
 If you're writing migrations:
 
-- `npm run migration:run` can be used to run migrations and ensure your db schema hasn't diverged; WARNING: this will drop and recreate your db if it has diverged
+- `npm run migration:run` can be used to run migrations, ensure your db schema hasn't diverged, and re-generate the prisma client (e.g. update types for queries based on new schema); WARNING: this will drop and recreate your db if it has diverged
 - `npm run migration:rollback` to rollback the last migration that's been run on your db
 - `npm run migration:generate` to generate an up & down migration based on changes you've made in `schema.prisma`
 - each migration should either fully succeed or fully fail - prefer small migrations, but if you have multiple statements running in one migration, wrap them with `BEGIN;` and `COMMIT;` to ensure the statements are run in a single transaction
