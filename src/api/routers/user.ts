@@ -2,8 +2,8 @@ import { TRPCError } from "@trpc/server";
 import _ from "lodash";
 
 import { userSchema } from "../../common/user";
+import { prisma } from "../../db/prisma";
 import { isAuthenticated } from "../auth";
-import { prisma } from "../prisma";
 import { procedure, router } from "../trpc";
 
 export const userRouter = router({

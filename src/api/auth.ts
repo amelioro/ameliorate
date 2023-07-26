@@ -1,6 +1,6 @@
 import { TRPCError } from "@trpc/server";
 
-import { prisma } from "./prisma";
+import { prisma } from "../db/prisma";
 import { middleware } from "./trpc";
 
 // "logged in" implying that the user has a record in our database, as opposed to "authenticated"

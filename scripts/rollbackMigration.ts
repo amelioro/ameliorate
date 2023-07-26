@@ -1,7 +1,7 @@
 import { $ } from "execa";
 import yargs from "yargs/yargs";
 
-import { prisma } from "../src/api/prisma";
+import { prisma } from "../src/db/prisma";
 
 // rollback the last-run migration
 // assumes [migration_dir]/down.sql exists

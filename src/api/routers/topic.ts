@@ -4,8 +4,8 @@ import { z } from "zod";
 
 import { topicSchema } from "../../common/topic";
 import { userSchema } from "../../common/user";
+import { prisma } from "../../db/prisma";
 import { isLoggedIn } from "../auth";
-import { prisma } from "../prisma";
 import { procedure, router } from "../trpc";
 
 export const topicRouter = router({

@@ -1,7 +1,7 @@
 import { AfterCallback, handleAuth, handleCallback } from "@auth0/nextjs-auth0";
 import { UserProfile } from "@auth0/nextjs-auth0/client";
 
-import { prisma } from "../../../api/prisma";
+import { prisma } from "../../../db/prisma";
 
 const afterCallback: AfterCallback = async (_req, res, session, _state) => {
   const userClaims = session.user as UserProfile;

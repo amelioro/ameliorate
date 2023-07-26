@@ -3,7 +3,7 @@ import dateFormat from "dateformat";
 import { $ } from "execa";
 import yargs from "yargs/yargs";
 
-import { prisma } from "../src/api/prisma";
+import { prisma } from "../src/db/prisma";
 
 // generate up and down sql files, since prisma only generates up for you
 // related issue: "Roll back the latest migration group" https://github.com/prisma/prisma/discussions/4617
