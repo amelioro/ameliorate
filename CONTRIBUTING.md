@@ -121,7 +121,11 @@ Code formatting is managed by [prettier](https://prettier.io/), which is automat
 
 For user experience & user interface design, please read [uxui-guidelines.md](./docs/uxui-guidelines.md).
 
-### Managing database schema
+### Database
+
+Consider using [pg admin](https://www.pgadmin.org/) - it provides a convenient UI for manually managing db schema, viewing data, raw querying, etc.
+
+#### Managing database schema
 
 Use `npm run migration:run` to run migrations on your db that haven't been run yet, and to re-generate the prisma client (i.e. update types for queries based on schema changes). WARNING: this will ask to drop and recreate your db if your schema was modified outside of migrations; you can use `npm run migration:deploy` to run migrations even if your schema has diverged (and then you'll have to run `npx prisma generate` separately to re-generate the prisma client).
 
