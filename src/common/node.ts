@@ -15,3 +15,11 @@ export const nodeTypes = [
 const zNodeTypes = z.enum(nodeTypes);
 
 export type NodeType = z.infer<typeof zNodeTypes>;
+
+export const nodeSchema = z.object({
+  id: z.string().uuid(),
+  topicId: z.number(),
+  arguedDiagramPartId: z.string().uuid().nullable(),
+  type: zNodeTypes,
+  text: z.string().max(200),
+});

@@ -16,3 +16,12 @@ export const relationNames = [
 const zRelationNames = z.enum(relationNames);
 
 export type RelationName = z.infer<typeof zRelationNames>;
+
+export const edgeSchema = z.object({
+  id: z.string().uuid(),
+  topicId: z.number(),
+  arguedDiagramPartId: z.string().uuid().nullable(),
+  type: zRelationNames,
+  sourceId: z.string().uuid(),
+  targetId: z.string().uuid(),
+});
