@@ -12,7 +12,7 @@ import {
 } from "material-react-table";
 import React, { useState } from "react";
 
-import { errorWithData } from "../../../common/errorHandling";
+import { errorWithData } from "../../../../common/errorHandling";
 import { useCriterionSolutionEdges, useNode, useNodeChildren } from "../../store/nodeHooks";
 import { closeTable } from "../../store/viewActions";
 import { Edge, Node, problemDiagramId } from "../../utils/diagram";

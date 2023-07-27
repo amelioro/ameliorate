@@ -1,4 +1,4 @@
-import { errorWithData } from "../../common/errorHandling";
+import { errorWithData } from "../../../common/errorHandling";
 import { emitter } from "../../common/event";
 import { getClaimDiagramId } from "../utils/claim";
 import {

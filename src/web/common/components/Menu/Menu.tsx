@@ -3,7 +3,7 @@
 import { MenuItem, type MenuItemProps, Menu as MuiMenu } from "@mui/material";
 import { Children, isValidElement } from "react";
 
-import { errorWithData } from "../../errorHandling";
+import { errorWithData } from "../../../../common/errorHandling";
 
 export const addCloseOnClick = (closeMenu: () => void, children: React.ReactNode) => {
   return Children.map(children, (child) => {

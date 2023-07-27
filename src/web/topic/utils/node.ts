@@ -9,8 +9,8 @@ import {
   Widgets,
 } from "@mui/icons-material";
 
+import { errorWithData } from "../../../common/errorHandling";
 import { NodeType } from "../../../common/node";
-import { errorWithData } from "../../common/errorHandling";
 import { Diagram, Node } from "./diagram";
 import { componentTypes } from "./edge";
 

@@ -12,8 +12,8 @@ import { AppBar, Button, Divider, IconButton, MenuItem, Toolbar } from "@mui/mat
 import fileDownload from "js-file-download";
 import { StorageValue } from "zustand/middleware";
 
+import { errorWithData } from "../../../../common/errorHandling";
 import { Menu } from "../../../common/components/Menu/Menu";
-import { errorWithData } from "../../../common/errorHandling";
 import { useMenu } from "../../../common/hooks";
 import { migrate } from "../../store/migrate";
 import { TopicStoreState, useIsTableActive, useShowImpliedEdges } from "../../store/store";

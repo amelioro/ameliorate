@@ -1,6 +1,6 @@
 import { StorageValue } from "zustand/middleware";
 
-import { errorWithData } from "../../common/errorHandling";
+import { errorWithData } from "../../../common/errorHandling";
 import { TopicStoreState, initialState, useTopicStore } from "./store";
 
 export const getPersistState = () => {

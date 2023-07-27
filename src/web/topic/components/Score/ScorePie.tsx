@@ -4,7 +4,7 @@ import { useState } from "react";
 import { PieChart } from "react-minimal-pie-chart";
 import { Data } from "react-minimal-pie-chart/types/commonTypes";
 
-import { errorWithData } from "../../../common/errorHandling";
+import { errorWithData } from "../../../../common/errorHandling";
 import { setScore } from "../../store/actions";
 import { ArguableType, Score, possibleScores } from "../../utils/diagram";
 import { scoreColors } from "./Score";

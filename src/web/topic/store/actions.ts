@@ -1,6 +1,6 @@
 import { type EdgeSelectionChange, type NodeSelectionChange } from "reactflow";
 
-import { errorWithData } from "../../common/errorHandling";
+import { errorWithData } from "../../../common/errorHandling";
 import { getClaimDiagramId, getRootArguable } from "../utils/claim";
 import { ArguableType, Score, findArguable, findNode } from "../utils/diagram";
 import { useTopicStore } from "./store";

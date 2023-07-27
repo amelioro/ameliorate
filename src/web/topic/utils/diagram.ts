@@ -1,7 +1,7 @@
 import { MarkerType } from "reactflow";
 
 import { RelationName } from "../../../common/edge";
-import { errorWithData } from "../../common/errorHandling";
+import { errorWithData } from "../../../common/errorHandling";
 import { composedRelations, isEdgeImplied } from "./edge";
 import { Orientation, layout } from "./layout";
 import { FlowNodeType } from "./node";

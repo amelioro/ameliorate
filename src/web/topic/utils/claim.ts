@@ -1,6 +1,6 @@
 import lowerCase from "lodash/lowerCase";
 
-import { errorWithData } from "../../common/errorHandling";
+import { errorWithData } from "../../../common/errorHandling";
 import { ArguableType, Diagram, Edge, findArguable } from "./diagram";
 
 export const parseClaimDiagramId = (diagramId: string) => {

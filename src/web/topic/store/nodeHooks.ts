@@ -1,4 +1,4 @@
-import { errorWithData } from "../../common/errorHandling";
+import { errorWithData } from "../../../common/errorHandling";
 import { Node, RelationDirection, findNode } from "../utils/diagram";
 import { children, edges, neighbors, parents } from "../utils/node";
 import { useTopicStoreAfterHydration } from "./store";
