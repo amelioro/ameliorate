@@ -6,7 +6,8 @@
   "name": "ameliorate",
   "version": "0.1.0",
   "prisma": {
-    "schema": "src/db/schema.prisma"
+    "schema": "src/db/schema.prisma",
+    "seed": "tsx scripts/seed.ts"
   },
   "private": true,
   "scripts": {
@@ -19,6 +20,8 @@
     "storybook": "sb dev -p 6006",
     "build-storybook": "sb build",
     "db:start": "bash ./scripts/dbStart.sh",
+    "db:seed": "prisma db seed",
+    "db:setup": "npm run migration:run && npm run db:seed",
     "migration:generate": "tsx scripts/generateMigration.ts",
     "migration:rollback": "tsx scripts/rollbackMigration.ts",
     "migration:run": "prisma migrate dev",
@@ -58,6 +61,7 @@
     "sharp": "^0.32.3",
     "superjson": "^1.13.1",
     "trpc-panel": "^1.3.4",
+    "uuid": "^9.0.0",
     "web-worker": "^1.2.0",
     "zod": "^3.21.4",
     "zundo": "^2.0.0-beta.10",
@@ -84,6 +88,7 @@
     "@types/pluralize": "^0.0.29",
     "@types/react": "18.0.15",
     "@types/react-dom": "18.0.6",
+    "@types/uuid": "^9.0.2",
     "@types/yargs": "^17.0.24",
     "@typescript-eslint/eslint-plugin": "^5.38.1",
     "@typescript-eslint/parser": "^5.38.1",

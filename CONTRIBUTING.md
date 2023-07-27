@@ -57,7 +57,7 @@ Set up database:
 
 ```bash
 npm run db:start # start container running postgres
-npm run migration:deploy # ensure db schema is up-to-date
+npm run db:setup # set up schema, seed data
 ```
 
 (see [Commit hooks](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md#commit-hooks) section for explanation of commit hooks)
