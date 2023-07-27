@@ -123,14 +123,13 @@ For user experience & user interface design, please read [uxui-guidelines.md](./
 
 ### Managing database schema
 
-Use `npm run migration:deploy` to run migrations on your db that haven't been run yet.
+Use `npm run migration:run` to run migrations on your db that haven't been run yet, and to re-generate the prisma client (i.e. update types for queries based on schema changes). WARNING: this will ask to drop and recreate your db if your schema was modified outside of migrations; you can use `npm run migration:deploy` to run migrations even if your schema has diverged (and then you'll have to run `npx prisma generate` separately to re-generate the prisma client).
 
 If you're writing migrations:
 
-- `npm run migration:run` can be used to run migrations, ensure your db schema hasn't diverged, and re-generate the prisma client (e.g. update types for queries based on new schema); WARNING: this will drop and recreate your db if it has diverged
 - `npm run migration:rollback` to rollback the last migration that's been run on your db
 - `npm run migration:generate` to generate an up & down migration based on changes you've made in `schema.prisma`
-- each migration should either fully succeed or fully fail - prefer small migrations, but if you have multiple statements running in one migration, wrap them with `BEGIN;` and `COMMIT;` to ensure the statements are run in a single transaction
+- each migration should either fully succeed or fully fail - prefer small migrations, but if you have multiple statements running in one migration, wrap them with `BEGIN;` and `COMMIT;` to ensure the statements are run in a single transaction (note: there's an [open issue](https://github.com/prisma/prisma/issues/15295) to improve error messages when transactions are used - removing these statements can help when debugging migration issues)
 - right now, only maintainers have credentials to the test database, so make a comment on the PR or in Discord to request migrations be run on the test database (an easier solution can be considered if this becomes a painpoint)
 
 ### Helpful VS Code settings
