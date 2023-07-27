@@ -4,7 +4,7 @@ import { useIsAnyArguableSelected } from "../../store/arguableHooks";
 import { useIsEdgeSelected, useIsNeighborSelected } from "../../store/nodeHooks";
 import { useDiagramType } from "../../store/store";
 import { Node, orientations } from "../../utils/diagram";
-import { NodeType } from "../../utils/node";
+import { FlowNodeType } from "../../utils/node";
 import { NodeProps } from "../Diagram/Diagram";
 import { Spotlight } from "../Diagram/Diagram.styles";
 import {
@@ -22,7 +22,7 @@ const convertToNode = (flowNode: NodeProps): Node => {
     data: flowNode.data,
     position: { x: flowNode.xPos, y: flowNode.yPos },
     selected: flowNode.selected,
-    type: flowNode.type as NodeType, // we always pass a NodeType from the diagram, but I'm not sure how to override react-flow's type to tell it that
+    type: flowNode.type as FlowNodeType, // we always pass a NodeType from the diagram, but I'm not sure how to override react-flow's type to tell it that
   };
 };
 

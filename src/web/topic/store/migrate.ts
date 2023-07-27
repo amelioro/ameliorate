@@ -14,6 +14,7 @@ export const migrate = (persistedState: any, version: number) => {
     migrate_8_to_9,
     migrate_9_to_10,
     migrate_10_to_11,
+    migrate_11_to_12,
   ];
 
   let state = persistedState;
@@ -192,6 +193,21 @@ const migrate_10_to_11 = (state: any) => {
       // rename edge "solves" -> "addresses"
       if (edge.label === "solves") {
         edge.label = "addresses";
+      }
+    });
+  });
+
+  return state;
+};
+
+const migrate_11_to_12 = (state: any) => {
+  Object.values(state.diagrams).forEach((diagram: any) => {
+    diagram.edges.forEach((edge: any) => {
+      // rename edge labels to use camelCase instead of space case
+      if (edge.label === "created by") {
+        edge.label = "createdBy";
+      } else if (edge.label === "criterion for") {
+        edge.label = "criterionFor";
       }
     });
   });

@@ -160,7 +160,7 @@
           {
             "id": "0",
             "data": { "score": "-", "diagramId": "root" },
-            "label": "criterion for",
+            "label": "criterionFor",
             "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
             "source": "0",
             "target": "1",
@@ -169,7 +169,7 @@
           {
             "id": "1",
             "data": { "score": "-", "diagramId": "root" },
-            "label": "criterion for",
+            "label": "criterionFor",
             "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
             "source": "0",
             "target": "2",
@@ -178,7 +178,7 @@
           {
             "id": "2",
             "data": { "score": "-", "diagramId": "root" },
-            "label": "criterion for",
+            "label": "criterionFor",
             "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
             "source": "0",
             "target": "3",
@@ -187,7 +187,7 @@
           {
             "id": "3",
             "data": { "score": "-", "diagramId": "root" },
-            "label": "criterion for",
+            "label": "criterionFor",
             "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
             "source": "0",
             "target": "4",
@@ -196,7 +196,7 @@
           {
             "id": "4",
             "data": { "score": "-", "diagramId": "root" },
-            "label": "criterion for",
+            "label": "criterionFor",
             "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
             "source": "0",
             "target": "5",

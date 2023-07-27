@@ -1,9 +1,10 @@
 import { MarkerType } from "reactflow";
 
+import { RelationName } from "../../../common/edge";
 import { errorWithData } from "../../common/errorHandling";
-import { RelationName, composedRelations, isEdgeImplied } from "./edge";
+import { composedRelations, isEdgeImplied } from "./edge";
 import { Orientation, layout } from "./layout";
-import { NodeType } from "./node";
+import { FlowNodeType } from "./node";
 
 export type DiagramType = "problem" | "claim";
 export type RelationDirection = "parent" | "child";
@@ -35,14 +36,14 @@ export interface Node {
     y: number;
   };
   selected: boolean;
-  type: NodeType;
+  type: FlowNodeType;
 }
 
 interface BuildProps {
   id: string;
   label?: string;
   score?: Score;
-  type: NodeType;
+  type: FlowNodeType;
   diagramId: string;
 }
 export const buildNode = ({ id, label, score, type, diagramId }: BuildProps): Node => {

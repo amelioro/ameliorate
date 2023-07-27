@@ -1,13 +1,14 @@
 import { Typography } from "@mui/material";
+import lowerCase from "lodash/lowerCase";
 import React from "react";
 import { EdgeLabelRenderer, getBezierPath } from "reactflow";
 
+import { RelationName } from "../../../../common/edge";
 import { openContextMenu } from "../../../common/store/contextMenuActions";
 import { setSelectedArguable } from "../../store/actions";
 import { useIsAnyArguableSelected } from "../../store/arguableHooks";
 import { useIsImplied, useIsNodeSelected } from "../../store/edgeHooks";
 import { Edge, markerStart } from "../../utils/diagram";
-import { RelationName } from "../../utils/edge";
 import { EdgeProps } from "../Diagram/Diagram";
 import { Spotlight } from "../Diagram/Diagram.styles";
 import { EdgeIndicatorGroup } from "../Indicator/EdgeIndicatorGroup";
@@ -79,7 +80,7 @@ export const ScoreEdge = (flowEdge: EdgeProps) => {
           spotlight={spotlight}
         >
           <Typography variant="body1" margin="0">
-            {flowEdge.label}
+            {lowerCase(edge.label)}
           </Typography>
           <EdgeIndicatorGroup edge={edge} />
         </StyledDiv>

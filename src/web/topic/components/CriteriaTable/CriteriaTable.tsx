@@ -128,7 +128,7 @@ export const CriteriaTable = ({ problemNodeId }: Props) => {
           fromNodeId={problemNodeId}
           as="child"
           toNodeType="criterion"
-          relation={{ child: "criterion", name: "criterion for", parent: "problem" }}
+          relation={{ child: "criterion", name: "criterionFor", parent: "problem" }}
         />
 
         <Tooltip title="Transpose Table">

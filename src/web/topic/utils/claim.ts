@@ -1,3 +1,5 @@
+import lowerCase from "lodash/lowerCase";
+
 import { errorWithData } from "../../common/errorHandling";
 import { ArguableType, Diagram, Edge, findArguable } from "./diagram";
 
@@ -50,6 +52,6 @@ export const getImplicitLabel = (
       throw errorWithData("edge nodes not found", parentEdge, parentArguableDiagram);
     }
 
-    return `"${targetNode.data.label}" ${parentEdge.label} "${sourceNode.data.label}"`;
+    return `"${targetNode.data.label}" ${lowerCase(parentEdge.label)} "${sourceNode.data.label}"`;
   }
 };

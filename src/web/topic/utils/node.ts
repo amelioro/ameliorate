@@ -9,6 +9,7 @@ import {
   Widgets,
 } from "@mui/icons-material";
 
+import { NodeType } from "../../../common/node";
 import { errorWithData } from "../../common/errorHandling";
 import { Diagram, Node } from "./diagram";
 import { componentTypes } from "./edge";
@@ -22,19 +23,15 @@ export interface NodeDecoration {
   NodeIcon: MuiIcon;
 }
 
-export type NodeType =
-  | "problem"
-  | "solution"
-  | "solutionComponent"
-  | "criterion"
-  | "effect"
-  | "rootClaim"
-  | "support"
-  | "critique";
+// this is expected to differ from the backend at some point, i.e. if we visualize solutionComponents as nested within solutions
+// this is somewhat premature optimization, but already spent time designing this way so it's probably worth leaving these as distinct
+export type FlowNodeType = NodeType;
 
-export const hideableNodeTypes: NodeType[] = ["criterion", "effect", "solutionComponent"];
+export const claimNodeTypes: FlowNodeType[] = ["rootClaim", "support", "critique"];
 
-export const nodeDecorations: Record<NodeType, NodeDecoration> = {
+export const hideableNodeTypes: FlowNodeType[] = ["criterion", "effect", "solutionComponent"];
+
+export const nodeDecorations: Record<FlowNodeType, NodeDecoration> = {
   problem: {
     title: "Problem",
     NodeIcon: Extension,

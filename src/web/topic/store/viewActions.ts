@@ -7,7 +7,7 @@ import {
   findNode,
   layoutVisibleComponents,
 } from "../utils/diagram";
-import { NodeType, children, parents } from "../utils/node";
+import { FlowNodeType, children, parents } from "../utils/node";
 import { useTopicStore } from "./store";
 import {
   getActiveDiagram,
@@ -68,7 +68,7 @@ export const closeTable = () => {
 // potential TODO: could show components that were hidden due to being implied by the now-hidden neighbor
 export const toggleShowNeighbors = async (
   nodeId: string,
-  neighborType: NodeType,
+  neighborType: FlowNodeType,
   direction: RelationDirection,
   show: boolean
 ) => {

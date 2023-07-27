@@ -125,7 +125,7 @@
           {
             "id": "5",
             "data": { "score": "-", "diagramId": "root" },
-            "label": "criterion for",
+            "label": "criterionFor",
             "selected": false,
             "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
             "source": "0",
@@ -175,7 +175,7 @@
           {
             "id": "10",
             "data": { "score": "-", "diagramId": "root" },
-            "label": "criterion for",
+            "label": "criterionFor",
             "selected": false,
             "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
             "source": "0",
@@ -225,7 +225,7 @@
           {
             "id": "15",
             "data": { "score": "-", "diagramId": "root" },
-            "label": "criterion for",
+            "label": "criterionFor",
             "selected": false,
             "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
             "source": "0",

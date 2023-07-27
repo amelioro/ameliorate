@@ -12,7 +12,7 @@ import {
   problemDiagramId,
 } from "../utils/diagram";
 import { Relation, canCreateEdge, getConnectingEdge, getRelation } from "../utils/edge";
-import { NodeType, edges } from "../utils/node";
+import { FlowNodeType, edges } from "../utils/node";
 import { TopicStoreState, useTopicStore } from "./store";
 import {
   getActiveDiagram,
@@ -22,7 +22,7 @@ import {
   getProblemDiagram,
 } from "./utils";
 
-const createNode = (state: TopicStoreState, toNodeType: NodeType) => {
+const createNode = (state: TopicStoreState, toNodeType: FlowNodeType) => {
   /* eslint-disable functional/immutable-data, no-param-reassign */
   const newNodeId = `${state.nextNodeId++}`;
   /* eslint-enable functional/immutable-data, no-param-reassign */
@@ -48,7 +48,7 @@ const connectCriteriaToSolutions = (state: TopicStoreState, newNode: Node, probl
   const targetRelation: Relation =
     newNode.type === "criterion"
       ? { child: "solution", name: "addresses", parent: "problem" }
-      : { child: "criterion", name: "criterion for", parent: "problem" };
+      : { child: "criterion", name: "criterionFor", parent: "problem" };
 
   const newCriterionEdges = problemDiagram.edges
     .filter(
@@ -82,7 +82,7 @@ const connectCriteriaToSolutions = (state: TopicStoreState, newNode: Node, probl
 interface AddNodeProps {
   fromNodeId: string;
   as: RelationDirection;
-  toNodeType: NodeType;
+  toNodeType: FlowNodeType;
   relation: Relation;
 }
 
