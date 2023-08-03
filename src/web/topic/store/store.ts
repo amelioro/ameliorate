@@ -1,5 +1,6 @@
 import throttle from "lodash/throttle";
 import { useContext } from "react";
+import { v4 as uuid } from "uuid";
 import { temporal } from "zundo";
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
@@ -18,7 +19,7 @@ import { getClaimDiagrams, getDiagram, getDiagramOrThrow, getTopicTitle } from "
 const initialDiagrams: Record<string, Diagram> = {
   [problemDiagramId]: {
     id: problemDiagramId,
-    nodes: [buildNode({ id: "0", type: "problem", diagramId: problemDiagramId })],
+    nodes: [buildNode({ id: uuid(), type: "problem", diagramId: problemDiagramId })],
     edges: [],
     type: "problem",
   },
@@ -28,8 +29,6 @@ export interface TopicStoreState {
   diagrams: Record<string, Diagram>;
   activeTableProblemId: string | null;
   activeClaimDiagramId: string | null;
-  nextNodeId: number;
-  nextEdgeId: number;
   showImpliedEdges: boolean;
 }
 
@@ -37,8 +36,6 @@ export const initialState: TopicStoreState = {
   diagrams: initialDiagrams,
   activeTableProblemId: null,
   activeClaimDiagramId: null,
-  nextNodeId: 1, // 0 is taken by the initial node
-  nextEdgeId: 0,
   showImpliedEdges: true,
 };
 
@@ -50,7 +47,7 @@ export const useTopicStore = create<TopicStoreState>()(
       devtools(() => initialState),
       {
         name: "diagram-storage", // should probably be "topic-storage" but don't know how to migrate
-        version: 12,
+        version: 13,
         migrate: migrate,
       }
     ),

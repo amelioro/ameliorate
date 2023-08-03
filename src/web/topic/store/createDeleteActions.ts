@@ -1,6 +1,7 @@
+import { v4 as uuid } from "uuid";
+
 import { errorWithData } from "../../../common/errorHandling";
 import { emitter } from "../../common/event";
-import { getClaimDiagramId } from "../utils/claim";
 import {
   type Node,
   RelationDirection,
@@ -23,12 +24,8 @@ import {
 } from "./utils";
 
 const createNode = (state: TopicStoreState, toNodeType: FlowNodeType) => {
-  /* eslint-disable functional/immutable-data, no-param-reassign */
-  const newNodeId = `${state.nextNodeId++}`;
-  /* eslint-enable functional/immutable-data, no-param-reassign */
-
   const activeDiagram = getActiveDiagram(state);
-  const newNode = buildNode({ id: newNodeId, type: toNodeType, diagramId: activeDiagram.id });
+  const newNode = buildNode({ id: uuid(), type: toNodeType, diagramId: activeDiagram.id });
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   activeDiagram.nodes = [
@@ -58,20 +55,10 @@ const connectCriteriaToSolutions = (state: TopicStoreState, newNode: Node, probl
         findNode(edge.target, problemDiagram).type === targetRelation.child
     )
     .map((edge) => {
-      /* eslint-disable functional/immutable-data, no-param-reassign */
-      const newCriterionEdgeId = `${state.nextEdgeId++}`;
-      /* eslint-enable functional/immutable-data, no-param-reassign */
-
       const sourceNodeId = newNode.type === "criterion" ? newNode.id : edge.target;
       const targetNodeId = newNode.type === "criterion" ? edge.target : newNode.id;
 
-      return buildEdge(
-        newCriterionEdgeId,
-        sourceNodeId,
-        targetNodeId,
-        "embodies",
-        problemDiagramId
-      );
+      return buildEdge(uuid(), sourceNodeId, targetNodeId, "embodies", problemDiagramId);
     });
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
@@ -161,11 +148,7 @@ const createEdgeAndImpliedEdges = (
   // assumes only one edge can exist between two notes - future may allow multiple edges of different relation type
   if (getConnectingEdge(parent, child, diagram.edges) !== undefined) return diagram.edges;
 
-  /* eslint-disable functional/immutable-data, no-param-reassign */
-  const newEdgeId = `${state.nextEdgeId++}`;
-  /* eslint-enable functional/immutable-data, no-param-reassign */
-
-  const newEdge = buildEdge(newEdgeId, parent.id, child.id, relation.name, diagram.id);
+  const newEdge = buildEdge(uuid(), parent.id, child.id, relation.name, diagram.id);
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   diagram.edges = diagram.edges.concat(newEdge);
@@ -224,13 +207,12 @@ export const deleteNode = async (nodeId: string) => {
   }
 
   const nodeEdges = edges(node, activeDiagram);
-  const childDiagramId = getClaimDiagramId(node.id, "node");
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   activeDiagram.nodes = activeDiagram.nodes.filter((node) => node.id !== nodeId);
   activeDiagram.edges = activeDiagram.edges.filter((edge) => !nodeEdges.includes(edge));
   // eslint-disable-next-line @typescript-eslint/no-dynamic-delete -- consider using a map instead of an object?
-  delete state.diagrams[childDiagramId];
+  delete state.diagrams[node.id];
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   const layoutedDiagram = await layoutVisibleComponents(activeDiagram, getClaimDiagrams(state));

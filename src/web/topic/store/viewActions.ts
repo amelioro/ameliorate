@@ -1,4 +1,6 @@
-import { getClaimDiagramId, getImplicitLabel } from "../utils/claim";
+import { v4 as uuid } from "uuid";
+
+import { getImplicitLabel } from "../utils/claim";
 import {
   ArguableType,
   RelationDirection,
@@ -20,25 +22,23 @@ import {
 export const viewOrCreateClaimDiagram = (arguableId: string, arguableType: ArguableType) => {
   const state = getDuplicateState();
 
-  const diagramId = getClaimDiagramId(arguableId, arguableType);
-
   // create claim diagram if it doesn't exist
-  if (!getDiagram(state, diagramId)) {
+  if (!getDiagram(state, arguableId)) {
     const activeDiagram = getActiveDiagram(state);
     const arguable = findArguable(arguableId, arguableType, activeDiagram);
     const label = getImplicitLabel(arguableId, arguableType, activeDiagram);
 
     /* eslint-disable functional/immutable-data, no-param-reassign */
     const newNode = buildNode({
-      id: `${state.nextNodeId++}`,
+      id: uuid(),
       label: label,
       score: arguable.data.score,
       type: "rootClaim",
-      diagramId: diagramId,
+      diagramId: arguableId,
     });
 
-    state.diagrams[diagramId] = {
-      id: diagramId,
+    state.diagrams[arguableId] = {
+      id: arguableId,
       nodes: [newNode],
       edges: [],
       type: "claim",
@@ -47,7 +47,7 @@ export const viewOrCreateClaimDiagram = (arguableId: string, arguableType: Argua
   }
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
-  state.activeClaimDiagramId = diagramId;
+  state.activeClaimDiagramId = arguableId;
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   useTopicStore.setState(state, false, "viewOrCreateClaimDiagram");

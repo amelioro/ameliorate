@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const ClaimIndicator = ({ arguableId, arguableType }: Props) => {
-  const explicitClaimCount = useExplicitClaimCount(arguableId, arguableType);
+  const explicitClaimCount = useExplicitClaimCount(arguableId);
 
   const Icon = explicitClaimCount > 0 ? Article : ArticleOutlined;
 

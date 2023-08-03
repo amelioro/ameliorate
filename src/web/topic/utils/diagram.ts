@@ -50,7 +50,7 @@ export const buildNode = ({ id, label, score, type, diagramId }: BuildProps): No
   const node = {
     id: id,
     data: {
-      label: label ?? `text${id}`,
+      label: label ?? `new node`,
       score: score ?? ("-" as Score),
       diagramId: diagramId,
       showing: true,
