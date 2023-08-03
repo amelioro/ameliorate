@@ -1,25 +1,13 @@
-import { Global } from "@emotion/react";
-import { Box } from "@mui/material";
 import { NextPage } from "next";
 import Head from "next/head";
-import { createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-import { ContextMenu } from "../web/common/components/ContextMenu/ContextMenu";
-import { CriteriaTable } from "../web/topic/components/CriteriaTable/CriteriaTable";
-import { Diagram } from "../web/topic/components/Diagram/Diagram";
-import { TopicPane } from "../web/topic/components/Surface/TopicPane";
-import { TopicToolbar } from "../web/topic/components/Surface/TopicToolbar";
-import { useActiveClaimDiagramId, useActiveTableProblemId } from "../web/topic/store/store";
-import { problemDiagramId } from "../web/topic/utils/diagram";
-import { WorkspaceBox, workspaceStyles } from "./solve.styles";
-
-export const HydrationContext = createContext(false);
+import { TopicWorkspace } from "../web/topic/components/TopicWorkspace/TopicWorkspace";
+import { populateFromLocalStorage } from "../web/topic/store/loadActions";
+import { HydrationContext } from "./_app.page";
 
 // extract component so that it can use the store after hydration
 const Page = () => {
-  const tableProblemId = useActiveTableProblemId();
-  const claimDiagramId = useActiveClaimDiagramId();
-
   return (
     <>
       <Head>
@@ -30,30 +18,7 @@ const Page = () => {
         />
       </Head>
 
-      <TopicToolbar />
-
-      <WorkspaceBox>
-        <TopicPane />
-
-        <Box width="100%" height="100%" position="absolute">
-          {tableProblemId ? (
-            <CriteriaTable problemNodeId={tableProblemId} />
-          ) : (
-            <Diagram diagramId={problemDiagramId} />
-          )}
-        </Box>
-
-        {claimDiagramId && (
-          // Criteria Table has header (z-index:2); expectation: overlay the component
-          <Box width="100%" height="100%" position="absolute" zIndex="2">
-            <Diagram diagramId={claimDiagramId} />
-          </Box>
-        )}
-        {/* prevents body scrolling when  workspace is rendered*/}
-        <Global styles={workspaceStyles} />
-      </WorkspaceBox>
-
-      <ContextMenu />
+      <TopicWorkspace />
     </>
   );
 };

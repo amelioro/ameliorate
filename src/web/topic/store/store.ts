@@ -5,7 +5,7 @@ import { temporal } from "zundo";
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
-import { HydrationContext } from "../../../pages/solve.page";
+import { HydrationContext } from "../../../pages/_app.page";
 import {
   Diagram,
   buildNode,
