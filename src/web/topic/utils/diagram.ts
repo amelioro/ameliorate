@@ -87,12 +87,13 @@ export const buildEdge = (
   sourceNodeId: string,
   targetNodeId: string,
   relation: RelationName,
-  diagramId: string
+  diagramId: string,
+  score?: Score
 ): Edge => {
   return {
     id: newEdgeId,
     data: {
-      score: "-" as Score,
+      score: score ?? ("-" as Score),
       diagramId: diagramId,
     },
     label: relation,

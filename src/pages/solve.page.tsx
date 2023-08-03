@@ -23,12 +23,19 @@ const Page = () => {
   );
 };
 
+// TODO: rename to playground
+// TODO: use different store for playground?
+// TODO: add save button to playground
 const Solve: NextPage = () => {
   // required to prevent hydration mismatch with usage of zustand's persist middleware
   // see explanation in `useDiagramStoreAfterHydration`
   const [isHydrated, setHydrated] = useState(false);
   useEffect(() => {
-    setHydrated(true);
+    const populate = async () => {
+      await populateFromLocalStorage();
+      setHydrated(true);
+    };
+    void populate();
   }, []);
 
   return (

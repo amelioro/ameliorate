@@ -25,3 +25,5 @@ export const edgeSchema = z.object({
   sourceId: z.string().uuid(),
   targetId: z.string().uuid(),
 });
+
+export const claimRelationNames: RelationName[] = ["supports", "critiques"];

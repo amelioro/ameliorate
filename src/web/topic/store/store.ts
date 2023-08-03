@@ -49,6 +49,7 @@ export const useTopicStore = create<TopicStoreState>()(
         name: "diagram-storage", // should probably be "topic-storage" but don't know how to migrate
         version: 13,
         migrate: migrate,
+        skipHydration: true,
       }
     ),
     {
@@ -65,6 +66,7 @@ export const useTopicStore = create<TopicStoreState>()(
 
 // create atomic selectors for usage outside of store/ dir
 // this is only exported to allow hooks to be extracted to a separate file
+// TODO: can we remove this, since we're manually invoking rehydrate now?
 export const useTopicStoreAfterHydration = ((selector, compare) => {
   /*
   This a fix to ensure zustand never hydrates the store before React hydrates the page.
