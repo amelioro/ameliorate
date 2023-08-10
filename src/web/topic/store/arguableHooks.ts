@@ -1,8 +1,8 @@
-import { useTopicStoreAfterHydration } from "./store";
+import { useTopicStore } from "./store";
 import { getActiveDiagram } from "./utils";
 
 export const useExplicitClaimCount = (arguableId: string) => {
-  return useTopicStoreAfterHydration((state) => {
+  return useTopicStore((state) => {
     const claimDiagram = state.diagrams[arguableId];
 
     // consider setting noUncheckedIndexedAccess because this _can_ be undefined
@@ -15,7 +15,7 @@ export const useExplicitClaimCount = (arguableId: string) => {
 };
 
 export const useIsAnyArguableSelected = () => {
-  return useTopicStoreAfterHydration((state) => {
+  return useTopicStore((state) => {
     const activeDiagram = getActiveDiagram(state);
     return [...activeDiagram.nodes, ...activeDiagram.edges].some((arguable) => arguable.selected);
   });

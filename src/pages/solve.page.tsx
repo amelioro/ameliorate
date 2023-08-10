@@ -1,13 +1,23 @@
 import { NextPage } from "next";
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import { TopicWorkspace } from "../web/topic/components/TopicWorkspace/TopicWorkspace";
 import { populateFromLocalStorage } from "../web/topic/store/loadActions";
-import { HydrationContext } from "./_app.page";
 
-// extract component so that it can use the store after hydration
-const Page = () => {
+// TODO: rename to playground
+// TODO: use different store for playground?
+// TODO: add save button to playground
+const Solve: NextPage = () => {
+  // must hydrate store after page is rendered, otherwise if hydration starts before page finishes
+  // rendering, there will be a render mismatch between client and server
+  useEffect(() => {
+    const populate = async () => {
+      await populateFromLocalStorage();
+    };
+    void populate();
+  }, []);
+
   return (
     <>
       <Head>
@@ -20,28 +30,6 @@ const Page = () => {
 
       <TopicWorkspace />
     </>
-  );
-};
-
-// TODO: rename to playground
-// TODO: use different store for playground?
-// TODO: add save button to playground
-const Solve: NextPage = () => {
-  // required to prevent hydration mismatch with usage of zustand's persist middleware
-  // see explanation in `useDiagramStoreAfterHydration`
-  const [isHydrated, setHydrated] = useState(false);
-  useEffect(() => {
-    const populate = async () => {
-      await populateFromLocalStorage();
-      setHydrated(true);
-    };
-    void populate();
-  }, []);
-
-  return (
-    <HydrationContext.Provider value={isHydrated}>
-      <Page />
-    </HydrationContext.Provider>
   );
 };
 

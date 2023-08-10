@@ -6,14 +6,12 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { AppProps, NextWebVitalsMetric } from "next/app";
 import Head from "next/head";
 import { GoogleAnalytics, event } from "nextjs-google-analytics";
-import { createContext, useEffect } from "react";
+import { useEffect } from "react";
 
 import Layout from "../web/common/components/Layout";
 import { getThemeOptions } from "../web/common/theme";
 import { trpc } from "../web/common/trpc";
 import { globals } from "./_app.styles";
-
-export const HydrationContext = createContext(false);
 
 // thanks https://github.com/MauricioRobayo/nextjs-google-analytics#web-vitals
 export const reportWebVitals = (metric: NextWebVitalsMetric) => {

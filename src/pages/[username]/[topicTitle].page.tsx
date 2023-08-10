@@ -1,17 +1,15 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import { NotFoundError } from "../../web/common/components/Error/Error";
 import { Loading } from "../../web/common/components/Loading/Loading";
 import { trpc } from "../../web/common/trpc";
 import { TopicWorkspace } from "../../web/topic/components/TopicWorkspace/TopicWorkspace";
 import { populateFromApi } from "../../web/topic/store/loadActions";
-import { HydrationContext } from "../_app.page";
 
-// extract component so that it can use the store after hydration
-const Page = () => {
+const Topic: NextPage = () => {
   const router = useRouter();
   // Router only loads query params after hydration, so we can get undefined username here.
   // Value can't be string[] because not using catch-all "[...slug]".
@@ -47,21 +45,6 @@ const Page = () => {
 
       <TopicWorkspace />
     </>
-  );
-};
-
-const Topic: NextPage = () => {
-  // required to prevent hydration mismatch with usage of zustand's persist middleware
-  // see explanation in `useDiagramStoreAfterHydration`
-  const [isHydrated, setHydrated] = useState(false);
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
-
-  return (
-    <HydrationContext.Provider value={isHydrated}>
-      <Page />
-    </HydrationContext.Provider>
   );
 };
 
