@@ -8,7 +8,10 @@ import { middleware } from "./trpc";
 export const isLoggedIn = middleware(async (opts) => {
   const { ctx } = opts;
 
+  if (!ctx.userAuthId) throw new TRPCError({ code: "UNAUTHORIZED" });
+
   const user = await xprisma.user.findFirst({ where: { authId: ctx.userAuthId } });
+
   if (!user) throw new TRPCError({ code: "UNAUTHORIZED" });
 
   return opts.next({
