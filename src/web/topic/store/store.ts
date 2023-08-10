@@ -1,3 +1,4 @@
+import { type Topic } from "@prisma/client";
 import throttle from "lodash/throttle";
 import { useContext } from "react";
 import { v4 as uuid } from "uuid";
@@ -13,6 +14,7 @@ import {
   getDiagramTitle,
   problemDiagramId,
 } from "../utils/diagram";
+import { apiSyncer } from "./apiSyncerMiddleware";
 import { migrate } from "./migrate";
 import { getClaimDiagrams, getDiagram, getDiagramOrThrow, getTopicTitle } from "./utils";
 
@@ -25,7 +27,10 @@ const initialDiagrams: Record<string, Diagram> = {
   },
 };
 
+type StoreTopic = Omit<Topic, "createdAt" | "updatedAt">;
+
 export interface TopicStoreState {
+  topic: StoreTopic | null;
   diagrams: Record<string, Diagram>;
   activeTableProblemId: string | null;
   activeClaimDiagramId: string | null;
@@ -33,6 +38,7 @@ export interface TopicStoreState {
 }
 
 export const initialState: TopicStoreState = {
+  topic: null,
   diagrams: initialDiagrams,
   activeTableProblemId: null,
   activeClaimDiagramId: null,
@@ -42,25 +48,27 @@ export const initialState: TopicStoreState = {
 // create atomic selectors for usage outside of store/ dir
 // this is only exported to allow actions to be extracted to a separate file
 export const useTopicStore = create<TopicStoreState>()(
-  temporal(
-    persist(
-      devtools(() => initialState),
+  apiSyncer(
+    temporal(
+      persist(
+        devtools(() => initialState),
+        {
+          name: "diagram-storage", // should probably be "topic-storage" but don't know how to migrate
+          version: 13,
+          migrate: migrate,
+          skipHydration: true,
+        }
+      ),
       {
-        name: "diagram-storage", // should probably be "topic-storage" but don't know how to migrate
-        version: 13,
-        migrate: migrate,
-        skipHydration: true,
+        // throttle temporal storage to group many rapid changes into one
+        // specific use case is for when typing in a node, to prevent each letter change from being stored
+        handleSet: (handleSet) => {
+          return throttle<typeof handleSet>((state) => {
+            handleSet(state);
+          }, 1000);
+        },
       }
-    ),
-    {
-      // throttle temporal storage to group many rapid changes into one
-      // specific use case is for when typing in a node, to prevent each letter change from being stored
-      handleSet: (handleSet) => {
-        return throttle<typeof handleSet>((state) => {
-          handleSet(state);
-        }, 1000);
-      },
-    }
+    )
   )
 );
 

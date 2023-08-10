@@ -8,3 +8,5 @@ export const userScoreSchema = z.object({
   // but it doesn't seem worth to save '-' scores in the db
   value: z.number().min(0).max(9),
 });
+
+export type UserScore = z.infer<typeof userScoreSchema>;

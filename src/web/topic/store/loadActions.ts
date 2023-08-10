@@ -45,6 +45,11 @@ export const populateFromApi = async (topicData: TopicData) => {
 
   useTopicStore.setState(
     {
+      topic: {
+        id: topicData.id,
+        title: topicData.title,
+        creatorId: topicData.creatorId,
+      },
       diagrams: {
         [problemDiagramId]: await layoutVisibleComponents(problemDiagram, claimDiagrams),
         ...Object.fromEntries(layoutedClaimDiagrams),

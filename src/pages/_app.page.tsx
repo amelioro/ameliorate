@@ -6,7 +6,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { AppProps, NextWebVitalsMetric } from "next/app";
 import Head from "next/head";
 import { GoogleAnalytics, event } from "nextjs-google-analytics";
-import { createContext } from "react";
+import { createContext, useEffect } from "react";
 
 import Layout from "../web/common/components/Layout";
 import { getThemeOptions } from "../web/common/theme";
@@ -25,8 +25,16 @@ export const reportWebVitals = (metric: NextWebVitalsMetric) => {
   });
 };
 
+// eslint-disable-next-line functional/no-let -- jank way to enable trpc queries outside of react tree, e.g. from zustand middleware https://github.com/trpc/trpc/discussions/2926#discussioncomment-5647033
+export let trpcClient = null as unknown as ReturnType<typeof trpc.useContext>["client"];
+
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const theme = createTheme(getThemeOptions("light"));
+
+  const utils = trpc.useContext();
+  useEffect(() => {
+    trpcClient = utils.client;
+  }, [utils.client]);
 
   return (
     <>

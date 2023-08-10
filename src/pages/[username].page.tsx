@@ -44,6 +44,7 @@ const User: NextPage = () => {
   const rowData: RowData[] = findUser.data.topics;
 
   const hasEditAccess = findUser.data.id === sessionUser?.id;
+  const foundUsername = findUser.data.username;
 
   return (
     <>
@@ -55,10 +56,8 @@ const User: NextPage = () => {
         renderRowActions={({ row }) => (
           <IconButton
             onClick={(e) => {
-              if (!findUser.data?.username) throw new Error("No username found for redirect");
-
               e.stopPropagation(); // prevent row click
-              void router.push(`/${findUser.data.username}/${row.original.title}/settings`);
+              void router.push(`/${foundUsername}/${row.original.title}/settings`);
             }}
           >
             <Settings />
@@ -79,11 +78,8 @@ const User: NextPage = () => {
             <></>
           );
         }}
-        muiTableBodyRowProps={() => ({
-          // TODO: actually associate topic with topic store data
-          // muiTableBodyRowProps={({ row }) => ({
-          // onClick: () => void router.push(`/${username}/${row.original.title}`),
-          onClick: () => void router.push(`/solve`),
+        muiTableBodyRowProps={({ row }) => ({
+          onClick: () => void router.push(`/${foundUsername}/${row.original.title}`),
           sx: { cursor: "pointer" },
         })}
       />
