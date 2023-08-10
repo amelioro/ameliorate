@@ -12,12 +12,23 @@ export const getPersistState = () => {
   return persistOptions.storage.getItem(persistOptions.name) as StorageValue<TopicStoreState>;
 };
 
-export const setState = (state: TopicStoreState) => {
-  useTopicStore.setState(state, false, "setState");
+export const setTopicData = (state: TopicStoreState) => {
+  // Don't override topic - this way, topic data from playground can be downloaded and uploaded as
+  // a means of saving playground data to the db.
+  // This also allows starting a new, separate topic from an existing topic's data.
+  // Note: this won't work with multiple users' scores, since a user shouldn't be able to create
+  // scores for other users.
+  const topic = useTopicStore.getState().topic;
+  useTopicStore.setState({ ...state, topic }, false, "setState");
 };
 
-export const resetState = () => {
-  useTopicStore.setState(initialState, false, "resetState");
+/**
+ * Maintain topic details; expectation is that you may want to start over with nodes/edges, but
+ * topic title and settings aren't changing, and you can go to topic details to change those.
+ */
+export const resetTopicData = () => {
+  const topic = useTopicStore.getState().topic;
+  useTopicStore.setState({ ...initialState, topic }, false, "resetState");
 };
 
 export const undo = () => {

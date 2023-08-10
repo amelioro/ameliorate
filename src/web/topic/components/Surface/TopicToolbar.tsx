@@ -17,7 +17,7 @@ import { Menu } from "../../../common/components/Menu/Menu";
 import { useMenu } from "../../../common/hooks";
 import { migrate } from "../../store/migrate";
 import { TopicStoreState, useIsTableActive, useShowImpliedEdges } from "../../store/store";
-import { getPersistState, redo, resetState, setState, undo } from "../../store/utilActions";
+import { getPersistState, redo, resetTopicData, setTopicData, undo } from "../../store/utilActions";
 import { getTopicTitle } from "../../store/utils";
 import { relayout, toggleShowImpliedEdges } from "../../store/viewActions";
 import { StyledToggleButton } from "./TopicToolbar.styles";
@@ -51,7 +51,7 @@ const uploadTopic = (event: React.ChangeEvent<HTMLInputElement>) => {
 
       const migratedState = migrate(persistState.state, persistState.version) as TopicStoreState;
 
-      setState(migratedState);
+      setTopicData(migratedState);
     })
     .catch((error) => {
       throw errorWithData("Failed to read file", error);
@@ -64,7 +64,7 @@ const loadExample = (exampleFileName: string) => {
     // TODO: validate that file JSON matches interface
     .then((loadedJson) => {
       const persistState = loadedJson as StorageValue<TopicStoreState>;
-      setState(persistState.state);
+      setTopicData(persistState.state);
     })
     .catch((error) => {
       throw errorWithData("Failed to load example", error);
@@ -117,7 +117,7 @@ export const TopicToolbar = () => {
         <IconButton color="inherit" title="Redo" aria-label="Redo" onClick={redo}>
           <Redo />
         </IconButton>
-        <IconButton color="inherit" title="Reset" aria-label="Reset" onClick={resetState}>
+        <IconButton color="inherit" title="Reset" aria-label="Reset" onClick={resetTopicData}>
           <AutoStoriesOutlined />
         </IconButton>
 
