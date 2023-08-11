@@ -29,7 +29,7 @@ import {
 } from "./TopicPane.styles";
 
 export const TopicPane = () => {
-  const [isTopicDrawerOpen, setIsTopicDrawerOpen] = useState(true);
+  const [isTopicDrawerOpen, setIsTopicDrawerOpen] = useState(false);
   const [isClaimsListOpen, setIsClaimsListOpen] = useState(true);
   const [isProblemsListOpen, setIsProblemsListOpen] = useState(true);
 
