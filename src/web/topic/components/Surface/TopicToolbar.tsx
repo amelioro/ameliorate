@@ -18,6 +18,7 @@ import { useMenu } from "../../../common/hooks";
 import { migrate } from "../../store/migrate";
 import { TopicStoreState, useIsTableActive, useShowImpliedEdges } from "../../store/store";
 import { getPersistState, redo, resetTopicData, setTopicData, undo } from "../../store/utilActions";
+import { useTemporalHooks } from "../../store/utilHooks";
 import { getTopicTitle } from "../../store/utils";
 import { relayout, toggleShowImpliedEdges } from "../../store/viewActions";
 import { StyledToggleButton } from "./TopicToolbar.styles";
@@ -75,6 +76,7 @@ export const TopicToolbar = () => {
   const [anchorEl, menuIsOpen, openMenu, closeMenu] = useMenu();
   const isTableActive = useIsTableActive();
   const showImpliedEdges = useShowImpliedEdges();
+  const [canUndo, canRedo] = useTemporalHooks();
 
   return (
     <AppBar position="sticky" color="primaryVariantLight">
@@ -107,14 +109,22 @@ export const TopicToolbar = () => {
         <Divider orientation="vertical" />
         {/* diagram state change actions */}
 
-        {/* TODO: disable undo/redo when there's nothing to undo/redo; right now can't use hooks for temporal state
-        because it doesn't work with persist middleware.
-        once this currently-in-progress PR merges, we should be able to do that easily!
-        https://github.com/charkour/zundo/pull/61 */}
-        <IconButton color="inherit" title="Undo" aria-label="Undo" onClick={undo}>
+        <IconButton
+          color="inherit"
+          title="Undo"
+          aria-label="Undo"
+          onClick={undo}
+          disabled={!canUndo}
+        >
           <Undo />
         </IconButton>
-        <IconButton color="inherit" title="Redo" aria-label="Redo" onClick={redo}>
+        <IconButton
+          color="inherit"
+          title="Redo"
+          aria-label="Redo"
+          onClick={redo}
+          disabled={!canRedo}
+        >
           <Redo />
         </IconButton>
         <IconButton color="inherit" title="Reset" aria-label="Reset" onClick={resetTopicData}>

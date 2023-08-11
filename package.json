@@ -65,7 +65,7 @@
     "uuid": "^9.0.0",
     "web-worker": "^1.2.0",
     "zod": "^3.21.4",
-    "zundo": "^2.0.0-beta.10",
+    "zundo": "^2.0.0-beta.24",
     "zustand": "^4.4.1"
   },
   "devDependencies": {
