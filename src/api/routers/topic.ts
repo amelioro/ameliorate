@@ -4,7 +4,7 @@ import { z } from "zod";
 
 import { topicSchema } from "../../common/topic";
 import { userSchema } from "../../common/user";
-import { prisma } from "../../db/prisma";
+import { xprisma } from "../../db/extendedPrisma";
 import { isLoggedIn } from "../auth";
 import { procedure, router } from "../trpc";
 
@@ -17,7 +17,7 @@ export const topicRouter = router({
       })
     )
     .query(async (opts) => {
-      return await prisma.topic.findFirst({
+      return await xprisma.topic.findFirst({
         where: {
           title: opts.input.title,
           creator: {
@@ -31,7 +31,7 @@ export const topicRouter = router({
     .use(isLoggedIn)
     .input(topicSchema.pick({ title: true }))
     .mutation(async (opts) => {
-      return await prisma.topic.create({
+      return await xprisma.topic.create({
         data: {
           title: opts.input.title,
           creatorId: opts.ctx.user.id,
@@ -43,10 +43,10 @@ export const topicRouter = router({
     .use(isLoggedIn)
     .input(topicSchema.pick({ id: true, title: true }))
     .mutation(async (opts) => {
-      const topic = await prisma.topic.findUniqueOrThrow({ where: { id: opts.input.id } });
+      const topic = await xprisma.topic.findUniqueOrThrow({ where: { id: opts.input.id } });
       if (opts.ctx.user.id !== topic.creatorId) throw new TRPCError({ code: "FORBIDDEN" });
 
-      return await prisma.topic.update({
+      return await xprisma.topic.update({
         where: { id: opts.input.id },
         data: {
           title: opts.input.title,
@@ -58,10 +58,10 @@ export const topicRouter = router({
     .use(isLoggedIn)
     .input(topicSchema.pick({ id: true }))
     .mutation(async (opts) => {
-      const topic = await prisma.topic.findUniqueOrThrow({ where: { id: opts.input.id } });
+      const topic = await xprisma.topic.findUniqueOrThrow({ where: { id: opts.input.id } });
       if (opts.ctx.user.id !== topic.creatorId) throw new TRPCError({ code: "FORBIDDEN" });
 
-      await prisma.topic.delete({ where: { id: opts.input.id } });
+      await xprisma.topic.delete({ where: { id: opts.input.id } });
 
       return null;
     }),

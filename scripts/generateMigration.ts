@@ -3,7 +3,7 @@ import dateFormat from "dateformat";
 import { $ } from "execa";
 import yargs from "yargs/yargs";
 
-import { prisma } from "../src/db/prisma";
+import { xprisma } from "../src/db/extendedPrisma";
 
 // generate up and down sql files, since prisma only generates up for you
 // related issue: "Roll back the latest migration group" https://github.com/prisma/prisma/discussions/4617
@@ -16,8 +16,8 @@ const generateMigration = async () => {
   // Create shadow db - required for prisma diff based on migrations folder
   // executeUnsafe because SQL templating does not support templating database names
   const shadowDbName = "ameliorate_shadow";
-  await prisma.$executeRawUnsafe(`DROP DATABASE IF EXISTS ${shadowDbName};`);
-  await prisma.$executeRawUnsafe(`CREATE DATABASE ${shadowDbName};`);
+  await xprisma.$executeRawUnsafe(`DROP DATABASE IF EXISTS ${shadowDbName};`);
+  await xprisma.$executeRawUnsafe(`CREATE DATABASE ${shadowDbName};`);
 
   try {
     // Create down migration
@@ -51,7 +51,7 @@ const generateMigration = async () => {
     await $`mv migration.sql src/db/migrations/${migrationDirectoryName}/migration.sql`;
   } finally {
     // Drop shadow db
-    await prisma.$executeRawUnsafe(`DROP DATABASE ${shadowDbName};`);
+    await xprisma.$executeRawUnsafe(`DROP DATABASE ${shadowDbName};`);
   }
 };
 
