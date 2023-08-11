@@ -34,7 +34,7 @@ model Topic {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  creator    User        @relation(fields: [creatorId], references: [id])
+  creator    User        @relation(fields: [creatorId], references: [id], onDelete: Cascade)
   nodes      Node[]
   edges      Edge[]
   userScores UserScore[]
