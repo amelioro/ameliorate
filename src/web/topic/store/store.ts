@@ -43,6 +43,9 @@ export const initialState: TopicStoreState = {
   showImpliedEdges: true,
 };
 
+// should probably be "topic-playground-storage" but don't know how to migrate
+export const topicStorePlaygroundName = "diagram-storage";
+
 // create atomic selectors for usage outside of store/ dir
 // this is only exported to allow actions to be extracted to a separate file
 export const useTopicStore = create<TopicStoreState>()(
@@ -51,7 +54,7 @@ export const useTopicStore = create<TopicStoreState>()(
       persist(
         devtools(() => initialState),
         {
-          name: "diagram-storage", // should probably be "topic-storage" but don't know how to migrate
+          name: topicStorePlaygroundName,
           version: 13,
           migrate: migrate,
           skipHydration: true,

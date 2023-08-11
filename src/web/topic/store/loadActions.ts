@@ -3,9 +3,13 @@ import { errorWithData } from "../../../common/errorHandling";
 import { type TopicData, convertToStoreEdge, convertToStoreNode } from "../utils/apiConversion";
 import { Diagram, layoutVisibleComponents, problemDiagramId } from "../utils/diagram";
 import { claimNodeTypes } from "../utils/node";
-import { useTopicStore } from "./store";
+import { topicStorePlaygroundName, useTopicStore } from "./store";
 
 export const populateFromApi = async (topicData: TopicData) => {
+  // Ensure we use distinct persistence for topic page compared to playground.
+  // Persisting saved-to-db topics allows us to use upload/download with persist migrations.
+  useTopicStore.persist.setOptions({ name: "diagram-storage-saved-to-db" });
+
   const problemDiagramNodes = topicData.nodes.filter((node) => !claimNodeTypes.includes(node.type));
   const problemDiagramEdges = topicData.edges.filter(
     (edge) => !claimRelationNames.includes(edge.type)
@@ -66,6 +70,9 @@ export const populateFromApi = async (topicData: TopicData) => {
 };
 
 export const populateFromLocalStorage = async () => {
+  // Ensure we use distinct persistence for topic page compared to playground.
+  useTopicStore.persist.setOptions({ name: topicStorePlaygroundName });
+
   // TODO(bug): for some reason, this results in an empty undo action _after_ clear() is run - despite awaiting this promise
   await useTopicStore.persist.rehydrate();
 

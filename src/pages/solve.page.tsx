@@ -6,7 +6,6 @@ import { TopicWorkspace } from "../web/topic/components/TopicWorkspace/TopicWork
 import { populateFromLocalStorage } from "../web/topic/store/loadActions";
 
 // TODO: rename to playground
-// TODO: use different store for playground?
 // TODO: add save button to playground
 const Solve: NextPage = () => {
   // must hydrate store after page is rendered, otherwise if hydration starts before page finishes
