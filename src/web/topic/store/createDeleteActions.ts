@@ -232,6 +232,8 @@ export const deleteEdge = async (edgeId: string) => {
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   activeDiagram.edges = activeDiagram.edges.filter((edge) => edge.id !== edgeId);
+  // eslint-disable-next-line @typescript-eslint/no-dynamic-delete -- consider using a map instead of an object?
+  delete state.diagrams[edgeId];
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   const layoutedDiagram = await layoutVisibleComponents(activeDiagram, getClaimDiagrams(state));
