@@ -55,7 +55,7 @@ const uploadTopic = (event: React.ChangeEvent<HTMLInputElement>) => {
       setTopicData(migratedState);
     })
     .catch((error) => {
-      throw errorWithData("Failed to read file", error);
+      throw error;
     });
 };
 
@@ -68,7 +68,7 @@ const loadExample = (exampleFileName: string) => {
       setTopicData(persistState.state);
     })
     .catch((error) => {
-      throw errorWithData("Failed to load example", error);
+      throw error;
     });
 };
 
