@@ -13,6 +13,7 @@ import {
 import React, { useState } from "react";
 
 import { errorWithData } from "../../../../common/errorHandling";
+import { Loading } from "../../../common/components/Loading/Loading";
 import { useCriterionSolutionEdges, useNode, useNodeChildren } from "../../store/nodeHooks";
 import { closeTable } from "../../store/viewActions";
 import { Edge, Node, problemDiagramId } from "../../utils/diagram";
@@ -93,7 +94,7 @@ export const CriteriaTable = ({ problemNodeId }: Props) => {
   const nodeChildren = useNodeChildren(problemNodeId, problemDiagramId);
   const criterionSolutionEdges = useCriterionSolutionEdges(problemNodeId, problemDiagramId);
 
-  if (!problemNode) return <p>loading...</p>;
+  if (!problemNode) return <Loading />;
 
   const criteria = nodeChildren.filter((node) => node.type === "criterion");
   const solutions = nodeChildren.filter((node) => node.type === "solution");
