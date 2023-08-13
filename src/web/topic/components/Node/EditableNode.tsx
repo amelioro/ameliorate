@@ -1,8 +1,10 @@
 import { useTheme } from "@mui/material";
 import { useEffect, useRef } from "react";
 
+import { useSessionUser } from "../../../common/hooks";
 import { openContextMenu } from "../../../common/store/contextMenuActions";
 import { setNodeLabel, setSelectedArguable } from "../../store/actions";
+import { useUserCanEditTopicData } from "../../store/userHooks";
 import { Node } from "../../utils/diagram";
 import { nodeDecorations } from "../../utils/node";
 import { NodeIndicatorGroup } from "../Indicator/NodeIndicatorGroup";
@@ -17,6 +19,9 @@ import {
 
 // TODO: should not re-render when node position changes
 export const EditableNode = ({ node, className = "" }: { node: Node; className?: string }) => {
+  const { sessionUser } = useSessionUser();
+  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.id);
+
   const theme = useTheme();
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
   // TODO: BUG does not work nicely with the react-flow component. Focus is being taken away from the element after the component mounts.
@@ -63,6 +68,7 @@ export const EditableNode = ({ node, className = "" }: { node: Node; className?:
           maxRows={3}
           onChange={(event) => setNodeLabel(node.id, event.target.value)}
           className="nopan" // allow regular text input drag functionality without using reactflow's pan behavior
+          disabled={!userCanEditTopicData}
         />
       </MiddleDiv>
     </NodeDiv>

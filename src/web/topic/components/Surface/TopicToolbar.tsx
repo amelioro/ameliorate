@@ -14,9 +14,10 @@ import { StorageValue } from "zustand/middleware";
 
 import { errorWithData } from "../../../../common/errorHandling";
 import { Menu } from "../../../common/components/Menu/Menu";
-import { useMenu } from "../../../common/hooks";
+import { useMenu, useSessionUser } from "../../../common/hooks";
 import { migrate } from "../../store/migrate";
 import { TopicStoreState, useIsTableActive, useShowImpliedEdges } from "../../store/store";
+import { useUserCanEditTopicData } from "../../store/userHooks";
 import { getPersistState, redo, resetTopicData, setTopicData, undo } from "../../store/utilActions";
 import { useTemporalHooks } from "../../store/utilHooks";
 import { getTopicTitle } from "../../store/utils";
@@ -73,6 +74,8 @@ const loadExample = (exampleFileName: string) => {
 };
 
 export const TopicToolbar = () => {
+  const { sessionUser } = useSessionUser();
+  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.id);
   const [anchorEl, menuIsOpen, openMenu, closeMenu] = useMenu();
   const isTableActive = useIsTableActive();
   const showImpliedEdges = useShowImpliedEdges();
@@ -82,54 +85,66 @@ export const TopicToolbar = () => {
     <AppBar position="sticky" color="primaryVariantLight">
       <Toolbar variant="dense">
         {/* load actions */}
+        {userCanEditTopicData && (
+          <>
+            <Button color="inherit" onClick={openMenu}>
+              Examples
+              <ExpandMore />
+            </Button>
+            <Menu anchorEl={anchorEl} isOpen={menuIsOpen} closeMenu={closeMenu}>
+              <MenuItem onClick={() => loadExample("cars_going_too_fast_in_neighborhood.json")}>
+                Cars Going Too Fast
+              </MenuItem>
+              <MenuItem onClick={() => loadExample("economic_system.json")}>
+                Economic System
+              </MenuItem>
+              <MenuItem onClick={() => loadExample("living_location.json")}>
+                Living Location
+              </MenuItem>
+              <MenuItem onClick={() => loadExample("unwanted_pregnancy.json")}>
+                Unwanted Pregnancy
+              </MenuItem>
+              <MenuItem onClick={() => loadExample("world_hunger.json")}>World Hunger</MenuItem>
+            </Menu>
+            <IconButton
+              color="inherit"
+              title="Download"
+              aria-label="Download"
+              onClick={downloadTopic}
+            >
+              <Download />
+            </IconButton>
+            <IconButton color="inherit" component="label" title="Upload" aria-label="Upload">
+              <Upload />
+              <input hidden accept=".json" type="file" onChange={uploadTopic} />
+            </IconButton>
 
-        <Button color="inherit" onClick={openMenu}>
-          Examples
-          <ExpandMore />
-        </Button>
-        <Menu anchorEl={anchorEl} isOpen={menuIsOpen} closeMenu={closeMenu}>
-          <MenuItem onClick={() => loadExample("cars_going_too_fast_in_neighborhood.json")}>
-            Cars Going Too Fast
-          </MenuItem>
-          <MenuItem onClick={() => loadExample("economic_system.json")}>Economic System</MenuItem>
-          <MenuItem onClick={() => loadExample("living_location.json")}>Living Location</MenuItem>
-          <MenuItem onClick={() => loadExample("unwanted_pregnancy.json")}>
-            Unwanted Pregnancy
-          </MenuItem>
-          <MenuItem onClick={() => loadExample("world_hunger.json")}>World Hunger</MenuItem>
-        </Menu>
-        <IconButton color="inherit" title="Download" aria-label="Download" onClick={downloadTopic}>
-          <Download />
-        </IconButton>
-        <IconButton color="inherit" component="label" title="Upload" aria-label="Upload">
-          <Upload />
-          <input hidden accept=".json" type="file" onChange={uploadTopic} />
-        </IconButton>
+            <Divider orientation="vertical" />
+            {/* diagram state change actions */}
 
-        <Divider orientation="vertical" />
-        {/* diagram state change actions */}
-
-        <IconButton
-          color="inherit"
-          title="Undo"
-          aria-label="Undo"
-          onClick={undo}
-          disabled={!canUndo}
-        >
-          <Undo />
-        </IconButton>
-        <IconButton
-          color="inherit"
-          title="Redo"
-          aria-label="Redo"
-          onClick={redo}
-          disabled={!canRedo}
-        >
-          <Redo />
-        </IconButton>
-        <IconButton color="inherit" title="Reset" aria-label="Reset" onClick={resetTopicData}>
-          <AutoStoriesOutlined />
-        </IconButton>
+            <IconButton
+              color="inherit"
+              title="Undo"
+              aria-label="Undo"
+              onClick={undo}
+              disabled={!canUndo}
+            >
+              <Undo />
+            </IconButton>
+            <IconButton
+              color="inherit"
+              title="Redo"
+              aria-label="Redo"
+              onClick={redo}
+              disabled={!canRedo}
+            >
+              <Redo />
+            </IconButton>
+            <IconButton color="inherit" title="Reset" aria-label="Reset" onClick={resetTopicData}>
+              <AutoStoriesOutlined />
+            </IconButton>
+          </>
+        )}
 
         {/* view actions */}
         {!isTableActive && (

@@ -57,6 +57,9 @@ export const StyledTextareaAutosize = styled(TextareaAutosize)<StyledTextareaPro
   font-size: 1rem;
   line-height: 1;
   font-family: inherit;
+
+  // so that disabled textarea doesn't appear gray
+  color: ${({ theme }) => theme.palette.text.primary};
 `;
 
 interface NodeDivProps {

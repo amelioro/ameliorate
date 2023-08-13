@@ -1,8 +1,10 @@
 import { Global } from "@emotion/react";
 
+import { useSessionUser } from "../../../common/hooks";
 import { useIsAnyArguableSelected } from "../../store/arguableHooks";
 import { useIsEdgeSelected, useIsNeighborSelected } from "../../store/nodeHooks";
 import { useDiagramType } from "../../store/store";
+import { useUserCanEditTopicData } from "../../store/userHooks";
 import { Node, orientations } from "../../utils/diagram";
 import { FlowNodeType } from "../../utils/node";
 import { NodeProps } from "../Diagram/Diagram";
@@ -27,6 +29,8 @@ const convertToNode = (flowNode: NodeProps): Node => {
 };
 
 export const FlowNode = (flowNode: NodeProps) => {
+  const { sessionUser } = useSessionUser();
+  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.id);
   const diagramType = useDiagramType(flowNode.data.diagramId);
   const isNeighborSelected = useIsNeighborSelected(flowNode.id, flowNode.data.diagramId);
   const isEdgeSelected = useIsEdgeSelected(flowNode.id, flowNode.data.diagramId);
@@ -53,21 +57,25 @@ export const FlowNode = (flowNode: NodeProps) => {
 
       <NodeHandle node={node} direction="parent" orientation={orientation} spotlight={spotlight} />
       {/* should this use react-flow's NodeToolbar? seems like it'd automatically handle positioning */}
-      <AddNodeButtonGroupParent
-        fromNodeId={flowNode.id}
-        fromNodeType={node.type}
-        as="parent"
-        orientation={orientation}
-      />
+      {userCanEditTopicData && (
+        <AddNodeButtonGroupParent
+          fromNodeId={flowNode.id}
+          fromNodeType={node.type}
+          as="parent"
+          orientation={orientation}
+        />
+      )}
 
       <StyledEditableNode node={node} spotlight={spotlight} />
 
-      <AddNodeButtonGroupChild
-        fromNodeId={flowNode.id}
-        fromNodeType={node.type}
-        as="child"
-        orientation={orientation}
-      />
+      {userCanEditTopicData && (
+        <AddNodeButtonGroupChild
+          fromNodeId={flowNode.id}
+          fromNodeType={node.type}
+          as="child"
+          orientation={orientation}
+        />
+      )}
       <NodeHandle node={node} direction="child" orientation={orientation} spotlight={spotlight} />
     </>
   );
