@@ -32,14 +32,16 @@ interface ScoreProps {
 // similar to MUI speed dial (https://mui.com/material-ui/react-speed-dial/),
 // but the main reason for creating a custom component are:
 // * allow actions to be positioned around the dial for even closer navigability to each one
-// TODO: should not re-render on every viewport change, only when zoom changes
 export const Score = ({ arguableId, arguableType, score }: ScoreProps) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.id);
-  const zoomRatio = useTopicZoom();
   const [selected, setSelected] = useState(false);
   const [hovering, setHovering] = useState(false);
   const mainButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  // Not reactive, but zoom is currently only used when hovering/selected change, which triggers a
+  // re-render, so we'll still get an updated zoom value.
+  const zoomRatio = useTopicZoom();
 
   const buttonLengthRem = indicatorLengthRem; //rem
   const buttonLengthRemScaled = buttonLengthRem * zoomRatio; //rem * zoom
