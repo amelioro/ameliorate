@@ -2,19 +2,17 @@ import {
   AlignVerticalTop,
   AutoStoriesOutlined,
   Download,
-  ExpandMore,
   Redo,
   Route,
   Undo,
   Upload,
 } from "@mui/icons-material";
-import { AppBar, Button, Divider, IconButton, MenuItem, Toolbar } from "@mui/material";
+import { AppBar, Divider, IconButton, Toolbar } from "@mui/material";
 import fileDownload from "js-file-download";
 import { StorageValue } from "zustand/middleware";
 
 import { errorWithData } from "../../../../common/errorHandling";
-import { Menu } from "../../../common/components/Menu/Menu";
-import { useMenu, useSessionUser } from "../../../common/hooks";
+import { useSessionUser } from "../../../common/hooks";
 import { migrate } from "../../store/migrate";
 import { TopicStoreState, useIsTableActive, useShowImpliedEdges } from "../../store/store";
 import { useUserCanEditTopicData } from "../../store/userHooks";
@@ -60,23 +58,9 @@ const uploadTopic = (event: React.ChangeEvent<HTMLInputElement>) => {
     });
 };
 
-const loadExample = (exampleFileName: string) => {
-  fetch(`/examples/${exampleFileName}`)
-    .then((response) => response.json())
-    // TODO: validate that file JSON matches interface
-    .then((loadedJson) => {
-      const persistState = loadedJson as StorageValue<TopicStoreState>;
-      setTopicData(persistState.state);
-    })
-    .catch((error) => {
-      throw error;
-    });
-};
-
 export const TopicToolbar = () => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.id);
-  const [anchorEl, menuIsOpen, openMenu, closeMenu] = useMenu();
   const isTableActive = useIsTableActive();
   const showImpliedEdges = useShowImpliedEdges();
   const [canUndo, canRedo] = useTemporalHooks();
@@ -87,25 +71,6 @@ export const TopicToolbar = () => {
         {/* load actions */}
         {userCanEditTopicData && (
           <>
-            <Button color="inherit" onClick={openMenu}>
-              Examples
-              <ExpandMore />
-            </Button>
-            <Menu anchorEl={anchorEl} isOpen={menuIsOpen} closeMenu={closeMenu}>
-              <MenuItem onClick={() => loadExample("cars_going_too_fast_in_neighborhood.json")}>
-                Cars Going Too Fast
-              </MenuItem>
-              <MenuItem onClick={() => loadExample("economic_system.json")}>
-                Economic System
-              </MenuItem>
-              <MenuItem onClick={() => loadExample("living_location.json")}>
-                Living Location
-              </MenuItem>
-              <MenuItem onClick={() => loadExample("unwanted_pregnancy.json")}>
-                Unwanted Pregnancy
-              </MenuItem>
-              <MenuItem onClick={() => loadExample("world_hunger.json")}>World Hunger</MenuItem>
-            </Menu>
             <IconButton
               color="inherit"
               title="Download"

@@ -4,6 +4,21 @@ import { useState } from "react";
 import { MenuPosition } from "./store/contextMenuStore";
 import { trpc } from "./trpc";
 
+/**
+ * @example <caption>(since there aren't currently usages of this method)</caption>
+ * 
+const [anchorEl, menuIsOpen, openMenu, closeMenu] = useMenu();
+
+<Button color="inherit" onClick={openMenu}>
+  Examples
+  <ExpandMore />
+</Button>
+<Menu anchorEl={anchorEl} isOpen={menuIsOpen} closeMenu={closeMenu}>
+  <MenuItem onClick={() => loadExample("cars_going_too_fast_in_neighborhood.json")}>
+    Cars Going Too Fast
+  </MenuItem>
+</Menu
+ */
 export const useMenu = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined>(undefined);
 
