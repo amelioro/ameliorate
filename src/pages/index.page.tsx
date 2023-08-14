@@ -41,6 +41,14 @@ const Home: NextPage = () => {
           </Button>
           <Button
             variant="outlined"
+            LinkComponent={NextLink}
+            href="/examples"
+            sx={{ marginLeft: "0.5rem" }}
+          >
+            Examples
+          </Button>
+          <Button
+            variant="outlined"
             endIcon={<ArrowDownward />}
             href="#how-it-works"
             sx={{ marginLeft: "0.5rem" }}

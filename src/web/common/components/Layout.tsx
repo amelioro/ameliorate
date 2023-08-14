@@ -53,6 +53,7 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
               <NavLink href="/">Ameliorate</NavLink>
               {isLoggedIn && <NavLink href={`/${sessionUser.username}`}>My Topics</NavLink>}
               <NavLink href="/playground">Playground</NavLink>
+              <NavLink href="/examples">Examples</NavLink>
             </Box>
 
             <Box display="flex" gap="15px" alignItems="center">
