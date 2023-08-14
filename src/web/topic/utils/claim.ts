@@ -3,23 +3,23 @@ import lowerCase from "lodash/lowerCase";
 import { errorWithData } from "../../../common/errorHandling";
 import { ArguableType, Diagram, Edge, findArguable } from "./diagram";
 
-export const parseClaimDiagramId = (diagramId: string) => {
+export const parseClaimTreeId = (diagramId: string) => {
   return diagramId.split("-") as [ArguableType, string];
 };
 
-export const getRootArguable = (claimDiagramId: string, problemDiagram: Diagram) => {
-  const [parentArguableType, parentArguableId] = parseClaimDiagramId(claimDiagramId);
-  const arguable = findArguable(parentArguableId, parentArguableType, problemDiagram);
+export const getRootArguable = (claimTreeId: string, topicDiagram: Diagram) => {
+  const [parentArguableType, parentArguableId] = parseClaimTreeId(claimTreeId);
+  const arguable = findArguable(parentArguableId, parentArguableType, topicDiagram);
   return arguable;
 };
 
 // TODO: this should work for arguables. annoying to do without knowing the arguable type though.
 // this will be much easier after adding the child claim diagram pointer to Arguable
-export const hasClaims = (edge: Edge, diagram: Diagram, claimDiagrams: Diagram[]) => {
-  const claimDiagram = claimDiagrams.find((diagram) => diagram.id === edge.id);
-  if (!claimDiagram) return false;
+export const hasClaims = (edge: Edge, diagram: Diagram, claimTrees: Diagram[]) => {
+  const claimTree = claimTrees.find((diagram) => diagram.id === edge.id);
+  if (!claimTree) return false;
 
-  return claimDiagram.nodes.length > 1; // one node will be the implicit claim, don't count that
+  return claimTree.nodes.length > 1; // one node will be the implicit claim, don't count that
 };
 
 // "parent" meaning the node or edge implies the claim

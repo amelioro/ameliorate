@@ -3,14 +3,14 @@ import { getActiveDiagram } from "./utils";
 
 export const useExplicitClaimCount = (arguableId: string) => {
   return useTopicStore((state) => {
-    const claimDiagram = state.diagrams[arguableId];
+    const claimTree = state.diagrams[arguableId];
 
     // consider setting noUncheckedIndexedAccess because this _can_ be undefined
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (claimDiagram === undefined) return 0;
+    if (claimTree === undefined) return 0;
 
     // there's always one implicit claim (the root node)
-    return claimDiagram.nodes.length - 1;
+    return claimTree.nodes.length - 1;
   });
 };
 

@@ -20,7 +20,7 @@ import { setSelected } from "../../store/actions";
 import { useIsAnyArguableSelected } from "../../store/arguableHooks";
 import { connectNodes } from "../../store/createDeleteActions";
 import { useFilteredDiagram } from "../../store/store";
-import { closeClaimDiagram } from "../../store/viewActions";
+import { closeClaimTree } from "../../store/viewActions";
 import { ArguableType, type Edge, type Node } from "../../utils/diagram";
 import { FlowNodeType } from "../../utils/node";
 import { FlowNode } from "../Node/FlowNode";
@@ -82,7 +82,7 @@ const DiagramWithoutProvider = ({ diagramId }: DiagramProps) => {
 
   const showCloseButton = diagram.type === "claim";
   const closeButton = (
-    <PositionedCloseButton onClick={() => closeClaimDiagram()} color="primary">
+    <PositionedCloseButton onClick={() => closeClaimTree()} color="primary">
       <Cancel />
     </PositionedCloseButton>
   );
@@ -114,7 +114,7 @@ const DiagramWithoutProvider = ({ diagramId }: DiagramProps) => {
         onEdgesChange={(changes) => onArguableChange(changes, "edge")}
         onNodesChange={(changes) => onArguableChange(changes, "node")}
         nodesDraggable={false}
-        nodesConnectable={diagram.type !== "claim"} // claim diagram is a tree, so cannot connect existing nodes
+        nodesConnectable={diagram.type !== "claim"} // claims are in a tree, so cannot connect existing nodes
         isAnyArguableSelected={isAnyArguableSelected}
       >
         <Background variant={BackgroundVariant.Dots} />

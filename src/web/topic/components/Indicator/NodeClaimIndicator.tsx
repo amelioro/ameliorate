@@ -1,4 +1,4 @@
-import { Node, problemDiagramId } from "../../utils/diagram";
+import { Node, topicDiagramId } from "../../utils/diagram";
 import { ClaimIndicator } from "./ClaimIndicator";
 
 interface Props {
@@ -7,7 +7,7 @@ interface Props {
 
 export const NodeClaimIndicator = ({ node }: Props) => {
   // don't render indicator for claim nodes because child claims are all already shown together in the claim view
-  if (node.data.diagramId !== problemDiagramId) return <></>;
+  if (node.data.diagramId !== topicDiagramId) return <></>;
 
   return <ClaimIndicator arguableId={node.id} arguableType="node" />;
 };

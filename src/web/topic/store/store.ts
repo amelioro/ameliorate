@@ -10,16 +10,16 @@ import {
   buildNode,
   filterHiddenComponents,
   getDiagramTitle,
-  problemDiagramId,
+  topicDiagramId,
 } from "../utils/diagram";
 import { apiSyncer } from "./apiSyncerMiddleware";
 import { migrate } from "./migrate";
-import { getClaimDiagrams, getDiagram, getDiagramOrThrow, getTopicTitle } from "./utils";
+import { getClaimTrees, getDiagram, getDiagramOrThrow, getTopicTitle } from "./utils";
 
 const initialDiagrams: Record<string, Diagram> = {
-  [problemDiagramId]: {
-    id: problemDiagramId,
-    nodes: [buildNode({ id: uuid(), type: "problem", diagramId: problemDiagramId })],
+  [topicDiagramId]: {
+    id: topicDiagramId,
+    nodes: [buildNode({ id: uuid(), type: "problem", diagramId: topicDiagramId })],
     edges: [],
     type: "problem",
   },
@@ -31,7 +31,7 @@ export interface TopicStoreState {
   topic: StoreTopic | null;
   diagrams: Record<string, Diagram>;
   activeTableProblemId: string | null;
-  activeClaimDiagramId: string | null;
+  activeClaimTreeId: string | null;
   showImpliedEdges: boolean;
 }
 
@@ -39,7 +39,7 @@ export const initialState: TopicStoreState = {
   topic: null,
   diagrams: initialDiagrams,
   activeTableProblemId: null,
-  activeClaimDiagramId: null,
+  activeClaimTreeId: null,
   showImpliedEdges: true,
 };
 
@@ -55,7 +55,7 @@ export const useTopicStore = create<TopicStoreState>()(
         devtools(() => initialState),
         {
           name: topicStorePlaygroundName,
-          version: 13,
+          version: 14,
           migrate: migrate,
           skipHydration: true,
         }
@@ -80,7 +80,7 @@ export const useDiagram = (diagramId: string) => {
 export const useFilteredDiagram = (diagramId: string) => {
   return useTopicStore((state) => {
     const diagram = getDiagramOrThrow(state, diagramId);
-    return filterHiddenComponents(diagram, getClaimDiagrams(state), state.showImpliedEdges);
+    return filterHiddenComponents(diagram, getClaimTrees(state), state.showImpliedEdges);
   });
 };
 
@@ -96,10 +96,10 @@ export const useDiagramType = (diagramId: string) => {
   });
 };
 
-// topic view id is the claim or problem diagram id
+// topic view id is the claim tree id or topic diagram id
 export const useTopicViewId = () => {
   return useTopicStore(
-    (state) => state.activeClaimDiagramId ?? state.activeTableProblemId ?? problemDiagramId
+    (state) => state.activeClaimTreeId ?? state.activeTableProblemId ?? topicDiagramId
   );
 };
 
@@ -107,8 +107,8 @@ export const useRootTitle = () => {
   return useTopicStore((state) => getTopicTitle(state));
 };
 
-export const useActiveClaimDiagramId = () => {
-  return useTopicStore((state) => state.activeClaimDiagramId);
+export const useActiveClaimTreeId = () => {
+  return useTopicStore((state) => state.activeClaimTreeId);
 };
 
 export const useActiveTableProblemId = () => {
@@ -117,14 +117,14 @@ export const useActiveTableProblemId = () => {
 
 export const useIsTableActive = () => {
   return useTopicStore(
-    (state) => state.activeClaimDiagramId === null && state.activeTableProblemId !== null
+    (state) => state.activeClaimTreeId === null && state.activeTableProblemId !== null
   );
 };
 
-export const useClaimDiagramsWithExplicitClaims = () => {
+export const useClaimTreesWithExplicitClaims = () => {
   return useTopicStore((state) =>
     Object.entries(state.diagrams)
-      .filter(([id, diagram]) => id !== problemDiagramId && diagram.nodes.length > 1)
+      .filter(([id, diagram]) => id !== topicDiagramId && diagram.nodes.length > 1)
       .map(([id, diagram]) => [id, getDiagramTitle(diagram)] as [string, string])
   );
 };

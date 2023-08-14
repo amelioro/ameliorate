@@ -14,7 +14,7 @@ export const orientations: Record<DiagramType, Orientation> = {
   claim: "RIGHT",
 };
 
-export const problemDiagramId = "root";
+export const topicDiagramId = "root";
 
 export interface Diagram {
   id: string;
@@ -66,7 +66,7 @@ export const buildNode = ({ id, label, score, type, diagramId }: BuildProps): No
 // assumes that we always want to point from child to parent
 export const markerStart = { type: MarkerType.ArrowClosed, width: 30, height: 30 };
 
-// TODO: add pointer to child claim diagram & own diagram
+// TODO: add pointer to child claim tree & own diagram
 // this will reduce a ton of extra calculation & param passing
 export interface Edge {
   id: string;
@@ -158,7 +158,7 @@ export const getDiagramTitle = (diagram: Diagram) => {
  */
 export const filterHiddenComponents = (
   diagram: Diagram,
-  claimDiagrams: Diagram[],
+  claimTrees: Diagram[],
   showImpliedEdges: boolean
 ): Diagram => {
   const shownNodes = diagram.nodes.filter((node) => node.data.showing);
@@ -174,20 +174,20 @@ export const filterHiddenComponents = (
   const shownEdgesAfterImpliedFilter = shownEdges.filter(
     (edge) =>
       showImpliedEdges ||
-      !isEdgeImplied(edge, { ...diagram, nodes: shownNodes, edges: shownEdges }, claimDiagrams)
+      !isEdgeImplied(edge, { ...diagram, nodes: shownNodes, edges: shownEdges }, claimTrees)
   );
 
   return { ...diagram, nodes: shownNodes, edges: shownEdgesAfterImpliedFilter };
 };
 
-export const layoutVisibleComponents = async (diagram: Diagram, claimDiagrams: Diagram[]) => {
+export const layoutVisibleComponents = async (diagram: Diagram, claimTrees: Diagram[]) => {
   // filter
-  const displayDiagram = filterHiddenComponents(diagram, claimDiagrams, true);
+  const displayDiagram = filterHiddenComponents(diagram, claimTrees, true);
 
   // layout only the displayed components
   const { layoutedNodes } = await layout(
     displayDiagram.nodes,
-    displayDiagram.edges.filter((edge) => !isEdgeImplied(edge, displayDiagram, claimDiagrams)), // implied edges shouldn't affect layout
+    displayDiagram.edges.filter((edge) => !isEdgeImplied(edge, displayDiagram, claimTrees)), // implied edges shouldn't affect layout
     orientations[diagram.type]
   );
 

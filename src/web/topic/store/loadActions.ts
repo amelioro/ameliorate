@@ -1,7 +1,7 @@
 import { claimRelationNames } from "../../../common/edge";
 import { errorWithData } from "../../../common/errorHandling";
 import { type TopicData, convertToStoreEdge, convertToStoreNode } from "../utils/apiConversion";
-import { Diagram, layoutVisibleComponents, problemDiagramId } from "../utils/diagram";
+import { Diagram, layoutVisibleComponents, topicDiagramId } from "../utils/diagram";
 import { claimNodeTypes } from "../utils/node";
 import { topicStorePlaygroundName, useTopicStore } from "./store";
 
@@ -10,18 +10,18 @@ export const populateFromApi = async (topicData: TopicData) => {
   // Persisting saved-to-db topics allows us to use upload/download with persist migrations.
   useTopicStore.persist.setOptions({ name: "diagram-storage-saved-to-db" });
 
-  const problemDiagramNodes = topicData.nodes.filter((node) => !claimNodeTypes.includes(node.type));
-  const problemDiagramEdges = topicData.edges.filter(
+  const topicDiagramNodes = topicData.nodes.filter((node) => !claimNodeTypes.includes(node.type));
+  const topicDiagramEdges = topicData.edges.filter(
     (edge) => !claimRelationNames.includes(edge.type)
   );
-  const problemDiagram: Diagram = {
-    id: problemDiagramId,
-    nodes: problemDiagramNodes.map((node) => convertToStoreNode(node, problemDiagramId, topicData)),
-    edges: problemDiagramEdges.map((edge) => convertToStoreEdge(edge, problemDiagramId, topicData)),
+  const topicDiagram: Diagram = {
+    id: topicDiagramId,
+    nodes: topicDiagramNodes.map((node) => convertToStoreNode(node, topicDiagramId, topicData)),
+    edges: topicDiagramEdges.map((edge) => convertToStoreEdge(edge, topicDiagramId, topicData)),
     type: "problem",
   };
 
-  const claimDiagrams: Diagram[] = topicData.nodes
+  const claimTrees: Diagram[] = topicData.nodes
     .filter((node) => node.type === "rootClaim")
     .map((rootClaim) => {
       if (!rootClaim.arguedDiagramPartId)
@@ -43,8 +43,8 @@ export const populateFromApi = async (topicData: TopicData) => {
       };
     });
 
-  const layoutedClaimDiagrams: [string, Diagram][] = await Promise.all(
-    claimDiagrams.map(async (diagram) => [diagram.id, await layoutVisibleComponents(diagram, [])])
+  const layoutedClaimTrees: [string, Diagram][] = await Promise.all(
+    claimTrees.map(async (diagram) => [diagram.id, await layoutVisibleComponents(diagram, [])])
   );
 
   useTopicStore.setState(
@@ -55,11 +55,11 @@ export const populateFromApi = async (topicData: TopicData) => {
         creatorId: topicData.creatorId,
       },
       diagrams: {
-        [problemDiagramId]: await layoutVisibleComponents(problemDiagram, claimDiagrams),
-        ...Object.fromEntries(layoutedClaimDiagrams),
+        [topicDiagramId]: await layoutVisibleComponents(topicDiagram, claimTrees),
+        ...Object.fromEntries(layoutedClaimTrees),
       },
       activeTableProblemId: null,
-      activeClaimDiagramId: null,
+      activeClaimTreeId: null,
     },
     false,
     "populateFromApi"

@@ -12,7 +12,7 @@ import {
   Node as StoreNode,
   buildEdge,
   buildNode,
-  problemDiagramId,
+  topicDiagramId,
 } from "./diagram";
 
 // TODO: passing topicData here is really bad, but userScores will be separated from StoreEdge soon
@@ -48,7 +48,7 @@ export const convertToApiNode = (storeNode: StoreNode, topicId: number): ApiNode
     id: storeNode.id,
     topicId: topicId,
     arguedDiagramPartId:
-      storeNode.data.diagramId !== problemDiagramId ? storeNode.data.diagramId : null,
+      storeNode.data.diagramId !== topicDiagramId ? storeNode.data.diagramId : null,
     type: storeNode.type,
     text: storeNode.data.label,
   };
@@ -59,7 +59,7 @@ export const convertToApiEdge = (storeEdge: StoreEdge, topicId: number): ApiEdge
     id: storeEdge.id,
     topicId: topicId,
     arguedDiagramPartId:
-      storeEdge.data.diagramId !== problemDiagramId ? storeEdge.data.diagramId : null,
+      storeEdge.data.diagramId !== topicDiagramId ? storeEdge.data.diagramId : null,
     type: storeEdge.label,
     sourceId: storeEdge.source,
     targetId: storeEdge.target,

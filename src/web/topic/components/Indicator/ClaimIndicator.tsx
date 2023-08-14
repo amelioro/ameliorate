@@ -3,7 +3,7 @@ import { Article, ArticleOutlined } from "@mui/icons-material";
 import { useSessionUser } from "../../../common/hooks";
 import { useExplicitClaimCount } from "../../store/arguableHooks";
 import { useUserCanEditTopicData } from "../../store/userHooks";
-import { viewOrCreateClaimDiagram } from "../../store/viewActions";
+import { viewOrCreateClaimTree } from "../../store/viewActions";
 import { ArguableType } from "../../utils/diagram";
 import { Indicator } from "./Indicator";
 
@@ -30,7 +30,7 @@ export const ClaimIndicator = ({ arguableId, arguableType }: Props) => {
           ? (event) => {
               // prevent setting the node as selected because we're about to navigate away from this diagram
               event.stopPropagation();
-              viewOrCreateClaimDiagram(arguableId, arguableType);
+              viewOrCreateClaimTree(arguableId, arguableType);
             }
           : undefined
       }

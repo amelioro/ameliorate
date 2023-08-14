@@ -9,7 +9,7 @@ import {
   getDiagram,
   getDiagramOrThrow,
   getDuplicateState,
-  getProblemDiagram,
+  getTopicDiagram,
 } from "./utils";
 
 // score setting is way more work than it needs to be because one score can live in multiple places:
@@ -30,9 +30,9 @@ export const setScore = (arguableId: string, arguableType: ArguableType, score: 
 
   // update parent arguable's score if this is a RootClaim
   if (arguable.type === "rootClaim") {
-    const problemDiagram = getProblemDiagram(state);
+    const topicDiagram = getTopicDiagram(state);
     // assuming we won't support nested root claims, so parent will always be root
-    const parentArguable = getRootArguable(activeDiagram.id, problemDiagram);
+    const parentArguable = getRootArguable(activeDiagram.id, topicDiagram);
     /* eslint-disable functional/immutable-data, no-param-reassign */
     parentArguable.data.score = score;
     /* eslint-enable functional/immutable-data, no-param-reassign */
