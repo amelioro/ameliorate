@@ -1,4 +1,5 @@
 import { MarkerType } from "reactflow";
+import { v4 as uuid } from "uuid";
 
 import { RelationName } from "../../../common/edge";
 import { errorWithData } from "../../../common/errorHandling";
@@ -40,7 +41,7 @@ export interface Node {
 }
 
 interface BuildProps {
-  id: string;
+  id?: string;
   label?: string;
   score?: Score;
   type: FlowNodeType;
@@ -48,7 +49,7 @@ interface BuildProps {
 }
 export const buildNode = ({ id, label, score, type, diagramId }: BuildProps): Node => {
   const node = {
-    id: id,
+    id: id ?? uuid(),
     data: {
       label: label ?? `new node`,
       score: score ?? ("-" as Score),
@@ -82,16 +83,24 @@ export interface Edge {
   type: "ScoreEdge";
 }
 
-export const buildEdge = (
-  newEdgeId: string,
-  sourceNodeId: string,
-  targetNodeId: string,
-  relation: RelationName,
-  diagramId: string,
-  score?: Score
-): Edge => {
+interface BuildEdgeProps {
+  id?: string;
+  sourceNodeId: string;
+  targetNodeId: string;
+  relation: RelationName;
+  score?: Score;
+  diagramId: string;
+}
+export const buildEdge = ({
+  id,
+  sourceNodeId,
+  targetNodeId,
+  relation,
+  score,
+  diagramId,
+}: BuildEdgeProps): Edge => {
   return {
-    id: newEdgeId,
+    id: id ?? uuid(),
     data: {
       score: score ?? ("-" as Score),
       diagramId: diagramId,

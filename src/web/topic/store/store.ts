@@ -1,6 +1,5 @@
 import { type Topic } from "@prisma/client";
 import throttle from "lodash/throttle";
-import { v4 as uuid } from "uuid";
 import { temporal } from "zundo";
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
@@ -19,7 +18,7 @@ import { getClaimTrees, getDiagram, getDiagramOrThrow, getTopicTitle } from "./u
 const initialDiagrams: Record<string, Diagram> = {
   [topicDiagramId]: {
     id: topicDiagramId,
-    nodes: [buildNode({ id: uuid(), type: "problem", diagramId: topicDiagramId })],
+    nodes: [buildNode({ type: "problem", diagramId: topicDiagramId })],
     edges: [],
     type: "problem",
   },

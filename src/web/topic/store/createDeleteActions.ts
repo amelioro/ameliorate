@@ -1,5 +1,3 @@
-import { v4 as uuid } from "uuid";
-
 import { errorWithData } from "../../../common/errorHandling";
 import { emitter } from "../../common/event";
 import {
@@ -25,7 +23,7 @@ import {
 
 const createNode = (state: TopicStoreState, toNodeType: FlowNodeType) => {
   const activeDiagram = getActiveDiagram(state);
-  const newNode = buildNode({ id: uuid(), type: toNodeType, diagramId: activeDiagram.id });
+  const newNode = buildNode({ type: toNodeType, diagramId: activeDiagram.id });
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   activeDiagram.nodes = [
@@ -58,7 +56,12 @@ const connectCriteriaToSolutions = (state: TopicStoreState, newNode: Node, probl
       const sourceNodeId = newNode.type === "criterion" ? newNode.id : edge.target;
       const targetNodeId = newNode.type === "criterion" ? edge.target : newNode.id;
 
-      return buildEdge(uuid(), sourceNodeId, targetNodeId, "embodies", topicDiagramId);
+      return buildEdge({
+        sourceNodeId,
+        targetNodeId,
+        relation: "embodies",
+        diagramId: topicDiagramId,
+      });
     });
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
@@ -148,7 +151,12 @@ const createEdgeAndImpliedEdges = (
   // assumes only one edge can exist between two notes - future may allow multiple edges of different relation type
   if (getConnectingEdge(parent, child, diagram.edges) !== undefined) return diagram.edges;
 
-  const newEdge = buildEdge(uuid(), parent.id, child.id, relation.name, diagram.id);
+  const newEdge = buildEdge({
+    sourceNodeId: parent.id,
+    targetNodeId: child.id,
+    relation: relation.name,
+    diagramId: diagram.id,
+  });
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   diagram.edges = diagram.edges.concat(newEdge);

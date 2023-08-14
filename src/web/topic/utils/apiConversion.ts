@@ -36,7 +36,14 @@ export const convertToStoreEdge = (apiEdge: TopicEdge, diagramId: string, topicD
     .find((score) => score.userId === topicData.creatorId && score.graphPartId === apiEdge.id)
     ?.value.toString() as Score | undefined;
 
-  return buildEdge(apiEdge.id, apiEdge.sourceId, apiEdge.targetId, apiEdge.type, diagramId, score);
+  return buildEdge({
+    id: apiEdge.id,
+    sourceNodeId: apiEdge.sourceId,
+    targetNodeId: apiEdge.targetId,
+    relation: apiEdge.type,
+    score,
+    diagramId,
+  });
 };
 
 export type TopicData = NonNullable<inferRouterOutputs<AppRouter>["topic"]["getData"]>;
