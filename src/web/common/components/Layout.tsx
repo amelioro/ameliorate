@@ -51,8 +51,8 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
           <Box flex="1" display="flex" justifyContent="space-between" alignItems="center">
             <Box display="flex" gap="15px" alignItems="center">
               <NavLink href="/">Ameliorate</NavLink>
-              <NavLink href="/solve">Solve</NavLink>
               {isLoggedIn && <NavLink href={`/${sessionUser.username}`}>My Topics</NavLink>}
+              <NavLink href="/playground">Playground</NavLink>
             </Box>
 
             <Box display="flex" gap="15px" alignItems="center">

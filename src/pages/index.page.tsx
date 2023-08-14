@@ -36,8 +36,8 @@ const Home: NextPage = () => {
         </Typography>
 
         <Box display="flex" margin="0.75rem">
-          <Button variant="contained" LinkComponent={NextLink} href="/solve">
-            Solve
+          <Button variant="contained" LinkComponent={NextLink} href="/playground">
+            Playground
           </Button>
           <Button
             variant="outlined"
