@@ -21,7 +21,7 @@ import { connectNodes } from "../../store/createDeleteActions";
 import { useIsAnyGraphPartSelected } from "../../store/graphPartHooks";
 import { useFilteredDiagram } from "../../store/store";
 import { closeClaimTree } from "../../store/viewActions";
-import { type Edge, GraphPartType, type Node } from "../../utils/diagram";
+import { type Edge, type Node } from "../../utils/diagram";
 import { FlowNodeType } from "../../utils/node";
 import { FlowNode } from "../Node/FlowNode";
 import { ScoreEdge } from "../ScoreEdge/ScoreEdge";
@@ -60,12 +60,12 @@ export interface EdgeProps extends DefaultEdgeProps {
   data?: Edge["data"];
 }
 
-const onGraphPartChange = (changes: (NodeChange | EdgeChange)[], graphPartType: GraphPartType) => {
+const onGraphPartChange = (changes: (NodeChange | EdgeChange)[]) => {
   const selectChanges = changes.filter((change) => change.type === "select") as
     | NodeSelectionChange[]
     | EdgeSelectionChange[];
 
-  if (selectChanges.length > 0) setSelected(selectChanges, graphPartType);
+  if (selectChanges.length > 0) setSelected(selectChanges);
 };
 
 interface DiagramProps {
@@ -111,8 +111,8 @@ const DiagramWithoutProvider = ({ diagramId }: DiagramProps) => {
         fitViewOptions={{ maxZoom: 1 }}
         minZoom={0.25}
         onConnect={({ source, target }) => void connectNodes(source, target)}
-        onEdgesChange={(changes) => onGraphPartChange(changes, "edge")}
-        onNodesChange={(changes) => onGraphPartChange(changes, "node")}
+        onEdgesChange={(changes) => onGraphPartChange(changes)}
+        onNodesChange={(changes) => onGraphPartChange(changes)}
         nodesDraggable={false}
         nodesConnectable={diagram.type !== "claim"} // claims are in a tree, so cannot connect existing nodes
         isAnyGraphPartSelected={isAnyGraphPartSelected}

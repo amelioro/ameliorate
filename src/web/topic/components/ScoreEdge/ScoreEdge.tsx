@@ -75,7 +75,7 @@ export const ScoreEdge = (flowEdge: EdgeProps) => {
         <StyledDiv
           labelX={labelX}
           labelY={labelY}
-          onClick={() => setSelectedGraphPart(edge.id, "edge")}
+          onClick={() => setSelectedGraphPart(edge.id)}
           onContextMenu={(event) => openContextMenu(event, { edge })}
           spotlight={spotlight}
         >

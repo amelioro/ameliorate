@@ -124,12 +124,13 @@ export const findEdge = (edgeId: string, diagram: Diagram) => {
   return edge;
 };
 
-export const findGraphPart = (
-  graphPartId: string,
-  graphPartType: GraphPartType,
-  diagram: Diagram
-) => {
-  return graphPartType === "node" ? findNode(graphPartId, diagram) : findEdge(graphPartId, diagram);
+export const findGraphPart = (graphPartId: string, diagram: Diagram) => {
+  const graphPart = [...diagram.nodes, ...diagram.edges].find(
+    (graphPart) => graphPart.id === graphPartId
+  );
+  if (!graphPart) throw errorWithData("graph part not found", graphPartId, diagram);
+
+  return graphPart;
 };
 
 export const getNodesComposedBy = (node: Node, diagram: Diagram) => {

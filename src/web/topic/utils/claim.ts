@@ -1,17 +1,7 @@
 import lowerCase from "lodash/lowerCase";
 
 import { errorWithData } from "../../../common/errorHandling";
-import { Diagram, Edge, GraphPartType, findGraphPart } from "./diagram";
-
-export const parseClaimTreeId = (diagramId: string) => {
-  return diagramId.split("-") as [GraphPartType, string];
-};
-
-export const getRootGraphPart = (claimTreeId: string, topicDiagram: Diagram) => {
-  const [parentGraphPartType, parentGraphPartId] = parseClaimTreeId(claimTreeId);
-  const graphPart = findGraphPart(parentGraphPartId, parentGraphPartType, topicDiagram);
-  return graphPart;
-};
+import { Diagram, Edge, GraphPartType } from "./diagram";
 
 // this should work for arguables too
 export const hasClaims = (edge: Edge, diagram: Diagram, claimTrees: Diagram[]) => {

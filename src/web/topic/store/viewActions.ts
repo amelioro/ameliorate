@@ -25,7 +25,7 @@ export const viewOrCreateClaimTree = (diagramPartId: string, diagramPartType: Gr
   // create claim tree if it doesn't exist
   if (!getDiagram(state, diagramPartId)) {
     const activeDiagram = getActiveDiagram(state);
-    const diagramPart = findGraphPart(diagramPartId, diagramPartType, activeDiagram);
+    const diagramPart = findGraphPart(diagramPartId, activeDiagram);
     const label = getImplicitLabel(diagramPartId, diagramPartType, activeDiagram);
 
     /* eslint-disable functional/immutable-data, no-param-reassign */

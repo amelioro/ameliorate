@@ -43,7 +43,7 @@ export const EditableNode = ({ node, className = "" }: { node: Node; className?:
     <NodeDiv
       color={color}
       className={className + (node.selected ? " selected" : "")}
-      onClick={() => setSelectedGraphPart(node.id, "node")}
+      onClick={() => setSelectedGraphPart(node.id)}
       onContextMenu={(event) => openContextMenu(event, { node })}
     >
       <YEdgeDiv>

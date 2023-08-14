@@ -1,7 +1,6 @@
 import { type EdgeSelectionChange, type NodeSelectionChange } from "reactflow";
 
 import { errorWithData } from "../../../common/errorHandling";
-import { getRootGraphPart } from "../utils/claim";
 import { GraphPartType, Score, findGraphPart, findNode } from "../utils/diagram";
 import { useTopicStore } from "./store";
 import {
@@ -23,7 +22,7 @@ export const setScore = (graphPartId: string, graphPartType: GraphPartType, scor
 
   // update this node's score
   const activeDiagram = getActiveDiagram(state);
-  const graphPart = findGraphPart(graphPartId, graphPartType, activeDiagram);
+  const graphPart = findGraphPart(graphPartId, activeDiagram);
   /* eslint-disable functional/immutable-data, no-param-reassign */
   graphPart.data.score = score;
   /* eslint-enable functional/immutable-data, no-param-reassign */
@@ -32,7 +31,7 @@ export const setScore = (graphPartId: string, graphPartType: GraphPartType, scor
   if (graphPart.type === "rootClaim") {
     const topicDiagram = getTopicDiagram(state);
     // assuming we won't support nested root claims, so parent will always be root
-    const arguedDiagramPart = getRootGraphPart(activeDiagram.id, topicDiagram);
+    const arguedDiagramPart = findGraphPart(activeDiagram.id, topicDiagram);
     /* eslint-disable functional/immutable-data, no-param-reassign */
     arguedDiagramPart.data.score = score;
     /* eslint-enable functional/immutable-data, no-param-reassign */
@@ -65,16 +64,13 @@ export const setNodeLabel = (nodeId: string, value: string) => {
   useTopicStore.setState(state, false, "setNodeLabel");
 };
 
-export const setSelected = (
-  selectChanges: NodeSelectionChange[] | EdgeSelectionChange[],
-  graphPartType: GraphPartType
-) => {
+export const setSelected = (selectChanges: NodeSelectionChange[] | EdgeSelectionChange[]) => {
   const state = getDuplicateState();
 
   const activeDiagram = getActiveDiagram(state);
 
   selectChanges.forEach((selectChange) => {
-    const graphPart = findGraphPart(selectChange.id, graphPartType, activeDiagram);
+    const graphPart = findGraphPart(selectChange.id, activeDiagram);
 
     /* eslint-disable functional/immutable-data, no-param-reassign */
     graphPart.selected = selectChange.selected;
@@ -84,7 +80,7 @@ export const setSelected = (
   useTopicStore.setState(state, false, "setSelected");
 };
 
-export const setSelectedGraphPart = (graphPartId: string, graphPartType: GraphPartType) => {
+export const setSelectedGraphPart = (graphPartId: string) => {
   const state = getDuplicateState();
 
   const activeDiagram = getActiveDiagram(state);
@@ -94,7 +90,7 @@ export const setSelectedGraphPart = (graphPartId: string, graphPartType: GraphPa
   activeDiagram.edges = activeDiagram.edges.map((edge) => ({ ...edge, selected: false }));
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  const graphPart = findGraphPart(graphPartId, graphPartType, activeDiagram);
+  const graphPart = findGraphPart(graphPartId, activeDiagram);
   /* eslint-disable functional/immutable-data, no-param-reassign */
   graphPart.selected = true;
   /* eslint-enable functional/immutable-data, no-param-reassign */
