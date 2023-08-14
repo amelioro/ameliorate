@@ -11,7 +11,7 @@ import "reactflow/dist/style.css";
  */
 export const zIndex = {
   background: -1,
-  svgWhenAnyArguableSelected: 1,
+  svgWhenAnyGraphPartSelected: 1,
   secondary: 2,
   primary: 3,
 };
@@ -19,11 +19,11 @@ export const zIndex = {
 export type Spotlight = "primary" | "secondary" | "normal" | "background";
 
 interface FlowProps {
-  isAnyArguableSelected: boolean;
+  isAnyGraphPartSelected: boolean;
 }
 
 const flowOptions = {
-  shouldForwardProp: (prop: string) => !["isAnyArguableSelected"].includes(prop),
+  shouldForwardProp: (prop: string) => !["isAnyGraphPartSelected"].includes(prop),
 };
 
 export const StyledReactFlow = styled(ReactFlow, flowOptions)<FlowProps>`
@@ -34,11 +34,11 @@ export const StyledReactFlow = styled(ReactFlow, flowOptions)<FlowProps>`
   // maintain some visual context when overlaying diagrams
   background-color: rgba(255, 255, 255, 0.87);
 
-  ${({ isAnyArguableSelected }) => {
-    if (isAnyArguableSelected) {
+  ${({ isAnyGraphPartSelected }) => {
+    if (isAnyGraphPartSelected) {
       return css`
         & svg.react-flow__edges {
-          z-index: ${zIndex.svgWhenAnyArguableSelected} !important; // z-index on this is set via library's inline style, so need to use !important to override
+          z-index: ${zIndex.svgWhenAnyGraphPartSelected} !important; // z-index on this is set via library's inline style, so need to use !important to override
         }
       `;
     }

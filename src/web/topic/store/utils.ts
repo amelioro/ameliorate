@@ -1,14 +1,14 @@
 import { errorWithData } from "../../../common/errorHandling";
-import { getDiagramTitle, problemDiagramId } from "../utils/diagram";
+import { getDiagramTitle, topicDiagramId } from "../utils/diagram";
 import { TopicStoreState, useTopicStore } from "./store";
 
 export const getTopicTitle = (state: TopicStoreState) => {
-  const rootDiagram = getProblemDiagram(state);
+  const rootDiagram = getTopicDiagram(state);
   return getDiagramTitle(rootDiagram);
 };
 
-export const getProblemDiagram = (state: TopicStoreState) => {
-  return getDiagramOrThrow(state, problemDiagramId);
+export const getTopicDiagram = (state: TopicStoreState) => {
+  return getDiagramOrThrow(state, topicDiagramId);
 };
 
 export const getDiagram = (state: TopicStoreState, diagramId: string) => {
@@ -23,7 +23,7 @@ export const getDiagramOrThrow = (state: TopicStoreState, diagramId: string) => 
 };
 
 export const getActiveDiagram = (state: TopicStoreState) => {
-  const activeDiagramId = state.activeClaimDiagramId ?? problemDiagramId;
+  const activeDiagramId = state.activeClaimTreeId ?? topicDiagramId;
   const activeDiagram = state.diagrams[activeDiagramId];
 
   if (!activeDiagram) throw errorWithData("Active diagram not found in state", state);
@@ -31,7 +31,7 @@ export const getActiveDiagram = (state: TopicStoreState) => {
   return activeDiagram;
 };
 
-export const getClaimDiagrams = (state: TopicStoreState) => {
+export const getClaimTrees = (state: TopicStoreState) => {
   return Object.values(state.diagrams).filter((diagram) => diagram.type === "claim");
 };
 

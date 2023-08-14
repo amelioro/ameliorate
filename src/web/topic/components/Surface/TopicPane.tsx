@@ -13,13 +13,9 @@ import { Collapse, List, ListItem, ListItemIcon, ListItemText } from "@mui/mater
 import { useState } from "react";
 
 import { useNodes } from "../../store/nodeHooks";
-import {
-  useClaimDiagramsWithExplicitClaims,
-  useRootTitle,
-  useTopicViewId,
-} from "../../store/store";
-import { viewClaimDiagram, viewCriteriaTable, viewProblemDiagram } from "../../store/viewActions";
-import { problemDiagramId } from "../../utils/diagram";
+import { useClaimTreesWithExplicitClaims, useRootTitle, useTopicViewId } from "../../store/store";
+import { viewClaimTree, viewCriteriaTable, viewTopicDiagram } from "../../store/viewActions";
+import { topicDiagramId } from "../../utils/diagram";
 import {
   NestedListItemButton,
   PositionedDiv,
@@ -36,8 +32,8 @@ export const TopicPane = () => {
   const topicViewId = useTopicViewId();
 
   const rootTitle = useRootTitle();
-  const claimDiagramIdentifiers = useClaimDiagramsWithExplicitClaims();
-  const problems = useNodes(problemDiagramId, (node) => node.type === "problem");
+  const claimTreeIdentifiers = useClaimTreesWithExplicitClaims();
+  const problems = useNodes(topicDiagramId, (node) => node.type === "problem");
 
   const handleDrawerToggle = () => {
     if (isTopicDrawerOpen) {
@@ -59,8 +55,8 @@ export const TopicPane = () => {
           <List>
             <ListItem key="1" disablePadding>
               <StyledListItemButton
-                selected={topicViewId === problemDiagramId}
-                onClick={() => viewProblemDiagram()}
+                selected={topicViewId === topicDiagramId}
+                onClick={() => viewTopicDiagram()}
               >
                 <ListItemIcon>
                   <AutoStories />
@@ -115,7 +111,7 @@ export const TopicPane = () => {
             </ListItem>
             <Collapse in={isClaimsListOpen} timeout="auto" unmountOnExit>
               <List disablePadding>
-                {claimDiagramIdentifiers.length === 0 && (
+                {claimTreeIdentifiers.length === 0 && (
                   <ListItem key="1" disablePadding>
                     <NestedListItemButton disabled={true}>
                       <ListItemIcon>
@@ -125,11 +121,11 @@ export const TopicPane = () => {
                     </NestedListItemButton>
                   </ListItem>
                 )}
-                {claimDiagramIdentifiers.map(([diagramId, diagramTitle]) => (
+                {claimTreeIdentifiers.map(([diagramId, diagramTitle]) => (
                   <ListItem key={diagramId} disablePadding>
                     <NestedListItemButton
                       selected={topicViewId === diagramId}
-                      onClick={() => viewClaimDiagram(diagramId)}
+                      onClick={() => viewClaimTree(diagramId)}
                     >
                       <ListItemIcon>
                         <Article />

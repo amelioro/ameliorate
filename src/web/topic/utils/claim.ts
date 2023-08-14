@@ -1,52 +1,42 @@
 import lowerCase from "lodash/lowerCase";
 
 import { errorWithData } from "../../../common/errorHandling";
-import { ArguableType, Diagram, Edge, findArguable } from "./diagram";
+import { Diagram, Edge, GraphPartType } from "./diagram";
 
-export const parseClaimDiagramId = (diagramId: string) => {
-  return diagramId.split("-") as [ArguableType, string];
+// this should work for arguables too
+export const hasClaims = (edge: Edge, diagram: Diagram, claimTrees: Diagram[]) => {
+  const claimTree = claimTrees.find((diagram) => diagram.id === edge.id);
+  if (!claimTree) return false;
+
+  return claimTree.nodes.length > 1; // one node will be the implicit claim, don't count that
 };
 
-export const getRootArguable = (claimDiagramId: string, problemDiagram: Diagram) => {
-  const [parentArguableType, parentArguableId] = parseClaimDiagramId(claimDiagramId);
-  const arguable = findArguable(parentArguableId, parentArguableType, problemDiagram);
-  return arguable;
-};
-
-// TODO: this should work for arguables. annoying to do without knowing the arguable type though.
-// this will be much easier after adding the child claim diagram pointer to Arguable
-export const hasClaims = (edge: Edge, diagram: Diagram, claimDiagrams: Diagram[]) => {
-  const claimDiagram = claimDiagrams.find((diagram) => diagram.id === edge.id);
-  if (!claimDiagram) return false;
-
-  return claimDiagram.nodes.length > 1; // one node will be the implicit claim, don't count that
-};
-
-// "parent" meaning the node or edge implies the claim
 export const getImplicitLabel = (
-  parentArguableId: string,
-  parentArguableType: ArguableType,
-  parentArguableDiagram: Diagram
+  diagramPartId: string,
+  diagramPartType: GraphPartType,
+  topicDiagram: Diagram
 ): string => {
-  if (parentArguableType === "node") {
-    const parentNode = parentArguableDiagram.nodes.find((node) => node.id === parentArguableId);
-    if (!parentNode) {
-      throw errorWithData("parent not found", parentArguableId, parentArguableDiagram);
+  if (diagramPartType === "node") {
+    const topicDiagramNode = topicDiagram.nodes.find((node) => node.id === diagramPartId);
+    if (!topicDiagramNode) {
+      throw errorWithData("topic diagram node not found", diagramPartId, topicDiagram);
     }
 
-    return `"${parentNode.data.label}" is important`;
+    return `"${topicDiagramNode.data.label}" is important`;
   } else {
-    const parentEdge = parentArguableDiagram.edges.find((edge) => edge.id === parentArguableId);
-    if (!parentEdge) {
-      throw errorWithData("parent not found", parentArguableId, parentArguableDiagram);
+    const topicDiagramEdge = topicDiagram.edges.find((edge) => edge.id === diagramPartId);
+    if (!topicDiagramEdge) {
+      throw errorWithData("topic diagram edge not found", diagramPartId, topicDiagram);
     }
 
-    const sourceNode = parentArguableDiagram.nodes.find((node) => node.id === parentEdge.source);
-    const targetNode = parentArguableDiagram.nodes.find((node) => node.id === parentEdge.target);
+    const sourceNode = topicDiagram.nodes.find((node) => node.id === topicDiagramEdge.source);
+    const targetNode = topicDiagram.nodes.find((node) => node.id === topicDiagramEdge.target);
     if (!sourceNode || !targetNode) {
-      throw errorWithData("edge nodes not found", parentEdge, parentArguableDiagram);
+      throw errorWithData("edge nodes not found", topicDiagramEdge, topicDiagram);
     }
 
-    return `"${targetNode.data.label}" ${lowerCase(parentEdge.label)} "${sourceNode.data.label}"`;
+    return `"${targetNode.data.label}" ${lowerCase(topicDiagramEdge.label)} "${
+      sourceNode.data.label
+    }"`;
   }
 };

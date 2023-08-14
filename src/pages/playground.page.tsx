@@ -5,9 +5,8 @@ import { useEffect } from "react";
 import { TopicWorkspace } from "../web/topic/components/TopicWorkspace/TopicWorkspace";
 import { populateFromLocalStorage } from "../web/topic/store/loadActions";
 
-// TODO: rename to playground
 // TODO: add save button to playground
-const Solve: NextPage = () => {
+const Playground: NextPage = () => {
   // must hydrate store after page is rendered, otherwise if hydration starts before page finishes
   // rendering, there will be a render mismatch between client and server
   useEffect(() => {
@@ -32,4 +31,4 @@ const Solve: NextPage = () => {
   );
 };
 
-export default Solve;
+export default Playground;

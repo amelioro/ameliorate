@@ -10,7 +10,7 @@ export const NodeIndicatorGroup = ({ node }: { node: Node }) => {
     <Box display="flex" margin="2px">
       <CriteriaTableIndicator nodeId={node.id} diagramId={node.data.diagramId} />
       <NodeClaimIndicator node={node} />
-      <Score arguableId={node.id} arguableType="node" score={node.data.score} />
+      <Score graphPartId={node.id} graphPartType="node" score={node.data.score} />
     </Box>
   );
 };

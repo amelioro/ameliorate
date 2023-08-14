@@ -18,6 +18,7 @@ export const migrate = (persistedState: any, version: number) => {
     migrate_10_to_11,
     migrate_11_to_12,
     migrate_12_to_13,
+    migrate_13_to_14,
   ];
 
   let state = persistedState;
@@ -282,6 +283,16 @@ const migrate_12_to_13 = (state: any) => {
 
   delete state.nextNodeId;
   delete state.nextEdgeId;
+
+  return state;
+};
+
+const migrate_13_to_14 = (state: any) => {
+  Object.values(state.diagrams).forEach((diagram: any) => {
+    // rename activeClaimDiagramId -> activeClaimTreeId
+    state.activeClaimTreeId = state.activeClaimDiagramId;
+    delete state.activeClaimDiagramId;
+  });
 
   return state;
 };

@@ -1,6 +1,6 @@
 import { RelationName } from "../../../common/edge";
 import { hasClaims } from "./claim";
-import { Diagram, Edge, Node, RelationDirection, findNode, problemDiagramId } from "./diagram";
+import { Diagram, Edge, Node, RelationDirection, findNode, topicDiagramId } from "./diagram";
 import { FlowNodeType, children, claimNodeTypes, components, parents } from "./node";
 
 // assumes that we're always pointing from child to parent
@@ -104,7 +104,7 @@ const addableNodesFor: Record<FlowNodeType, AddableNodes> = {
 
   effect: { parent: [], child: ["problem"] },
 
-  // claim diagram is a tree so claim nodes can't add parents
+  // claims are in a tree so claim nodes can't add parents
   rootClaim: { parent: [], child: ["support", "critique"] },
   support: { parent: [], child: ["support", "critique"] },
   critique: { parent: [], child: ["support", "critique"] },
@@ -147,7 +147,7 @@ export const canCreateEdge = (diagram: Diagram, parent: Node, child: Node) => {
   }
 
   if (claimNodeTypes.includes(parent.type)) {
-    console.log("cannot connect nodes: claim diagram is a tree so claim nodes can't add parents");
+    console.log("cannot connect nodes: claims are in a tree so claim nodes can't add parents");
     return false;
   }
 
@@ -242,9 +242,9 @@ export const isEdgeImpliedByComposition = (edge: Edge, diagram: Diagram) => {
   return impliedThroughChildComponent;
 };
 
-export const isEdgeImplied = (edge: Edge, displayDiagram: Diagram, claimDiagrams: Diagram[]) => {
-  if (displayDiagram.id !== problemDiagramId) return false;
-  if (edge.data.score !== "-" || hasClaims(edge, displayDiagram, claimDiagrams)) return false;
+export const isEdgeImplied = (edge: Edge, displayDiagram: Diagram, claimTrees: Diagram[]) => {
+  if (displayDiagram.id !== topicDiagramId) return false;
+  if (edge.data.score !== "-" || hasClaims(edge, displayDiagram, claimTrees)) return false;
 
   return isEdgeAShortcut(edge, displayDiagram) || isEdgeImpliedByComposition(edge, displayDiagram);
 };

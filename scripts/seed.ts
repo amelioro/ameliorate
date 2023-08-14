@@ -97,7 +97,7 @@ const seed = async () => {
       data: {
         id: id,
         topicId: topicCarsGoingTooFast.id,
-        arguedDiagramPartId: source.arguedDiagramPartId, // if the node is in the claim diagram, the edge will be too
+        arguedDiagramPartId: source.arguedDiagramPartId, // if the node is in the claim tree, the edge will be too
         type: type,
         sourceId: source.id,
         targetId: target.id,

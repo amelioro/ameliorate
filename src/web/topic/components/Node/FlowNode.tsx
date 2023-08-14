@@ -1,7 +1,7 @@
 import { Global } from "@emotion/react";
 
 import { useSessionUser } from "../../../common/hooks";
-import { useIsAnyArguableSelected } from "../../store/arguableHooks";
+import { useIsAnyGraphPartSelected } from "../../store/graphPartHooks";
 import { useIsEdgeSelected, useIsNeighborSelected } from "../../store/nodeHooks";
 import { useDiagramType } from "../../store/store";
 import { useUserCanEditTopicData } from "../../store/userHooks";
@@ -34,7 +34,7 @@ export const FlowNode = (flowNode: NodeProps) => {
   const diagramType = useDiagramType(flowNode.data.diagramId);
   const isNeighborSelected = useIsNeighborSelected(flowNode.id, flowNode.data.diagramId);
   const isEdgeSelected = useIsEdgeSelected(flowNode.id, flowNode.data.diagramId);
-  const isAnyArguableSelected = useIsAnyArguableSelected();
+  const isAnyGraphPartSelected = useIsAnyGraphPartSelected();
 
   if (!diagramType) return <></>;
 
@@ -45,7 +45,7 @@ export const FlowNode = (flowNode: NodeProps) => {
     ? "primary"
     : isNeighborSelected || isEdgeSelected
     ? "secondary"
-    : isAnyArguableSelected
+    : isAnyGraphPartSelected
     ? "background"
     : "normal";
 

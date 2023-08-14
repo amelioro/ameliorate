@@ -2,8 +2,8 @@ import { Global } from "@emotion/react";
 import { Box } from "@mui/material";
 
 import { ContextMenu } from "../../../common/components/ContextMenu/ContextMenu";
-import { useActiveClaimDiagramId, useActiveTableProblemId } from "../../store/store";
-import { problemDiagramId } from "../../utils/diagram";
+import { useActiveClaimTreeId, useActiveTableProblemId } from "../../store/store";
+import { topicDiagramId } from "../../utils/diagram";
 import { CriteriaTable } from "../CriteriaTable/CriteriaTable";
 import { Diagram } from "../Diagram/Diagram";
 import { TopicPane } from "../Surface/TopicPane";
@@ -12,7 +12,7 @@ import { WorkspaceBox, workspaceStyles } from "./TopicWorkspace.styles";
 
 export const TopicWorkspace = () => {
   const tableProblemId = useActiveTableProblemId();
-  const claimDiagramId = useActiveClaimDiagramId();
+  const claimTreeId = useActiveClaimTreeId();
 
   return (
     <>
@@ -25,14 +25,14 @@ export const TopicWorkspace = () => {
           {tableProblemId ? (
             <CriteriaTable problemNodeId={tableProblemId} />
           ) : (
-            <Diagram diagramId={problemDiagramId} />
+            <Diagram diagramId={topicDiagramId} />
           )}
         </Box>
 
-        {claimDiagramId && (
+        {claimTreeId && (
           // Criteria Table has header (z-index:2); expectation: overlay the component
           <Box width="100%" height="100%" position="absolute" zIndex="2">
-            <Diagram diagramId={claimDiagramId} />
+            <Diagram diagramId={claimTreeId} />
           </Box>
         )}
 

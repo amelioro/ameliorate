@@ -2,10 +2,10 @@ import { v4 as uuid } from "uuid";
 
 import { getImplicitLabel } from "../utils/claim";
 import {
-  ArguableType,
+  GraphPartType,
   RelationDirection,
   buildNode,
-  findArguable,
+  findGraphPart,
   findNode,
   layoutVisibleComponents,
 } from "../utils/diagram";
@@ -13,32 +13,32 @@ import { FlowNodeType, children, parents } from "../utils/node";
 import { useTopicStore } from "./store";
 import {
   getActiveDiagram,
-  getClaimDiagrams,
+  getClaimTrees,
   getDiagram,
   getDuplicateState,
-  getProblemDiagram,
+  getTopicDiagram,
 } from "./utils";
 
-export const viewOrCreateClaimDiagram = (arguableId: string, arguableType: ArguableType) => {
+export const viewOrCreateClaimTree = (diagramPartId: string, diagramPartType: GraphPartType) => {
   const state = getDuplicateState();
 
-  // create claim diagram if it doesn't exist
-  if (!getDiagram(state, arguableId)) {
+  // create claim tree if it doesn't exist
+  if (!getDiagram(state, diagramPartId)) {
     const activeDiagram = getActiveDiagram(state);
-    const arguable = findArguable(arguableId, arguableType, activeDiagram);
-    const label = getImplicitLabel(arguableId, arguableType, activeDiagram);
+    const diagramPart = findGraphPart(diagramPartId, activeDiagram);
+    const label = getImplicitLabel(diagramPartId, diagramPartType, activeDiagram);
 
     /* eslint-disable functional/immutable-data, no-param-reassign */
     const newNode = buildNode({
       id: uuid(),
       label: label,
-      score: arguable.data.score,
+      score: diagramPart.data.score,
       type: "rootClaim",
-      diagramId: arguableId,
+      diagramId: diagramPartId,
     });
 
-    state.diagrams[arguableId] = {
-      id: arguableId,
+    state.diagrams[diagramPartId] = {
+      id: diagramPartId,
       nodes: [newNode],
       edges: [],
       type: "claim",
@@ -47,18 +47,18 @@ export const viewOrCreateClaimDiagram = (arguableId: string, arguableType: Argua
   }
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
-  state.activeClaimDiagramId = arguableId;
+  state.activeClaimTreeId = diagramPartId;
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  useTopicStore.setState(state, false, "viewOrCreateClaimDiagram");
+  useTopicStore.setState(state, false, "viewOrCreateClaimTree");
 };
 
-export const viewClaimDiagram = (diagramId: string) => {
-  useTopicStore.setState({ activeClaimDiagramId: diagramId }, false, "viewClaimDiagram");
+export const viewClaimTree = (diagramId: string) => {
+  useTopicStore.setState({ activeClaimTreeId: diagramId }, false, "viewClaimTree");
 };
 
-export const closeClaimDiagram = () => {
-  useTopicStore.setState({ activeClaimDiagramId: null }, false, "closeClaimDiagram");
+export const closeClaimTree = () => {
+  useTopicStore.setState({ activeClaimTreeId: null }, false, "closeClaimTree");
 };
 
 export const closeTable = () => {
@@ -74,12 +74,12 @@ export const toggleShowNeighbors = async (
 ) => {
   const state = getDuplicateState();
 
-  const problemDiagram = getProblemDiagram(state); // assuming we're only show/hiding from problem diagram
+  const topicDiagram = getTopicDiagram(state); // assuming we're only show/hiding from topic diagram
 
-  const node = findNode(nodeId, problemDiagram);
+  const node = findNode(nodeId, topicDiagram);
 
   const neighborsInDirection =
-    direction === "parent" ? parents(node, problemDiagram) : children(node, problemDiagram);
+    direction === "parent" ? parents(node, topicDiagram) : children(node, topicDiagram);
 
   const neighborsToToggle = neighborsInDirection.filter(
     (neighbor) => neighbor.type === neighborType
@@ -89,27 +89,27 @@ export const toggleShowNeighbors = async (
   neighborsToToggle.forEach((neighbor) => (neighbor.data.showing = show));
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  const layoutedDiagram = await layoutVisibleComponents(problemDiagram, getClaimDiagrams(state)); // depends on showing having been updated
+  const layoutedDiagram = await layoutVisibleComponents(topicDiagram, getClaimTrees(state)); // depends on showing having been updated
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
-  problemDiagram.nodes = layoutedDiagram.nodes;
-  problemDiagram.edges = layoutedDiagram.edges;
+  topicDiagram.nodes = layoutedDiagram.nodes;
+  topicDiagram.edges = layoutedDiagram.edges;
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   useTopicStore.setState(state, false, "toggleShowNeighbors");
 };
 
-export const viewProblemDiagram = () => {
+export const viewTopicDiagram = () => {
   useTopicStore.setState(
-    { activeTableProblemId: null, activeClaimDiagramId: null },
+    { activeTableProblemId: null, activeClaimTreeId: null },
     false,
-    "viewProblemDiagram"
+    "viewTopicDiagram"
   );
 };
 
 export const viewCriteriaTable = (problemNodeId: string) => {
   useTopicStore.setState(
-    { activeTableProblemId: problemNodeId, activeClaimDiagramId: null },
+    { activeTableProblemId: problemNodeId, activeClaimTreeId: null },
     false,
     "viewCriteriaTable"
   );
@@ -124,7 +124,7 @@ export const relayout = async () => {
 
   const activeDiagram = getActiveDiagram(state);
 
-  const layoutedDiagram = await layoutVisibleComponents(activeDiagram, getClaimDiagrams(state));
+  const layoutedDiagram = await layoutVisibleComponents(activeDiagram, getClaimTrees(state));
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   activeDiagram.nodes = layoutedDiagram.nodes;
