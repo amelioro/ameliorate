@@ -1,11 +1,11 @@
-import { errorWithData } from "../../common/errorHandling";
+import { errorWithData } from "../../../common/errorHandling";
 import { Node, RelationDirection, findNode } from "../utils/diagram";
 import { children, edges, neighbors, parents } from "../utils/node";
-import { useTopicStoreAfterHydration } from "./store";
+import { useTopicStore } from "./store";
 import { getDiagramOrThrow } from "./utils";
 
 export const useNode = (nodeId: string, diagramId: string) => {
-  return useTopicStoreAfterHydration((state) => {
+  return useTopicStore((state) => {
     try {
       const diagram = getDiagramOrThrow(state, diagramId);
       return findNode(nodeId, diagram);
@@ -16,7 +16,7 @@ export const useNode = (nodeId: string, diagramId: string) => {
 };
 
 export const useNodeChildren = (nodeId: string, diagramId: string) => {
-  return useTopicStoreAfterHydration((state) => {
+  return useTopicStore((state) => {
     try {
       const diagram = getDiagramOrThrow(state, diagramId);
       const node = findNode(nodeId, diagram);
@@ -28,7 +28,7 @@ export const useNodeChildren = (nodeId: string, diagramId: string) => {
 };
 
 export const useNodeParents = (nodeId: string, diagramId: string) => {
-  return useTopicStoreAfterHydration((state) => {
+  return useTopicStore((state) => {
     try {
       const diagram = getDiagramOrThrow(state, diagramId);
       const node = findNode(nodeId, diagram);
@@ -40,7 +40,7 @@ export const useNodeParents = (nodeId: string, diagramId: string) => {
 };
 
 export const useNodes = (diagramId: string, predicate: (node: Node) => boolean) => {
-  return useTopicStoreAfterHydration((state) => {
+  return useTopicStore((state) => {
     try {
       const diagram = getDiagramOrThrow(state, diagramId);
       return diagram.nodes.filter(predicate);
@@ -51,7 +51,7 @@ export const useNodes = (diagramId: string, predicate: (node: Node) => boolean) 
 };
 
 export const useCriterionSolutionEdges = (problemNodeId: string, diagramId: string) => {
-  return useTopicStoreAfterHydration((state) => {
+  return useTopicStore((state) => {
     try {
       const diagram = getDiagramOrThrow(state, diagramId);
       const problemNode = findNode(problemNodeId, diagram);
@@ -75,7 +75,7 @@ export const useCriterionSolutionEdges = (problemNodeId: string, diagramId: stri
 };
 
 export const useNeighbors = (nodeId: string, direction: RelationDirection, diagramId: string) => {
-  return useTopicStoreAfterHydration((state) => {
+  return useTopicStore((state) => {
     try {
       const diagram = getDiagramOrThrow(state, diagramId);
       const node = findNode(nodeId, diagram);
@@ -87,7 +87,7 @@ export const useNeighbors = (nodeId: string, direction: RelationDirection, diagr
 };
 
 export const useIsNeighborSelected = (nodeId: string, diagramId: string) => {
-  return useTopicStoreAfterHydration((state) => {
+  return useTopicStore((state) => {
     try {
       const diagram = getDiagramOrThrow(state, diagramId);
       const node = findNode(nodeId, diagram);
@@ -99,7 +99,7 @@ export const useIsNeighborSelected = (nodeId: string, diagramId: string) => {
 };
 
 export const useIsEdgeSelected = (nodeId: string, diagramId: string) => {
-  return useTopicStoreAfterHydration((state) => {
+  return useTopicStore((state) => {
     try {
       const diagram = getDiagramOrThrow(state, diagramId);
       const node = findNode(nodeId, diagram);

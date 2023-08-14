@@ -20,19 +20,105 @@ model User {
   updatedAt DateTime @updatedAt
 
   topics Topic[]
+  scores UserScore[]
 
+  @@index([username])
+  @@index([authId])
   @@map("users")
 }
 
 model Topic {
   id        Int      @id @default(autoincrement())
   title     String   @db.VarChar(100)
-  userId    Int
+  creatorId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user User @relation(fields: [userId], references: [id])
+  creator    User        @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  nodes      Node[]
+  edges      Edge[]
+  userScores UserScore[]
 
-  @@unique([title, userId])
+  @@unique([title, creatorId])
+  @@index([creatorId])
   @@map("topics")
+}
+
+model Node {
+  id                  String   @id @db.Uuid // apparently cuid2 https://github.com/paralleldrive/cuid2 is a newer similar thing but I think it's intentionally slow alg for security reasons, doesn't seem necessary
+  topicId             Int
+  arguedDiagramPartId String?  @db.Uuid // only set if this is a claim node; ideally this would be FK but could point to either Node or Edge
+  type                NodeType
+  text                String   @db.VarChar(200) // arbitrary max, ~50 chars fit on 3 lines of the node's text area
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  topic         Topic  @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  edgesAsSource Edge[] @relation("EdgeSource")
+  edgesAsTarget Edge[] @relation("EdgeTarget")
+
+  @@index([topicId])
+  @@map("nodes")
+}
+
+enum NodeType {
+  problem
+  solution
+  solutionComponent
+  criterion
+  effect
+  rootClaim
+  support
+  critique
+}
+
+model Edge {
+  id                  String   @id @db.Uuid
+  topicId             Int
+  arguedDiagramPartId String?  @db.Uuid // only set if this is a claim node; ideally this would be FK but could point to either Node or Edge
+  type                EdgeType
+  sourceId            String   @db.Uuid
+  targetId            String   @db.Uuid
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  topic  Topic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  source Node  @relation("EdgeSource", fields: [sourceId], references: [id]) // don't cascade because e.g. source node deletion should generally not delete target node
+  target Node  @relation("EdgeTarget", fields: [targetId], references: [id])
+
+  @@index([topicId])
+  @@index([sourceId])
+  @@index([targetId])
+  @@map("edges")
+}
+
+enum EdgeType {
+  causes
+  addresses
+  createdBy
+  has
+  criterionFor
+  creates
+  embodies
+  supports
+  critiques
+}
+
+model UserScore {
+  userId      Int
+  graphPartId String   @db.Uuid
+  topicId     Int // mainly so that we can cascade (since graphPart isn't a FK to cascade from that)
+  value       Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topic Topic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  // when prisma allows weak FKs https://github.com/prisma/prisma/issues/7351, relation to node & to edge could be added here
+
+  @@id([userId, graphPartId])
+  @@index([userId])
+  @@index([graphPartId])
+  @@index([topicId])
+  @@map("userScores")
 }

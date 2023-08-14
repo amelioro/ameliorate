@@ -1,7 +1,7 @@
 import { type EdgeSelectionChange, type NodeSelectionChange } from "reactflow";
 
-import { errorWithData } from "../../common/errorHandling";
-import { getClaimDiagramId, getRootArguable } from "../utils/claim";
+import { errorWithData } from "../../../common/errorHandling";
+import { getRootArguable } from "../utils/claim";
 import { ArguableType, Score, findArguable, findNode } from "../utils/diagram";
 import { useTopicStore } from "./store";
 import {
@@ -39,9 +39,8 @@ export const setScore = (arguableId: string, arguableType: ArguableType, score: 
   }
 
   // update implicit child claim's score if it exists
-  const childDiagramId = getClaimDiagramId(arguableId, arguableType);
-  if (getDiagram(state, childDiagramId)) {
-    const childDiagram = getDiagramOrThrow(state, childDiagramId);
+  if (getDiagram(state, arguableId)) {
+    const childDiagram = getDiagramOrThrow(state, arguableId);
     const childClaim = childDiagram.nodes.find((node) => node.type === "rootClaim");
     if (!childClaim) throw errorWithData("child claim not found", childDiagram);
 

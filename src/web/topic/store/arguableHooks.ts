@@ -1,13 +1,9 @@
-import { getClaimDiagramId } from "../utils/claim";
-import { ArguableType } from "../utils/diagram";
-import { useTopicStoreAfterHydration } from "./store";
+import { useTopicStore } from "./store";
 import { getActiveDiagram } from "./utils";
 
-export const useExplicitClaimCount = (arguableId: string, arguableType: ArguableType) => {
-  const claimDiagramId = getClaimDiagramId(arguableId, arguableType);
-
-  return useTopicStoreAfterHydration((state) => {
-    const claimDiagram = state.diagrams[claimDiagramId];
+export const useExplicitClaimCount = (arguableId: string) => {
+  return useTopicStore((state) => {
+    const claimDiagram = state.diagrams[arguableId];
 
     // consider setting noUncheckedIndexedAccess because this _can_ be undefined
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -19,7 +15,7 @@ export const useExplicitClaimCount = (arguableId: string, arguableType: Arguable
 };
 
 export const useIsAnyArguableSelected = () => {
-  return useTopicStoreAfterHydration((state) => {
+  return useTopicStore((state) => {
     const activeDiagram = getActiveDiagram(state);
     return [...activeDiagram.nodes, ...activeDiagram.edges].some((arguable) => arguable.selected);
   });

@@ -22,12 +22,12 @@ import { connectNodes } from "../../store/createDeleteActions";
 import { useFilteredDiagram } from "../../store/store";
 import { closeClaimDiagram } from "../../store/viewActions";
 import { ArguableType, type Edge, type Node } from "../../utils/diagram";
-import { type NodeType } from "../../utils/node";
+import { FlowNodeType } from "../../utils/node";
 import { FlowNode } from "../Node/FlowNode";
 import { ScoreEdge } from "../ScoreEdge/ScoreEdge";
 import { PositionedCloseButton, StyledReactFlow } from "./Diagram.styles";
 
-const buildNodeComponent = (type: NodeType) => {
+const buildNodeComponent = (type: FlowNodeType) => {
   // eslint-disable-next-line react/display-name -- react flow dynamically creates these components without name anyway
   return (props: NodeProps) => {
     return <FlowNode {...props} type={type} />;
@@ -35,7 +35,7 @@ const buildNodeComponent = (type: NodeType) => {
 };
 
 // this can be generated via `nodeDecorations` but hard to do without the complexity making it hard to follow, so leaving this hardcoded
-const nodeTypes: Record<NodeType, ComponentType<NodeProps>> = {
+const nodeTypes: Record<FlowNodeType, ComponentType<NodeProps>> = {
   problem: buildNodeComponent("problem"),
   solution: buildNodeComponent("solution"),
   solutionComponent: buildNodeComponent("solutionComponent"),

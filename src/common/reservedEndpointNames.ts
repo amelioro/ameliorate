@@ -66,6 +66,7 @@ export const reservedFirstLevelEndpointNames = [
   "organizations",
   "partners",
   "plans",
+  "playground",
   "polls",
   "popular",
   "privacy",

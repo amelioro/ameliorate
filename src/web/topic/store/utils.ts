@@ -1,4 +1,4 @@
-import { errorWithData } from "../../common/errorHandling";
+import { errorWithData } from "../../../common/errorHandling";
 import { getDiagramTitle, problemDiagramId } from "../utils/diagram";
 import { TopicStoreState, useTopicStore } from "./store";
 

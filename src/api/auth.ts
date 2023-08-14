@@ -1,6 +1,6 @@
 import { TRPCError } from "@trpc/server";
 
-import { prisma } from "./prisma";
+import { xprisma } from "../db/extendedPrisma";
 import { middleware } from "./trpc";
 
 // "logged in" implying that the user has a record in our database, as opposed to "authenticated"
@@ -8,7 +8,10 @@ import { middleware } from "./trpc";
 export const isLoggedIn = middleware(async (opts) => {
   const { ctx } = opts;
 
-  const user = await prisma.user.findFirst({ where: { authId: ctx.userAuthId } });
+  if (!ctx.userAuthId) throw new TRPCError({ code: "UNAUTHORIZED" });
+
+  const user = await xprisma.user.findFirst({ where: { authId: ctx.userAuthId } });
+
   if (!user) throw new TRPCError({ code: "UNAUTHORIZED" });
 
   return opts.next({

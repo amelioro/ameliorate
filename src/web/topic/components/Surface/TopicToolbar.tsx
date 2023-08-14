@@ -12,12 +12,14 @@ import { AppBar, Button, Divider, IconButton, MenuItem, Toolbar } from "@mui/mat
 import fileDownload from "js-file-download";
 import { StorageValue } from "zustand/middleware";
 
+import { errorWithData } from "../../../../common/errorHandling";
 import { Menu } from "../../../common/components/Menu/Menu";
-import { errorWithData } from "../../../common/errorHandling";
-import { useMenu } from "../../../common/hooks";
+import { useMenu, useSessionUser } from "../../../common/hooks";
 import { migrate } from "../../store/migrate";
 import { TopicStoreState, useIsTableActive, useShowImpliedEdges } from "../../store/store";
-import { getPersistState, redo, resetState, setState, undo } from "../../store/utilActions";
+import { useUserCanEditTopicData } from "../../store/userHooks";
+import { getPersistState, redo, resetTopicData, setTopicData, undo } from "../../store/utilActions";
+import { useTemporalHooks } from "../../store/utilHooks";
 import { getTopicTitle } from "../../store/utils";
 import { relayout, toggleShowImpliedEdges } from "../../store/viewActions";
 import { StyledToggleButton } from "./TopicToolbar.styles";
@@ -51,10 +53,10 @@ const uploadTopic = (event: React.ChangeEvent<HTMLInputElement>) => {
 
       const migratedState = migrate(persistState.state, persistState.version) as TopicStoreState;
 
-      setState(migratedState);
+      setTopicData(migratedState);
     })
     .catch((error) => {
-      throw errorWithData("Failed to read file", error);
+      throw error;
     });
 };
 
@@ -64,62 +66,85 @@ const loadExample = (exampleFileName: string) => {
     // TODO: validate that file JSON matches interface
     .then((loadedJson) => {
       const persistState = loadedJson as StorageValue<TopicStoreState>;
-      setState(persistState.state);
+      setTopicData(persistState.state);
     })
     .catch((error) => {
-      throw errorWithData("Failed to load example", error);
+      throw error;
     });
 };
 
 export const TopicToolbar = () => {
+  const { sessionUser } = useSessionUser();
+  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.id);
   const [anchorEl, menuIsOpen, openMenu, closeMenu] = useMenu();
   const isTableActive = useIsTableActive();
   const showImpliedEdges = useShowImpliedEdges();
+  const [canUndo, canRedo] = useTemporalHooks();
 
   return (
     <AppBar position="sticky" color="primaryVariantLight">
       <Toolbar variant="dense">
         {/* load actions */}
+        {userCanEditTopicData && (
+          <>
+            <Button color="inherit" onClick={openMenu}>
+              Examples
+              <ExpandMore />
+            </Button>
+            <Menu anchorEl={anchorEl} isOpen={menuIsOpen} closeMenu={closeMenu}>
+              <MenuItem onClick={() => loadExample("cars_going_too_fast_in_neighborhood.json")}>
+                Cars Going Too Fast
+              </MenuItem>
+              <MenuItem onClick={() => loadExample("economic_system.json")}>
+                Economic System
+              </MenuItem>
+              <MenuItem onClick={() => loadExample("living_location.json")}>
+                Living Location
+              </MenuItem>
+              <MenuItem onClick={() => loadExample("unwanted_pregnancy.json")}>
+                Unwanted Pregnancy
+              </MenuItem>
+              <MenuItem onClick={() => loadExample("world_hunger.json")}>World Hunger</MenuItem>
+            </Menu>
+            <IconButton
+              color="inherit"
+              title="Download"
+              aria-label="Download"
+              onClick={downloadTopic}
+            >
+              <Download />
+            </IconButton>
+            <IconButton color="inherit" component="label" title="Upload" aria-label="Upload">
+              <Upload />
+              <input hidden accept=".json" type="file" onChange={uploadTopic} />
+            </IconButton>
 
-        <Button color="inherit" onClick={openMenu}>
-          Examples
-          <ExpandMore />
-        </Button>
-        <Menu anchorEl={anchorEl} isOpen={menuIsOpen} closeMenu={closeMenu}>
-          <MenuItem onClick={() => loadExample("cars_going_too_fast_in_neighborhood.json")}>
-            Cars Going Too Fast
-          </MenuItem>
-          <MenuItem onClick={() => loadExample("economic_system.json")}>Economic System</MenuItem>
-          <MenuItem onClick={() => loadExample("living_location.json")}>Living Location</MenuItem>
-          <MenuItem onClick={() => loadExample("unwanted_pregnancy.json")}>
-            Unwanted Pregnancy
-          </MenuItem>
-          <MenuItem onClick={() => loadExample("world_hunger.json")}>World Hunger</MenuItem>
-        </Menu>
-        <IconButton color="inherit" title="Download" aria-label="Download" onClick={downloadTopic}>
-          <Download />
-        </IconButton>
-        <IconButton color="inherit" component="label" title="Upload" aria-label="Upload">
-          <Upload />
-          <input hidden accept=".json" type="file" onChange={uploadTopic} />
-        </IconButton>
+            <Divider orientation="vertical" />
+            {/* diagram state change actions */}
 
-        <Divider orientation="vertical" />
-        {/* diagram state change actions */}
-
-        {/* TODO: disable undo/redo when there's nothing to undo/redo; right now can't use hooks for temporal state
-        because it doesn't work with persist middleware.
-        once this currently-in-progress PR merges, we should be able to do that easily!
-        https://github.com/charkour/zundo/pull/61 */}
-        <IconButton color="inherit" title="Undo" aria-label="Undo" onClick={undo}>
-          <Undo />
-        </IconButton>
-        <IconButton color="inherit" title="Redo" aria-label="Redo" onClick={redo}>
-          <Redo />
-        </IconButton>
-        <IconButton color="inherit" title="Reset" aria-label="Reset" onClick={resetState}>
-          <AutoStoriesOutlined />
-        </IconButton>
+            <IconButton
+              color="inherit"
+              title="Undo"
+              aria-label="Undo"
+              onClick={undo}
+              disabled={!canUndo}
+            >
+              <Undo />
+            </IconButton>
+            <IconButton
+              color="inherit"
+              title="Redo"
+              aria-label="Redo"
+              onClick={redo}
+              disabled={!canRedo}
+            >
+              <Redo />
+            </IconButton>
+            <IconButton color="inherit" title="Reset" aria-label="Reset" onClick={resetTopicData}>
+              <AutoStoriesOutlined />
+            </IconButton>
+          </>
+        )}
 
         {/* view actions */}
         {!isTableActive && (

@@ -1,17 +1,7 @@
+import { RelationName } from "../../../common/edge";
 import { hasClaims } from "./claim";
 import { Diagram, Edge, Node, RelationDirection, findNode, problemDiagramId } from "./diagram";
-import { NodeType, children, components, parents } from "./node";
-
-export type RelationName =
-  | "causes"
-  | "addresses"
-  | "created by"
-  | "has"
-  | "criterion for"
-  | "creates"
-  | "embodies"
-  | "supports"
-  | "critiques";
+import { FlowNodeType, children, claimNodeTypes, components, parents } from "./node";
 
 // assumes that we're always pointing from child to parent
 export const relations = [
@@ -20,14 +10,14 @@ export const relations = [
   { child: "solutionComponent", name: "addresses", parent: "problem" },
   { child: "effect", name: "addresses", parent: "problem" },
 
-  { child: "problem", name: "created by", parent: "solution" },
-  { child: "problem", name: "created by", parent: "solutionComponent" },
-  { child: "problem", name: "created by", parent: "effect" },
+  { child: "problem", name: "createdBy", parent: "solution" },
+  { child: "problem", name: "createdBy", parent: "solutionComponent" },
+  { child: "problem", name: "createdBy", parent: "effect" },
   { child: "solution", name: "has", parent: "solutionComponent" },
   { child: "solution", name: "creates", parent: "effect" },
   { child: "solutionComponent", name: "creates", parent: "effect" },
 
-  { child: "criterion", name: "criterion for", parent: "problem" },
+  { child: "criterion", name: "criterionFor", parent: "problem" },
   { child: "solution", name: "embodies", parent: "criterion" },
   { child: "solutionComponent", name: "embodies", parent: "criterion" },
   { child: "effect", name: "embodies", parent: "criterion" },
@@ -44,11 +34,9 @@ export const relations = [
 
 export type Relation = typeof relations[number];
 
-export const claimNodeTypes: NodeType[] = ["rootClaim", "support", "critique"];
-
 export const getRelation = (
-  parent: NodeType,
-  child: NodeType,
+  parent: FlowNodeType,
+  child: FlowNodeType,
   relationName?: RelationName
 ): Relation | undefined => {
   if (relationName) {
@@ -68,7 +56,7 @@ export const composedRelations: Relation[] = [
 export const componentTypes = composedRelations.map((relation) => relation.parent);
 
 interface ShortcutRelation {
-  detourNodeType: NodeType;
+  detourNodeType: FlowNodeType;
   relation: Relation;
 }
 
@@ -94,9 +82,9 @@ export const shortcutRelations: ShortcutRelation[] = [
 ];
 
 type AddableNodes = {
-  [key in RelationDirection]: NodeType[];
+  [key in RelationDirection]: FlowNodeType[];
 };
-const addableNodesFor: Record<NodeType, AddableNodes> = {
+const addableNodesFor: Record<FlowNodeType, AddableNodes> = {
   problem: {
     parent: ["problem", "solution"],
     child: ["problem", "solution", "criterion"],
@@ -122,7 +110,7 @@ const addableNodesFor: Record<NodeType, AddableNodes> = {
   critique: { parent: [], child: ["support", "critique"] },
 };
 
-export const addableRelationsFrom = (nodeType: NodeType, addingAs: RelationDirection) => {
+export const addableRelationsFrom = (nodeType: FlowNodeType, addingAs: RelationDirection) => {
   const fromDirection = addingAs === "parent" ? "child" : "parent";
   const addableNodes = addableNodesFor[nodeType][addingAs];
 

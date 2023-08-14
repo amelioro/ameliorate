@@ -170,7 +170,7 @@
           {
             "id": "4",
             "data": { "score": "-", "diagramId": "root", "showing": true },
-            "label": "criterion for",
+            "label": "criterionFor",
             "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
             "source": "0",
             "target": "5",
@@ -215,7 +215,7 @@
           {
             "id": "9",
             "data": { "score": "-", "diagramId": "root", "showing": true },
-            "label": "criterion for",
+            "label": "criterionFor",
             "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
             "source": "0",
             "target": "6",
@@ -260,7 +260,7 @@
           {
             "id": "14",
             "data": { "score": "-", "diagramId": "root", "showing": true },
-            "label": "criterion for",
+            "label": "criterionFor",
             "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
             "source": "0",
             "target": "7",
@@ -305,7 +305,7 @@
           {
             "id": "19",
             "data": { "score": "-", "diagramId": "root", "showing": true },
-            "label": "criterion for",
+            "label": "criterionFor",
             "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
             "source": "0",
             "target": "8",
@@ -350,7 +350,7 @@
           {
             "id": "24",
             "data": { "score": "-", "diagramId": "root", "showing": true },
-            "label": "criterion for",
+            "label": "criterionFor",
             "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
             "source": "0",
             "target": "9",

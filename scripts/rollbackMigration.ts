@@ -1,7 +1,7 @@
 import { $ } from "execa";
 import yargs from "yargs/yargs";
 
-import { prisma } from "../src/api/prisma";
+import { xprisma } from "../src/db/extendedPrisma";
 
 // rollback the last-run migration
 // assumes [migration_dir]/down.sql exists
@@ -12,7 +12,7 @@ const rollbackMigration = async () => {
   }).argv;
 
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- `as` does seem to add correct type, not sure why this is throwing
-  const result = (await prisma.$queryRaw`\
+  const result = (await xprisma.$queryRaw`\
     SELECT migration_name \
       FROM _prisma_migrations \
       WHERE rolled_back_at IS NULL \
@@ -40,7 +40,7 @@ const rollbackMigration = async () => {
   // Not using `prisma migrate resolve` because that requires the migration to have failed.
   // Setting `rolled_back_at` might have benefits because it maintains the started_at, checksum, etc, (https://github.com/prisma/prisma-engines/blob/bb8e7aae27ce478f586df41260253876ccb5b390/schema-engine/ARCHITECTURE.md#the-_prisma_migrations-table)
   // but that doesn't seem necessary.
-  await prisma.$executeRaw`\
+  await xprisma.$executeRaw`\
     DELETE FROM _prisma_migrations \
       WHERE migration_name = ${migrationToRollback};`;
 };
@@ -48,4 +48,4 @@ const rollbackMigration = async () => {
 // not sure how to use top-level await without messing with project config
 rollbackMigration()
   .then(() => console.log("done running rollback script"))
-  .catch(() => "issues running rollback script");
+  .catch((error) => console.log("issues running rollback script, error: \n", error));

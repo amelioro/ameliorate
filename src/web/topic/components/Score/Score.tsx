@@ -2,7 +2,9 @@ import { type ButtonProps, type Palette } from "@mui/material";
 import { useRef, useState } from "react";
 
 import { htmlDefaultFontSize } from "../../../../pages/_document.page";
+import { useSessionUser } from "../../../common/hooks";
 import { useTopicZoom } from "../../hooks/topicHooks";
+import { useUserCanEditTopicData } from "../../store/userHooks";
 import { type ArguableType, type Score as ScoreData } from "../../utils/diagram";
 import { indicatorLengthRem } from "../../utils/node";
 import { BackdropPopper, ScorePopper, StyledButton } from "./Score.styles";
@@ -32,6 +34,8 @@ interface ScoreProps {
 // * allow actions to be positioned around the dial for even closer navigability to each one
 // TODO: should not re-render on every viewport change, only when zoom changes
 export const Score = ({ arguableId, arguableType, score }: ScoreProps) => {
+  const { sessionUser } = useSessionUser();
+  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.id);
   const zoomRatio = useTopicZoom();
   const [selected, setSelected] = useState(false);
   const [hovering, setHovering] = useState(false);
@@ -45,6 +49,20 @@ export const Score = ({ arguableId, arguableType, score }: ScoreProps) => {
     mainButtonRef.current?.clientHeight ?? buttonLengthRem * htmlDefaultFontSize;
 
   const scoreColor = scoreColors[score] as ButtonProps["color"]; // not sure how to type this without type assertion, while still being able to access palette with it
+
+  if (!userCanEditTopicData) {
+    return (
+      <StyledButton
+        buttonLength={buttonLengthRem}
+        variant="contained"
+        color={scoreColor}
+        sx={{ pointerEvents: "none" }}
+      >
+        {/* i bet material icons would look way nicer than this text... but material only has number icons 1-6 :( */}
+        {score}
+      </StyledButton>
+    );
+  }
 
   return (
     <>

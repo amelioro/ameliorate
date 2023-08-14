@@ -1,5 +1,7 @@
-/* eslint-disable -- don't really care to make this file meet eslint standards */
+/* eslint-disable -- don't really care to make this file meet eslint standards, since store type is changing between each migration */
+
 import camelCase from "lodash/camelCase";
+import { v4 as uuid } from "uuid";
 
 export const migrate = (persistedState: any, version: number) => {
   const migrations = [
@@ -14,6 +16,8 @@ export const migrate = (persistedState: any, version: number) => {
     migrate_8_to_9,
     migrate_9_to_10,
     migrate_10_to_11,
+    migrate_11_to_12,
+    migrate_12_to_13,
   ];
 
   let state = persistedState;
@@ -195,6 +199,89 @@ const migrate_10_to_11 = (state: any) => {
       }
     });
   });
+
+  return state;
+};
+
+const migrate_11_to_12 = (state: any) => {
+  Object.values(state.diagrams).forEach((diagram: any) => {
+    diagram.edges.forEach((edge: any) => {
+      // rename edge labels to use camelCase instead of space case
+      if (edge.label === "created by") {
+        edge.label = "createdBy";
+      } else if (edge.label === "criterion for") {
+        edge.label = "criterionFor";
+      }
+    });
+  });
+
+  return state;
+};
+
+// use uuids for node & edge ids instead of incrementing numbers
+const migrate_12_to_13 = (state: any) => {
+  const diagramIdChanges: any[][] = [];
+
+  // why does migration of 1k nodes & edges take several seconds?
+  Object.values(state.diagrams).forEach((diagram: any) => {
+    diagram.nodes.forEach((nodeWithChangingId: any) => {
+      const oldId = nodeWithChangingId.id;
+      const oldDiagramId = `node-${oldId}`;
+      const newId = uuid();
+      nodeWithChangingId.id = newId;
+
+      diagram.edges.forEach((edge: any) => {
+        if (edge.source === oldId) edge.source = newId;
+        if (edge.target === oldId) edge.target = newId;
+      });
+
+      diagramIdChanges.push([oldId, oldDiagramId, newId]);
+    });
+
+    diagram.edges.forEach((edgeWithChangingId: any) => {
+      const oldId = edgeWithChangingId.id;
+      const oldDiagramId = `edge-${oldId}`;
+      const newId = uuid();
+      edgeWithChangingId.id = newId;
+
+      diagramIdChanges.push([oldId, oldDiagramId, newId]);
+    });
+  });
+
+  diagramIdChanges.forEach(([oldId, oldDiagramId, newId]) => {
+    if (Object.keys(state.diagrams).includes(oldDiagramId)) {
+      const diagram = state.diagrams[oldDiagramId];
+
+      diagram.nodes.forEach((node: any) => {
+        node.data.diagramId = newId;
+      });
+
+      diagram.edges.forEach((edge: any) => {
+        edge.data.diagramId = newId;
+      });
+
+      state.diagrams[newId] = state.diagrams[oldDiagramId];
+      state.diagrams[newId].id = newId;
+      delete state.diagrams[oldDiagramId];
+    }
+
+    if (oldId === state.activeTableProblemId) state.activeTableProblemId = newId;
+    if (oldId === state.activeClaimDiagramId) state.activeClaimDiagramId = newId;
+  });
+
+  // clean up claim trees for edges that were deleted - there was a bug (now fixed) where deleting a diagram edge would not delete these
+  Object.keys(state.diagrams).forEach((diagramId) => {
+    if (
+      diagramId !== "root" &&
+      !diagramIdChanges.map(([_, __, newId]) => newId).includes(diagramId)
+    ) {
+      if (!diagramId.startsWith("edge-")) throw new Error("orphaned claim tree for node?");
+      delete state.diagrams[diagramId];
+    }
+  });
+
+  delete state.nextNodeId;
+  delete state.nextEdgeId;
 
   return state;
 };

@@ -190,7 +190,7 @@
           {
             "id": "30",
             "data": { "score": "-", "diagramId": "root", "showing": true },
-            "label": "criterion for",
+            "label": "criterionFor",
             "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
             "source": "0",
             "target": "35",
@@ -217,7 +217,7 @@
           {
             "id": "33",
             "data": { "score": "-", "diagramId": "root", "showing": true },
-            "label": "criterion for",
+            "label": "criterionFor",
             "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
             "source": "0",
             "target": "36",
@@ -244,7 +244,7 @@
           {
             "id": "37",
             "data": { "score": "-", "diagramId": "root", "showing": true },
-            "label": "criterion for",
+            "label": "criterionFor",
             "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
             "source": "0",
             "target": "38",
@@ -271,7 +271,7 @@
           {
             "id": "40",
             "data": { "score": "-", "diagramId": "root", "showing": true },
-            "label": "criterion for",
+            "label": "criterionFor",
             "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
             "source": "0",
             "target": "39",
@@ -298,7 +298,7 @@
           {
             "id": "43",
             "data": { "score": "-", "diagramId": "root", "showing": true },
-            "label": "criterion for",
+            "label": "criterionFor",
             "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
             "source": "0",
             "target": "40",
@@ -325,7 +325,7 @@
           {
             "id": "46",
             "data": { "score": "-", "diagramId": "root", "showing": true },
-            "label": "criterion for",
+            "label": "criterionFor",
             "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
             "source": "0",
             "target": "41",
@@ -352,7 +352,7 @@
           {
             "id": "49",
             "data": { "score": "-", "diagramId": "root", "showing": true },
-            "label": "criterion for",
+            "label": "criterionFor",
             "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
             "source": "0",
             "target": "42",
@@ -379,7 +379,7 @@
           {
             "id": "52",
             "data": { "score": "-", "diagramId": "root", "showing": true },
-            "label": "criterion for",
+            "label": "criterionFor",
             "markerStart": { "type": "arrowclosed", "width": 30, "height": 30 },
             "source": "0",
             "target": "43",

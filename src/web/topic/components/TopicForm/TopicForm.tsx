@@ -24,7 +24,7 @@ export const CreateTopicForm = ({ user }: { user: User }) => {
   const utils = trpc.useContext();
 
   const createTopic = trpc.topic.create.useMutation({
-    onSuccess: (newTopic, variables) => {
+    onSuccess: async (newTopic, variables) => {
       utils.topic.findByUsernameAndTitle.setData(
         { username: user.username, title: variables.title },
         newTopic
@@ -35,9 +35,7 @@ export const CreateTopicForm = ({ user }: { user: User }) => {
         return oldUser;
       });
 
-      // TODO: route to newly-created topic's page
-      // void Router.push(`/${user.username}/${variables.title}`);
-      void Router.push("/solve");
+      await Router.push(`/${user.username}/${variables.title}`);
     },
   });
 

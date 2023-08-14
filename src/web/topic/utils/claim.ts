@@ -1,12 +1,10 @@
-import { errorWithData } from "../../common/errorHandling";
+import lowerCase from "lodash/lowerCase";
+
+import { errorWithData } from "../../../common/errorHandling";
 import { ArguableType, Diagram, Edge, findArguable } from "./diagram";
 
 export const parseClaimDiagramId = (diagramId: string) => {
   return diagramId.split("-") as [ArguableType, string];
-};
-
-export const getClaimDiagramId = (parentArguableId: string, parentArguableType: ArguableType) => {
-  return `${parentArguableType}-${parentArguableId}`;
 };
 
 export const getRootArguable = (claimDiagramId: string, problemDiagram: Diagram) => {
@@ -18,8 +16,7 @@ export const getRootArguable = (claimDiagramId: string, problemDiagram: Diagram)
 // TODO: this should work for arguables. annoying to do without knowing the arguable type though.
 // this will be much easier after adding the child claim diagram pointer to Arguable
 export const hasClaims = (edge: Edge, diagram: Diagram, claimDiagrams: Diagram[]) => {
-  const claimDiagramId = getClaimDiagramId(edge.id, "edge");
-  const claimDiagram = claimDiagrams.find((diagram) => diagram.id === claimDiagramId);
+  const claimDiagram = claimDiagrams.find((diagram) => diagram.id === edge.id);
   if (!claimDiagram) return false;
 
   return claimDiagram.nodes.length > 1; // one node will be the implicit claim, don't count that
@@ -50,6 +47,6 @@ export const getImplicitLabel = (
       throw errorWithData("edge nodes not found", parentEdge, parentArguableDiagram);
     }
 
-    return `"${targetNode.data.label}" ${parentEdge.label} "${sourceNode.data.label}"`;
+    return `"${targetNode.data.label}" ${lowerCase(parentEdge.label)} "${sourceNode.data.label}"`;
   }
 };

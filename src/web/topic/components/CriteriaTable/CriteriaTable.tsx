@@ -12,8 +12,11 @@ import {
 } from "material-react-table";
 import React, { useState } from "react";
 
-import { errorWithData } from "../../../common/errorHandling";
+import { errorWithData } from "../../../../common/errorHandling";
+import { Loading } from "../../../common/components/Loading/Loading";
+import { useSessionUser } from "../../../common/hooks";
 import { useCriterionSolutionEdges, useNode, useNodeChildren } from "../../store/nodeHooks";
+import { useUserCanEditTopicData } from "../../store/userHooks";
 import { closeTable } from "../../store/viewActions";
 import { Edge, Node, problemDiagramId } from "../../utils/diagram";
 import { getConnectingEdge } from "../../utils/edge";
@@ -88,12 +91,14 @@ interface Props {
 }
 
 export const CriteriaTable = ({ problemNodeId }: Props) => {
+  const { sessionUser } = useSessionUser();
+  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.id);
   const [useSolutionsForColumns, setUseSolutionsForColumns] = useState<boolean>(true);
   const problemNode = useNode(problemNodeId, problemDiagramId);
   const nodeChildren = useNodeChildren(problemNodeId, problemDiagramId);
   const criterionSolutionEdges = useCriterionSolutionEdges(problemNodeId, problemDiagramId);
 
-  if (!problemNode) return <p>loading...</p>;
+  if (!problemNode) return <Loading />;
 
   const criteria = nodeChildren.filter((node) => node.type === "criterion");
   const solutions = nodeChildren.filter((node) => node.type === "solution");
@@ -117,19 +122,23 @@ export const CriteriaTable = ({ problemNodeId }: Props) => {
         <MRT_ToggleFiltersButton table={table} />
         <MRT_ShowHideColumnsButton table={table} />
 
-        <AddNodeButton
-          fromNodeId={problemNodeId}
-          as="child"
-          toNodeType="solution"
-          relation={{ child: "solution", name: "addresses", parent: "problem" }}
-        />
+        {userCanEditTopicData && (
+          <>
+            <AddNodeButton
+              fromNodeId={problemNodeId}
+              as="child"
+              toNodeType="solution"
+              relation={{ child: "solution", name: "addresses", parent: "problem" }}
+            />
 
-        <AddNodeButton
-          fromNodeId={problemNodeId}
-          as="child"
-          toNodeType="criterion"
-          relation={{ child: "criterion", name: "criterion for", parent: "problem" }}
-        />
+            <AddNodeButton
+              fromNodeId={problemNodeId}
+              as="child"
+              toNodeType="criterion"
+              relation={{ child: "criterion", name: "criterionFor", parent: "problem" }}
+            />
+          </>
+        )}
 
         <Tooltip title="Transpose Table">
           <Button

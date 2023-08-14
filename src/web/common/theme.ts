@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { yellow } from "@mui/material/colors";
 
-import { NodeType } from "../topic/utils/node";
+import { FlowNodeType } from "../topic/utils/node";
 
 // adding colors to theme documented at https://mui.com/material-ui/customization/palette/#adding-new-colors
 
@@ -19,8 +19,8 @@ import { NodeType } from "../topic/utils/node";
 declare module "@mui/material/styles" {
   // bit awkward but don't think it's possible to create keys for each NodeType in an interface without creating this intermediate type
   // thanks https://stackoverflow.com/a/60378992
-  type NodeTypePalettes = { [key in NodeType]: Palette["primary"] };
-  type NodeTypePaletteOptions = { [key in NodeType]: PaletteOptions["primary"] };
+  type NodeTypePalettes = { [key in FlowNodeType]: Palette["primary"] };
+  type NodeTypePaletteOptions = { [key in FlowNodeType]: PaletteOptions["primary"] };
 
   interface Palette extends NodeTypePalettes {
     primaryVariantDark: Palette["primary"];
@@ -56,7 +56,7 @@ declare module "@mui/material/styles" {
 }
 
 declare module "@mui/material" {
-  type NodeTypeColors = { [key in NodeType]: true };
+  type NodeTypeColors = { [key in FlowNodeType]: true };
 
   interface ButtonPropsColorOverrides extends NodeTypeColors {
     primaryVariantDark: true;

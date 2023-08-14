@@ -20,7 +20,7 @@ export const Indicator = ({ Icon, title, onClick }: IndicatorProps) => {
         variant="contained"
         color="neutralContrast"
         onClick={onClick}
-        disabled={!onClick}
+        sx={!onClick ? { pointerEvents: "none" } : {}}
       >
         <Icon color="neutral" />
       </StyledButton>
