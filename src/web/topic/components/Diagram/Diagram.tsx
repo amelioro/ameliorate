@@ -17,11 +17,11 @@ import {
 import { emitter } from "../../../common/event";
 import { useViewportUpdater } from "../../hooks/flowHooks";
 import { setSelected } from "../../store/actions";
-import { useIsAnyArguableSelected } from "../../store/arguableHooks";
 import { connectNodes } from "../../store/createDeleteActions";
+import { useIsAnyGraphPartSelected } from "../../store/graphPartHooks";
 import { useFilteredDiagram } from "../../store/store";
 import { closeClaimTree } from "../../store/viewActions";
-import { ArguableType, type Edge, type Node } from "../../utils/diagram";
+import { type Edge, GraphPartType, type Node } from "../../utils/diagram";
 import { FlowNodeType } from "../../utils/node";
 import { FlowNode } from "../Node/FlowNode";
 import { ScoreEdge } from "../ScoreEdge/ScoreEdge";
@@ -60,12 +60,12 @@ export interface EdgeProps extends DefaultEdgeProps {
   data?: Edge["data"];
 }
 
-const onArguableChange = (changes: (NodeChange | EdgeChange)[], arguableType: ArguableType) => {
+const onGraphPartChange = (changes: (NodeChange | EdgeChange)[], graphPartType: GraphPartType) => {
   const selectChanges = changes.filter((change) => change.type === "select") as
     | NodeSelectionChange[]
     | EdgeSelectionChange[];
 
-  if (selectChanges.length > 0) setSelected(selectChanges, arguableType);
+  if (selectChanges.length > 0) setSelected(selectChanges, graphPartType);
 };
 
 interface DiagramProps {
@@ -75,7 +75,7 @@ interface DiagramProps {
 const DiagramWithoutProvider = ({ diagramId }: DiagramProps) => {
   const diagram = useFilteredDiagram(diagramId);
   const { moveViewportToIncludeNode } = useViewportUpdater();
-  const isAnyArguableSelected = useIsAnyArguableSelected();
+  const isAnyGraphPartSelected = useIsAnyGraphPartSelected();
 
   const nodes = diagram.nodes;
   const edges = diagram.edges;
@@ -111,11 +111,11 @@ const DiagramWithoutProvider = ({ diagramId }: DiagramProps) => {
         fitViewOptions={{ maxZoom: 1 }}
         minZoom={0.25}
         onConnect={({ source, target }) => void connectNodes(source, target)}
-        onEdgesChange={(changes) => onArguableChange(changes, "edge")}
-        onNodesChange={(changes) => onArguableChange(changes, "node")}
+        onEdgesChange={(changes) => onGraphPartChange(changes, "edge")}
+        onNodesChange={(changes) => onGraphPartChange(changes, "node")}
         nodesDraggable={false}
         nodesConnectable={diagram.type !== "claim"} // claims are in a tree, so cannot connect existing nodes
-        isAnyArguableSelected={isAnyArguableSelected}
+        isAnyGraphPartSelected={isAnyGraphPartSelected}
       >
         <Background variant={BackgroundVariant.Dots} />
         {isEmpty(nodes) && emptyText}

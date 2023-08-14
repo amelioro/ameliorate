@@ -105,7 +105,7 @@ export const buildEdge = (
   };
 };
 
-export type ArguableType = "node" | "edge";
+export type GraphPartType = "node" | "edge";
 
 export const possibleScores = ["-", "1", "2", "3", "4", "5", "6", "7", "8", "9"] as const;
 export type Score = typeof possibleScores[number];
@@ -124,8 +124,12 @@ export const findEdge = (edgeId: string, diagram: Diagram) => {
   return edge;
 };
 
-export const findArguable = (arguableId: string, arguableType: ArguableType, diagram: Diagram) => {
-  return arguableType === "node" ? findNode(arguableId, diagram) : findEdge(arguableId, diagram);
+export const findGraphPart = (
+  graphPartId: string,
+  graphPartType: GraphPartType,
+  diagram: Diagram
+) => {
+  return graphPartType === "node" ? findNode(graphPartId, diagram) : findEdge(graphPartId, diagram);
 };
 
 export const getNodesComposedBy = (node: Node, diagram: Diagram) => {

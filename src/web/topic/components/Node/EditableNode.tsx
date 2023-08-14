@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 
 import { useSessionUser } from "../../../common/hooks";
 import { openContextMenu } from "../../../common/store/contextMenuActions";
-import { setNodeLabel, setSelectedArguable } from "../../store/actions";
+import { setNodeLabel, setSelectedGraphPart } from "../../store/actions";
 import { useUserCanEditTopicData } from "../../store/userHooks";
 import { Node } from "../../utils/diagram";
 import { nodeDecorations } from "../../utils/node";
@@ -43,7 +43,7 @@ export const EditableNode = ({ node, className = "" }: { node: Node; className?:
     <NodeDiv
       color={color}
       className={className + (node.selected ? " selected" : "")}
-      onClick={() => setSelectedArguable(node.id, "node")}
+      onClick={() => setSelectedGraphPart(node.id, "node")}
       onContextMenu={(event) => openContextMenu(event, { node })}
     >
       <YEdgeDiv>

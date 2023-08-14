@@ -1,21 +1,21 @@
 import { Article, ArticleOutlined } from "@mui/icons-material";
 
 import { useSessionUser } from "../../../common/hooks";
-import { useExplicitClaimCount } from "../../store/arguableHooks";
+import { useExplicitClaimCount } from "../../store/graphPartHooks";
 import { useUserCanEditTopicData } from "../../store/userHooks";
 import { viewOrCreateClaimTree } from "../../store/viewActions";
-import { ArguableType } from "../../utils/diagram";
+import { GraphPartType } from "../../utils/diagram";
 import { Indicator } from "./Indicator";
 
 interface Props {
-  arguableId: string;
-  arguableType: ArguableType; // rename to ArguableType
+  graphPartId: string;
+  graphPartType: GraphPartType;
 }
 
-export const ClaimIndicator = ({ arguableId, arguableType }: Props) => {
+export const ClaimIndicator = ({ graphPartId, graphPartType }: Props) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.id);
-  const explicitClaimCount = useExplicitClaimCount(arguableId);
+  const explicitClaimCount = useExplicitClaimCount(graphPartId);
 
   const Icon = explicitClaimCount > 0 ? Article : ArticleOutlined;
 
@@ -30,7 +30,7 @@ export const ClaimIndicator = ({ arguableId, arguableType }: Props) => {
           ? (event) => {
               // prevent setting the node as selected because we're about to navigate away from this diagram
               event.stopPropagation();
-              viewOrCreateClaimTree(arguableId, arguableType);
+              viewOrCreateClaimTree(graphPartId, graphPartType);
             }
           : undefined
       }

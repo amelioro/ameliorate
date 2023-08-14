@@ -5,9 +5,9 @@ import { EdgeLabelRenderer, getBezierPath } from "reactflow";
 
 import { RelationName } from "../../../../common/edge";
 import { openContextMenu } from "../../../common/store/contextMenuActions";
-import { setSelectedArguable } from "../../store/actions";
-import { useIsAnyArguableSelected } from "../../store/arguableHooks";
+import { setSelectedGraphPart } from "../../store/actions";
 import { useIsImplied, useIsNodeSelected } from "../../store/edgeHooks";
+import { useIsAnyGraphPartSelected } from "../../store/graphPartHooks";
 import { Edge, markerStart } from "../../utils/diagram";
 import { EdgeProps } from "../Diagram/Diagram";
 import { Spotlight } from "../Diagram/Diagram.styles";
@@ -40,13 +40,13 @@ export const ScoreEdge = (flowEdge: EdgeProps) => {
 
   const isImplied = useIsImplied(edge.id, edge.data.diagramId);
   const isNodeSelected = useIsNodeSelected(edge.id, edge.data.diagramId);
-  const isAnyArguableSelected = useIsAnyArguableSelected();
+  const isAnyGraphPartSelected = useIsAnyGraphPartSelected();
 
   const spotlight: Spotlight = edge.selected
     ? "primary"
     : isNodeSelected
     ? "secondary"
-    : isAnyArguableSelected || isImplied
+    : isAnyGraphPartSelected || isImplied
     ? "background"
     : "normal";
 
@@ -75,7 +75,7 @@ export const ScoreEdge = (flowEdge: EdgeProps) => {
         <StyledDiv
           labelX={labelX}
           labelY={labelY}
-          onClick={() => setSelectedArguable(edge.id, "edge")}
+          onClick={() => setSelectedGraphPart(edge.id, "edge")}
           onContextMenu={(event) => openContextMenu(event, { edge })}
           spotlight={spotlight}
         >

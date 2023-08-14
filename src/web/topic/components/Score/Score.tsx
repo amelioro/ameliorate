@@ -5,7 +5,7 @@ import { htmlDefaultFontSize } from "../../../../pages/_document.page";
 import { useSessionUser } from "../../../common/hooks";
 import { useTopicZoom } from "../../hooks/topicHooks";
 import { useUserCanEditTopicData } from "../../store/userHooks";
-import { type ArguableType, type Score as ScoreData } from "../../utils/diagram";
+import { type GraphPartType, type Score as ScoreData } from "../../utils/diagram";
 import { indicatorLengthRem } from "../../utils/node";
 import { BackdropPopper, ScorePopper, StyledButton } from "./Score.styles";
 import { ScorePie } from "./ScorePie";
@@ -24,15 +24,15 @@ export const scoreColors: Record<ScoreData, keyof Palette> = {
 };
 
 interface ScoreProps {
-  arguableId: string;
-  arguableType: ArguableType;
+  graphPartId: string;
+  graphPartType: GraphPartType;
   score: ScoreData;
 }
 
 // similar to MUI speed dial (https://mui.com/material-ui/react-speed-dial/),
 // but the main reason for creating a custom component are:
 // * allow actions to be positioned around the dial for even closer navigability to each one
-export const Score = ({ arguableId, arguableType, score }: ScoreProps) => {
+export const Score = ({ graphPartId, graphPartType, score }: ScoreProps) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.id);
   const [selected, setSelected] = useState(false);
@@ -117,8 +117,8 @@ export const Score = ({ arguableId, arguableType, score }: ScoreProps) => {
       >
         <ScorePie
           circleDiameter={circleDiameter}
-          arguableId={arguableId}
-          arguableType={arguableType}
+          graphPartId={graphPartId}
+          graphPartType={graphPartType}
         />
 
         {/* second button here because we want Pie to display in front of everything except the button... user isn't supposed to know there's two */}

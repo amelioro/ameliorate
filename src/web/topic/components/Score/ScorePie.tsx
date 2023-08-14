@@ -6,17 +6,17 @@ import { Data } from "react-minimal-pie-chart/types/commonTypes";
 
 import { errorWithData } from "../../../../common/errorHandling";
 import { setScore } from "../../store/actions";
-import { ArguableType, Score, possibleScores } from "../../utils/diagram";
+import { GraphPartType, Score, possibleScores } from "../../utils/diagram";
 import { scoreColors } from "./Score";
 import { CircleDiv } from "./Score.styles";
 
 interface Props {
   circleDiameter: number;
-  arguableId: string;
-  arguableType: ArguableType;
+  graphPartId: string;
+  graphPartType: GraphPartType;
 }
 
-export const ScorePie = ({ circleDiameter, arguableId, arguableType }: Props) => {
+export const ScorePie = ({ circleDiameter, graphPartId, graphPartType }: Props) => {
   const theme = useTheme();
   const [hovered, setHovered] = useState<number | undefined>(undefined);
 
@@ -58,7 +58,7 @@ export const ScorePie = ({ circleDiameter, arguableId, arguableType }: Props) =>
         onClick={(_, dataIndex) => {
           const segmentData = data[dataIndex];
           if (!segmentData) throw errorWithData(`invalid pie segment dataIndex ${dataIndex}`, data);
-          setScore(arguableId, arguableType, segmentData.key as Score);
+          setScore(graphPartId, graphPartType, segmentData.key as Score);
         }}
         background="white"
       />

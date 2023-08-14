@@ -5,5 +5,5 @@ import { Score } from "./Score";
 export default { component: Score } as Meta<typeof Score>;
 
 export const Basic: StoryFn<typeof Score> = () => (
-  <Score arguableId="1" arguableType="node" score="-" />
+  <Score graphPartId="1" graphPartType="node" score="-" />
 );

@@ -8,7 +8,7 @@ export const EdgeIndicatorGroup = ({ edge }: { edge: Edge }) => {
   return (
     <Box display="flex">
       <EdgeClaimIndicator edge={edge} />
-      <Score arguableId={edge.id} arguableType="edge" score={edge.data.score} />
+      <Score graphPartId={edge.id} graphPartType="edge" score={edge.data.score} />
     </Box>
   );
 };
