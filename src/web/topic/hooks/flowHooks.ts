@@ -1,4 +1,4 @@
-import { type Viewport, useReactFlow, useStore, useStoreApi } from "reactflow";
+import { type Viewport, useReactFlow, useStore } from "reactflow";
 
 import { nodeHeightPx, nodeWidthPx } from "../components/Node/EditableNode.styles";
 import { Node } from "../utils/diagram";
@@ -43,29 +43,20 @@ const getViewportToIncludeNode = (
 };
 
 /**
- * Returns the viewport of the flow diagram.
+ * Returns method to update the viewport of the flow diagram.
  *
- * This is intentionally not-reactive. Using a hook that fires whenever the viewport changes is very
- * slow. It's still a hook though because that's how reactflow exposes this data - presumably so
+ * This is a hook because that's how reactflow exposes this data - presumably so
  * that the state can come from the nearest react flow provider.
  */
-const useViewportNonReactive = (): Viewport => {
-  // found by referring to useViewport code https://github.com/wbkd/react-flow/blob/6d9585c1a62bf549298c83ad5f2dcd6216a5b8eb/packages/core/src/hooks/useViewport.ts
-  const transform = useStoreApi().getState().transform;
-  return {
-    x: transform[0],
-    y: transform[1],
-    zoom: transform[2],
-  };
-};
-
 export const useViewportUpdater = () => {
-  const { setViewport } = useReactFlow();
-  const viewport = useViewportNonReactive();
+  const { getViewport, setViewport } = useReactFlow();
   const viewportHeight = useStore((state) => state.height);
   const viewportWidth = useStore((state) => state.width);
 
   const moveViewportToIncludeNode = (node: Node) => {
+    // This is intentionally not-reactive. Using a hook that fires whenever the viewport changes is
+    // very slow.
+    const viewport = getViewport();
     const newViewport = getViewportToIncludeNode(node, viewport, viewportHeight, viewportWidth);
 
     setViewport(newViewport, { duration: 500 });
