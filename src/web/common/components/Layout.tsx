@@ -64,20 +64,17 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
                 Feedback
               </NavLink>
               <NavLink href="/about">About</NavLink>
-              {/* TODO: always render once backend is done being set up */}
-              {process.env.NODE_ENV != "production" && (
-                <NavLink
-                  href={
-                    isLoggedIn
-                      ? "/api/auth/logout"
-                      : isAuthed
-                      ? "/choose-username"
-                      : "/api/auth/login"
-                  }
-                >
-                  {isLoggedIn ? "Log out" : isAuthed ? "Username" : "Log in"}
-                </NavLink>
-              )}
+              <NavLink
+                href={
+                  isLoggedIn
+                    ? "/api/auth/logout"
+                    : isAuthed
+                    ? "/choose-username"
+                    : "/api/auth/login"
+                }
+              >
+                {isLoggedIn ? "Log out" : isAuthed ? "Username" : "Log in"}
+              </NavLink>
               <NavLink
                 href="https://www.facebook.com/profile.php?id=100091844721178"
                 target="_blank"
