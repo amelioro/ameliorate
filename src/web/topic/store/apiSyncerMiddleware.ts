@@ -93,7 +93,10 @@ const apiSyncerImpl: ApiSyncerImpl = (create) => (set, get, store) => {
     set(args);
     const storeAfter = get();
 
-    // probably cleaner to check store.persist.getOptions().name === storagePlaygroundName, but it's annoying to figure out how to type the `store` param as a persist store
+    // Probably cleaner to check store.persist.getOptions().name === storagePlaygroundName, but it's
+    // annoying to figure out how to type the `store` param as a persist store,
+    // or even cleaner to check that we're not doing a populate action... but for some reason
+    // `set`'s third arg of action (from devtools middleware) is always undefined.
     if (!storeAfter.topic) return;
 
     // any diff API changes should be for the same topic (specifically we don't want to delete previously-viewed topic data)
