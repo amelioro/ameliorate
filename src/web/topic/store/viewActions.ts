@@ -1,5 +1,3 @@
-import { v4 as uuid } from "uuid";
-
 import { getImplicitLabel } from "../utils/claim";
 import {
   GraphPartType,
@@ -30,7 +28,6 @@ export const viewOrCreateClaimTree = (diagramPartId: string, diagramPartType: Gr
 
     /* eslint-disable functional/immutable-data, no-param-reassign */
     const newNode = buildNode({
-      id: uuid(),
       label: label,
       score: diagramPart.data.score,
       type: "rootClaim",

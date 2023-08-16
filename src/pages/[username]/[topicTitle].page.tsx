@@ -19,16 +19,22 @@ const Topic: NextPage = () => {
   const getDiagram = trpc.topic.getData.useQuery(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- `enabled` guarantees non-null before query is run
     { username: username!, title: topicTitle! },
-    { enabled: !!username && !!topicTitle, staleTime: Infinity }
+    // Not using stale time because client-side navigation back to this page fires the useEffect again,
+    // repopulating the store with old data (if the client changed data before navigating away & back).
+    // So we'll just re-fire on page mount, should be fine.
+    { enabled: !!username && !!topicTitle }
   );
 
   useEffect(() => {
-    if (!getDiagram.data) return;
+    // Check isFetching so we don't populate if we know we're just about to do so again.
+    if (!getDiagram.data || getDiagram.isFetching) return;
     void populateFromApi(getDiagram.data);
-  }, [getDiagram.data]);
+  }, [getDiagram.data, getDiagram.isFetching]);
 
   // TODO: use suspense to better handle loading & error
-  if (!router.isReady || !username || !topicTitle || getDiagram.isLoading) return <Loading />;
+  // Additional check for isFetching for when client side navigation re-mounts but getDiagram was already loaded
+  if (!router.isReady || !username || !topicTitle || getDiagram.isLoading || getDiagram.isFetching)
+    return <Loading />;
   if (!getDiagram.isSuccess || !getDiagram.data) return <NotFoundError />;
 
   return (
