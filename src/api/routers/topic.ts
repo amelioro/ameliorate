@@ -126,19 +126,23 @@ export const topicRouter = router({
         throw new TRPCError({ code: "FORBIDDEN" });
       }
 
-      // only allow score deletes by the score's user or by the topic creator
-      // creators should be able to delete scores of other users via deleting graph parts
-      // KNOWN ISSUE: technically this allows topic creators to delete others' scores without
-      // deleting graph parts, but at least this won't be allowed UI-side
-      const unauthorizedToDeleteScore =
-        opts.ctx.user.id !== topic.creatorId &&
-        opts.input.scoresToDelete.some((score) => opts.ctx.user.id !== score.userId);
-      const unauthorizedToUpsertScore = [
+      const authorizedToDeleteScore =
+        opts.input.scoresToDelete.every((score) => score.userId === opts.ctx.user.id) ||
+        // creator can delete another user's score indirectly, by deleting the score's graphPart
+        opts.input.scoresToDelete.every((score) => {
+          const scoreIsForGraphPartBeingDeleted = [
+            ...opts.input.nodesToDelete,
+            ...opts.input.edgesToDelete,
+          ].some((graphPart) => graphPart.id === score.graphPartId);
+
+          return opts.ctx.user.id == topic.creatorId && scoreIsForGraphPartBeingDeleted;
+        });
+      const authorizedToUpsertScore = [
         ...opts.input.scoresToCreate,
         ...opts.input.scoresToUpdate,
-      ].some((score) => score.userId !== opts.ctx.user.id);
+      ].every((score) => score.userId === opts.ctx.user.id);
 
-      if (unauthorizedToDeleteScore || unauthorizedToUpsertScore)
+      if (!authorizedToDeleteScore || !authorizedToUpsertScore)
         throw new TRPCError({ code: "FORBIDDEN" });
 
       // make changes

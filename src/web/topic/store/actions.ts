@@ -1,3 +1,4 @@
+import { createDraft, finishDraft } from "immer";
 import { type EdgeSelectionChange, type NodeSelectionChange } from "reactflow";
 
 import { errorWithData } from "../../../common/errorHandling";
@@ -7,8 +8,8 @@ import {
   getActiveDiagram,
   getDiagram,
   getDiagramOrThrow,
-  getDuplicateState,
   getTopicDiagram,
+  setSelected as setSelectedUtil,
 } from "./utils";
 
 // score setting is way more work than it needs to be because one score can live in multiple places:
@@ -18,7 +19,7 @@ import {
 // keeping this in sync manually ain't great.
 // TODO: store scores in one place
 export const setScore = (graphPartId: string, graphPartType: GraphPartType, score: Score) => {
-  const state = getDuplicateState();
+  const state = createDraft(useTopicStore.getState());
 
   // update this node's score
   const activeDiagram = getActiveDiagram(state);
@@ -48,11 +49,11 @@ export const setScore = (graphPartId: string, graphPartType: GraphPartType, scor
     /* eslint-enable functional/immutable-data, no-param-reassign */
   }
 
-  useTopicStore.setState(state, false, "setScore");
+  useTopicStore.setState(finishDraft(state), false, "setScore");
 };
 
 export const setNodeLabel = (nodeId: string, value: string) => {
-  const state = getDuplicateState();
+  const state = createDraft(useTopicStore.getState());
 
   const activeDiagram = getActiveDiagram(state);
   const node = findNode(nodeId, activeDiagram);
@@ -61,11 +62,11 @@ export const setNodeLabel = (nodeId: string, value: string) => {
   node.data.label = value;
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  useTopicStore.setState(state, false, "setNodeLabel");
+  useTopicStore.setState(finishDraft(state), false, "setNodeLabel");
 };
 
 export const setSelected = (selectChanges: NodeSelectionChange[] | EdgeSelectionChange[]) => {
-  const state = getDuplicateState();
+  const state = createDraft(useTopicStore.getState());
 
   const activeDiagram = getActiveDiagram(state);
 
@@ -77,23 +78,15 @@ export const setSelected = (selectChanges: NodeSelectionChange[] | EdgeSelection
     /* eslint-enable functional/immutable-data, no-param-reassign */
   });
 
-  useTopicStore.setState(state, false, "setSelected");
+  useTopicStore.setState(finishDraft(state), false, "setSelected");
 };
 
 export const setSelectedGraphPart = (graphPartId: string) => {
-  const state = getDuplicateState();
+  const state = createDraft(useTopicStore.getState());
 
   const activeDiagram = getActiveDiagram(state);
 
-  /* eslint-disable functional/immutable-data, no-param-reassign */
-  activeDiagram.nodes = activeDiagram.nodes.map((node) => ({ ...node, selected: false }));
-  activeDiagram.edges = activeDiagram.edges.map((edge) => ({ ...edge, selected: false }));
-  /* eslint-enable functional/immutable-data, no-param-reassign */
+  setSelectedUtil(graphPartId, activeDiagram);
 
-  const graphPart = findGraphPart(graphPartId, activeDiagram);
-  /* eslint-disable functional/immutable-data, no-param-reassign */
-  graphPart.selected = true;
-  /* eslint-enable functional/immutable-data, no-param-reassign */
-
-  useTopicStore.setState(state, false, "setSelectedGraphPart");
+  useTopicStore.setState(finishDraft(state), false, "setSelectedGraphPart");
 };

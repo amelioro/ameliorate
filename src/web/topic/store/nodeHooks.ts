@@ -1,3 +1,5 @@
+import { shallow } from "zustand/shallow";
+
 import { errorWithData } from "../../../common/errorHandling";
 import { Node, RelationDirection, findNode } from "../utils/diagram";
 import { children, edges, neighbors, parents } from "../utils/node";
@@ -24,7 +26,7 @@ export const useNodeChildren = (nodeId: string, diagramId: string) => {
     } catch {
       return [];
     }
-  });
+  }, shallow);
 };
 
 export const useNodeParents = (nodeId: string, diagramId: string) => {
@@ -36,7 +38,7 @@ export const useNodeParents = (nodeId: string, diagramId: string) => {
     } catch {
       return [];
     }
-  });
+  }, shallow);
 };
 
 export const useNodes = (diagramId: string, predicate: (node: Node) => boolean) => {
@@ -47,7 +49,7 @@ export const useNodes = (diagramId: string, predicate: (node: Node) => boolean) 
     } catch {
       return [];
     }
-  });
+  }, shallow);
 };
 
 export const useCriterionSolutionEdges = (problemNodeId: string, diagramId: string) => {
@@ -71,7 +73,7 @@ export const useCriterionSolutionEdges = (problemNodeId: string, diagramId: stri
     } catch {
       return [];
     }
-  });
+  }, shallow);
 };
 
 export const useNeighbors = (nodeId: string, direction: RelationDirection, diagramId: string) => {
@@ -83,7 +85,7 @@ export const useNeighbors = (nodeId: string, direction: RelationDirection, diagr
     } catch {
       return [];
     }
-  });
+  }, shallow);
 };
 
 export const useIsNeighborSelected = (nodeId: string, diagramId: string) => {
