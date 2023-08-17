@@ -69,16 +69,12 @@ export const TopicToolbar = () => {
     <AppBar position="sticky" color="primaryVariantLight">
       <Toolbar variant="dense">
         {/* load actions */}
+        <IconButton color="inherit" title="Download" aria-label="Download" onClick={downloadTopic}>
+          <Download />
+        </IconButton>
+
         {userCanEditTopicData && (
           <>
-            <IconButton
-              color="inherit"
-              title="Download"
-              aria-label="Download"
-              onClick={downloadTopic}
-            >
-              <Download />
-            </IconButton>
             <IconButton color="inherit" component="label" title="Upload" aria-label="Upload">
               <Upload />
               <input hidden accept=".json" type="file" onChange={uploadTopic} />
