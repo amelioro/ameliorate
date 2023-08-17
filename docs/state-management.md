@@ -46,6 +46,9 @@ These are functions that subscribe to changes in the state
   };
   ```
 
+- note: for hooks that copy an object or create a new array, and therefore have new object/array
+  references, consider passing a shallow comparison fn to prevent extra re-renders (see zustand [docs](https://github.com/pmndrs/zustand#selecting-multiple-state-slices))
+
 ### Zombie child issue
 
 - hooks should generally not throw errors, particularly due to the [zombie child issue](https://github.com/pmndrs/zustand/issues/302)

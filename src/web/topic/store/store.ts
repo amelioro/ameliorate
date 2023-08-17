@@ -1,8 +1,8 @@
 import { type Topic } from "@prisma/client";
 import throttle from "lodash/throttle";
 import { temporal } from "zundo";
-import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
+import { createWithEqualityFn } from "zustand/traditional";
 
 import {
   Diagram,
@@ -47,7 +47,7 @@ export const topicStorePlaygroundName = "diagram-storage";
 
 // create atomic selectors for usage outside of store/ dir
 // this is only exported to allow actions to be extracted to a separate file
-export const useTopicStore = create<TopicStoreState>()(
+export const useTopicStore = createWithEqualityFn<TopicStoreState>()(
   apiSyncer(
     temporal(
       persist(
@@ -69,12 +69,9 @@ export const useTopicStore = create<TopicStoreState>()(
         },
       }
     )
-  )
+  ),
+  Object.is // using `createWithEqualityFn` so that we can do shallow or deep diffs in hooks that return new arrays/objects so that we can avoid extra renders
 );
-
-export const useDiagram = (diagramId: string) => {
-  return useTopicStore((state) => state.diagrams[diagramId]);
-};
 
 export const useFilteredDiagram = (diagramId: string) => {
   return useTopicStore((state) => {
