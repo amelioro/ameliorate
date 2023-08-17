@@ -1,3 +1,5 @@
+import { createDraft, finishDraft } from "immer";
+
 import { getImplicitLabel } from "../utils/claim";
 import {
   GraphPartType,
@@ -9,16 +11,10 @@ import {
 } from "../utils/diagram";
 import { FlowNodeType, children, parents } from "../utils/node";
 import { useTopicStore } from "./store";
-import {
-  getActiveDiagram,
-  getClaimTrees,
-  getDiagram,
-  getDuplicateState,
-  getTopicDiagram,
-} from "./utils";
+import { getActiveDiagram, getClaimTrees, getDiagram, getTopicDiagram } from "./utils";
 
 export const viewOrCreateClaimTree = (diagramPartId: string, diagramPartType: GraphPartType) => {
-  const state = getDuplicateState();
+  const state = createDraft(useTopicStore.getState());
 
   // create claim tree if it doesn't exist
   if (!getDiagram(state, diagramPartId)) {
@@ -47,7 +43,7 @@ export const viewOrCreateClaimTree = (diagramPartId: string, diagramPartType: Gr
   state.activeClaimTreeId = diagramPartId;
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  useTopicStore.setState(state, false, "viewOrCreateClaimTree");
+  useTopicStore.setState(finishDraft(state), false, "viewOrCreateClaimTree");
 };
 
 export const viewClaimTree = (diagramId: string) => {
@@ -69,7 +65,7 @@ export const toggleShowNeighbors = async (
   direction: RelationDirection,
   show: boolean
 ) => {
-  const state = getDuplicateState();
+  const state = createDraft(useTopicStore.getState());
 
   const topicDiagram = getTopicDiagram(state); // assuming we're only show/hiding from topic diagram
 
@@ -93,7 +89,7 @@ export const toggleShowNeighbors = async (
   topicDiagram.edges = layoutedDiagram.edges;
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  useTopicStore.setState(state, false, "toggleShowNeighbors");
+  useTopicStore.setState(finishDraft(state), false, "toggleShowNeighbors");
 };
 
 export const viewTopicDiagram = () => {
@@ -117,7 +113,7 @@ export const toggleShowImpliedEdges = (show: boolean) => {
 };
 
 export const relayout = async () => {
-  const state = getDuplicateState();
+  const state = createDraft(useTopicStore.getState());
 
   const activeDiagram = getActiveDiagram(state);
 
@@ -128,5 +124,5 @@ export const relayout = async () => {
   activeDiagram.edges = layoutedDiagram.edges;
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  useTopicStore.setState(state, false, "relayout");
+  useTopicStore.setState(finishDraft(state), false, "relayout");
 };

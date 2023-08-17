@@ -1,3 +1,5 @@
+import { createDraft, finishDraft } from "immer";
+
 import { errorWithData } from "../../../common/errorHandling";
 import { emitter } from "../../common/event";
 import {
@@ -17,20 +19,18 @@ import {
   getActiveDiagram,
   getClaimTrees,
   getDiagramOrThrow,
-  getDuplicateState,
   getTopicDiagram,
+  setSelected,
 } from "./utils";
 
 const createNode = (state: TopicStoreState, toNodeType: FlowNodeType) => {
   const activeDiagram = getActiveDiagram(state);
   const newNode = buildNode({ type: toNodeType, diagramId: activeDiagram.id });
 
-  /* eslint-disable functional/immutable-data, no-param-reassign */
-  activeDiagram.nodes = [
-    ...activeDiagram.nodes.map((node) => ({ ...node, selected: false })),
-    { ...newNode, selected: true },
-  ];
-  /* eslint-enable functional/immutable-data, no-param-reassign */
+  /* eslint-disable functional/immutable-data */
+  activeDiagram.nodes.push(newNode);
+  setSelected(newNode.id, activeDiagram);
+  /* eslint-enable functional/immutable-data */
 
   return newNode;
 };
@@ -77,7 +77,7 @@ interface AddNodeProps {
 }
 
 export const addNode = async ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) => {
-  const state = getDuplicateState();
+  const state = createDraft(useTopicStore.getState());
 
   const activeDiagram = getActiveDiagram(state);
   const fromNode = findNode(fromNodeId, activeDiagram);
@@ -111,7 +111,7 @@ export const addNode = async ({ fromNodeId, as, toNodeType, relation }: AddNodeP
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   // TODO: can we infer the action name from the method name?
-  useTopicStore.setState(state, false, "addNode");
+  useTopicStore.setState(finishDraft(state), false, "addNode");
 };
 
 const createEdgesImpliedByComposition = (
@@ -170,7 +170,7 @@ const createEdgeAndImpliedEdges = (
 };
 
 export const connectNodes = async (parentId: string | null, childId: string | null) => {
-  const state = getDuplicateState();
+  const state = createDraft(useTopicStore.getState());
 
   const activeDiagram = getActiveDiagram(state);
 
@@ -195,11 +195,11 @@ export const connectNodes = async (parentId: string | null, childId: string | nu
   activeDiagram.edges = layoutedDiagram.edges;
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  useTopicStore.setState(state, false, "connectNodes");
+  useTopicStore.setState(finishDraft(state), false, "connectNodes");
 };
 
 export const deleteNode = async (nodeId: string) => {
-  const state = getDuplicateState();
+  const state = createDraft(useTopicStore.getState());
 
   const activeDiagram = getActiveDiagram(state);
 
@@ -230,11 +230,11 @@ export const deleteNode = async (nodeId: string) => {
   activeDiagram.edges = layoutedDiagram.edges;
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  useTopicStore.setState(state, false, "deleteNode");
+  useTopicStore.setState(finishDraft(state), false, "deleteNode");
 };
 
 export const deleteEdge = async (edgeId: string) => {
-  const state = getDuplicateState();
+  const state = createDraft(useTopicStore.getState());
 
   const activeDiagram = getActiveDiagram(state);
 
@@ -251,5 +251,5 @@ export const deleteEdge = async (edgeId: string) => {
   activeDiagram.edges = layoutedDiagram.edges;
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  useTopicStore.setState(state, false, "deleteEdge");
+  useTopicStore.setState(finishDraft(state), false, "deleteEdge");
 };

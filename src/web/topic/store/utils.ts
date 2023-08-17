@@ -1,6 +1,6 @@
 import { errorWithData } from "../../../common/errorHandling";
-import { getDiagramTitle, topicDiagramId } from "../utils/diagram";
-import { TopicStoreState, useTopicStore } from "./store";
+import { Diagram, getDiagramTitle, topicDiagramId } from "../utils/diagram";
+import { TopicStoreState } from "./store";
 
 export const getTopicTitle = (state: TopicStoreState) => {
   const rootDiagram = getTopicDiagram(state);
@@ -35,10 +35,20 @@ export const getClaimTrees = (state: TopicStoreState) => {
   return Object.values(state.diagrams).filter((diagram) => diagram.type === "claim");
 };
 
-/**
- * This is intended to allow mutation without issues, before calling setState
- * @returns a deep copy of the current topic store state
- */
-export const getDuplicateState = () => {
-  return JSON.parse(JSON.stringify(useTopicStore.getState())) as TopicStoreState;
+export const setSelected = (graphPartId: string, diagram: Diagram) => {
+  /* eslint-disable functional/immutable-data, no-param-reassign */
+  diagram.nodes = diagram.nodes.map((node) => {
+    // only shallow copy node if we have to, since re-renders will occur on Object change
+    if (node.id === graphPartId && !node.selected) return { ...node, selected: true };
+    if (node.id !== graphPartId && node.selected) return { ...node, selected: false };
+    return node;
+  });
+
+  diagram.edges = diagram.edges.map((edge) => {
+    // only shallow copy node if we have to, since re-renders will occur on Object change
+    if (edge.id === graphPartId && !edge.selected) return { ...edge, selected: true };
+    if (edge.id !== graphPartId && edge.selected) return { ...edge, selected: false };
+    return edge;
+  });
+  /* eslint-enable functional/immutable-data, no-param-reassign */
 };

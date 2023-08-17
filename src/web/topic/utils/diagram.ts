@@ -210,6 +210,10 @@ export const layoutVisibleComponents = async (diagram: Diagram, claimTrees: Diag
     const layoutedNode = layoutedNodes.find((layoutedNode) => layoutedNode.id === node.id);
     if (!layoutedNode) return node;
 
+    // only shallow copy node if the node is changing, since re-renders will occur on Object change
+    if (layoutedNode.position.x === node.position.x && layoutedNode.position.y === node.position.y)
+      return node;
+
     return { ...node, position: layoutedNode.position };
   });
 

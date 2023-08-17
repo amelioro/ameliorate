@@ -17,11 +17,18 @@ These are functions that update the state
 
   ```ts
   const action = () => {
-    const state = getDuplicateState();
+    // Using immer's `createDraft` allows us to mutate a draft object instead of the store's current
+    // state object.
+    const state = createDraft(useTopicStore.getState());
 
-    // do something with the state (usually mutating it because the very-nested state is annoying to update without mutation)
+    // Do something with the state (usually mutating it because the very-nested state is annoying to update without mutation).
+    // We use this pattern instead of the suggested `setState((state) => [modifiedState])` so that
+    // we can use async functions, like `layout`.
 
-    setState(state, false, "[actionName]");
+    // `finishDraft` returns a new object with all the modifications, and maintains nested object
+    // object references for objects that were not modified. This reduces re-renders for hooks that
+    // rely on `Object.is` for comparison.
+    useTopicStore.setState(finishDraft(state), false, "[actionName]");
   };
   ```
 

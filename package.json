@@ -44,6 +44,7 @@
     "@trpc/react-query": "^10.28.1",
     "@trpc/server": "^10.28.1",
     "elkjs": "^0.8.2",
+    "immer": "^10.0.2",
     "js-file-download": "^0.4.12",
     "lodash": "^4.17.21",
     "material-react-table": "^1.14.0",
