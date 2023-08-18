@@ -43,6 +43,8 @@ export const populateFromApi = async (topicData: TopicData) => {
       };
     });
 
+  const layoutedTopicDiagram = await layoutVisibleComponents(topicDiagram, claimTrees);
+
   const layoutedClaimTrees: [string, Diagram][] = await Promise.all(
     claimTrees.map(async (diagram) => [diagram.id, await layoutVisibleComponents(diagram, [])])
   );
@@ -55,7 +57,7 @@ export const populateFromApi = async (topicData: TopicData) => {
         creatorId: topicData.creatorId,
       },
       diagrams: {
-        [topicDiagramId]: await layoutVisibleComponents(topicDiagram, claimTrees),
+        [topicDiagramId]: layoutedTopicDiagram,
         ...Object.fromEntries(layoutedClaimTrees),
       },
       activeTableProblemId: null,
