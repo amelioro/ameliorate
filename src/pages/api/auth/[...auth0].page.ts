@@ -10,8 +10,13 @@ const afterCallback: AfterCallback = async (_req, res, session, _state) => {
   // fetch user from db
   const user = await xprisma.user.findUnique({ where: { authId: userClaims.sub } });
 
+  // Add any param to location so that netlify doesn't carry forward callback params with our redirect. See https://github.com/auth0/nextjs-auth0/issues/747#issuecomment-1183733931
+  // There should be an easier way to just remove the ?code and ?state params from oauth, but this works for now.
+  const params = "?login-success";
+
   // redirect to /choose-username if user doesn't exist, otherwise redirect to user's page
-  res.setHeader("Location", user ? `/${user.username}` : "/choose-username");
+  const location = user ? `/${user.username}` : "/choose-username";
+  res.setHeader("Location", `${location}${params}`);
 
   return session;
 };
