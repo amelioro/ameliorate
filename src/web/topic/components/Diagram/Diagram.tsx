@@ -74,7 +74,7 @@ interface DiagramProps {
 
 const DiagramWithoutProvider = ({ diagramId }: DiagramProps) => {
   const diagram = useFilteredDiagram(diagramId);
-  const { moveViewportToIncludeNode } = useViewportUpdater();
+  const { fitViewForNodes, moveViewportToIncludeNode } = useViewportUpdater();
   const isAnyGraphPartSelected = useIsAnyGraphPartSelected();
 
   const nodes = diagram.nodes;
@@ -88,12 +88,17 @@ const DiagramWithoutProvider = ({ diagramId }: DiagramProps) => {
   );
 
   useEffect(() => {
-    const unbind = emitter.on("addNode", (node) => {
+    const unbindAdd = emitter.on("addNode", (node) => {
       if (node.data.diagramId !== diagramId) return;
       moveViewportToIncludeNode(node);
     });
-    return () => unbind();
-  }, [diagramId, moveViewportToIncludeNode]);
+    const unbindLoad = emitter.on("loadedTopicData", (diagram) => fitViewForNodes(diagram.nodes));
+
+    return () => {
+      unbindAdd();
+      unbindLoad();
+    };
+  }, [diagramId, fitViewForNodes, moveViewportToIncludeNode]);
 
   const emptyText = <Typography variant="h5">Right-click to create</Typography>;
 

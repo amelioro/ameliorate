@@ -1,9 +1,11 @@
 import { claimRelationNames } from "../../../common/edge";
 import { errorWithData } from "../../../common/errorHandling";
+import { emitter } from "../../common/event";
 import { type TopicData, convertToStoreEdge, convertToStoreNode } from "../utils/apiConversion";
 import { Diagram, layoutVisibleComponents, topicDiagramId } from "../utils/diagram";
 import { claimNodeTypes } from "../utils/node";
 import { topicStorePlaygroundName, useTopicStore } from "./store";
+import { getTopicDiagram } from "./utils";
 
 export const populateFromApi = async (topicData: TopicData) => {
   // Ensure we use distinct persistence for topic page compared to playground.
@@ -43,6 +45,8 @@ export const populateFromApi = async (topicData: TopicData) => {
       };
     });
 
+  const layoutedTopicDiagram = await layoutVisibleComponents(topicDiagram, claimTrees);
+
   const layoutedClaimTrees: [string, Diagram][] = await Promise.all(
     claimTrees.map(async (diagram) => [diagram.id, await layoutVisibleComponents(diagram, [])])
   );
@@ -55,7 +59,7 @@ export const populateFromApi = async (topicData: TopicData) => {
         creatorId: topicData.creatorId,
       },
       diagrams: {
-        [topicDiagramId]: await layoutVisibleComponents(topicDiagram, claimTrees),
+        [topicDiagramId]: layoutedTopicDiagram,
         ...Object.fromEntries(layoutedClaimTrees),
       },
       activeTableProblemId: null,
@@ -64,6 +68,8 @@ export const populateFromApi = async (topicData: TopicData) => {
     false,
     "populateFromApi"
   );
+
+  emitter.emit("loadedTopicData", layoutedTopicDiagram);
 
   // it doesn't make sense to want to undo a page load
   useTopicStore.temporal.getState().clear();
@@ -75,6 +81,8 @@ export const populateFromLocalStorage = async () => {
 
   // TODO(bug): for some reason, this results in an empty undo action _after_ clear() is run - despite awaiting this promise
   await useTopicStore.persist.rehydrate();
+
+  emitter.emit("loadedTopicData", getTopicDiagram(useTopicStore.getState()));
 
   // it doesn't make sense to want to undo a page load
   useTopicStore.temporal.getState().clear();

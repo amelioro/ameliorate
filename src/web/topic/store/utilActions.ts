@@ -1,7 +1,9 @@
 import { StorageValue } from "zustand/middleware";
 
 import { errorWithData } from "../../../common/errorHandling";
+import { emitter } from "../../common/event";
 import { TopicStoreState, initialState, useTopicStore } from "./store";
+import { getTopicDiagram } from "./utils";
 
 export const getPersistState = () => {
   const persistOptions = useTopicStore.persist.getOptions();
@@ -20,6 +22,8 @@ export const setTopicData = (state: TopicStoreState) => {
   // scores for other users.
   const topic = useTopicStore.getState().topic;
   useTopicStore.setState({ ...state, topic }, false, "setState");
+
+  emitter.emit("loadedTopicData", getTopicDiagram(useTopicStore.getState()));
 };
 
 /**
@@ -29,6 +33,8 @@ export const setTopicData = (state: TopicStoreState) => {
 export const resetTopicData = () => {
   const topic = useTopicStore.getState().topic;
   useTopicStore.setState({ ...initialState, topic }, false, "resetState");
+
+  emitter.emit("loadedTopicData", getTopicDiagram(useTopicStore.getState()));
 };
 
 export const undo = () => {

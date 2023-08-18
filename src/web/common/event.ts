@@ -1,9 +1,10 @@
 import { createNanoEvents } from "nanoevents";
 
-import { Node } from "../topic/utils/diagram";
+import { Diagram, Node } from "../topic/utils/diagram";
 
 interface Events {
   addNode: (node: Node) => void;
+  loadedTopicData: (diagram: Diagram) => void;
 }
 
 export const emitter = createNanoEvents<Events>();
