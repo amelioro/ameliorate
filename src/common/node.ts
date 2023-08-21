@@ -1,3 +1,4 @@
+import lowerCase from "lodash/lowerCase";
 import { v4 as uuid } from "uuid";
 import { z } from "zod";
 
@@ -33,6 +34,6 @@ export const getNewTopicProblemNode = (topicId: number, topicTitle: string): Nod
     topicId,
     arguedDiagramPartId: null,
     type: "problem",
-    text: topicTitle,
+    text: lowerCase(topicTitle),
   };
 };
