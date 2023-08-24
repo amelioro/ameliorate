@@ -120,6 +120,7 @@ const DiagramWithoutProvider = ({ diagramId }: DiagramProps) => {
         onNodesChange={(changes) => onGraphPartChange(changes)}
         nodesDraggable={false}
         nodesConnectable={diagram.type !== "claim"} // claims are in a tree, so cannot connect existing nodes
+        deleteKeyCode={null} // was preventing holding ctrl and repeating backspace to delete multiple words from node text
         isAnyGraphPartSelected={isAnyGraphPartSelected}
       >
         <Background variant={BackgroundVariant.Dots} />
