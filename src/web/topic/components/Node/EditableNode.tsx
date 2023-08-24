@@ -33,7 +33,8 @@ export const EditableNode = ({ node, className = "" }: { node: Node; className?:
       textAreaRef.current.value.length,
       textAreaRef.current.value.length
     );
-  }, [node.selected]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- if we select the node after initial render, we don't care about re-focusing. we mainly care about focusing on node add. focusing on node click is annoying because our cursor jumps to the end of the input.
+  }, []);
 
   const nodeDecoration = nodeDecorations[node.type];
   const color = theme.palette[node.type].main;
