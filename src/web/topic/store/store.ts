@@ -1,5 +1,4 @@
 import { type Topic } from "@prisma/client";
-import throttle from "lodash/throttle";
 import { temporal } from "zundo";
 import { devtools, persist } from "zustand/middleware";
 import { createWithEqualityFn } from "zustand/traditional";
@@ -58,16 +57,7 @@ export const useTopicStore = createWithEqualityFn<TopicStoreState>()(
           migrate: migrate,
           skipHydration: true,
         }
-      ),
-      {
-        // throttle temporal storage to group many rapid changes into one
-        // specific use case is for when typing in a node, to prevent each letter change from being stored
-        handleSet: (handleSet) => {
-          return throttle<typeof handleSet>((state) => {
-            handleSet(state);
-          }, 1000);
-        },
-      }
+      )
     )
   ),
   Object.is // using `createWithEqualityFn` so that we can do shallow or deep diffs in hooks that return new arrays/objects so that we can avoid extra renders
