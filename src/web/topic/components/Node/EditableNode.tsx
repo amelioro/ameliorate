@@ -36,6 +36,14 @@ export const EditableNode = ({ node, className = "" }: { node: Node; className?:
     // eslint-disable-next-line react-hooks/exhaustive-deps -- if we select the node after initial render, we don't care about re-focusing. we mainly care about focusing on node add. focusing on node click is annoying because our cursor jumps to the end of the input.
   }, []);
 
+  // prefer this over binding value={node.data.label} because this allows us to update node.data.label onBlur instead of onChange, creating significantly fewer unnecessary re-renders
+  useEffect(() => {
+    if (!textAreaRef.current || textAreaRef.current.value === node.data.label) return;
+
+    // eslint-disable-next-line functional/immutable-data
+    textAreaRef.current.value = node.data.label;
+  }, [node.data.label]);
+
   const nodeDecoration = nodeDecorations[node.type];
   const color = theme.palette[node.type].main;
   const NodeIcon = nodeDecoration.NodeIcon;
@@ -59,15 +67,9 @@ export const EditableNode = ({ node, className = "" }: { node: Node; className?:
           ref={textAreaRef}
           color={color}
           placeholder="Enter text..."
-          // Will cause re-render on every keystroke because of onChange, hopefully this is fine.
-          // Was previously using defaultValue to avoid this, but that caused text to not update
-          // when rendering for the second time (1. post-hydration value updating, see store, or
-          // 2. when importing a new diagram but the node id's are the same).
-          // Also tried using onBlur and setting value via useEffect & useRef, but for some reason that triggered
-          // "TextareaAutosize" too many renders error, even though console.log showed each node only rendering twice.
-          value={node.data.label}
+          defaultValue={node.data.label}
           maxRows={3}
-          onChange={(event) => setNodeLabel(node.id, event.target.value)}
+          onBlur={(event) => setNodeLabel(node.id, event.target.value)}
           className="nopan" // allow regular text input drag functionality without using reactflow's pan behavior
           disabled={!userCanEditTopicData}
         />
