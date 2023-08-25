@@ -24,10 +24,6 @@ export const StyledPath = styled("path", pathOptions)<PathProps>`
           // because marker styles need to be specified when creating the marker element, without css
           stroke: ${theme.palette.info.main};
         `;
-      } else if (spotlight === "background") {
-        return css`
-          opacity: 0.5;
-        `;
       }
     }}
   }
@@ -72,11 +68,6 @@ export const StyledDiv = styled("div", divOptions)<DivProps>`
       return css`
         border-color: ${theme.palette.info.main};
         z-index: ${zIndex.secondary};
-      `;
-    } else if (spotlight === "background") {
-      return css`
-        opacity: 0.5;
-        z-index: ${zIndex.background};
       `;
     }
   }}

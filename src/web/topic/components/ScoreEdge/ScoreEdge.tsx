@@ -6,7 +6,7 @@ import { EdgeLabelRenderer, getBezierPath } from "reactflow";
 import { RelationName } from "../../../../common/edge";
 import { openContextMenu } from "../../../common/store/contextMenuActions";
 import { setSelectedGraphPart } from "../../store/actions";
-import { useIsImplied, useIsNodeSelected } from "../../store/edgeHooks";
+import { useIsNodeSelected } from "../../store/edgeHooks";
 import { Edge, markerStart } from "../../utils/diagram";
 import { EdgeProps } from "../Diagram/Diagram";
 import { Spotlight } from "../Diagram/Diagram.styles";
@@ -37,16 +37,9 @@ const convertToEdge = (flowEdge: EdgeProps): Edge => {
 export const ScoreEdge = (flowEdge: EdgeProps) => {
   const edge = convertToEdge(flowEdge);
 
-  const isImplied = useIsImplied(edge.id, edge.data.diagramId);
   const isNodeSelected = useIsNodeSelected(edge.id, edge.data.diagramId);
 
-  const spotlight: Spotlight = edge.selected
-    ? "primary"
-    : isNodeSelected
-    ? "secondary"
-    : isImplied
-    ? "background"
-    : "normal";
+  const spotlight: Spotlight = edge.selected ? "primary" : isNodeSelected ? "secondary" : "normal";
 
   const [edgePath, labelX, labelY] = getBezierPath({
     sourceX: flowEdge.sourceX,
