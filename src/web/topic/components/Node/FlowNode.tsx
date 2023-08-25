@@ -1,7 +1,6 @@
 import { Global } from "@emotion/react";
 
 import { useSessionUser } from "../../../common/hooks";
-import { useIsAnyGraphPartSelected } from "../../store/graphPartHooks";
 import { useIsEdgeSelected, useIsNeighborSelected } from "../../store/nodeHooks";
 import { useDiagramType } from "../../store/store";
 import { useUserCanEditTopicData } from "../../store/userHooks";
@@ -34,7 +33,6 @@ export const FlowNode = (flowNode: NodeProps) => {
   const diagramType = useDiagramType(flowNode.data.diagramId);
   const isNeighborSelected = useIsNeighborSelected(flowNode.id, flowNode.data.diagramId);
   const isEdgeSelected = useIsEdgeSelected(flowNode.id, flowNode.data.diagramId);
-  const isAnyGraphPartSelected = useIsAnyGraphPartSelected();
 
   if (!diagramType) return <></>;
 
@@ -45,8 +43,6 @@ export const FlowNode = (flowNode: NodeProps) => {
     ? "primary"
     : isNeighborSelected || isEdgeSelected
     ? "secondary"
-    : isAnyGraphPartSelected
-    ? "background"
     : "normal";
 
   return (
@@ -55,7 +51,7 @@ export const FlowNode = (flowNode: NodeProps) => {
 
       <HoverBridgeDiv />
 
-      <NodeHandle node={node} direction="parent" orientation={orientation} spotlight={spotlight} />
+      <NodeHandle node={node} direction="parent" orientation={orientation} />
       {/* should this use react-flow's NodeToolbar? seems like it'd automatically handle positioning */}
       {userCanEditTopicData && (
         <AddNodeButtonGroupParent
@@ -76,7 +72,7 @@ export const FlowNode = (flowNode: NodeProps) => {
           orientation={orientation}
         />
       )}
-      <NodeHandle node={node} direction="child" orientation={orientation} spotlight={spotlight} />
+      <NodeHandle node={node} direction="child" orientation={orientation} />
     </>
   );
 };

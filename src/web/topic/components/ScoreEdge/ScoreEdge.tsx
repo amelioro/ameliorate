@@ -7,7 +7,6 @@ import { RelationName } from "../../../../common/edge";
 import { openContextMenu } from "../../../common/store/contextMenuActions";
 import { setSelectedGraphPart } from "../../store/actions";
 import { useIsImplied, useIsNodeSelected } from "../../store/edgeHooks";
-import { useIsAnyGraphPartSelected } from "../../store/graphPartHooks";
 import { Edge, markerStart } from "../../utils/diagram";
 import { EdgeProps } from "../Diagram/Diagram";
 import { Spotlight } from "../Diagram/Diagram.styles";
@@ -40,13 +39,12 @@ export const ScoreEdge = (flowEdge: EdgeProps) => {
 
   const isImplied = useIsImplied(edge.id, edge.data.diagramId);
   const isNodeSelected = useIsNodeSelected(edge.id, edge.data.diagramId);
-  const isAnyGraphPartSelected = useIsAnyGraphPartSelected();
 
   const spotlight: Spotlight = edge.selected
     ? "primary"
     : isNodeSelected
     ? "secondary"
-    : isAnyGraphPartSelected || isImplied
+    : isImplied
     ? "background"
     : "normal";
 
