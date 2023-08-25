@@ -37,7 +37,12 @@ export const StyledReactFlow = styled(ReactFlow, flowOptions)<FlowProps>`
   ${({ isAnyGraphPartSelected }) => {
     if (isAnyGraphPartSelected) {
       return css`
-        & svg.react-flow__edges {
+        // Very fragile "z-index: " selector because there's no other differentiation between the
+        // svg for elevated edges and the svg for not-elevated edges.
+        // We don't want to rely on the lib's 1000 because that pulls edges in front of primary and
+        // secondary graph parts (because we're handling z-index manually, I think because the lib
+        // doesn't elevate node neighbors when a node is selected?).
+        & svg.react-flow__edges[style*="z-index: 1000"] {
           z-index: ${zIndex.svgWhenAnyGraphPartSelected} !important; // z-index on this is set via library's inline style, so need to use !important to override
         }
       `;
