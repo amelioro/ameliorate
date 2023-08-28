@@ -84,8 +84,12 @@ export const Score = ({ graphPartId, graphPartType, score }: ScoreProps) => {
         id="backdrop-popper"
         open={hovering || selected}
         isPieSelected={selected}
+        // Not used, since size is stretched to screen, but without this MUI will throw really
+        // annoying errors. This is an easier fix than converting the popper to a modal, which
+        // would probably be a more correct solution (per MUI's intentions for the components).
+        anchorEl={mainButtonRef.current}
         onClick={(e) => {
-          //prevents parent node from being selected
+          // prevents parent node from being selected
           e.stopPropagation();
           setSelected(false);
         }}
@@ -95,13 +99,17 @@ export const Score = ({ graphPartId, graphPartType, score }: ScoreProps) => {
           setHovering(false);
         }}
       />
+
+      {/* We're using Popper because it doesn't seem possible to handle z-index in such a way that
+      the score is brought in front of the header and body table cells in the criteria table,
+      due to how the parent stacking contexts are set up. */}
       {/* jank: zoom needs to be manually applied to the popper & its children because it is not a child of the flow element */}
       {/* cannot just apply scale to Popper because Popper sets transform in styles in order to position next to anchor, and scale affects that */}
       <ScorePopper
         id="scoring-popper"
         open={hovering || selected}
         onClick={(e) =>
-          //prevents parent node from being selected
+          // prevents parent node from being selected
           e.stopPropagation()
         }
         anchorEl={mainButtonRef.current}
