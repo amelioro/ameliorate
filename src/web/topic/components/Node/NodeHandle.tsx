@@ -8,7 +8,6 @@ import { toggleShowNeighbors } from "../../store/viewActions";
 import { Node, RelationDirection } from "../../utils/diagram";
 import { Orientation } from "../../utils/layout";
 import { hideableNodeTypes, nodeDecorations } from "../../utils/node";
-import { Spotlight } from "../Diagram/Diagram.styles";
 import { StyledHandle } from "./NodeHandle.styles";
 
 const tooltipItems = (
@@ -55,10 +54,9 @@ interface Props {
   node: Node;
   direction: RelationDirection;
   orientation: Orientation;
-  spotlight: Spotlight;
 }
 
-export const NodeHandle = ({ node, direction, orientation, spotlight }: Props) => {
+export const NodeHandle = ({ node, direction, orientation }: Props) => {
   const directedNeighbors = useNeighbors(node.id, direction, node.data.diagramId);
 
   const shownNodesTooltips = tooltipItems(node.id, directedNeighbors, direction, true);
@@ -83,7 +81,6 @@ export const NodeHandle = ({ node, direction, orientation, spotlight }: Props) =
         type={type}
         position={position}
         hasHiddenComponents={hiddenNodesTooltips.length > 0}
-        spotlight={spotlight}
       />
     </Tooltip>
   );

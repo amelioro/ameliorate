@@ -90,10 +90,6 @@ export const StyledEditableNode = styled(EditableNode, options)<NodeProps>`
         border-color: ${theme.palette.info.main};
         z-index: ${zIndex.secondary};
       `;
-    } else if (spotlight === "background") {
-      return css`
-        opacity: 0.5;
-      `;
     }
   }};
 `;

@@ -18,7 +18,6 @@ import { emitter } from "../../../common/event";
 import { useViewportUpdater } from "../../hooks/flowHooks";
 import { setSelected } from "../../store/actions";
 import { connectNodes } from "../../store/createDeleteActions";
-import { useIsAnyGraphPartSelected } from "../../store/graphPartHooks";
 import { useFilteredDiagram } from "../../store/store";
 import { closeClaimTree } from "../../store/viewActions";
 import { type Edge, type Node } from "../../utils/diagram";
@@ -75,7 +74,6 @@ interface DiagramProps {
 const DiagramWithoutProvider = ({ diagramId }: DiagramProps) => {
   const diagram = useFilteredDiagram(diagramId);
   const { fitViewForNodes, moveViewportToIncludeNode } = useViewportUpdater();
-  const isAnyGraphPartSelected = useIsAnyGraphPartSelected();
 
   const nodes = diagram.nodes;
   const edges = diagram.edges;
@@ -120,7 +118,8 @@ const DiagramWithoutProvider = ({ diagramId }: DiagramProps) => {
         onNodesChange={(changes) => onGraphPartChange(changes)}
         nodesDraggable={false}
         nodesConnectable={diagram.type !== "claim"} // claims are in a tree, so cannot connect existing nodes
-        isAnyGraphPartSelected={isAnyGraphPartSelected}
+        deleteKeyCode={null} // was preventing holding ctrl and repeating backspace to delete multiple words from node text
+        elevateEdgesOnSelect={true} // this puts selected edges (or neighbor-to-selected-node edges) in a separate svg that is given a higher zindex, so they can be elevated above other nodes
       >
         <Background variant={BackgroundVariant.Dots} />
         {isEmpty(nodes) && emptyText}

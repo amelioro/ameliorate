@@ -2,15 +2,12 @@ import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { Handle } from "reactflow";
 
-import { Spotlight } from "../Diagram/Diagram.styles";
-
 interface Props {
   hasHiddenComponents: boolean;
-  spotlight: Spotlight;
 }
 
 const options = {
-  shouldForwardProp: (prop: string) => !["hasHiddenComponents", "spotlight"].includes(prop),
+  shouldForwardProp: (prop: string) => !["hasHiddenComponents"].includes(prop),
 };
 
 export const StyledHandle = styled(Handle, options)<Props>`
@@ -23,14 +20,6 @@ export const StyledHandle = styled(Handle, options)<Props>`
       if (hasHiddenComponents) {
         return css`
           background-color: ${theme.palette.info.main};
-        `;
-      }
-    }}
-
-    ${({ spotlight }) => {
-      if (spotlight === "background") {
-        return css`
-          opacity: 0.5;
         `;
       }
     }}
