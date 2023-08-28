@@ -40,7 +40,12 @@ const backdropOptions = {
 };
 
 export const BackdropPopper = styled(Popper, backdropOptions)<BackdropProps>`
-  inset: 0;
+  // jank to override Popper behavior to work like a Modal;
+  // using a Modal would be cleaner but more effort to switch to that now.
+  inset: 0 !important;
+  position: fixed !important;
+  transform: none !important;
+
   ${({ theme }) => css`
     z-index: ${theme.zIndex.tooltip};
   `}
