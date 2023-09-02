@@ -44,13 +44,14 @@ Note: be particularly wary of [issues with a "needs [x]" label](https://github.c
 
 Make sure you have [git](https://git-scm.com/downloads), [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm), and [docker](https://docs.docker.com/get-docker/) installed.
 
-Clone & install dependencies:
+Clone, install dependencies, set up env variables:
 
 ```bash
 git clone https://github.com/amelioro/ameliorate.git
 cd ameliorate
 npm install
 npx husky install # activate commit hooks
+cp .env.example .env # set up env variables
 ```
 
 Set up database:
