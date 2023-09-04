@@ -31,6 +31,7 @@ export const ContextMenu = () => {
       anchorPosition={anchorPosition}
       open={isOpen}
       onClose={closeContextMenu}
+      onContextMenu={(e) => e.preventDefault()}
     >
       {menuItems}
     </MuiMenu>

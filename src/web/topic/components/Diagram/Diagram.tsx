@@ -114,6 +114,7 @@ const DiagramWithoutProvider = ({ diagramId }: DiagramProps) => {
         fitViewOptions={{ maxZoom: 1 }}
         minZoom={0.25}
         onConnect={({ source, target }) => void connectNodes(source, target)}
+        onContextMenu={(e) => e.preventDefault()}
         onEdgesChange={(changes) => onGraphPartChange(changes)}
         onNodesChange={(changes) => onGraphPartChange(changes)}
         nodesDraggable={false}
