@@ -29,7 +29,7 @@ const convertToNode = (flowNode: NodeProps): Node => {
 
 export const FlowNode = (flowNode: NodeProps) => {
   const { sessionUser } = useSessionUser();
-  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.id);
+  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const diagramType = useDiagramType(flowNode.data.diagramId);
   const isNeighborSelected = useIsNeighborSelected(flowNode.id, flowNode.data.diagramId);
   const isEdgeSelected = useIsEdgeSelected(flowNode.id, flowNode.data.diagramId);

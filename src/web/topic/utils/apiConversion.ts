@@ -18,7 +18,7 @@ import {
 // TODO: passing topicData here is really bad, but userScores will be separated from StoreEdge soon
 export const convertToStoreNode = (apiNode: TopicNode, diagramId: string, topicData: TopicData) => {
   const score: Score | undefined = topicData.userScores
-    .find((score) => score.userId === topicData.creatorId && score.graphPartId === apiNode.id)
+    .find((score) => score.username === topicData.creatorName && score.graphPartId === apiNode.id)
     ?.value.toString() as Score | undefined;
 
   return buildNode({
@@ -33,7 +33,7 @@ export const convertToStoreNode = (apiNode: TopicNode, diagramId: string, topicD
 // TODO: passing topicData here is really bad, but userScores will be separated from StoreEdge soon
 export const convertToStoreEdge = (apiEdge: TopicEdge, diagramId: string, topicData: TopicData) => {
   const score: Score | undefined = topicData.userScores
-    .find((score) => score.userId === topicData.creatorId && score.graphPartId === apiEdge.id)
+    .find((score) => score.username === topicData.creatorName && score.graphPartId === apiEdge.id)
     ?.value.toString() as Score | undefined;
 
   return buildEdge({
@@ -75,13 +75,13 @@ export const convertToApiEdge = (storeEdge: StoreEdge, topicId: number): ApiEdge
 
 export const convertToApiUserScore = (
   graphPart: StoreNode | StoreEdge,
-  userId: number,
+  username: string,
   topicId: number
 ): ApiUserScore | null => {
   if (graphPart.data.score === "-") return null; // don't save a user score for empty scores
 
   return {
-    userId: userId,
+    username: username,
     graphPartId: graphPart.id,
     topicId: topicId,
     value: parseInt(graphPart.data.score),
@@ -97,7 +97,7 @@ interface ApiData {
 export const convertToApi = (topicStore: TopicStoreState): ApiData => {
   if (!topicStore.topic) throw new Error("must create topic before saving topic data");
   const topicId = topicStore.topic.id;
-  const userId = topicStore.topic.creatorId; // when scores per user are added, we'll probably just have a `userScores` Record<> in the store
+  const creatorName = topicStore.topic.creatorName; // when scores per user are added, we'll probably just have a `userScores` Record<> in the store
 
   const nodes = Object.values(topicStore.diagrams).flatMap((diagram) =>
     diagram.nodes.map((node) => convertToApiNode(node, topicId))
@@ -109,7 +109,7 @@ export const convertToApi = (topicStore: TopicStoreState): ApiData => {
 
   const userScores = Object.values(topicStore.diagrams).flatMap((diagram) => {
     const scores = [...diagram.nodes, ...diagram.edges].map((graphPart) =>
-      convertToApiUserScore(graphPart, userId, topicId)
+      convertToApiUserScore(graphPart, creatorName, topicId)
     );
     return compact(scores);
   });

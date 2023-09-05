@@ -23,9 +23,7 @@ export const topicRouter = router({
       return await xprisma.topic.findFirst({
         where: {
           title: opts.input.title,
-          creator: {
-            username: opts.input.username,
-          },
+          creatorName: opts.input.username,
         },
       });
     }),
@@ -46,9 +44,7 @@ export const topicRouter = router({
       return await xprisma.topic.findFirst({
         where: {
           title: opts.input.title,
-          creator: {
-            username: opts.input.username,
-          },
+          creatorName: opts.input.username,
         },
         include: {
           nodes: true,
@@ -91,7 +87,7 @@ export const topicRouter = router({
         scoresToCreate: z.array(userScoreSchema),
         scoresToUpdate: z.array(userScoreSchema),
         scoresToDelete: z.array(
-          userScoreSchema.pick({ userId: true, graphPartId: true, topicId: true })
+          userScoreSchema.pick({ username: true, graphPartId: true, topicId: true })
         ),
       })
     )
@@ -114,7 +110,7 @@ export const topicRouter = router({
       ];
 
       const graphPartsChangedByNotCreator =
-        opts.ctx.user.id !== topic.creatorId &&
+        opts.ctx.user.username !== topic.creatorName &&
         graphPartLists.some((graphParts) => graphParts.length > 0);
 
       // ensure requests don't try changing nodes/edges/scores from other topics
@@ -127,7 +123,7 @@ export const topicRouter = router({
       }
 
       const authorizedToDeleteScore =
-        opts.input.scoresToDelete.every((score) => score.userId === opts.ctx.user.id) ||
+        opts.input.scoresToDelete.every((score) => score.username === opts.ctx.user.username) ||
         // creator can delete another user's score indirectly, by deleting the score's graphPart
         opts.input.scoresToDelete.every((score) => {
           const scoreIsForGraphPartBeingDeleted = [
@@ -135,12 +131,12 @@ export const topicRouter = router({
             ...opts.input.edgesToDelete,
           ].some((graphPart) => graphPart.id === score.graphPartId);
 
-          return opts.ctx.user.id == topic.creatorId && scoreIsForGraphPartBeingDeleted;
+          return opts.ctx.user.username == topic.creatorName && scoreIsForGraphPartBeingDeleted;
         });
       const authorizedToUpsertScore = [
         ...opts.input.scoresToCreate,
         ...opts.input.scoresToUpdate,
-      ].every((score) => score.userId === opts.ctx.user.id);
+      ].every((score) => score.username === opts.ctx.user.username);
 
       if (!authorizedToDeleteScore || !authorizedToUpsertScore)
         throw new TRPCError({ code: "FORBIDDEN" });
@@ -157,7 +153,7 @@ export const topicRouter = router({
             // we've validated that all scores being modified are for the logged-in user, so we can assume the username
             // TODO: remove once we're receiving username from frontend
             data: opts.input.scoresToCreate.map((score) => {
-              return { ...score, username: opts.ctx.user.username };
+              return { ...score, userId: opts.ctx.user.id };
             }),
           });
 
@@ -168,7 +164,9 @@ export const topicRouter = router({
           await tx.edge.update({ where: { id: edge.id }, data: edge });
         for (const score of opts.input.scoresToUpdate) {
           await tx.userScore.update({
-            where: { userId_graphPartId: { userId: score.userId, graphPartId: score.graphPartId } },
+            where: {
+              username_graphPartId: { username: score.username, graphPartId: score.graphPartId },
+            },
             data: score,
           });
         }
@@ -181,8 +179,8 @@ export const topicRouter = router({
         for (const score of opts.input.scoresToDelete) {
           await tx.userScore.delete({
             where: {
-              userId_graphPartId: {
-                userId: score.userId,
+              username_graphPartId: {
+                username: score.username,
                 graphPartId: score.graphPartId,
               },
             },
@@ -225,7 +223,7 @@ export const topicRouter = router({
     .input(topicSchema.pick({ id: true, title: true }))
     .mutation(async (opts) => {
       const topic = await xprisma.topic.findUniqueOrThrow({ where: { id: opts.input.id } });
-      if (opts.ctx.user.id !== topic.creatorId) throw new TRPCError({ code: "FORBIDDEN" });
+      if (opts.ctx.user.username !== topic.creatorName) throw new TRPCError({ code: "FORBIDDEN" });
 
       return await xprisma.topic.update({
         where: { id: opts.input.id },
@@ -240,7 +238,7 @@ export const topicRouter = router({
     .input(topicSchema.pick({ id: true }))
     .mutation(async (opts) => {
       const topic = await xprisma.topic.findUniqueOrThrow({ where: { id: opts.input.id } });
-      if (opts.ctx.user.id !== topic.creatorId) throw new TRPCError({ code: "FORBIDDEN" });
+      if (opts.ctx.user.username !== topic.creatorName) throw new TRPCError({ code: "FORBIDDEN" });
 
       await xprisma.topic.delete({ where: { id: opts.input.id } });
 

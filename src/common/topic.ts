@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { reservedSecondLevelEndpointNames } from "./reservedEndpointNames";
+import { userSchema } from "./user";
 
 export const topicSchema = z.object({
   id: z.number(),
@@ -16,5 +17,5 @@ export const topicSchema = z.object({
       (topic) => !reservedSecondLevelEndpointNames.includes(topic.toLocaleLowerCase()),
       (topic) => ({ message: `${topic} is a reserved title.` })
     ),
-  creatorId: z.number(), // user id
+  creatorName: userSchema.shape.username,
 });

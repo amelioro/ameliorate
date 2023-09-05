@@ -54,7 +54,7 @@ const saveDiffs = (storeBefore: TopicStoreState, storeAfter: TopicStoreState) =>
   const [scoresToCreate, scoresToUpdate, scoresToDelete] = getCrudDiffs(
     apiBefore.userScores,
     apiAfter.userScores,
-    (score) => score.userId.toString() + score.graphPartId
+    (score) => score.username.toString() + score.graphPartId
   );
 
   const changeLists = {

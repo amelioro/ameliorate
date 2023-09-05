@@ -19,7 +19,7 @@ const seed = async () => {
 
   // delete topic and recreate data to make sure it's all fresh if we change this file
   const topicToDelete = await xprisma.topic.findUnique({
-    where: { title_creatorId: { creatorId: testUser.id, title: "cars-going-too-fast" } },
+    where: { title_creatorName: { creatorName: testUser.username, title: "cars-going-too-fast" } },
   });
   if (topicToDelete) await xprisma.topic.delete({ where: { id: topicToDelete.id } });
 

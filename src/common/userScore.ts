@@ -1,7 +1,9 @@
 import { z } from "zod";
 
+import { userSchema } from "./user";
+
 export const userScoreSchema = z.object({
-  userId: z.number(),
+  username: userSchema.shape.username,
   graphPartId: z.string().uuid(),
   topicId: z.number(),
   // would be nice to keep this in sync with front-end's string equivalent that includes '-',

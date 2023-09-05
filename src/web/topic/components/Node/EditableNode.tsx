@@ -20,7 +20,7 @@ import {
 // TODO: should not re-render when node position changes
 export const EditableNode = ({ node, className = "" }: { node: Node; className?: string }) => {
   const { sessionUser } = useSessionUser();
-  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.id);
+  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
 
   const theme = useTheme();
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);

@@ -60,7 +60,7 @@ const uploadTopic = (event: React.ChangeEvent<HTMLInputElement>) => {
 
 export const TopicToolbar = () => {
   const { sessionUser } = useSessionUser();
-  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.id);
+  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const isTableActive = useIsTableActive();
   const showImpliedEdges = useShowImpliedEdges();
   const [canUndo, canRedo] = useTemporalHooks();

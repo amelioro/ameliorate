@@ -1,10 +1,10 @@
 import { useTopicStore } from "./store";
 
-export const useUserCanEditTopicData = (userId?: number) => {
+export const useUserCanEditTopicData = (username?: string) => {
   return useTopicStore((state) => {
     if (!state.topic) return true;
-    if (!userId) return false;
+    if (!username) return false;
 
-    return state.topic.creatorId === userId;
+    return state.topic.creatorName === username;
   });
 };
