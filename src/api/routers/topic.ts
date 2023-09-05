@@ -149,13 +149,7 @@ export const topicRouter = router({
         if (opts.input.edgesToCreate.length > 0)
           await tx.edge.createMany({ data: opts.input.edgesToCreate });
         if (opts.input.scoresToCreate.length > 0)
-          await tx.userScore.createMany({
-            // we've validated that all scores being modified are for the logged-in user, so we can assume the username
-            // TODO: remove once we're receiving username from frontend
-            data: opts.input.scoresToCreate.map((score) => {
-              return { ...score, userId: opts.ctx.user.id };
-            }),
-          });
+          await tx.userScore.createMany({ data: opts.input.scoresToCreate });
 
         /* eslint-disable functional/no-loop-statement -- seems like functional methods don't work with promises nicely https://stackoverflow.com/questions/37576685/using-async-await-with-a-foreach-loop#comment65277758_37576787 */
         for (const node of opts.input.nodesToUpdate)
@@ -206,7 +200,6 @@ export const topicRouter = router({
       const newTopic = await xprisma.topic.create({
         data: {
           title: opts.input.title,
-          creatorId: opts.ctx.user.id, // TODO: remove
           creatorName: opts.ctx.user.username,
         },
       });
