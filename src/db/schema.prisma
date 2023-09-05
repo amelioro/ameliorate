@@ -31,17 +31,17 @@ model Topic {
   id          Int      @id @default(autoincrement())
   title       String   @db.VarChar(100)
   creatorId   Int // TODO: remove in favor of creatorName
-  creatorName String?
+  creatorName String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  creator    User        @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  creator    User        @relation(fields: [creatorName], references: [username], onDelete: Cascade)
   nodes      Node[]
   edges      Edge[]
   userScores UserScore[]
 
-  @@unique([title, creatorId])
-  @@index([creatorId])
+  @@unique([title, creatorName])
+  @@index([creatorName])
   @@map("topics")
 }
 
@@ -107,19 +107,19 @@ enum EdgeType {
 
 model UserScore {
   userId      Int
-  username    String?
+  username    String
   graphPartId String   @db.Uuid
   topicId     Int // mainly so that we can cascade (since graphPart isn't a FK to cascade from that)
   value       Int
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [username], references: [username], onDelete: Cascade)
   topic Topic @relation(fields: [topicId], references: [id], onDelete: Cascade)
   // when prisma allows weak FKs https://github.com/prisma/prisma/issues/7351, relation to node & to edge could be added here
 
-  @@id([userId, graphPartId])
-  @@index([userId])
+  @@id([username, graphPartId])
+  @@index([username])
   @@index([graphPartId])
   @@index([topicId])
   @@map("userScores")

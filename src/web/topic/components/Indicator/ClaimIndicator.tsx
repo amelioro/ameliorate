@@ -14,7 +14,7 @@ interface Props {
 
 export const ClaimIndicator = ({ graphPartId, graphPartType }: Props) => {
   const { sessionUser } = useSessionUser();
-  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.id);
+  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const explicitClaimCount = useExplicitClaimCount(graphPartId);
 
   const Icon = explicitClaimCount > 0 ? Article : ArticleOutlined;

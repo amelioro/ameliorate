@@ -92,7 +92,7 @@ interface Props {
 
 export const CriteriaTable = ({ problemNodeId }: Props) => {
   const { sessionUser } = useSessionUser();
-  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.id);
+  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const [useSolutionsForColumns, setUseSolutionsForColumns] = useState<boolean>(true);
   const problemNode = useNode(problemNodeId, topicDiagramId);
   const nodeChildren = useNodeChildren(problemNodeId, topicDiagramId);

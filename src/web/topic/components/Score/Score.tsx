@@ -34,7 +34,7 @@ interface ScoreProps {
 // * allow actions to be positioned around the dial for even closer navigability to each one
 export const Score = ({ graphPartId, graphPartType, score }: ScoreProps) => {
   const { sessionUser } = useSessionUser();
-  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.id);
+  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const [selected, setSelected] = useState(false);
   const [hovering, setHovering] = useState(false);
   const mainButtonRef = useRef<HTMLButtonElement | null>(null);
