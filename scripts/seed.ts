@@ -9,10 +9,10 @@ import { xprisma } from "../src/db/extendedPrisma";
 
 const seed = async () => {
   const testUser = await xprisma.user.upsert({
-    where: { username: "test-user" },
+    where: { username: "examples" },
     update: {},
     create: {
-      username: "test-user",
+      username: "examples",
       authId: "oauth-test-user",
     },
   });
