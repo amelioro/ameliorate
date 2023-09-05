@@ -9,10 +9,10 @@ import { xprisma } from "../src/db/extendedPrisma";
 
 const seed = async () => {
   const testUser = await xprisma.user.upsert({
-    where: { username: "test-user" },
+    where: { username: "examples" },
     update: {},
     create: {
-      username: "test-user",
+      username: "examples",
       authId: "oauth-test-user",
     },
   });
@@ -25,7 +25,6 @@ const seed = async () => {
 
   const topicCarsGoingTooFast = await xprisma.topic.create({
     data: {
-      creatorId: testUser.id,
       creatorName: testUser.username,
       title: "cars-going-too-fast",
     },
@@ -179,7 +178,6 @@ const seed = async () => {
   const createScore = async (graphPart: Node | Edge, value: number) => {
     return await xprisma.userScore.create({
       data: {
-        userId: testUser.id,
         username: testUser.username,
         graphPartId: graphPart.id,
         topicId: graphPart.topicId,
