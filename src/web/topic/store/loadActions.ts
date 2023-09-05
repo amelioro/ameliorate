@@ -57,6 +57,7 @@ export const populateFromApi = async (topicData: TopicData) => {
         id: topicData.id,
         title: topicData.title,
         creatorId: topicData.creatorId,
+        creatorName: topicData.creatorName,
       },
       diagrams: {
         [topicDiagramId]: layoutedTopicDiagram,
