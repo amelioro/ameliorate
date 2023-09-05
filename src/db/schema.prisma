@@ -30,7 +30,6 @@ model User {
 model Topic {
   id          Int      @id @default(autoincrement())
   title       String   @db.VarChar(100)
-  creatorId   Int // TODO: remove in favor of creatorName
   creatorName String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -106,7 +105,6 @@ enum EdgeType {
 }
 
 model UserScore {
-  userId      Int
   username    String
   graphPartId String   @db.Uuid
   topicId     Int // mainly so that we can cascade (since graphPart isn't a FK to cascade from that)
