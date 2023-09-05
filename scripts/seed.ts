@@ -26,6 +26,7 @@ const seed = async () => {
   const topicCarsGoingTooFast = await xprisma.topic.create({
     data: {
       creatorId: testUser.id,
+      creatorName: testUser.username,
       title: "cars-going-too-fast",
     },
   });
@@ -179,6 +180,7 @@ const seed = async () => {
     return await xprisma.userScore.create({
       data: {
         userId: testUser.id,
+        username: testUser.username,
         graphPartId: graphPart.id,
         topicId: graphPart.topicId,
         value: value,
