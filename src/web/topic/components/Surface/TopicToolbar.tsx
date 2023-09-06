@@ -13,8 +13,14 @@ import { StorageValue } from "zustand/middleware";
 
 import { errorWithData } from "../../../../common/errorHandling";
 import { useSessionUser } from "../../../common/hooks";
+import { Perspectives } from "../../../view/components/Perspectives/Perspectives";
 import { migrate } from "../../store/migrate";
-import { TopicStoreState, useIsTableActive, useShowImpliedEdges } from "../../store/store";
+import {
+  TopicStoreState,
+  useIsTableActive,
+  useOnPlayground,
+  useShowImpliedEdges,
+} from "../../store/store";
 import { useUserCanEditTopicData } from "../../store/userHooks";
 import { getPersistState, redo, resetTopicData, setTopicData, undo } from "../../store/utilActions";
 import { useTemporalHooks } from "../../store/utilHooks";
@@ -61,6 +67,7 @@ const uploadTopic = (event: React.ChangeEvent<HTMLInputElement>, sessionUsername
 export const TopicToolbar = () => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
+  const onPlayground = useOnPlayground();
   const isTableActive = useIsTableActive();
   const showImpliedEdges = useShowImpliedEdges();
   const [canUndo, canRedo] = useTemporalHooks();
@@ -139,6 +146,7 @@ export const TopicToolbar = () => {
             </StyledToggleButton>
           </>
         )}
+        {!onPlayground && <Perspectives />}
       </Toolbar>
     </AppBar>
   );

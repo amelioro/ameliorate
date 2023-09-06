@@ -3,10 +3,10 @@ import { useRef, useState } from "react";
 
 import { htmlDefaultFontSize } from "../../../../pages/_document.page";
 import { useSessionUser } from "../../../common/hooks";
+import { usePerspectives } from "../../../view/store/store";
 import { useTopicZoom } from "../../hooks/topicHooks";
-import { useUserScore } from "../../store/graphPartHooks";
-import { useOnPlayground } from "../../store/store";
-import { useUserCanEditTopicData } from "../../store/userHooks";
+import { useUserScores } from "../../store/scoreHooks";
+import { playgroundUsername, useOnPlayground } from "../../store/store";
 import { type Score as ScoreData } from "../../utils/diagram";
 import { indicatorLengthRem } from "../../utils/node";
 import { BackdropPopper, ScorePopper, StyledButton } from "./Score.styles";
@@ -34,14 +34,17 @@ interface ScoreProps {
 // * allow actions to be positioned around the dial for even closer navigability to each one
 export const Score = ({ graphPartId }: ScoreProps) => {
   const { sessionUser } = useSessionUser();
-  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const onPlayground = useOnPlayground();
+  const myUsername = onPlayground ? playgroundUsername : sessionUser?.username;
+  const perspectives = usePerspectives();
+  const canEdit = perspectives.length === 1 && myUsername && perspectives[0] === myUsername;
+
   const [selected, setSelected] = useState(false);
   const [hovering, setHovering] = useState(false);
   const mainButtonRef = useRef<HTMLButtonElement | null>(null);
 
-  const username = onPlayground ? playgroundUsername : sessionUser?.username;
-  const score = useUserScore(graphPartId, username) ?? "-";
+  const userScores = useUserScores(graphPartId, perspectives);
+  const score = Object.values(userScores)[0] ?? "-";
 
   // Not reactive, but zoom is currently only used when hovering/selected change, which triggers a
   // re-render, so we'll still get an updated zoom value.
@@ -56,7 +59,7 @@ export const Score = ({ graphPartId }: ScoreProps) => {
 
   const scoreColor = scoreColors[score] as ButtonProps["color"]; // not sure how to type this without type assertion, while still being able to access palette with it
 
-  if (!userCanEditTopicData || !username) {
+  if (!canEdit) {
     return (
       <StyledButton
         buttonLength={buttonLengthRem}
@@ -127,7 +130,7 @@ export const Score = ({ graphPartId }: ScoreProps) => {
           },
         ]}
       >
-        <ScorePie circleDiameter={circleDiameter} username={username} graphPartId={graphPartId} />
+        <ScorePie circleDiameter={circleDiameter} username={myUsername} graphPartId={graphPartId} />
 
         {/* second button here because we want Pie to display in front of everything except the button... user isn't supposed to know there's two */}
         {/* TODO: extract ScoreButton component for reuse - couldn't figure out how to get forwardref to work */}
