@@ -1,14 +1,14 @@
 import { createDraft, finishDraft } from "immer";
+import set from "lodash/set";
 import { type EdgeSelectionChange, type NodeSelectionChange } from "reactflow";
 
 import { errorWithData } from "../../../common/errorHandling";
-import { GraphPartType, Score, findGraphPart, findNode } from "../utils/diagram";
+import { Score, findGraphPart, findNode } from "../utils/diagram";
 import { useTopicStore } from "./store";
 import {
   getActiveDiagram,
   getDiagram,
   getDiagramOrThrow,
-  getTopicDiagram,
   setSelected as setSelectedUtil,
 } from "./utils";
 
@@ -18,23 +18,19 @@ import {
 // - on the child/implicit root claim (if it exists)
 // keeping this in sync manually ain't great.
 // TODO: store scores in one place
-export const setScore = (graphPartId: string, graphPartType: GraphPartType, score: Score) => {
+export const setScore = (username: string, graphPartId: string, score: Score) => {
   const state = createDraft(useTopicStore.getState());
 
-  // update this node's score
-  const activeDiagram = getActiveDiagram(state);
-  const graphPart = findGraphPart(graphPartId, activeDiagram);
   /* eslint-disable functional/immutable-data, no-param-reassign */
-  graphPart.data.score = score;
+  set(state.userScores, [username, graphPartId], score);
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   // update parent graphPart's score if this is a RootClaim
+  const activeDiagram = getActiveDiagram(state);
+  const graphPart = findGraphPart(graphPartId, activeDiagram);
   if (graphPart.type === "rootClaim") {
-    const topicDiagram = getTopicDiagram(state);
-    // assuming we won't support nested root claims, so parent will always be root
-    const arguedDiagramPart = findGraphPart(activeDiagram.id, topicDiagram);
     /* eslint-disable functional/immutable-data, no-param-reassign */
-    arguedDiagramPart.data.score = score;
+    set(state.userScores, [username, activeDiagram.id], score);
     /* eslint-enable functional/immutable-data, no-param-reassign */
   }
 
@@ -45,7 +41,7 @@ export const setScore = (graphPartId: string, graphPartType: GraphPartType, scor
     if (!rootClaim) throw errorWithData("child claim not found", claimTree);
 
     /* eslint-disable functional/immutable-data, no-param-reassign */
-    rootClaim.data.score = score;
+    set(state.userScores, [username, rootClaim.id], score);
     /* eslint-enable functional/immutable-data, no-param-reassign */
   }
 

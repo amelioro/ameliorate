@@ -5,7 +5,6 @@ import {
   GraphPartType,
   RelationDirection,
   buildNode,
-  findGraphPart,
   findNode,
   layoutVisibleComponents,
 } from "../utils/diagram";
@@ -19,13 +18,11 @@ export const viewOrCreateClaimTree = (diagramPartId: string, diagramPartType: Gr
   // create claim tree if it doesn't exist
   if (!getDiagram(state, diagramPartId)) {
     const activeDiagram = getActiveDiagram(state);
-    const diagramPart = findGraphPart(diagramPartId, activeDiagram);
     const label = getImplicitLabel(diagramPartId, diagramPartType, activeDiagram);
 
     /* eslint-disable functional/immutable-data, no-param-reassign */
     const newNode = buildNode({
       label: label,
-      score: diagramPart.data.score,
       type: "rootClaim",
       diagramId: diagramPartId,
     });

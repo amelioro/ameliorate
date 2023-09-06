@@ -1,11 +1,12 @@
 import { inferRouterOutputs } from "@trpc/server";
 import compact from "lodash/compact";
+import set from "lodash/set";
 
 import { AppRouter } from "../../../api/routers/_app";
 import { Edge as ApiEdge, Edge } from "../../../common/edge";
 import { Node as ApiNode, Node } from "../../../common/node";
-import { UserScore as ApiUserScore, UserScore } from "../../../common/userScore";
-import { TopicStoreState } from "../store/store";
+import { UserScore as ApiScore } from "../../../common/userScore";
+import { UserScores as StoreScores, TopicStoreState } from "../store/store";
 import {
   Score,
   Edge as StoreEdge,
@@ -15,40 +16,42 @@ import {
   topicDiagramId,
 } from "./diagram";
 
-// TODO: passing topicData here is really bad, but userScores will be separated from StoreEdge soon
-export const convertToStoreNode = (apiNode: TopicNode, diagramId: string, topicData: TopicData) => {
-  const score: Score | undefined = topicData.userScores
-    .find((score) => score.username === topicData.creatorName && score.graphPartId === apiNode.id)
-    ?.value.toString() as Score | undefined;
-
+export const convertToStoreNode = (apiNode: TopicNode, diagramId: string) => {
   return buildNode({
     id: apiNode.id,
     label: apiNode.text,
-    score: score,
     type: apiNode.type,
     diagramId: diagramId,
   });
 };
 
-// TODO: passing topicData here is really bad, but userScores will be separated from StoreEdge soon
-export const convertToStoreEdge = (apiEdge: TopicEdge, diagramId: string, topicData: TopicData) => {
-  const score: Score | undefined = topicData.userScores
-    .find((score) => score.username === topicData.creatorName && score.graphPartId === apiEdge.id)
-    ?.value.toString() as Score | undefined;
-
+export const convertToStoreEdge = (apiEdge: TopicEdge, diagramId: string) => {
   return buildEdge({
     id: apiEdge.id,
     sourceNodeId: apiEdge.sourceId,
     targetNodeId: apiEdge.targetId,
     relation: apiEdge.type,
-    score,
     diagramId,
   });
+};
+
+export const convertToStoreScores = (apiUserScores: TopicUserScores): StoreScores => {
+  const storeScores: StoreScores = {};
+
+  apiUserScores.forEach((apiScore) => {
+    const score: Score = apiScore.value.toString() as Score;
+
+    // mutation seems much easier than not mutating
+    set(storeScores, [apiScore.username, apiScore.graphPartId], score);
+  });
+
+  return storeScores;
 };
 
 export type TopicData = NonNullable<inferRouterOutputs<AppRouter>["topic"]["getData"]>;
 export type TopicNode = TopicData["nodes"][number];
 export type TopicEdge = TopicData["edges"][number];
+export type TopicUserScores = TopicData["userScores"];
 
 export const convertToApiNode = (storeNode: StoreNode, topicId: number): ApiNode => {
   return {
@@ -73,31 +76,32 @@ export const convertToApiEdge = (storeEdge: StoreEdge, topicId: number): ApiEdge
   };
 };
 
-export const convertToApiUserScore = (
-  graphPart: StoreNode | StoreEdge,
-  username: string,
-  topicId: number
-): ApiUserScore | null => {
-  if (graphPart.data.score === "-") return null; // don't save a user score for empty scores
+export const convertToApiUserScores = (storeScores: StoreScores, topicId: number): ApiScore[] => {
+  const apiUserScores = Object.entries(storeScores).flatMap(([username, scoresByGraphPart]) => {
+    return Object.entries(scoresByGraphPart).flatMap(([graphPartId, score]) => {
+      if (score === "-") return null; // don't save a user score for empty scores
 
-  return {
-    username: username,
-    graphPartId: graphPart.id,
-    topicId: topicId,
-    value: parseInt(graphPart.data.score),
-  };
+      return {
+        username,
+        graphPartId,
+        topicId,
+        value: parseInt(score),
+      };
+    });
+  });
+
+  return compact(apiUserScores);
 };
 
 interface ApiData {
   nodes: Node[];
   edges: Edge[];
-  userScores: UserScore[];
+  userScores: ApiScore[];
 }
 
 export const convertToApi = (topicStore: TopicStoreState): ApiData => {
   if (!topicStore.topic) throw new Error("must create topic before saving topic data");
   const topicId = topicStore.topic.id;
-  const creatorName = topicStore.topic.creatorName; // when scores per user are added, we'll probably just have a `userScores` Record<> in the store
 
   const nodes = Object.values(topicStore.diagrams).flatMap((diagram) =>
     diagram.nodes.map((node) => convertToApiNode(node, topicId))
@@ -107,12 +111,7 @@ export const convertToApi = (topicStore: TopicStoreState): ApiData => {
     diagram.edges.map((edge) => convertToApiEdge(edge, topicId))
   );
 
-  const userScores = Object.values(topicStore.diagrams).flatMap((diagram) => {
-    const scores = [...diagram.nodes, ...diagram.edges].map((graphPart) =>
-      convertToApiUserScore(graphPart, creatorName, topicId)
-    );
-    return compact(scores);
-  });
+  const userScores = convertToApiUserScores(topicStore.userScores, topicId);
 
   return { nodes, edges, userScores };
 };

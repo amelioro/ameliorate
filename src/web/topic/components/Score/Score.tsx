@@ -4,8 +4,10 @@ import { useRef, useState } from "react";
 import { htmlDefaultFontSize } from "../../../../pages/_document.page";
 import { useSessionUser } from "../../../common/hooks";
 import { useTopicZoom } from "../../hooks/topicHooks";
+import { useUserScore } from "../../store/graphPartHooks";
+import { useOnPlayground } from "../../store/store";
 import { useUserCanEditTopicData } from "../../store/userHooks";
-import { type GraphPartType, type Score as ScoreData } from "../../utils/diagram";
+import { type Score as ScoreData } from "../../utils/diagram";
 import { indicatorLengthRem } from "../../utils/node";
 import { BackdropPopper, ScorePopper, StyledButton } from "./Score.styles";
 import { ScorePie } from "./ScorePie";
@@ -25,19 +27,25 @@ export const scoreColors: Record<ScoreData, keyof Palette> = {
 
 interface ScoreProps {
   graphPartId: string;
-  graphPartType: GraphPartType;
-  score: ScoreData;
 }
 
 // similar to MUI speed dial (https://mui.com/material-ui/react-speed-dial/),
-// but the main reason for creating a custom component are:
+// but the main reason for creating a custom component is:
 // * allow actions to be positioned around the dial for even closer navigability to each one
-export const Score = ({ graphPartId, graphPartType, score }: ScoreProps) => {
+export const Score = ({ graphPartId }: ScoreProps) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
+  const onPlayground = useOnPlayground();
   const [selected, setSelected] = useState(false);
   const [hovering, setHovering] = useState(false);
   const mainButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  // If we're on the playground, hardcode "me." as the username. This:
+  // - allows us to still use the userScores object in the store
+  // - indicates that the scores are the creator's
+  // - indicates that the user is not a real user, since "." is not a valid username character
+  const username = onPlayground ? "me." : sessionUser?.username;
+  const score = useUserScore(graphPartId, username) ?? "-";
 
   // Not reactive, but zoom is currently only used when hovering/selected change, which triggers a
   // re-render, so we'll still get an updated zoom value.
@@ -52,7 +60,7 @@ export const Score = ({ graphPartId, graphPartType, score }: ScoreProps) => {
 
   const scoreColor = scoreColors[score] as ButtonProps["color"]; // not sure how to type this without type assertion, while still being able to access palette with it
 
-  if (!userCanEditTopicData) {
+  if (!userCanEditTopicData || !username) {
     return (
       <StyledButton
         buttonLength={buttonLengthRem}
@@ -123,11 +131,7 @@ export const Score = ({ graphPartId, graphPartType, score }: ScoreProps) => {
           },
         ]}
       >
-        <ScorePie
-          circleDiameter={circleDiameter}
-          graphPartId={graphPartId}
-          graphPartType={graphPartType}
-        />
+        <ScorePie circleDiameter={circleDiameter} username={username} graphPartId={graphPartId} />
 
         {/* second button here because we want Pie to display in front of everything except the button... user isn't supposed to know there's two */}
         {/* TODO: extract ScoreButton component for reuse - couldn't figure out how to get forwardref to work */}

@@ -242,9 +242,17 @@ export const isEdgeImpliedByComposition = (edge: Edge, diagram: Diagram) => {
   return impliedThroughChildComponent;
 };
 
+// Implied edges feel a little jank.
+//
+// Previously an edge was no longer implied if it had a score, but scores became user-specific, and
+// edges should not be implied based on the user viewing them.
+//
+// We don't want users to apply scores and then never see them again due to an implied edge being
+// hidden. The button to show implied edges should reduce this pain, but maybe we need a better view
+// to reduce the need to hide implied edges?
 export const isEdgeImplied = (edge: Edge, displayDiagram: Diagram, claimTrees: Diagram[]) => {
   if (displayDiagram.id !== topicDiagramId) return false;
-  if (edge.data.score !== "-" || hasClaims(edge, displayDiagram, claimTrees)) return false;
+  if (hasClaims(edge, displayDiagram, claimTrees)) return false;
 
   return isEdgeAShortcut(edge, displayDiagram) || isEdgeImpliedByComposition(edge, displayDiagram);
 };

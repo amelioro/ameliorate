@@ -5,6 +5,7 @@ import { createWithEqualityFn } from "zustand/traditional";
 
 import {
   Diagram,
+  Score,
   buildNode,
   filterHiddenComponents,
   getDiagramTitle,
@@ -25,9 +26,16 @@ const initialDiagrams: Record<string, Diagram> = {
 
 type StoreTopic = Omit<Topic, "createdAt" | "updatedAt">;
 
+// TODO: probably better to put userScores into a separate store (it doesn't seem necessary to
+// couple scores with the nodes/edges, and we'd be able to avoid triggering score comparators by
+// non-score-related changes), but a separate store will create the problem of separate undos/redos,
+// and the need for another apiSyncer middleware? So it'll be nontrivial.
+export type UserScores = Record<string, Record<string, Score>>; // userScores[:username][:graphPartId]
+
 export interface TopicStoreState {
   topic: StoreTopic | null;
   diagrams: Record<string, Diagram>;
+  userScores: UserScores;
   activeTableProblemId: string | null;
   activeClaimTreeId: string | null;
   showImpliedEdges: boolean;
@@ -36,6 +44,7 @@ export interface TopicStoreState {
 export const initialState: TopicStoreState = {
   topic: null,
   diagrams: initialDiagrams,
+  userScores: {},
   activeTableProblemId: null,
   activeClaimTreeId: null,
   showImpliedEdges: true,
@@ -53,7 +62,7 @@ export const useTopicStore = createWithEqualityFn<TopicStoreState>()(
         devtools(() => initialState),
         {
           name: topicStorePlaygroundName,
-          version: 14,
+          version: 15,
           migrate: migrate,
           skipHydration: true,
         }
@@ -117,4 +126,8 @@ export const useClaimTreesWithExplicitClaims = () => {
 
 export const useShowImpliedEdges = () => {
   return useTopicStore((state) => state.showImpliedEdges);
+};
+
+export const useOnPlayground = () => {
+  return useTopicStore((state) => state.topic === null);
 };
