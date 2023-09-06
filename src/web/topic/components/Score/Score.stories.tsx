@@ -4,6 +4,4 @@ import { Score } from "./Score";
 
 export default { component: Score } as Meta<typeof Score>;
 
-export const Basic: StoryFn<typeof Score> = () => (
-  <Score graphPartId="1" graphPartType="node" score="-" />
-);
+export const Basic: StoryFn<typeof Score> = () => <Score graphPartId="1" />;

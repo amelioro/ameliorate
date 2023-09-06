@@ -1,7 +1,12 @@
 import { claimRelationNames } from "../../../common/edge";
 import { errorWithData } from "../../../common/errorHandling";
 import { emitter } from "../../common/event";
-import { type TopicData, convertToStoreEdge, convertToStoreNode } from "../utils/apiConversion";
+import {
+  type TopicData,
+  convertToStoreEdge,
+  convertToStoreNode,
+  convertToStoreScores,
+} from "../utils/apiConversion";
 import { Diagram, layoutVisibleComponents, topicDiagramId } from "../utils/diagram";
 import { claimNodeTypes } from "../utils/node";
 import { topicStorePlaygroundName, useTopicStore } from "./store";
@@ -18,8 +23,8 @@ export const populateFromApi = async (topicData: TopicData) => {
   );
   const topicDiagram: Diagram = {
     id: topicDiagramId,
-    nodes: topicDiagramNodes.map((node) => convertToStoreNode(node, topicDiagramId, topicData)),
-    edges: topicDiagramEdges.map((edge) => convertToStoreEdge(edge, topicDiagramId, topicData)),
+    nodes: topicDiagramNodes.map((node) => convertToStoreNode(node, topicDiagramId)),
+    edges: topicDiagramEdges.map((edge) => convertToStoreEdge(edge, topicDiagramId)),
     type: "problem",
   };
 
@@ -35,11 +40,11 @@ export const populateFromApi = async (topicData: TopicData) => {
 
         nodes: topicData.nodes
           .filter((node) => node.arguedDiagramPartId === diagramId)
-          .map((node) => convertToStoreNode(node, diagramId, topicData)),
+          .map((node) => convertToStoreNode(node, diagramId)),
 
         edges: topicData.edges
           .filter((edge) => edge.arguedDiagramPartId === diagramId)
-          .map((edge) => convertToStoreEdge(edge, diagramId, topicData)),
+          .map((edge) => convertToStoreEdge(edge, diagramId)),
 
         type: "claim",
       };
@@ -50,6 +55,8 @@ export const populateFromApi = async (topicData: TopicData) => {
   const layoutedClaimTrees: [string, Diagram][] = await Promise.all(
     claimTrees.map(async (diagram) => [diagram.id, await layoutVisibleComponents(diagram, [])])
   );
+
+  const userScores = convertToStoreScores(topicData.userScores);
 
   useTopicStore.setState(
     {
@@ -62,6 +69,7 @@ export const populateFromApi = async (topicData: TopicData) => {
         [topicDiagramId]: layoutedTopicDiagram,
         ...Object.fromEntries(layoutedClaimTrees),
       },
+      userScores,
       activeTableProblemId: null,
       activeClaimTreeId: null,
     },

@@ -1,5 +1,6 @@
 /* eslint-disable -- don't really care to make this file meet eslint standards, since store type is changing between each migration */
 
+import set from "lodash/set";
 import camelCase from "lodash/camelCase";
 import { v4 as uuid } from "uuid";
 
@@ -19,6 +20,7 @@ export const migrate = (persistedState: any, version: number) => {
     migrate_11_to_12,
     migrate_12_to_13,
     migrate_13_to_14,
+    migrate_14_to_15,
   ];
 
   let state = persistedState;
@@ -292,6 +294,43 @@ const migrate_13_to_14 = (state: any) => {
     // rename activeClaimDiagramId -> activeClaimTreeId
     state.activeClaimTreeId = state.activeClaimDiagramId;
     delete state.activeClaimDiagramId;
+  });
+
+  return state;
+};
+/* eslint-enable */
+
+/* eslint-disable functional/immutable-data, no-param-reassign -- ok we can at least try to meet non-mutation standards by pasting in types */
+
+interface GraphPart14 {
+  id: string;
+  data: { score?: string }; // optional because being removed
+}
+interface Diagram14 {
+  nodes: GraphPart14[];
+  edges: GraphPart14[];
+}
+type UserScores = Record<string, Record<string, string>>; // userScores[:username][:graphPartId]
+interface State14 {
+  diagrams: Record<string, Diagram14>;
+  userScores: UserScores; // new
+}
+
+// move scores from node/edge to userScores
+const migrate_14_to_15 = (state: State14) => {
+  // we only care to migrate playground data, so any scores will be under the user "me."
+  state.userScores = {};
+
+  Object.values(state.diagrams).forEach((diagram) => {
+    diagram.nodes.forEach((node) => {
+      if (node.data.score !== "-") set(state.userScores, ["me.", node.id], node.data.score);
+      delete node.data.score;
+    });
+
+    diagram.edges.forEach((edge) => {
+      if (edge.data.score !== "-") set(state.userScores, ["me.", edge.id], edge.data.score);
+      delete edge.data.score;
+    });
   });
 
   return state;

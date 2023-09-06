@@ -4,6 +4,8 @@ import { useEffect } from "react";
 
 import { TopicWorkspace } from "../web/topic/components/TopicWorkspace/TopicWorkspace";
 import { populateFromLocalStorage } from "../web/topic/store/loadActions";
+import { playgroundUsername } from "../web/topic/store/store";
+import { setPerspectives } from "../web/view/store/store";
 
 // TODO: add save button to playground
 const Playground: NextPage = () => {
@@ -14,6 +16,7 @@ const Playground: NextPage = () => {
       await populateFromLocalStorage();
     };
     void populate();
+    setPerspectives([playgroundUsername]);
   }, []);
 
   return (

@@ -28,7 +28,6 @@ export interface Node {
   id: string;
   data: {
     label: string;
-    score: Score;
     diagramId: string;
     showing: boolean;
   };
@@ -43,16 +42,14 @@ export interface Node {
 interface BuildProps {
   id?: string;
   label?: string;
-  score?: Score;
   type: FlowNodeType;
   diagramId: string;
 }
-export const buildNode = ({ id, label, score, type, diagramId }: BuildProps): Node => {
+export const buildNode = ({ id, label, type, diagramId }: BuildProps): Node => {
   const node = {
     id: id ?? uuid(),
     data: {
       label: label ?? `new node`,
-      score: score ?? ("-" as Score),
       diagramId: diagramId,
       showing: true,
     },
@@ -72,7 +69,6 @@ export const markerStart = { type: MarkerType.ArrowClosed, width: 30, height: 30
 export interface Edge {
   id: string;
   data: {
-    score: Score;
     diagramId: string;
   };
   label: RelationName;
@@ -88,7 +84,6 @@ interface BuildEdgeProps {
   sourceNodeId: string;
   targetNodeId: string;
   relation: RelationName;
-  score?: Score;
   diagramId: string;
 }
 export const buildEdge = ({
@@ -96,13 +91,11 @@ export const buildEdge = ({
   sourceNodeId,
   targetNodeId,
   relation,
-  score,
   diagramId,
 }: BuildEdgeProps): Edge => {
   return {
     id: id ?? uuid(),
     data: {
-      score: score ?? ("-" as Score),
       diagramId: diagramId,
     },
     label: relation,
