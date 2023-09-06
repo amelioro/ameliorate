@@ -40,11 +40,7 @@ export const Score = ({ graphPartId }: ScoreProps) => {
   const [hovering, setHovering] = useState(false);
   const mainButtonRef = useRef<HTMLButtonElement | null>(null);
 
-  // If we're on the playground, hardcode "me." as the username. This:
-  // - allows us to still use the userScores object in the store
-  // - indicates that the scores are the creator's
-  // - indicates that the user is not a real user, since "." is not a valid username character
-  const username = onPlayground ? "me." : sessionUser?.username;
+  const username = onPlayground ? playgroundUsername : sessionUser?.username;
   const score = useUserScore(graphPartId, username) ?? "-";
 
   // Not reactive, but zoom is currently only used when hovering/selected change, which triggers a

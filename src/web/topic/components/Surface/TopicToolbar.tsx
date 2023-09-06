@@ -34,7 +34,7 @@ const downloadTopic = () => {
   fileDownload(JSON.stringify(persistState), `${sanitizedFileName}.json`);
 };
 
-const uploadTopic = (event: React.ChangeEvent<HTMLInputElement>) => {
+const uploadTopic = (event: React.ChangeEvent<HTMLInputElement>, sessionUsername?: string) => {
   if (event.target.files === null) return;
 
   const file = event.target.files[0];
@@ -51,7 +51,7 @@ const uploadTopic = (event: React.ChangeEvent<HTMLInputElement>) => {
 
       const migratedState = migrate(persistState.state, persistState.version) as TopicStoreState;
 
-      setTopicData(migratedState);
+      setTopicData(migratedState, sessionUsername);
     })
     .catch((error) => {
       throw error;
@@ -77,7 +77,12 @@ export const TopicToolbar = () => {
           <>
             <IconButton color="inherit" component="label" title="Upload" aria-label="Upload">
               <Upload />
-              <input hidden accept=".json" type="file" onChange={uploadTopic} />
+              <input
+                hidden
+                accept=".json"
+                type="file"
+                onChange={(event) => uploadTopic(event, sessionUser?.username)}
+              />
             </IconButton>
 
             <Divider orientation="vertical" />

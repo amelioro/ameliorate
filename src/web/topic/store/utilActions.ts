@@ -2,7 +2,7 @@ import { StorageValue } from "zustand/middleware";
 
 import { errorWithData } from "../../../common/errorHandling";
 import { emitter } from "../../common/event";
-import { TopicStoreState, initialState, useTopicStore } from "./store";
+import { TopicStoreState, initialState, playgroundUsername, useTopicStore } from "./store";
 import { getTopicDiagram } from "./utils";
 
 export const getPersistState = () => {
@@ -14,14 +14,20 @@ export const getPersistState = () => {
   return persistOptions.storage.getItem(persistOptions.name) as StorageValue<TopicStoreState>;
 };
 
-export const setTopicData = (state: TopicStoreState) => {
+export const setTopicData = (state: TopicStoreState, sessionUsername?: string) => {
   // Don't override topic - this way, topic data from playground can be downloaded and uploaded as
   // a means of saving playground data to the db.
   // This also allows starting a new, separate topic from an existing topic's data.
-  // Note: this won't work with multiple users' scores, since a user shouldn't be able to create
-  // scores for other users.
   const topic = useTopicStore.getState().topic;
-  useTopicStore.setState({ ...state, topic }, false, "setState");
+
+  // Manually specify scores for only the uploading user, since a user shouldn't be able to create
+  // scores for other users.
+  const sessionScores = sessionUsername ? state.userScores[sessionUsername] : undefined;
+  const myScores = sessionScores ?? state.userScores[playgroundUsername]; // state should only have one of these at most
+  const myUsername = topic ? sessionUsername : playgroundUsername;
+  const userScores = myScores && myUsername ? { [myUsername]: myScores } : {};
+
+  useTopicStore.setState({ ...state, topic, userScores }, false, "setState");
 
   emitter.emit("loadedTopicData", getTopicDiagram(useTopicStore.getState()));
 };

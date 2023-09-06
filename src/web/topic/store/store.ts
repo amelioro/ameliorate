@@ -32,6 +32,14 @@ type StoreTopic = Omit<Topic, "createdAt" | "updatedAt">;
 // and the need for another apiSyncer middleware? So it'll be nontrivial.
 export type UserScores = Record<string, Record<string, Score>>; // userScores[:username][:graphPartId]
 
+/**
+ * If we're on the playground, hardcode "me." as the username. This:
+ * - allows us to still use the userScores object in the store
+ * - indicates that the scores are the creator's
+ * - indicates that the user is not a real user, since "." is not a valid username character
+ */
+export const playgroundUsername = "me.";
+
 export interface TopicStoreState {
   topic: StoreTopic | null;
   diagrams: Record<string, Diagram>;
