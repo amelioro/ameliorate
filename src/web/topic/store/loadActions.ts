@@ -9,7 +9,7 @@ import {
 } from "../utils/apiConversion";
 import { Diagram, layoutVisibleComponents, topicDiagramId } from "../utils/diagram";
 import { claimNodeTypes } from "../utils/node";
-import { topicStorePlaygroundName, useTopicStore } from "./store";
+import { initialState, topicStorePlaygroundName, useTopicStore } from "./store";
 import { getTopicDiagram } from "./utils";
 
 export const populateFromApi = async (topicData: TopicData) => {
@@ -87,8 +87,12 @@ export const populateFromLocalStorage = async () => {
   // Ensure we use distinct persistence for topic page compared to playground.
   useTopicStore.persist.setOptions({ name: topicStorePlaygroundName });
 
-  // TODO(bug): for some reason, this results in an empty undo action _after_ clear() is run - despite awaiting this promise
-  await useTopicStore.persist.rehydrate();
+  if (useTopicStore.persist.getOptions().storage?.getItem(topicStorePlaygroundName)) {
+    // TODO(bug): for some reason, this results in an empty undo action _after_ clear() is run - despite awaiting this promise
+    await useTopicStore.persist.rehydrate();
+  } else {
+    useTopicStore.setState(initialState, true, "populateFromLocalStorage");
+  }
 
   emitter.emit("loadedTopicData", getTopicDiagram(useTopicStore.getState()));
 
