@@ -1,25 +1,5 @@
 import styled from "@emotion/styled";
-import { Button, Popper, css } from "@mui/material";
-
-interface StyledButtonProps {
-  buttonLength: number;
-  zoomRatio?: number;
-}
-
-// seems like MUI automatically forwards invalid props to underlying HTML components?
-// this seems wrong, or at least that it shouldn't be the default
-const buttonOptions = {
-  shouldForwardProp: (prop: string) => !["buttonLength", "zoomRatio"].includes(prop),
-};
-export const StyledButton = styled(Button, buttonOptions)<StyledButtonProps>`
-  height: ${({ buttonLength }) => `${buttonLength}rem`};
-  width: ${({ buttonLength }) => `${buttonLength}rem`};
-  min-width: ${({ buttonLength }) => `${buttonLength}rem`};
-  line-height: ${({ zoomRatio = 1 }) => `${zoomRatio}rem`};
-  font-size: ${({ zoomRatio = 1 }) => `${zoomRatio}rem`};
-  padding: 0px;
-  border-radius: 50%;
-`;
+import { Popper, css } from "@mui/material";
 
 export const ScorePopper = styled(Popper)`
   display: flex;

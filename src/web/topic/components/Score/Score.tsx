@@ -1,4 +1,3 @@
-import { type ButtonProps, type Palette } from "@mui/material";
 import { useRef, useState } from "react";
 
 import { htmlDefaultFontSize } from "../../../../pages/_document.page";
@@ -7,23 +6,12 @@ import { usePerspectives } from "../../../view/store/store";
 import { useTopicZoom } from "../../hooks/topicHooks";
 import { useUserScores } from "../../store/scoreHooks";
 import { playgroundUsername, useOnPlayground } from "../../store/store";
-import { type Score as ScoreData } from "../../utils/diagram";
-import { indicatorLengthRem } from "../../utils/node";
-import { BackdropPopper, ScorePopper, StyledButton } from "./Score.styles";
-import { ScorePie } from "./ScorePie";
+import { BackdropPopper, CircleDiv, ScorePopper } from "./Score.styles";
+import { ScoreButton, buttonDiameterRem } from "./ScoreButton";
+import { ScoreCompare } from "./ScoreCompare";
+import { ScoreSelect } from "./ScoreSelect";
 
-export const scoreColors: Record<ScoreData, keyof Palette> = {
-  "-": "neutral",
-  "1": "critique1",
-  "2": "critique2",
-  "3": "critique3",
-  "4": "critique4",
-  "5": "paper",
-  "6": "support4",
-  "7": "support3",
-  "8": "support2",
-  "9": "support1",
-};
+const circleDiameter = 6 * buttonDiameterRem; // no collisions for fitting 10 elements
 
 interface ScoreProps {
   graphPartId: string;
@@ -37,55 +25,43 @@ export const Score = ({ graphPartId }: ScoreProps) => {
   const onPlayground = useOnPlayground();
   const myUsername = onPlayground ? playgroundUsername : sessionUser?.username;
   const perspectives = usePerspectives();
-  const canEdit = perspectives.length === 1 && myUsername && perspectives[0] === myUsername;
+  const canEdit =
+    perspectives.length === 1 && myUsername !== undefined && perspectives[0] === myUsername;
 
   const [selected, setSelected] = useState(false);
   const [hovering, setHovering] = useState(false);
   const mainButtonRef = useRef<HTMLButtonElement | null>(null);
 
   const userScores = useUserScores(graphPartId, perspectives);
-  const score = Object.values(userScores)[0] ?? "-";
 
   // Not reactive, but zoom is currently only used when hovering/selected change, which triggers a
   // re-render, so we'll still get an updated zoom value.
   const zoomRatio = useTopicZoom();
 
-  const buttonLengthRem = indicatorLengthRem; //rem
-  const buttonLengthRemScaled = buttonLengthRem * zoomRatio; //rem * zoom
-  const circleDiameter = 6 * buttonLengthRemScaled; // no collisions for fitting 10 elements
+  const buttonDiameterPx =
+    mainButtonRef.current?.clientHeight ?? buttonDiameterRem * htmlDefaultFontSize;
 
-  const buttonHeightPx =
-    mainButtonRef.current?.clientHeight ?? buttonLengthRem * htmlDefaultFontSize;
+  const isComparing = Object.keys(userScores).length > 1;
 
-  const scoreColor = scoreColors[score] as ButtonProps["color"]; // not sure how to type this without type assertion, while still being able to access palette with it
+  const hoverCircle = isComparing ? (
+    <ScoreCompare userScores={userScores} />
+  ) : canEdit ? (
+    <ScoreSelect username={myUsername} graphPartId={graphPartId} />
+  ) : undefined;
+  const isInteractive = hoverCircle !== undefined;
 
-  if (!canEdit) {
-    return (
-      <StyledButton
-        buttonLength={buttonLengthRem}
-        variant="contained"
-        color={scoreColor}
-        sx={{ pointerEvents: "none" }}
-      >
-        {/* i bet material icons would look way nicer than this text... but material only has number icons 1-6 :( */}
-        {score}
-      </StyledButton>
-    );
+  if (!isInteractive) {
+    return <ScoreButton userScores={userScores} />;
   }
 
   return (
     <>
-      <StyledButton
+      <ScoreButton
+        buttonRef={mainButtonRef}
         onClick={() => setSelected(true)}
         onMouseEnter={() => setHovering(true)}
-        buttonLength={buttonLengthRem}
-        variant="contained"
-        color={scoreColor}
-        ref={mainButtonRef}
-      >
-        {/* i bet material icons would look way nicer than this text... but material only has number icons 1-6 :( */}
-        {score}
-      </StyledButton>
+        userScores={userScores}
+      />
 
       <BackdropPopper
         id="backdrop-popper"
@@ -125,25 +101,19 @@ export const Score = ({ graphPartId }: ScoreProps) => {
             name: "offset",
             options: {
               // position centered on top of the main button https://popper.js.org/docs/v2/modifiers/offset/
-              offset: [0, -buttonHeightPx * zoomRatio],
+              offset: [0, -buttonDiameterPx * zoomRatio],
             },
           },
         ]}
       >
-        <ScorePie circleDiameter={circleDiameter} username={myUsername} graphPartId={graphPartId} />
+        <CircleDiv circleDiameter={circleDiameter * zoomRatio}>{hoverCircle}</CircleDiv>
 
         {/* second button here because we want Pie to display in front of everything except the button... user isn't supposed to know there's two */}
-        {/* TODO: extract ScoreButton component for reuse - couldn't figure out how to get forwardref to work */}
-        <StyledButton
+        <ScoreButton
           onClick={() => setSelected(!selected)}
-          buttonLength={buttonLengthRemScaled}
-          variant="contained"
-          color={scoreColor}
+          userScores={userScores}
           zoomRatio={zoomRatio}
-        >
-          {/* i bet material icons would look way nicer than this text... but material only has number icons 1-6 :( */}
-          {score}
-        </StyledButton>
+        />
       </ScorePopper>
     </>
   );

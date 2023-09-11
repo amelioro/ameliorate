@@ -76,7 +76,6 @@ const buildColumns = (
     ...columnNodes.map(
       (columnNode) =>
         ({
-          accessorKey: `${columnNode.id}.data.score`, // we'll sort/filter edges by their score for now I guess
           header: columnNode.data.label,
           Header: <NodeCell node={columnNode} />,
           enableColumnFilter: false,
