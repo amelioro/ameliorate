@@ -61,7 +61,9 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
         <Toolbar variant="dense">
           <Box flex="1" display="flex" justifyContent="space-between" alignItems="center">
             <Box display="flex" gap="16px" alignItems="center">
-              <NavLink href="/">Ameliorate</NavLink>
+              <NavLink href="/" display="flex">
+                <Image src="/favicon.ico" height={32} width={32} alt="home" />
+              </NavLink>
               <NavLink href="/playground">Playground</NavLink>
               <NavLink href="/examples">Examples</NavLink>
             </Box>
