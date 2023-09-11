@@ -21,7 +21,7 @@ export const Perspectives = () => {
       limitTags={1}
       options={usernameOptions}
       value={perspectives}
-      onChange={(_event, value) => setPerspectives(value)}
+      onChange={(_event, value) => setPerspectives([...value])}
       renderInput={(params) => <TextField {...params} color="secondary" label="Perspectives" />}
       size="small"
       sx={{

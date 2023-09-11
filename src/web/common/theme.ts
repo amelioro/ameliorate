@@ -175,4 +175,26 @@ export const getThemeOptions = (mode: PaletteMode): ThemeOptions => ({
     ...sharedPalette,
     ...(mode === "light" ? lightPalette : darkPalette),
   },
+  components: {
+    MuiDrawer: {
+      styleOverrides: {
+        paper: {
+          width: "min(18.75rem, 100vw - 2rem)",
+        },
+      },
+    },
+    MuiList: {
+      defaultProps: {
+        dense: true,
+      },
+    },
+    MuiListItem: {
+      defaultProps: {
+        // Intended for list item buttons, so that the hover effect uses the whole row.
+        // List item buttons have their own padding, but other list items do not, so those will need
+        // to un-disable this. We're defaulting because it seems that most list items are buttons.
+        disablePadding: true,
+      },
+    },
+  },
 });
