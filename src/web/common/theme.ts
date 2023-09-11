@@ -175,11 +175,4 @@ export const getThemeOptions = (mode: PaletteMode): ThemeOptions => ({
     ...sharedPalette,
     ...(mode === "light" ? lightPalette : darkPalette),
   },
-  components: {
-    MuiTypography: {
-      defaultProps: {
-        margin: 1,
-      },
-    },
-  },
 });
