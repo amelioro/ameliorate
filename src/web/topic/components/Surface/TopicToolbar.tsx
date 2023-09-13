@@ -1,11 +1,24 @@
-import { AutoStoriesOutlined, Build, Download, Redo, Undo, Upload } from "@mui/icons-material";
-import { AppBar, Divider, IconButton, Toolbar } from "@mui/material";
+import {
+  AutoStoriesOutlined,
+  Build,
+  Download,
+  Group,
+  Redo,
+  Undo,
+  Upload,
+} from "@mui/icons-material";
+import { AppBar, Divider, IconButton, ToggleButton, Toolbar } from "@mui/material";
 import fileDownload from "js-file-download";
 import { useState } from "react";
 import { StorageValue } from "zustand/middleware";
 
 import { errorWithData } from "../../../../common/errorHandling";
 import { useSessionUser } from "../../../common/hooks";
+import {
+  comparePerspectives,
+  resetPerspectives,
+  useIsComparingPerspectives,
+} from "../../../view/store/store";
 import { migrate } from "../../store/migrate";
 import { TopicStoreState, useIsTableActive, useOnPlayground } from "../../store/store";
 import { useUserCanEditTopicData } from "../../store/userHooks";
@@ -56,6 +69,7 @@ export const TopicToolbar = () => {
   const onPlayground = useOnPlayground();
   const isTableActive = useIsTableActive();
   const [canUndo, canRedo] = useTemporalHooks();
+  const isComparingPerspectives = useIsComparingPerspectives();
 
   const thereAreMoreActions = !isTableActive || !onPlayground;
   const [isMoreActionsDrawerOpen, setIsMoreActionsDrawerOpen] = useState(false);
@@ -105,6 +119,21 @@ export const TopicToolbar = () => {
               <AutoStoriesOutlined />
             </IconButton>
           </>
+        )}
+
+        {!onPlayground && (
+          <ToggleButton
+            value={isComparingPerspectives}
+            title="Compare perspectives"
+            aria-label="Compare perspectives"
+            color="secondary"
+            size="small"
+            selected={isComparingPerspectives}
+            onClick={() => (isComparingPerspectives ? resetPerspectives() : comparePerspectives())}
+            sx={{ borderRadius: "50%", border: "0" }}
+          >
+            <Group />
+          </ToggleButton>
         )}
 
         {thereAreMoreActions && (

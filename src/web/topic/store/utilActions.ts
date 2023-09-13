@@ -14,6 +14,11 @@ export const getPersistState = () => {
   return persistOptions.storage.getItem(persistOptions.name) as StorageValue<TopicStoreState>;
 };
 
+export const getScoringUsernames = () => {
+  const userScores = useTopicStore.getState().userScores;
+  return Object.keys(userScores);
+};
+
 export const setTopicData = (state: TopicStoreState, sessionUsername?: string) => {
   // Don't override topic - this way, topic data from playground can be downloaded and uploaded as
   // a means of saving playground data to the db.
