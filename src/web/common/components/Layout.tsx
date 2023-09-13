@@ -1,33 +1,31 @@
-import { AccountCircle } from "@mui/icons-material";
-import { AppBar, Box, IconButton, Toolbar, useTheme } from "@mui/material";
+import { AccountCircle, Menu } from "@mui/icons-material";
+import {
+  AppBar,
+  Box,
+  IconButton,
+  type LinkProps,
+  Toolbar,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { NextPage } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, forwardRef, useEffect, useState } from "react";
 
 import { useSessionUser } from "../hooks";
 import { discordInvite, feedbackPage, githubRepo } from "../urls";
 import { Link } from "./Link";
+import { SiteDrawer } from "./SiteDrawer/SiteDrawer";
 import { UserDrawer } from "./UserDrawer/UserDrawer";
 
-interface NavLinkProps {
-  href: string;
-  target?: string;
-  display?: string;
-  children: ReactNode;
-}
+const NavLink = forwardRef<HTMLAnchorElement, LinkProps>(function NavLink(props, ref) {
+  return <Link ref={ref} {...props} underline="hover" />;
+});
 
 interface LayoutProps {
   children: ReactNode;
 }
-
-const NavLink = ({ href, target, display, children }: NavLinkProps) => {
-  return (
-    <Link href={href} target={target} display={display} color="text" underline="none">
-      {children}
-    </Link>
-  );
-};
 
 const Layout: NextPage<LayoutProps> = ({ children }) => {
   const theme = useTheme();
@@ -39,11 +37,16 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
   const { sessionUser, authUser } = useSessionUser();
   const { pathname } = useRouter();
 
+  const usingTinyScreen = useMediaQuery(theme.breakpoints.down("xs"));
+  const usingBigScreen = useMediaQuery(theme.breakpoints.up("sm"));
+
   const [isUserDrawerOpen, setIsUserDrawerOpen] = useState(false);
+  const [isSiteDrawerOpen, setIsSiteDrawerOpen] = useState(false);
 
   useEffect(() => {
     // close drawers after navigating
     setIsUserDrawerOpen(false);
+    setIsSiteDrawerOpen(false);
   }, [pathname]);
 
   const isAuthed = authUser != null;
@@ -51,38 +54,74 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
 
   return (
     <>
-      <AppBar position="sticky">
+      <AppBar
+        position="sticky"
+        sx={{
+          // navigability of links is implied by being in the navbar, so decoration isn't necessary
+          "& .MuiLink-root": { color: theme.palette.text.primary, textDecoration: "none" },
+        }}
+      >
         <Toolbar variant="dense">
           <Box flex="1" display="flex" justifyContent="space-between" alignItems="center">
-            <Box display="flex" gap="16px" alignItems="center">
-              <NavLink href="/" display="flex">
-                <Image src="/favicon.ico" height={32} width={32} alt="home" />
-              </NavLink>
-              <NavLink href="/playground">Playground</NavLink>
-              <NavLink href="/examples">Examples</NavLink>
+            <Box display="flex" gap={2} alignItems="center">
+              <IconButton onClick={() => setIsSiteDrawerOpen(true)} sx={{ padding: "0" }}>
+                <Menu />
+              </IconButton>
+              <SiteDrawer
+                isSiteDrawerOpen={isSiteDrawerOpen}
+                setIsSiteDrawerOpen={setIsSiteDrawerOpen}
+              />
+
+              <Box display="flex" position="relative">
+                <Link href="/" display="flex">
+                  <Image src="/favicon.ico" height={32} width={32} alt="home" />
+                </Link>
+                <NavLink
+                  href="/about#release-status"
+                  variant="caption"
+                  sx={{
+                    position: "absolute",
+                    top: "-2px",
+                    right: "-8px",
+                    transform: "rotate(30deg)",
+                  }}
+                >
+                  Alpha
+                </NavLink>
+              </Box>
+              {!usingTinyScreen && (
+                <>
+                  <NavLink href="/playground">Playground</NavLink>
+                  <NavLink href="/examples">Examples</NavLink>
+                </>
+              )}
             </Box>
 
             <Box display="flex" gap={2} alignItems="center">
-              <NavLink href={feedbackPage} target="_blank">
-                Feedback
-              </NavLink>
-              <NavLink href="/about">About</NavLink>
-              <Link href={discordInvite} target="_blank" display="flex">
-                <Image
-                  src={`/${theme.palette.mode}/Discord-Mark.png`}
-                  height={24}
-                  width={32}
-                  alt="discord link"
-                />
-              </Link>
-              <Link href={githubRepo} target="_blank" display="flex">
-                <Image
-                  src={`/${theme.palette.mode}/GitHub-Mark.png`}
-                  height={32}
-                  width={32}
-                  alt="github link"
-                />
-              </Link>
+              {usingBigScreen && (
+                <>
+                  <NavLink href={feedbackPage} target="_blank">
+                    Feedback
+                  </NavLink>
+                  <NavLink href="/about">About</NavLink>
+                  <Link href={discordInvite} target="_blank" display="flex">
+                    <Image
+                      src={`/${theme.palette.mode}/Discord-Mark.png`}
+                      height={24}
+                      width={32}
+                      alt="discord link"
+                    />
+                  </Link>
+                  <Link href={githubRepo} target="_blank" display="flex">
+                    <Image
+                      src={`/${theme.palette.mode}/GitHub-Mark.png`}
+                      height={32}
+                      width={32}
+                      alt="github link"
+                    />
+                  </Link>
+                </>
+              )}
 
               {!isLoggedIn && (
                 <NavLink href={isAuthed ? "/choose-username" : "/api/auth/login"}>

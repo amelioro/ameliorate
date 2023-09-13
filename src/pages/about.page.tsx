@@ -138,24 +138,26 @@ const About: NextPage = () => {
 
             <Divider />
 
-            <Typography variant="h5">Release Status</Typography>
-            <Typography variant="body1">
-              A release status is being using to convey an expectation of how solid the tool is,
-              though there will always be room for improvements and enhancements. These are the
-              planned-to-be-used statuses:
-            </Typography>
-            <Typography variant="body1">
-              <b>Alpha (current)</b>: tool is usable, core features exist but are unrefined, tool
-              may feel clunky to use, bugs are expected, no established userbase
-            </Typography>
-            <Typography variant="body1">
-              <b>Beta</b>: core features are somewhat refined, tool does not feel clunky to use,
-              bugs are expected, established userbase is forming
-            </Typography>
-            <Typography variant="body1">
-              <b>No label/fully-released</b>: core features are well-refined, tool feels smooth to
-              use, bugs are rare, established userbase exists
-            </Typography>
+            <section id="release-status">
+              <Typography variant="h5">Release Status</Typography>
+              <Typography variant="body1">
+                A release status is being using to convey an expectation of how solid the tool is,
+                though there will always be room for improvements and enhancements. These are the
+                planned-to-be-used statuses:
+              </Typography>
+              <Typography variant="body1">
+                <b>Alpha (current)</b>: tool is usable, core features exist but are unrefined, tool
+                may feel clunky to use, bugs are expected, no established userbase
+              </Typography>
+              <Typography variant="body1">
+                <b>Beta</b>: core features are somewhat refined, tool does not feel clunky to use,
+                bugs are expected, established userbase is forming
+              </Typography>
+              <Typography variant="body1">
+                <b>No label/fully-released</b>: core features are well-refined, tool feels smooth to
+                use, bugs are rare, established userbase exists
+              </Typography>
+            </section>
 
             <Divider />
 

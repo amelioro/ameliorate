@@ -37,24 +37,14 @@ const Home: NextPage = () => {
             A tool for discussing and mutually understanding tough problems
           </Typography>
 
-          <Box display="flex" margin="0.75rem">
+          <Box display="flex" flexWrap="wrap" justifyContent="center" margin="0.75rem" gap={1}>
             <Button variant="contained" LinkComponent={NextLink} href="/playground">
               Playground
             </Button>
-            <Button
-              variant="outlined"
-              LinkComponent={NextLink}
-              href="/examples"
-              sx={{ marginLeft: "0.5rem" }}
-            >
+            <Button variant="outlined" LinkComponent={NextLink} href="/examples">
               Examples
             </Button>
-            <Button
-              variant="outlined"
-              endIcon={<ArrowDownward />}
-              href="#how-it-works"
-              sx={{ marginLeft: "0.5rem" }}
-            >
+            <Button variant="outlined" endIcon={<ArrowDownward />} href="#how-it-works">
               See how it works
             </Button>
           </Box>

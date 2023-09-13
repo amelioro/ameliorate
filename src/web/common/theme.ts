@@ -170,6 +170,19 @@ const sharedPalette = {
 };
 
 export const getThemeOptions = (mode: PaletteMode): ThemeOptions => ({
+  breakpoints: {
+    values: {
+      // Most design for mobile should be the same, but most mobile devices (97%? https://worship.agency/mobile-screen-sizes-for-2022-based-on-data-from-2021)
+      // are above 360px wide, so if we need to squeeze out space, we can target 360px+ and have just an ok design for below 360px
+      xs: 360,
+
+      // these are mui defaults
+      sm: 600,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
   palette: {
     mode,
     ...sharedPalette,
