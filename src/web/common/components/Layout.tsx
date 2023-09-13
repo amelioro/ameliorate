@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { ReactNode, useEffect, useState } from "react";
 
 import { useSessionUser } from "../hooks";
+import { discordInvite, feedbackPage, githubRepo } from "../urls";
 import { Link } from "./Link";
 import { UserDrawer } from "./UserDrawer/UserDrawer";
 
@@ -48,13 +49,6 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
   const isAuthed = authUser != null;
   const isLoggedIn = sessionUser != null;
 
-  const githubIconSrc =
-    theme.palette.mode == "light" ? "/GitHub-Mark-64px.png" : "/GitHub-Mark-Light-64px.png";
-  const discordIconSrc =
-    theme.palette.mode == "light" ? "/Discord-Mark-Black.png" : "/Discord-Mark-White.png";
-  const facebookIconSrc =
-    theme.palette.mode == "light" ? "/Facebook-Icon-Black.png" : "/Facebook-Icon-White.png";
-
   return (
     <>
       <AppBar position="sticky">
@@ -68,27 +62,27 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
               <NavLink href="/examples">Examples</NavLink>
             </Box>
 
-            <Box display="flex" gap="16px" alignItems="center">
-              <NavLink
-                href="https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md#providing-feedback"
-                target="_blank"
-              >
+            <Box display="flex" gap={2} alignItems="center">
+              <NavLink href={feedbackPage} target="_blank">
                 Feedback
               </NavLink>
               <NavLink href="/about">About</NavLink>
-              <NavLink
-                href="https://www.facebook.com/profile.php?id=100091844721178"
-                target="_blank"
-                display="flex"
-              >
-                <Image src={facebookIconSrc} height={32} width={32} alt="facebook link" />
-              </NavLink>
-              <NavLink href="https://discord.gg/3KhdyJkTWT" target="_blank" display="flex">
-                <Image src={discordIconSrc} height={24} width={32} alt="discord link" />
-              </NavLink>
-              <NavLink href="https://github.com/amelioro/ameliorate" target="_blank" display="flex">
-                <Image src={githubIconSrc} height={32} width={32} alt="github link" />
-              </NavLink>
+              <Link href={discordInvite} target="_blank" display="flex">
+                <Image
+                  src={`/${theme.palette.mode}/Discord-Mark.png`}
+                  height={24}
+                  width={32}
+                  alt="discord link"
+                />
+              </Link>
+              <Link href={githubRepo} target="_blank" display="flex">
+                <Image
+                  src={`/${theme.palette.mode}/GitHub-Mark.png`}
+                  height={32}
+                  width={32}
+                  alt="github link"
+                />
+              </Link>
 
               {!isLoggedIn && (
                 <NavLink href={isAuthed ? "/choose-username" : "/api/auth/login"}>
