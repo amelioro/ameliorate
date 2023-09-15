@@ -15,6 +15,7 @@ import {
 import Image from "next/image";
 import NextLink from "next/link";
 
+import favicon from "../../../../../public/favicon.png";
 import { discordInvite, facebookPage, feedbackPage, githubRepo } from "../../urls";
 
 interface Props {
@@ -37,7 +38,7 @@ export const SiteDrawer = ({ isSiteDrawerOpen, setIsSiteDrawerOpen }: Props) => 
           }
         >
           <ListItemIcon>
-            <Image src="/favicon.ico" height={32} width={32} alt="home" />
+            <Image src={favicon} height={32} width={32} alt="home" />
           </ListItemIcon>
           <ListItemText primary="Ameliorate" />
         </ListItem>

@@ -13,6 +13,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { ReactNode, forwardRef, useEffect, useState } from "react";
 
+import favicon from "../../../../public/favicon.png";
 import { useSessionUser } from "../hooks";
 import { discordInvite, feedbackPage, githubRepo } from "../urls";
 import { Link } from "./Link";
@@ -74,7 +75,7 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
 
               <Box display="flex" position="relative">
                 <Link href="/" display="flex">
-                  <Image src="/favicon.ico" height={32} width={32} alt="home" />
+                  <Image src={favicon} height={32} width={32} alt="home" />
                 </Link>
                 <NavLink
                   href="/about#release-status"
