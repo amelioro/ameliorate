@@ -1,13 +1,7 @@
 import styled from "@emotion/styled";
 import { Drawer, IconButton, ListItemButton } from "@mui/material";
 
-export const StyledListItemButton = styled(ListItemButton)`
-  & span {
-    margin: 0;
-  }
-`;
-
-export const NestedListItemButton = styled(StyledListItemButton)`
+export const NestedListItemButton = styled(ListItemButton)`
   padding-left: 32px;
 `;
 

@@ -1,32 +1,31 @@
 import {
-  AlignVerticalTop,
   AutoStoriesOutlined,
+  Build,
   Download,
+  Group,
   Redo,
-  Route,
   Undo,
   Upload,
 } from "@mui/icons-material";
-import { AppBar, Divider, IconButton, Toolbar } from "@mui/material";
+import { AppBar, Divider, IconButton, ToggleButton, Toolbar } from "@mui/material";
 import fileDownload from "js-file-download";
+import { useState } from "react";
 import { StorageValue } from "zustand/middleware";
 
 import { errorWithData } from "../../../../common/errorHandling";
 import { useSessionUser } from "../../../common/hooks";
-import { Perspectives } from "../../../view/components/Perspectives/Perspectives";
-import { migrate } from "../../store/migrate";
 import {
-  TopicStoreState,
-  useIsTableActive,
-  useOnPlayground,
-  useShowImpliedEdges,
-} from "../../store/store";
+  comparePerspectives,
+  resetPerspectives,
+  useIsComparingPerspectives,
+} from "../../../view/store/store";
+import { migrate } from "../../store/migrate";
+import { TopicStoreState, useIsTableActive, useOnPlayground } from "../../store/store";
 import { useUserCanEditTopicData } from "../../store/userHooks";
 import { getPersistState, redo, resetTopicData, setTopicData, undo } from "../../store/utilActions";
 import { useTemporalHooks } from "../../store/utilHooks";
 import { getTopicTitle } from "../../store/utils";
-import { relayout, toggleShowImpliedEdges } from "../../store/viewActions";
-import { StyledToggleButton } from "./TopicToolbar.styles";
+import { MoreActionsDrawer } from "./MoreActionsDrawer";
 
 // TODO: might be useful to have downloaded state be more human editable;
 // for this, probably should prettify the JSON, and remove position values (we can re-layout on import)
@@ -69,8 +68,11 @@ export const TopicToolbar = () => {
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const onPlayground = useOnPlayground();
   const isTableActive = useIsTableActive();
-  const showImpliedEdges = useShowImpliedEdges();
   const [canUndo, canRedo] = useTemporalHooks();
+  const isComparingPerspectives = useIsComparingPerspectives();
+
+  const thereAreMoreActions = !isTableActive || !onPlayground;
+  const [isMoreActionsDrawerOpen, setIsMoreActionsDrawerOpen] = useState(false);
 
   return (
     <AppBar position="sticky" color="primaryVariantLight">
@@ -119,34 +121,40 @@ export const TopicToolbar = () => {
           </>
         )}
 
-        {/* view actions */}
-        {!isTableActive && (
+        {!onPlayground && (
+          <ToggleButton
+            value={isComparingPerspectives}
+            title="Compare perspectives"
+            aria-label="Compare perspectives"
+            color="secondary"
+            size="small"
+            selected={isComparingPerspectives}
+            onClick={() => (isComparingPerspectives ? resetPerspectives() : comparePerspectives())}
+            sx={{ borderRadius: "50%", border: "0" }}
+          >
+            <Group />
+          </ToggleButton>
+        )}
+
+        {thereAreMoreActions && (
           <>
             <Divider orientation="vertical" />
 
             <IconButton
               color="inherit"
-              title="Recalculate layout"
-              aria-label="Recalculate layout"
-              onClick={() => void relayout()}
+              title="More actions"
+              aria-label="More actions"
+              onClick={() => setIsMoreActionsDrawerOpen(true)}
             >
-              <AlignVerticalTop />
+              <Build />
             </IconButton>
 
-            <StyledToggleButton
-              value={showImpliedEdges}
-              title="Show implied edges"
-              aria-label="Show implied edges"
-              color="secondary"
-              size="small"
-              selected={showImpliedEdges}
-              onClick={() => toggleShowImpliedEdges(!showImpliedEdges)}
-            >
-              <Route />
-            </StyledToggleButton>
+            <MoreActionsDrawer
+              isMoreActionsDrawerOpen={isMoreActionsDrawerOpen}
+              setIsMoreActionsDrawerOpen={setIsMoreActionsDrawerOpen}
+            />
           </>
         )}
-        {!onPlayground && <Perspectives />}
       </Toolbar>
     </AppBar>
   );

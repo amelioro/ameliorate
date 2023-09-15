@@ -9,7 +9,7 @@ import { useSessionUser } from "../../web/common/hooks";
 import { trpc } from "../../web/common/trpc";
 import { TopicWorkspace } from "../../web/topic/components/TopicWorkspace/TopicWorkspace";
 import { populateFromApi } from "../../web/topic/store/loadActions";
-import { setPerspectives } from "../../web/view/store/store";
+import { setInitialPerspective } from "../../web/view/store/store";
 
 const Topic: NextPage = () => {
   const router = useRouter();
@@ -38,7 +38,7 @@ const Topic: NextPage = () => {
   useEffect(() => {
     const startingPerspective = sessionUser?.username ?? username;
     if (!startingPerspective) return;
-    setPerspectives([startingPerspective]);
+    setInitialPerspective(startingPerspective);
   }, [sessionUser, username]);
 
   // TODO: use suspense to better handle loading & error

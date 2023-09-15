@@ -9,7 +9,14 @@ import {
   TableChart,
   TableView,
 } from "@mui/icons-material";
-import { Collapse, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import {
+  Collapse,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 import { useState } from "react";
 
 import { useNodes } from "../../store/nodeHooks";
@@ -20,7 +27,6 @@ import {
   NestedListItemButton,
   PositionedDiv,
   StyledDrawer,
-  StyledListItemButton,
   TogglePaneButton,
 } from "./TopicPane.styles";
 
@@ -53,8 +59,8 @@ export const TopicPane = () => {
         {/* `permanent` because `persistent` adds transitions that conflict with our styles */}
         <StyledDrawer variant="permanent" open={isTopicDrawerOpen}>
           <List>
-            <ListItem key="1" disablePadding>
-              <StyledListItemButton
+            <ListItem key="1">
+              <ListItemButton
                 selected={topicViewId === topicDiagramId}
                 onClick={() => viewTopicDiagram()}
               >
@@ -62,21 +68,21 @@ export const TopicPane = () => {
                   <AutoStories />
                 </ListItemIcon>
                 <ListItemText primary={rootTitle} />
-              </StyledListItemButton>
+              </ListItemButton>
             </ListItem>
-            <ListItem key="2" disablePadding>
-              <StyledListItemButton onClick={() => setIsProblemsListOpen(!isProblemsListOpen)}>
+            <ListItem key="2">
+              <ListItemButton onClick={() => setIsProblemsListOpen(!isProblemsListOpen)}>
                 <ListItemIcon>
                   <TableView />
                 </ListItemIcon>
                 <ListItemText primary="Criteria" />
                 {isProblemsListOpen ? <ExpandLess /> : <ExpandMore />}
-              </StyledListItemButton>
+              </ListItemButton>
             </ListItem>
             <Collapse in={isProblemsListOpen} timeout="auto" unmountOnExit>
               <List disablePadding>
                 {problems.length === 0 && (
-                  <ListItem key="1" disablePadding>
+                  <ListItem key="1">
                     <NestedListItemButton disabled={true}>
                       <ListItemIcon>
                         <TableChart />
@@ -86,7 +92,7 @@ export const TopicPane = () => {
                   </ListItem>
                 )}
                 {problems.map(({ id: nodeId, data }) => (
-                  <ListItem key={nodeId} disablePadding>
+                  <ListItem key={nodeId}>
                     <NestedListItemButton
                       selected={topicViewId === nodeId}
                       onClick={() => viewCriteriaTable(nodeId)}
@@ -100,19 +106,19 @@ export const TopicPane = () => {
                 ))}
               </List>
             </Collapse>
-            <ListItem key="3" disablePadding>
-              <StyledListItemButton onClick={() => setIsClaimsListOpen(!isClaimsListOpen)}>
+            <ListItem key="3">
+              <ListItemButton onClick={() => setIsClaimsListOpen(!isClaimsListOpen)}>
                 <ListItemIcon>
                   <LibraryBooks />
                 </ListItemIcon>
                 <ListItemText primary="Claims" />
                 {isClaimsListOpen ? <ExpandLess /> : <ExpandMore />}
-              </StyledListItemButton>
+              </ListItemButton>
             </ListItem>
             <Collapse in={isClaimsListOpen} timeout="auto" unmountOnExit>
               <List disablePadding>
                 {claimTreeIdentifiers.length === 0 && (
-                  <ListItem key="1" disablePadding>
+                  <ListItem key="1">
                     <NestedListItemButton disabled={true}>
                       <ListItemIcon>
                         <Article />
@@ -122,7 +128,7 @@ export const TopicPane = () => {
                   </ListItem>
                 )}
                 {claimTreeIdentifiers.map(([diagramId, diagramTitle]) => (
-                  <ListItem key={diagramId} disablePadding>
+                  <ListItem key={diagramId}>
                     <NestedListItemButton
                       selected={topicViewId === diagramId}
                       onClick={() => viewClaimTree(diagramId)}

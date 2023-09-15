@@ -170,15 +170,43 @@ const sharedPalette = {
 };
 
 export const getThemeOptions = (mode: PaletteMode): ThemeOptions => ({
+  breakpoints: {
+    values: {
+      // Most design for mobile should be the same, but most mobile devices (97%? https://worship.agency/mobile-screen-sizes-for-2022-based-on-data-from-2021)
+      // are above 360px wide, so if we need to squeeze out space, we can target 360px+ and have just an ok design for below 360px
+      xs: 360,
+
+      // these are mui defaults
+      sm: 600,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
   palette: {
     mode,
     ...sharedPalette,
     ...(mode === "light" ? lightPalette : darkPalette),
   },
   components: {
-    MuiTypography: {
+    MuiDrawer: {
+      styleOverrides: {
+        paper: {
+          width: "min(18.75rem, 100vw - 2rem)",
+        },
+      },
+    },
+    MuiList: {
       defaultProps: {
-        margin: 1,
+        dense: true,
+      },
+    },
+    MuiListItem: {
+      defaultProps: {
+        // Intended for list item buttons, so that the hover effect uses the whole row.
+        // List item buttons have their own padding, but other list items do not, so those will need
+        // to un-disable this. We're defaulting because it seems that most list items are buttons.
+        disablePadding: true,
       },
     },
   },

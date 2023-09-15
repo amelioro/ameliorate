@@ -1,11 +1,6 @@
 import { css } from "@emotion/react";
 
 export const globals = css`
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
-
   html {
     scroll-behavior: smooth;
   }
