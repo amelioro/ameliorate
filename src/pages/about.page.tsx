@@ -141,9 +141,8 @@ const About: NextPage = () => {
             <section id="release-status">
               <Typography variant="h5">Release Status</Typography>
               <Typography variant="body1">
-                A release status is being using to convey an expectation of how solid the tool is,
-                though there will always be room for improvements and enhancements. These are the
-                planned-to-be-used statuses:
+                A release status conveys an expectation of how solid the tool is, though there will
+                always be room for improvements and enhancements. These are the statuses:
               </Typography>
               <Typography variant="body1">
                 <b>Alpha (current)</b>: tool is usable, core features exist but are unrefined, tool
