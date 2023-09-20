@@ -212,8 +212,11 @@ const TopicForm = ({ topic, user, onSubmit, DeleteSection }: Props) => {
         onSubmit={(event) => void handleSubmit(onSubmit)(event)}
         style={{ display: "flex", justifyContent: "center" }}
       >
-        <Stack spacing={1} sx={{ width: "600px" }}>
-          <Typography variant="h4">{newTopic ? "Create a new topic" : "Topic Settings"}</Typography>
+        <Stack spacing={2} sx={{ width: "600px", margin: 2 }}>
+          <Typography variant="h4" sx={{ marginBottom: 2 }}>
+            {newTopic ? "Create a new topic" : "Topic Settings"}
+          </Typography>
+
           <Stack direction="row" spacing={1} sx={{ width: "100%" }}>
             {/* TODO: shrink to width of username (this box takes up a lot of space in mobile) */}
             <TextField

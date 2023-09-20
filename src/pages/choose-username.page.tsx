@@ -116,7 +116,7 @@ const CreateUserPage = () => {
         onSubmit={(event) => void handleSubmit(onSubmit)(event)}
         style={{ display: "flex", justifyContent: "center" }}
       >
-        <Stack spacing={1} sx={{ width: "600px", textAlign: "center" }}>
+        <Stack spacing={1} sx={{ width: "600px", textAlign: "center", margin: 1 }}>
           <Typography variant="h4">Choose your username</Typography>
           <Typography variant="body1">
             Your username is how other users will refer to you and find topics you create.
