@@ -49,7 +49,7 @@ export const useContextMenu = () => {
 };
 
 export const useSessionUser = () => {
-  const { user: authUser } = useAuthUser();
+  const { user: authUser, isLoading: authUserIsLoading, checkSession } = useAuthUser();
 
   const findUserByAuthId = trpc.user.findByAuthId.useQuery(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain -- enabled will ensure it only runs when not null
@@ -63,6 +63,7 @@ export const useSessionUser = () => {
   return {
     sessionUser: sessionUser,
     authUser: authUser,
-    isLoading: findUserByAuthId.isFetching && findUserByAuthId.isLoading, // return isLoading: false if not fetching, e.g. if user isn't authenticated
+    isLoading: authUserIsLoading || (findUserByAuthId.isFetching && findUserByAuthId.isLoading), // return isLoading: false if not fetching, e.g. if user isn't authenticated
+    checkSession,
   };
 };

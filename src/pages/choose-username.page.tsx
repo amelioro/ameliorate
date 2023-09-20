@@ -1,21 +1,20 @@
-import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Stack, TextField, Typography } from "@mui/material";
 import Head from "next/head";
 import Router from "next/router";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { userSchema } from "../common/user";
-import { QueryError } from "../web/common/components/Error/Error";
 import { Loading } from "../web/common/components/Loading/Loading";
+import { useSessionUser } from "../web/common/hooks";
 import { trpc } from "../web/common/trpc";
 
 // not sure if extracting the queries into a method is a good pattern, but it was
 // really annoying to have so much code to read through in the component
-const useQueries = (authId: string) => {
+const useQueries = () => {
   const utils = trpc.useContext();
-  const findUserByAuthId = trpc.user.findByAuthId.useQuery({ authId: authId });
   const createUser = trpc.user.create.useMutation({
     onSuccess: (newUser, variables) => {
       utils.user.findByAuthId.setData({ authId: variables.authId }, newUser);
@@ -26,7 +25,7 @@ const useQueries = (authId: string) => {
     },
   });
 
-  return { findUserByAuthId, createUser };
+  return { createUser };
 };
 
 // not sure if extracting the form schema here is a good pattern, but it was
@@ -47,12 +46,12 @@ const formSchema = (utils: ReturnType<typeof trpc.useContext>) => {
 };
 type FormData = z.infer<ReturnType<typeof formSchema>>;
 
-const CreateUserPage = withPageAuthRequired(({ user: authUser }) => {
-  if (!authUser.sub) throw new Error("not logged in, should have redirected");
-  const authId = authUser.sub;
+const CreateUserPage = () => {
+  const { authUser, sessionUser, checkSession, isLoading } = useSessionUser();
+  const authId = authUser?.sub;
 
   const utils = trpc.useContext();
-  const { findUserByAuthId, createUser } = useQueries(authId);
+  const { createUser } = useQueries();
 
   const {
     register,
@@ -64,12 +63,36 @@ const CreateUserPage = withPageAuthRequired(({ user: authUser }) => {
     resolver: zodResolver(formSchema(utils)),
   });
 
-  if (findUserByAuthId.isLoading) return <Loading />;
-  if (findUserByAuthId.error) return <QueryError error={findUserByAuthId.error} />;
+  // allow user to verify email then refresh page
+  useEffect(() => {
+    const check = async () => {
+      await fetch("/api/auth/refresh-profile");
+      await checkSession();
+    };
+    void check();
+  }, [checkSession]);
 
-  if (findUserByAuthId.data) {
+  if (isLoading) return <Loading />;
+
+  if (!authUser || !authId) {
+    void Router.push("/api/auth/login");
+    return <Loading />;
+  }
+
+  if (!authUser.email_verified) {
+    return (
+      <Typography variant="h5" textAlign="center" sx={{ margin: 2 }}>
+        An email was sent to verify your email address.
+        <br />
+        Please verify your email address, then refresh the page.
+      </Typography>
+    );
+  }
+
+  if (sessionUser) {
     // redirect away because user already exists
-    void Router.push(`/${findUserByAuthId.data.username}`);
+    void Router.push(`/${sessionUser.username}`);
+    return <Loading />;
   }
 
   const onSubmit = (data: FormData) => {
@@ -112,6 +135,6 @@ const CreateUserPage = withPageAuthRequired(({ user: authUser }) => {
       </form>
     </>
   );
-});
+};
 
 export default CreateUserPage;

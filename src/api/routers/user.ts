@@ -3,7 +3,7 @@ import _ from "lodash";
 
 import { userSchema } from "../../common/user";
 import { xprisma } from "../../db/extendedPrisma";
-import { isAuthenticated } from "../auth";
+import { isAuthenticated, isEmailVerified } from "../auth";
 import { procedure, router } from "../trpc";
 
 export const userRouter = router({
@@ -32,6 +32,7 @@ export const userRouter = router({
 
   create: procedure
     .use(isAuthenticated)
+    .use(isEmailVerified)
     .input(userSchema.pick({ username: true, authId: true }))
     .mutation(async (opts) => {
       if (opts.ctx.userAuthId !== opts.input.authId) throw new TRPCError({ code: "FORBIDDEN" });
