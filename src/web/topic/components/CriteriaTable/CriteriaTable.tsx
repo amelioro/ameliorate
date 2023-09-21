@@ -29,8 +29,8 @@ type RowData = Record<string, Node | Edge>;
 
 // returns structure:
 // {
-//   criterion: Node,
-//   [solution_id: string]: Edge,
+//   rowNode: Node,
+//   [columnNodeId: string]: Edge,
 // }
 // but not sure how to type this because index signatures require _all_ properties to match the specified type
 const buildRows = (rowNodes: Node[], columnNodes: Node[], edges: Edge[]): RowData[] => {
@@ -76,6 +76,9 @@ const buildColumns = (
     ...columnNodes.map(
       (columnNode) =>
         ({
+          // Don't yet know what we'd want to sort/filter by for edges, so we're setting id instead
+          // of accessorKey
+          id: columnNode.id,
           header: columnNode.data.label,
           Header: <NodeCell node={columnNode} />,
           enableColumnFilter: false,
