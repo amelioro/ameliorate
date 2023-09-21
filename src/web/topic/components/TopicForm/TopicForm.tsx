@@ -193,6 +193,7 @@ const TopicForm = ({ topic, user, onSubmit, DeleteSection }: Props) => {
     reset,
     register,
     handleSubmit,
+    watch,
     // TODO: isDirty bug: enter "test1" into title, press cancel, paste "test1" into title again, isDirty remains false until a second change is made
     formState: { errors, isDirty },
   } = useForm<FormData>({
@@ -204,6 +205,8 @@ const TopicForm = ({ topic, user, onSubmit, DeleteSection }: Props) => {
     },
   });
 
+  const topicTitle = watch("title");
+
   const newTopic = topic === undefined;
 
   return (
@@ -212,8 +215,11 @@ const TopicForm = ({ topic, user, onSubmit, DeleteSection }: Props) => {
         onSubmit={(event) => void handleSubmit(onSubmit)(event)}
         style={{ display: "flex", justifyContent: "center" }}
       >
-        <Stack spacing={1} sx={{ width: "600px" }}>
-          <Typography variant="h4">{newTopic ? "Create a new topic" : "Topic Settings"}</Typography>
+        <Stack spacing={2} sx={{ width: "600px", margin: 2 }}>
+          <Typography variant="h4" sx={{ marginBottom: 2 }}>
+            {newTopic ? "Create a new topic" : "Topic Settings"}
+          </Typography>
+
           <Stack direction="row" spacing={1} sx={{ width: "100%" }}>
             {/* TODO: shrink to width of username (this box takes up a lot of space in mobile) */}
             <TextField
@@ -235,6 +241,10 @@ const TopicForm = ({ topic, user, onSubmit, DeleteSection }: Props) => {
               sx={{ flexGrow: 1 }}
             />
           </Stack>
+
+          <Typography variant="body2">
+            Anyone can view your topic at: ameliorate.app/{user.username}/{topicTitle || "{title}"}
+          </Typography>
 
           <Stack direction="row" spacing={1} justifyContent="flex-end">
             <Button onClick={() => reset()} disabled={!isDirty}>

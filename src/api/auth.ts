@@ -28,3 +28,12 @@ export const isAuthenticated = middleware(async (opts) => {
 
   return opts.next();
 });
+
+export const isEmailVerified = middleware(async (opts) => {
+  const { ctx } = opts;
+
+  if (!ctx.userEmailVerified)
+    throw new TRPCError({ code: "UNAUTHORIZED", message: "Email not verified" });
+
+  return opts.next();
+});
