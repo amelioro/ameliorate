@@ -2,6 +2,9 @@
   "editor.codeActionsOnSave": ["source.fixAll.eslint"],
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "editor.wordWrapColumn": 100,
+  "files.insertFinalNewline": true,
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
   }
