@@ -71,6 +71,12 @@ npm run dev
 
 ## Codebase overview
 
+These are diagrams that might help provide high-level views of different pieces of the codebase:
+
+- [Architecture by Environment](https://github.com/amelioro/ameliorate/blob/main/docs/architecture-by-env.md)
+- [Database Schema](https://github.com/amelioro/ameliorate/blob/main/docs/database-schema.md)
+- [Data Flow](https://github.com/amelioro/ameliorate/blob/main/docs/data-flow.md)
+
 Reading up on the tech listed in the [Built with](https://github.com/amelioro/ameliorate#built-with) section of the readme will likely provide useful context.
 
 Known deviations from standard usage of the above tech:

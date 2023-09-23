@@ -4,6 +4,7 @@
     "eamodio.gitlens",
     "vivaxy.vscode-conventional-commits",
     "dbaeumer.vscode-eslint",
-    "styled-components.vscode-styled-components"
+    "styled-components.vscode-styled-components",
+    "Prisma.prisma"
   ]
 }
