@@ -87,7 +87,13 @@ type ApiSyncer = <
 type ApiSyncerImpl = (f: StateCreator<TopicStoreState>) => StateCreator<TopicStoreState>;
 
 // types taken from https://github.com/pmndrs/zustand/blob/main/docs/guides/typescript.md#middleware-that-doesnt-change-the-store-type
-const apiSyncerImpl: ApiSyncerImpl = (create) => (set, get, store) => {
+const apiSyncerImpl: ApiSyncerImpl = (create) => (set, get, api) => {
+  // There's a `set` and `get` passed by the store to its methods,
+  // and there's a `setState` and `getState` that is defined on the store separately.
+  // We want our middleware to run if `setState` is called because our "no store actions" pattern
+  // relies on `setState`, but we might as well override `set` too in case we ever want to use that.
+  // Tried extracting the code into a reusable function, but that seemed hard to read, so we're just
+  // duplicating it here.
   const apiSyncerSet: typeof set = (args) => {
     const storeBefore = get();
     set(args);
@@ -105,7 +111,26 @@ const apiSyncerImpl: ApiSyncerImpl = (create) => (set, get, store) => {
     saveDiffs(storeBefore, storeAfter);
   };
 
-  return create(apiSyncerSet, get, store);
+  const origSetState = api.setState;
+  // eslint-disable-next-line functional/immutable-data, no-param-reassign -- mutation required https://github.com/pmndrs/zustand/issues/881#issuecomment-1076957006
+  api.setState = (args) => {
+    const storeBefore = api.getState();
+    origSetState(args);
+    const storeAfter = api.getState();
+
+    // Probably cleaner to check store.persist.getOptions().name === storagePlaygroundName, but it's
+    // annoying to figure out how to type the `store` param as a persist store,
+    // or even cleaner to check that we're not doing a populate action... but for some reason
+    // `set`'s third arg of action (from devtools middleware) is always undefined.
+    if (!storeAfter.topic) return;
+
+    // any diff API changes should be for the same topic (specifically we don't want to delete previously-viewed topic data)
+    if (storeBefore.topic?.id !== storeAfter.topic.id) return;
+
+    saveDiffs(storeBefore, storeAfter);
+  };
+
+  return create(apiSyncerSet, get, api);
 };
 
 export const apiSyncer = apiSyncerImpl as unknown as ApiSyncer;
