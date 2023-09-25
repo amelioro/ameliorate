@@ -69,6 +69,8 @@ Serve project on localhost:
 npm run dev
 ```
 
+Note: Much of the app can be used without logging in, but if you need to log in, you'll need to ask for test Auth0 credentials via Discord. There's a TODO to set up a mock auth server so that this isn't necessary.
+
 ## Codebase overview
 
 These are diagrams that might help provide high-level views of different pieces of the codebase:
