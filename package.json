@@ -16,6 +16,7 @@
     "build": "next build",
     "start": "next start",
     "setup:local": "bash ./scripts/setupLocal.sh",
+    "update": "bash ./scripts/update.sh",
     "check-types": "tsc --noEmit",
     "check-pretty": "prettier --check .",
     "lint": "next lint --format stylish",
