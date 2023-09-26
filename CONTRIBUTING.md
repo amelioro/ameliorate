@@ -44,32 +44,31 @@ Note: be particularly wary of [issues with a "needs [x]" label](https://github.c
 
 Make sure you have [git](https://git-scm.com/downloads), [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm), and [docker](https://docs.docker.com/get-docker/) installed.
 
-Clone, install dependencies, set up env variables:
+Setup:
 
 ```bash
 git clone https://github.com/amelioro/ameliorate.git
 cd ameliorate
-npm install
-npx husky install # activate commit hooks
-cp .env.example .env # set up env variables
+
+# install dependencies, commit hooks, env variables, seed db, build mock-auth server image
+# see https://github.com/amelioro/ameliorate/blob/main/scripts/setupLocal.sh
+npm run setup:local
 ```
-
-Set up database:
-
-```bash
-npm run db:start # start container running postgres
-npm run db:setup # set up schema, seed data
-```
-
-(see [Commit hooks](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md#commit-hooks) section for explanation of commit hooks)
 
 Serve project on localhost:
 
 ```bash
-npm run dev
+npm run dev # runs postgres container, mock auth server, and the nextjs server
 ```
 
-Note: Much of the app can be used without logging in, but if you need to log in, you'll need to ask for test Auth0 credentials via Discord. There's a TODO to set up a mock auth server so that this isn't necessary.
+The mock authentication server will allow any username and password, and you can log in as any user by using the user's authId as the username. So if you want to log in as, e.g., the [example seeded user](https://github.com/amelioro/ameliorate/blob/b5f6dfcd21c252e57fe03c429e56719b27c980ae/scripts/seed.ts#L16), use "oauth-test-user" as the username.
+
+Update project after pulling new changes:
+
+```bash
+# see https://github.com/amelioro/ameliorate/blob/main/scripts/update.sh
+npm run update
+```
 
 ## Codebase overview
 

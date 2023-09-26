@@ -1,3 +1,5 @@
+// Just copied this from root dir so docker won't need shenanigans for reuse.
+// Thinking we shouldn't need to maintain this anyway.
 {
   "compilerOptions": {
     "target": "es5",
@@ -22,5 +24,5 @@
     ]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "mock-auth"]
+  "exclude": ["node_modules"]
 }
