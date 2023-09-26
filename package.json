@@ -1,6 +1,7 @@
 {
   "//": [
     "This is where comments in this file can go, thanks to https://stackoverflow.com/a/14221781 for the idea",
+    "scripts/dev: runs locally-needed components (database, mock auth server) with the nextjs server in dev mode",
     "scripts/postinstall: prisma generate is needed because of https://www.prisma.io/docs/guides/other/troubleshooting-orm/help-articles/netlify-caching-issue"
   ],
   "name": "ameliorate",
@@ -11,14 +12,17 @@
   },
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "npm run db:start && npm run mock-auth:start && next dev",
     "build": "next build",
     "start": "next start",
+    "setup:local": "bash ./scripts/setupLocal.sh",
     "check-types": "tsc --noEmit",
     "check-pretty": "prettier --check .",
     "lint": "next lint --format stylish",
     "storybook": "sb dev -p 6006",
     "build-storybook": "sb build",
+    "mock-auth:build": "docker build -t mock-auth mock-auth/",
+    "mock-auth:start": "bash ./scripts/mockAuthStart.sh",
     "db:start": "bash ./scripts/dbStart.sh",
     "db:seed": "prisma db seed",
     "db:setup": "npm run migration:run && npm run db:seed",

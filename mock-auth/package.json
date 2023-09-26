@@ -1,0 +1,12 @@
+{
+  "name": "mock-auth",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "tsx index.ts"
+  },
+  "dependencies": {
+    "@types/oidc-provider": "^8.4.0",
+    "oidc-provider": "^8.4.0",
+    "tsx": "^3.13.0"
+  }
+}

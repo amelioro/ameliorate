@@ -26,7 +26,7 @@ flowchart TD
   "]
   Auth["
     Auth Service
-    <font color=red>(Auth0 test, TODO: Docker local mock)</font>
+    <font color=red>(Docker local mock)</font>
     <font color=orange>(Auth0 test tenant)</font>
     <font color=forestgreen>(Auth0 prod tenant)</font>
   "]
