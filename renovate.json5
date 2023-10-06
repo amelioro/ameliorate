@@ -1,10 +1,10 @@
 {
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   extends: [
-    ":approveMajorUpdates",
     ":enableVulnerabilityAlertsWithLabel(security)",
+    ":pinAllExceptPeerDependencies", // recommended by config:js-app; idk seems nice to see update diffs in package.json instead of lockfile
     "config:best-practices",
-    "group:all",
+    "group:allNonMajor",
     "npm:unpublishSafe",
   ],
   ignorePaths: ["mock-auth/**"],
