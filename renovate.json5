@@ -9,6 +9,7 @@
   ],
   ignorePaths: ["mock-auth/**"],
   labels: ["dependencies"],
-  schedule: "before 4am on Saturday",
+  // schedule: "before 4am on Saturday",
+  schedule: "never", // enable once all initial upgrades are done
   timezone: "America/Chicago",
 }
