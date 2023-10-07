@@ -14,7 +14,7 @@
   timezone: "America/Chicago",
   packageRules: [
     {
-      groupName: "next", // separate group because nextjs 13.5 doesn't work with netlify, and they recommend (https://answers.netlify.com/t/runtime-importmoduleerror-error-cannot-find-module-styled-jsx-style/102375/10) staying on 13.4 until they can fix it
+      groupName: "^next$", // separate group because nextjs 13.5 doesn't work with netlify, and they recommend (https://answers.netlify.com/t/runtime-importmoduleerror-error-cannot-find-module-styled-jsx-style/102375/10) staying on 13.4 until they can fix it
       matchPackagePatterns: ["next"],
     },
   ],
