@@ -2,6 +2,7 @@ import diff from "microdiff";
 import { StateCreator, StoreMutatorIdentifier } from "zustand";
 
 import { trpcClient } from "../../../pages/_app.page";
+import { emitter } from "../../common/event";
 import { convertToApi } from "../utils/apiConversion";
 import { TopicStoreState } from "./store";
 
@@ -73,6 +74,7 @@ const saveDiffs = (storeBefore: TopicStoreState, storeAfter: TopicStoreState) =>
 
   // TODO: is there a way to compress this data? when uploading a new topic, the payload appears to be 30% larger than the file being uploaded
   trpcClient.topic.setData.mutate({ topicId: storeBefore.topic.id, ...changeLists }).catch((e) => {
+    emitter.emit("errored");
     throw e;
   });
 };

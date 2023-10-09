@@ -1,18 +1,11 @@
-import {
-  AutoStoriesOutlined,
-  Build,
-  Download,
-  Group,
-  Redo,
-  Undo,
-  Upload,
-} from "@mui/icons-material";
-import { AppBar, Divider, IconButton, ToggleButton, Toolbar } from "@mui/material";
+import { Build, Download, Error, Group, Redo, Undo, Upload } from "@mui/icons-material";
+import { AppBar, Divider, IconButton, ToggleButton, Toolbar, Tooltip } from "@mui/material";
 import fileDownload from "js-file-download";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StorageValue } from "zustand/middleware";
 
 import { errorWithData } from "../../../../common/errorHandling";
+import { emitter } from "../../../common/event";
 import { useSessionUser } from "../../../common/hooks";
 import {
   comparePerspectives,
@@ -20,9 +13,9 @@ import {
   useIsComparingPerspectives,
 } from "../../../view/store/store";
 import { migrate } from "../../store/migrate";
-import { TopicStoreState, useIsTableActive, useOnPlayground } from "../../store/store";
+import { TopicStoreState, useOnPlayground } from "../../store/store";
 import { useUserCanEditTopicData } from "../../store/userHooks";
-import { getPersistState, redo, resetTopicData, setTopicData, undo } from "../../store/utilActions";
+import { getPersistState, redo, setTopicData, undo } from "../../store/utilActions";
 import { useTemporalHooks } from "../../store/utilHooks";
 import { getTopicTitle } from "../../store/utils";
 import { MoreActionsDrawer } from "./MoreActionsDrawer";
@@ -67,12 +60,21 @@ export const TopicToolbar = () => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const onPlayground = useOnPlayground();
-  const isTableActive = useIsTableActive();
   const [canUndo, canRedo] = useTemporalHooks();
   const isComparingPerspectives = useIsComparingPerspectives();
+  const [hasErrored, setHasErrored] = useState(false);
 
-  const thereAreMoreActions = !isTableActive || !onPlayground;
   const [isMoreActionsDrawerOpen, setIsMoreActionsDrawerOpen] = useState(false);
+
+  useEffect(() => {
+    const unbindErrored = emitter.on("errored", () => {
+      setHasErrored(true);
+    });
+
+    return () => {
+      unbindErrored();
+    };
+  }, []);
 
   return (
     <AppBar position="sticky" color="primaryVariantLight">
@@ -115,9 +117,6 @@ export const TopicToolbar = () => {
             >
               <Redo />
             </IconButton>
-            <IconButton color="inherit" title="Reset" aria-label="Reset" onClick={resetTopicData}>
-              <AutoStoriesOutlined />
-            </IconButton>
           </>
         )}
 
@@ -136,24 +135,38 @@ export const TopicToolbar = () => {
           </ToggleButton>
         )}
 
-        {thereAreMoreActions && (
-          <>
-            <Divider orientation="vertical" />
+        <Divider orientation="vertical" />
 
-            <IconButton
-              color="inherit"
-              title="More actions"
-              aria-label="More actions"
-              onClick={() => setIsMoreActionsDrawerOpen(true)}
-            >
-              <Build />
-            </IconButton>
+        <IconButton
+          color="inherit"
+          title="More actions"
+          aria-label="More actions"
+          onClick={() => setIsMoreActionsDrawerOpen(true)}
+        >
+          <Build />
+        </IconButton>
 
-            <MoreActionsDrawer
-              isMoreActionsDrawerOpen={isMoreActionsDrawerOpen}
-              setIsMoreActionsDrawerOpen={setIsMoreActionsDrawerOpen}
-            />
-          </>
+        <MoreActionsDrawer
+          isMoreActionsDrawerOpen={isMoreActionsDrawerOpen}
+          setIsMoreActionsDrawerOpen={setIsMoreActionsDrawerOpen}
+        />
+
+        {hasErrored && (
+          // hmm why does this steal the "More actions" onClick through devtools? confirm this doesn't happen on preview deploy
+          // TODO: this should be accessible via screen reader - can the tooltip be accessed by screen readers?
+          <Tooltip
+            title={
+              <span>
+                Failed to save changes - your changes will be lost after refreshing the page.
+                <br />
+                <br />
+                Please refresh the page and try making your changes again, or download your topic
+                with your changes and re-upload it after refreshing the page.
+              </span>
+            }
+          >
+            <Error color="error" />
+          </Tooltip>
         )}
       </Toolbar>
     </AppBar>
