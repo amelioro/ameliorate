@@ -1,4 +1,4 @@
-import { AlignVerticalTop, Build, Close, Route } from "@mui/icons-material";
+import { AlignVerticalTop, AutoStoriesOutlined, Build, Close, Route } from "@mui/icons-material";
 import {
   Divider,
   Drawer,
@@ -12,6 +12,7 @@ import {
 
 import { Perspectives } from "../../../view/components/Perspectives/Perspectives";
 import { useIsTableActive, useOnPlayground, useShowImpliedEdges } from "../../store/store";
+import { resetTopicData } from "../../store/utilActions";
 import { relayout, toggleShowImpliedEdges } from "../../store/viewActions";
 
 interface Props {
@@ -54,31 +55,37 @@ export const MoreActionsDrawer = ({
 
         <Divider />
 
-        {!isTableActive && (
-          <ListItem disablePadding={false}>
-            <IconButton
-              color="inherit"
-              title="Recalculate layout"
-              aria-label="Recalculate layout"
-              onClick={() => void relayout()}
-            >
-              <AlignVerticalTop />
-            </IconButton>
+        <ListItem disablePadding={false}>
+          <IconButton color="inherit" title="Reset" aria-label="Reset" onClick={resetTopicData}>
+            <AutoStoriesOutlined />
+          </IconButton>
 
-            <ToggleButton
-              value={showImpliedEdges}
-              title="Show implied edges"
-              aria-label="Show implied edges"
-              color="secondary"
-              size="small"
-              selected={showImpliedEdges}
-              onClick={() => toggleShowImpliedEdges(!showImpliedEdges)}
-              sx={{ borderRadius: "50%", border: "0" }}
-            >
-              <Route />
-            </ToggleButton>
-          </ListItem>
-        )}
+          {!isTableActive && (
+            <>
+              <IconButton
+                color="inherit"
+                title="Recalculate layout"
+                aria-label="Recalculate layout"
+                onClick={() => void relayout()}
+              >
+                <AlignVerticalTop />
+              </IconButton>
+
+              <ToggleButton
+                value={showImpliedEdges}
+                title="Show implied edges"
+                aria-label="Show implied edges"
+                color="secondary"
+                size="small"
+                selected={showImpliedEdges}
+                onClick={() => toggleShowImpliedEdges(!showImpliedEdges)}
+                sx={{ borderRadius: "50%", border: "0" }}
+              >
+                <Route />
+              </ToggleButton>
+            </>
+          )}
+        </ListItem>
 
         {!onPlayground && (
           <ListItem disablePadding={false}>
