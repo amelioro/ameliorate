@@ -152,8 +152,6 @@ export const TopicToolbar = () => {
         />
 
         {hasErrored && (
-          // hmm why does this steal the "More actions" onClick through devtools? confirm this doesn't happen on preview deploy
-          // TODO: this should be accessible via screen reader - can the tooltip be accessed by screen readers?
           <Tooltip
             title={
               <span>
@@ -164,8 +162,21 @@ export const TopicToolbar = () => {
                 with your changes and re-upload it after refreshing the page.
               </span>
             }
+            enterTouchDelay={0} // allow touch to immediately trigger
+            leaveTouchDelay={Infinity} // touch-away to close on mobile, since message is long
           >
-            <Error color="error" />
+            <IconButton
+              color="error"
+              aria-label="Error info"
+              sx={{
+                // Don't make it look like clicking will do something, since it won't.
+                // Using a button here is an attempt to make it accessible, since the tooltip will show
+                // on focus.
+                cursor: "default",
+              }}
+            >
+              <Error />
+            </IconButton>
           </Tooltip>
         )}
       </Toolbar>
