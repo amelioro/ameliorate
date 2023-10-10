@@ -28,11 +28,12 @@ model User {
 }
 
 model Topic {
-  id          Int      @id @default(autoincrement())
-  title       String   @db.VarChar(100)
+  id          Int            @id @default(autoincrement())
+  title       String         @db.VarChar(100)
   creatorName String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  visibility  VisibilityType @default(public)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
 
   creator    User        @relation(fields: [creatorName], references: [username], onDelete: Cascade)
   nodes      Node[]
@@ -42,6 +43,12 @@ model Topic {
   @@unique([title, creatorName])
   @@index([creatorName])
   @@map("topics")
+}
+
+enum VisibilityType {
+  public
+  unlisted
+  private
 }
 
 model Node {
