@@ -11,7 +11,7 @@ export const PositionedDiv = styled.div`
   height: 100%;
 `;
 
-export const TogglePaneButton = styled(IconButton)`
+export const ToggleDrawerButton = styled(IconButton)`
   position: absolute;
   right: 0;
   transform: translateX(100%);
