@@ -1,7 +1,12 @@
 import { AutoStories, Settings } from "@mui/icons-material";
 import { Button, IconButton } from "@mui/material";
 import { Topic } from "@prisma/client";
-import { type MRT_ColumnDef, MaterialReactTable } from "material-react-table";
+import {
+  type MRT_ColumnDef,
+  MRT_ShowHideColumnsButton,
+  MRT_ToggleGlobalFilterButton,
+  MaterialReactTable,
+} from "material-react-table";
 import { NextPage } from "next";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
@@ -39,6 +44,10 @@ const User: NextPage = () => {
       accessorKey: "title",
       header: "Topic",
     },
+    {
+      accessorKey: "visibility",
+      header: "Visibility",
+    },
   ];
 
   const rowData: RowData[] = findUser.data.topics;
@@ -51,7 +60,6 @@ const User: NextPage = () => {
       <MaterialReactTable
         columns={columnData}
         data={rowData}
-        enableHiding={false}
         enableRowActions={hasEditAccess}
         renderRowActions={({ row }) => (
           <IconButton
@@ -64,24 +72,32 @@ const User: NextPage = () => {
           </IconButton>
         )}
         positionActionsColumn="last"
-        renderToolbarInternalActions={() => {
-          return hasEditAccess ? (
-            <Button
-              variant="contained"
-              LinkComponent={NextLink}
-              href="/new"
-              startIcon={<AutoStories />}
-            >
-              New
-            </Button>
-          ) : (
-            <></>
+        renderToolbarInternalActions={({ table }) => {
+          return (
+            <>
+              <MRT_ToggleGlobalFilterButton table={table} />
+              <MRT_ShowHideColumnsButton table={table} />
+
+              {hasEditAccess && (
+                <Button
+                  variant="contained"
+                  LinkComponent={NextLink}
+                  href="/new"
+                  startIcon={<AutoStories />}
+                >
+                  New
+                </Button>
+              )}
+            </>
           );
         }}
         muiTableBodyRowProps={({ row }) => ({
           onClick: () => void router.push(`/${foundUsername}/${row.original.title}`),
           sx: { cursor: "pointer" },
         })}
+        initialState={{
+          columnVisibility: { visibility: hasEditAccess },
+        }}
       />
     </>
   );
