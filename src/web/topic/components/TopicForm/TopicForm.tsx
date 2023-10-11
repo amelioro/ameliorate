@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Info } from "@mui/icons-material";
 import {
   Button,
   Dialog,
@@ -7,8 +8,11 @@ import {
   DialogContentText,
   DialogTitle,
   Divider,
+  IconButton,
+  MenuItem,
   Stack,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { Topic, User } from "@prisma/client";
@@ -17,7 +21,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { topicSchema } from "../../../../common/topic";
+import { topicSchema, visibilityTypes } from "../../../../common/topic";
 import { trpc } from "../../../common/trpc";
 
 export const CreateTopicForm = ({ user }: { user: User }) => {
@@ -42,6 +46,7 @@ export const CreateTopicForm = ({ user }: { user: User }) => {
   const onSubmit = (data: FormData) => {
     createTopic.mutate({
       title: data.title,
+      visibility: data.visibility,
     });
   };
 
@@ -110,6 +115,7 @@ export const EditTopicForm = ({ topic, user }: { topic: Topic; user: User }) => 
     updateTopic.mutate({
       id: topic.id,
       title: data.title,
+      visibility: data.visibility,
     });
   };
 
@@ -175,6 +181,7 @@ const formSchema = (utils: ReturnType<typeof trpc.useContext>, user: User, topic
       },
       (title) => ({ message: `Title ${title} is not available.` })
     ),
+    visibility: topicSchema.shape.visibility,
   });
 };
 type FormData = z.infer<ReturnType<typeof formSchema>>;
@@ -202,17 +209,24 @@ const TopicForm = ({ topic, user, onSubmit, DeleteSection }: Props) => {
     resolver: zodResolver(formSchema(utils, user, topic)),
     defaultValues: {
       title: topic?.title,
+      visibility: topic?.visibility ?? "public",
     },
   });
 
   const topicTitle = watch("title");
+  const visibility = watch("visibility");
 
   const newTopic = topic === undefined;
 
   return (
     <>
       <form
-        onSubmit={(event) => void handleSubmit(onSubmit)(event)}
+        onSubmit={(event) =>
+          void handleSubmit((data) => {
+            onSubmit(data);
+            reset(data); // otherwise isDirty remains true after submit
+          })(event)
+        }
         style={{ display: "flex", justifyContent: "center" }}
       >
         <Stack spacing={2} sx={{ width: "600px", margin: 2 }}>
@@ -242,8 +256,63 @@ const TopicForm = ({ topic, user, onSubmit, DeleteSection }: Props) => {
             />
           </Stack>
 
+          <Stack direction="row">
+            <TextField
+              {...register("visibility")}
+              label="Visibility"
+              error={!!errors.visibility}
+              helperText={errors.visibility?.message}
+              required
+              select
+              value={visibility} // not sure why this is needed here but not on the title text field
+            >
+              {visibilityTypes.map((visibilityType) => (
+                <MenuItem key={visibilityType} value={visibilityType}>
+                  {visibilityType}
+                </MenuItem>
+              ))}
+            </TextField>
+
+            <Tooltip
+              title={
+                <span>
+                  This determines who can view your topic.
+                  <br />
+                  <br />
+                  Public: anyone with the link can view your topic, but additionally your topic will
+                  show up in your topic list, and it may show up in future topic-sharing
+                  functionality, such as topic search.
+                  <br />
+                  <br />
+                  Unlisted: anyone with the link can view your topic.
+                  <br />
+                  <br />
+                  Private: only you can view your topic (note: Ameliorate maintainers still have
+                  access to any topic you save - you must use the playground if you want your topic
+                  to be truly private).
+                </span>
+              }
+              enterTouchDelay={0} // allow touch to immediately trigger
+              leaveTouchDelay={Infinity} // touch-away to close on mobile, since message is long
+            >
+              <IconButton
+                color="info"
+                aria-label="Visibility info"
+                sx={{
+                  // Don't make it look like clicking will do something, since it won't.
+                  // Using a button here is an attempt to make it accessible, since the tooltip will show
+                  // on focus.
+                  cursor: "default",
+                  alignSelf: "center",
+                }}
+              >
+                <Info />
+              </IconButton>
+            </Tooltip>
+          </Stack>
+
           <Typography variant="body2">
-            Anyone can view your topic at: ameliorate.app/{user.username}/{topicTitle || "{title}"}
+            View your topic at: ameliorate.app/{user.username}/{topicTitle || "{title}"}
           </Typography>
 
           <Stack direction="row" spacing={1} justifyContent="flex-end">

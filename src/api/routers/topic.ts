@@ -195,12 +195,13 @@ export const topicRouter = router({
 
   create: procedure
     .use(isLoggedIn)
-    .input(topicSchema.pick({ title: true }))
+    .input(topicSchema.pick({ title: true, visibility: true }))
     .mutation(async (opts) => {
       const newTopic = await xprisma.topic.create({
         data: {
           title: opts.input.title,
           creatorName: opts.ctx.user.username,
+          visibility: opts.input.visibility,
         },
       });
 
@@ -213,7 +214,7 @@ export const topicRouter = router({
 
   update: procedure
     .use(isLoggedIn)
-    .input(topicSchema.pick({ id: true, title: true }))
+    .input(topicSchema.pick({ id: true, title: true, visibility: true }))
     .mutation(async (opts) => {
       const topic = await xprisma.topic.findUniqueOrThrow({ where: { id: opts.input.id } });
       if (opts.ctx.user.username !== topic.creatorName) throw new TRPCError({ code: "FORBIDDEN" });
@@ -222,6 +223,7 @@ export const topicRouter = router({
         where: { id: opts.input.id },
         data: {
           title: opts.input.title,
+          visibility: opts.input.visibility,
         },
       });
     }),
