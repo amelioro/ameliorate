@@ -1,4 +1,3 @@
-import { type Topic } from "@prisma/client";
 import { temporal } from "zundo";
 import { devtools, persist } from "zustand/middleware";
 import { createWithEqualityFn } from "zustand/traditional";
@@ -24,7 +23,11 @@ const initialDiagrams: Record<string, Diagram> = {
   },
 };
 
-type StoreTopic = Omit<Topic, "createdAt" | "updatedAt">;
+interface StoreTopic {
+  id: number;
+  title: string;
+  creatorName: string;
+}
 
 // TODO: probably better to put userScores into a separate store (it doesn't seem necessary to
 // couple scores with the nodes/edges, and we'd be able to avoid triggering score comparators by

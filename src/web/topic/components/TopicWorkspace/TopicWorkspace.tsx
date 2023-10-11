@@ -6,7 +6,7 @@ import { useActiveClaimTreeId, useActiveTableProblemId } from "../../store/store
 import { topicDiagramId } from "../../utils/diagram";
 import { CriteriaTable } from "../CriteriaTable/CriteriaTable";
 import { Diagram } from "../Diagram/Diagram";
-import { TopicPane } from "../Surface/TopicPane";
+import { TopicDrawer } from "../Surface/TopicDrawer";
 import { TopicToolbar } from "../Surface/TopicToolbar";
 import { WorkspaceBox, workspaceStyles } from "./TopicWorkspace.styles";
 
@@ -19,7 +19,7 @@ export const TopicWorkspace = () => {
       <TopicToolbar />
 
       <WorkspaceBox>
-        <TopicPane />
+        <TopicDrawer />
 
         <Box width="100%" height="100%" position="absolute">
           {tableProblemId ? (

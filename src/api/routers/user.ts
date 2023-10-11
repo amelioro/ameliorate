@@ -10,11 +10,21 @@ export const userRouter = router({
   findByUsername: procedure
     .input(userSchema.pick({ username: true })) // prettier shoves this into one line if this comment isn't here, which is lame, so this comment is here.
     .query(async (opts) => {
+      const isViewingSelf = opts.input.username === opts.ctx.user?.username;
+
       // Can consider making a separate endpoint for withRelations if the extra data becomes a problem and is unnecessary.
       return await xprisma.user.findUnique({
         // Manually selecting each column in order to exclude authId.
         // See prisma docs if we want to implement an exclude method, and to track if prisma has implemented it themselves yet https://www.prisma.io/docs/concepts/components/prisma-client/excluding-fields
-        select: { id: true, username: true, topics: true },
+        select: {
+          id: true,
+          username: true,
+          topics: {
+            where: {
+              visibility: isViewingSelf ? undefined : "public",
+            },
+          },
+        },
         where: { username: opts.input.username },
       });
     }),

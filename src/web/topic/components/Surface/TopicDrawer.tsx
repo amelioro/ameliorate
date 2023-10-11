@@ -27,10 +27,10 @@ import {
   NestedListItemButton,
   PositionedDiv,
   StyledDrawer,
-  TogglePaneButton,
-} from "./TopicPane.styles";
+  ToggleDrawerButton,
+} from "./TopicDrawer.styles";
 
-export const TopicPane = () => {
+export const TopicDrawer = () => {
   const [isTopicDrawerOpen, setIsTopicDrawerOpen] = useState(false);
   const [isClaimsListOpen, setIsClaimsListOpen] = useState(true);
   const [isProblemsListOpen, setIsProblemsListOpen] = useState(true);
@@ -53,9 +53,9 @@ export const TopicPane = () => {
     <>
       {/* div to enable menu button to be positioned to the right of the drawer */}
       <PositionedDiv>
-        <TogglePaneButton onClick={handleDrawerToggle} color="primary">
+        <ToggleDrawerButton onClick={handleDrawerToggle} color="primary">
           {isTopicDrawerOpen ? <ChevronLeft /> : <Menu />}
-        </TogglePaneButton>
+        </ToggleDrawerButton>
         {/* `permanent` because `persistent` adds transitions that conflict with our styles */}
         <StyledDrawer variant="permanent" open={isTopicDrawerOpen}>
           <List>

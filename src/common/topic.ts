@@ -3,6 +3,13 @@ import { z } from "zod";
 import { reservedSecondLevelEndpointNames } from "./reservedEndpointNames";
 import { userSchema } from "./user";
 
+// not sure how to guarantee that this matches the schema enum
+export const visibilityTypes = ["public", "unlisted", "private"] as const;
+
+const zVisibilityTypes = z.enum(visibilityTypes);
+
+export type VisibilityType = z.infer<typeof zVisibilityTypes>;
+
 export const topicSchema = z.object({
   id: z.number(),
   title: z
@@ -18,4 +25,5 @@ export const topicSchema = z.object({
       (topic) => ({ message: `${topic} is a reserved title.` })
     ),
   creatorName: userSchema.shape.username,
+  visibility: zVisibilityTypes,
 });
