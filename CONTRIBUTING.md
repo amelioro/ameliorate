@@ -63,7 +63,7 @@ npm run dev # runs postgres container, mock auth server, and the nextjs server
 
 The mock authentication server will allow any username and password, and you can log in as any user by using the user's authId as the username. So if you want to log in as, e.g., the [example seeded user](https://github.com/amelioro/ameliorate/blob/b5f6dfcd21c252e57fe03c429e56719b27c980ae/scripts/seed.ts#L16), use "oauth-test-user" as the username.
 
-Update project after pulling new changes:
+Update project (run new migrations, install new dependencies) after pulling new changes:
 
 ```bash
 # see https://github.com/amelioro/ameliorate/blob/main/scripts/update.sh
