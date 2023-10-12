@@ -22,20 +22,30 @@ const generateMigration = async () => {
   try {
     // Create down migration
     // @ts-expect-error idk, execa example usage is like this but ts doesn't like piping after command returns potentially undefined
-    const { stdout: _downStdout } = await $`prisma migrate diff \
+    const { stdout: downStdout } = await $`prisma migrate diff \
   --from-schema-datamodel src/db/schema.prisma \
   --to-migrations src/db/migrations \
   --shadow-database-url postgres://postgres:Demo99@localhost:33100/${shadowDbName} \
   --script`.pipeStdout("down.sql");
+
+    // add BEGIN and COMMIT to ensure migration is wrapped in a transaction
+    // @ts-expect-error idk, execa example usage is like this but ts doesn't like piping after command returns potentially undefined
+    await $`printf %s\n\n%s\n%s\n BEGIN; ${downStdout} COMMIT;`.pipeStdout("down.sql");
+
     console.log("created down.sql");
 
     // Create up migration
     // @ts-expect-error idk, execa example usage is like this but ts doesn't like piping after command returns potentially undefined
-    const { stdout: _upStdout } = await $`prisma migrate diff \
+    const { stdout: upStdout } = await $`prisma migrate diff \
   --from-migrations src/db/migrations \
   --to-schema-datamodel src/db/schema.prisma \
   --shadow-database-url postgres://postgres:Demo99@localhost:33100/${shadowDbName} \
   --script`.pipeStdout("migration.sql");
+
+    // add BEGIN and COMMIT to ensure migration is wrapped in a transaction
+    // @ts-expect-error idk, execa example usage is like this but ts doesn't like piping after command returns potentially undefined
+    await $`printf %s\n\n%s\n%s\n BEGIN; ${upStdout} COMMIT;`.pipeStdout("migration.sql");
+
     console.log("created migration.sql (up)");
 
     // create migration directory the same way that prisma does, "[timestamp]_[migration_name]"
