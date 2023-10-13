@@ -54,6 +54,24 @@ const User: NextPage = () => {
       accessorKey: "visibility",
       header: "Visibility",
     },
+    {
+      accessorKey: "createdAt",
+      header: "Created",
+      Cell: ({ row }) => (
+        <span title={row.original.createdAt.toLocaleString()}>
+          {row.original.createdAt.toLocaleDateString()}
+        </span>
+      ),
+    },
+    {
+      accessorKey: "updatedAt",
+      header: "Updated",
+      Cell: ({ row }) => (
+        <span title={row.original.updatedAt.toLocaleString()}>
+          {row.original.updatedAt.toLocaleDateString()}
+        </span>
+      ),
+    },
   ];
 
   const rowData: RowData[] = foundUser.topics;
@@ -97,7 +115,8 @@ const User: NextPage = () => {
           );
         }}
         initialState={{
-          columnVisibility: { visibility: hasEditAccess },
+          columnVisibility: { visibility: hasEditAccess, createdAt: false },
+          sorting: [{ id: "updatedAt", desc: true }],
         }}
       />
     </>
