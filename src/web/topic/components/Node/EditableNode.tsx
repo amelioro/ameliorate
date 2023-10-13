@@ -71,7 +71,7 @@ export const EditableNode = ({ node, className = "" }: { node: Node; className?:
           maxRows={3}
           onBlur={(event) => setNodeLabel(node.id, event.target.value)}
           className="nopan" // allow regular text input drag functionality without using reactflow's pan behavior
-          disabled={!userCanEditTopicData}
+          readOnly={!userCanEditTopicData}
         />
       </MiddleDiv>
     </NodeDiv>

@@ -58,8 +58,13 @@ export const StyledTextareaAutosize = styled(TextareaAutosize)<StyledTextareaPro
   line-height: 1;
   font-family: inherit;
 
-  // so that disabled textarea doesn't appear gray
+  // so that readonly textarea doesn't appear gray
   color: ${({ theme }) => theme.palette.text.primary};
+
+  &[readonly] {
+    // so that cursor doesn't imply that textarea is editable
+    cursor: default;
+  }
 `;
 
 interface NodeDivProps {
