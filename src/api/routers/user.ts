@@ -41,7 +41,6 @@ export const userRouter = router({
     }),
 
   create: procedure
-    .use(isAuthenticated)
     .use(isEmailVerified)
     .input(userSchema.pick({ username: true, authId: true }))
     .mutation(async (opts) => {

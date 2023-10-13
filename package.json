@@ -20,6 +20,8 @@
     "check-types": "tsc --noEmit",
     "check-pretty": "prettier --check .",
     "lint": "next lint --format stylish",
+    "test": "vitest",
+    "test:api": "vitest api",
     "storybook": "sb dev -p 6006",
     "build-storybook": "sb build",
     "mock-auth:build": "docker build -t mock-auth mock-auth/",
@@ -112,10 +114,12 @@
     "lint-staged": "13.2.3",
     "prettier": "2.7.1",
     "prisma": "5.1.0",
+    "prismock": "1.21.1",
     "storybook": "7.0.0-alpha.47",
     "storybook-addon-next": "1.6.10",
     "tsx": "3.12.7",
     "typescript": "4.7.4",
+    "vitest": "0.34.6",
     "yargs": "17.7.2"
   }
 }
