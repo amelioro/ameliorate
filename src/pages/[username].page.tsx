@@ -12,6 +12,7 @@ import NextLink from "next/link";
 import { useRouter } from "next/router";
 
 import { NotFoundError, QueryError } from "../web/common/components/Error/Error";
+import { Link } from "../web/common/components/Link";
 import { Loading } from "../web/common/components/Loading/Loading";
 import { useSessionUser } from "../web/common/hooks";
 import { trpc } from "../web/common/trpc";
@@ -39,21 +40,43 @@ const User: NextPage = () => {
   if (findUser.error) return <QueryError error={findUser.error} />;
   if (!findUser.data) return <NotFoundError />;
 
+  const foundUser = findUser.data;
+
   const columnData: MRT_ColumnDef<RowData>[] = [
     {
       accessorKey: "title",
       header: "Topic",
+      Cell: ({ row }) => (
+        <Link href={`/${foundUser.username}/${row.original.title}`}>{row.original.title}</Link>
+      ),
     },
     {
       accessorKey: "visibility",
       header: "Visibility",
     },
+    {
+      accessorKey: "createdAt",
+      header: "Created",
+      Cell: ({ row }) => (
+        <span title={row.original.createdAt.toLocaleString()}>
+          {row.original.createdAt.toLocaleDateString()}
+        </span>
+      ),
+    },
+    {
+      accessorKey: "updatedAt",
+      header: "Updated",
+      Cell: ({ row }) => (
+        <span title={row.original.updatedAt.toLocaleString()}>
+          {row.original.updatedAt.toLocaleDateString()}
+        </span>
+      ),
+    },
   ];
 
-  const rowData: RowData[] = findUser.data.topics;
+  const rowData: RowData[] = foundUser.topics;
 
-  const hasEditAccess = findUser.data.id === sessionUser?.id;
-  const foundUsername = findUser.data.username;
+  const hasEditAccess = foundUser.id === sessionUser?.id;
 
   return (
     <>
@@ -65,7 +88,7 @@ const User: NextPage = () => {
           <IconButton
             onClick={(e) => {
               e.stopPropagation(); // prevent row click
-              void router.push(`/${foundUsername}/${row.original.title}/settings`);
+              void router.push(`/${foundUser.username}/${row.original.title}/settings`);
             }}
           >
             <Settings />
@@ -91,12 +114,9 @@ const User: NextPage = () => {
             </>
           );
         }}
-        muiTableBodyRowProps={({ row }) => ({
-          onClick: () => void router.push(`/${foundUsername}/${row.original.title}`),
-          sx: { cursor: "pointer" },
-        })}
         initialState={{
-          columnVisibility: { visibility: hasEditAccess },
+          columnVisibility: { visibility: hasEditAccess, createdAt: false },
+          sorting: [{ id: "updatedAt", desc: true }],
         }}
       />
     </>

@@ -203,6 +203,10 @@ export const deleteNode = async (nodeId: string) => {
 
   const activeDiagram = getActiveDiagram(state);
 
+  if (activeDiagram.type === "problem" && activeDiagram.nodes.length === 1) {
+    throw errorWithData("cannot delete last node in problem diagram", activeDiagram);
+  }
+
   const node = findNode(nodeId, activeDiagram);
 
   if (node.type === "rootClaim") {

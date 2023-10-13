@@ -120,8 +120,8 @@ export const topicRouter = router({
         opts.input.scoresToDelete,
       ];
 
-      const graphPartsChangedByNotCreator =
-        !isCreator && graphPartLists.some((graphParts) => graphParts.length > 0);
+      const graphPartsChanged = graphPartLists.some((graphParts) => graphParts.length > 0);
+      const graphPartsChangedByNotCreator = !isCreator && graphPartsChanged;
 
       // ensure requests don't try changing nodes/edges/scores from other topics
       const onlyChangingObjectsFromThisTopic = topicObjectLists.every((topicObjects) =>
@@ -153,6 +153,14 @@ export const topicRouter = router({
 
       // make changes
       await xprisma.$transaction(async (tx) => {
+        // count any not-user-specific changes as a change to the topic (i.e. node/edge changes, not scores)
+        if (graphPartsChanged) {
+          await tx.topic.update({
+            where: { id: opts.input.topicId },
+            data: { updatedAt: new Date() },
+          });
+        }
+
         // scores points to edges/nodes, and edges point to nodes, so create nodes -> edges -> scores, and delete in reverse
         if (opts.input.nodesToCreate.length > 0)
           await tx.node.createMany({ data: opts.input.nodesToCreate });
