@@ -9,7 +9,7 @@ export const createContext = async ({ req, res }: CreateNextContextOptions) => {
   const userAuthId = session?.user.sub as string | null;
   const userEmailVerified = session?.user.email_verified as boolean | null;
 
-  if (!userAuthId) return { userAuthId, userEmailVerified };
+  if (!userAuthId) return {};
 
   const user = await xprisma.user.findFirst({ where: { authId: userAuthId } });
 
