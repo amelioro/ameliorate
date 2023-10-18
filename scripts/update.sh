@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
+set -e
+
 # update db - needed if new migrations are added
 npm run migration:deploy
 

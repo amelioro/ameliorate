@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
+set -e
+
 # start container if it exists, otherwise create and run
 docker start pgsql 2>/dev/null || \
   docker run --name pgsql -d \
