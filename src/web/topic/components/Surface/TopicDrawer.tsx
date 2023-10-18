@@ -24,7 +24,6 @@ import {
   useActiveClaimTreeId,
   useActiveTableProblemId,
   useClaimTreesWithExplicitClaims,
-  useRootTitle,
 } from "../../store/store";
 import { viewClaimTree, viewCriteriaTable, viewTopicDiagram } from "../../store/viewActions";
 import { topicDiagramId } from "../../utils/diagram";
@@ -43,7 +42,6 @@ export const TopicDrawer = () => {
   const activeTableProblemId = useActiveTableProblemId();
   const activeClaimTreeId = useActiveClaimTreeId();
 
-  const rootTitle = useRootTitle();
   const claimTreeIdentifiers = useClaimTreesWithExplicitClaims();
   const problems = useNodes(topicDiagramId, (node) => node.type === "problem");
 
@@ -73,7 +71,7 @@ export const TopicDrawer = () => {
                 <ListItemIcon>
                   <AutoStories />
                 </ListItemIcon>
-                <ListItemText primary={rootTitle} />
+                <ListItemText primary="Topic Diagram" />
               </ListItemButton>
             </ListItem>
             <ListItem key="2">
@@ -81,7 +79,7 @@ export const TopicDrawer = () => {
                 <ListItemIcon>
                   <TableView />
                 </ListItemIcon>
-                <ListItemText primary="Criteria" />
+                <ListItemText primary="Criteria Tables" />
                 {isProblemsListOpen ? <ExpandLess /> : <ExpandMore />}
               </ListItemButton>
             </ListItem>
@@ -117,7 +115,7 @@ export const TopicDrawer = () => {
                 <ListItemIcon>
                   <LibraryBooks />
                 </ListItemIcon>
-                <ListItemText primary="Claims" />
+                <ListItemText primary="Claim Trees" />
                 {isClaimsListOpen ? <ExpandLess /> : <ExpandMore />}
               </ListItemButton>
             </ListItem>
