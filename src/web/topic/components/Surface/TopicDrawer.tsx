@@ -5,7 +5,6 @@ import {
   ExpandLess,
   ExpandMore,
   LibraryBooks,
-  Menu,
   TableChart,
   TableView,
 } from "@mui/icons-material";
@@ -58,7 +57,7 @@ export const TopicDrawer = () => {
       {/* div to enable menu button to be positioned to the right of the drawer */}
       <PositionedDiv>
         <ToggleDrawerButton onClick={handleDrawerToggle} color="primary">
-          {isTopicDrawerOpen ? <ChevronLeft /> : <Menu />}
+          {isTopicDrawerOpen ? <ChevronLeft /> : <AutoStories />}
         </ToggleDrawerButton>
         {/* `permanent` because `persistent` adds transitions that conflict with our styles */}
         <StyledDrawer variant="permanent" open={isTopicDrawerOpen}>
