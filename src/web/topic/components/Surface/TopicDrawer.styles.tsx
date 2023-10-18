@@ -7,7 +7,7 @@ export const NestedListItemButton = styled(ListItemButton)`
 
 export const PositionedDiv = styled.div`
   display: flex;
-  position: absolute;
+  position: relative;
   height: 100%;
 `;
 

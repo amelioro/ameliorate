@@ -31,7 +31,7 @@ import {
 } from "./TopicDrawer.styles";
 
 export const TopicDrawer = () => {
-  const [isTopicDrawerOpen, setIsTopicDrawerOpen] = useState(false);
+  const [isTopicDrawerOpen, setIsTopicDrawerOpen] = useState(true);
   const [isClaimsListOpen, setIsClaimsListOpen] = useState(true);
   const [isProblemsListOpen, setIsProblemsListOpen] = useState(true);
 
