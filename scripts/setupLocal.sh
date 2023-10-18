@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
+set -e
+
 npm install # install dependencies
 npx husky install # activate commit hooks
 cp .env.example .env # set up env variables
