@@ -102,13 +102,6 @@ export const useDiagramType = (diagramId: string) => {
   });
 };
 
-// topic view id is the claim tree id or topic diagram id
-export const useTopicViewId = () => {
-  return useTopicStore(
-    (state) => state.activeClaimTreeId ?? state.activeTableProblemId ?? topicDiagramId
-  );
-};
-
 export const useRootTitle = () => {
   return useTopicStore((state) => getTopicTitle(state));
 };
