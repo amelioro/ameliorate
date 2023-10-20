@@ -2,7 +2,6 @@ import { UserProvider as AuthUserProvider } from "@auth0/nextjs-auth0/client";
 import { Global } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { AppProps, NextWebVitalsMetric } from "next/app";
 import Head from "next/head";
 import { GoogleAnalytics, event } from "nextjs-google-analytics";
@@ -55,8 +54,6 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
             <Component {...pageProps} />
           </Layout>
         </AuthUserProvider>
-
-        <ReactQueryDevtools />
       </ThemeProvider>
 
       <Global styles={globals} />
