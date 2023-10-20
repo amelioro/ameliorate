@@ -25,5 +25,6 @@ export const topicSchema = z.object({
       (topic) => ({ message: `${topic} is a reserved title.` })
     ),
   creatorName: userSchema.shape.username,
+  description: z.string().max(10000),
   visibility: zVisibilityTypes,
 });

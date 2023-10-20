@@ -51,6 +51,10 @@ const User: NextPage = () => {
       ),
     },
     {
+      accessorKey: "description",
+      header: "Description",
+    },
+    {
       accessorKey: "visibility",
       header: "Visibility",
     },
@@ -115,7 +119,7 @@ const User: NextPage = () => {
           );
         }}
         initialState={{
-          columnVisibility: { visibility: hasEditAccess, createdAt: false },
+          columnVisibility: { description: false, visibility: hasEditAccess, createdAt: false },
           sorting: [{ id: "updatedAt", desc: true }],
         }}
       />

@@ -46,6 +46,7 @@ export const CreateTopicForm = ({ user }: { user: User }) => {
   const onSubmit = (data: FormData) => {
     createTopic.mutate({
       title: data.title,
+      description: data.description,
       visibility: data.visibility,
     });
   };
@@ -115,6 +116,7 @@ export const EditTopicForm = ({ topic, user }: { topic: Topic; user: User }) => 
     updateTopic.mutate({
       id: topic.id,
       title: data.title,
+      description: data.description,
       visibility: data.visibility,
     });
   };
@@ -181,6 +183,7 @@ const formSchema = (utils: ReturnType<typeof trpc.useContext>, user: User, topic
       },
       (title) => ({ message: `Title ${title} is not available.` })
     ),
+    description: topicSchema.shape.description,
     visibility: topicSchema.shape.visibility,
   });
 };
@@ -209,6 +212,7 @@ const TopicForm = ({ topic, user, onSubmit, DeleteSection }: Props) => {
     resolver: zodResolver(formSchema(utils, user, topic)),
     defaultValues: {
       title: topic?.title,
+      description: topic?.description,
       visibility: topic?.visibility ?? "public",
     },
   });
@@ -255,6 +259,16 @@ const TopicForm = ({ topic, user, onSubmit, DeleteSection }: Props) => {
               sx={{ flexGrow: 1 }}
             />
           </Stack>
+
+          {/* seems to function properly but throws "too many rerenders" in development; think we can just leave it til a fix comes https://github.com/mui/material-ui/issues/33081 */}
+          <TextField
+            {...register("description")}
+            label="Description"
+            error={!!errors.description}
+            helperText={errors.description?.message}
+            multiline
+            maxRows={10}
+          />
 
           <Stack direction="row">
             <TextField
