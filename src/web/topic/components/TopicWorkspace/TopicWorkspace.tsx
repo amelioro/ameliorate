@@ -1,5 +1,5 @@
 import { Global } from "@emotion/react";
-import { Box } from "@mui/material";
+import { Box, useMediaQuery } from "@mui/material";
 
 import { ContextMenu } from "../../../common/components/ContextMenu/ContextMenu";
 import { useActiveClaimTreeId, useActiveTableProblemId } from "../../store/store";
@@ -10,6 +10,8 @@ import { TopicDrawer } from "../Surface/TopicDrawer";
 import { TopicToolbar } from "../Surface/TopicToolbar";
 
 export const TopicWorkspace = () => {
+  const isLandscape = useMediaQuery("(orientation: landscape)");
+
   const tableProblemId = useActiveTableProblemId();
   const claimTreeId = useActiveClaimTreeId();
 
@@ -17,8 +19,16 @@ export const TopicWorkspace = () => {
     <>
       <TopicToolbar />
 
-      <Box sx={{ width: "100%", height: "100%", display: "flex", position: "relative" }}>
-        <TopicDrawer />
+      <Box
+        sx={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          position: "relative",
+          flexDirection: isLandscape ? "row" : "column-reverse",
+        }}
+      >
+        <TopicDrawer isLandscape={isLandscape} />
 
         <Box height="100%" flex="1" position="relative">
           <Box width="100%" height="100%" position="absolute">

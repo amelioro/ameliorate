@@ -4,6 +4,7 @@ import {
   ChevronLeft,
   ExpandLess,
   ExpandMore,
+  KeyboardArrowDown,
   LibraryBooks,
   TableChart,
   TableView,
@@ -33,7 +34,11 @@ import {
   ToggleDrawerButton,
 } from "./TopicDrawer.styles";
 
-export const TopicDrawer = () => {
+interface Props {
+  isLandscape: boolean;
+}
+
+export const TopicDrawer = ({ isLandscape }: Props) => {
   const [isTopicDrawerOpen, setIsTopicDrawerOpen] = useState(true);
   const [isClaimsListOpen, setIsClaimsListOpen] = useState(true);
   const [isProblemsListOpen, setIsProblemsListOpen] = useState(true);
@@ -52,15 +57,26 @@ export const TopicDrawer = () => {
     }
   };
 
+  const ToggleIcon = isTopicDrawerOpen
+    ? isLandscape
+      ? ChevronLeft
+      : KeyboardArrowDown
+    : AutoStories;
+
   return (
     <>
       {/* div to enable menu button to be positioned to the right of the drawer */}
       <PositionedDiv>
-        <ToggleDrawerButton onClick={handleDrawerToggle} color="primary">
-          {isTopicDrawerOpen ? <ChevronLeft /> : <AutoStories />}
+        <ToggleDrawerButton onClick={handleDrawerToggle} color="primary" isLandscape={isLandscape}>
+          <ToggleIcon />
         </ToggleDrawerButton>
         {/* `permanent` because `persistent` adds transitions that conflict with our styles */}
-        <StyledDrawer variant="permanent" open={isTopicDrawerOpen}>
+        <StyledDrawer
+          variant="permanent"
+          open={isTopicDrawerOpen}
+          anchor={isLandscape ? "left" : "bottom"}
+          isLandscape={isLandscape}
+        >
           <List>
             <ListItem key="1">
               <ListItemButton
