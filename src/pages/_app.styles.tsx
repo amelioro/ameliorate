@@ -6,7 +6,10 @@ export const globals = css`
   }
 
   #__next {
+    // vh runs into issue where bottom of page is cut off by mobile navbar, see https://developer.mozilla.org/en-US/docs/Web/CSS/length#relative_length_units_based_on_viewport
+    // so use svh if it's supported.
     height: 100vh;
+    height: 100svh;
     display: flex;
     flex-direction: column;
   }
