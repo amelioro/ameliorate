@@ -12,7 +12,7 @@ import {
 } from "../utils/diagram";
 import { apiSyncer } from "./apiSyncerMiddleware";
 import { migrate } from "./migrate";
-import { getClaimTrees, getDiagram, getDiagramOrThrow, getTopicTitle } from "./utils";
+import { getClaimTrees, getDiagram, getDiagramOrThrow } from "./utils";
 
 const initialDiagrams: Record<string, Diagram> = {
   [topicDiagramId]: {
@@ -100,17 +100,6 @@ export const useDiagramType = (diagramId: string) => {
 
     return diagram.type;
   });
-};
-
-// topic view id is the claim tree id or topic diagram id
-export const useTopicViewId = () => {
-  return useTopicStore(
-    (state) => state.activeClaimTreeId ?? state.activeTableProblemId ?? topicDiagramId
-  );
-};
-
-export const useRootTitle = () => {
-  return useTopicStore((state) => getTopicTitle(state));
 };
 
 export const useActiveClaimTreeId = () => {

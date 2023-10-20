@@ -1,4 +1,5 @@
 import { NextPage } from "next";
+import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -7,9 +8,25 @@ import { NotFoundError } from "../../web/common/components/Error/Error";
 import { Loading } from "../../web/common/components/Loading/Loading";
 import { useSessionUser } from "../../web/common/hooks";
 import { trpc } from "../../web/common/trpc";
-import { TopicWorkspace } from "../../web/topic/components/TopicWorkspace/TopicWorkspace";
 import { populateFromApi } from "../../web/topic/store/loadActions";
 import { setInitialPerspective } from "../../web/view/store/store";
+
+// Don't render the workspace server-side.
+// Known reasons:
+// - The Topic Drawer can render on the left or bottom depending on screen size, and it's jarring
+// to render left on the server then shift after hydration to the bottom.
+//
+// Need to pass props type to dynamic for ts https://stackoverflow.com/a/69353026/8409296
+const DynamicTopicWorkspace = dynamic<Record<string, never>>(
+  () =>
+    import("../../web/topic/components/TopicWorkspace/TopicWorkspace").then(
+      (module) => module.TopicWorkspace
+    ),
+  {
+    ssr: false,
+    loading: () => <Loading />,
+  }
+);
 
 const Topic: NextPage = () => {
   const router = useRouter();
@@ -59,7 +76,7 @@ const Topic: NextPage = () => {
         />
       </Head>
 
-      <TopicWorkspace />
+      <DynamicTopicWorkspace />
     </>
   );
 };

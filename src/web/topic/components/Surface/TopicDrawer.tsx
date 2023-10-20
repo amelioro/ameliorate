@@ -4,8 +4,8 @@ import {
   ChevronLeft,
   ExpandLess,
   ExpandMore,
+  KeyboardArrowDown,
   LibraryBooks,
-  Menu,
   TableChart,
   TableView,
 } from "@mui/icons-material";
@@ -20,7 +20,11 @@ import {
 import { useState } from "react";
 
 import { useNodes } from "../../store/nodeHooks";
-import { useClaimTreesWithExplicitClaims, useRootTitle, useTopicViewId } from "../../store/store";
+import {
+  useActiveClaimTreeId,
+  useActiveTableProblemId,
+  useClaimTreesWithExplicitClaims,
+} from "../../store/store";
 import { viewClaimTree, viewCriteriaTable, viewTopicDiagram } from "../../store/viewActions";
 import { topicDiagramId } from "../../utils/diagram";
 import {
@@ -30,14 +34,18 @@ import {
   ToggleDrawerButton,
 } from "./TopicDrawer.styles";
 
-export const TopicDrawer = () => {
-  const [isTopicDrawerOpen, setIsTopicDrawerOpen] = useState(false);
+interface Props {
+  isLandscape: boolean;
+}
+
+export const TopicDrawer = ({ isLandscape }: Props) => {
+  const [isTopicDrawerOpen, setIsTopicDrawerOpen] = useState(true);
   const [isClaimsListOpen, setIsClaimsListOpen] = useState(true);
   const [isProblemsListOpen, setIsProblemsListOpen] = useState(true);
 
-  const topicViewId = useTopicViewId();
+  const activeTableProblemId = useActiveTableProblemId();
+  const activeClaimTreeId = useActiveClaimTreeId();
 
-  const rootTitle = useRootTitle();
   const claimTreeIdentifiers = useClaimTreesWithExplicitClaims();
   const problems = useNodes(topicDiagramId, (node) => node.type === "problem");
 
@@ -49,25 +57,36 @@ export const TopicDrawer = () => {
     }
   };
 
+  const ToggleIcon = isTopicDrawerOpen
+    ? isLandscape
+      ? ChevronLeft
+      : KeyboardArrowDown
+    : AutoStories;
+
   return (
     <>
       {/* div to enable menu button to be positioned to the right of the drawer */}
       <PositionedDiv>
-        <ToggleDrawerButton onClick={handleDrawerToggle} color="primary">
-          {isTopicDrawerOpen ? <ChevronLeft /> : <Menu />}
+        <ToggleDrawerButton onClick={handleDrawerToggle} color="primary" isLandscape={isLandscape}>
+          <ToggleIcon />
         </ToggleDrawerButton>
         {/* `permanent` because `persistent` adds transitions that conflict with our styles */}
-        <StyledDrawer variant="permanent" open={isTopicDrawerOpen}>
+        <StyledDrawer
+          variant="permanent"
+          open={isTopicDrawerOpen}
+          anchor={isLandscape ? "left" : "bottom"}
+          isLandscape={isLandscape}
+        >
           <List>
             <ListItem key="1">
               <ListItemButton
-                selected={topicViewId === topicDiagramId}
+                selected={!activeTableProblemId && !activeClaimTreeId}
                 onClick={() => viewTopicDiagram()}
               >
                 <ListItemIcon>
                   <AutoStories />
                 </ListItemIcon>
-                <ListItemText primary={rootTitle} />
+                <ListItemText primary="Topic Diagram" />
               </ListItemButton>
             </ListItem>
             <ListItem key="2">
@@ -75,7 +94,7 @@ export const TopicDrawer = () => {
                 <ListItemIcon>
                   <TableView />
                 </ListItemIcon>
-                <ListItemText primary="Criteria" />
+                <ListItemText primary="Criteria Tables" />
                 {isProblemsListOpen ? <ExpandLess /> : <ExpandMore />}
               </ListItemButton>
             </ListItem>
@@ -94,7 +113,7 @@ export const TopicDrawer = () => {
                 {problems.map(({ id: nodeId, data }) => (
                   <ListItem key={nodeId}>
                     <NestedListItemButton
-                      selected={topicViewId === nodeId}
+                      selected={!activeClaimTreeId && activeTableProblemId === nodeId}
                       onClick={() => viewCriteriaTable(nodeId)}
                     >
                       <ListItemIcon>
@@ -111,7 +130,7 @@ export const TopicDrawer = () => {
                 <ListItemIcon>
                   <LibraryBooks />
                 </ListItemIcon>
-                <ListItemText primary="Claims" />
+                <ListItemText primary="Claim Trees" />
                 {isClaimsListOpen ? <ExpandLess /> : <ExpandMore />}
               </ListItemButton>
             </ListItem>
@@ -130,7 +149,7 @@ export const TopicDrawer = () => {
                 {claimTreeIdentifiers.map(([diagramId, diagramTitle]) => (
                   <ListItem key={diagramId}>
                     <NestedListItemButton
-                      selected={topicViewId === diagramId}
+                      selected={activeClaimTreeId === diagramId}
                       onClick={() => viewClaimTree(diagramId)}
                     >
                       <ListItemIcon>
