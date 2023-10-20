@@ -1,9 +1,5 @@
 import styled from "@emotion/styled";
-import { Drawer, IconButton, ListItemButton, css } from "@mui/material";
-
-export const NestedListItemButton = styled(ListItemButton)`
-  padding-left: 32px;
-`;
+import { Drawer, IconButton, css } from "@mui/material";
 
 export const PositionedDiv = styled.div`
   display: flex;
