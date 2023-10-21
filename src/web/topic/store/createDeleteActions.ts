@@ -3,7 +3,8 @@ import { createDraft, finishDraft } from "immer";
 import { errorWithData } from "../../../common/errorHandling";
 import { emitter } from "../../common/event";
 import {
-  type Node,
+  type GraphPart,
+  Node,
   RelationDirection,
   buildEdge,
   buildNode,
@@ -256,4 +257,12 @@ export const deleteEdge = async (edgeId: string) => {
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   useTopicStore.setState(finishDraft(state), false, "deleteEdge");
+};
+
+export const deleteGraphPart = async (graphPart: GraphPart) => {
+  if (graphPart.type === "ScoreEdge") {
+    await deleteEdge(graphPart.id);
+  } else {
+    await deleteNode(graphPart.id);
+  }
 };

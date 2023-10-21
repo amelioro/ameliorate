@@ -1,4 +1,4 @@
-import { Build, Download, Error, Group, Redo, Undo, Upload } from "@mui/icons-material";
+import { Build, Delete, Download, Error, Group, Redo, Undo, Upload } from "@mui/icons-material";
 import { AppBar, Divider, IconButton, ToggleButton, Toolbar, Tooltip } from "@mui/material";
 import fileDownload from "js-file-download";
 import { useEffect, useState } from "react";
@@ -12,6 +12,8 @@ import {
   resetPerspectives,
   useIsComparingPerspectives,
 } from "../../../view/store/store";
+import { deleteGraphPart } from "../../store/createDeleteActions";
+import { useSelectedGraphPart } from "../../store/graphPartHooks";
 import { migrate } from "../../store/migrate";
 import { TopicStoreState, useOnPlayground } from "../../store/store";
 import { useUserCanEditTopicData } from "../../store/userHooks";
@@ -63,6 +65,8 @@ export const TopicToolbar = () => {
   const [canUndo, canRedo] = useTemporalHooks();
   const isComparingPerspectives = useIsComparingPerspectives();
   const [hasErrored, setHasErrored] = useState(false);
+
+  const selectedGraphPart = useSelectedGraphPart();
 
   const [isMoreActionsDrawerOpen, setIsMoreActionsDrawerOpen] = useState(false);
 
@@ -116,6 +120,22 @@ export const TopicToolbar = () => {
               disabled={!canRedo}
             >
               <Redo />
+            </IconButton>
+
+            <Divider orientation="vertical" />
+
+            <IconButton
+              color="inherit"
+              title="Delete"
+              aria-label="Delete"
+              onClick={() => {
+                if (selectedGraphPart) {
+                  void deleteGraphPart(selectedGraphPart);
+                }
+              }}
+              disabled={!selectedGraphPart}
+            >
+              <Delete />
             </IconButton>
           </>
         )}
