@@ -76,6 +76,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "seanyeh",
+      "name": "Sean Yeh",
+      "avatar_url": "https://avatars.githubusercontent.com/u/109418?v=4",
+      "profile": "https://seanyeh.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
