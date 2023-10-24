@@ -21,6 +21,7 @@ export const migrate = (persistedState: any, version: number) => {
     migrate_12_to_13,
     migrate_13_to_14,
     migrate_14_to_15,
+    migrate_15_to_16,
   ];
 
   let state = persistedState;
@@ -332,6 +333,43 @@ const migrate_14_to_15 = (state: State14) => {
       delete edge.data.score;
     });
   });
+
+  return state;
+};
+
+interface State15 {
+  topic: {
+    id: number;
+    title: string;
+    creatorName: string;
+  } | null;
+}
+
+interface State16 {
+  topic:
+    | {
+        id: number;
+        title: string;
+        description: string;
+        creatorName: string;
+      }
+    | {
+        id: undefined;
+        title: string;
+        description: string;
+      };
+}
+
+const migrate_15_to_16 = (state: State15) => {
+  if (state.topic) {
+    (state as State16).topic.description = "";
+  } else {
+    (state as State16).topic = {
+      id: undefined,
+      title: "",
+      description: "",
+    };
+  }
 
   return state;
 };

@@ -38,6 +38,11 @@ const getCrudDiffs = <T>(
 const saveDiffs = (storeBefore: TopicStoreState, storeAfter: TopicStoreState) => {
   if (isPlaygroundTopic(storeBefore.topic)) return;
 
+  const newDescription =
+    storeAfter.topic.description !== storeBefore.topic.description
+      ? storeAfter.topic.description
+      : undefined;
+
   const apiBefore = convertToApi(storeBefore);
   const apiAfter = convertToApi(storeAfter);
 
@@ -71,13 +76,19 @@ const saveDiffs = (storeBefore: TopicStoreState, storeAfter: TopicStoreState) =>
     scoresToDelete,
   };
 
-  if (Object.values(changeLists).every((changes) => changes.length === 0)) return;
+  const anyChanges =
+    Object.values(changeLists).some((changes) => changes.length > 0) ||
+    newDescription !== undefined;
+
+  if (!anyChanges) return;
 
   // TODO: is there a way to compress this data? when uploading a new topic, the payload appears to be 30% larger than the file being uploaded
-  trpcClient.topic.setData.mutate({ topicId: storeBefore.topic.id, ...changeLists }).catch((e) => {
-    emitter.emit("errored");
-    throw e;
-  });
+  trpcClient.topic.setData
+    .mutate({ topicId: storeBefore.topic.id, description: newDescription, ...changeLists })
+    .catch((e) => {
+      emitter.emit("errored");
+      throw e;
+    });
 };
 
 type ApiSyncer = <

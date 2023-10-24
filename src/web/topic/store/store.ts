@@ -26,6 +26,7 @@ const initialDiagrams: Record<string, Diagram> = {
 export interface PlaygroundTopic {
   id: undefined; // so we can check this to see if the store topic is a playground topic
   title: string;
+  description: string;
 }
 
 export type UserTopic = Omit<PlaygroundTopic, "id"> & {
@@ -59,7 +60,7 @@ export interface TopicStoreState {
 }
 
 export const initialState: TopicStoreState = {
-  topic: { id: undefined, title: "" },
+  topic: { id: undefined, title: "", description: "" },
   diagrams: initialDiagrams,
   userScores: {},
   activeTableProblemId: null,
@@ -79,7 +80,7 @@ export const useTopicStore = createWithEqualityFn<TopicStoreState>()(
         devtools(() => initialState),
         {
           name: topicStorePlaygroundName,
-          version: 15,
+          version: 16,
           migrate: migrate,
           skipHydration: true,
         }

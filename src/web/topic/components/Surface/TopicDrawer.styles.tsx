@@ -84,4 +84,9 @@ export const StyledDrawer = styled(Drawer, options)<DrawerProps>`
     // allows the drawer to start at parent position, as opposed to MUI's default fixed positioning starting from top of page
     position: relative;
   }
+
+  & .MuiTabPanel-root {
+    // children should handle their own padding, the default here seems like too much
+    padding: 0;
+  }
 `;

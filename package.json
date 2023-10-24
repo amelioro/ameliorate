@@ -41,6 +41,7 @@
     "@emotion/styled": "11.10.0",
     "@hookform/resolvers": "3.1.1",
     "@mui/icons-material": "5.14.8",
+    "@mui/lab": "^5.0.0-alpha.149",
     "@mui/material": "5.14.8",
     "@next/bundle-analyzer": "13.4.9",
     "@prisma/client": "5.1.0",

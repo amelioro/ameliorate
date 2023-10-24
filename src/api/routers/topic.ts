@@ -84,6 +84,7 @@ export const topicRouter = router({
     .input(
       z.object({
         topicId: topicSchema.shape.id,
+        description: topicSchema.shape.description.optional(),
         nodesToCreate: z.array(nodeSchema),
         nodesToUpdate: z.array(nodeSchema.partial().required({ id: true, topicId: true })),
         nodesToDelete: z.array(nodeSchema.pick({ id: true, topicId: true })),
@@ -121,14 +122,15 @@ export const topicRouter = router({
       ];
 
       const graphPartsChanged = graphPartLists.some((graphParts) => graphParts.length > 0);
-      const graphPartsChangedByNotCreator = !isCreator && graphPartsChanged;
+      const nonCreatorMadeRestrictedChanges =
+        !isCreator && (graphPartsChanged || opts.input.description !== undefined);
 
       // ensure requests don't try changing nodes/edges/scores from other topics
       const onlyChangingObjectsFromThisTopic = topicObjectLists.every((topicObjects) =>
         topicObjects.every((topicObject) => topicObject.topicId === topic.id)
       );
 
-      if (graphPartsChangedByNotCreator || !onlyChangingObjectsFromThisTopic) {
+      if (nonCreatorMadeRestrictedChanges || !onlyChangingObjectsFromThisTopic) {
         throw new TRPCError({ code: "FORBIDDEN" });
       }
 
@@ -158,6 +160,13 @@ export const topicRouter = router({
           await tx.topic.update({
             where: { id: opts.input.topicId },
             data: { updatedAt: new Date() },
+          });
+        }
+
+        if (opts.input.description !== undefined) {
+          await tx.topic.update({
+            where: { id: opts.input.topicId },
+            data: { description: opts.input.description },
           });
         }
 
