@@ -3,7 +3,7 @@ import { StorageValue } from "zustand/middleware";
 import { errorWithData } from "../../../common/errorHandling";
 import { emitter } from "../../common/event";
 import { TopicStoreState, initialState, playgroundUsername, useTopicStore } from "./store";
-import { getTopicDiagram } from "./utils";
+import { getTopicDiagram, isPlaygroundTopic } from "./utils";
 
 export const getPersistState = () => {
   const persistOptions = useTopicStore.persist.getOptions();
@@ -29,7 +29,7 @@ export const setTopicData = (state: TopicStoreState, sessionUsername?: string) =
   // scores for other users.
   const sessionScores = sessionUsername ? state.userScores[sessionUsername] : undefined;
   const myScores = sessionScores ?? state.userScores[playgroundUsername]; // state should only have one of these at most
-  const myUsername = topic ? sessionUsername : playgroundUsername;
+  const myUsername = isPlaygroundTopic(topic) ? playgroundUsername : sessionUsername;
   const userScores = myScores && myUsername ? { [myUsername]: myScores } : {};
 
   useTopicStore.setState({ ...state, topic, userScores }, false, "setState");

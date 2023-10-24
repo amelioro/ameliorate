@@ -11,7 +11,8 @@ import {
 } from "@mui/material";
 
 import { Perspectives } from "../../../view/components/Perspectives/Perspectives";
-import { useIsTableActive, useOnPlayground, useShowImpliedEdges } from "../../store/store";
+import { useIsTableActive, useShowImpliedEdges } from "../../store/store";
+import { useOnPlayground } from "../../store/topicHooks";
 import { resetTopicData } from "../../store/utilActions";
 import { relayout, toggleShowImpliedEdges } from "../../store/viewActions";
 

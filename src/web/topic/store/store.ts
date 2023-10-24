@@ -23,11 +23,17 @@ const initialDiagrams: Record<string, Diagram> = {
   },
 };
 
-interface StoreTopic {
-  id: number;
+export interface PlaygroundTopic {
+  id: undefined; // so we can check this to see if the store topic is a playground topic
   title: string;
-  creatorName: string;
 }
+
+export type UserTopic = Omit<PlaygroundTopic, "id"> & {
+  id: number;
+  creatorName: string;
+};
+
+export type StoreTopic = UserTopic | PlaygroundTopic;
 
 // TODO: probably better to put userScores into a separate store (it doesn't seem necessary to
 // couple scores with the nodes/edges, and we'd be able to avoid triggering score comparators by
@@ -44,7 +50,7 @@ export type UserScores = Record<string, Record<string, Score>>; // userScores[:u
 export const playgroundUsername = "me.";
 
 export interface TopicStoreState {
-  topic: StoreTopic | null;
+  topic: StoreTopic;
   diagrams: Record<string, Diagram>;
   userScores: UserScores;
   activeTableProblemId: string | null;
@@ -53,7 +59,7 @@ export interface TopicStoreState {
 }
 
 export const initialState: TopicStoreState = {
-  topic: null,
+  topic: { id: undefined, title: "" },
   diagrams: initialDiagrams,
   userScores: {},
   activeTableProblemId: null,
@@ -126,8 +132,4 @@ export const useClaimTreesWithExplicitClaims = () => {
 
 export const useShowImpliedEdges = () => {
   return useTopicStore((state) => state.showImpliedEdges);
-};
-
-export const useOnPlayground = () => {
-  return useTopicStore((state) => state.topic === null);
 };

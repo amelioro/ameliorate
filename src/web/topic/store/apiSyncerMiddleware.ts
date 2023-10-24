@@ -5,6 +5,7 @@ import { trpcClient } from "../../../pages/_app.page";
 import { emitter } from "../../common/event";
 import { convertToApi } from "../utils/apiConversion";
 import { TopicStoreState } from "./store";
+import { isPlaygroundTopic } from "./utils";
 
 const getCrudDiffs = <T>(
   before: T[],
@@ -35,7 +36,7 @@ const getCrudDiffs = <T>(
 };
 
 const saveDiffs = (storeBefore: TopicStoreState, storeAfter: TopicStoreState) => {
-  if (!storeBefore.topic) return;
+  if (isPlaygroundTopic(storeBefore.topic)) return;
 
   const apiBefore = convertToApi(storeBefore);
   const apiAfter = convertToApi(storeAfter);
@@ -105,10 +106,10 @@ const apiSyncerImpl: ApiSyncerImpl = (create) => (set, get, api) => {
     // annoying to figure out how to type the `store` param as a persist store,
     // or even cleaner to check that we're not doing a populate action... but for some reason
     // `set`'s third arg of action (from devtools middleware) is always undefined.
-    if (!storeAfter.topic) return;
+    if (isPlaygroundTopic(storeAfter.topic)) return;
 
     // any diff API changes should be for the same topic (specifically we don't want to delete previously-viewed topic data)
-    if (storeBefore.topic?.id !== storeAfter.topic.id) return;
+    if (storeBefore.topic.id !== storeAfter.topic.id) return;
 
     saveDiffs(storeBefore, storeAfter);
   };
@@ -124,10 +125,10 @@ const apiSyncerImpl: ApiSyncerImpl = (create) => (set, get, api) => {
     // annoying to figure out how to type the `store` param as a persist store,
     // or even cleaner to check that we're not doing a populate action... but for some reason
     // `set`'s third arg of action (from devtools middleware) is always undefined.
-    if (!storeAfter.topic) return;
+    if (isPlaygroundTopic(storeAfter.topic)) return;
 
     // any diff API changes should be for the same topic (specifically we don't want to delete previously-viewed topic data)
-    if (storeBefore.topic?.id !== storeAfter.topic.id) return;
+    if (storeBefore.topic.id !== storeAfter.topic.id) return;
 
     saveDiffs(storeBefore, storeAfter);
   };
