@@ -1,6 +1,6 @@
 import { errorWithData } from "../../../common/errorHandling";
 import { Diagram, getDiagramTitle, topicDiagramId } from "../utils/diagram";
-import { TopicStoreState } from "./store";
+import { PlaygroundTopic, StoreTopic, TopicStoreState } from "./store";
 
 export const getTopicTitle = (state: TopicStoreState) => {
   const rootDiagram = getTopicDiagram(state);
@@ -51,4 +51,8 @@ export const setSelected = (graphPartId: string, diagram: Diagram) => {
     return edge;
   });
   /* eslint-enable functional/immutable-data, no-param-reassign */
+};
+
+export const isPlaygroundTopic = (topic: StoreTopic): topic is PlaygroundTopic => {
+  return topic.id === undefined;
 };

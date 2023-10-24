@@ -15,7 +15,8 @@ import {
 import { deleteGraphPart } from "../../store/createDeleteActions";
 import { useSelectedGraphPart } from "../../store/graphPartHooks";
 import { migrate } from "../../store/migrate";
-import { TopicStoreState, useOnPlayground } from "../../store/store";
+import { TopicStoreState } from "../../store/store";
+import { useOnPlayground } from "../../store/topicHooks";
 import { useUserCanEditTopicData } from "../../store/userHooks";
 import { getPersistState, redo, setTopicData, undo } from "../../store/utilActions";
 import { useTemporalHooks } from "../../store/utilHooks";

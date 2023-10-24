@@ -84,6 +84,7 @@ export const topicRouter = router({
     .input(
       z.object({
         topicId: topicSchema.shape.id,
+        description: topicSchema.shape.description.optional(),
         nodesToCreate: z.array(nodeSchema),
         nodesToUpdate: z.array(nodeSchema.partial().required({ id: true, topicId: true })),
         nodesToDelete: z.array(nodeSchema.pick({ id: true, topicId: true })),
@@ -121,14 +122,15 @@ export const topicRouter = router({
       ];
 
       const graphPartsChanged = graphPartLists.some((graphParts) => graphParts.length > 0);
-      const graphPartsChangedByNotCreator = !isCreator && graphPartsChanged;
+      const nonCreatorMadeRestrictedChanges =
+        !isCreator && (graphPartsChanged || opts.input.description !== undefined);
 
       // ensure requests don't try changing nodes/edges/scores from other topics
       const onlyChangingObjectsFromThisTopic = topicObjectLists.every((topicObjects) =>
         topicObjects.every((topicObject) => topicObject.topicId === topic.id)
       );
 
-      if (graphPartsChangedByNotCreator || !onlyChangingObjectsFromThisTopic) {
+      if (nonCreatorMadeRestrictedChanges || !onlyChangingObjectsFromThisTopic) {
         throw new TRPCError({ code: "FORBIDDEN" });
       }
 
@@ -158,6 +160,13 @@ export const topicRouter = router({
           await tx.topic.update({
             where: { id: opts.input.topicId },
             data: { updatedAt: new Date() },
+          });
+        }
+
+        if (opts.input.description !== undefined) {
+          await tx.topic.update({
+            where: { id: opts.input.topicId },
+            data: { description: opts.input.description },
           });
         }
 
@@ -213,12 +222,13 @@ export const topicRouter = router({
 
   create: procedure
     .use(isLoggedIn)
-    .input(topicSchema.pick({ title: true, visibility: true }))
+    .input(topicSchema.pick({ title: true, description: true, visibility: true }))
     .mutation(async (opts) => {
       const newTopic = await xprisma.topic.create({
         data: {
           title: opts.input.title,
           creatorName: opts.ctx.user.username,
+          description: opts.input.description,
           visibility: opts.input.visibility,
         },
       });
@@ -232,7 +242,7 @@ export const topicRouter = router({
 
   update: procedure
     .use(isLoggedIn)
-    .input(topicSchema.pick({ id: true, title: true, visibility: true }))
+    .input(topicSchema.pick({ id: true, title: true, description: true, visibility: true }))
     .mutation(async (opts) => {
       const topic = await xprisma.topic.findUniqueOrThrow({ where: { id: opts.input.id } });
       if (opts.ctx.user.username !== topic.creatorName) throw new TRPCError({ code: "FORBIDDEN" });
@@ -241,6 +251,7 @@ export const topicRouter = router({
         where: { id: opts.input.id },
         data: {
           title: opts.input.title,
+          description: opts.input.description,
           visibility: opts.input.visibility,
         },
       });

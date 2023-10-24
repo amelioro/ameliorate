@@ -3,7 +3,7 @@ import { StorageValue } from "zustand/middleware";
 import { errorWithData } from "../../../common/errorHandling";
 import { emitter } from "../../common/event";
 import { TopicStoreState, initialState, playgroundUsername, useTopicStore } from "./store";
-import { getTopicDiagram } from "./utils";
+import { getTopicDiagram, isPlaygroundTopic } from "./utils";
 
 export const getPersistState = () => {
   const persistOptions = useTopicStore.persist.getOptions();
@@ -23,13 +23,14 @@ export const setTopicData = (state: TopicStoreState, sessionUsername?: string) =
   // Don't override topic - this way, topic data from playground can be downloaded and uploaded as
   // a means of saving playground data to the db.
   // This also allows starting a new, separate topic from an existing topic's data.
+  // TODO?: allow topic description to be overridden, since it's editable from the playground
   const topic = useTopicStore.getState().topic;
 
   // Manually specify scores for only the uploading user, since a user shouldn't be able to create
   // scores for other users.
   const sessionScores = sessionUsername ? state.userScores[sessionUsername] : undefined;
   const myScores = sessionScores ?? state.userScores[playgroundUsername]; // state should only have one of these at most
-  const myUsername = topic ? sessionUsername : playgroundUsername;
+  const myUsername = isPlaygroundTopic(topic) ? playgroundUsername : sessionUsername;
   const userScores = myScores && myUsername ? { [myUsername]: myScores } : {};
 
   useTopicStore.setState({ ...state, topic, userScores }, false, "setState");
@@ -42,6 +43,7 @@ export const setTopicData = (state: TopicStoreState, sessionUsername?: string) =
  * topic title and settings aren't changing, and you can go to topic details to change those.
  */
 export const resetTopicData = () => {
+  // TODO?: allow topic description to be reset, since it's editable from the playground
   const topic = useTopicStore.getState().topic;
   useTopicStore.setState({ ...initialState, topic }, false, "resetState");
 

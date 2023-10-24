@@ -1,9 +1,5 @@
 import styled from "@emotion/styled";
-import { Drawer, IconButton, ListItemButton, css } from "@mui/material";
-
-export const NestedListItemButton = styled(ListItemButton)`
-  padding-left: 32px;
-`;
+import { Drawer, IconButton, css } from "@mui/material";
 
 export const PositionedDiv = styled.div`
   display: flex;
@@ -87,5 +83,10 @@ export const StyledDrawer = styled(Drawer, options)<DrawerProps>`
     overflow-x: hidden; // prevent scrollbar during drawer transition
     // allows the drawer to start at parent position, as opposed to MUI's default fixed positioning starting from top of page
     position: relative;
+  }
+
+  & .MuiTabPanel-root {
+    // children should handle their own padding, the default here seems like too much
+    padding: 0;
   }
 `;

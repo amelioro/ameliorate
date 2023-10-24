@@ -7,6 +7,7 @@ import { Edge as ApiEdge, Edge } from "../../../common/edge";
 import { Node as ApiNode, Node } from "../../../common/node";
 import { UserScore as ApiScore } from "../../../common/userScore";
 import { UserScores as StoreScores, TopicStoreState } from "../store/store";
+import { isPlaygroundTopic } from "../store/utils";
 import {
   Score,
   Edge as StoreEdge,
@@ -100,7 +101,8 @@ interface ApiData {
 }
 
 export const convertToApi = (topicStore: TopicStoreState): ApiData => {
-  if (!topicStore.topic) throw new Error("must create topic before saving topic data");
+  if (isPlaygroundTopic(topicStore.topic))
+    throw new Error("must create topic before saving topic data");
   const topicId = topicStore.topic.id;
 
   const nodes = Object.values(topicStore.diagrams).flatMap((diagram) =>

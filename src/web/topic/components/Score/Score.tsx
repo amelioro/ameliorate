@@ -3,9 +3,10 @@ import { useRef, useState } from "react";
 import { htmlDefaultFontSize } from "../../../../pages/_document.page";
 import { useSessionUser } from "../../../common/hooks";
 import { usePerspectives } from "../../../view/store/store";
-import { useTopicZoom } from "../../hooks/topicHooks";
+import { useFlowZoom } from "../../hooks/flowHooks";
 import { useUserScores } from "../../store/scoreHooks";
-import { playgroundUsername, useOnPlayground } from "../../store/store";
+import { playgroundUsername } from "../../store/store";
+import { useOnPlayground } from "../../store/topicHooks";
 import { BackdropPopper, CircleDiv, ScorePopper } from "./Score.styles";
 import { ScoreButton, buttonDiameterRem } from "./ScoreButton";
 import { ScoreCompare } from "./ScoreCompare";
@@ -36,7 +37,7 @@ export const Score = ({ graphPartId }: ScoreProps) => {
 
   // Not reactive, but zoom is currently only used when hovering/selected change, which triggers a
   // re-render, so we'll still get an updated zoom value.
-  const zoomRatio = useTopicZoom();
+  const zoomRatio = useFlowZoom();
 
   const buttonDiameterPx =
     mainButtonRef.current?.clientHeight ?? buttonDiameterRem * htmlDefaultFontSize;
