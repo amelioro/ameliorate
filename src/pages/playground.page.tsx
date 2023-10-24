@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import dynamic from "next/dynamic";
 import Head from "next/head";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { Loading } from "../web/common/components/Loading/Loading";
 import { populateFromLocalStorage } from "../web/topic/store/loadActions";
@@ -27,15 +27,23 @@ const DynamicTopicWorkspace = dynamic<Record<string, never>>(
 );
 
 const Playground: NextPage = () => {
+  // Track populating so we don't render workspace (along with default values for components) with
+  // old data before populating the store with fresh data.
+  const [populatedFromApi, setPopulatedFromApi] = useState(false);
+
   // must hydrate store after page is rendered, otherwise if hydration starts before page finishes
   // rendering, there will be a render mismatch between client and server
   useEffect(() => {
     const populate = async () => {
+      setPopulatedFromApi(false);
       await populateFromLocalStorage();
+      setPopulatedFromApi(true);
     };
     void populate();
     setInitialPerspective(playgroundUsername);
   }, []);
+
+  if (!populatedFromApi) return <Loading />;
 
   return (
     <>

@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { NotFoundError } from "../../web/common/components/Error/Error";
 import { Loading } from "../../web/common/components/Loading/Loading";
@@ -46,10 +46,21 @@ const Topic: NextPage = () => {
 
   const { sessionUser } = useSessionUser();
 
+  // Track populating so we don't render workspace (along with default values for components) with
+  // old data before populating the store with fresh data.
+  const [populatedFromApi, setPopulatedFromApi] = useState(false);
+
   useEffect(() => {
     // Check isFetching so we don't populate if we know we're just about to do so again.
     if (!getDiagram.data || getDiagram.isFetching) return;
-    void populateFromApi(getDiagram.data);
+    const diagramData = getDiagram.data;
+
+    const populate = async () => {
+      setPopulatedFromApi(false);
+      await populateFromApi(diagramData);
+      setPopulatedFromApi(true);
+    };
+    void populate();
   }, [getDiagram.data, getDiagram.isFetching]);
 
   useEffect(() => {
@@ -60,8 +71,16 @@ const Topic: NextPage = () => {
 
   // TODO: use suspense to better handle loading & error
   // Additional check for isFetching for when client side navigation re-mounts but getDiagram was already loaded
-  if (!router.isReady || !username || !topicTitle || getDiagram.isLoading || getDiagram.isFetching)
+  if (
+    !router.isReady ||
+    !username ||
+    !topicTitle ||
+    getDiagram.isLoading ||
+    getDiagram.isFetching ||
+    !populatedFromApi
+  )
     return <Loading />;
+
   if (!getDiagram.isSuccess || !getDiagram.data) return <NotFoundError />;
 
   return (
