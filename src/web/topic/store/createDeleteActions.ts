@@ -31,6 +31,7 @@ const createNode = (state: TopicStoreState, toNodeType: FlowNodeType) => {
   /* eslint-disable functional/immutable-data */
   activeDiagram.nodes.push(newNode);
   setSelected(newNode.id, activeDiagram);
+  newNode.data.newlyAdded = true;
   /* eslint-enable functional/immutable-data */
 
   return newNode;

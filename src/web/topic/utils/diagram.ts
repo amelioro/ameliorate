@@ -30,6 +30,7 @@ export interface Node {
     label: string;
     diagramId: string;
     showing: boolean;
+    newlyAdded: boolean; // jank to allow focusing nodes after adding them
   };
   position: {
     x: number;
@@ -52,6 +53,7 @@ export const buildNode = ({ id, label, type, diagramId }: BuildProps): Node => {
       label: label ?? `new node`,
       diagramId: diagramId,
       showing: true,
+      newlyAdded: false,
     },
     position: { x: 0, y: 0 }, // assume layout will adjust this
     selected: false,

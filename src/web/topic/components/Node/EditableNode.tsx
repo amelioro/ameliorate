@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 
 import { useSessionUser } from "../../../common/hooks";
 import { openContextMenu } from "../../../common/store/contextMenuActions";
-import { setNodeLabel, setSelectedGraphPart } from "../../store/actions";
+import { finishAddingNode, setNodeLabel, setSelectedGraphPart } from "../../store/actions";
 import { useUserCanEditTopicData } from "../../store/userHooks";
 import { Node } from "../../utils/diagram";
 import { nodeDecorations } from "../../utils/node";
@@ -24,15 +24,19 @@ export const EditableNode = ({ node, className = "" }: { node: Node; className?:
 
   const theme = useTheme();
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
-  // TODO: BUG does not work nicely with the react-flow component. Focus is being taken away from the element after the component mounts.
   useEffect(() => {
-    if (!node.selected) return;
+    if (!node.data.newlyAdded || !node.selected || !textAreaRef.current) return;
+    finishAddingNode(node.id);
+    const textArea = textAreaRef.current;
 
-    textAreaRef.current?.focus();
-    textAreaRef.current?.setSelectionRange(
-      textAreaRef.current.value.length,
-      textAreaRef.current.value.length
-    );
+    // No idea why timeout is needed here, but without it, and in the flow, focus is not moved to
+    // the text area. It seems specific to react-flow - making a simple button and list of item
+    // components, with each item having a useEffect that focuses it, focus is set properly after a
+    // new item is rendered.
+    setTimeout(() => {
+      textArea.focus();
+      textArea.setSelectionRange(0, textArea.value.length);
+    }, 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- if we select the node after initial render, we don't care about re-focusing. we mainly care about focusing on node add. focusing on node click is annoying because our cursor jumps to the end of the input.
   }, []);
 
