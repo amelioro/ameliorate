@@ -74,7 +74,9 @@ export const setSelected = (selectChanges: NodeSelectionChange[] | EdgeSelection
     /* eslint-enable functional/immutable-data, no-param-reassign */
   });
 
+  useTopicStore.temporal.getState().pause();
   useTopicStore.setState(finishDraft(state), false, "setSelected");
+  useTopicStore.temporal.getState().resume();
 };
 
 export const setSelectedGraphPart = (graphPartId: string) => {
@@ -84,5 +86,7 @@ export const setSelectedGraphPart = (graphPartId: string) => {
 
   setSelectedUtil(graphPartId, activeDiagram);
 
+  useTopicStore.temporal.getState().pause();
   useTopicStore.setState(finishDraft(state), false, "setSelectedGraphPart");
+  useTopicStore.temporal.getState().resume();
 };
