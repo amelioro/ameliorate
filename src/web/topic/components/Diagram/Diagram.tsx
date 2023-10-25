@@ -22,8 +22,8 @@ import { useFilteredDiagram } from "../../store/store";
 import { closeClaimTree } from "../../store/viewActions";
 import { type Edge, type Node } from "../../utils/diagram";
 import { FlowNodeType } from "../../utils/node";
+import { ScoreEdge } from "../Edge/ScoreEdge";
 import { FlowNode } from "../Node/FlowNode";
-import { ScoreEdge } from "../ScoreEdge/ScoreEdge";
 import { PositionedCloseButton, StyledReactFlow } from "./Diagram.styles";
 
 const buildNodeComponent = (type: FlowNodeType) => {
