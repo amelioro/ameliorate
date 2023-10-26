@@ -22,6 +22,7 @@ export const edgeSchema = z.object({
   topicId: z.number(),
   arguedDiagramPartId: z.string().uuid().nullable(),
   type: zRelationNames,
+  notes: z.string().max(10000),
   sourceId: z.string().uuid(),
   targetId: z.string().uuid(),
 });

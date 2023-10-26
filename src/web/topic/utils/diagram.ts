@@ -28,6 +28,7 @@ export interface Node {
   id: string;
   data: {
     label: string;
+    notes: string;
     diagramId: string;
     showing: boolean;
     newlyAdded: boolean; // jank to allow focusing nodes after adding them
@@ -43,14 +44,16 @@ export interface Node {
 interface BuildProps {
   id?: string;
   label?: string;
+  notes?: string;
   type: FlowNodeType;
   diagramId: string;
 }
-export const buildNode = ({ id, label, type, diagramId }: BuildProps): Node => {
+export const buildNode = ({ id, label, notes, type, diagramId }: BuildProps): Node => {
   const node = {
     id: id ?? uuid(),
     data: {
       label: label ?? `new node`,
+      notes: notes ?? "",
       diagramId: diagramId,
       showing: true,
       newlyAdded: false,
@@ -72,6 +75,7 @@ export interface Edge {
   id: string;
   data: {
     diagramId: string;
+    notes: string;
   };
   label: RelationName;
   selected: boolean;
@@ -83,6 +87,7 @@ export interface Edge {
 
 interface BuildEdgeProps {
   id?: string;
+  notes?: string;
   sourceNodeId: string;
   targetNodeId: string;
   relation: RelationName;
@@ -90,6 +95,7 @@ interface BuildEdgeProps {
 }
 export const buildEdge = ({
   id,
+  notes,
   sourceNodeId,
   targetNodeId,
   relation,
@@ -99,6 +105,7 @@ export const buildEdge = ({
     id: id ?? uuid(),
     data: {
       diagramId: diagramId,
+      notes: notes ?? "",
     },
     label: relation,
     selected: false,

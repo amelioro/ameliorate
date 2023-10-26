@@ -21,6 +21,7 @@ export const convertToStoreNode = (apiNode: TopicNode, diagramId: string) => {
   return buildNode({
     id: apiNode.id,
     label: apiNode.text,
+    notes: apiNode.notes,
     type: apiNode.type,
     diagramId: diagramId,
   });
@@ -29,6 +30,7 @@ export const convertToStoreNode = (apiNode: TopicNode, diagramId: string) => {
 export const convertToStoreEdge = (apiEdge: TopicEdge, diagramId: string) => {
   return buildEdge({
     id: apiEdge.id,
+    notes: apiEdge.notes,
     sourceNodeId: apiEdge.sourceId,
     targetNodeId: apiEdge.targetId,
     relation: apiEdge.type,
@@ -62,6 +64,7 @@ export const convertToApiNode = (storeNode: StoreNode, topicId: number): ApiNode
       storeNode.data.diagramId !== topicDiagramId ? storeNode.data.diagramId : null,
     type: storeNode.type,
     text: storeNode.data.label,
+    notes: storeNode.data.notes,
   };
 };
 
@@ -72,6 +75,7 @@ export const convertToApiEdge = (storeEdge: StoreEdge, topicId: number): ApiEdge
     arguedDiagramPartId:
       storeEdge.data.diagramId !== topicDiagramId ? storeEdge.data.diagramId : null,
     type: storeEdge.label,
+    notes: storeEdge.data.notes,
     sourceId: storeEdge.source,
     targetId: storeEdge.target,
   };

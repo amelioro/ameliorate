@@ -3,7 +3,7 @@ import set from "lodash/set";
 import { type EdgeSelectionChange, type NodeSelectionChange } from "reactflow";
 
 import { errorWithData } from "../../../common/errorHandling";
-import { type Node, Score, findGraphPart, findNode } from "../utils/diagram";
+import { GraphPart, type Node, Score, findGraphPart, findNode } from "../utils/diagram";
 import { useTopicStore } from "./store";
 import {
   getActiveDiagram,
@@ -59,6 +59,19 @@ export const setNodeLabel = (node: Node, value: string) => {
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   useTopicStore.setState(finishDraft(state), false, "setNodeLabel");
+};
+
+export const setGraphPartNotes = (graphPart: GraphPart, value: string) => {
+  const state = createDraft(useTopicStore.getState());
+
+  const diagram = getDiagramOrThrow(state, graphPart.data.diagramId);
+  const foundGraphPart = findGraphPart(graphPart.id, diagram);
+
+  /* eslint-disable functional/immutable-data, no-param-reassign */
+  foundGraphPart.data.notes = value;
+  /* eslint-enable functional/immutable-data, no-param-reassign */
+
+  useTopicStore.setState(finishDraft(state), false, "setGraphPartNotes");
 };
 
 export const setSelected = (selectChanges: NodeSelectionChange[] | EdgeSelectionChange[]) => {

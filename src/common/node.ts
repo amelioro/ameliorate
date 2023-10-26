@@ -24,6 +24,7 @@ export const nodeSchema = z.object({
   arguedDiagramPartId: z.string().uuid().nullable(),
   type: zNodeTypes,
   text: z.string().max(200),
+  notes: z.string().max(10000),
 });
 
 export type Node = z.infer<typeof nodeSchema>;
@@ -35,5 +36,6 @@ export const getNewTopicProblemNode = (topicId: number, topicTitle: string): Nod
     arguedDiagramPartId: null,
     type: "problem",
     text: lowerCase(topicTitle),
+    notes: "",
   };
 };
