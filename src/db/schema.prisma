@@ -58,6 +58,7 @@ model Node {
   arguedDiagramPartId String?  @db.Uuid // only set if this is a claim node; ideally this would be FK but could point to either Node or Edge
   type                NodeType
   text                String   @db.VarChar(200) // arbitrary max, ~50 chars fit on 3 lines of the node's text area
+  notes               String   @default("") @db.VarChar(10000) // arbitrarily large max length
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 
@@ -85,6 +86,7 @@ model Edge {
   topicId             Int
   arguedDiagramPartId String?  @db.Uuid // only set if this is a claim node; ideally this would be FK but could point to either Node or Edge
   type                EdgeType
+  notes               String   @default("") @db.VarChar(10000) // arbitrarily large max length
   sourceId            String   @db.Uuid
   targetId            String   @db.Uuid
   createdAt           DateTime @default(now())
