@@ -3,7 +3,7 @@ import set from "lodash/set";
 import { type EdgeSelectionChange, type NodeSelectionChange } from "reactflow";
 
 import { errorWithData } from "../../../common/errorHandling";
-import { Score, findGraphPart, findNode } from "../utils/diagram";
+import { type Node, Score, findGraphPart, findNode } from "../utils/diagram";
 import { useTopicStore } from "./store";
 import {
   getActiveDiagram,
@@ -48,14 +48,14 @@ export const setScore = (username: string, graphPartId: string, score: Score) =>
   useTopicStore.setState(finishDraft(state), false, "setScore");
 };
 
-export const setNodeLabel = (nodeId: string, value: string) => {
+export const setNodeLabel = (node: Node, value: string) => {
   const state = createDraft(useTopicStore.getState());
 
-  const activeDiagram = getActiveDiagram(state);
-  const node = findNode(nodeId, activeDiagram);
+  const diagram = getDiagramOrThrow(state, node.data.diagramId);
+  const foundNode = findNode(node.id, diagram);
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
-  node.data.label = value;
+  foundNode.data.label = value;
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   useTopicStore.setState(finishDraft(state), false, "setNodeLabel");
