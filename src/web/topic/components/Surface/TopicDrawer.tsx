@@ -3,6 +3,9 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Tab } from "@mui/material";
 import { useState } from "react";
 
+import { useSelectedGraphPart } from "../../store/graphPartHooks";
+import { useActiveArguedDiagramPart, useActiveTableProblemNode } from "../../store/store";
+import { GraphPartDetails } from "./GraphPartDetails";
 import { TopicDetails } from "./TopicDetails";
 import { PositionedDiv, StyledDrawer, ToggleDrawerButton } from "./TopicDrawer.styles";
 import { TopicViews } from "./TopicViews";
@@ -14,6 +17,10 @@ interface Props {
 export const TopicDrawer = ({ isLandscape }: Props) => {
   const [isTopicDrawerOpen, setIsTopicDrawerOpen] = useState(true);
   const [selectedTab, setSelectedTab] = useState("1");
+
+  const selectedGraphPart = useSelectedGraphPart();
+  const activeArguedDiagramPart = useActiveArguedDiagramPart();
+  const activeTableProblemNode = useActiveTableProblemNode();
 
   const handleDrawerToggle = () => {
     if (isTopicDrawerOpen) {
@@ -50,8 +57,17 @@ export const TopicDrawer = ({ isLandscape }: Props) => {
             </TabList>
 
             <TabPanel value="1">
-              <TopicDetails />
+              {selectedGraphPart !== undefined ? (
+                <GraphPartDetails graphPart={selectedGraphPart} />
+              ) : activeArguedDiagramPart !== null ? (
+                <GraphPartDetails graphPart={activeArguedDiagramPart} />
+              ) : activeTableProblemNode !== null ? (
+                <GraphPartDetails graphPart={activeTableProblemNode} />
+              ) : (
+                <TopicDetails />
+              )}
             </TabPanel>
+
             <TabPanel value="2">
               <TopicViews />
             </TabPanel>
