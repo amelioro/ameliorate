@@ -7,12 +7,14 @@ import {
   Score,
   buildNode,
   filterHiddenComponents,
+  findGraphPart,
+  findNode,
   getDiagramTitle,
   topicDiagramId,
 } from "../utils/diagram";
 import { apiSyncer } from "./apiSyncerMiddleware";
 import { migrate } from "./migrate";
-import { getClaimTrees, getDiagram, getDiagramOrThrow } from "./utils";
+import { getClaimTrees, getDiagram, getDiagramOrThrow, getTopicDiagram } from "./utils";
 
 const initialDiagrams: Record<string, Diagram> = {
   [topicDiagramId]: {
@@ -80,7 +82,7 @@ export const useTopicStore = createWithEqualityFn<TopicStoreState>()(
         devtools(() => initialState),
         {
           name: topicStorePlaygroundName,
-          version: 16,
+          version: 17,
           migrate: migrate,
           skipHydration: true,
         }
@@ -109,12 +111,22 @@ export const useDiagramType = (diagramId: string) => {
   });
 };
 
-export const useActiveClaimTreeId = () => {
-  return useTopicStore((state) => state.activeClaimTreeId);
+export const useActiveArguedDiagramPart = () => {
+  return useTopicStore((state) => {
+    if (!state.activeClaimTreeId) return null;
+
+    const topicDiagram = getTopicDiagram(state);
+    return findGraphPart(state.activeClaimTreeId, topicDiagram);
+  });
 };
 
-export const useActiveTableProblemId = () => {
-  return useTopicStore((state) => state.activeTableProblemId);
+export const useActiveTableProblemNode = () => {
+  return useTopicStore((state) => {
+    if (!state.activeTableProblemId) return null;
+
+    const topicDiagram = getTopicDiagram(state);
+    return findNode(state.activeTableProblemId, topicDiagram);
+  });
 };
 
 export const useIsTableActive = () => {

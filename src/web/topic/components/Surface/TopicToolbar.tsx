@@ -142,18 +142,24 @@ export const TopicToolbar = () => {
         )}
 
         {!onPlayground && (
-          <ToggleButton
-            value={isComparingPerspectives}
-            title="Compare perspectives"
-            aria-label="Compare perspectives"
-            color="secondary"
-            size="small"
-            selected={isComparingPerspectives}
-            onClick={() => (isComparingPerspectives ? resetPerspectives() : comparePerspectives())}
-            sx={{ borderRadius: "50%", border: "0" }}
-          >
-            <Group />
-          </ToggleButton>
+          <>
+            <Divider orientation="vertical" />
+
+            <ToggleButton
+              value={isComparingPerspectives}
+              title="Compare perspectives"
+              aria-label="Compare perspectives"
+              color="secondary"
+              size="small"
+              selected={isComparingPerspectives}
+              onClick={() =>
+                isComparingPerspectives ? resetPerspectives() : comparePerspectives()
+              }
+              sx={{ borderRadius: "50%", border: "0" }}
+            >
+              <Group />
+            </ToggleButton>
+          </>
         )}
 
         <Divider orientation="vertical" />

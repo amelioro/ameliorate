@@ -22,8 +22,8 @@ import { useFilteredDiagram } from "../../store/store";
 import { closeClaimTree } from "../../store/viewActions";
 import { type Edge, type Node } from "../../utils/diagram";
 import { FlowNodeType } from "../../utils/node";
+import { FlowEdge } from "../Edge/FlowEdge";
 import { FlowNode } from "../Node/FlowNode";
-import { ScoreEdge } from "../ScoreEdge/ScoreEdge";
 import { PositionedCloseButton, StyledReactFlow } from "./Diagram.styles";
 
 const buildNodeComponent = (type: FlowNodeType) => {
@@ -45,7 +45,7 @@ const nodeTypes: Record<FlowNodeType, ComponentType<NodeProps>> = {
   critique: buildNodeComponent("critique"),
 };
 
-const edgeTypes: Record<"ScoreEdge", ComponentType<EdgeProps>> = { ScoreEdge: ScoreEdge };
+const edgeTypes: Record<"FlowEdge", ComponentType<EdgeProps>> = { FlowEdge: FlowEdge };
 
 // react-flow passes exactly DefaultNodeProps but data can be customized
 // not sure why, but DefaultNodeProps has xPos and yPos instead of Node's position.x and position.y

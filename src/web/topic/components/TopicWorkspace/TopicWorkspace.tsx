@@ -2,7 +2,7 @@ import { Global } from "@emotion/react";
 import { Box, useMediaQuery } from "@mui/material";
 
 import { ContextMenu } from "../../../common/components/ContextMenu/ContextMenu";
-import { useActiveClaimTreeId, useActiveTableProblemId } from "../../store/store";
+import { useActiveArguedDiagramPart, useActiveTableProblemNode } from "../../store/store";
 import { topicDiagramId } from "../../utils/diagram";
 import { CriteriaTable } from "../CriteriaTable/CriteriaTable";
 import { Diagram } from "../Diagram/Diagram";
@@ -12,8 +12,8 @@ import { TopicToolbar } from "../Surface/TopicToolbar";
 export const TopicWorkspace = () => {
   const isLandscape = useMediaQuery("(orientation: landscape)");
 
-  const tableProblemId = useActiveTableProblemId();
-  const claimTreeId = useActiveClaimTreeId();
+  const tableProblemNode = useActiveTableProblemNode();
+  const arguedDiagramPart = useActiveArguedDiagramPart();
 
   return (
     <>
@@ -32,17 +32,17 @@ export const TopicWorkspace = () => {
 
         <Box height="100%" flex="1" position="relative">
           <Box width="100%" height="100%" position="absolute">
-            {tableProblemId ? (
-              <CriteriaTable problemNodeId={tableProblemId} />
+            {tableProblemNode ? (
+              <CriteriaTable problemNodeId={tableProblemNode.id} />
             ) : (
               <Diagram diagramId={topicDiagramId} />
             )}
           </Box>
 
-          {claimTreeId && (
+          {arguedDiagramPart && (
             // Criteria Table has header (z-index:2); expectation: overlay the component
             <Box width="100%" height="100%" position="absolute" zIndex="2">
-              <Diagram diagramId={claimTreeId} />
+              <Diagram diagramId={arguedDiagramPart.id} />
             </Box>
           )}
         </Box>

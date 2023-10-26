@@ -19,8 +19,8 @@ import { useState } from "react";
 
 import { useNodes } from "../../store/nodeHooks";
 import {
-  useActiveClaimTreeId,
-  useActiveTableProblemId,
+  useActiveArguedDiagramPart,
+  useActiveTableProblemNode,
   useClaimTreesWithExplicitClaims,
 } from "../../store/store";
 import { viewClaimTree, viewCriteriaTable, viewTopicDiagram } from "../../store/viewActions";
@@ -31,8 +31,8 @@ export const TopicViews = () => {
   const [isClaimsListOpen, setIsClaimsListOpen] = useState(true);
   const [isProblemsListOpen, setIsProblemsListOpen] = useState(true);
 
-  const activeTableProblemId = useActiveTableProblemId();
-  const activeClaimTreeId = useActiveClaimTreeId();
+  const activeTableProblemNode = useActiveTableProblemNode();
+  const activeArguedDiagramPart = useActiveArguedDiagramPart();
 
   const claimTreeIdentifiers = useClaimTreesWithExplicitClaims();
   const problems = useNodes(topicDiagramId, (node) => node.type === "problem");
@@ -41,7 +41,7 @@ export const TopicViews = () => {
     <List>
       <ListItem key="1">
         <ListItemButton
-          selected={!activeTableProblemId && !activeClaimTreeId}
+          selected={!activeTableProblemNode && !activeArguedDiagramPart}
           onClick={() => viewTopicDiagram()}
         >
           <ListItemIcon>
@@ -74,7 +74,7 @@ export const TopicViews = () => {
           {problems.map(({ id: nodeId, data }) => (
             <ListItem key={nodeId}>
               <NestedListItemButton
-                selected={!activeClaimTreeId && activeTableProblemId === nodeId}
+                selected={!activeArguedDiagramPart && activeTableProblemNode?.id === nodeId}
                 onClick={() => viewCriteriaTable(nodeId)}
               >
                 <ListItemIcon>
@@ -110,7 +110,7 @@ export const TopicViews = () => {
           {claimTreeIdentifiers.map(([diagramId, diagramTitle]) => (
             <ListItem key={diagramId}>
               <NestedListItemButton
-                selected={activeClaimTreeId === diagramId}
+                selected={activeArguedDiagramPart?.id === diagramId}
                 onClick={() => viewClaimTree(diagramId)}
               >
                 <ListItemIcon>

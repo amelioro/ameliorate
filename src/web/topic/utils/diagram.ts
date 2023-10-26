@@ -30,6 +30,7 @@ export interface Node {
     label: string;
     diagramId: string;
     showing: boolean;
+    newlyAdded: boolean; // jank to allow focusing nodes after adding them
   };
   position: {
     x: number;
@@ -52,6 +53,7 @@ export const buildNode = ({ id, label, type, diagramId }: BuildProps): Node => {
       label: label ?? `new node`,
       diagramId: diagramId,
       showing: true,
+      newlyAdded: false,
     },
     position: { x: 0, y: 0 }, // assume layout will adjust this
     selected: false,
@@ -76,7 +78,7 @@ export interface Edge {
   markerStart: { type: MarkerType; width: number; height: number };
   source: string; // source === parent if arrows point from bottom to top
   target: string; // target === child if arrows point from bottom to top
-  type: "ScoreEdge";
+  type: "FlowEdge";
 }
 
 interface BuildEdgeProps {
@@ -103,7 +105,7 @@ export const buildEdge = ({
     markerStart: markerStart,
     source: sourceNodeId,
     target: targetNodeId,
-    type: "ScoreEdge" as const,
+    type: "FlowEdge" as const,
   };
 };
 
@@ -134,6 +136,11 @@ export const findGraphPart = (graphPartId: string, diagram: Diagram) => {
   if (!graphPart) throw errorWithData("graph part not found", graphPartId, diagram);
 
   return graphPart;
+};
+
+export const isNode = (graphPart: GraphPart): graphPart is Node => {
+  if (graphPart.type !== "FlowEdge") return true;
+  return false;
 };
 
 export const getNodesComposedBy = (node: Node, diagram: Diagram) => {

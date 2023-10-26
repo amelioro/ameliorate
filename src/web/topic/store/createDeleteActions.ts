@@ -10,6 +10,7 @@ import {
   buildNode,
   findNode,
   getNodesComposedBy,
+  isNode,
   layoutVisibleComponents,
   topicDiagramId,
 } from "../utils/diagram";
@@ -31,6 +32,7 @@ const createNode = (state: TopicStoreState, toNodeType: FlowNodeType) => {
   /* eslint-disable functional/immutable-data */
   activeDiagram.nodes.push(newNode);
   setSelected(newNode.id, activeDiagram);
+  newNode.data.newlyAdded = true;
   /* eslint-enable functional/immutable-data */
 
   return newNode;
@@ -260,9 +262,9 @@ export const deleteEdge = async (edgeId: string) => {
 };
 
 export const deleteGraphPart = async (graphPart: GraphPart) => {
-  if (graphPart.type === "ScoreEdge") {
-    await deleteEdge(graphPart.id);
-  } else {
+  if (isNode(graphPart)) {
     await deleteNode(graphPart.id);
+  } else {
+    await deleteEdge(graphPart.id);
   }
 };

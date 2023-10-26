@@ -40,19 +40,27 @@ export const viewOrCreateClaimTree = (diagramPartId: string, diagramPartType: Gr
   state.activeClaimTreeId = diagramPartId;
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
+  useTopicStore.temporal.getState().pause();
   useTopicStore.setState(finishDraft(state), false, "viewOrCreateClaimTree");
+  useTopicStore.temporal.getState().resume();
 };
 
 export const viewClaimTree = (diagramId: string) => {
+  useTopicStore.temporal.getState().pause();
   useTopicStore.setState({ activeClaimTreeId: diagramId }, false, "viewClaimTree");
+  useTopicStore.temporal.getState().resume();
 };
 
 export const closeClaimTree = () => {
+  useTopicStore.temporal.getState().pause();
   useTopicStore.setState({ activeClaimTreeId: null }, false, "closeClaimTree");
+  useTopicStore.temporal.getState().resume();
 };
 
 export const closeTable = () => {
+  useTopicStore.temporal.getState().pause();
   useTopicStore.setState({ activeTableProblemId: null }, false, "closeTable");
+  useTopicStore.temporal.getState().resume();
 };
 
 // potential TODO: could show components that were hidden due to being implied by the now-hidden neighbor
@@ -86,27 +94,35 @@ export const toggleShowNeighbors = async (
   topicDiagram.edges = layoutedDiagram.edges;
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
+  useTopicStore.temporal.getState().pause();
   useTopicStore.setState(finishDraft(state), false, "toggleShowNeighbors");
+  useTopicStore.temporal.getState().resume();
 };
 
 export const viewTopicDiagram = () => {
+  useTopicStore.temporal.getState().pause();
   useTopicStore.setState(
     { activeTableProblemId: null, activeClaimTreeId: null },
     false,
     "viewTopicDiagram"
   );
+  useTopicStore.temporal.getState().resume();
 };
 
 export const viewCriteriaTable = (problemNodeId: string) => {
+  useTopicStore.temporal.getState().pause();
   useTopicStore.setState(
     { activeTableProblemId: problemNodeId, activeClaimTreeId: null },
     false,
     "viewCriteriaTable"
   );
+  useTopicStore.temporal.getState().resume();
 };
 
 export const toggleShowImpliedEdges = (show: boolean) => {
+  useTopicStore.temporal.getState().pause();
   useTopicStore.setState({ showImpliedEdges: show }, false, "toggleShowImpliedEdges");
+  useTopicStore.temporal.getState().resume();
 };
 
 export const relayout = async () => {
