@@ -29,7 +29,7 @@ const convertToEdge = (flowEdge: EdgeProps): Edge => {
     markerStart: markerStart,
     source: flowEdge.source,
     target: flowEdge.target,
-    type: "ScoreEdge",
+    type: "FlowEdge",
   };
 };
 

@@ -78,7 +78,7 @@ export interface Edge {
   markerStart: { type: MarkerType; width: number; height: number };
   source: string; // source === parent if arrows point from bottom to top
   target: string; // target === child if arrows point from bottom to top
-  type: "ScoreEdge";
+  type: "FlowEdge";
 }
 
 interface BuildEdgeProps {
@@ -105,7 +105,7 @@ export const buildEdge = ({
     markerStart: markerStart,
     source: sourceNodeId,
     target: targetNodeId,
-    type: "ScoreEdge" as const,
+    type: "FlowEdge" as const,
   };
 };
 
@@ -139,7 +139,7 @@ export const findGraphPart = (graphPartId: string, diagram: Diagram) => {
 };
 
 export const isNode = (graphPart: GraphPart): graphPart is Node => {
-  if (graphPart.type !== "ScoreEdge") return true;
+  if (graphPart.type !== "FlowEdge") return true;
   return false;
 };
 

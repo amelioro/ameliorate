@@ -22,6 +22,7 @@ export const migrate = (persistedState: any, version: number) => {
     migrate_13_to_14,
     migrate_14_to_15,
     migrate_15_to_16,
+    migrate_16_to_17,
   ];
 
   let state = persistedState;
@@ -370,6 +371,28 @@ const migrate_15_to_16 = (state: State15) => {
       description: "",
     };
   }
+
+  return state;
+};
+
+interface FromDiagram16 {
+  edges: { type: "ScoreEdge" }[];
+}
+
+interface FromState16 {
+  diagrams: Record<string, FromDiagram16>;
+}
+
+interface ToEdge17 {
+  type: "FlowEdge";
+}
+
+const migrate_16_to_17 = (state: FromState16) => {
+  Object.values(state.diagrams).forEach((diagram) => {
+    diagram.edges.forEach((edge) => {
+      (edge as unknown as ToEdge17).type = "FlowEdge";
+    });
+  });
 
   return state;
 };
