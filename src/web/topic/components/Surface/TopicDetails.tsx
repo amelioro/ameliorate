@@ -50,6 +50,7 @@ export const TopicDetails = () => {
     <form
       onBlur={(event) => {
         void handleSubmit((data) => {
+          if (topic.description === data.description) return;
           setTopicDetails(data.description);
         })(event);
       }}

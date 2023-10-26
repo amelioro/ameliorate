@@ -58,11 +58,18 @@ export const TopicDrawer = ({ isLandscape }: Props) => {
 
             <TabPanel value="1">
               {selectedGraphPart !== undefined ? (
-                <GraphPartDetails graphPart={selectedGraphPart} />
+                // key ensures that details components re-render, re-setting default values
+                <GraphPartDetails graphPart={selectedGraphPart} key={selectedGraphPart.id} />
               ) : activeArguedDiagramPart !== null ? (
-                <GraphPartDetails graphPart={activeArguedDiagramPart} />
+                <GraphPartDetails
+                  graphPart={activeArguedDiagramPart}
+                  key={activeArguedDiagramPart.id}
+                />
               ) : activeTableProblemNode !== null ? (
-                <GraphPartDetails graphPart={activeTableProblemNode} />
+                <GraphPartDetails
+                  graphPart={activeTableProblemNode}
+                  key={activeTableProblemNode.id}
+                />
               ) : (
                 <TopicDetails />
               )}

@@ -1,0 +1,9 @@
+BEGIN;
+
+-- AlterTable
+ALTER TABLE "edges" ADD COLUMN     "notes" VARCHAR(10000) NOT NULL DEFAULT '';
+
+-- AlterTable
+ALTER TABLE "nodes" ADD COLUMN     "notes" VARCHAR(10000) NOT NULL DEFAULT '';
+
+COMMIT;
