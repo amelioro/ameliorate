@@ -138,6 +138,11 @@ export const findGraphPart = (graphPartId: string, diagram: Diagram) => {
   return graphPart;
 };
 
+export const isNode = (graphPart: GraphPart): graphPart is Node => {
+  if (graphPart.type !== "ScoreEdge") return true;
+  return false;
+};
+
 export const getNodesComposedBy = (node: Node, diagram: Diagram) => {
   return composedRelations.flatMap((composedRelation) => {
     const composingEdges = diagram.edges.filter((edge) => {
