@@ -129,7 +129,7 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
           <svg
             width={nodeWidthPx}
             height={100}
-            style={{ position: "absolute" }}
+            style={{ position: "absolute", cursor: "default" }}
             className="react-flow__edge selected"
           >
             {svgMarkerDef}

@@ -12,6 +12,8 @@ const pathOptions = {
 };
 
 export const StyledPath = styled("path", pathOptions)<PathProps>`
+  cursor: default;
+
   &.react-flow__edge-path {
     ${({ theme, spotlight }) => {
       if (spotlight === "primary") {
@@ -41,7 +43,7 @@ const divOptions = {
 
 export const StyledDiv = styled("div", divOptions)<DivProps>`
   pointer-events: all;
-  cursor: pointer;
+  cursor: default;
 
   display: flex;
   flex-direction: column;
