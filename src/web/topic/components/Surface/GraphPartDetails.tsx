@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Timeline } from "@mui/icons-material";
 import { Divider, List, ListItem, ListItemIcon, ListItemText, TextField } from "@mui/material";
+import lowerCase from "lodash/lowerCase";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -46,7 +47,7 @@ export const GraphPartDetails = ({ graphPart }: Props) => {
   const GraphPartIcon = partIsNode ? nodeDecorations[graphPart.type].NodeIcon : Timeline;
   const headerText = partIsNode
     ? `${nodeDecorations[graphPart.type].title} Node`
-    : `"${graphPart.label}" Edge`;
+    : `"${lowerCase(graphPart.label)}" Edge`;
 
   return (
     <form
