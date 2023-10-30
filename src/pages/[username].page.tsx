@@ -1,5 +1,5 @@
 import { AutoStories, Settings } from "@mui/icons-material";
-import { Button, IconButton } from "@mui/material";
+import { Box, Button, IconButton } from "@mui/material";
 import { Topic } from "@prisma/client";
 import {
   type MRT_ColumnDef,
@@ -53,6 +53,19 @@ const User: NextPage = () => {
     {
       accessorKey: "description",
       header: "Description",
+      Cell: ({ row }) => (
+        <Box
+          title={row.original.description}
+          sx={{
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            maxWidth: "300px", // arbitrary number that fits a decent number of words
+          }}
+        >
+          {row.original.description}
+        </Box>
+      ),
     },
     {
       accessorKey: "visibility",
@@ -119,7 +132,7 @@ const User: NextPage = () => {
           );
         }}
         initialState={{
-          columnVisibility: { description: false, visibility: hasEditAccess, createdAt: false },
+          columnVisibility: { visibility: hasEditAccess, createdAt: false },
           sorting: [{ id: "updatedAt", desc: true }],
         }}
       />

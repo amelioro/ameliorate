@@ -2,7 +2,11 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-import { NotFoundError, NotLoggedInError } from "../../../web/common/components/Error/Error";
+import {
+  NotFoundError,
+  NotLoggedInError,
+  QueryError,
+} from "../../../web/common/components/Error/Error";
 import { Loading } from "../../../web/common/components/Loading/Loading";
 import { useSessionUser } from "../../../web/common/hooks";
 import { trpc } from "../../../web/common/trpc";
@@ -29,8 +33,10 @@ const TopicSettings: NextPage = () => {
   if (!sessionUser) return <NotLoggedInError />;
   // not authorized
   if (username !== sessionUser.username) return <NotFoundError />;
+  // server error
+  if (findTopic.error) return <QueryError error={findTopic.error} />;
   // no topic to view
-  if (!findTopic.isSuccess || !findTopic.data) return <NotFoundError />;
+  if (!findTopic.data) return <NotFoundError />;
 
   return (
     <>

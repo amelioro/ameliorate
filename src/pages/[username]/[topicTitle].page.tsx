@@ -4,7 +4,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-import { NotFoundError } from "../../web/common/components/Error/Error";
+import { NotFoundError, QueryError } from "../../web/common/components/Error/Error";
 import { Loading } from "../../web/common/components/Loading/Loading";
 import { useSessionUser } from "../../web/common/hooks";
 import { trpc } from "../../web/common/trpc";
@@ -71,17 +71,14 @@ const Topic: NextPage = () => {
 
   // TODO: use suspense to better handle loading & error
   // Additional check for isFetching for when client side navigation re-mounts but getDiagram was already loaded
-  if (
-    !router.isReady ||
-    !username ||
-    !topicTitle ||
-    getDiagram.isLoading ||
-    getDiagram.isFetching ||
-    !populatedFromApi
-  )
+  if (!router.isReady || !username || !topicTitle || getDiagram.isLoading || getDiagram.isFetching)
     return <Loading />;
 
-  if (!getDiagram.isSuccess || !getDiagram.data) return <NotFoundError />;
+  if (getDiagram.error) return <QueryError error={getDiagram.error} />;
+  if (!getDiagram.data) return <NotFoundError />;
+
+  // Separate this from the above loading check so that errors show on failed query
+  if (!populatedFromApi) return <Loading />;
 
   return (
     <>

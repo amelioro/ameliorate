@@ -96,7 +96,7 @@ const About: NextPage = () => {
 
             <Typography variant="h5">Mission</Typography>
             <Typography variant="body1">
-              Enable humanity to effectively solve problems through understanding their own
+              Enable humanity to effectively solve problems through mutually understanding their own
               differences and reasonings.
             </Typography>
 
