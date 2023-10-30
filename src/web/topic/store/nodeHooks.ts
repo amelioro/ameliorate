@@ -1,10 +1,10 @@
 import { shallow } from "zustand/shallow";
 
 import { errorWithData } from "../../../common/errorHandling";
-import { Node, RelationDirection, findNode } from "../utils/diagram";
+import { RelationDirection, findNode } from "../utils/diagram";
 import { children, edges, neighbors, parents } from "../utils/node";
 import { useTopicStore } from "./store";
-import { getDiagramOrThrow } from "./utils";
+import { getDiagramOrThrow, getTopicDiagram } from "./utils";
 
 export const useNode = (nodeId: string, diagramId: string) => {
   return useTopicStore((state) => {
@@ -41,11 +41,16 @@ export const useNodeParents = (nodeId: string, diagramId: string) => {
   }, shallow);
 };
 
-export const useNodes = (diagramId: string, predicate: (node: Node) => boolean) => {
+export const useCriteriaTableProblemNodes = () => {
   return useTopicStore((state) => {
     try {
-      const diagram = getDiagramOrThrow(state, diagramId);
-      return diagram.nodes.filter(predicate);
+      const topicDiagram = getTopicDiagram(state);
+
+      return topicDiagram.nodes.filter(
+        (node) =>
+          node.type === "problem" &&
+          children(node, topicDiagram).some((child) => child.type === "criterion")
+      );
     } catch {
       return [];
     }
