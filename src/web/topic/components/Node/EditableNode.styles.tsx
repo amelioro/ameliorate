@@ -62,8 +62,8 @@ export const StyledTextareaAutosize = styled(TextareaAutosize)<StyledTextareaPro
   color: ${({ theme }) => theme.palette.text.primary};
 
   &[readonly] {
-    // so that cursor doesn't imply that textarea is editable
-    cursor: default;
+    // don't want clicking to select a spot in the input before the node is editable
+    pointer-events: none;
   }
 `;
 
@@ -89,6 +89,10 @@ export const NodeDiv = styled("div", options)<NodeDivProps>`
   border-width: 2px;
   border-style: solid;
   border-color: #1a192b;
+
+  // react-flow sets this to pan hand because nodes can't be moved, so dragging a node will pan, but
+  // we want to indicate that the node is selectable.
+  cursor: default;
 
   &:hover {
     box-shadow: 0 2px 8px 2px rgba(0, 0, 0, 0.08);

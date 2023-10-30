@@ -77,7 +77,9 @@ export const EditableNode = ({ node, className = "" }: { node: Node; className?:
             if (event.target.value !== node.data.label) setNodeLabel(node, event.target.value);
           }}
           className="nopan" // allow regular text input drag functionality without using reactflow's pan behavior
-          readOnly={!userCanEditTopicData}
+          // Require selecting a node before editing it, because oftentimes you'll want to select a node to
+          // view more details, and the editing will be distracting. Only edit after clicking when selected.
+          readOnly={!userCanEditTopicData || !node.selected}
         />
       </MiddleDiv>
     </NodeDiv>
