@@ -17,7 +17,7 @@ import {
 import { emitter } from "../../../common/event";
 import { useViewportUpdater } from "../../hooks/flowHooks";
 import { setSelected } from "../../store/actions";
-import { connectNodes } from "../../store/createDeleteActions";
+import { connectNodes, reconnectEdge } from "../../store/createDeleteActions";
 import { useFilteredDiagram } from "../../store/store";
 import { closeClaimTree } from "../../store/viewActions";
 import { type Edge, type Node } from "../../utils/diagram";
@@ -117,6 +117,9 @@ const DiagramWithoutProvider = ({ diagramId }: DiagramProps) => {
         onContextMenu={(e) => e.preventDefault()}
         onEdgesChange={(changes) => onGraphPartChange(changes)}
         onNodesChange={(changes) => onGraphPartChange(changes)}
+        onEdgeUpdate={(oldEdge, newConnection) =>
+          void reconnectEdge(oldEdge, newConnection.source, newConnection.target)
+        }
         nodesDraggable={false}
         nodesConnectable={diagram.type !== "claim"} // claims are in a tree, so cannot connect existing nodes
         deleteKeyCode={null} // was preventing holding ctrl and repeating backspace to delete multiple words from node text

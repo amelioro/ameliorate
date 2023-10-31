@@ -7,30 +7,30 @@ import { useSelectedGraphPart } from "../../store/graphPartHooks";
 import { useActiveArguedDiagramPart, useActiveTableProblemNode } from "../../store/store";
 import { GraphPartDetails } from "./GraphPartDetails";
 import { TopicDetails } from "./TopicDetails";
-import { PositionedDiv, StyledDrawer, ToggleDrawerButton } from "./TopicDrawer.styles";
+import { PositionedDiv, StyledDrawer, TogglePaneButton } from "./TopicPane.styles";
 import { TopicViews } from "./TopicViews";
 
 interface Props {
   isLandscape: boolean;
 }
 
-export const TopicDrawer = ({ isLandscape }: Props) => {
-  const [isTopicDrawerOpen, setIsTopicDrawerOpen] = useState(true);
+export const TopicPane = ({ isLandscape }: Props) => {
+  const [isTopicPaneOpen, setIsTopicPaneOpen] = useState(true);
   const [selectedTab, setSelectedTab] = useState("1");
 
   const selectedGraphPart = useSelectedGraphPart();
   const activeArguedDiagramPart = useActiveArguedDiagramPart();
   const activeTableProblemNode = useActiveTableProblemNode();
 
-  const handleDrawerToggle = () => {
-    if (isTopicDrawerOpen) {
-      setIsTopicDrawerOpen(false);
+  const handlePaneToggle = () => {
+    if (isTopicPaneOpen) {
+      setIsTopicPaneOpen(false);
     } else {
-      setIsTopicDrawerOpen(true);
+      setIsTopicPaneOpen(true);
     }
   };
 
-  const ToggleIcon = isTopicDrawerOpen
+  const ToggleIcon = isTopicPaneOpen
     ? isLandscape
       ? ChevronLeft
       : KeyboardArrowDown
@@ -38,15 +38,15 @@ export const TopicDrawer = ({ isLandscape }: Props) => {
 
   return (
     <>
-      {/* div to enable menu button to be positioned to the right of the drawer */}
+      {/* div to enable menu button to be positioned to the right of the pane */}
       <PositionedDiv>
-        <ToggleDrawerButton onClick={handleDrawerToggle} color="primary" isLandscape={isLandscape}>
+        <TogglePaneButton onClick={handlePaneToggle} color="primary" isLandscape={isLandscape}>
           <ToggleIcon />
-        </ToggleDrawerButton>
+        </TogglePaneButton>
         {/* `permanent` because `persistent` adds transitions that conflict with our styles */}
         <StyledDrawer
           variant="permanent"
-          open={isTopicDrawerOpen}
+          open={isTopicPaneOpen}
           anchor={isLandscape ? "left" : "bottom"}
           isLandscape={isLandscape}
         >

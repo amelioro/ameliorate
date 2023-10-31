@@ -14,7 +14,7 @@ const buttonOptions = {
   shouldForwardProp: (prop: string) => !["isLandscape"].includes(prop),
 };
 
-export const ToggleDrawerButton = styled(IconButton, buttonOptions)<ButtonProps>`
+export const TogglePaneButton = styled(IconButton, buttonOptions)<ButtonProps>`
   position: absolute;
   z-index: ${({ theme }) => theme.zIndex.appBar - 1};
 

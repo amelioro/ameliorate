@@ -13,11 +13,11 @@ export const CriteriaTableIndicator = ({ nodeId, diagramId }: Props) => {
   const node = useNode(nodeId, diagramId);
   const nodeChildren = useNodeChildren(nodeId, diagramId);
 
-  const hasCriteria = nodeChildren.some((child) => child.type === "criterion");
-
   if (node === null || node.type !== "problem") {
     return <></>;
   }
+
+  const hasCriteria = nodeChildren.some((child) => child.type === "criterion");
 
   const Icon = hasCriteria ? TableChart : TableChartOutlined;
 

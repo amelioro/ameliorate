@@ -6,7 +6,7 @@ import { useActiveArguedDiagramPart, useActiveTableProblemNode } from "../../sto
 import { topicDiagramId } from "../../utils/diagram";
 import { CriteriaTable } from "../CriteriaTable/CriteriaTable";
 import { Diagram } from "../Diagram/Diagram";
-import { TopicDrawer } from "../Surface/TopicDrawer";
+import { TopicPane } from "../Surface/TopicPane";
 import { TopicToolbar } from "../Surface/TopicToolbar";
 
 export const TopicWorkspace = () => {
@@ -28,7 +28,7 @@ export const TopicWorkspace = () => {
           flexDirection: isLandscape ? "row" : "column-reverse",
         }}
       >
-        <TopicDrawer isLandscape={isLandscape} />
+        <TopicPane isLandscape={isLandscape} />
 
         <Box height="100%" flex="1" position="relative">
           <Box width="100%" height="100%" position="absolute">

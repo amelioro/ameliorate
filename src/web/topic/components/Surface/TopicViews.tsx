@@ -17,14 +17,13 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
-import { useNodes } from "../../store/nodeHooks";
+import { useCriteriaTableProblemNodes } from "../../store/nodeHooks";
 import {
   useActiveArguedDiagramPart,
   useActiveTableProblemNode,
   useClaimTreesWithExplicitClaims,
 } from "../../store/store";
 import { viewClaimTree, viewCriteriaTable, viewTopicDiagram } from "../../store/viewActions";
-import { topicDiagramId } from "../../utils/diagram";
 import { NestedListItemButton } from "./TopicViews.styles";
 
 export const TopicViews = () => {
@@ -35,7 +34,7 @@ export const TopicViews = () => {
   const activeArguedDiagramPart = useActiveArguedDiagramPart();
 
   const claimTreeIdentifiers = useClaimTreesWithExplicitClaims();
-  const problems = useNodes(topicDiagramId, (node) => node.type === "problem");
+  const problems = useCriteriaTableProblemNodes();
 
   return (
     <List>
@@ -67,7 +66,7 @@ export const TopicViews = () => {
                 <ListItemIcon>
                   <TableChart />
                 </ListItemIcon>
-                <ListItemText primary="No criteria yet!" />
+                <ListItemText primary="No criteria tables yet!" />
               </NestedListItemButton>
             </ListItem>
           )}
