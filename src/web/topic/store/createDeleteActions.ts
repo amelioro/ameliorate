@@ -3,6 +3,7 @@ import { createDraft, finishDraft } from "immer";
 import { errorWithData } from "../../../common/errorHandling";
 import { emitter } from "../../common/event";
 import {
+  Diagram,
   type GraphPart,
   Node,
   RelationDirection,
@@ -17,13 +18,7 @@ import {
 import { Relation, canCreateEdge, getConnectingEdge, getRelation } from "../utils/edge";
 import { FlowNodeType, edges } from "../utils/node";
 import { TopicStoreState, useTopicStore } from "./store";
-import {
-  getActiveDiagram,
-  getClaimTrees,
-  getDiagramOrThrow,
-  getTopicDiagram,
-  setSelected,
-} from "./utils";
+import { getActiveDiagram, getClaimTrees, getTopicDiagram, setSelected } from "./utils";
 
 const createNode = (state: TopicStoreState, toNodeType: FlowNodeType) => {
   const activeDiagram = getActiveDiagram(state);
@@ -90,7 +85,7 @@ export const addNode = async ({ fromNodeId, as, toNodeType, relation }: AddNodeP
 
   const parentNode = as === "parent" ? newNode : fromNode;
   const childNode = as === "parent" ? fromNode : newNode;
-  createEdgeAndImpliedEdges(state, parentNode, childNode, relation);
+  createEdgeAndImpliedEdges(activeDiagram, parentNode, childNode, relation);
 
   // connect criteria
   if (
@@ -118,19 +113,17 @@ export const addNode = async ({ fromNodeId, as, toNodeType, relation }: AddNodeP
 };
 
 const createEdgesImpliedByComposition = (
-  state: TopicStoreState,
+  diagram: Diagram,
   parent: Node,
   child: Node,
   relation: Relation
 ) => {
-  const diagram = getDiagramOrThrow(state, parent.data.diagramId);
-
   const nodesComposedByParent = getNodesComposedBy(parent, diagram);
   nodesComposedByParent.forEach((composedNode) => {
     const relationForComposed = getRelation(composedNode.type, relation.child, relation.name);
     if (!relationForComposed) return;
 
-    createEdgeAndImpliedEdges(state, composedNode, child, relationForComposed);
+    createEdgeAndImpliedEdges(diagram, composedNode, child, relationForComposed);
   });
 
   const nodesComposedByChild = getNodesComposedBy(child, diagram);
@@ -138,19 +131,17 @@ const createEdgesImpliedByComposition = (
     const relationForComposed = getRelation(relation.parent, composedNode.type, relation.name);
     if (!relationForComposed) return;
 
-    createEdgeAndImpliedEdges(state, parent, composedNode, relationForComposed);
+    createEdgeAndImpliedEdges(diagram, parent, composedNode, relationForComposed);
   });
 };
 
 // see algorithm pseudocode & example at https://github.com/amelioro/ameliorate/issues/66#issuecomment-1465078133
 const createEdgeAndImpliedEdges = (
-  state: TopicStoreState,
+  diagram: Diagram,
   parent: Node,
   child: Node,
   relation: Relation
 ) => {
-  const diagram = getDiagramOrThrow(state, parent.data.diagramId);
-
   // assumes only one edge can exist between two notes - future may allow multiple edges of different relation type
   if (getConnectingEdge(parent, child, diagram.edges) !== undefined) return diagram.edges;
 
@@ -167,9 +158,27 @@ const createEdgeAndImpliedEdges = (
 
   // indirectly recurses by calling this method after determining which implied edges to create
   // note: modifies diagram.edges through `state` (via the line above)
-  createEdgesImpliedByComposition(state, parent, child, relation);
+  createEdgesImpliedByComposition(diagram, parent, child, relation);
 
   return diagram.edges;
+};
+
+const createConnection = (diagram: Diagram, parentId: string | null, childId: string | null) => {
+  const parent = diagram.nodes.find((node) => node.id === parentId);
+  const child = diagram.nodes.find((node) => node.id === childId);
+  if (!parent || !child) {
+    throw errorWithData("parent or child not found", parentId, childId, diagram);
+  }
+
+  if (!canCreateEdge(diagram, parent, child)) return false;
+
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- canCreateEdge ensures relation is valid
+  const relation = getRelation(parent.type, child.type)!;
+
+  // modifies diagram.edges through `state`
+  createEdgeAndImpliedEdges(diagram, parent, child, relation);
+
+  return true;
 };
 
 export const connectNodes = async (parentId: string | null, childId: string | null) => {
@@ -177,19 +186,8 @@ export const connectNodes = async (parentId: string | null, childId: string | nu
 
   const activeDiagram = getActiveDiagram(state);
 
-  const parent = activeDiagram.nodes.find((node) => node.id === parentId);
-  const child = activeDiagram.nodes.find((node) => node.id === childId);
-  if (!parent || !child) {
-    throw errorWithData("parent or child not found", parentId, childId, activeDiagram);
-  }
-
-  if (!canCreateEdge(activeDiagram, parent, child)) return;
-
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- canCreateEdge ensures relation is valid
-  const relation = getRelation(parent.type, child.type)!;
-
-  // modifies diagram.edges through `state`
-  createEdgeAndImpliedEdges(state, parent, child, relation);
+  const created = createConnection(activeDiagram, parentId, childId);
+  if (!created) return;
 
   const layoutedDiagram = await layoutVisibleComponents(activeDiagram, getClaimTrees(state));
 
@@ -199,6 +197,34 @@ export const connectNodes = async (parentId: string | null, childId: string | nu
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   useTopicStore.setState(finishDraft(state), false, "connectNodes");
+};
+
+export const reconnectEdge = async (
+  oldEdge: { id: string; source: string; target: string },
+  newParentId: string | null,
+  newChildId: string | null
+) => {
+  if (oldEdge.source === newParentId && oldEdge.target === newChildId) return;
+
+  const state = createDraft(useTopicStore.getState());
+
+  const activeDiagram = getActiveDiagram(state);
+
+  /* eslint-disable functional/immutable-data, no-param-reassign */
+  activeDiagram.edges = activeDiagram.edges.filter((edge) => edge.id !== oldEdge.id);
+  /* eslint-enable functional/immutable-data, no-param-reassign */
+
+  const created = createConnection(activeDiagram, newParentId, newChildId);
+  if (!created) return;
+
+  const layoutedDiagram = await layoutVisibleComponents(activeDiagram, getClaimTrees(state));
+
+  /* eslint-disable functional/immutable-data, no-param-reassign */
+  activeDiagram.nodes = layoutedDiagram.nodes;
+  activeDiagram.edges = layoutedDiagram.edges;
+  /* eslint-enable functional/immutable-data, no-param-reassign */
+
+  useTopicStore.setState(finishDraft(state), false, "reconnectEdge");
 };
 
 export const deleteNode = async (nodeId: string) => {
