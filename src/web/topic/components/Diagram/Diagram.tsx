@@ -15,10 +15,12 @@ import {
 } from "reactflow";
 
 import { emitter } from "../../../common/event";
+import { useSessionUser } from "../../../common/hooks";
 import { useViewportUpdater } from "../../hooks/flowHooks";
 import { setSelected } from "../../store/actions";
 import { connectNodes, reconnectEdge } from "../../store/createDeleteActions";
 import { useFilteredDiagram } from "../../store/store";
+import { useUserCanEditTopicData } from "../../store/userHooks";
 import { closeClaimTree } from "../../store/viewActions";
 import { type Edge, type Node } from "../../utils/diagram";
 import { FlowNodeType } from "../../utils/node";
@@ -72,6 +74,8 @@ interface DiagramProps {
 }
 
 const DiagramWithoutProvider = ({ diagramId }: DiagramProps) => {
+  const { sessionUser } = useSessionUser();
+  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const diagram = useFilteredDiagram(diagramId);
   const { fitViewForNodes, moveViewportToIncludeNode } = useViewportUpdater();
 
@@ -113,15 +117,22 @@ const DiagramWithoutProvider = ({ diagramId }: DiagramProps) => {
         fitView
         fitViewOptions={{ maxZoom: 1 }}
         minZoom={0.25}
-        onConnect={({ source, target }) => void connectNodes(source, target)}
+        onConnect={
+          userCanEditTopicData
+            ? ({ source, target }) => void connectNodes(source, target)
+            : undefined
+        }
         onContextMenu={(e) => e.preventDefault()}
         onEdgesChange={(changes) => onGraphPartChange(changes)}
         onNodesChange={(changes) => onGraphPartChange(changes)}
-        onEdgeUpdate={(oldEdge, newConnection) =>
-          void reconnectEdge(oldEdge, newConnection.source, newConnection.target)
+        onEdgeUpdate={
+          userCanEditTopicData
+            ? (oldEdge, newConnection) =>
+                void reconnectEdge(oldEdge, newConnection.source, newConnection.target)
+            : undefined
         }
         nodesDraggable={false}
-        nodesConnectable={diagram.type !== "claim"} // claims are in a tree, so cannot connect existing nodes
+        nodesConnectable={userCanEditTopicData && diagram.type !== "claim"} // claims are in a tree, so cannot connect existing nodes
         deleteKeyCode={null} // was preventing holding ctrl and repeating backspace to delete multiple words from node text
         elevateEdgesOnSelect={true} // this puts selected edges (or neighbor-to-selected-node edges) in a separate svg that is given a higher zindex, so they can be elevated above other nodes
       >
