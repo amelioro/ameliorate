@@ -31,6 +31,8 @@ export const Score = ({ graphPartId }: ScoreProps) => {
 
   const [selected, setSelected] = useState(false);
   const [hovering, setHovering] = useState(false);
+  // thanks for delay impl: https://stackoverflow.com/a/59417556/8409296
+  const [hoverDelayHandler, setHoverDelayHandler] = useState<NodeJS.Timeout | undefined>(undefined);
   const mainButtonRef = useRef<HTMLButtonElement | null>(null);
 
   const userScores = useUserScores(graphPartId, perspectives);
@@ -60,7 +62,10 @@ export const Score = ({ graphPartId }: ScoreProps) => {
       <ScoreButton
         buttonRef={mainButtonRef}
         onClick={() => setSelected(true)}
-        onMouseEnter={() => setHovering(true)}
+        // delay hover so that the score pie doesn't get in the way when you're not intending to score
+        // 100 ms matches the default for MUI tooltips https://mui.com/material-ui/api/tooltip/#Tooltip-prop-enterDelay
+        onMouseEnter={() => setHoverDelayHandler(setTimeout(() => setHovering(true), 100))}
+        onMouseLeave={() => clearTimeout(hoverDelayHandler)}
         userScores={userScores}
       />
 

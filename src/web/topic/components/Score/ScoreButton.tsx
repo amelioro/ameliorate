@@ -44,6 +44,7 @@ interface ScoreButtonProps {
   buttonRef?: MutableRefObject<HTMLButtonElement | null>;
   onClick?: () => void;
   onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
   zoomRatio?: number;
   userScores: Record<string, ScoreData>;
 }
@@ -52,6 +53,7 @@ export const ScoreButton = ({
   buttonRef,
   onClick,
   onMouseEnter,
+  onMouseLeave,
   zoomRatio = 1,
   userScores,
 }: ScoreButtonProps) => {
@@ -68,6 +70,7 @@ export const ScoreButton = ({
         color={scoreColor}
         onClick={onClick}
         onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
         buttonDiameter={buttonDiameterRem}
         zoomRatio={zoomRatio}
         sx={
