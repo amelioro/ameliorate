@@ -3,24 +3,28 @@ import { hasClaims } from "./claim";
 import { Diagram, Edge, Node, RelationDirection, findNode, topicDiagramId } from "./diagram";
 import { FlowNodeType, children, claimNodeTypes, components, parents } from "./node";
 
-// assumes that we're always pointing from child to parent
+// Assumes that we're always pointing from child to parent.
+// This list is sorted by `parent` and then `child` so that it matches the partition order of nodes
+// in the layout.
 export const relations = [
   { child: "problem", name: "causes", parent: "problem" },
-  { child: "solution", name: "addresses", parent: "problem" },
-  { child: "solutionComponent", name: "addresses", parent: "problem" },
+  { child: "criterion", name: "criterionFor", parent: "problem" },
   { child: "effect", name: "addresses", parent: "problem" },
+  { child: "solutionComponent", name: "addresses", parent: "problem" },
+  { child: "solution", name: "addresses", parent: "problem" },
+
+  { child: "effect", name: "embodies", parent: "criterion" },
+  { child: "solutionComponent", name: "embodies", parent: "criterion" },
+  { child: "solution", name: "embodies", parent: "criterion" },
+
+  { child: "problem", name: "createdBy", parent: "effect" },
+  { child: "solutionComponent", name: "creates", parent: "effect" },
+  { child: "solution", name: "creates", parent: "effect" },
+
+  { child: "problem", name: "createdBy", parent: "solutionComponent" },
+  { child: "solution", name: "has", parent: "solutionComponent" },
 
   { child: "problem", name: "createdBy", parent: "solution" },
-  { child: "problem", name: "createdBy", parent: "solutionComponent" },
-  { child: "problem", name: "createdBy", parent: "effect" },
-  { child: "solution", name: "has", parent: "solutionComponent" },
-  { child: "solution", name: "creates", parent: "effect" },
-  { child: "solutionComponent", name: "creates", parent: "effect" },
-
-  { child: "criterion", name: "criterionFor", parent: "problem" },
-  { child: "solution", name: "embodies", parent: "criterion" },
-  { child: "solutionComponent", name: "embodies", parent: "criterion" },
-  { child: "effect", name: "embodies", parent: "criterion" },
 
   { child: "support", name: "supports", parent: "rootClaim" },
   { child: "critique", name: "critiques", parent: "rootClaim" },
@@ -87,15 +91,7 @@ type AddableNodes = {
 const addableNodesFor: Record<FlowNodeType, AddableNodes> = {
   problem: {
     parent: ["problem", "solution"],
-    child: ["problem", "solution", "criterion"],
-  },
-  solution: {
-    parent: ["problem", "solutionComponent", "effect"], // could have criteria, but need to select a specific problem for it & that requires design
-    child: ["problem"],
-  },
-  solutionComponent: {
-    parent: ["problem", "effect"],
-    child: ["problem"],
+    child: ["problem", "criterion", "solution"],
   },
 
   // can't have multiple problems;
@@ -103,6 +99,15 @@ const addableNodesFor: Record<FlowNodeType, AddableNodes> = {
   criterion: { parent: [], child: [] },
 
   effect: { parent: [], child: ["problem"] },
+
+  solutionComponent: {
+    parent: ["problem", "effect"],
+    child: ["problem"],
+  },
+  solution: {
+    parent: ["problem", "effect", "solutionComponent"], // could have criteria, but need to select a specific problem for it & that requires design
+    child: ["problem"],
+  },
 
   // claims are in a tree so claim nodes can't add parents
   rootClaim: { parent: [], child: ["support", "critique"] },

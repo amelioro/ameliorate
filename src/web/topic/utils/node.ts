@@ -36,14 +36,6 @@ export const nodeDecorations: Record<FlowNodeType, NodeDecoration> = {
     title: "Problem",
     NodeIcon: Extension,
   },
-  solution: {
-    title: "Solution",
-    NodeIcon: Check,
-  },
-  solutionComponent: {
-    title: "Component",
-    NodeIcon: Widgets,
-  },
   criterion: {
     title: "Criterion",
     NodeIcon: Ballot,
@@ -51,6 +43,14 @@ export const nodeDecorations: Record<FlowNodeType, NodeDecoration> = {
   effect: {
     title: "Effect",
     NodeIcon: Bolt,
+  },
+  solutionComponent: {
+    title: "Component",
+    NodeIcon: Widgets,
+  },
+  solution: {
+    title: "Solution",
+    NodeIcon: Check,
   },
   rootClaim: {
     title: "Root Claim",
