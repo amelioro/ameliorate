@@ -2,13 +2,17 @@ import lowerCase from "lodash/lowerCase";
 import { v4 as uuid } from "uuid";
 import { z } from "zod";
 
-// not sure how to guarantee that this matches the schema enum
+// Not sure how to guarantee that this matches the schema enum.
+// This order is generally used for sorting, e.g.:
+// - the order in which add-node buttons are displayed,
+// - the order to group node types in the same layer of the diagram,
+// - (future) the order to group node types in different layers of the diagram
 export const nodeTypes = [
   "problem",
-  "solution",
-  "solutionComponent",
   "criterion",
   "effect",
+  "solutionComponent",
+  "solution",
   "rootClaim",
   "support",
   "critique",
