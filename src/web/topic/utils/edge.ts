@@ -151,8 +151,10 @@ export const canCreateEdge = (diagram: Diagram, parent: Node, child: Node) => {
     return false;
   }
 
-  if (claimNodeTypes.includes(parent.type)) {
-    console.log("cannot connect nodes: claims are in a tree so claim nodes can't add parents");
+  const secondParentForClaim =
+    claimNodeTypes.includes(child.type) && diagram.edges.find((edge) => edge.target === child.id);
+  if (secondParentForClaim) {
+    console.log("cannot connect nodes: claims are in a tree so can't have multiple parents");
     return false;
   }
 

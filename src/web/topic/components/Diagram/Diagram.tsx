@@ -132,7 +132,7 @@ const DiagramWithoutProvider = ({ diagramId }: DiagramProps) => {
             : undefined
         }
         nodesDraggable={false}
-        nodesConnectable={userCanEditTopicData && diagram.type !== "claim"} // claims are in a tree, so cannot connect existing nodes
+        nodesConnectable={userCanEditTopicData}
         deleteKeyCode={null} // was preventing holding ctrl and repeating backspace to delete multiple words from node text
         elevateEdgesOnSelect={true} // this puts selected edges (or neighbor-to-selected-node edges) in a separate svg that is given a higher zindex, so they can be elevated above other nodes
       >
