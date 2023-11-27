@@ -1,12 +1,12 @@
 import { Global } from "@emotion/react";
+import { useContext } from "react";
 
 import { useSessionUser } from "../../../common/hooks";
 import { useIsEdgeSelected, useIsNeighborSelected } from "../../store/nodeHooks";
-import { useDiagramType } from "../../store/store";
 import { useUserCanEditTopicData } from "../../store/userHooks";
-import { Node, orientations } from "../../utils/diagram";
+import { Node } from "../../utils/diagram";
 import { FlowNodeType } from "../../utils/node";
-import { NodeProps } from "../Diagram/Diagram";
+import { DiagramContext, NodeProps } from "../Diagram/Diagram";
 import { Spotlight } from "../Diagram/Diagram.styles";
 import {
   AddNodeButtonGroupChild,
@@ -30,13 +30,10 @@ const convertToNode = (flowNode: NodeProps): Node => {
 export const FlowNode = (flowNode: NodeProps) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
-  const diagramType = useDiagramType(flowNode.data.diagramId);
-  const isNeighborSelected = useIsNeighborSelected(flowNode.id, flowNode.data.diagramId);
-  const isEdgeSelected = useIsEdgeSelected(flowNode.id, flowNode.data.diagramId);
+  const isNeighborSelected = useIsNeighborSelected(flowNode.id);
+  const isEdgeSelected = useIsEdgeSelected(flowNode.id);
 
-  if (!diagramType) return <></>;
-
-  const orientation = orientations[diagramType];
+  const orientation = useContext(DiagramContext).orientation;
   const node = convertToNode(flowNode);
 
   const spotlight: Spotlight = node.selected

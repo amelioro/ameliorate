@@ -2,28 +2,20 @@ import { temporal } from "zundo";
 import { devtools, persist } from "zustand/middleware";
 import { createWithEqualityFn } from "zustand/traditional";
 
+import { claimRelationNames } from "../../../common/edge";
 import {
   Diagram,
+  Edge,
+  Node,
   Score,
   buildNode,
   filterHiddenComponents,
   findGraphPart,
   findNode,
-  getDiagramTitle,
-  topicDiagramId,
 } from "../utils/diagram";
 import { apiSyncer } from "./apiSyncerMiddleware";
 import { migrate } from "./migrate";
-import { getClaimTrees, getDiagram, getDiagramOrThrow, getTopicDiagram } from "./utils";
-
-const initialDiagrams: Record<string, Diagram> = {
-  [topicDiagramId]: {
-    id: topicDiagramId,
-    nodes: [buildNode({ type: "problem", diagramId: topicDiagramId })],
-    edges: [],
-    type: "problem",
-  },
-};
+import { getClaimTree, getTopicDiagram } from "./utils";
 
 export interface PlaygroundTopic {
   id: undefined; // so we can check this to see if the store topic is a playground topic
@@ -54,7 +46,8 @@ export const playgroundUsername = "me.";
 
 export interface TopicStoreState {
   topic: StoreTopic;
-  diagrams: Record<string, Diagram>;
+  nodes: Node[];
+  edges: Edge[];
   userScores: UserScores;
   activeTableProblemId: string | null;
   activeClaimTreeId: string | null;
@@ -63,7 +56,8 @@ export interface TopicStoreState {
 
 export const initialState: TopicStoreState = {
   topic: { id: undefined, title: "", description: "" },
-  diagrams: initialDiagrams,
+  nodes: [buildNode({ type: "problem" })],
+  edges: [],
   userScores: {},
   activeTableProblemId: null,
   activeClaimTreeId: null,
@@ -82,7 +76,7 @@ export const useTopicStore = createWithEqualityFn<TopicStoreState>()(
         devtools(() => initialState),
         {
           name: topicStorePlaygroundName,
-          version: 17,
+          version: 18,
           migrate: migrate,
           skipHydration: true,
         }
@@ -92,22 +86,19 @@ export const useTopicStore = createWithEqualityFn<TopicStoreState>()(
   Object.is // using `createWithEqualityFn` so that we can do shallow or deep diffs in hooks that return new arrays/objects so that we can avoid extra renders
 );
 
-export const useFilteredDiagram = (diagramId: string) => {
+export const useTopicDiagram = (): Diagram => {
   return useTopicStore((state) => {
-    const diagram = getDiagramOrThrow(state, diagramId);
-    return filterHiddenComponents(diagram, getClaimTrees(state), state.showImpliedEdges);
+    const topicGraph = { nodes: state.nodes, edges: state.edges };
+    const topicDiagram = getTopicDiagram(topicGraph);
+    const claimEdges = state.edges.filter((edge) => claimRelationNames.includes(edge.label));
+    return filterHiddenComponents(topicDiagram, claimEdges, state.showImpliedEdges);
   });
 };
 
-export const useDiagramType = (diagramId: string) => {
+export const useClaimTree = (arguedDiagramPartId: string): Diagram => {
   return useTopicStore((state) => {
-    // Zombie child issue, see https://github.com/amelioro/ameliorate/blob/main/docs/state-management.md#zombie-child-issue
-    // batchedUpdates isn't necessary because react already batches updates as of react 18
-    // Batching doesn't fix this though because the error isn't when rendering, it's when checking the store's comparers
-    const diagram = getDiagram(state, diagramId);
-    if (!diagram) return null;
-
-    return diagram.type;
+    const topicGraph = { nodes: state.nodes, edges: state.edges };
+    return getClaimTree(topicGraph, arguedDiagramPartId);
   });
 };
 
@@ -115,8 +106,7 @@ export const useActiveArguedDiagramPart = () => {
   return useTopicStore((state) => {
     if (!state.activeClaimTreeId) return null;
 
-    const topicDiagram = getTopicDiagram(state);
-    return findGraphPart(state.activeClaimTreeId, topicDiagram);
+    return findGraphPart(state.activeClaimTreeId, state.nodes, state.edges);
   });
 };
 
@@ -124,8 +114,7 @@ export const useActiveTableProblemNode = () => {
   return useTopicStore((state) => {
     if (!state.activeTableProblemId) return null;
 
-    const topicDiagram = getTopicDiagram(state);
-    return findNode(state.activeTableProblemId, topicDiagram);
+    return findNode(state.activeTableProblemId, state.nodes);
   });
 };
 
@@ -136,11 +125,15 @@ export const useIsTableActive = () => {
 };
 
 export const useClaimTreesWithExplicitClaims = () => {
-  return useTopicStore((state) =>
-    Object.entries(state.diagrams)
-      .filter(([id, diagram]) => id !== topicDiagramId && diagram.nodes.length > 1)
-      .map(([id, diagram]) => [id, getDiagramTitle(diagram)] as [string, string])
-  );
+  return useTopicStore((state) => {
+    const rootNodes = state.nodes.filter(
+      (node) => node.type === "rootClaim" && state.edges.some((edge) => edge.source === node.id)
+    );
+
+    return rootNodes.map(
+      (node) => [node.data.arguedDiagramPartId, node.data.label] as [string, string]
+    );
+  });
 };
 
 export const useShowImpliedEdges = () => {

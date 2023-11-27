@@ -5,12 +5,7 @@ import { type EdgeSelectionChange, type NodeSelectionChange } from "reactflow";
 import { errorWithData } from "../../../common/errorHandling";
 import { GraphPart, type Node, Score, findGraphPart, findNode } from "../utils/diagram";
 import { useTopicStore } from "./store";
-import {
-  getActiveDiagram,
-  getDiagram,
-  getDiagramOrThrow,
-  setSelected as setSelectedUtil,
-} from "./utils";
+import { getActiveDiagram, setSelected as setSelectedUtil } from "./utils";
 
 // score setting is way more work than it needs to be because one score can live in multiple places:
 // - on the graphPart
@@ -26,22 +21,23 @@ export const setScore = (username: string, graphPartId: string, score: Score) =>
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   // update parent graphPart's score if this is a RootClaim
-  const activeDiagram = getActiveDiagram(state);
-  const graphPart = findGraphPart(graphPartId, activeDiagram);
+  const graphPart = findGraphPart(graphPartId, state.nodes, state.edges);
   if (graphPart.type === "rootClaim") {
+    if (graphPart.data.arguedDiagramPartId === undefined)
+      throw errorWithData("no arguedDiagramPartId on root claim", graphPart);
+
     /* eslint-disable functional/immutable-data, no-param-reassign */
-    set(state.userScores, [username, activeDiagram.id], score);
+    set(state.userScores, [username, graphPart.data.arguedDiagramPartId], score);
     /* eslint-enable functional/immutable-data, no-param-reassign */
   }
 
   // update implicit child claim's score if it exists
-  if (getDiagram(state, graphPartId)) {
-    const claimTree = getDiagramOrThrow(state, graphPartId);
-    const rootClaim = claimTree.nodes.find((node) => node.type === "rootClaim");
-    if (!rootClaim) throw errorWithData("child claim not found", claimTree);
-
+  const implicitRootClaim = state.nodes.find(
+    (node) => node.data.arguedDiagramPartId === graphPartId
+  );
+  if (implicitRootClaim) {
     /* eslint-disable functional/immutable-data, no-param-reassign */
-    set(state.userScores, [username, rootClaim.id], score);
+    set(state.userScores, [username, implicitRootClaim.id], score);
     /* eslint-enable functional/immutable-data, no-param-reassign */
   }
 
@@ -51,8 +47,7 @@ export const setScore = (username: string, graphPartId: string, score: Score) =>
 export const setNodeLabel = (node: Node, value: string) => {
   const state = createDraft(useTopicStore.getState());
 
-  const diagram = getDiagramOrThrow(state, node.data.diagramId);
-  const foundNode = findNode(node.id, diagram);
+  const foundNode = findNode(node.id, state.nodes);
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   foundNode.data.label = value;
@@ -64,8 +59,7 @@ export const setNodeLabel = (node: Node, value: string) => {
 export const setGraphPartNotes = (graphPart: GraphPart, value: string) => {
   const state = createDraft(useTopicStore.getState());
 
-  const diagram = getDiagramOrThrow(state, graphPart.data.diagramId);
-  const foundGraphPart = findGraphPart(graphPart.id, diagram);
+  const foundGraphPart = findGraphPart(graphPart.id, state.nodes, state.edges);
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   foundGraphPart.data.notes = value;
@@ -77,10 +71,8 @@ export const setGraphPartNotes = (graphPart: GraphPart, value: string) => {
 export const setSelected = (selectChanges: NodeSelectionChange[] | EdgeSelectionChange[]) => {
   const state = createDraft(useTopicStore.getState());
 
-  const activeDiagram = getActiveDiagram(state);
-
   selectChanges.forEach((selectChange) => {
-    const graphPart = findGraphPart(selectChange.id, activeDiagram);
+    const graphPart = findGraphPart(selectChange.id, state.nodes, state.edges);
 
     /* eslint-disable functional/immutable-data, no-param-reassign */
     graphPart.selected = selectChange.selected;
@@ -107,8 +99,7 @@ export const setSelectedGraphPart = (graphPartId: string) => {
 export const finishAddingNode = (nodeId: string) => {
   const state = createDraft(useTopicStore.getState());
 
-  const activeDiagram = getActiveDiagram(state);
-  const node = findNode(nodeId, activeDiagram);
+  const node = findNode(nodeId, state.nodes);
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   node.data.newlyAdded = false;

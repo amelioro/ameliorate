@@ -1,7 +1,6 @@
-import { Cancel } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import isEmpty from "lodash/isEmpty";
-import { ComponentType, useEffect } from "react";
+import { ComponentType, createContext, useEffect, useState } from "react";
 import {
   Background,
   BackgroundVariant,
@@ -19,14 +18,13 @@ import { useSessionUser } from "../../../common/hooks";
 import { useViewportUpdater } from "../../hooks/flowHooks";
 import { setSelected } from "../../store/actions";
 import { connectNodes, reconnectEdge } from "../../store/createDeleteActions";
-import { useFilteredDiagram } from "../../store/store";
 import { useUserCanEditTopicData } from "../../store/userHooks";
-import { closeClaimTree } from "../../store/viewActions";
-import { type Edge, type Node } from "../../utils/diagram";
+import { Diagram as DiagramData, type Edge, type Node } from "../../utils/diagram";
+import { Orientation } from "../../utils/layout";
 import { FlowNodeType } from "../../utils/node";
 import { FlowEdge } from "../Edge/FlowEdge";
 import { FlowNode } from "../Node/FlowNode";
-import { PositionedCloseButton, StyledReactFlow } from "./Diagram.styles";
+import { StyledReactFlow } from "./Diagram.styles";
 
 const buildNodeComponent = (type: FlowNodeType) => {
   // eslint-disable-next-line react/display-name -- react flow dynamically creates these components without name anyway
@@ -69,47 +67,38 @@ const onGraphPartChange = (changes: (NodeChange | EdgeChange)[]) => {
   if (selectChanges.length > 0) setSelected(selectChanges);
 };
 
-interface DiagramProps {
-  diagramId: string;
-}
+const DiagramWithoutProvider = ({ nodes, edges, type }: DiagramData) => {
+  const [topicNewlyLoaded, setTopicNewlyLoaded] = useState(false);
 
-const DiagramWithoutProvider = ({ diagramId }: DiagramProps) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
-  const diagram = useFilteredDiagram(diagramId);
   const { fitViewForNodes, moveViewportToIncludeNode } = useViewportUpdater();
-
-  const nodes = diagram.nodes;
-  const edges = diagram.edges;
-
-  const showCloseButton = diagram.type === "claim";
-  const closeButton = (
-    <PositionedCloseButton onClick={() => closeClaimTree()} color="primary">
-      <Cancel />
-    </PositionedCloseButton>
-  );
 
   useEffect(() => {
     const unbindAdd = emitter.on("addNode", (node) => {
-      if (node.data.diagramId !== diagramId) return;
+      if (!nodes.map((node) => node.id).includes(node.id)) return;
       moveViewportToIncludeNode(node);
     });
-    const unbindLoad = emitter.on("loadedTopicData", (diagram) => fitViewForNodes(diagram.nodes));
+    const unbindLoad = emitter.on("loadedTopicData", () => setTopicNewlyLoaded(true));
 
     return () => {
       unbindAdd();
       unbindLoad();
     };
-  }, [diagramId, fitViewForNodes, moveViewportToIncludeNode]);
+  }, [nodes, fitViewForNodes, moveViewportToIncludeNode]);
+
+  if (topicNewlyLoaded) {
+    // TODO(bug): diagram flickers with newly-loaded nodes before fitting to view
+    fitViewForNodes(nodes);
+    setTopicNewlyLoaded(false);
+  }
 
   const emptyText = <Typography variant="h5">Right-click to create</Typography>;
 
   return (
     <>
-      {showCloseButton && closeButton}
-
       <StyledReactFlow
-        id={diagramId} // need unique ids to use multiple flow instances on the same page
+        id={type} // need unique ids to use multiple flow instances on the same page
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}
@@ -143,9 +132,14 @@ const DiagramWithoutProvider = ({ diagramId }: DiagramProps) => {
   );
 };
 
-export const Diagram = (props: DiagramProps) => (
-  // wrap in provider so we can use react-flow state https://reactflow.dev/docs/api/react-flow-provider/
-  <ReactFlowProvider>
-    <DiagramWithoutProvider {...props} />
-  </ReactFlowProvider>
+export const DiagramContext = createContext<{ orientation: Orientation }>({ orientation: "DOWN" });
+
+export const Diagram = (diagram: DiagramData) => (
+  // custom provider so that nodes can get the orientation based on the diagram they're in
+  <DiagramContext.Provider value={{ orientation: diagram.orientation }}>
+    {/* wrap in provider so we can use react-flow state https://reactflow.dev/docs/api/react-flow-provider/ */}
+    <ReactFlowProvider>
+      <DiagramWithoutProvider {...diagram} />
+    </ReactFlowProvider>
+  </DiagramContext.Provider>
 );

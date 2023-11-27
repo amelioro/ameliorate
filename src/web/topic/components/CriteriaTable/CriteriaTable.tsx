@@ -18,7 +18,7 @@ import { useSessionUser } from "../../../common/hooks";
 import { useCriterionSolutionEdges, useNode, useNodeChildren } from "../../store/nodeHooks";
 import { useUserCanEditTopicData } from "../../store/userHooks";
 import { closeTable } from "../../store/viewActions";
-import { Edge, Node, topicDiagramId } from "../../utils/diagram";
+import { Edge, Node } from "../../utils/diagram";
 import { getConnectingEdge } from "../../utils/edge";
 import { EdgeCell } from "../CriteriaTable/EdgeCell";
 import { NodeCell } from "../CriteriaTable/NodeCell";
@@ -96,9 +96,9 @@ export const CriteriaTable = ({ problemNodeId }: Props) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const [useSolutionsForColumns, setUseSolutionsForColumns] = useState<boolean>(true);
-  const problemNode = useNode(problemNodeId, topicDiagramId);
-  const nodeChildren = useNodeChildren(problemNodeId, topicDiagramId);
-  const criterionSolutionEdges = useCriterionSolutionEdges(problemNodeId, topicDiagramId);
+  const problemNode = useNode(problemNodeId);
+  const nodeChildren = useNodeChildren(problemNodeId);
+  const criterionSolutionEdges = useCriterionSolutionEdges(problemNodeId);
 
   if (!problemNode) return <Loading />;
 

@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { IconButton } from "@mui/material";
 import { ReactFlow } from "reactflow";
 import "reactflow/dist/style.css";
 
@@ -36,10 +35,4 @@ export const StyledReactFlow = styled(ReactFlow)`
   svg.react-flow__edges[style*="z-index:"][style*="1000"] {
     z-index: ${zIndex.svgWhenAnyGraphPartSelected} !important; // z-index on this is set via library's inline style, so need to use !important to override
   }
-`;
-
-export const PositionedCloseButton = styled(IconButton)`
-  position: absolute;
-  z-index: 1;
-  right: 0;
 `;

@@ -29,4 +29,13 @@ export const edgeSchema = z.object({
 
 export type Edge = z.infer<typeof edgeSchema>;
 
+export const topicRelationNames: RelationName[] = [
+  "causes",
+  "addresses",
+  "createdBy",
+  "has",
+  "criterionFor",
+  "creates",
+  "embodies",
+];
 export const claimRelationNames: RelationName[] = ["supports", "critiques"];

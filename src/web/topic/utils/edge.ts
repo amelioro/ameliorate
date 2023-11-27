@@ -1,6 +1,6 @@
-import { RelationName } from "../../../common/edge";
+import { RelationName, claimRelationNames } from "../../../common/edge";
 import { hasClaims } from "./claim";
-import { Diagram, Edge, Node, RelationDirection, findNode, topicDiagramId } from "./diagram";
+import { Diagram, Edge, Graph, Node, RelationDirection, findNode } from "./diagram";
 import { FlowNodeType, children, claimNodeTypes, components, parents } from "./node";
 
 // Assumes that we're always pointing from child to parent.
@@ -131,10 +131,10 @@ export const addableRelationsFrom = (nodeType: FlowNodeType, addingAs: RelationD
   return formattedRelations;
 };
 
-export const canCreateEdge = (diagram: Diagram, parent: Node, child: Node) => {
+export const canCreateEdge = (topicGraph: Graph, parent: Node, child: Node) => {
   const relation = getRelation(parent.type, child.type);
 
-  const existingEdge = diagram.edges.find((edge) => {
+  const existingEdge = topicGraph.edges.find((edge) => {
     return (
       (edge.source === parent.id && edge.target === child.id) ||
       (edge.source === child.id && edge.target === parent.id)
@@ -152,7 +152,8 @@ export const canCreateEdge = (diagram: Diagram, parent: Node, child: Node) => {
   }
 
   const secondParentForClaim =
-    claimNodeTypes.includes(child.type) && diagram.edges.find((edge) => edge.target === child.id);
+    claimNodeTypes.includes(child.type) &&
+    topicGraph.edges.find((edge) => edge.target === child.id);
   if (secondParentForClaim) {
     console.log("cannot connect nodes: claims are in a tree so can't have multiple parents");
     return false;
@@ -166,16 +167,16 @@ export const canCreateEdge = (diagram: Diagram, parent: Node, child: Node) => {
   return true;
 };
 
-export const parentNode = (edge: Edge, diagram: Diagram) => {
-  return findNode(edge.source, diagram);
+export const parentNode = (edge: Edge, nodes: Node[]) => {
+  return findNode(edge.source, nodes);
 };
 
-export const childNode = (edge: Edge, diagram: Diagram) => {
-  return findNode(edge.target, diagram);
+export const childNode = (edge: Edge, nodes: Node[]) => {
+  return findNode(edge.target, nodes);
 };
 
-export const nodes = (edge: Edge, diagram: Diagram) => {
-  return [parentNode(edge, diagram), childNode(edge, diagram)];
+export const nodes = (edge: Edge, nodes: Node[]) => {
+  return [parentNode(edge, nodes), childNode(edge, nodes)];
 };
 
 export const getConnectingEdge = (node1: Node, node2: Node, edges: Edge[]) => {
@@ -189,9 +190,9 @@ export const getConnectingEdge = (node1: Node, node2: Node, edges: Edge[]) => {
 };
 
 // see algorithm pseudocode & example at https://github.com/amelioro/ameliorate/issues/66#issuecomment-1465078133
-export const isEdgeAShortcut = (edge: Edge, diagram: Diagram) => {
-  const edgeParent = parentNode(edge, diagram);
-  const edgeChild = childNode(edge, diagram);
+export const isEdgeAShortcut = (edge: Edge, topicGraph: Graph) => {
+  const edgeParent = parentNode(edge, topicGraph.nodes);
+  const edgeChild = childNode(edge, topicGraph.nodes);
 
   return shortcutRelations.some((shortcutRelation) => {
     const edgeCouldBeAShortcut =
@@ -200,8 +201,8 @@ export const isEdgeAShortcut = (edge: Edge, diagram: Diagram) => {
 
     if (!edgeCouldBeAShortcut) return false;
 
-    const childrenOfParent = children(edgeParent, diagram);
-    const parentsOfChild = parents(edgeChild, diagram);
+    const childrenOfParent = children(edgeParent, topicGraph);
+    const parentsOfChild = parents(edgeChild, topicGraph);
 
     const detourNodeAsChild = childrenOfParent.find(
       (child) => child.type === shortcutRelation.detourNodeType
@@ -222,14 +223,14 @@ export const isEdgeAShortcut = (edge: Edge, diagram: Diagram) => {
  * note: does not check if component node is showing - this is so that hidden implied edges
  * can still be shown when a component node is hidden
  */
-export const isEdgeImpliedByComposition = (edge: Edge, diagram: Diagram) => {
-  const edgeParent = parentNode(edge, diagram);
-  const edgeChild = childNode(edge, diagram);
+export const isEdgeImpliedByComposition = (edge: Edge, topicGraph: Graph) => {
+  const edgeParent = parentNode(edge, topicGraph.nodes);
+  const edgeChild = childNode(edge, topicGraph.nodes);
 
   // check implied through parent
-  const componentsOfParent = components(edgeParent, diagram);
+  const componentsOfParent = components(edgeParent, topicGraph);
   const impliedThroughParentComponent = componentsOfParent.some((component) => {
-    return diagram.edges.some(
+    return topicGraph.edges.some(
       (edge) =>
         edge.source === component.id && edge.label === edge.label && edge.target === edgeChild.id
     );
@@ -238,9 +239,9 @@ export const isEdgeImpliedByComposition = (edge: Edge, diagram: Diagram) => {
   if (impliedThroughParentComponent) return true;
 
   // check implied through child
-  const componentsOfChild = components(edgeChild, diagram);
+  const componentsOfChild = components(edgeChild, topicGraph);
   const impliedThroughChildComponent = componentsOfChild.some((component) => {
-    return diagram.edges.some(
+    return topicGraph.edges.some(
       (edge) =>
         edge.target === component.id && edge.label === edge.label && edge.source === edgeParent.id
     );
@@ -257,9 +258,9 @@ export const isEdgeImpliedByComposition = (edge: Edge, diagram: Diagram) => {
 // We don't want users to apply scores and then never see them again due to an implied edge being
 // hidden. The button to show implied edges should reduce this pain, but maybe we need a better view
 // to reduce the need to hide implied edges?
-export const isEdgeImplied = (edge: Edge, displayDiagram: Diagram, claimTrees: Diagram[]) => {
-  if (displayDiagram.id !== topicDiagramId) return false;
-  if (hasClaims(edge, displayDiagram, claimTrees)) return false;
+export const isEdgeImplied = (edge: Edge, displayDiagram: Diagram, claimEdges: Edge[]) => {
+  if (claimRelationNames.includes(edge.label)) return false; // claims can't be implied
+  if (hasClaims(edge, claimEdges)) return false;
 
   return isEdgeAShortcut(edge, displayDiagram) || isEdgeImpliedByComposition(edge, displayDiagram);
 };

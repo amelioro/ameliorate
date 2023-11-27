@@ -4,7 +4,7 @@ import { Node } from "../../../topic/utils/diagram";
 import { CloseOnClickMenuItem } from "./CloseOnClickMenuItem";
 
 export const ShowEffectsMenuItem = ({ node }: { node: Node }) => {
-  const nodeParents = useNodeParents(node.id, node.data.diagramId);
+  const nodeParents = useNodeParents(node.id);
 
   const effects = nodeParents.filter((child) => child.type === "effect");
 

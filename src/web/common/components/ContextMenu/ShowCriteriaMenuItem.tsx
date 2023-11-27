@@ -4,7 +4,7 @@ import { Node } from "../../../topic/utils/diagram";
 import { CloseOnClickMenuItem } from "./CloseOnClickMenuItem";
 
 export const ShowCriteriaMenuItem = ({ node }: { node: Node }) => {
-  const nodeChildren = useNodeChildren(node.id, node.data.diagramId);
+  const nodeChildren = useNodeChildren(node.id);
 
   const criteria = nodeChildren.filter((child) => child.type === "criterion");
 

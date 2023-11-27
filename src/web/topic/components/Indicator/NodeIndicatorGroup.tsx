@@ -8,7 +8,7 @@ import { Score } from "../Score/Score";
 export const NodeIndicatorGroup = ({ node }: { node: Node }) => {
   return (
     <Box display="flex" margin="2px">
-      <CriteriaTableIndicator nodeId={node.id} diagramId={node.data.diagramId} />
+      <CriteriaTableIndicator nodeId={node.id} />
       <NodeClaimIndicator node={node} />
       <Score graphPartId={node.id} />
     </Box>

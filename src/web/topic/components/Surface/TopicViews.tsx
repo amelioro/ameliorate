@@ -106,11 +106,11 @@ export const TopicViews = () => {
               </NestedListItemButton>
             </ListItem>
           )}
-          {claimTreeIdentifiers.map(([diagramId, diagramTitle]) => (
-            <ListItem key={diagramId}>
+          {claimTreeIdentifiers.map(([arguedDiagramPartId, diagramTitle]) => (
+            <ListItem key={arguedDiagramPartId}>
               <NestedListItemButton
-                selected={activeArguedDiagramPart?.id === diagramId}
-                onClick={() => viewClaimTree(diagramId)}
+                selected={activeArguedDiagramPart?.id === arguedDiagramPartId}
+                onClick={() => viewClaimTree(arguedDiagramPartId)}
               >
                 <ListItemIcon>
                   <Article />

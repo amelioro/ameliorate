@@ -33,8 +33,8 @@ interface Props {
 }
 
 export const StandaloneEdge = ({ edge }: Props) => {
-  const sourceNode = useNode(edge.source, edge.data.diagramId);
-  const targetNode = useNode(edge.target, edge.data.diagramId);
+  const sourceNode = useNode(edge.source);
+  const targetNode = useNode(edge.target);
 
   if (!sourceNode || !targetNode) {
     return <p>Could not find edge data!</p>;
