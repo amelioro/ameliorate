@@ -5,7 +5,10 @@ import { getActiveDiagram } from "./utils";
 export const useExplicitClaimCount = (graphPartId: string) => {
   return useTopicStore((state) => {
     return state.nodes.filter(
-      (node) => claimNodeTypes.includes(node.type) && node.data.arguedDiagramPartId === graphPartId
+      (node) =>
+        claimNodeTypes.includes(node.type) &&
+        node.type !== "rootClaim" &&
+        node.data.arguedDiagramPartId === graphPartId
     ).length;
   });
 };
