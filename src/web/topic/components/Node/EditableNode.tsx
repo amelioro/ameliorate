@@ -17,7 +17,6 @@ import {
   YEdgeDiv,
 } from "./EditableNode.styles";
 
-// TODO: should not re-render when node position changes
 export const EditableNode = ({ node, className = "" }: { node: Node; className?: string }) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
