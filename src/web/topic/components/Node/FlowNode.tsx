@@ -1,12 +1,13 @@
 import { Global } from "@emotion/react";
+import { motion } from "framer-motion";
+import { useContext, useEffect, useState } from "react";
 
 import { useSessionUser } from "../../../common/hooks";
 import { useIsEdgeSelected, useIsNeighborSelected } from "../../store/nodeHooks";
-import { useDiagramType } from "../../store/store";
 import { useUserCanEditTopicData } from "../../store/userHooks";
-import { Node, orientations } from "../../utils/diagram";
+import { Node } from "../../utils/diagram";
 import { FlowNodeType } from "../../utils/node";
-import { NodeProps } from "../Diagram/Diagram";
+import { DiagramContext, NodeProps } from "../Diagram/Diagram";
 import { Spotlight } from "../Diagram/Diagram.styles";
 import {
   AddNodeButtonGroupChild,
@@ -21,22 +22,20 @@ const convertToNode = (flowNode: NodeProps): Node => {
   return {
     id: flowNode.id,
     data: flowNode.data,
-    position: { x: flowNode.xPos, y: flowNode.yPos },
     selected: flowNode.selected,
     type: flowNode.type as FlowNodeType, // we always pass a NodeType from the diagram, but I'm not sure how to override react-flow's type to tell it that
   };
 };
 
 export const FlowNode = (flowNode: NodeProps) => {
+  const [animated, setAnimated] = useState(false);
+
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
-  const diagramType = useDiagramType(flowNode.data.diagramId);
-  const isNeighborSelected = useIsNeighborSelected(flowNode.id, flowNode.data.diagramId);
-  const isEdgeSelected = useIsEdgeSelected(flowNode.id, flowNode.data.diagramId);
+  const isNeighborSelected = useIsNeighborSelected(flowNode.id);
+  const isEdgeSelected = useIsEdgeSelected(flowNode.id);
 
-  if (!diagramType) return <></>;
-
-  const orientation = orientations[diagramType];
+  const orientation = useContext(DiagramContext).orientation;
   const node = convertToNode(flowNode);
 
   const spotlight: Spotlight = node.selected
@@ -44,6 +43,12 @@ export const FlowNode = (flowNode: NodeProps) => {
     : isNeighborSelected || isEdgeSelected
     ? "secondary"
     : "normal";
+
+  useEffect(() => {
+    // hack to avoid animation on first render; for some reason nodes were animating from position 0
+    // to their initial position
+    setAnimated(true);
+  }, []);
 
   return (
     <>
@@ -62,7 +67,14 @@ export const FlowNode = (flowNode: NodeProps) => {
         />
       )}
 
-      <StyledEditableNode node={node} spotlight={spotlight} />
+      <motion.div
+        // create new component when animated changes, see issue workaround https://github.com/framer/motion/issues/2238#issue-1809290539
+        key={node.id.concat(animated.toString())}
+        layout={animated}
+        style={{ pointerEvents: "none" }}
+      >
+        <StyledEditableNode node={node} spotlight={spotlight} />
+      </motion.div>
 
       {userCanEditTopicData && (
         <AddNodeButtonGroupChild

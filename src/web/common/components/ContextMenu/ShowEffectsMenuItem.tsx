@@ -4,7 +4,7 @@ import { Node } from "../../../topic/utils/diagram";
 import { CloseOnClickMenuItem } from "./CloseOnClickMenuItem";
 
 export const ShowEffectsMenuItem = ({ node }: { node: Node }) => {
-  const nodeParents = useNodeParents(node.id, node.data.diagramId);
+  const nodeParents = useNodeParents(node.id);
 
   const effects = nodeParents.filter((child) => child.type === "effect");
 
@@ -16,7 +16,7 @@ export const ShowEffectsMenuItem = ({ node }: { node: Node }) => {
 
   return (
     <CloseOnClickMenuItem
-      onClick={() => void toggleShowNeighbors(node.id, "effect", "parent", !allEffectsShown)}
+      onClick={() => toggleShowNeighbors(node.id, "effect", "parent", !allEffectsShown)}
     >
       {allEffectsShown ? "Hide effects" : "Show effects"}
     </CloseOnClickMenuItem>

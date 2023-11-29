@@ -3,7 +3,7 @@ import { StorageValue } from "zustand/middleware";
 import { errorWithData } from "../../../common/errorHandling";
 import { emitter } from "../../common/event";
 import { TopicStoreState, initialState, playgroundUsername, useTopicStore } from "./store";
-import { getTopicDiagram, isPlaygroundTopic } from "./utils";
+import { isPlaygroundTopic } from "./utils";
 
 export const getPersistState = () => {
   const persistOptions = useTopicStore.persist.getOptions();
@@ -35,7 +35,7 @@ export const setTopicData = (state: TopicStoreState, sessionUsername?: string) =
 
   useTopicStore.setState({ ...state, topic, userScores }, false, "setState");
 
-  emitter.emit("loadedTopicData", getTopicDiagram(useTopicStore.getState()));
+  emitter.emit("loadedTopicData");
 };
 
 /**
@@ -47,7 +47,7 @@ export const resetTopicData = () => {
   const topic = useTopicStore.getState().topic;
   useTopicStore.setState({ ...initialState, topic }, false, "resetState");
 
-  emitter.emit("loadedTopicData", getTopicDiagram(useTopicStore.getState()));
+  emitter.emit("loadedTopicData");
 };
 
 export const undo = () => {

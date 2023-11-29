@@ -35,7 +35,7 @@ const tooltipItems = (
             key={`${typeLabel}-${shownLabel}`}
           >
             <IconButton
-              onClick={() => void toggleShowNeighbors(parentNodeId, nodeType, direction, !shown)}
+              onClick={() => toggleShowNeighbors(parentNodeId, nodeType, direction, !shown)}
             >
               {shown ? <Visibility /> : <VisibilityOff />}
             </IconButton>
@@ -57,7 +57,7 @@ interface Props {
 }
 
 export const NodeHandle = ({ node, direction, orientation }: Props) => {
-  const directedNeighbors = useNeighbors(node.id, direction, node.data.diagramId);
+  const directedNeighbors = useNeighbors(node.id, direction);
 
   const shownNodesTooltips = tooltipItems(node.id, directedNeighbors, direction, true);
   const hiddenNodesTooltips = tooltipItems(node.id, directedNeighbors, direction, false);

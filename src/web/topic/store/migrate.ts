@@ -23,6 +23,8 @@ export const migrate = (persistedState: any, version: number) => {
     migrate_14_to_15,
     migrate_15_to_16,
     migrate_16_to_17,
+    migrate_17_to_18,
+    migrate_18_to_19,
   ];
 
   let state = persistedState;
@@ -392,6 +394,67 @@ const migrate_16_to_17 = (state: FromState16) => {
     diagram.edges.forEach((edge) => {
       (edge as unknown as ToEdge17).type = "FlowEdge";
     });
+  });
+
+  return state;
+};
+
+interface Diagram17 {
+  nodes: { data: { diagramId?: string } }[];
+  edges: { data: { diagramId?: string } }[];
+}
+
+interface FromState17 {
+  diagrams?: Record<string, Diagram17>;
+}
+
+interface GraphPart18 {
+  data: { arguedDiagramPartId?: string };
+}
+
+interface ToState18 {
+  nodes: GraphPart18[];
+  edges: GraphPart18[];
+}
+
+const migrate_17_to_18 = (state: FromState17) => {
+  // - set graphPart.data.arguedDiagramPartId
+  // - delete graphPart.data.diagramId
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  Object.values(state.diagrams!).forEach((diagram) => {
+    [...diagram.nodes, ...diagram.edges].forEach((graphPart) => {
+      const diagramId = graphPart.data.diagramId;
+      if (diagramId !== "root") {
+        (graphPart as GraphPart18).data.arguedDiagramPartId = diagramId;
+      }
+
+      delete graphPart.data.diagramId;
+    });
+  });
+
+  // - create nodes and edges from topic diagram and each claim tree into single list of nodes and edges
+  // - delete diagrams
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  (state as unknown as ToState18).nodes = Object.values(state.diagrams!).flatMap(
+    (diagram) => diagram.nodes as GraphPart18[]
+  );
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  (state as unknown as ToState18).edges = Object.values(state.diagrams!).flatMap(
+    (diagram) => diagram.edges as GraphPart18[]
+  );
+  delete state.diagrams;
+
+  return state;
+};
+
+interface FromState18 {
+  nodes: { position?: { x: number; y: number } }[];
+}
+
+const migrate_18_to_19 = (state: FromState18) => {
+  // position is moved from store to diagram component
+  state.nodes.forEach((node) => {
+    delete node.position;
   });
 
   return state;

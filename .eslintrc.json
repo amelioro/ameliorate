@@ -14,9 +14,8 @@
       "files": ["*.ts", "*.tsx"],
       "extends": [
         "plugin:@typescript-eslint/eslint-recommended",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:@typescript-eslint/recommended-requiring-type-checking",
-        "plugin:@typescript-eslint/strict"
+        "plugin:@typescript-eslint/strict-type-checked",
+        "plugin:@typescript-eslint/stylistic-type-checked"
       ],
       "plugins": ["@typescript-eslint"],
       "parser": "@typescript-eslint/parser",
@@ -27,10 +26,17 @@
       "rules": {
         "@typescript-eslint/member-ordering": "error",
         "@typescript-eslint/switch-exhaustiveness-check": "error",
+        "@typescript-eslint/no-confusing-void-expression": [
+          "error",
+          { "ignoreArrowShorthand": true }
+        ],
+        // annoying when wanting to overspecify different types that happen to be the same but could become different
+        "@typescript-eslint/no-duplicate-type-constituents": "off",
         // annoying to have to dupe this with the js version
         "@typescript-eslint/no-unused-vars": [
           "error",
           {
+            "args": "all",
             "argsIgnorePattern": "^_",
             "varsIgnorePattern": "^_"
           }
@@ -45,11 +51,11 @@
         "enforceParameterCount": false
       }
     ],
-    "functional/immutable-data": "error",
-    "functional/no-class": "error",
+    "functional/immutable-data": ["error", { "ignoreIdentifierPattern": ["router"] }],
+    "functional/no-classes": "error",
     "functional/no-let": "error",
-    "functional/no-loop-statement": "error",
-    "functional/no-this-expression": "error",
+    "functional/no-loop-statements": "error",
+    "functional/no-this-expressions": "error",
     "import/order": [
       "error",
       {

@@ -178,7 +178,7 @@ export const topicRouter = router({
         if (opts.input.scoresToCreate.length > 0)
           await tx.userScore.createMany({ data: opts.input.scoresToCreate });
 
-        /* eslint-disable functional/no-loop-statement -- seems like functional methods don't work with promises nicely https://stackoverflow.com/questions/37576685/using-async-await-with-a-foreach-loop#comment65277758_37576787 */
+        /* eslint-disable functional/no-loop-statements -- seems like functional methods don't work with promises nicely https://stackoverflow.com/questions/37576685/using-async-await-with-a-foreach-loop#comment65277758_37576787 */
         for (const node of opts.input.nodesToUpdate)
           await tx.node.update({ where: { id: node.id }, data: node });
         for (const edge of opts.input.edgesToUpdate)
@@ -191,12 +191,12 @@ export const topicRouter = router({
             data: score,
           });
         }
-        /* eslint-enable functional/no-loop-statement */
+        /* eslint-enable functional/no-loop-statements */
 
         // deleting a graph part in the UI will send over deletions for other user's scores
         // this should be allowed, and that is why we loop over scores here - deleteMany wouldn't
         // be able to `where` for multiple user x graph part combinations
-        // eslint-disable-next-line functional/no-loop-statement
+        // eslint-disable-next-line functional/no-loop-statements
         for (const score of opts.input.scoresToDelete) {
           await tx.userScore.delete({
             where: {

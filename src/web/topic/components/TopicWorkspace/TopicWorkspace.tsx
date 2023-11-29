@@ -3,9 +3,9 @@ import { Box, useMediaQuery } from "@mui/material";
 
 import { ContextMenu } from "../../../common/components/ContextMenu/ContextMenu";
 import { useActiveArguedDiagramPart, useActiveTableProblemNode } from "../../store/store";
-import { topicDiagramId } from "../../utils/diagram";
 import { CriteriaTable } from "../CriteriaTable/CriteriaTable";
-import { Diagram } from "../Diagram/Diagram";
+import { ClaimTree } from "../Diagram/ClaimTree";
+import { TopicDiagram } from "../Diagram/TopicDiagram";
 import { TopicPane } from "../Surface/TopicPane";
 import { TopicToolbar } from "../Surface/TopicToolbar";
 
@@ -32,17 +32,16 @@ export const TopicWorkspace = () => {
 
         <Box height="100%" flex="1" position="relative">
           <Box width="100%" height="100%" position="absolute">
-            {tableProblemNode ? (
-              <CriteriaTable problemNodeId={tableProblemNode.id} />
-            ) : (
-              <Diagram diagramId={topicDiagramId} />
-            )}
+            <>
+              {tableProblemNode && <CriteriaTable problemNodeId={tableProblemNode.id} />}
+              <TopicDiagram />
+            </>
           </Box>
 
           {arguedDiagramPart && (
             // Criteria Table has header (z-index:2); expectation: overlay the component
             <Box width="100%" height="100%" position="absolute" zIndex="2">
-              <Diagram diagramId={arguedDiagramPart.id} />
+              <ClaimTree arguedDiagramPartId={arguedDiagramPart.id} />
             </Box>
           )}
         </Box>

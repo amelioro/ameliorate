@@ -33,6 +33,15 @@ export const nodeSchema = z.object({
 
 export type Node = z.infer<typeof nodeSchema>;
 
+export const topicNodeTypes: NodeType[] = [
+  "problem",
+  "criterion",
+  "effect",
+  "solutionComponent",
+  "solution",
+];
+export const claimNodeTypes: NodeType[] = ["rootClaim", "support", "critique"];
+
 export const getNewTopicProblemNode = (topicId: number, topicTitle: string): Node => {
   return {
     id: uuid(),

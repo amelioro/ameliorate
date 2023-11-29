@@ -8,33 +8,26 @@ import { Node as ApiNode, Node } from "../../../common/node";
 import { UserScore as ApiScore } from "../../../common/userScore";
 import { UserScores as StoreScores, TopicStoreState } from "../store/store";
 import { isPlaygroundTopic } from "../store/utils";
-import {
-  Score,
-  Edge as StoreEdge,
-  Node as StoreNode,
-  buildEdge,
-  buildNode,
-  topicDiagramId,
-} from "./diagram";
+import { Score, Edge as StoreEdge, Node as StoreNode, buildEdge, buildNode } from "./diagram";
 
-export const convertToStoreNode = (apiNode: TopicNode, diagramId: string) => {
+export const convertToStoreNode = (apiNode: TopicNode) => {
   return buildNode({
     id: apiNode.id,
     label: apiNode.text,
     notes: apiNode.notes,
     type: apiNode.type,
-    diagramId: diagramId,
+    arguedDiagramPartId: apiNode.arguedDiagramPartId ?? undefined,
   });
 };
 
-export const convertToStoreEdge = (apiEdge: TopicEdge, diagramId: string) => {
+export const convertToStoreEdge = (apiEdge: TopicEdge) => {
   return buildEdge({
     id: apiEdge.id,
     notes: apiEdge.notes,
     sourceNodeId: apiEdge.sourceId,
     targetNodeId: apiEdge.targetId,
     relation: apiEdge.type,
-    diagramId,
+    arguedDiagramPartId: apiEdge.arguedDiagramPartId ?? undefined,
   });
 };
 
@@ -60,8 +53,7 @@ export const convertToApiNode = (storeNode: StoreNode, topicId: number): ApiNode
   return {
     id: storeNode.id,
     topicId: topicId,
-    arguedDiagramPartId:
-      storeNode.data.diagramId !== topicDiagramId ? storeNode.data.diagramId : null,
+    arguedDiagramPartId: storeNode.data.arguedDiagramPartId ?? null,
     type: storeNode.type,
     text: storeNode.data.label,
     notes: storeNode.data.notes,
@@ -72,8 +64,7 @@ export const convertToApiEdge = (storeEdge: StoreEdge, topicId: number): ApiEdge
   return {
     id: storeEdge.id,
     topicId: topicId,
-    arguedDiagramPartId:
-      storeEdge.data.diagramId !== topicDiagramId ? storeEdge.data.diagramId : null,
+    arguedDiagramPartId: storeEdge.data.arguedDiagramPartId ?? null,
     type: storeEdge.label,
     notes: storeEdge.data.notes,
     sourceId: storeEdge.source,
@@ -109,14 +100,8 @@ export const convertToApi = (topicStore: TopicStoreState): ApiData => {
     throw new Error("must create topic before saving topic data");
   const topicId = topicStore.topic.id;
 
-  const nodes = Object.values(topicStore.diagrams).flatMap((diagram) =>
-    diagram.nodes.map((node) => convertToApiNode(node, topicId))
-  );
-
-  const edges = Object.values(topicStore.diagrams).flatMap((diagram) =>
-    diagram.edges.map((edge) => convertToApiEdge(edge, topicId))
-  );
-
+  const nodes = topicStore.nodes.map((node) => convertToApiNode(node, topicId));
+  const edges = topicStore.edges.map((edge) => convertToApiEdge(edge, topicId));
   const userScores = convertToApiUserScores(topicStore.userScores, topicId);
 
   return { nodes, edges, userScores };

@@ -11,7 +11,7 @@ import {
 
 import { errorWithData } from "../../../common/errorHandling";
 import { NodeType } from "../../../common/node";
-import { Diagram, Node } from "./diagram";
+import { Edge, Graph, Node } from "./diagram";
 import { componentTypes } from "./edge";
 
 export const indicatorLengthRem = 1.25; // rem
@@ -67,35 +67,35 @@ export const nodeDecorations: Record<FlowNodeType, NodeDecoration> = {
 };
 
 // TODO: memoize? this could traverse a lot of nodes & edges, seems not performant
-export const parents = (node: Node, diagram: Diagram) => {
-  const parentEdges = diagram.edges.filter((edge) => edge.target === node.id);
+export const parents = (node: Node, topicGraph: Graph) => {
+  const parentEdges = topicGraph.edges.filter((edge) => edge.target === node.id);
 
   return parentEdges.map((edge) => {
-    const node = diagram.nodes.find((node) => edge.source === node.id);
-    if (!node) throw errorWithData(`node ${edge.source} not found`, diagram);
+    const node = topicGraph.nodes.find((node) => edge.source === node.id);
+    if (!node) throw errorWithData(`node ${edge.source} not found`, topicGraph);
 
     return node;
   });
 };
 
-export const children = (node: Node, diagram: Diagram) => {
-  const childEdges = diagram.edges.filter((edge) => edge.source === node.id);
+export const children = (node: Node, topicGraph: Graph) => {
+  const childEdges = topicGraph.edges.filter((edge) => edge.source === node.id);
   return childEdges.map((edge) => {
-    const node = diagram.nodes.find((node) => edge.target === node.id);
-    if (!node) throw errorWithData(`node ${edge.target} not found`, diagram);
+    const node = topicGraph.nodes.find((node) => edge.target === node.id);
+    if (!node) throw errorWithData(`node ${edge.target} not found`, topicGraph);
 
     return node;
   });
 };
 
-export const neighbors = (node: Node, diagram: Diagram) => {
-  return [...parents(node, diagram), ...children(node, diagram)];
+export const neighbors = (node: Node, topicGraph: Graph) => {
+  return [...parents(node, topicGraph), ...children(node, topicGraph)];
 };
 
-export const components = (node: Node, diagram: Diagram) => {
-  return parents(node, diagram).filter((parent) => componentTypes.includes(parent.type));
+export const components = (node: Node, topicGraph: Graph) => {
+  return parents(node, topicGraph).filter((parent) => componentTypes.includes(parent.type));
 };
 
-export const edges = (node: Node, diagram: Diagram) => {
-  return diagram.edges.filter((edge) => edge.source === node.id || edge.target === node.id);
+export const edges = (node: Node, edges: Edge[]) => {
+  return edges.filter((edge) => edge.source === node.id || edge.target === node.id);
 };

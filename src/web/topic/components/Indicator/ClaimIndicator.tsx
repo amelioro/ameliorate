@@ -4,15 +4,13 @@ import { useSessionUser } from "../../../common/hooks";
 import { useExplicitClaimCount } from "../../store/graphPartHooks";
 import { useUserCanEditTopicData } from "../../store/userHooks";
 import { viewOrCreateClaimTree } from "../../store/viewActions";
-import { GraphPartType } from "../../utils/diagram";
 import { Indicator } from "./Indicator";
 
 interface Props {
   graphPartId: string;
-  graphPartType: GraphPartType;
 }
 
-export const ClaimIndicator = ({ graphPartId, graphPartType }: Props) => {
+export const ClaimIndicator = ({ graphPartId }: Props) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const explicitClaimCount = useExplicitClaimCount(graphPartId);
@@ -30,7 +28,7 @@ export const ClaimIndicator = ({ graphPartId, graphPartType }: Props) => {
           ? (event) => {
               // prevent setting the node as selected because we're about to navigate away from this diagram
               event.stopPropagation();
-              viewOrCreateClaimTree(graphPartId, graphPartType);
+              viewOrCreateClaimTree(graphPartId);
             }
           : undefined
       }

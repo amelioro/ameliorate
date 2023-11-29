@@ -64,7 +64,7 @@ export const PieChart = ({ onClick, customData, startAngle, type = "regular" }: 
               duration: theme.transitions.duration.shortest,
             }),
             pointerEvents: "auto",
-            cursor: onClick || type === "button" ? "pointer" : "auto",
+            cursor: onClick ?? type === "button" ? "pointer" : "auto",
           })}
           labelPosition={70} // percent of radius
           startAngle={startAngle}

@@ -1,5 +1,6 @@
-import { errorWithData } from "../../../common/errorHandling";
-import { Diagram, getDiagramTitle, topicDiagramId } from "../utils/diagram";
+import { topicRelationNames } from "../../../common/edge";
+import { topicNodeTypes } from "../../../common/node";
+import { Diagram, Edge, Graph, getDiagramTitle } from "../utils/diagram";
 import { PlaygroundTopic, StoreTopic, TopicStoreState } from "./store";
 
 export const getTopicTitle = (state: TopicStoreState) => {
@@ -7,48 +8,44 @@ export const getTopicTitle = (state: TopicStoreState) => {
   return getDiagramTitle(rootDiagram);
 };
 
-export const getTopicDiagram = (state: TopicStoreState) => {
-  return getDiagramOrThrow(state, topicDiagramId);
+export const getActiveDiagram = (state: TopicStoreState): Diagram => {
+  const topicGraph = { nodes: state.nodes, edges: state.edges };
+  if (state.activeClaimTreeId) return getClaimTree(topicGraph, state.activeClaimTreeId);
+  else return getTopicDiagram(topicGraph);
 };
 
-export const getDiagram = (state: TopicStoreState, diagramId: string) => {
-  return state.diagrams[diagramId];
+export const getTopicDiagram = (topicGraph: Graph): Diagram => {
+  return {
+    nodes: topicGraph.nodes.filter((node) => topicNodeTypes.includes(node.type)),
+    edges: topicGraph.edges.filter((edge) => topicRelationNames.includes(edge.label)),
+    orientation: "DOWN",
+    type: "topicDiagram",
+  };
 };
 
-export const getDiagramOrThrow = (state: TopicStoreState, diagramId: string) => {
-  const diagram = state.diagrams[diagramId];
-  if (!diagram) throw errorWithData(`Diagram ${diagramId} not found in state`, state);
-
-  return diagram;
+export const getClaimTree = (topicGraph: Graph, arguedDiagramPartId: string): Diagram => {
+  return {
+    nodes: topicGraph.nodes.filter((node) => node.data.arguedDiagramPartId === arguedDiagramPartId),
+    edges: topicGraph.edges.filter((edge) => edge.data.arguedDiagramPartId === arguedDiagramPartId),
+    orientation: "RIGHT",
+    type: "claimTree",
+  };
 };
 
-export const getActiveDiagram = (state: TopicStoreState) => {
-  const activeDiagramId = state.activeClaimTreeId ?? topicDiagramId;
-  const activeDiagram = state.diagrams[activeDiagramId];
-
-  if (!activeDiagram) throw errorWithData("Active diagram not found in state", state);
-
-  return activeDiagram;
-};
-
-export const getClaimTrees = (state: TopicStoreState) => {
-  return Object.values(state.diagrams).filter((diagram) => diagram.type === "claim");
+export const getClaimEdges = (edges: Edge[]) => {
+  return edges.filter((edge) => topicRelationNames.includes(edge.label));
 };
 
 export const setSelected = (graphPartId: string, diagram: Diagram) => {
   /* eslint-disable functional/immutable-data, no-param-reassign */
-  diagram.nodes = diagram.nodes.map((node) => {
-    // only shallow copy node if we have to, since re-renders will occur on Object change
-    if (node.id === graphPartId && !node.selected) return { ...node, selected: true };
-    if (node.id !== graphPartId && node.selected) return { ...node, selected: false };
-    return node;
+  diagram.nodes.forEach((node) => {
+    if (node.id === graphPartId && !node.selected) node.selected = true;
+    if (node.id !== graphPartId && node.selected) node.selected = false;
   });
 
-  diagram.edges = diagram.edges.map((edge) => {
-    // only shallow copy node if we have to, since re-renders will occur on Object change
-    if (edge.id === graphPartId && !edge.selected) return { ...edge, selected: true };
-    if (edge.id !== graphPartId && edge.selected) return { ...edge, selected: false };
-    return edge;
+  diagram.edges.forEach((edge) => {
+    if (edge.id === graphPartId && !edge.selected) edge.selected = true;
+    if (edge.id !== graphPartId && edge.selected) edge.selected = false;
   });
   /* eslint-enable functional/immutable-data, no-param-reassign */
 };

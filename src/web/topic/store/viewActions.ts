@@ -1,43 +1,36 @@
 import { createDraft, finishDraft } from "immer";
 
 import { getImplicitLabel } from "../utils/claim";
-import {
-  GraphPartType,
-  RelationDirection,
-  buildNode,
-  findNode,
-  layoutVisibleComponents,
-} from "../utils/diagram";
+import { RelationDirection, buildNode, findNode } from "../utils/diagram";
 import { FlowNodeType, children, parents } from "../utils/node";
 import { useTopicStore } from "./store";
-import { getActiveDiagram, getClaimTrees, getDiagram, getTopicDiagram } from "./utils";
+import { getTopicDiagram } from "./utils";
 
-export const viewOrCreateClaimTree = (diagramPartId: string, diagramPartType: GraphPartType) => {
+export const viewOrCreateClaimTree = (arguedDiagramPartId: string) => {
   const state = createDraft(useTopicStore.getState());
 
+  const rootClaim = state.nodes.find(
+    (node) => node.type === "rootClaim" && node.data.arguedDiagramPartId === arguedDiagramPartId
+  );
+
   // create claim tree if it doesn't exist
-  if (!getDiagram(state, diagramPartId)) {
-    const activeDiagram = getActiveDiagram(state);
-    const label = getImplicitLabel(diagramPartId, diagramPartType, activeDiagram);
+  if (!rootClaim) {
+    const topicGraph = { nodes: state.nodes, edges: state.edges };
+    const label = getImplicitLabel(arguedDiagramPartId, topicGraph);
 
     /* eslint-disable functional/immutable-data, no-param-reassign */
     const newNode = buildNode({
       label: label,
       type: "rootClaim",
-      diagramId: diagramPartId,
+      arguedDiagramPartId: arguedDiagramPartId,
     });
 
-    state.diagrams[diagramPartId] = {
-      id: diagramPartId,
-      nodes: [newNode],
-      edges: [],
-      type: "claim",
-    };
+    state.nodes.push(newNode);
     /* eslint-enable functional/immutable-data, no-param-reassign */
   }
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
-  state.activeClaimTreeId = diagramPartId;
+  state.activeClaimTreeId = arguedDiagramPartId;
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   useTopicStore.temporal.getState().pause();
@@ -45,9 +38,9 @@ export const viewOrCreateClaimTree = (diagramPartId: string, diagramPartType: Gr
   useTopicStore.temporal.getState().resume();
 };
 
-export const viewClaimTree = (diagramId: string) => {
+export const viewClaimTree = (arguedDiagramPartId: string) => {
   useTopicStore.temporal.getState().pause();
-  useTopicStore.setState({ activeClaimTreeId: diagramId }, false, "viewClaimTree");
+  useTopicStore.setState({ activeClaimTreeId: arguedDiagramPartId }, false, "viewClaimTree");
   useTopicStore.temporal.getState().resume();
 };
 
@@ -64,7 +57,7 @@ export const closeTable = () => {
 };
 
 // potential TODO: could show components that were hidden due to being implied by the now-hidden neighbor
-export const toggleShowNeighbors = async (
+export const toggleShowNeighbors = (
   nodeId: string,
   neighborType: FlowNodeType,
   direction: RelationDirection,
@@ -74,7 +67,7 @@ export const toggleShowNeighbors = async (
 
   const topicDiagram = getTopicDiagram(state); // assuming we're only show/hiding from topic diagram
 
-  const node = findNode(nodeId, topicDiagram);
+  const node = findNode(nodeId, topicDiagram.nodes);
 
   const neighborsInDirection =
     direction === "parent" ? parents(node, topicDiagram) : children(node, topicDiagram);
@@ -85,13 +78,6 @@ export const toggleShowNeighbors = async (
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   neighborsToToggle.forEach((neighbor) => (neighbor.data.showing = show));
-  /* eslint-enable functional/immutable-data, no-param-reassign */
-
-  const layoutedDiagram = await layoutVisibleComponents(topicDiagram, getClaimTrees(state)); // depends on showing having been updated
-
-  /* eslint-disable functional/immutable-data, no-param-reassign */
-  topicDiagram.nodes = layoutedDiagram.nodes;
-  topicDiagram.edges = layoutedDiagram.edges;
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   useTopicStore.temporal.getState().pause();
@@ -123,19 +109,4 @@ export const toggleShowImpliedEdges = (show: boolean) => {
   useTopicStore.temporal.getState().pause();
   useTopicStore.setState({ showImpliedEdges: show }, false, "toggleShowImpliedEdges");
   useTopicStore.temporal.getState().resume();
-};
-
-export const relayout = async () => {
-  const state = createDraft(useTopicStore.getState());
-
-  const activeDiagram = getActiveDiagram(state);
-
-  const layoutedDiagram = await layoutVisibleComponents(activeDiagram, getClaimTrees(state));
-
-  /* eslint-disable functional/immutable-data, no-param-reassign */
-  activeDiagram.nodes = layoutedDiagram.nodes;
-  activeDiagram.edges = layoutedDiagram.edges;
-  /* eslint-enable functional/immutable-data, no-param-reassign */
-
-  useTopicStore.setState(finishDraft(state), false, "relayout");
 };

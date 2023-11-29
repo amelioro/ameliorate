@@ -4,7 +4,7 @@ import { Node } from "../../../topic/utils/diagram";
 import { CloseOnClickMenuItem } from "./CloseOnClickMenuItem";
 
 export const ShowCriteriaMenuItem = ({ node }: { node: Node }) => {
-  const nodeChildren = useNodeChildren(node.id, node.data.diagramId);
+  const nodeChildren = useNodeChildren(node.id);
 
   const criteria = nodeChildren.filter((child) => child.type === "criterion");
 
@@ -16,7 +16,7 @@ export const ShowCriteriaMenuItem = ({ node }: { node: Node }) => {
 
   return (
     <CloseOnClickMenuItem
-      onClick={() => void toggleShowNeighbors(node.id, "criterion", "child", !allCriteriaShown)}
+      onClick={() => toggleShowNeighbors(node.id, "criterion", "child", !allCriteriaShown)}
     >
       {allCriteriaShown ? "Hide criteria" : "Show criteria"}
     </CloseOnClickMenuItem>

@@ -68,7 +68,7 @@ interface Props {
 export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
   const edge = convertToEdge(flowEdge);
 
-  const isNodeSelected = useIsNodeSelected(edge.id, edge.data.diagramId);
+  const isNodeSelected = useIsNodeSelected(edge.id);
 
   const spotlight: Spotlight = edge.selected ? "primary" : isNodeSelected ? "secondary" : "normal";
 

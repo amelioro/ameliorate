@@ -4,24 +4,26 @@ import { v4 as uuid } from "uuid";
 import { RelationName } from "../../../common/edge";
 import { errorWithData } from "../../../common/errorHandling";
 import { composedRelations, isEdgeImplied } from "./edge";
-import { Orientation, layout } from "./layout";
+import { Orientation } from "./layout";
 import { FlowNodeType } from "./node";
 
-export type DiagramType = "problem" | "claim";
 export type RelationDirection = "parent" | "child";
-
-export const orientations: Record<DiagramType, Orientation> = {
-  problem: "DOWN",
-  claim: "RIGHT",
-};
-
-export const topicDiagramId = "root";
+export type DiagramType = "topicDiagram" | "claimTree";
 
 export interface Diagram {
-  id: string;
   nodes: Node[];
   edges: Edge[];
+  orientation: Orientation;
   type: DiagramType;
+}
+
+export interface PositionedDiagram extends Diagram {
+  nodes: PositionedNode[];
+}
+
+export interface Graph {
+  nodes: Node[];
+  edges: Edge[];
 }
 
 export interface Node {
@@ -29,16 +31,19 @@ export interface Node {
   data: {
     label: string;
     notes: string;
-    diagramId: string;
+    arguedDiagramPartId?: string;
     showing: boolean;
     newlyAdded: boolean; // jank to allow focusing nodes after adding them
   };
+  selected: boolean;
+  type: FlowNodeType;
+}
+
+export interface PositionedNode extends Node {
   position: {
     x: number;
     y: number;
   };
-  selected: boolean;
-  type: FlowNodeType;
 }
 
 interface BuildProps {
@@ -46,19 +51,18 @@ interface BuildProps {
   label?: string;
   notes?: string;
   type: FlowNodeType;
-  diagramId: string;
+  arguedDiagramPartId?: string;
 }
-export const buildNode = ({ id, label, notes, type, diagramId }: BuildProps): Node => {
+export const buildNode = ({ id, label, notes, type, arguedDiagramPartId }: BuildProps): Node => {
   const node = {
     id: id ?? uuid(),
     data: {
       label: label ?? `new node`,
       notes: notes ?? "",
-      diagramId: diagramId,
+      arguedDiagramPartId: arguedDiagramPartId,
       showing: true,
       newlyAdded: false,
     },
-    position: { x: 0, y: 0 }, // assume layout will adjust this
     selected: false,
     type: type,
   };
@@ -74,7 +78,7 @@ export const markerStart = { type: MarkerType.ArrowClosed, width: 30, height: 30
 export interface Edge {
   id: string;
   data: {
-    diagramId: string;
+    arguedDiagramPartId?: string;
     notes: string;
   };
   label: RelationName;
@@ -91,7 +95,7 @@ interface BuildEdgeProps {
   sourceNodeId: string;
   targetNodeId: string;
   relation: RelationName;
-  diagramId: string;
+  arguedDiagramPartId?: string;
 }
 export const buildEdge = ({
   id,
@@ -99,12 +103,12 @@ export const buildEdge = ({
   sourceNodeId,
   targetNodeId,
   relation,
-  diagramId,
+  arguedDiagramPartId,
 }: BuildEdgeProps): Edge => {
   return {
     id: id ?? uuid(),
     data: {
-      diagramId: diagramId,
+      arguedDiagramPartId: arguedDiagramPartId,
       notes: notes ?? "",
     },
     label: relation,
@@ -122,25 +126,23 @@ export type GraphPartType = "node" | "edge";
 export const possibleScores = ["-", "1", "2", "3", "4", "5", "6", "7", "8", "9"] as const;
 export type Score = typeof possibleScores[number];
 
-export const findNode = (nodeId: string, diagram: Diagram) => {
-  const node = diagram.nodes.find((node) => node.id === nodeId);
-  if (!node) throw errorWithData("node not found", nodeId, diagram);
+export const findNode = (nodeId: string, nodes: Node[]) => {
+  const node = nodes.find((node) => node.id === nodeId);
+  if (!node) throw errorWithData("node not found", nodeId, nodes);
 
   return node;
 };
 
-export const findEdge = (edgeId: string, diagram: Diagram) => {
-  const edge = diagram.edges.find((edge) => edge.id === edgeId);
-  if (!edge) throw errorWithData("edge not found", edgeId, diagram);
+export const findEdge = (edgeId: string, edges: Edge[]) => {
+  const edge = edges.find((edge) => edge.id === edgeId);
+  if (!edge) throw errorWithData("edge not found", edgeId, edges);
 
   return edge;
 };
 
-export const findGraphPart = (graphPartId: string, diagram: Diagram) => {
-  const graphPart = [...diagram.nodes, ...diagram.edges].find(
-    (graphPart) => graphPart.id === graphPartId
-  );
-  if (!graphPart) throw errorWithData("graph part not found", graphPartId, diagram);
+export const findGraphPart = (graphPartId: string, nodes: Node[], edges: Edge[]) => {
+  const graphPart = [...nodes, ...edges].find((graphPart) => graphPart.id === graphPartId);
+  if (!graphPart) throw errorWithData("graph part not found", graphPartId, nodes, edges);
 
   return graphPart;
 };
@@ -150,13 +152,15 @@ export const isNode = (graphPart: GraphPart): graphPart is Node => {
   return false;
 };
 
-export const getNodesComposedBy = (node: Node, diagram: Diagram) => {
+export const getNodesComposedBy = (node: Node, topicGraph: Graph) => {
   return composedRelations.flatMap((composedRelation) => {
-    const composingEdges = diagram.edges.filter((edge) => {
+    const composingEdges = topicGraph.edges.filter((edge) => {
       return edge.source === node.id && edge.label === composedRelation.name;
     });
 
-    const potentialComposedNodes = composingEdges.map((edge) => findNode(edge.target, diagram));
+    const potentialComposedNodes = composingEdges.map((edge) =>
+      findNode(edge.target, topicGraph.nodes)
+    );
 
     return potentialComposedNodes
       .filter((node) => node.type === composedRelation.child)
@@ -180,7 +184,7 @@ export const getDiagramTitle = (diagram: Diagram) => {
  */
 export const filterHiddenComponents = (
   diagram: Diagram,
-  claimTrees: Diagram[],
+  claimEdges: Edge[],
   showImpliedEdges: boolean
 ): Diagram => {
   const shownNodes = diagram.nodes.filter((node) => node.data.showing);
@@ -196,35 +200,8 @@ export const filterHiddenComponents = (
   const shownEdgesAfterImpliedFilter = shownEdges.filter(
     (edge) =>
       showImpliedEdges ||
-      !isEdgeImplied(edge, { ...diagram, nodes: shownNodes, edges: shownEdges }, claimTrees)
+      !isEdgeImplied(edge, { ...diagram, nodes: shownNodes, edges: shownEdges }, claimEdges)
   );
 
   return { ...diagram, nodes: shownNodes, edges: shownEdgesAfterImpliedFilter };
-};
-
-export const layoutVisibleComponents = async (diagram: Diagram, claimTrees: Diagram[]) => {
-  // filter
-  const displayDiagram = filterHiddenComponents(diagram, claimTrees, true);
-
-  // layout only the displayed components
-  const { layoutedNodes } = await layout(
-    displayDiagram.nodes,
-    displayDiagram.edges.filter((edge) => !isEdgeImplied(edge, displayDiagram, claimTrees)), // implied edges shouldn't affect layout
-    orientations[diagram.type]
-  );
-
-  // update positions of displayed components
-  const updatedNodes = diagram.nodes.map((node) => {
-    const layoutedNode = layoutedNodes.find((layoutedNode) => layoutedNode.id === node.id);
-    if (!layoutedNode) return node;
-
-    // only shallow copy node if the node is changing, since re-renders will occur on Object change
-    if (layoutedNode.position.x === node.position.x && layoutedNode.position.y === node.position.y)
-      return node;
-
-    return { ...node, position: layoutedNode.position };
-  });
-
-  // return both displayed and hidden components
-  return { ...diagram, nodes: updatedNodes, edges: diagram.edges };
 };
