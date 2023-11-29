@@ -1,5 +1,6 @@
 import { Global } from "@emotion/react";
-import { useContext } from "react";
+import { motion } from "framer-motion";
+import { useContext, useEffect, useState } from "react";
 
 import { useSessionUser } from "../../../common/hooks";
 import { useIsEdgeSelected, useIsNeighborSelected } from "../../store/nodeHooks";
@@ -27,6 +28,8 @@ const convertToNode = (flowNode: NodeProps): Node => {
 };
 
 export const FlowNode = (flowNode: NodeProps) => {
+  const [animated, setAnimated] = useState(false);
+
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const isNeighborSelected = useIsNeighborSelected(flowNode.id);
@@ -40,6 +43,12 @@ export const FlowNode = (flowNode: NodeProps) => {
     : isNeighborSelected || isEdgeSelected
     ? "secondary"
     : "normal";
+
+  useEffect(() => {
+    // hack to avoid animation on first render; for some reason nodes were animating from position 0
+    // to their initial position
+    setAnimated(true);
+  }, []);
 
   return (
     <>
@@ -58,7 +67,14 @@ export const FlowNode = (flowNode: NodeProps) => {
         />
       )}
 
-      <StyledEditableNode node={node} spotlight={spotlight} />
+      <motion.div
+        // create new component when animated changes, see issue workaround https://github.com/framer/motion/issues/2238#issue-1809290539
+        key={node.id.concat(animated.toString())}
+        layout={animated}
+        style={{ pointerEvents: "none" }}
+      >
+        <StyledEditableNode node={node} spotlight={spotlight} />
+      </motion.div>
 
       {userCanEditTopicData && (
         <AddNodeButtonGroupChild

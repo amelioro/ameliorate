@@ -52,6 +52,7 @@
     "@trpc/react-query": "10.34.0",
     "@trpc/server": "10.34.0",
     "elkjs": "0.8.2",
+    "framer-motion": "^10.16.5",
     "immer": "10.0.2",
     "js-file-download": "0.4.12",
     "lodash": "4.17.21",

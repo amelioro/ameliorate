@@ -94,6 +94,9 @@ export const NodeDiv = styled("div", options)<NodeDivProps>`
   // we want to indicate that the node is selectable.
   cursor: default;
 
+  // avoid inheriting because flow node will wrap in a motion.div that ignores pointer events
+  pointer-events: auto;
+
   &:hover {
     box-shadow: 0 2px 8px 2px rgba(0, 0, 0, 0.08);
   }
