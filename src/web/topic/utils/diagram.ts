@@ -4,7 +4,7 @@ import { v4 as uuid } from "uuid";
 import { RelationName } from "../../../common/edge";
 import { errorWithData } from "../../../common/errorHandling";
 import { composedRelations, isEdgeImplied } from "./edge";
-import { Orientation, layout } from "./layout";
+import { Orientation } from "./layout";
 import { FlowNodeType } from "./node";
 
 export type RelationDirection = "parent" | "child";
@@ -15,6 +15,10 @@ export interface Diagram {
   edges: Edge[];
   orientation: Orientation;
   type: DiagramType;
+}
+
+export interface PositionedDiagram extends Diagram {
+  nodes: PositionedNode[];
 }
 
 export interface Graph {
@@ -31,12 +35,15 @@ export interface Node {
     showing: boolean;
     newlyAdded: boolean; // jank to allow focusing nodes after adding them
   };
+  selected: boolean;
+  type: FlowNodeType;
+}
+
+export interface PositionedNode extends Node {
   position: {
     x: number;
     y: number;
   };
-  selected: boolean;
-  type: FlowNodeType;
 }
 
 interface BuildProps {
@@ -56,7 +63,6 @@ export const buildNode = ({ id, label, notes, type, arguedDiagramPartId }: Build
       showing: true,
       newlyAdded: false,
     },
-    position: { x: 0, y: 0 }, // assume layout will adjust this
     selected: false,
     type: type,
   };
@@ -198,35 +204,4 @@ export const filterHiddenComponents = (
   );
 
   return { ...diagram, nodes: shownNodes, edges: shownEdgesAfterImpliedFilter };
-};
-
-export const layoutVisibleComponents = async (diagram: Diagram, claimEdges: Edge[]) => {
-  // filter
-  const displayDiagram = filterHiddenComponents(diagram, claimEdges, true);
-
-  // layout only the displayed components
-  const { layoutedNodes } = await layout(
-    displayDiagram.nodes,
-    displayDiagram.edges.filter((edge) => !isEdgeImplied(edge, displayDiagram, claimEdges)), // implied edges shouldn't affect layout
-    displayDiagram.orientation
-  );
-
-  // update positions of displayed components
-  const updatedNodes = diagram.nodes.map((node) => {
-    const layoutedNode = layoutedNodes.find((layoutedNode) => layoutedNode.id === node.id);
-    if (!layoutedNode) return node;
-
-    // only shallow copy node if the node is changing, since re-renders will occur on Object change
-    if (layoutedNode.position.x === node.position.x && layoutedNode.position.y === node.position.y)
-      return node;
-
-    /* eslint-disable functional/immutable-data, no-param-reassign */
-    node.position = layoutedNode.position;
-    /* eslint-enable functional/immutable-data, no-param-reassign */
-
-    return node;
-  });
-
-  // return both displayed and hidden components
-  return { ...diagram, nodes: updatedNodes, edges: diagram.edges };
 };

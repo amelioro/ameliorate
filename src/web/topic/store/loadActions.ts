@@ -1,4 +1,3 @@
-import { claimRelationNames } from "../../../common/edge";
 import { emitter } from "../../common/event";
 import {
   type TopicData,
@@ -6,30 +5,15 @@ import {
   convertToStoreNode,
   convertToStoreScores,
 } from "../utils/apiConversion";
-import { Diagram, layoutVisibleComponents } from "../utils/diagram";
-import { claimNodeTypes } from "../utils/node";
 import { initialState, topicStorePlaygroundName, useTopicStore } from "./store";
 
-export const populateFromApi = async (topicData: TopicData) => {
+export const populateFromApi = (topicData: TopicData) => {
   // Ensure we use distinct persistence for topic page compared to playground.
   // Persisting saved-to-db topics allows us to use upload/download with persist migrations.
   useTopicStore.persist.setOptions({ name: "diagram-storage-saved-to-db" });
 
   const topicGraphNodes = topicData.nodes.map((node) => convertToStoreNode(node));
   const topicGraphEdges = topicData.edges.map((edge) => convertToStoreEdge(edge));
-
-  const topicDiagram: Diagram = {
-    nodes: topicGraphNodes.filter((node) => !claimNodeTypes.includes(node.type)),
-    edges: topicGraphEdges.filter((edge) => !claimRelationNames.includes(edge.label)),
-    orientation: "DOWN",
-    type: "topicDiagram",
-  };
-
-  // TODO(bug): lay out claim trees in Claim Tree component
-  const claimEdges = topicData.edges
-    .filter((edge) => claimRelationNames.includes(edge.type))
-    .map((edge) => convertToStoreEdge(edge));
-  await layoutVisibleComponents(topicDiagram, claimEdges);
 
   const userScores = convertToStoreScores(topicData.userScores);
 

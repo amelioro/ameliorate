@@ -1,4 +1,4 @@
-import { AlignVerticalTop, AutoStoriesOutlined, Build, Close, Route } from "@mui/icons-material";
+import { AutoStoriesOutlined, Build, Close, Route } from "@mui/icons-material";
 import {
   Divider,
   Drawer,
@@ -14,7 +14,7 @@ import { Perspectives } from "../../../view/components/Perspectives/Perspectives
 import { useIsTableActive, useShowImpliedEdges } from "../../store/store";
 import { useOnPlayground } from "../../store/topicHooks";
 import { resetTopicData } from "../../store/utilActions";
-import { relayout, toggleShowImpliedEdges } from "../../store/viewActions";
+import { toggleShowImpliedEdges } from "../../store/viewActions";
 
 interface Props {
   isMoreActionsDrawerOpen: boolean;
@@ -63,15 +63,6 @@ export const MoreActionsDrawer = ({
 
           {!isTableActive && (
             <>
-              <IconButton
-                color="inherit"
-                title="Recalculate layout"
-                aria-label="Recalculate layout"
-                onClick={() => void relayout()}
-              >
-                <AlignVerticalTop />
-              </IconButton>
-
               <ToggleButton
                 value={showImpliedEdges}
                 title="Show implied edges"

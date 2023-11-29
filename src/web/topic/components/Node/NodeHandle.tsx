@@ -35,7 +35,7 @@ const tooltipItems = (
             key={`${typeLabel}-${shownLabel}`}
           >
             <IconButton
-              onClick={() => void toggleShowNeighbors(parentNodeId, nodeType, direction, !shown)}
+              onClick={() => toggleShowNeighbors(parentNodeId, nodeType, direction, !shown)}
             >
               {shown ? <Visibility /> : <VisibilityOff />}
             </IconButton>

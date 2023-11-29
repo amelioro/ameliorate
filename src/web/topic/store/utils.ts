@@ -38,18 +38,14 @@ export const getClaimEdges = (edges: Edge[]) => {
 
 export const setSelected = (graphPartId: string, diagram: Diagram) => {
   /* eslint-disable functional/immutable-data, no-param-reassign */
-  diagram.nodes = diagram.nodes.map((node) => {
-    // only shallow copy node if we have to, since re-renders will occur on Object change
-    if (node.id === graphPartId && !node.selected) return { ...node, selected: true };
-    if (node.id !== graphPartId && node.selected) return { ...node, selected: false };
-    return node;
+  diagram.nodes.forEach((node) => {
+    if (node.id === graphPartId && !node.selected) node.selected = true;
+    if (node.id !== graphPartId && node.selected) node.selected = false;
   });
 
-  diagram.edges = diagram.edges.map((edge) => {
-    // only shallow copy node if we have to, since re-renders will occur on Object change
-    if (edge.id === graphPartId && !edge.selected) return { ...edge, selected: true };
-    if (edge.id !== graphPartId && edge.selected) return { ...edge, selected: false };
-    return edge;
+  diagram.edges.forEach((edge) => {
+    if (edge.id === graphPartId && !edge.selected) edge.selected = true;
+    if (edge.id !== graphPartId && edge.selected) edge.selected = false;
   });
   /* eslint-enable functional/immutable-data, no-param-reassign */
 };

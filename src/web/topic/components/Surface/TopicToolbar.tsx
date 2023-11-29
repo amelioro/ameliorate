@@ -131,7 +131,7 @@ export const TopicToolbar = () => {
               aria-label="Delete"
               onClick={() => {
                 if (selectedGraphPart) {
-                  void deleteGraphPart(selectedGraphPart);
+                  deleteGraphPart(selectedGraphPart);
                 }
               }}
               disabled={!selectedGraphPart}

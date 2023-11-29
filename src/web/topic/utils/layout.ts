@@ -40,7 +40,17 @@ const compareEdges = (edge1: Edge, edge2: Edge, nodes: Node[]) => {
   return Number(priorities[target1.type]) - Number(priorities[target2.type]);
 };
 
-export const layout = async (nodes: Node[], edges: Edge[], orientation: Orientation) => {
+export interface NodePosition {
+  id: string;
+  x: number;
+  y: number;
+}
+
+export const layout = async (
+  nodes: Node[],
+  edges: Edge[],
+  orientation: Orientation
+): Promise<NodePosition[]> => {
   // see support layout options at https://www.eclipse.org/elk/reference/algorithms/org-eclipse-elk-layered.html
   const layoutOptions: LayoutOptions = {
     algorithm: "layered",
@@ -94,20 +104,9 @@ export const layout = async (nodes: Node[], edges: Edge[], orientation: Orientat
     measureExecutionTime: true,
   });
 
-  const layoutedNodes = nodes.map((node) => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- we just added children above, so they should still exist
-    const nodeWithPosition = layoutedGraph.children!.find((child) => child.id === node.id)!;
-
-    return {
-      ...node,
-      position: {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        x: nodeWithPosition.x!,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        y: nodeWithPosition.y!,
-      },
-    };
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  return layoutedGraph.children!.map((node) => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return { id: node.id, x: node.x!, y: node.y! };
   });
-
-  return { layoutedNodes, layoutedEdges: edges };
 };

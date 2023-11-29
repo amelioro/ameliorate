@@ -23,7 +23,7 @@ export const AddNodeButton = ({ fromNodeId, as, toNodeType, relation, className 
       variant="contained"
       onClick={(event) => {
         event.stopPropagation(); // don't trigger selection of node
-        void addNode({ fromNodeId, as, toNodeType, relation });
+        addNode({ fromNodeId, as, toNodeType, relation });
       }}
       // Not using MUI Tooltip because it throws anchorEl missing error when the button is hidden
       // after hovering it. Think we'd have to pass `show` into this component in order to hide

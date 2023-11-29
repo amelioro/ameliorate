@@ -24,6 +24,7 @@ export const migrate = (persistedState: any, version: number) => {
     migrate_15_to_16,
     migrate_16_to_17,
     migrate_17_to_18,
+    migrate_18_to_19,
   ];
 
   let state = persistedState;
@@ -442,6 +443,19 @@ const migrate_17_to_18 = (state: FromState17) => {
     (diagram) => diagram.edges as GraphPart18[]
   );
   delete state.diagrams;
+
+  return state;
+};
+
+interface FromState18 {
+  nodes: { position?: { x: number; y: number } }[];
+}
+
+const migrate_18_to_19 = (state: FromState18) => {
+  // position is moved from store to diagram component
+  state.nodes.forEach((node) => {
+    delete node.position;
+  });
 
   return state;
 };

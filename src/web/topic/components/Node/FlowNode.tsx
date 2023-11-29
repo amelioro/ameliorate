@@ -21,7 +21,6 @@ const convertToNode = (flowNode: NodeProps): Node => {
   return {
     id: flowNode.id,
     data: flowNode.data,
-    position: { x: flowNode.xPos, y: flowNode.yPos },
     selected: flowNode.selected,
     type: flowNode.type as FlowNodeType, // we always pass a NodeType from the diagram, but I'm not sure how to override react-flow's type to tell it that
   };

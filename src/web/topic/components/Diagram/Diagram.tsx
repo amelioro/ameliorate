@@ -1,6 +1,4 @@
-import { Typography } from "@mui/material";
-import isEmpty from "lodash/isEmpty";
-import { ComponentType, createContext, useEffect, useState } from "react";
+import { ComponentType, createContext, useEffect, useMemo, useState } from "react";
 import {
   Background,
   BackgroundVariant,
@@ -13,8 +11,10 @@ import {
   ReactFlowProvider,
 } from "reactflow";
 
+import { Loading } from "../../../common/components/Loading/Loading";
 import { emitter } from "../../../common/event";
 import { useSessionUser } from "../../../common/hooks";
+import { useLayoutedDiagram } from "../../hooks/diagramHooks";
 import { useViewportUpdater } from "../../hooks/flowHooks";
 import { setSelected } from "../../store/actions";
 import { connectNodes, reconnectEdge } from "../../store/createDeleteActions";
@@ -67,33 +67,41 @@ const onGraphPartChange = (changes: (NodeChange | EdgeChange)[]) => {
   if (selectChanges.length > 0) setSelected(selectChanges);
 };
 
-const DiagramWithoutProvider = ({ nodes, edges, type }: DiagramData) => {
+const DiagramWithoutProvider = (diagram: DiagramData) => {
   const [topicNewlyLoaded, setTopicNewlyLoaded] = useState(false);
+  const [newNodeId, setNewNodeId] = useState<string | null>(null);
 
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const { fitViewForNodes, moveViewportToIncludeNode } = useViewportUpdater();
+  const { layoutedDiagram, hasNewLayout, setHasNewLayout } = useLayoutedDiagram(diagram);
 
   useEffect(() => {
-    const unbindAdd = emitter.on("addNode", (node) => {
-      if (!nodes.map((node) => node.id).includes(node.id)) return;
-      moveViewportToIncludeNode(node);
-    });
+    const unbindAdd = emitter.on("addNode", (node) => setNewNodeId(node.id));
     const unbindLoad = emitter.on("loadedTopicData", () => setTopicNewlyLoaded(true));
 
     return () => {
       unbindAdd();
       unbindLoad();
     };
-  }, [nodes, fitViewForNodes, moveViewportToIncludeNode]);
+  }, []);
 
-  if (topicNewlyLoaded) {
-    // TODO(bug): diagram flickers with newly-loaded nodes before fitting to view
+  if (!layoutedDiagram) return <Loading />;
+
+  const { nodes, edges, type } = layoutedDiagram;
+
+  if (newNodeId && hasNewLayout) {
+    const newNode = nodes.find((node) => node.id === newNodeId);
+    if (newNode) moveViewportToIncludeNode(newNode);
+    setNewNodeId(null);
+  }
+
+  if (topicNewlyLoaded && hasNewLayout) {
     fitViewForNodes(nodes);
     setTopicNewlyLoaded(false);
   }
 
-  const emptyText = <Typography variant="h5">Right-click to create</Typography>;
+  if (hasNewLayout) setHasNewLayout(false);
 
   return (
     <>
@@ -107,9 +115,7 @@ const DiagramWithoutProvider = ({ nodes, edges, type }: DiagramData) => {
         fitViewOptions={{ maxZoom: 1 }}
         minZoom={0.25}
         onConnect={
-          userCanEditTopicData
-            ? ({ source, target }) => void connectNodes(source, target)
-            : undefined
+          userCanEditTopicData ? ({ source, target }) => connectNodes(source, target) : undefined
         }
         onContextMenu={(e) => e.preventDefault()}
         onEdgesChange={(changes) => onGraphPartChange(changes)}
@@ -117,7 +123,7 @@ const DiagramWithoutProvider = ({ nodes, edges, type }: DiagramData) => {
         onEdgeUpdate={
           userCanEditTopicData
             ? (oldEdge, newConnection) =>
-                void reconnectEdge(oldEdge, newConnection.source, newConnection.target)
+                reconnectEdge(oldEdge, newConnection.source, newConnection.target)
             : undefined
         }
         nodesDraggable={false}
@@ -126,7 +132,6 @@ const DiagramWithoutProvider = ({ nodes, edges, type }: DiagramData) => {
         elevateEdgesOnSelect={true} // this puts selected edges (or neighbor-to-selected-node edges) in a separate svg that is given a higher zindex, so they can be elevated above other nodes
       >
         <Background variant={BackgroundVariant.Dots} />
-        {isEmpty(nodes) && emptyText}
       </StyledReactFlow>
     </>
   );
@@ -134,12 +139,18 @@ const DiagramWithoutProvider = ({ nodes, edges, type }: DiagramData) => {
 
 export const DiagramContext = createContext<{ orientation: Orientation }>({ orientation: "DOWN" });
 
-export const Diagram = (diagram: DiagramData) => (
+export const Diagram = (diagram: DiagramData) => {
+  const diagramContext = useMemo(() => {
+    return { orientation: diagram.orientation };
+  }, [diagram.orientation]);
+
   // custom provider so that nodes can get the orientation based on the diagram they're in
-  <DiagramContext.Provider value={{ orientation: diagram.orientation }}>
-    {/* wrap in provider so we can use react-flow state https://reactflow.dev/docs/api/react-flow-provider/ */}
-    <ReactFlowProvider>
-      <DiagramWithoutProvider {...diagram} />
-    </ReactFlowProvider>
-  </DiagramContext.Provider>
-);
+  return (
+    <DiagramContext.Provider value={diagramContext}>
+      {/* wrap in provider so we can use react-flow state https://reactflow.dev/docs/api/react-flow-provider/ */}
+      <ReactFlowProvider>
+        <DiagramWithoutProvider {...diagram} />
+      </ReactFlowProvider>
+    </DiagramContext.Provider>
+  );
+};

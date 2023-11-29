@@ -55,12 +55,9 @@ const Topic: NextPage = () => {
     if (!getDiagram.data || getDiagram.isFetching) return;
     const diagramData = getDiagram.data;
 
-    const populate = async () => {
-      setPopulatedFromApi(false);
-      await populateFromApi(diagramData);
-      setPopulatedFromApi(true);
-    };
-    void populate();
+    setPopulatedFromApi(false);
+    populateFromApi(diagramData);
+    setPopulatedFromApi(true);
   }, [getDiagram.data, getDiagram.isFetching]);
 
   useEffect(() => {

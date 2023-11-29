@@ -11,8 +11,6 @@ export const DeleteNodeMenuItem = ({ node }: { node: Node }) => {
   if (!userCanEditTopicData) return <></>;
 
   return (
-    <CloseOnClickMenuItem onClick={() => void deleteNode(node.id)}>
-      Delete node
-    </CloseOnClickMenuItem>
+    <CloseOnClickMenuItem onClick={() => deleteNode(node.id)}>Delete node</CloseOnClickMenuItem>
   );
 };

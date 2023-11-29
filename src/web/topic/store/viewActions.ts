@@ -1,10 +1,10 @@
 import { createDraft, finishDraft } from "immer";
 
 import { getImplicitLabel } from "../utils/claim";
-import { RelationDirection, buildNode, findNode, layoutVisibleComponents } from "../utils/diagram";
+import { RelationDirection, buildNode, findNode } from "../utils/diagram";
 import { FlowNodeType, children, parents } from "../utils/node";
 import { useTopicStore } from "./store";
-import { getActiveDiagram, getClaimEdges, getTopicDiagram } from "./utils";
+import { getTopicDiagram } from "./utils";
 
 export const viewOrCreateClaimTree = (arguedDiagramPartId: string) => {
   const state = createDraft(useTopicStore.getState());
@@ -57,7 +57,7 @@ export const closeTable = () => {
 };
 
 // potential TODO: could show components that were hidden due to being implied by the now-hidden neighbor
-export const toggleShowNeighbors = async (
+export const toggleShowNeighbors = (
   nodeId: string,
   neighborType: FlowNodeType,
   direction: RelationDirection,
@@ -79,8 +79,6 @@ export const toggleShowNeighbors = async (
   /* eslint-disable functional/immutable-data, no-param-reassign */
   neighborsToToggle.forEach((neighbor) => (neighbor.data.showing = show));
   /* eslint-enable functional/immutable-data, no-param-reassign */
-
-  await layoutVisibleComponents(topicDiagram, getClaimEdges(state.edges)); // depends on showing having been updated
 
   useTopicStore.temporal.getState().pause();
   useTopicStore.setState(finishDraft(state), false, "toggleShowNeighbors");
@@ -111,13 +109,4 @@ export const toggleShowImpliedEdges = (show: boolean) => {
   useTopicStore.temporal.getState().pause();
   useTopicStore.setState({ showImpliedEdges: show }, false, "toggleShowImpliedEdges");
   useTopicStore.temporal.getState().resume();
-};
-
-export const relayout = async () => {
-  const state = createDraft(useTopicStore.getState());
-
-  const activeDiagram = getActiveDiagram(state);
-  await layoutVisibleComponents(activeDiagram, getClaimEdges(state.edges));
-
-  useTopicStore.setState(finishDraft(state), false, "relayout");
 };

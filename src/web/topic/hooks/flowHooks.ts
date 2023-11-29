@@ -8,10 +8,10 @@ import {
 } from "reactflow";
 
 import { nodeHeightPx, nodeWidthPx } from "../components/Node/EditableNode.styles";
-import { Node } from "../utils/diagram";
+import { PositionedNode } from "../utils/diagram";
 
 const getViewportToIncludeNode = (
-  node: Node,
+  node: PositionedNode,
   viewport: Viewport,
   viewportHeight: number,
   viewportWidth: number
@@ -61,7 +61,7 @@ export const useViewportUpdater = () => {
   const viewportWidth = useStore((state) => state.width);
   const minZoom = useStore((state) => state.minZoom);
 
-  const moveViewportToIncludeNode = (node: Node) => {
+  const moveViewportToIncludeNode = (node: PositionedNode) => {
     // This is intentionally not-reactive. Using a hook that fires whenever the viewport changes is
     // very slow.
     const viewport = getViewport();
@@ -75,7 +75,7 @@ export const useViewportUpdater = () => {
    * the flow; we want to be able to invoke this after a store action, which means we may not have
    * re-rendered the flow yet.
    */
-  const fitViewForNodes = (nodes: Node[]) => {
+  const fitViewForNodes = (nodes: PositionedNode[]) => {
     // roughly figured the code here by referencing the fitView implementation https://github.com/wbkd/react-flow/blob/9dba3c5e7fb0d7edb6a3015bf65282f7030ca929/packages/core/src/store/utils.ts#L128
     const rect = getRectOfNodes(nodes);
     const transform = getTransformForBounds(rect, viewportWidth, viewportHeight, minZoom, 1);

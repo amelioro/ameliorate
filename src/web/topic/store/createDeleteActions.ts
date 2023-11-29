@@ -12,12 +12,11 @@ import {
   findNode,
   getNodesComposedBy,
   isNode,
-  layoutVisibleComponents,
 } from "../utils/diagram";
 import { Relation, canCreateEdge, getConnectingEdge, getRelation } from "../utils/edge";
 import { FlowNodeType, edges } from "../utils/node";
 import { TopicStoreState, useTopicStore } from "./store";
-import { getActiveDiagram, getClaimEdges, getTopicDiagram, setSelected } from "./utils";
+import { getActiveDiagram, getTopicDiagram, setSelected } from "./utils";
 
 const createNode = (
   state: TopicStoreState,
@@ -77,7 +76,7 @@ interface AddNodeProps {
   relation: Relation;
 }
 
-export const addNode = async ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) => {
+export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) => {
   const state = createDraft(useTopicStore.getState());
 
   const topicGraph = { nodes: state.nodes, edges: state.edges };
@@ -98,10 +97,6 @@ export const addNode = async ({ fromNodeId, as, toNodeType, relation }: AddNodeP
   ) {
     connectCriteriaToSolutions(state, newNode, fromNode);
   }
-
-  // re-layout
-  const activeDiagram = getActiveDiagram(state);
-  await layoutVisibleComponents(activeDiagram, getClaimEdges(state.edges));
 
   // trigger event so viewport can be updated.
   // seems like there should be a cleaner way to do this - perhaps custom zustand middleware to emit for any action
@@ -180,20 +175,17 @@ const createConnection = (topicGraph: Graph, parentId: string | null, childId: s
   return true;
 };
 
-export const connectNodes = async (parentId: string | null, childId: string | null) => {
+export const connectNodes = (parentId: string | null, childId: string | null) => {
   const state = createDraft(useTopicStore.getState());
 
   const topicGraph = { nodes: state.nodes, edges: state.edges };
   const created = createConnection(topicGraph, parentId, childId);
   if (!created) return;
 
-  const activeDiagram = getActiveDiagram(state);
-  await layoutVisibleComponents(activeDiagram, getClaimEdges(state.edges));
-
   useTopicStore.setState(finishDraft(state), false, "connectNodes");
 };
 
-export const reconnectEdge = async (
+export const reconnectEdge = (
   oldEdge: { id: string; source: string; target: string },
   newParentId: string | null,
   newChildId: string | null
@@ -210,13 +202,10 @@ export const reconnectEdge = async (
   const created = createConnection(topicGraph, newParentId, newChildId);
   if (!created) return;
 
-  const activeDiagram = getActiveDiagram(state);
-  await layoutVisibleComponents(activeDiagram, getClaimEdges(state.edges));
-
   useTopicStore.setState(finishDraft(state), false, "reconnectEdge");
 };
 
-export const deleteNode = async (nodeId: string) => {
+export const deleteNode = (nodeId: string) => {
   const state = createDraft(useTopicStore.getState());
 
   const deletedNode = findNode(nodeId, state.nodes);
@@ -246,13 +235,10 @@ export const deleteNode = async (nodeId: string) => {
   );
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  const activeDiagram = getActiveDiagram(state);
-  await layoutVisibleComponents(activeDiagram, getClaimEdges(state.edges));
-
   useTopicStore.setState(finishDraft(state), false, "deleteNode");
 };
 
-export const deleteEdge = async (edgeId: string) => {
+export const deleteEdge = (edgeId: string) => {
   const state = createDraft(useTopicStore.getState());
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
@@ -263,16 +249,13 @@ export const deleteEdge = async (edgeId: string) => {
   );
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  const activeDiagram = getActiveDiagram(state);
-  await layoutVisibleComponents(activeDiagram, getClaimEdges(state.edges));
-
   useTopicStore.setState(finishDraft(state), false, "deleteEdge");
 };
 
-export const deleteGraphPart = async (graphPart: GraphPart) => {
+export const deleteGraphPart = (graphPart: GraphPart) => {
   if (isNode(graphPart)) {
-    await deleteNode(graphPart.id);
+    deleteNode(graphPart.id);
   } else {
-    await deleteEdge(graphPart.id);
+    deleteEdge(graphPart.id);
   }
 };

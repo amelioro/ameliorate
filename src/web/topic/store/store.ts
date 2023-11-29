@@ -76,7 +76,7 @@ export const useTopicStore = createWithEqualityFn<TopicStoreState>()(
         devtools(() => initialState),
         {
           name: topicStorePlaygroundName,
-          version: 18,
+          version: 19,
           migrate: migrate,
           skipHydration: true,
         }
