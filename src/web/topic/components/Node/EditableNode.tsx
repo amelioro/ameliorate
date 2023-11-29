@@ -40,12 +40,10 @@ export const EditableNode = ({ node, className = "" }: { node: Node; className?:
   }, []);
 
   // prefer this over binding value={node.data.label} because this allows us to update node.data.label onBlur instead of onChange, creating significantly fewer unnecessary re-renders
-  useEffect(() => {
-    if (!textAreaRef.current || textAreaRef.current.value === node.data.label) return;
-
+  if (textAreaRef.current && textAreaRef.current.value !== node.data.label) {
     // eslint-disable-next-line functional/immutable-data
     textAreaRef.current.value = node.data.label;
-  }, [node.data.label]);
+  }
 
   const nodeDecoration = nodeDecorations[node.type];
   const color = theme.palette[node.type].main;
