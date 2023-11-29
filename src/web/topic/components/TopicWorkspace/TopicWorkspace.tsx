@@ -32,11 +32,10 @@ export const TopicWorkspace = () => {
 
         <Box height="100%" flex="1" position="relative">
           <Box width="100%" height="100%" position="absolute">
-            {tableProblemNode ? (
-              <CriteriaTable problemNodeId={tableProblemNode.id} />
-            ) : (
+            <>
+              {tableProblemNode && <CriteriaTable problemNodeId={tableProblemNode.id} />}
               <TopicDiagram />
-            )}
+            </>
           </Box>
 
           {arguedDiagramPart && (
