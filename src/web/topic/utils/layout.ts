@@ -98,15 +98,31 @@ export const layout = async (
       }),
   };
 
-  const layoutedGraph = await elk.layout(graph, {
-    layoutOptions,
-    logging: true,
-    measureExecutionTime: true,
-  });
+  // hack to try laying out without partition if partitions cause error
+  // see https://github.com/eclipse/elk/issues/969
+  try {
+    const layoutedGraph = await elk.layout(graph, {
+      layoutOptions,
+      logging: true,
+      measureExecutionTime: true,
+    });
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  return layoutedGraph.children!.map((node) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return { id: node.id, x: node.x!, y: node.y! };
-  });
+    return layoutedGraph.children!.map((node) => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      return { id: node.id, x: node.x!, y: node.y! };
+    });
+  } catch (error) {
+    const layoutedGraph = await elk.layout(graph, {
+      layoutOptions: { ...layoutOptions, "elk.partitioning.activate": "false" },
+      logging: true,
+      measureExecutionTime: true,
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return layoutedGraph.children!.map((node) => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      return { id: node.id, x: node.x!, y: node.y! };
+    });
+  }
 };
