@@ -2,6 +2,7 @@ import { createDraft, finishDraft } from "immer";
 
 import { errorWithData } from "../../../common/errorHandling";
 import { emitter } from "../../common/event";
+import { Relation, canCreateEdge, getConnectingEdge, getRelation } from "../utils/edge";
 import {
   Graph,
   type GraphPart,
@@ -12,8 +13,7 @@ import {
   findNode,
   getNodesComposedBy,
   isNode,
-} from "../utils/diagram";
-import { Relation, canCreateEdge, getConnectingEdge, getRelation } from "../utils/edge";
+} from "../utils/graph";
 import { FlowNodeType, edges } from "../utils/node";
 import { TopicStoreState, useTopicStore } from "./store";
 import { getActiveDiagram, getTopicDiagram, setSelected } from "./utils";

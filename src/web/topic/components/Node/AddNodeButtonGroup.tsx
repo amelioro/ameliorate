@@ -1,7 +1,7 @@
 import { ButtonGroup } from "@mui/material";
 
-import { type RelationDirection } from "../../utils/diagram";
 import { addableRelationsFrom } from "../../utils/edge";
+import { type RelationDirection } from "../../utils/graph";
 import { Orientation } from "../../utils/layout";
 import { FlowNodeType } from "../../utils/node";
 import { AddNodeButton } from "../Node/AddNodeButton";

@@ -1,6 +1,7 @@
 import { topicRelationNames } from "../../../common/edge";
 import { topicNodeTypes } from "../../../common/node";
-import { Diagram, Edge, Graph, getDiagramTitle } from "../utils/diagram";
+import { Diagram, getDiagramTitle } from "../utils/diagram";
+import { Edge, Graph } from "../utils/graph";
 import { PlaygroundTopic, StoreTopic, TopicStoreState } from "./store";
 
 export const getTopicTitle = (state: TopicStoreState) => {

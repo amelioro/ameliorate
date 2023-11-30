@@ -1,6 +1,6 @@
 import { deleteNode } from "../../../topic/store/createDeleteActions";
 import { useUserCanEditTopicData } from "../../../topic/store/userHooks";
-import { Node } from "../../../topic/utils/diagram";
+import { Node } from "../../../topic/utils/graph";
 import { useSessionUser } from "../../hooks";
 import { CloseOnClickMenuItem } from "./CloseOnClickMenuItem";
 

@@ -1,6 +1,6 @@
 import { useNodeParents } from "../../../topic/store/nodeHooks";
 import { toggleShowNeighbors } from "../../../topic/store/viewActions";
-import { Node } from "../../../topic/utils/diagram";
+import { Node } from "../../../topic/utils/graph";
 import { CloseOnClickMenuItem } from "./CloseOnClickMenuItem";
 
 export const ShowComponentsMenuItem = ({ node }: { node: Node }) => {

@@ -1,5 +1,5 @@
-import { findEdge } from "../utils/diagram";
 import { nodes } from "../utils/edge";
+import { findEdge } from "../utils/graph";
 import { useTopicStore } from "./store";
 
 export const useIsNodeSelected = (edgeId: string) => {

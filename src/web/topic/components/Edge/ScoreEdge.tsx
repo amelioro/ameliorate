@@ -6,7 +6,7 @@ import { RelationName } from "../../../../common/edge";
 import { openContextMenu } from "../../../common/store/contextMenuActions";
 import { setSelectedGraphPart } from "../../store/actions";
 import { useIsNodeSelected } from "../../store/edgeHooks";
-import { Edge, markerStart } from "../../utils/diagram";
+import { Edge, markerStart } from "../../utils/graph";
 import { EdgeProps } from "../Diagram/Diagram";
 import { Spotlight } from "../Diagram/Diagram.styles";
 import { EdgeIndicatorGroup } from "../Indicator/EdgeIndicatorGroup";

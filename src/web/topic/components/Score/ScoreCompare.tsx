@@ -5,7 +5,7 @@ import reduce from "lodash/reduce";
 import set from "lodash/set";
 import { Data } from "react-minimal-pie-chart/types/commonTypes";
 
-import { Score } from "../../utils/diagram";
+import { Score } from "../../utils/graph";
 import { CustomDataEntry, PieChart } from "./PieChart";
 import { scoreColors } from "./ScoreButton";
 

@@ -1,7 +1,7 @@
 import lowerCase from "lodash/lowerCase";
 
 import { errorWithData } from "../../../common/errorHandling";
-import { Edge, Graph, findGraphPart, isNode } from "./diagram";
+import { Edge, Graph, findGraphPart, isNode } from "./graph";
 
 // Using claimEdges instead of claimNodes because eventually we'll probably replace Root Claim nodes
 // with direct edges from a claim to diagram part.

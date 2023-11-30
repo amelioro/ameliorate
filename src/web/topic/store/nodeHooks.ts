@@ -1,7 +1,7 @@
 import { shallow } from "zustand/shallow";
 
 import { errorWithData } from "../../../common/errorHandling";
-import { RelationDirection, findNode } from "../utils/diagram";
+import { RelationDirection, findNode } from "../utils/graph";
 import { children, edges, neighbors, parents } from "../utils/node";
 import { useTopicStore } from "./store";
 import { getTopicDiagram } from "./utils";

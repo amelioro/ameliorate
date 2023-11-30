@@ -3,7 +3,7 @@ import set from "lodash/set";
 import { type EdgeSelectionChange, type NodeSelectionChange } from "reactflow";
 
 import { errorWithData } from "../../../common/errorHandling";
-import { GraphPart, type Node, Score, findGraphPart, findNode } from "../utils/diagram";
+import { GraphPart, type Node, Score, findGraphPart, findNode } from "../utils/graph";
 import { useTopicStore } from "./store";
 import { getActiveDiagram, setSelected as setSelectedUtil } from "./utils";
 

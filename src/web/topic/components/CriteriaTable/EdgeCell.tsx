@@ -1,4 +1,4 @@
-import { Edge } from "../../utils/diagram";
+import { Edge } from "../../utils/graph";
 import { EdgeIndicatorGroup } from "../Indicator/EdgeIndicatorGroup";
 import { StyledDiv } from "./EdgeCell.styles";
 

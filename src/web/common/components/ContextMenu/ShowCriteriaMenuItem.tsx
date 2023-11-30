@@ -1,6 +1,6 @@
 import { useNodeChildren } from "../../../topic/store/nodeHooks";
 import { toggleShowNeighbors } from "../../../topic/store/viewActions";
-import { Node } from "../../../topic/utils/diagram";
+import { Node } from "../../../topic/utils/graph";
 import { CloseOnClickMenuItem } from "./CloseOnClickMenuItem";
 
 export const ShowCriteriaMenuItem = ({ node }: { node: Node }) => {

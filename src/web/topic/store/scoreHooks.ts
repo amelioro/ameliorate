@@ -1,6 +1,6 @@
 import get from "lodash/get";
 
-import { Score } from "../utils/diagram";
+import { Score } from "../utils/graph";
 import { useTopicStore } from "./store";
 
 export const useUserScores = (graphPartId: string, perspectives: string[]) => {

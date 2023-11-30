@@ -1,4 +1,4 @@
-import { Node } from "../../utils/diagram";
+import { Node } from "../../utils/graph";
 import { EditableNode } from "../Node/EditableNode";
 import { StyledDiv } from "./NodeCell.styles";
 

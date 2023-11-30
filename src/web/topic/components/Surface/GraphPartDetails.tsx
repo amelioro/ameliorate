@@ -9,7 +9,7 @@ import { nodeSchema } from "../../../../common/node";
 import { useSessionUser } from "../../../common/hooks";
 import { setGraphPartNotes } from "../../store/actions";
 import { useUserCanEditTopicData } from "../../store/userHooks";
-import { GraphPart, isNode } from "../../utils/diagram";
+import { GraphPart, isNode } from "../../utils/graph";
 import { nodeDecorations } from "../../utils/node";
 import { StandaloneEdge } from "../Edge/StandaloneEdge";
 import { EditableNode } from "../Node/EditableNode";

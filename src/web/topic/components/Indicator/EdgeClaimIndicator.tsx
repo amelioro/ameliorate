@@ -1,5 +1,5 @@
 import { claimRelationNames } from "../../../../common/edge";
-import { Edge } from "../../utils/diagram";
+import { Edge } from "../../utils/graph";
 import { ClaimIndicator } from "./ClaimIndicator";
 
 interface Props {

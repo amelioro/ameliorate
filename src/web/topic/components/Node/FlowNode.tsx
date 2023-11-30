@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { useSessionUser } from "../../../common/hooks";
 import { useIsEdgeSelected, useIsNeighborSelected } from "../../store/nodeHooks";
 import { useUserCanEditTopicData } from "../../store/userHooks";
-import { Node } from "../../utils/diagram";
+import { Node } from "../../utils/graph";
 import { FlowNodeType } from "../../utils/node";
 import { DiagramContext, NodeProps } from "../Diagram/Diagram";
 import { Spotlight } from "../Diagram/Diagram.styles";
@@ -56,7 +56,6 @@ export const FlowNode = (flowNode: NodeProps) => {
 
       <HoverBridgeDiv />
 
-      <NodeHandle node={node} direction="parent" orientation={orientation} />
       {/* should this use react-flow's NodeToolbar? seems like it'd automatically handle positioning */}
       {userCanEditTopicData && (
         <AddNodeButtonGroupParent
@@ -73,7 +72,9 @@ export const FlowNode = (flowNode: NodeProps) => {
         layout={animated}
         style={{ pointerEvents: "none" }}
       >
+        <NodeHandle node={node} direction="parent" orientation={orientation} />
         <StyledEditableNode node={node} spotlight={spotlight} />
+        <NodeHandle node={node} direction="child" orientation={orientation} />
       </motion.div>
 
       {userCanEditTopicData && (
@@ -84,7 +85,6 @@ export const FlowNode = (flowNode: NodeProps) => {
           orientation={orientation}
         />
       )}
-      <NodeHandle node={node} direction="child" orientation={orientation} />
     </>
   );
 };
