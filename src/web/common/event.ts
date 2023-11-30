@@ -1,6 +1,6 @@
 import { createNanoEvents } from "nanoevents";
 
-import { Node } from "../topic/utils/diagram";
+import { Node } from "../topic/utils/graph";
 
 interface Events {
   addNode: (node: Node) => void;

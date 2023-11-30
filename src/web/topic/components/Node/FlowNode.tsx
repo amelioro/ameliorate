@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { useSessionUser } from "../../../common/hooks";
 import { useIsEdgeSelected, useIsNeighborSelected } from "../../store/nodeHooks";
 import { useUserCanEditTopicData } from "../../store/userHooks";
-import { Node } from "../../utils/diagram";
+import { Node } from "../../utils/graph";
 import { FlowNodeType } from "../../utils/node";
 import { DiagramContext, NodeProps } from "../Diagram/Diagram";
 import { Spotlight } from "../Diagram/Diagram.styles";

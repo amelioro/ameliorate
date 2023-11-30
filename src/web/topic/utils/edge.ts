@@ -1,6 +1,7 @@
 import { RelationName, claimRelationNames } from "../../../common/edge";
 import { hasClaims } from "./claim";
-import { Diagram, Edge, Graph, Node, RelationDirection, findNode } from "./diagram";
+import { Diagram } from "./diagram";
+import { Edge, Graph, Node, RelationDirection, findNode } from "./graph";
 import { FlowNodeType, children, claimNodeTypes, components, parents } from "./node";
 
 // Assumes that we're always pointing from child to parent.

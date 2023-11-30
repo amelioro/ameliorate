@@ -2,7 +2,7 @@ import { Stack } from "@mui/material";
 import { Position } from "reactflow";
 
 import { useNode } from "../../store/nodeHooks";
-import { Edge } from "../../utils/diagram";
+import { Edge } from "../../utils/graph";
 import { EdgeProps } from "../Diagram/Diagram";
 import { EditableNode } from "../Node/EditableNode";
 import { nodeWidthPx } from "../Node/EditableNode.styles";

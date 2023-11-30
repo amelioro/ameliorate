@@ -1,5 +1,5 @@
 import { claimNodeTypes } from "../../../../common/node";
-import { Node } from "../../utils/diagram";
+import { Node } from "../../utils/graph";
 import { ClaimIndicator } from "./ClaimIndicator";
 
 interface Props {

@@ -1,7 +1,7 @@
 import { claimRelationNames } from "../../../../common/edge";
 import { deleteEdge } from "../../../topic/store/createDeleteActions";
 import { useUserCanEditTopicData } from "../../../topic/store/userHooks";
-import { Edge } from "../../../topic/utils/diagram";
+import { Edge } from "../../../topic/utils/graph";
 import { useSessionUser } from "../../hooks";
 import { CloseOnClickMenuItem } from "./CloseOnClickMenuItem";
 

@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 
-import { Edge } from "../../utils/diagram";
+import { Edge } from "../../utils/graph";
 import { EdgeClaimIndicator } from "../Indicator/EdgeClaimIndicator";
 import { Score } from "../Score/Score";
 

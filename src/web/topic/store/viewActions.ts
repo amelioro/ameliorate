@@ -1,7 +1,7 @@
 import { createDraft, finishDraft } from "immer";
 
 import { getImplicitLabel } from "../utils/claim";
-import { RelationDirection, buildNode, findNode } from "../utils/diagram";
+import { RelationDirection, buildNode, findNode } from "../utils/graph";
 import { FlowNodeType, children, parents } from "../utils/node";
 import { useTopicStore } from "./store";
 import { getTopicDiagram } from "./utils";

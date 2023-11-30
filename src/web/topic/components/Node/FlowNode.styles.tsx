@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { css } from "@mui/material";
 
-import { Node } from "../../utils/diagram";
+import { Node } from "../../utils/graph";
 import { Orientation } from "../../utils/layout";
 import { Spotlight, zIndex } from "../Diagram/Diagram.styles";
 import { AddNodeButtonGroup } from "../Node/AddNodeButtonGroup";

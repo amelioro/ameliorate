@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
-import { Edge, Node } from "../../topic/utils/diagram";
+import { Edge, Node } from "../../topic/utils/graph";
 
 export interface MenuPosition {
   top: number;

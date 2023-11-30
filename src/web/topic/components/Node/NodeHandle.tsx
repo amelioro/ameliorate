@@ -5,7 +5,7 @@ import { Position } from "reactflow";
 
 import { useNeighbors } from "../../store/nodeHooks";
 import { toggleShowNeighbors } from "../../store/viewActions";
-import { Node, RelationDirection } from "../../utils/diagram";
+import { Node, RelationDirection } from "../../utils/graph";
 import { Orientation } from "../../utils/layout";
 import { hideableNodeTypes, nodeDecorations } from "../../utils/node";
 import { StyledHandle } from "./NodeHandle.styles";

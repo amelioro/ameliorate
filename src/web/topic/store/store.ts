@@ -3,16 +3,8 @@ import { devtools, persist } from "zustand/middleware";
 import { createWithEqualityFn } from "zustand/traditional";
 
 import { claimRelationNames } from "../../../common/edge";
-import {
-  Diagram,
-  Edge,
-  Node,
-  Score,
-  buildNode,
-  filterHiddenComponents,
-  findGraphPart,
-  findNode,
-} from "../utils/diagram";
+import { Diagram, filterHiddenComponents } from "../utils/diagram";
+import { Edge, Node, Score, buildNode, findGraphPart, findNode } from "../utils/graph";
 import { apiSyncer } from "./apiSyncerMiddleware";
 import { migrate } from "./migrate";
 import { getClaimTree, getTopicDiagram } from "./utils";

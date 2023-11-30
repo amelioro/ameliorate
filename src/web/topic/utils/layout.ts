@@ -2,7 +2,7 @@ import ELK, { ElkNode, LayoutOptions } from "elkjs";
 
 import { NodeType, nodeTypes } from "../../../common/node";
 import { nodeHeightPx, nodeWidthPx } from "../components/Node/EditableNode.styles";
-import { type Edge, type Node } from "../utils/diagram";
+import { type Edge, type Node } from "./graph";
 
 export type Orientation = "DOWN" | "UP" | "RIGHT" | "LEFT";
 

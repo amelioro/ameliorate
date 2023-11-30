@@ -11,8 +11,8 @@ import {
 
 import { errorWithData } from "../../../common/errorHandling";
 import { NodeType } from "../../../common/node";
-import { Edge, Graph, Node } from "./diagram";
 import { componentTypes } from "./edge";
+import { Edge, Graph, Node } from "./graph";
 
 export const indicatorLengthRem = 1.25; // rem
 

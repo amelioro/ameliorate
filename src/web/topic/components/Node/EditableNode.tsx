@@ -5,7 +5,7 @@ import { useSessionUser } from "../../../common/hooks";
 import { openContextMenu } from "../../../common/store/contextMenuActions";
 import { finishAddingNode, setNodeLabel, setSelectedGraphPart } from "../../store/actions";
 import { useUserCanEditTopicData } from "../../store/userHooks";
-import { Node } from "../../utils/diagram";
+import { Node } from "../../utils/graph";
 import { nodeDecorations } from "../../utils/node";
 import { NodeIndicatorGroup } from "../Indicator/NodeIndicatorGroup";
 import {

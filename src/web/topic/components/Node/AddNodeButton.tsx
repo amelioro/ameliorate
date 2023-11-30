@@ -1,6 +1,6 @@
 import { addNode } from "../../store/createDeleteActions";
-import { type RelationDirection } from "../../utils/diagram";
 import { Relation } from "../../utils/edge";
+import { type RelationDirection } from "../../utils/graph";
 import { FlowNodeType, nodeDecorations } from "../../utils/node";
 import { StyledButton } from "./AddNodeButton.styles";
 

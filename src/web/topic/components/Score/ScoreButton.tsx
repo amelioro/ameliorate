@@ -3,7 +3,7 @@ import meanBy from "lodash/meanBy";
 import round from "lodash/round";
 import { MutableRefObject } from "react";
 
-import { Score, type Score as ScoreData } from "../../utils/diagram";
+import { Score, type Score as ScoreData } from "../../utils/graph";
 import { indicatorLengthRem } from "../../utils/node";
 import { StyledButton } from "./ScoreButton.styles";
 import { ScoreCompare } from "./ScoreCompare";
