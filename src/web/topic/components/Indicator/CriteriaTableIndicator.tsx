@@ -1,20 +1,16 @@
 import { TableChart, TableChartOutlined } from "@mui/icons-material";
 
-import { useNode, useNodeChildren } from "../../store/nodeHooks";
+import { useNodeChildren } from "../../store/nodeHooks";
 import { viewCriteriaTable } from "../../store/viewActions";
+import { ProblemNode } from "../../utils/graph";
 import { Indicator } from "../Indicator/Indicator";
 
 interface Props {
-  nodeId: string;
+  node: ProblemNode;
 }
 
-export const CriteriaTableIndicator = ({ nodeId }: Props) => {
-  const node = useNode(nodeId);
-  const nodeChildren = useNodeChildren(nodeId);
-
-  if (node === null || node.type !== "problem") {
-    return <></>;
-  }
+export const CriteriaTableIndicator = ({ node }: Props) => {
+  const nodeChildren = useNodeChildren(node.id);
 
   const hasCriteria = nodeChildren.some((child) => child.type === "criterion");
 
@@ -24,7 +20,7 @@ export const CriteriaTableIndicator = ({ nodeId }: Props) => {
     <Indicator
       Icon={Icon}
       title={"View criteria table"}
-      onClick={() => viewCriteriaTable(nodeId)}
+      onClick={() => viewCriteriaTable(node.id)}
     />
   );
 };
