@@ -69,7 +69,11 @@ export const GraphPartDetails = ({ graphPart }: Props) => {
         <Divider />
 
         <ListItem disablePadding={false} sx={{ justifyContent: "center" }}>
-          {partIsNode ? <EditableNode node={graphPart} /> : <StandaloneEdge edge={graphPart} />}
+          {partIsNode ? (
+            <EditableNode node={graphPart} supplemental />
+          ) : (
+            <StandaloneEdge edge={graphPart} />
+          )}
         </ListItem>
 
         <Divider />

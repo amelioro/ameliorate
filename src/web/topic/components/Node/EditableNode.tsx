@@ -17,7 +17,21 @@ import {
   YEdgeDiv,
 } from "./EditableNode.styles";
 
-export const EditableNode = ({ node, className = "" }: { node: Node; className?: string }) => {
+interface Props {
+  node: Node;
+  /**
+   * If a node is supplemental, clicking it won't select it. This is useful for nodes in the details
+   * pane, where you may want to edit text or score without selecting it (and thus displaying a new
+   * node's detail pane).
+   *
+   * Potentially  this could be avoided by turning off "click to select" and requiring clicking on
+   * the details button to select, but selecting with a click seems intuitive.
+   */
+  supplemental?: boolean;
+  className?: string;
+}
+
+export const EditableNode = ({ node, supplemental = false, className = "" }: Props) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
 
@@ -49,11 +63,16 @@ export const EditableNode = ({ node, className = "" }: { node: Node; className?:
   const color = theme.palette[node.type].main;
   const NodeIcon = nodeDecoration.NodeIcon;
 
+  // Require selecting a node before editing it, because oftentimes you'll want to select a node to
+  // view more details, and the editing will be distracting. Only edit after clicking when selected.
+  // Supplemental nodes are always editable, because clicking does not select them.
+  const editable = userCanEditTopicData && (supplemental || node.selected);
+
   return (
     <NodeDiv
       color={color}
       className={className + (node.selected ? " selected" : "")}
-      onClick={() => setSelectedGraphPart(node.id)}
+      onClick={() => !supplemental && setSelectedGraphPart(node.id)}
       onContextMenu={(event) => openContextMenu(event, { node })}
     >
       <YEdgeDiv>
@@ -74,9 +93,7 @@ export const EditableNode = ({ node, className = "" }: { node: Node; className?:
             if (event.target.value !== node.data.label) setNodeLabel(node, event.target.value);
           }}
           className="nopan" // allow regular text input drag functionality without using reactflow's pan behavior
-          // Require selecting a node before editing it, because oftentimes you'll want to select a node to
-          // view more details, and the editing will be distracting. Only edit after clicking when selected.
-          readOnly={!userCanEditTopicData || !node.selected}
+          readOnly={!editable}
         />
       </MiddleDiv>
     </NodeDiv>
