@@ -33,7 +33,7 @@ export const DetailsClaimsSection = ({ graphPart }: Props) => {
       {/* spacing is the amount that centers the add buttons above the columns */}
       <Stack direction="row" justifyContent="center" alignItems="center" margin="8px" spacing={6}>
         <AddNodeButton
-          fromNodeId={graphPart.id}
+          fromPartId={graphPart.id}
           as="child"
           toNodeType="support"
           // TODO: remove root claims with edge directly to argued part
@@ -46,7 +46,7 @@ export const DetailsClaimsSection = ({ graphPart }: Props) => {
         />
         <ClaimTreeIndicator graphPartId={graphPart.data.arguedDiagramPartId ?? graphPart.id} />
         <AddNodeButton
-          fromNodeId={graphPart.id}
+          fromPartId={graphPart.id}
           as="child"
           toNodeType="critique"
           // TODO: remove root claims with edge directly to argued part

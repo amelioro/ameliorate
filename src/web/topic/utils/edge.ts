@@ -185,11 +185,11 @@ export const nodes = (edge: Edge, nodes: Node[]) => {
   return [parentNode(edge, nodes), childNode(edge, nodes)];
 };
 
-export const getConnectingEdge = (node1: Node, node2: Node, edges: Edge[]) => {
+export const getConnectingEdge = (graphPartId1: string, graphPartId2: string, edges: Edge[]) => {
   const edge = edges.find(
     (edge) =>
-      (edge.source === node1.id && edge.target === node2.id) ||
-      (edge.source === node2.id && edge.target === node1.id)
+      (edge.source === graphPartId1 && edge.target === graphPartId2) ||
+      (edge.source === graphPartId2 && edge.target === graphPartId2)
   );
 
   return edge;

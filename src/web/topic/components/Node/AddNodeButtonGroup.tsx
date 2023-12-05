@@ -35,7 +35,7 @@ export const AddNodeButtonGroup = ({
       {addableRelations.map(({ toNodeType, relation }) => (
         <AddNodeButton
           key={toNodeType}
-          fromNodeId={fromNodeId}
+          fromPartId={fromNodeId}
           as={as}
           toNodeType={toNodeType}
           relation={relation}

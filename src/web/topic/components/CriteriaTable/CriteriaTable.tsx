@@ -39,7 +39,7 @@ const buildRows = (rowNodes: Node[], columnNodes: Node[], edges: Edge[]): RowDat
       rowNode,
       ...Object.fromEntries(
         columnNodes.map((columnNode) => {
-          const edge = getConnectingEdge(rowNode, columnNode, edges);
+          const edge = getConnectingEdge(rowNode.id, columnNode.id, edges);
           if (!edge) {
             throw errorWithData(`No edge found between ${rowNode.id} and ${columnNode.id}`, edges);
           }
@@ -127,14 +127,14 @@ export const CriteriaTable = ({ problemNodeId }: Props) => {
         {userCanEditTopicData && (
           <>
             <AddNodeButton
-              fromNodeId={problemNodeId}
+              fromPartId={problemNodeId}
               as="child"
               toNodeType="solution"
               relation={{ child: "solution", name: "addresses", parent: "problem" }}
             />
 
             <AddNodeButton
-              fromNodeId={problemNodeId}
+              fromPartId={problemNodeId}
               as="child"
               toNodeType="criterion"
               relation={{ child: "criterion", name: "criterionFor", parent: "problem" }}
