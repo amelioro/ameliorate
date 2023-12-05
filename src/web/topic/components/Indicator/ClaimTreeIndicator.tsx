@@ -1,7 +1,7 @@
-import { Article, ArticleOutlined } from "@mui/icons-material";
+import { AccountTree, AccountTreeOutlined } from "@mui/icons-material";
 
 import { useSessionUser } from "../../../common/hooks";
-import { useExplicitClaimCount } from "../../store/graphPartHooks";
+import { useExplicitClaimCount, useNonTopLevelClaimCount } from "../../store/graphPartHooks";
 import { useUserCanEditTopicData } from "../../store/userHooks";
 import { viewOrCreateClaimTree } from "../../store/viewActions";
 import { Indicator } from "./Indicator";
@@ -10,17 +10,21 @@ interface Props {
   graphPartId: string;
 }
 
-export const ClaimIndicator = ({ graphPartId }: Props) => {
+export const ClaimTreeIndicator = ({ graphPartId }: Props) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const explicitClaimCount = useExplicitClaimCount(graphPartId);
+  const nonTopLevelClaimCount = useNonTopLevelClaimCount(graphPartId);
 
-  const Icon = explicitClaimCount > 0 ? Article : ArticleOutlined;
+  const Icon = nonTopLevelClaimCount > 0 ? AccountTree : AccountTreeOutlined;
+  const title =
+    "View claim tree" +
+    (nonTopLevelClaimCount > 0 ? ` (${nonTopLevelClaimCount} claims not shown here)` : "");
 
   return (
     <Indicator
       Icon={Icon}
-      title={"View claims"}
+      title={title}
       // Kind-of-hack to prevent viewing empty claim tree without edit access if there are no claims
       // because it'll try to create the root claim in the db, and give an authorize error
       onClick={

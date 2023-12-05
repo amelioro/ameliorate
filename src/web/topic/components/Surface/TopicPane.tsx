@@ -85,7 +85,10 @@ export const TopicPane = ({ isLandscape }: Props) => {
 
             <TabPanel value="Details">
               {selectedGraphPart !== undefined ? (
-                // key ensures that details components re-render, re-setting default values
+                // Key ensures that details components re-render, re-setting default values.
+                // Could consider using a `viewingGraphPart` separate from selected so that graph
+                // part details for parts outside of the shown diagram can be displayed, without
+                // losing tracking of the selected part per diagram.
                 <GraphPartDetails graphPart={selectedGraphPart} key={selectedGraphPart.id} />
               ) : activeArguedDiagramPart !== null ? (
                 <GraphPartDetails

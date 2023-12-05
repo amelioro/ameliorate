@@ -27,8 +27,6 @@ export interface NodeDecoration {
 // this is somewhat premature optimization, but already spent time designing this way so it's probably worth leaving these as distinct
 export type FlowNodeType = NodeType;
 
-export const claimNodeTypes: FlowNodeType[] = ["rootClaim", "support", "critique"];
-
 export const hideableNodeTypes: FlowNodeType[] = ["criterion", "effect", "solutionComponent"];
 
 export const nodeDecorations: Record<FlowNodeType, NodeDecoration> = {
