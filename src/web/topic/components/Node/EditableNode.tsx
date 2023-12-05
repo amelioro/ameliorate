@@ -38,7 +38,7 @@ export const EditableNode = ({ node, supplemental = false, className = "" }: Pro
   const theme = useTheme();
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
   useEffect(() => {
-    if (!node.data.newlyAdded || !node.selected || !textAreaRef.current) return;
+    if (!node.data.newlyAdded || !textAreaRef.current) return;
     finishAddingNode(node.id);
     const textArea = textAreaRef.current;
 
