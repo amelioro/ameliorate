@@ -62,9 +62,7 @@ model Node {
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 
-  topic         Topic  @relation(fields: [topicId], references: [id], onDelete: Cascade)
-  edgesAsSource Edge[] @relation("EdgeSource")
-  edgesAsTarget Edge[] @relation("EdgeTarget")
+  topic Topic @relation(fields: [topicId], references: [id], onDelete: Cascade)
 
   @@index([topicId])
   @@map("nodes")
@@ -92,9 +90,8 @@ model Edge {
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 
-  topic  Topic @relation(fields: [topicId], references: [id], onDelete: Cascade)
-  source Node  @relation("EdgeSource", fields: [sourceId], references: [id]) // don't cascade because e.g. source node deletion should generally not delete target node
-  target Node  @relation("EdgeTarget", fields: [targetId], references: [id])
+  topic Topic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  // when prisma allows weak FKs https://github.com/prisma/prisma/issues/7351, relation to source & target node/edge could be added here
 
   @@index([topicId])
   @@index([sourceId])
