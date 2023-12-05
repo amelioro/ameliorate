@@ -1,7 +1,8 @@
 import lowerCase from "lodash/lowerCase";
 
+import { claimRelationNames } from "../../../common/edge";
 import { errorWithData } from "../../../common/errorHandling";
-import { Edge, Graph, findGraphPart, isNode } from "./graph";
+import { Edge, Graph, GraphPart, findGraphPart, isNode } from "./graph";
 
 // Using claimEdges instead of claimNodes because eventually we'll probably replace Root Claim nodes
 // with direct edges from a claim to diagram part.
@@ -24,4 +25,8 @@ export const getImplicitLabel = (arguedDiagramPartId: string, topicGraph: Graph)
       sourceNode.data.label
     }"`;
   }
+};
+
+export const isClaimEdge = (graphPart: GraphPart) => {
+  return !isNode(graphPart) && claimRelationNames.includes(graphPart.label);
 };

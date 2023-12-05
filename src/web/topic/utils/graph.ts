@@ -24,6 +24,10 @@ export interface Node {
   type: FlowNodeType;
 }
 
+export interface ProblemNode extends Node {
+  type: "problem";
+}
+
 interface BuildProps {
   id?: string;
   label?: string;

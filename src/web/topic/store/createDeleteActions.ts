@@ -2,6 +2,7 @@ import { createDraft, finishDraft } from "immer";
 
 import { errorWithData } from "../../../common/errorHandling";
 import { emitter } from "../../common/event";
+import { getImplicitLabel } from "../utils/claim";
 import { Relation, canCreateEdge, getConnectingEdge, getRelation } from "../utils/edge";
 import {
   Graph,
@@ -16,12 +17,13 @@ import {
 } from "../utils/graph";
 import { FlowNodeType, edges } from "../utils/node";
 import { TopicStoreState, useTopicStore } from "./store";
-import { getActiveDiagram, getTopicDiagram, setSelected } from "./utils";
+import { getTopicDiagram, setSelected } from "./utils";
 
 const createNode = (
   state: TopicStoreState,
   toNodeType: FlowNodeType,
-  arguedDiagramPartId?: string
+  arguedDiagramPartId?: string,
+  selectNewNode = true
 ) => {
   const newNode = buildNode({ type: toNodeType, arguedDiagramPartId });
 
@@ -30,8 +32,8 @@ const createNode = (
   newNode.data.newlyAdded = true;
   /* eslint-enable functional/immutable-data */
 
-  const activeDiagram = getActiveDiagram(state);
-  setSelected(newNode.id, activeDiagram);
+  const topicGraph = { nodes: state.nodes, edges: state.edges };
+  if (selectNewNode) setSelected(newNode.id, topicGraph);
 
   return newNode;
 };
@@ -74,16 +76,44 @@ interface AddNodeProps {
   as: RelationDirection;
   toNodeType: FlowNodeType;
   relation: Relation;
+  selectNewNode?: boolean;
 }
 
-export const addNode = ({ fromNodeId, as, toNodeType, relation }: AddNodeProps) => {
+export const addNode = ({ fromNodeId, as, toNodeType, relation, selectNewNode }: AddNodeProps) => {
   const state = createDraft(useTopicStore.getState());
 
   const topicGraph = { nodes: state.nodes, edges: state.edges };
-  const fromNode = findNode(fromNodeId, topicGraph.nodes);
+
+  // TODO: replace root claim hackery with direct edge from claims to argued diagram part
+  // e.g. instead of support -> supports -> root claim, which requires this creation of a root claim
+  // if it doesn't exist, just do support -> supports -> argued diagram part.
+  // root claim has existed because edges could not previously point to other edges, but they will
+  // be able to soon.
+  if (
+    relation.parent === "rootClaim" &&
+    !topicGraph.nodes.find(
+      (node) =>
+        node.type === "rootClaim" &&
+        (node.data.arguedDiagramPartId === fromNodeId || node.id === fromNodeId)
+    )
+  ) {
+    const label = getImplicitLabel(fromNodeId, topicGraph);
+    // eslint-disable-next-line functional/immutable-data
+    state.nodes.push(buildNode({ type: "rootClaim", arguedDiagramPartId: fromNodeId, label }));
+  }
+
+  const rootClaim =
+    relation.parent === "rootClaim"
+      ? topicGraph.nodes.find(
+          (node) =>
+            node.type === "rootClaim" &&
+            (node.data.arguedDiagramPartId === fromNodeId || node.id === fromNodeId)
+        )
+      : undefined;
+  const fromNode = rootClaim ?? findNode(fromNodeId, topicGraph.nodes);
 
   // create and connect node
-  const newNode = createNode(state, toNodeType, fromNode.data.arguedDiagramPartId);
+  const newNode = createNode(state, toNodeType, fromNode.data.arguedDiagramPartId, selectNewNode);
 
   const parentNode = as === "parent" ? newNode : fromNode;
   const childNode = as === "parent" ? fromNode : newNode;

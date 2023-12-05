@@ -1,8 +1,9 @@
 import { RelationName, claimRelationNames } from "../../../common/edge";
+import { NodeType, claimNodeTypes } from "../../../common/node";
 import { hasClaims } from "./claim";
 import { Diagram } from "./diagram";
 import { Edge, Graph, Node, RelationDirection, findNode } from "./graph";
-import { FlowNodeType, children, claimNodeTypes, components, parents } from "./node";
+import { FlowNodeType, children, components, parents } from "./node";
 
 // Assumes that we're always pointing from child to parent.
 // This list is sorted by `parent` and then `child` so that it matches the partition order of nodes
@@ -37,7 +38,11 @@ export const relations = [
   { child: "critique", name: "critiques", parent: "critique" },
 ] as const;
 
-export type Relation = typeof relations[number];
+export interface Relation {
+  child: NodeType;
+  name: RelationName;
+  parent: NodeType;
+}
 
 export const getRelation = (
   parent: FlowNodeType,

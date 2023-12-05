@@ -1,9 +1,8 @@
 import {
-  Article,
+  AccountTree,
   AutoStories,
   ExpandLess,
   ExpandMore,
-  LibraryBooks,
   TableChart,
   TableView,
 } from "@mui/icons-material";
@@ -88,7 +87,7 @@ export const TopicViews = () => {
       <ListItem key="3">
         <ListItemButton onClick={() => setIsClaimsListOpen(!isClaimsListOpen)}>
           <ListItemIcon>
-            <LibraryBooks />
+            <AccountTree />
           </ListItemIcon>
           <ListItemText primary="Claim Trees" />
           {isClaimsListOpen ? <ExpandLess /> : <ExpandMore />}
@@ -100,7 +99,7 @@ export const TopicViews = () => {
             <ListItem key="1">
               <NestedListItemButton disabled={true}>
                 <ListItemIcon>
-                  <Article />
+                  <AccountTree />
                 </ListItemIcon>
                 <ListItemText primary="No claims yet!" />
               </NestedListItemButton>
@@ -113,7 +112,7 @@ export const TopicViews = () => {
                 onClick={() => viewClaimTree(arguedDiagramPartId)}
               >
                 <ListItemIcon>
-                  <Article />
+                  <AccountTree />
                 </ListItemIcon>
                 <ListItemText primary={diagramTitle} />
               </NestedListItemButton>

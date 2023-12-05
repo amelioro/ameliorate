@@ -1,6 +1,8 @@
 import styled from "@emotion/styled";
 import { Drawer, IconButton, css } from "@mui/material";
 
+import { nodeWidthRem } from "../Node/EditableNode.styles";
+
 export const PositionedDiv = styled.div`
   display: flex;
   position: relative;
@@ -44,13 +46,19 @@ const options = {
   shouldForwardProp: (prop: string) => !["open", "isLandscape"].includes(prop),
 };
 
+const drawerPaddingRem = 0.5;
+const drawerMinWidthRem = nodeWidthRem * 2 + drawerPaddingRem;
+
 // paper controls what the drawer actually looks like, but it's `position: fixed` so it
 // doesn't affect surrounding elements.
 // So there's a parent div non-fixed position in order to allow affecting surrounding elements (e.g. menu button),
 // and this needs to match transition and size of Paper; this is why there's css on both elements.
 export const StyledDrawer = styled(Drawer, options)<DrawerProps>`
   ${({ open, isLandscape }) => {
-    const length = open ? `min(30${isLandscape ? "vw" : "vh"}, 18.75rem)` : "0";
+    const lengthIfOpen = isLandscape
+      ? `${drawerMinWidthRem}rem`
+      : `min(30vh, ${drawerMinWidthRem}rem)`;
+    const length = open ? lengthIfOpen : "0";
     if (isLandscape) {
       return css`
         width: ${length};

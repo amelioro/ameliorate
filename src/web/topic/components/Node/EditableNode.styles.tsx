@@ -3,7 +3,7 @@ import { TextareaAutosize } from "@mui/material";
 
 import { htmlDefaultFontSize } from "../../../../pages/_document.page";
 
-const nodeWidthRem = 11;
+export const nodeWidthRem = 11;
 
 export const nodeWidthPx = nodeWidthRem * htmlDefaultFontSize;
 export const nodeHeightPx = 66;

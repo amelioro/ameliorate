@@ -13,6 +13,7 @@ import { GraphPart, isNode } from "../../utils/graph";
 import { nodeDecorations } from "../../utils/node";
 import { StandaloneEdge } from "../Edge/StandaloneEdge";
 import { EditableNode } from "../Node/EditableNode";
+import { DetailsClaimsSection } from "./DetailsClaimsSection";
 
 const formSchema = () => {
   return z.object({
@@ -69,7 +70,11 @@ export const GraphPartDetails = ({ graphPart }: Props) => {
         <Divider />
 
         <ListItem disablePadding={false} sx={{ justifyContent: "center" }}>
-          {partIsNode ? <EditableNode node={graphPart} /> : <StandaloneEdge edge={graphPart} />}
+          {partIsNode ? (
+            <EditableNode node={graphPart} supplemental />
+          ) : (
+            <StandaloneEdge edge={graphPart} />
+          )}
         </ListItem>
 
         <Divider />
@@ -86,6 +91,10 @@ export const GraphPartDetails = ({ graphPart }: Props) => {
             disabled={!userCanEditTopicData}
           />
         </ListItem>
+
+        <Divider />
+
+        <DetailsClaimsSection graphPart={graphPart} />
       </List>
     </form>
   );
