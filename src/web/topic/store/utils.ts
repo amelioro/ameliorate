@@ -37,14 +37,14 @@ export const getClaimEdges = (edges: Edge[]) => {
   return edges.filter((edge) => topicRelationNames.includes(edge.label));
 };
 
-export const setSelected = (graphPartId: string, diagram: Diagram) => {
+export const setSelected = (graphPartId: string, topicGraph: Graph) => {
   /* eslint-disable functional/immutable-data, no-param-reassign */
-  diagram.nodes.forEach((node) => {
+  topicGraph.nodes.forEach((node) => {
     if (node.id === graphPartId && !node.selected) node.selected = true;
     if (node.id !== graphPartId && node.selected) node.selected = false;
   });
 
-  diagram.edges.forEach((edge) => {
+  topicGraph.edges.forEach((edge) => {
     if (edge.id === graphPartId && !edge.selected) edge.selected = true;
     if (edge.id !== graphPartId && edge.selected) edge.selected = false;
   });

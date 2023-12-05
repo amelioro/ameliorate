@@ -1,6 +1,5 @@
 import { claimNodeTypes } from "../../../common/node";
 import { useTopicStore } from "./store";
-import { getActiveDiagram } from "./utils";
 
 export const useExplicitClaimCount = (graphPartId: string) => {
   return useTopicStore((state) => {
@@ -15,9 +14,6 @@ export const useExplicitClaimCount = (graphPartId: string) => {
 
 export const useSelectedGraphPart = () => {
   return useTopicStore((state) => {
-    const diagram = getActiveDiagram(state);
-    return (
-      diagram.edges.find((edge) => edge.selected) ?? diagram.nodes.find((node) => node.selected)
-    );
+    return state.edges.find((edge) => edge.selected) ?? state.nodes.find((node) => node.selected);
   });
 };

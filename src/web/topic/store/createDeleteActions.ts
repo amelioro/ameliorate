@@ -16,12 +16,13 @@ import {
 } from "../utils/graph";
 import { FlowNodeType, edges } from "../utils/node";
 import { TopicStoreState, useTopicStore } from "./store";
-import { getActiveDiagram, getTopicDiagram, setSelected } from "./utils";
+import { getTopicDiagram, setSelected } from "./utils";
 
 const createNode = (
   state: TopicStoreState,
   toNodeType: FlowNodeType,
-  arguedDiagramPartId?: string
+  arguedDiagramPartId?: string,
+  selectNewNode = true
 ) => {
   const newNode = buildNode({ type: toNodeType, arguedDiagramPartId });
 
@@ -30,8 +31,8 @@ const createNode = (
   newNode.data.newlyAdded = true;
   /* eslint-enable functional/immutable-data */
 
-  const activeDiagram = getActiveDiagram(state);
-  setSelected(newNode.id, activeDiagram);
+  const topicGraph = { nodes: state.nodes, edges: state.edges };
+  if (selectNewNode) setSelected(newNode.id, topicGraph);
 
   return newNode;
 };

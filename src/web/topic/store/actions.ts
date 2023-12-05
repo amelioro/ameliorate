@@ -5,7 +5,7 @@ import { type EdgeSelectionChange, type NodeSelectionChange } from "reactflow";
 import { errorWithData } from "../../../common/errorHandling";
 import { GraphPart, type Node, Score, findGraphPart, findNode } from "../utils/graph";
 import { useTopicStore } from "./store";
-import { getActiveDiagram, setSelected as setSelectedUtil } from "./utils";
+import { setSelected as setSelectedUtil } from "./utils";
 
 // score setting is way more work than it needs to be because one score can live in multiple places:
 // - on the graphPart
@@ -87,9 +87,8 @@ export const setSelected = (selectChanges: NodeSelectionChange[] | EdgeSelection
 export const setSelectedGraphPart = (graphPartId: string) => {
   const state = createDraft(useTopicStore.getState());
 
-  const activeDiagram = getActiveDiagram(state);
-
-  setSelectedUtil(graphPartId, activeDiagram);
+  const topicGraph = { nodes: state.nodes, edges: state.edges };
+  setSelectedUtil(graphPartId, topicGraph);
 
   useTopicStore.temporal.getState().pause();
   useTopicStore.setState(finishDraft(state), false, "setSelectedGraphPart");
