@@ -81,6 +81,9 @@ interface AddNodeProps {
 }
 
 export const addNode = ({ fromPartId, as, toNodeType, relation, selectNewNode }: AddNodeProps) => {
+  if (!getRelation(relation.parent, relation.child, relation.name))
+    throw errorWithData("invalid relation to add", relation);
+
   const state = createDraft(useTopicStore.getState());
 
   const topicGraph = { nodes: state.nodes, edges: state.edges };
