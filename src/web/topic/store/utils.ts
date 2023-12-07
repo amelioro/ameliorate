@@ -1,5 +1,5 @@
-import { topicRelationNames } from "../../../common/edge";
-import { topicNodeTypes } from "../../../common/node";
+import { claimRelationNames, topicRelationNames } from "../../../common/edge";
+import { claimNodeTypes, topicNodeTypes } from "../../../common/node";
 import { Diagram, getDiagramTitle } from "../utils/diagram";
 import { Edge, Graph } from "../utils/graph";
 import { PlaygroundTopic, StoreTopic, TopicStoreState } from "./store";
@@ -26,8 +26,15 @@ export const getTopicDiagram = (topicGraph: Graph): Diagram => {
 
 export const getClaimTree = (topicGraph: Graph, arguedDiagramPartId: string): Diagram => {
   return {
-    nodes: topicGraph.nodes.filter((node) => node.data.arguedDiagramPartId === arguedDiagramPartId),
-    edges: topicGraph.edges.filter((edge) => edge.data.arguedDiagramPartId === arguedDiagramPartId),
+    nodes: topicGraph.nodes.filter(
+      (node) =>
+        claimNodeTypes.includes(node.type) && node.data.arguedDiagramPartId === arguedDiagramPartId
+    ),
+    edges: topicGraph.edges.filter(
+      (edge) =>
+        claimRelationNames.includes(edge.label) &&
+        edge.data.arguedDiagramPartId === arguedDiagramPartId
+    ),
     orientation: "RIGHT",
     type: "claimTree",
   };

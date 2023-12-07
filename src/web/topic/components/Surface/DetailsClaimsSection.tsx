@@ -1,5 +1,5 @@
 import { ThumbsUpDown } from "@mui/icons-material";
-import { Divider, ListItem, ListItemIcon, ListItemText, Stack, Typography } from "@mui/material";
+import { ListItem, ListItemIcon, ListItemText, Stack, Typography } from "@mui/material";
 
 import { claimNodeTypes } from "../../../../common/node";
 import { useTopLevelClaims } from "../../store/graphPartHooks";
@@ -31,7 +31,13 @@ export const DetailsClaimsSection = ({ graphPart }: Props) => {
       </ListItem>
 
       {/* spacing is the amount that centers the add buttons above the columns */}
-      <Stack direction="row" justifyContent="center" alignItems="center" margin="8px" spacing={6}>
+      <Stack
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+        marginBottom="8px"
+        spacing={6}
+      >
         <AddNodeButton
           fromPartId={graphPart.id}
           as="child"
@@ -59,7 +65,13 @@ export const DetailsClaimsSection = ({ graphPart }: Props) => {
         />
       </Stack>
 
-      <Stack direction="row" justifyContent="center" alignItems="flex-start" spacing="2px">
+      <Stack
+        direction="row"
+        justifyContent="center"
+        alignItems="flex-start"
+        spacing="2px"
+        marginBottom={0.5}
+      >
         <Stack width={nodeWidthPx} alignItems="center" spacing="2px">
           {supports.length > 0 ? (
             supports.map((support) => <EditableNode key={support.id} node={support} supplemental />)
@@ -67,8 +79,6 @@ export const DetailsClaimsSection = ({ graphPart }: Props) => {
             <Typography>No supports yet!</Typography>
           )}
         </Stack>
-
-        <Divider orientation="vertical" flexItem />
 
         <Stack width={nodeWidthPx} alignItems="center" spacing="2px">
           {critiques.length > 0 ? (

@@ -1,5 +1,5 @@
-import { claimRelationNames } from "../../../common/edge";
-import { NodeType, claimNodeTypes } from "../../../common/node";
+import { RelationName, claimRelationNames } from "../../../common/edge";
+import { NodeType, claimNodeTypes, exploreNodeTypes } from "../../../common/node";
 import { isClaimEdge } from "../utils/claim";
 import { Node, findGraphPart } from "../utils/graph";
 import { useTopicStore } from "./store";
@@ -56,6 +56,27 @@ export const useNonTopLevelClaimCount = (graphPartId: string) => {
     return state.edges.filter(
       (edge) => edge.data.arguedDiagramPartId === graphPartId && edge.source !== rootClaim.id
     ).length;
+  });
+};
+
+const commonExploreRelations: RelationName[] = ["asksAbout", "relevantFor"];
+
+export const useExploreNodes = (graphPartId: string) => {
+  return useTopicStore((state) => {
+    const exploreEdges = state.edges.filter(
+      (edge) => edge.source === graphPartId && commonExploreRelations.includes(edge.label)
+    );
+
+    const exploreNodes = state.nodes.filter(
+      (node) =>
+        exploreNodeTypes.includes(node.type) && exploreEdges.find((edge) => edge.target === node.id)
+    );
+
+    return {
+      questions: exploreNodes.filter((node) => node.type === "question"),
+      facts: exploreNodes.filter((node) => node.type === "fact"),
+      sources: exploreNodes.filter((node) => node.type === "source"),
+    };
   });
 };
 

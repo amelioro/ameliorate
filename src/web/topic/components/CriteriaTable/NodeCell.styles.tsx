@@ -12,6 +12,7 @@ export const StyledDiv = styled.div`
   min-width: ${nodeWidthPx}px;
 
   & > div {
+    height: 100%; // expand to fill cell in case other cells are bigger due to nodes having more rows of text
     width: auto; // override EditableNode's width to allow stretching
   }
 `;
