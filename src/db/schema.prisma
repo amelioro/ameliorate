@@ -69,11 +69,20 @@ model Node {
 }
 
 enum NodeType {
+  // topic
   problem
-  solution
-  solutionComponent
   criterion
   effect
+  solutionComponent
+  solution
+
+  // explore
+  question
+  answer
+  fact
+  source
+
+  // claim
   rootClaim
   support
   critique
@@ -100,6 +109,7 @@ model Edge {
 }
 
 enum EdgeType {
+  // topic
   causes
   addresses
   createdBy
@@ -107,6 +117,14 @@ enum EdgeType {
   criterionFor
   creates
   embodies
+
+  // explore
+  asksAbout
+  potentialAnswerTo
+  relevantFor
+  sourceOf
+
+  // claim
   supports
   critiques
 }
