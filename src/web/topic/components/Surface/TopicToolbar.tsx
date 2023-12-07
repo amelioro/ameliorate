@@ -1,10 +1,7 @@
-import { Build, Delete, Download, Error, Group, Redo, Undo, Upload } from "@mui/icons-material";
+import { Build, Delete, Error, Group, Redo, Undo } from "@mui/icons-material";
 import { AppBar, Divider, IconButton, ToggleButton, Toolbar, Tooltip } from "@mui/material";
-import fileDownload from "js-file-download";
 import { useEffect, useState } from "react";
-import { StorageValue } from "zustand/middleware";
 
-import { errorWithData } from "../../../../common/errorHandling";
 import { emitter } from "../../../common/event";
 import { useSessionUser } from "../../../common/hooks";
 import {
@@ -14,50 +11,11 @@ import {
 } from "../../../view/store/store";
 import { deleteGraphPart } from "../../store/createDeleteActions";
 import { useSelectedGraphPart } from "../../store/graphPartHooks";
-import { migrate } from "../../store/migrate";
-import { TopicStoreState } from "../../store/store";
 import { useOnPlayground } from "../../store/topicHooks";
 import { useUserCanEditTopicData } from "../../store/userHooks";
-import { getPersistState, redo, setTopicData, undo } from "../../store/utilActions";
+import { redo, undo } from "../../store/utilActions";
 import { useTemporalHooks } from "../../store/utilHooks";
-import { getTopicTitle } from "../../store/utils";
 import { MoreActionsDrawer } from "./MoreActionsDrawer";
-
-// TODO: might be useful to have downloaded state be more human editable;
-// for this, probably should prettify the JSON, and remove position values (we can re-layout on import)
-const downloadTopic = () => {
-  const persistState = getPersistState();
-
-  const topicState = persistState.state;
-  const topicTitle = getTopicTitle(topicState);
-  const sanitizedFileName = topicTitle.replace(/[^a-z0-9]/gi, "_").toLowerCase(); // thanks https://stackoverflow.com/a/8485137
-
-  fileDownload(JSON.stringify(persistState), `${sanitizedFileName}.json`);
-};
-
-const uploadTopic = (event: React.ChangeEvent<HTMLInputElement>, sessionUsername?: string) => {
-  if (event.target.files === null) return;
-
-  const file = event.target.files[0];
-  if (!file) return;
-
-  file
-    .text()
-    .then((text) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- TODO: validate that JSON matches interface
-      const persistState = JSON.parse(text) as StorageValue<TopicStoreState>;
-      if (!persistState.version) {
-        throw errorWithData("No version found in file, cannot migrate old state", persistState);
-      }
-
-      const migratedState = migrate(persistState.state, persistState.version) as TopicStoreState;
-
-      setTopicData(migratedState, sessionUsername);
-    })
-    .catch((error) => {
-      throw error;
-    });
-};
 
 export const TopicToolbar = () => {
   const { sessionUser } = useSessionUser();
@@ -84,23 +42,8 @@ export const TopicToolbar = () => {
   return (
     <AppBar position="sticky" color="primaryVariantLight">
       <Toolbar variant="dense">
-        {/* load actions */}
-        <IconButton color="inherit" title="Download" aria-label="Download" onClick={downloadTopic}>
-          <Download />
-        </IconButton>
-
         {userCanEditTopicData && (
           <>
-            <IconButton color="inherit" component="label" title="Upload" aria-label="Upload">
-              <Upload />
-              <input
-                hidden
-                accept=".json"
-                type="file"
-                onChange={(event) => uploadTopic(event, sessionUser?.username)}
-              />
-            </IconButton>
-
             <Divider orientation="vertical" />
             {/* diagram state change actions */}
 
@@ -176,6 +119,8 @@ export const TopicToolbar = () => {
         <MoreActionsDrawer
           isMoreActionsDrawerOpen={isMoreActionsDrawerOpen}
           setIsMoreActionsDrawerOpen={setIsMoreActionsDrawerOpen}
+          sessionUser={sessionUser}
+          userCanEditTopicData={userCanEditTopicData}
         />
 
         {hasErrored && (
