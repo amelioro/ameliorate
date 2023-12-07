@@ -2,6 +2,7 @@ import { z } from "zod";
 
 // not sure how to guarantee that this matches the schema enum
 export const relationNames = [
+  // topic
   "causes",
   "addresses",
   "createdBy",
@@ -9,6 +10,14 @@ export const relationNames = [
   "criterionFor",
   "creates",
   "embodies",
+
+  // explore
+  "asksAbout", //question to any node
+  "potentialAnswerTo", //answer to question
+  "relevantFor", //fact, source to any node except fact, source
+  "sourceOf", //source to fact
+
+  // claim
   "supports",
   "critiques",
 ] as const;
@@ -37,5 +46,11 @@ export const topicRelationNames: RelationName[] = [
   "criterionFor",
   "creates",
   "embodies",
+];
+export const exploreRelationNames: RelationName[] = [
+  "asksAbout",
+  "potentialAnswerTo",
+  "relevantFor",
+  "sourceOf",
 ];
 export const claimRelationNames: RelationName[] = ["supports", "critiques"];

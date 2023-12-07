@@ -9,7 +9,7 @@ import {
   type ThemeOptions,
   createTheme,
 } from "@mui/material";
-import { yellow } from "@mui/material/colors";
+import { grey, lightGreen, orange, yellow } from "@mui/material/colors";
 
 import { FlowNodeType } from "../topic/utils/node";
 
@@ -146,13 +146,22 @@ const sharedPalette = {
   neutral: augmentColor({ color: { main: "#BDBDBD" } }), // gray is very neutral, somewhat arbitrarily chosen, no particular relation to the other colors
   neutralContrast: augmentColor({ color: { main: "#000000" } }), // black contrasts with gray, separate from neutral.contrastText so that it gets its own augments I guess
   paper: augmentColor({ color: { main: "#fff" } }), // used for neutral-but-chosen score
+
+  // topic
   problem: augmentColor({ color: { main: secondary, contrastText: "rgba(0, 0, 0, 0.87)" } }),
   solution: augmentColor({ color: { main: primary } }),
   solutionComponent: augmentColor({ color: { main: primaryVariantLight } }),
   criterion: augmentColor({ color: { main: "#4AB885" } }), // mint: analogous to solution; between solution & support because criteria are kind of like supports for solutions
   effect: augmentColor({ color: { main: yellow[500] } }), // random yellow that looks decent: somewhat similar to green/solution but also goes well with lightning bolt icon
-  rootClaim: augmentColor({ color: { main: "#DA9526" } }), // goldenrod (gold): somewhat neutral; analogous to critique
 
+  // explore
+  question: augmentColor({ color: { main: grey[500] } }), // grey, ambiguous, uncertain
+  answer: augmentColor({ color: { main: lightGreen.A400 } }), // lime-green, answer
+  fact: augmentColor({ color: { main: orange["700"] } }), // orange, fact
+  source: augmentColor({ color: { main: "#0288d1", contrastText: "rgba(0, 0, 0, 0.87)" } }), // blue, info
+
+  // claim
+  rootClaim: augmentColor({ color: { main: "#DA9526" } }), // goldenrod (gold): somewhat neutral; analogous to critique
   // Picked a non-green support-ish color (cyan) for support #26C5DA, grabbed its complement #DA2626 (red-orange) for critique,
   // then entered those into the material 3 theme builder and grabbed 5 tones from each of those two colors' tonal palettes.
   // The numbered support & critique colors are used for coloring scores.

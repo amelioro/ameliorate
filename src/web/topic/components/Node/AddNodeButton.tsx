@@ -1,13 +1,14 @@
+import { NodeType } from "../../../../common/node";
 import { addNode } from "../../store/createDeleteActions";
 import { Relation } from "../../utils/edge";
 import { type RelationDirection } from "../../utils/graph";
-import { FlowNodeType, nodeDecorations } from "../../utils/node";
+import { nodeDecorations } from "../../utils/node";
 import { StyledButton } from "./AddNodeButton.styles";
 
 interface Props {
   fromPartId: string;
   as: RelationDirection;
-  toNodeType: FlowNodeType;
+  toNodeType: NodeType;
   relation: Relation;
   /**
    * Generally want to select the new node to highlight it in the view, but some cases we want to

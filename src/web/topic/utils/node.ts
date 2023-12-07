@@ -3,7 +3,11 @@ import {
   Ballot,
   Bolt,
   Check,
+  Code,
   Extension,
+  Info,
+  PriorityHigh,
+  QuestionMark,
   ThumbDown,
   ThumbUp,
   Widgets,
@@ -30,6 +34,7 @@ export type FlowNodeType = NodeType;
 export const hideableNodeTypes: FlowNodeType[] = ["criterion", "effect", "solutionComponent"];
 
 export const nodeDecorations: Record<FlowNodeType, NodeDecoration> = {
+  // topic
   problem: {
     title: "Problem",
     NodeIcon: Extension,
@@ -50,6 +55,26 @@ export const nodeDecorations: Record<FlowNodeType, NodeDecoration> = {
     title: "Solution",
     NodeIcon: Check,
   },
+
+  // explore
+  question: {
+    title: "Question",
+    NodeIcon: QuestionMark,
+  },
+  answer: {
+    title: "Answer",
+    NodeIcon: PriorityHigh,
+  },
+  fact: {
+    title: "Fact",
+    NodeIcon: Info,
+  },
+  source: {
+    title: "Source",
+    NodeIcon: Code,
+  },
+
+  // claim
   rootClaim: {
     title: "Root Claim",
     NodeIcon: Article,

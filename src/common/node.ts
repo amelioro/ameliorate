@@ -8,11 +8,20 @@ import { z } from "zod";
 // - the order to group node types in the same layer of the diagram,
 // - (future) the order to group node types in different layers of the diagram
 export const nodeTypes = [
+  // topic
   "problem",
   "criterion",
   "effect",
   "solutionComponent",
   "solution",
+
+  // explore
+  "question",
+  "answer",
+  "fact",
+  "source",
+
+  // claim
   "rootClaim",
   "support",
   "critique",
@@ -40,6 +49,7 @@ export const topicNodeTypes: NodeType[] = [
   "solutionComponent",
   "solution",
 ];
+export const exploreNodeTypes: NodeType[] = ["question", "answer", "fact", "source"];
 export const claimNodeTypes: NodeType[] = ["rootClaim", "support", "critique"];
 
 export const getNewTopicProblemNode = (topicId: number, topicTitle: string): Node => {
