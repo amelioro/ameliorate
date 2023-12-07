@@ -25,6 +25,7 @@ export const TopicWorkspace = () => {
           height: "100%",
           display: "flex",
           position: "relative",
+          overflow: "auto",
           flexDirection: isLandscape ? "row" : "column-reverse",
         }}
       >

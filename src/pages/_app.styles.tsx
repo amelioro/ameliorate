@@ -18,5 +18,6 @@ export const globals = css`
     flex: 1; // stretch to fill space between layout app bar and viewport bottom
     display: flex;
     flex-direction: column; // allow child diagram to stretch to fill space
+    min-height: 0; // allow workspace to shrink to fit if drawer is too big https://stackoverflow.com/a/36247448/8409296
   }
 `;
