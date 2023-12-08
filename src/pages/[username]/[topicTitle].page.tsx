@@ -9,7 +9,7 @@ import { Loading } from "../../web/common/components/Loading/Loading";
 import { useSessionUser } from "../../web/common/hooks";
 import { trpc } from "../../web/common/trpc";
 import { populateFromApi } from "../../web/topic/store/loadActions";
-import { setInitialPerspective } from "../../web/view/store/store";
+import { setInitialPerspective } from "../../web/view/perspectiveStore";
 
 // Don't render the workspace server-side.
 // Known reasons:

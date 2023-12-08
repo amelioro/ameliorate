@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { Loading } from "../web/common/components/Loading/Loading";
 import { populateFromLocalStorage } from "../web/topic/store/loadActions";
 import { playgroundUsername } from "../web/topic/store/store";
-import { setInitialPerspective } from "../web/view/store/store";
+import { setInitialPerspective } from "../web/view/perspectiveStore";
 
 // Don't render the workspace server-side.
 // Known reasons:

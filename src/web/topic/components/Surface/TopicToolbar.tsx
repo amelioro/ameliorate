@@ -23,7 +23,7 @@ import {
   comparePerspectives,
   resetPerspectives,
   useIsComparingPerspectives,
-} from "../../../view/store/store";
+} from "../../../view/perspectiveStore";
 import { deleteGraphPart } from "../../store/createDeleteActions";
 import { useOnPlayground } from "../../store/topicHooks";
 import { useUserCanEditTopicData } from "../../store/userHooks";
