@@ -24,8 +24,8 @@ export const convertToStoreEdge = (apiEdge: TopicEdge) => {
   return buildEdge({
     id: apiEdge.id,
     notes: apiEdge.notes,
-    sourceNodeId: apiEdge.sourceId,
-    targetNodeId: apiEdge.targetId,
+    sourceId: apiEdge.sourceId,
+    targetId: apiEdge.targetId,
     relation: apiEdge.type,
     arguedDiagramPartId: apiEdge.arguedDiagramPartId ?? undefined,
   });

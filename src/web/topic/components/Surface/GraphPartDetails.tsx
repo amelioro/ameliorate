@@ -14,6 +14,7 @@ import { nodeDecorations } from "../../utils/node";
 import { StandaloneEdge } from "../Edge/StandaloneEdge";
 import { EditableNode } from "../Node/EditableNode";
 import { DetailsClaimsSection } from "./DetailsClaimsSection";
+import { DetailsExploreSection } from "./DetailsExploreSection";
 
 const formSchema = () => {
   return z.object({
@@ -95,6 +96,10 @@ export const GraphPartDetails = ({ graphPart }: Props) => {
         <Divider />
 
         <DetailsClaimsSection graphPart={graphPart} />
+
+        <Divider />
+
+        <DetailsExploreSection graphPart={graphPart} />
       </List>
     </form>
   );

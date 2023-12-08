@@ -36,11 +36,20 @@ const buildNodeComponent = (type: FlowNodeType) => {
 
 // this can be generated via `nodeDecorations` but hard to do without the complexity making it hard to follow, so leaving this hardcoded
 const nodeTypes: Record<FlowNodeType, ComponentType<NodeProps>> = {
+  // topic
   problem: buildNodeComponent("problem"),
   solution: buildNodeComponent("solution"),
   solutionComponent: buildNodeComponent("solutionComponent"),
   criterion: buildNodeComponent("criterion"),
   effect: buildNodeComponent("effect"),
+
+  // explore
+  question: buildNodeComponent("question"),
+  answer: buildNodeComponent("answer"),
+  fact: buildNodeComponent("fact"),
+  source: buildNodeComponent("source"),
+
+  // claim
   rootClaim: buildNodeComponent("rootClaim"),
   support: buildNodeComponent("support"),
   critique: buildNodeComponent("critique"),

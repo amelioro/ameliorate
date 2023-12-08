@@ -47,7 +47,8 @@ const options = {
 };
 
 const drawerPaddingRem = 0.5;
-const drawerMinWidthRem = nodeWidthRem * 2 + drawerPaddingRem;
+const drawerScrollbarWidthRem = 1; // make container big enough to hold both nodes even with scrollbar showing
+const drawerMinWidthRem = nodeWidthRem * 2 + drawerPaddingRem + drawerScrollbarWidthRem;
 
 // paper controls what the drawer actually looks like, but it's `position: fixed` so it
 // doesn't affect surrounding elements.

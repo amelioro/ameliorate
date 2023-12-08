@@ -78,7 +78,6 @@ const options = {
 /* some copied from https://github.com/wbkd/react-flow/blob/147656b22f577bb4141664d000e62ada9b490473/src/theme-default.css#L42-L77 */
 export const NodeDiv = styled("div", options)<NodeDivProps>`
   width: ${nodeWidthRem}rem;
-  height: 100%; // allow expanding for use with table cells
 
   background: ${({ color }) => color};
   padding: 0px;

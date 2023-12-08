@@ -11,6 +11,7 @@ import {
   RelationDirection,
   buildEdge,
   buildNode,
+  findGraphPart,
   findNode,
   getNodesComposedBy,
   isNode,
@@ -56,12 +57,12 @@ const connectCriteriaToSolutions = (state: TopicStoreState, newNode: Node, probl
         findNode(edge.target, topicDiagram.nodes).type === targetRelation.child
     )
     .map((edge) => {
-      const sourceNodeId = newNode.type === "criterion" ? newNode.id : edge.target;
-      const targetNodeId = newNode.type === "criterion" ? edge.target : newNode.id;
+      const sourceId = newNode.type === "criterion" ? newNode.id : edge.target;
+      const targetId = newNode.type === "criterion" ? edge.target : newNode.id;
 
       return buildEdge({
-        sourceNodeId,
-        targetNodeId,
+        sourceId,
+        targetId,
         relation: "embodies",
       });
     });
@@ -72,14 +73,17 @@ const connectCriteriaToSolutions = (state: TopicStoreState, newNode: Node, probl
 };
 
 interface AddNodeProps {
-  fromNodeId: string;
+  fromPartId: string;
   as: RelationDirection;
   toNodeType: FlowNodeType;
   relation: Relation;
   selectNewNode?: boolean;
 }
 
-export const addNode = ({ fromNodeId, as, toNodeType, relation, selectNewNode }: AddNodeProps) => {
+export const addNode = ({ fromPartId, as, toNodeType, relation, selectNewNode }: AddNodeProps) => {
+  if (!getRelation(relation.parent, relation.child, relation.name))
+    throw errorWithData("invalid relation to add", relation);
+
   const state = createDraft(useTopicStore.getState());
 
   const topicGraph = { nodes: state.nodes, edges: state.edges };
@@ -94,12 +98,12 @@ export const addNode = ({ fromNodeId, as, toNodeType, relation, selectNewNode }:
     !topicGraph.nodes.find(
       (node) =>
         node.type === "rootClaim" &&
-        (node.data.arguedDiagramPartId === fromNodeId || node.id === fromNodeId)
+        (node.data.arguedDiagramPartId === fromPartId || node.id === fromPartId)
     )
   ) {
-    const label = getImplicitLabel(fromNodeId, topicGraph);
+    const label = getImplicitLabel(fromPartId, topicGraph);
     // eslint-disable-next-line functional/immutable-data
-    state.nodes.push(buildNode({ type: "rootClaim", arguedDiagramPartId: fromNodeId, label }));
+    state.nodes.push(buildNode({ type: "rootClaim", arguedDiagramPartId: fromPartId, label }));
   }
 
   const rootClaim =
@@ -107,25 +111,25 @@ export const addNode = ({ fromNodeId, as, toNodeType, relation, selectNewNode }:
       ? topicGraph.nodes.find(
           (node) =>
             node.type === "rootClaim" &&
-            (node.data.arguedDiagramPartId === fromNodeId || node.id === fromNodeId)
+            (node.data.arguedDiagramPartId === fromPartId || node.id === fromPartId)
         )
       : undefined;
-  const fromNode = rootClaim ?? findNode(fromNodeId, topicGraph.nodes);
+  const fromPart = rootClaim ?? findGraphPart(fromPartId, topicGraph.nodes, topicGraph.edges);
 
   // create and connect node
-  const newNode = createNode(state, toNodeType, fromNode.data.arguedDiagramPartId, selectNewNode);
+  const newNode = createNode(state, toNodeType, fromPart.data.arguedDiagramPartId, selectNewNode);
 
-  const parentNode = as === "parent" ? newNode : fromNode;
-  const childNode = as === "parent" ? fromNode : newNode;
-  createEdgeAndImpliedEdges(topicGraph, parentNode, childNode, relation);
+  const parent = as === "parent" ? newNode : fromPart;
+  const child = as === "parent" ? fromPart : newNode;
+  createEdgeAndImpliedEdges(topicGraph, parent, child, relation);
 
   // connect criteria
   if (
     ["criterion", "solution"].includes(newNode.type) &&
-    fromNode.type === "problem" &&
+    fromPart.type === "problem" &&
     as === "child"
   ) {
-    connectCriteriaToSolutions(state, newNode, fromNode);
+    connectCriteriaToSolutions(state, newNode, fromPart);
   }
 
   // trigger event so viewport can be updated.
@@ -162,16 +166,17 @@ const createEdgesImpliedByComposition = (
 // see algorithm pseudocode & example at https://github.com/amelioro/ameliorate/issues/66#issuecomment-1465078133
 const createEdgeAndImpliedEdges = (
   topicGraph: Graph,
-  parent: Node,
-  child: Node,
+  parent: GraphPart,
+  child: GraphPart,
   relation: Relation
 ) => {
-  // assumes only one edge can exist between two notes - future may allow multiple edges of different relation type
-  if (getConnectingEdge(parent, child, topicGraph.edges) !== undefined) return topicGraph.edges;
+  // assumes only one edge can exist between two nodes - future may allow multiple edges of different relation type
+  if (getConnectingEdge(parent.id, child.id, topicGraph.edges) !== undefined)
+    return topicGraph.edges;
 
   const newEdge = buildEdge({
-    sourceNodeId: parent.id,
-    targetNodeId: child.id,
+    sourceId: parent.id,
+    targetId: child.id,
     relation: relation.name,
     arguedDiagramPartId: parent.data.arguedDiagramPartId,
   });
@@ -180,9 +185,12 @@ const createEdgeAndImpliedEdges = (
   topicGraph.edges.push(newEdge);
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  // indirectly recurses by calling this method after determining which implied edges to create
-  // note: modifies topicGraph.edges through `state` (via the line above)
-  createEdgesImpliedByComposition(topicGraph, parent, child, relation);
+  // we're going to keep the assumption for now that edges to edges won't imply other edges
+  if (isNode(parent) && isNode(child)) {
+    // indirectly recurses by calling this method after determining which implied edges to create
+    // note: modifies topicGraph.edges through `state` (via the line above)
+    createEdgesImpliedByComposition(topicGraph, parent, child, relation);
+  }
 
   return topicGraph.edges;
 };

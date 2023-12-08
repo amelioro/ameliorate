@@ -1,15 +1,15 @@
 import { ButtonGroup } from "@mui/material";
 
+import { NodeType } from "../../../../common/node";
 import { addableRelationsFrom } from "../../utils/edge";
 import { type RelationDirection } from "../../utils/graph";
 import { Orientation } from "../../utils/layout";
-import { FlowNodeType } from "../../utils/node";
 import { AddNodeButton } from "../Node/AddNodeButton";
 
 interface Props {
   className?: string;
   fromNodeId: string;
-  fromNodeType: FlowNodeType;
+  fromNodeType: NodeType;
   as: RelationDirection;
   orientation: Orientation;
 }
@@ -35,7 +35,7 @@ export const AddNodeButtonGroup = ({
       {addableRelations.map(({ toNodeType, relation }) => (
         <AddNodeButton
           key={toNodeType}
-          fromNodeId={fromNodeId}
+          fromPartId={fromNodeId}
           as={as}
           toNodeType={toNodeType}
           relation={relation}

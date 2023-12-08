@@ -66,7 +66,23 @@ export interface Edge {
   label: RelationName;
   selected: boolean;
   markerStart: { type: MarkerType; width: number; height: number };
+  /**
+   * id of the source graph part. Can be a node or an edge, but most UI edge operations only work
+   * with node sources.
+   *
+   * It seems like there might be value in having a SuperEdge type that can point to edges, so that
+   * regular edges can be distinguished. But that sounds like a lot of work and it's hard to tell
+   * that it'd be worth it.
+   */
   source: string; // source === parent if arrows point from bottom to top
+  /**
+   * id of the target graph part. Can be a node or an edge, but most UI edge operations only work
+   * with node targets.
+   *
+   * It seems like there might be value in having a SuperEdge type that can point to edges, so that
+   * regular edges can be distinguished. But that sounds like a lot of work and it's hard to tell
+   * that it'd be worth it.
+   */
   target: string; // target === child if arrows point from bottom to top
   type: "FlowEdge";
 }
@@ -74,16 +90,16 @@ export interface Edge {
 interface BuildEdgeProps {
   id?: string;
   notes?: string;
-  sourceNodeId: string;
-  targetNodeId: string;
+  sourceId: string;
+  targetId: string;
   relation: RelationName;
   arguedDiagramPartId?: string;
 }
 export const buildEdge = ({
   id,
   notes,
-  sourceNodeId,
-  targetNodeId,
+  sourceId,
+  targetId,
   relation,
   arguedDiagramPartId,
 }: BuildEdgeProps): Edge => {
@@ -96,8 +112,8 @@ export const buildEdge = ({
     label: relation,
     selected: false,
     markerStart: markerStart,
-    source: sourceNodeId,
-    target: targetNodeId,
+    source: sourceId,
+    target: targetId,
     type: "FlowEdge" as const,
   };
 };

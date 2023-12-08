@@ -7,12 +7,20 @@ import { type Edge, type Node } from "./graph";
 export type Orientation = "DOWN" | "UP" | "RIGHT" | "LEFT";
 
 const partitionOrders: { [type in NodeType]: string } = {
+  // topic
   problem: "null",
   criterion: "1",
   effect: "2",
   solutionComponent: "3",
   solution: "4",
 
+  // explore
+  question: "null",
+  answer: "null",
+  fact: "null",
+  source: "null",
+
+  // claim
   rootClaim: "null",
   support: "null",
   critique: "null",

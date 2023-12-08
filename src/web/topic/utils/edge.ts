@@ -1,14 +1,54 @@
-import { RelationName, claimRelationNames } from "../../../common/edge";
-import { NodeType, claimNodeTypes } from "../../../common/node";
+import { RelationName, claimRelationNames, relationNames } from "../../../common/edge";
+import { NodeType, claimNodeTypes, nodeTypes } from "../../../common/node";
 import { hasClaims } from "./claim";
 import { Diagram } from "./diagram";
 import { Edge, Graph, Node, RelationDirection, findNode } from "./graph";
-import { FlowNodeType, children, components, parents } from "./node";
+import { children, components, parents } from "./node";
+
+const questionRelations: Relation[] = [...nodeTypes, ...relationNames].map((partType) => ({
+  child: "question",
+  name: "asksAbout",
+  parent: partType,
+}));
+
+const factRelations: Relation[] = [...nodeTypes, ...relationNames]
+  .filter(
+    (partType) =>
+      partType !== "fact" &&
+      partType !== "source" &&
+      partType !== "relevantFor" &&
+      partType !== "sourceOf"
+  )
+  .map((partType) => ({
+    child: "fact",
+    name: "relevantFor",
+    parent: partType,
+  }));
+
+const sourceRelations: Relation[] = [...nodeTypes, ...relationNames]
+  .filter(
+    (partType) =>
+      partType !== "fact" &&
+      partType !== "source" &&
+      partType !== "relevantFor" &&
+      partType !== "sourceOf"
+  )
+  .map((nodeType) => ({
+    child: "source",
+    name: "relevantFor",
+    parent: nodeType,
+  }));
+
+const exploreRelations: Relation[] = questionRelations.concat(factRelations, sourceRelations, [
+  { child: "answer", name: "potentialAnswerTo", parent: "question" },
+  { child: "source", name: "sourceOf", parent: "fact" },
+]);
 
 // Assumes that we're always pointing from child to parent.
 // This list is sorted by `parent` and then `child` so that it matches the partition order of nodes
 // in the layout.
-export const relations = [
+export const relations: Relation[] = exploreRelations.concat([
+  // topic relations
   { child: "problem", name: "causes", parent: "problem" },
   { child: "criterion", name: "criterionFor", parent: "problem" },
   { child: "effect", name: "addresses", parent: "problem" },
@@ -28,6 +68,7 @@ export const relations = [
 
   { child: "problem", name: "createdBy", parent: "solution" },
 
+  // claim relations
   { child: "support", name: "supports", parent: "rootClaim" },
   { child: "critique", name: "critiques", parent: "rootClaim" },
 
@@ -36,17 +77,18 @@ export const relations = [
 
   { child: "support", name: "supports", parent: "critique" },
   { child: "critique", name: "critiques", parent: "critique" },
-] as const;
+]);
 
 export interface Relation {
   child: NodeType;
   name: RelationName;
-  parent: NodeType;
+  // right now, only parents can point to other edges, but this could change if need be
+  parent: NodeType | RelationName;
 }
 
 export const getRelation = (
-  parent: FlowNodeType,
-  child: FlowNodeType,
+  parent: NodeType | RelationName,
+  child: NodeType,
   relationName?: RelationName
 ): Relation | undefined => {
   if (relationName) {
@@ -66,7 +108,7 @@ export const composedRelations: Relation[] = [
 export const componentTypes = composedRelations.map((relation) => relation.parent);
 
 interface ShortcutRelation {
-  detourNodeType: FlowNodeType;
+  detourNodeType: NodeType;
   relation: Relation;
 }
 
@@ -92,9 +134,9 @@ export const shortcutRelations: ShortcutRelation[] = [
 ];
 
 type AddableNodes = {
-  [key in RelationDirection]: FlowNodeType[];
+  [key in RelationDirection]: NodeType[];
 };
-const addableNodesFor: Record<FlowNodeType, AddableNodes> = {
+const addableNodesFor: Record<NodeType, AddableNodes> = {
   problem: {
     parent: ["problem", "solution"],
     child: ["problem", "criterion", "solution"],
@@ -115,22 +157,29 @@ const addableNodesFor: Record<FlowNodeType, AddableNodes> = {
     child: ["problem"],
   },
 
+  // explore nodes
+  question: { parent: [], child: ["question", "answer", "fact", "source"] },
+  answer: { parent: [], child: ["question", "fact", "source"] },
+  fact: { parent: [], child: ["question", "source"] },
+  source: { parent: ["fact"], child: ["question"] },
+
   // claims are in a tree so claim nodes can't add parents
   rootClaim: { parent: [], child: ["support", "critique"] },
   support: { parent: [], child: ["support", "critique"] },
   critique: { parent: [], child: ["support", "critique"] },
 };
 
-export const addableRelationsFrom = (nodeType: FlowNodeType, addingAs: RelationDirection) => {
+export const addableRelationsFrom = (nodeType: NodeType, addingAs: RelationDirection) => {
   const fromDirection = addingAs === "parent" ? "child" : "parent";
   const addableNodes = addableNodesFor[nodeType][addingAs];
 
   const addableRelations = relations.filter(
-    (relation) => addableNodes.includes(relation[addingAs]) && relation[fromDirection] === nodeType
+    (relation) =>
+      addableNodes.includes(relation[addingAs] as NodeType) && relation[fromDirection] === nodeType
   );
 
   const formattedRelations = addableRelations.map((relation) => ({
-    toNodeType: relation[addingAs],
+    toNodeType: relation[addingAs] as NodeType,
     relation,
   }));
 
@@ -185,11 +234,11 @@ export const nodes = (edge: Edge, nodes: Node[]) => {
   return [parentNode(edge, nodes), childNode(edge, nodes)];
 };
 
-export const getConnectingEdge = (node1: Node, node2: Node, edges: Edge[]) => {
+export const getConnectingEdge = (graphPartId1: string, graphPartId2: string, edges: Edge[]) => {
   const edge = edges.find(
     (edge) =>
-      (edge.source === node1.id && edge.target === node2.id) ||
-      (edge.source === node2.id && edge.target === node1.id)
+      (edge.source === graphPartId1 && edge.target === graphPartId2) ||
+      (edge.source === graphPartId2 && edge.target === graphPartId2)
   );
 
   return edge;
