@@ -22,7 +22,6 @@ const convertToNode = (flowNode: NodeProps): Node => {
   return {
     id: flowNode.id,
     data: flowNode.data,
-    selected: flowNode.selected,
     type: flowNode.type as FlowNodeType, // we always pass a NodeType from the diagram, but I'm not sure how to override react-flow's type to tell it that
   };
 };
@@ -38,7 +37,7 @@ export const FlowNode = (flowNode: NodeProps) => {
   const orientation = useContext(DiagramContext).orientation;
   const node = convertToNode(flowNode);
 
-  const spotlight: Spotlight = node.selected
+  const spotlight: Spotlight = flowNode.selected
     ? "primary"
     : isNeighborSelected || isEdgeSelected
     ? "secondary"

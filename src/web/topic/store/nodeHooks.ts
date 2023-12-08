@@ -1,13 +1,16 @@
 import { shallow } from "zustand/shallow";
 
 import { errorWithData } from "../../../common/errorHandling";
+import { useIsAnyGraphPartSelected } from "../../view/navigateStore";
 import { RelationDirection, findNode } from "../utils/graph";
 import { children, edges, neighbors, parents } from "../utils/node";
 import { useTopicStore } from "./store";
 import { getTopicDiagram } from "./utils";
 
-export const useNode = (nodeId: string) => {
+export const useNode = (nodeId: string | null) => {
   return useTopicStore((state) => {
+    if (!nodeId) return null;
+
     try {
       return findNode(nodeId, state.nodes);
     } catch {
@@ -93,24 +96,28 @@ export const useNeighbors = (nodeId: string, direction: RelationDirection) => {
 };
 
 export const useIsNeighborSelected = (nodeId: string) => {
-  return useTopicStore((state) => {
+  const neighborNodes = useTopicStore((state) => {
     try {
       const node = findNode(nodeId, state.nodes);
       const topicGraph = { nodes: state.nodes, edges: state.edges };
-      return neighbors(node, topicGraph).some((node) => node.selected);
+      return neighbors(node, topicGraph);
     } catch {
-      return false;
+      return [];
     }
   });
+
+  return useIsAnyGraphPartSelected(neighborNodes.map((node) => node.id));
 };
 
 export const useIsEdgeSelected = (nodeId: string) => {
-  return useTopicStore((state) => {
+  const neighborEdges = useTopicStore((state) => {
     try {
       const node = findNode(nodeId, state.nodes);
-      return edges(node, state.edges).some((edge) => edge.selected);
+      return edges(node, state.edges);
     } catch {
-      return false;
+      return [];
     }
   });
+
+  return useIsAnyGraphPartSelected(neighborEdges.map((edge) => edge.id));
 };

@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 
 import { htmlDefaultFontSize } from "../../../../pages/_document.page";
 import { useSessionUser } from "../../../common/hooks";
-import { usePerspectives } from "../../../view/store/store";
+import { usePerspectives } from "../../../view/perspectiveStore";
 import { useFlowZoom } from "../../hooks/flowHooks";
 import { useUserScores } from "../../store/scoreHooks";
 import { playgroundUsername } from "../../store/store";

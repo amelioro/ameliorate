@@ -1,11 +1,13 @@
 import { createDraft, finishDraft } from "immer";
 
+import { viewClaimTree } from "../../view/navigateStore";
 import { getImplicitLabel } from "../utils/claim";
 import { RelationDirection, buildNode, findNode } from "../utils/graph";
 import { FlowNodeType, children, parents } from "../utils/node";
 import { useTopicStore } from "./store";
 import { getTopicDiagram } from "./utils";
 
+// TODO: remove when root claim is removed
 export const viewOrCreateClaimTree = (arguedDiagramPartId: string) => {
   const state = createDraft(useTopicStore.getState());
 
@@ -29,31 +31,11 @@ export const viewOrCreateClaimTree = (arguedDiagramPartId: string) => {
     /* eslint-enable functional/immutable-data, no-param-reassign */
   }
 
-  /* eslint-disable functional/immutable-data, no-param-reassign */
-  state.activeClaimTreeId = arguedDiagramPartId;
-  /* eslint-enable functional/immutable-data, no-param-reassign */
-
   useTopicStore.temporal.getState().pause();
   useTopicStore.setState(finishDraft(state), false, "viewOrCreateClaimTree");
   useTopicStore.temporal.getState().resume();
-};
 
-export const viewClaimTree = (arguedDiagramPartId: string) => {
-  useTopicStore.temporal.getState().pause();
-  useTopicStore.setState({ activeClaimTreeId: arguedDiagramPartId }, false, "viewClaimTree");
-  useTopicStore.temporal.getState().resume();
-};
-
-export const closeClaimTree = () => {
-  useTopicStore.temporal.getState().pause();
-  useTopicStore.setState({ activeClaimTreeId: null }, false, "closeClaimTree");
-  useTopicStore.temporal.getState().resume();
-};
-
-export const closeTable = () => {
-  useTopicStore.temporal.getState().pause();
-  useTopicStore.setState({ activeTableProblemId: null }, false, "closeTable");
-  useTopicStore.temporal.getState().resume();
+  viewClaimTree(arguedDiagramPartId);
 };
 
 // potential TODO: could show components that were hidden due to being implied by the now-hidden neighbor
@@ -82,26 +64,6 @@ export const toggleShowNeighbors = (
 
   useTopicStore.temporal.getState().pause();
   useTopicStore.setState(finishDraft(state), false, "toggleShowNeighbors");
-  useTopicStore.temporal.getState().resume();
-};
-
-export const viewTopicDiagram = () => {
-  useTopicStore.temporal.getState().pause();
-  useTopicStore.setState(
-    { activeTableProblemId: null, activeClaimTreeId: null },
-    false,
-    "viewTopicDiagram"
-  );
-  useTopicStore.temporal.getState().resume();
-};
-
-export const viewCriteriaTable = (problemNodeId: string) => {
-  useTopicStore.temporal.getState().pause();
-  useTopicStore.setState(
-    { activeTableProblemId: problemNodeId, activeClaimTreeId: null },
-    false,
-    "viewCriteriaTable"
-  );
   useTopicStore.temporal.getState().resume();
 };
 

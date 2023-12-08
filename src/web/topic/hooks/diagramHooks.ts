@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { useSelectedGraphPart } from "../../view/navigateStore";
 import { Diagram, PositionedDiagram, PositionedNode } from "../utils/diagram";
 import { NodePosition, layout } from "../utils/layout";
 
@@ -9,6 +10,8 @@ export const useLayoutedDiagram = (diagram: Diagram) => {
   const [prevDiagramHash, setPrevDiagramHash] = useState<string | null>(null);
   const [layoutedNodes, setLayoutedNodes] = useState<NodePosition[] | null>(null);
   const [hasNewLayout, setHasNewLayout] = useState<boolean>(false);
+
+  const selectedGraphPart = useSelectedGraphPart();
 
   if (diagramHash !== prevDiagramHash) {
     setPrevDiagramHash(diagramHash);
@@ -36,9 +39,11 @@ export const useLayoutedDiagram = (diagram: Diagram) => {
             x: layoutedNode.x,
             y: layoutedNode.y,
           },
+          selected: node.id === selectedGraphPart?.id, // add selected here because react flow uses it (as opposed to our custom components, which can rely on selectedGraphPart hook independently)
         };
       })
       .filter((node): node is PositionedNode => node !== null),
+    edges: diagram.edges.map((edge) => ({ ...edge, selected: edge.id === selectedGraphPart?.id })),
   };
 
   // loading a new diagram but layout hasn't finished yet

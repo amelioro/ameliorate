@@ -80,8 +80,14 @@ export const useExploreNodes = (graphPartId: string) => {
   });
 };
 
-export const useSelectedGraphPart = () => {
+export const useGraphPart = (graphPartId: string | null) => {
   return useTopicStore((state) => {
-    return state.edges.find((edge) => edge.selected) ?? state.nodes.find((node) => node.selected);
+    if (!graphPartId) return null;
+
+    return (
+      state.edges.find((edge) => edge.id === graphPartId) ??
+      state.nodes.find((node) => node.id === graphPartId) ??
+      null
+    );
   });
 };

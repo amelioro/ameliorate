@@ -4,19 +4,16 @@ import {
   BackgroundVariant,
   type EdgeProps as DefaultEdgeProps,
   type NodeProps as DefaultNodeProps,
-  type EdgeChange,
-  type EdgeSelectionChange,
-  type NodeChange,
-  type NodeSelectionChange,
+  OnEdgeUpdateFunc,
   ReactFlowProvider,
 } from "reactflow";
 
 import { Loading } from "../../../common/components/Loading/Loading";
 import { emitter } from "../../../common/event";
 import { useSessionUser } from "../../../common/hooks";
+import { setSelected } from "../../../view/navigateStore";
 import { useLayoutedDiagram } from "../../hooks/diagramHooks";
 import { useViewportUpdater } from "../../hooks/flowHooks";
-import { setSelected } from "../../store/actions";
 import { connectNodes, reconnectEdge } from "../../store/createDeleteActions";
 import { useUserCanEditTopicData } from "../../store/userHooks";
 import { Diagram as DiagramData } from "../../utils/diagram";
@@ -69,12 +66,8 @@ export interface EdgeProps extends DefaultEdgeProps {
   data?: Edge["data"];
 }
 
-const onGraphPartChange = (changes: (NodeChange | EdgeChange)[]) => {
-  const selectChanges = changes.filter((change) => change.type === "select") as
-    | NodeSelectionChange[]
-    | EdgeSelectionChange[];
-
-  if (selectChanges.length > 0) setSelected(selectChanges);
+const onEdgeUpdate: OnEdgeUpdateFunc = (oldEdge, newConnection) => {
+  reconnectEdge(oldEdge, newConnection.source, newConnection.target);
 };
 
 const DiagramWithoutProvider = (diagram: DiagramData) => {
@@ -128,16 +121,10 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
           userCanEditTopicData ? ({ source, target }) => connectNodes(source, target) : undefined
         }
         onContextMenu={(e) => e.preventDefault()}
-        onEdgesChange={(changes) => onGraphPartChange(changes)}
-        onNodesChange={(changes) => onGraphPartChange(changes)}
-        onEdgeUpdate={
-          userCanEditTopicData
-            ? (oldEdge, newConnection) =>
-                reconnectEdge(oldEdge, newConnection.source, newConnection.target)
-            : undefined
-        }
+        onEdgeUpdate={userCanEditTopicData ? onEdgeUpdate : undefined}
         nodesDraggable={false}
         nodesConnectable={userCanEditTopicData}
+        onPaneClick={() => setSelected(null)}
         deleteKeyCode={null} // was preventing holding ctrl and repeating backspace to delete multiple words from node text
         elevateEdgesOnSelect={true} // this puts selected edges (or neighbor-to-selected-node edges) in a separate svg that is given a higher zindex, so they can be elevated above other nodes
       >

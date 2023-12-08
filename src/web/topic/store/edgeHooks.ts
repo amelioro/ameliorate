@@ -1,14 +1,17 @@
+import { useIsAnyGraphPartSelected } from "../../view/navigateStore";
 import { nodes } from "../utils/edge";
 import { findEdge } from "../utils/graph";
 import { useTopicStore } from "./store";
 
 export const useIsNodeSelected = (edgeId: string) => {
-  return useTopicStore((state) => {
+  const neighborNodes = useTopicStore((state) => {
     try {
       const edge = findEdge(edgeId, state.edges);
-      return nodes(edge, state.nodes).some((node) => node.selected);
+      return nodes(edge, state.nodes);
     } catch {
-      return false;
+      return [];
     }
   });
+
+  return useIsAnyGraphPartSelected(neighborNodes.map((node) => node.id));
 };

@@ -16,13 +16,15 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
-import { useCriteriaTableProblemNodes } from "../../store/nodeHooks";
 import {
   useActiveArguedDiagramPart,
   useActiveTableProblemNode,
-  useClaimTreesWithExplicitClaims,
-} from "../../store/store";
-import { viewClaimTree, viewCriteriaTable, viewTopicDiagram } from "../../store/viewActions";
+  viewClaimTree,
+  viewCriteriaTable,
+  viewTopicDiagram,
+} from "../../../view/navigateStore";
+import { useCriteriaTableProblemNodes } from "../../store/nodeHooks";
+import { useClaimTreesWithExplicitClaims } from "../../store/store";
 import { NestedListItemButton } from "./TopicViews.styles";
 
 export const TopicViews = () => {

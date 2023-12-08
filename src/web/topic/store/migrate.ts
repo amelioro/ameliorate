@@ -25,6 +25,7 @@ export const migrate = (persistedState: any, version: number) => {
     migrate_16_to_17,
     migrate_17_to_18,
     migrate_18_to_19,
+    migrate_19_to_20,
   ];
 
   let state = persistedState;
@@ -456,6 +457,22 @@ const migrate_18_to_19 = (state: FromState18) => {
   state.nodes.forEach((node) => {
     delete node.position;
   });
+
+  return state;
+};
+
+interface FromState19 {
+  nodes: { selected?: boolean }[];
+  edges: { selected?: boolean }[];
+  activeTableProblemId?: string | null;
+  activeClaimTreeId?: string | null;
+}
+
+const migrate_19_to_20 = (state: FromState19) => {
+  state.nodes.forEach((node) => delete node.selected);
+  state.edges.forEach((edge) => delete edge.selected);
+  delete state.activeTableProblemId;
+  delete state.activeClaimTreeId;
 
   return state;
 };

@@ -20,7 +20,6 @@ export interface Node {
     showing: boolean;
     newlyAdded: boolean; // jank to allow focusing nodes after adding them
   };
-  selected: boolean;
   type: FlowNodeType;
 }
 
@@ -45,7 +44,6 @@ export const buildNode = ({ id, label, notes, type, arguedDiagramPartId }: Build
       showing: true,
       newlyAdded: false,
     },
-    selected: false,
     type: type,
   };
 
@@ -64,7 +62,6 @@ export interface Edge {
     notes: string;
   };
   label: RelationName;
-  selected: boolean;
   markerStart: { type: MarkerType; width: number; height: number };
   /**
    * id of the source graph part. Can be a node or an edge, but most UI edge operations only work
@@ -110,7 +107,6 @@ export const buildEdge = ({
       notes: notes ?? "",
     },
     label: relation,
-    selected: false,
     markerStart: markerStart,
     source: sourceId,
     target: targetId,

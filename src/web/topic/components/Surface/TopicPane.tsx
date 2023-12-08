@@ -3,8 +3,11 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Tab } from "@mui/material";
 import { create } from "zustand";
 
-import { useSelectedGraphPart } from "../../store/graphPartHooks";
-import { useActiveArguedDiagramPart, useActiveTableProblemNode } from "../../store/store";
+import {
+  useActiveArguedDiagramPart,
+  useActiveTableProblemNode,
+  useSelectedGraphPart,
+} from "../../../view/navigateStore";
 import { GraphPartDetails } from "./GraphPartDetails";
 import { TopicDetails } from "./TopicDetails";
 import { PositionedDiv, StyledDrawer, TogglePaneButton } from "./TopicPane.styles";
@@ -84,7 +87,7 @@ export const TopicPane = ({ isLandscape }: Props) => {
             </TabList>
 
             <TabPanel value="Details">
-              {selectedGraphPart !== undefined ? (
+              {selectedGraphPart !== null ? (
                 // Key ensures that details components re-render, re-setting default values.
                 // Could consider using a `viewingGraphPart` separate from selected so that graph
                 // part details for parts outside of the shown diagram can be displayed, without

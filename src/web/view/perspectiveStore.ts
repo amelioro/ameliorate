@@ -1,26 +1,26 @@
 import { create } from "zustand";
 
-import { getScoringUsernames } from "../../topic/store/utilActions";
+import { getScoringUsernames } from "../topic/store/utilActions";
 
-interface ViewStoreState {
+interface PerspectiveStoreState {
   myPerspective: string;
   perspectives: string[];
 }
 
-const initialState: ViewStoreState = {
+const initialState: PerspectiveStoreState = {
   myPerspective: "",
   perspectives: [],
 };
 
-const useViewStore = create<ViewStoreState>()(() => initialState);
+const usePerspectiveStore = create<PerspectiveStoreState>()(() => initialState);
 
 // hooks
 export const usePerspectives = () => {
-  return useViewStore((state) => state.perspectives);
+  return usePerspectiveStore((state) => state.perspectives);
 };
 
 export const useIsComparingPerspectives = () => {
-  return useViewStore((state) => {
+  return usePerspectiveStore((state) => {
     const viewingMyPerspective =
       state.perspectives.length === 1 && state.perspectives[0] === state.myPerspective;
     return !viewingMyPerspective;
@@ -29,20 +29,20 @@ export const useIsComparingPerspectives = () => {
 
 // actions
 export const setInitialPerspective = (perspective: string) => {
-  useViewStore.setState({ myPerspective: perspective, perspectives: [perspective] });
+  usePerspectiveStore.setState({ myPerspective: perspective, perspectives: [perspective] });
 };
 
 export const setPerspectives = (perspectives: string[]) => {
-  useViewStore.setState({ perspectives });
+  usePerspectiveStore.setState({ perspectives });
 };
 
 export const resetPerspectives = () => {
-  useViewStore.setState((state) => {
+  usePerspectiveStore.setState((state) => {
     return { perspectives: [state.myPerspective] };
   });
 };
 
 export const comparePerspectives = () => {
   const scoringUsernames = getScoringUsernames();
-  useViewStore.setState({ perspectives: scoringUsernames });
+  usePerspectiveStore.setState({ perspectives: scoringUsernames });
 };

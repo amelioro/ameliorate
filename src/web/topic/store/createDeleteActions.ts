@@ -2,6 +2,7 @@ import { createDraft, finishDraft } from "immer";
 
 import { errorWithData } from "../../../common/errorHandling";
 import { emitter } from "../../common/event";
+import { setSelected } from "../../view/navigateStore";
 import { getImplicitLabel } from "../utils/claim";
 import { Relation, canCreateEdge, getConnectingEdge, getRelation } from "../utils/edge";
 import {
@@ -18,7 +19,7 @@ import {
 } from "../utils/graph";
 import { FlowNodeType, edges } from "../utils/node";
 import { TopicStoreState, useTopicStore } from "./store";
-import { getTopicDiagram, setSelected } from "./utils";
+import { getTopicDiagram } from "./utils";
 
 const createNode = (
   state: TopicStoreState,
@@ -33,8 +34,7 @@ const createNode = (
   newNode.data.newlyAdded = true;
   /* eslint-enable functional/immutable-data */
 
-  const topicGraph = { nodes: state.nodes, edges: state.edges };
-  if (selectNewNode) setSelected(newNode.id, topicGraph);
+  if (selectNewNode) setSelected(newNode.id);
 
   return newNode;
 };
@@ -256,7 +256,6 @@ export const deleteNode = (nodeId: string) => {
     state.edges = state.edges.filter(
       (edge) => edge.data.arguedDiagramPartId !== deletedNode.data.arguedDiagramPartId
     );
-    state.activeClaimTreeId = null;
     /* eslint-enable functional/immutable-data, no-param-reassign */
     return;
   }

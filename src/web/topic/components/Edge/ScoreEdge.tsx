@@ -4,7 +4,7 @@ import { EdgeLabelRenderer, getBezierPath } from "reactflow";
 
 import { RelationName } from "../../../../common/edge";
 import { openContextMenu } from "../../../common/store/contextMenuActions";
-import { setSelectedGraphPart } from "../../store/actions";
+import { setSelected } from "../../../view/navigateStore";
 import { useIsNodeSelected } from "../../store/edgeHooks";
 import { Edge, markerStart } from "../../utils/graph";
 import { EdgeProps } from "../Diagram/Diagram";
@@ -49,8 +49,6 @@ const convertToEdge = (flowEdge: EdgeProps): Edge => {
     label: flowEdge.label! as RelationName,
     /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- this should never be null?
-    selected: flowEdge.selected!,
     // janky, not grabbing from flow edge because flow edge converts this to some URL format that idk how to convert;
     // but this value is currently always constant so it should be fine
     markerStart: markerStart,
@@ -70,7 +68,11 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
 
   const isNodeSelected = useIsNodeSelected(edge.id);
 
-  const spotlight: Spotlight = edge.selected ? "primary" : isNodeSelected ? "secondary" : "normal";
+  const spotlight: Spotlight = flowEdge.selected
+    ? "primary"
+    : isNodeSelected
+    ? "secondary"
+    : "normal";
 
   const [edgePath, labelX, labelY] = getBezierPath({
     sourceX: flowEdge.sourceX,
@@ -90,6 +92,7 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
       markerStart={flowEdge.markerStart}
       markerEnd={flowEdge.markerEnd}
       spotlight={spotlight}
+      onClick={() => setSelected(edge.id)}
     />
   );
 
@@ -97,7 +100,7 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
     <StyledDiv
       labelX={labelX}
       labelY={labelY}
-      onClick={() => setSelectedGraphPart(edge.id)}
+      onClick={() => setSelected(edge.id)}
       onContextMenu={(event) => openContextMenu(event, { edge })}
       spotlight={spotlight}
     >

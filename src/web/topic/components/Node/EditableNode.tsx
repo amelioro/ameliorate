@@ -3,7 +3,8 @@ import { useEffect, useRef } from "react";
 
 import { useSessionUser } from "../../../common/hooks";
 import { openContextMenu } from "../../../common/store/contextMenuActions";
-import { finishAddingNode, setNodeLabel, setSelectedGraphPart } from "../../store/actions";
+import { setSelected, useIsGraphPartSelected } from "../../../view/navigateStore";
+import { finishAddingNode, setNodeLabel } from "../../store/actions";
 import { useUserCanEditTopicData } from "../../store/userHooks";
 import { Node } from "../../utils/graph";
 import { nodeDecorations } from "../../utils/node";
@@ -34,6 +35,7 @@ interface Props {
 export const EditableNode = ({ node, supplemental = false, className = "" }: Props) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
+  const selected = useIsGraphPartSelected(node.id);
 
   const theme = useTheme();
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -66,13 +68,13 @@ export const EditableNode = ({ node, supplemental = false, className = "" }: Pro
   // Require selecting a node before editing it, because oftentimes you'll want to select a node to
   // view more details, and the editing will be distracting. Only edit after clicking when selected.
   // Supplemental nodes are always editable, because clicking does not select them.
-  const editable = userCanEditTopicData && (supplemental || node.selected);
+  const editable = userCanEditTopicData && (supplemental || selected);
 
   return (
     <NodeDiv
       color={color}
-      className={className + (node.selected ? " selected" : "")}
-      onClick={() => !supplemental && setSelectedGraphPart(node.id)}
+      className={className + (selected ? " selected" : "")}
+      onClick={() => !supplemental && setSelected(node.id)}
       onContextMenu={(event) => openContextMenu(event, { node })}
     >
       <YEdgeDiv>
