@@ -1,6 +1,6 @@
 import { Article, ArticleOutlined } from "@mui/icons-material";
 
-import { setSelectedGraphPart } from "../../store/actions";
+import { setSelected } from "../../../view/navigateStore";
 import { useExplicitClaimCount, useExploreNodes } from "../../store/graphPartHooks";
 import { GraphPart } from "../../utils/graph";
 import { viewDetails } from "../Surface/TopicPane";
@@ -25,7 +25,7 @@ export const DetailsIndicator = ({ graphPart }: Props) => {
       Icon={Icon}
       title={"View details"}
       onClick={() => {
-        setSelectedGraphPart(graphPart.id);
+        setSelected(graphPart.id);
         viewDetails();
       }}
     />

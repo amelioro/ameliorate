@@ -4,7 +4,7 @@ import { createWithEqualityFn } from "zustand/traditional";
 
 import { claimRelationNames } from "../../../common/edge";
 import { Diagram, filterHiddenComponents } from "../utils/diagram";
-import { Edge, Node, Score, buildNode, findGraphPart, findNode } from "../utils/graph";
+import { Edge, Node, Score, buildNode } from "../utils/graph";
 import { apiSyncer } from "./apiSyncerMiddleware";
 import { migrate } from "./migrate";
 import { getClaimTree, getTopicDiagram } from "./utils";
@@ -41,8 +41,6 @@ export interface TopicStoreState {
   nodes: Node[];
   edges: Edge[];
   userScores: UserScores;
-  activeTableProblemId: string | null;
-  activeClaimTreeId: string | null;
   showImpliedEdges: boolean;
 }
 
@@ -51,9 +49,7 @@ export const initialState: TopicStoreState = {
   nodes: [buildNode({ type: "problem" })],
   edges: [],
   userScores: {},
-  activeTableProblemId: null,
-  activeClaimTreeId: null,
-  showImpliedEdges: true,
+  showImpliedEdges: true, // TODO: probably belongs in a config store
 };
 
 // should probably be "topic-playground-storage" but don't know how to migrate
@@ -68,7 +64,7 @@ export const useTopicStore = createWithEqualityFn<TopicStoreState>()(
         devtools(() => initialState),
         {
           name: topicStorePlaygroundName,
-          version: 19,
+          version: 20,
           migrate: migrate,
           skipHydration: true,
         }
@@ -92,28 +88,6 @@ export const useClaimTree = (arguedDiagramPartId: string): Diagram => {
     const topicGraph = { nodes: state.nodes, edges: state.edges };
     return getClaimTree(topicGraph, arguedDiagramPartId);
   });
-};
-
-export const useActiveArguedDiagramPart = () => {
-  return useTopicStore((state) => {
-    if (!state.activeClaimTreeId) return null;
-
-    return findGraphPart(state.activeClaimTreeId, state.nodes, state.edges);
-  });
-};
-
-export const useActiveTableProblemNode = () => {
-  return useTopicStore((state) => {
-    if (!state.activeTableProblemId) return null;
-
-    return findNode(state.activeTableProblemId, state.nodes);
-  });
-};
-
-export const useIsTableActive = () => {
-  return useTopicStore(
-    (state) => state.activeClaimTreeId === null && state.activeTableProblemId !== null
-  );
 };
 
 export const useClaimTreesWithExplicitClaims = () => {

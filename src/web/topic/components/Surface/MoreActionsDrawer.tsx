@@ -14,8 +14,9 @@ import { StorageValue } from "zustand/middleware";
 
 import { errorWithData } from "../../../../common/errorHandling";
 import { Perspectives } from "../../../view/components/Perspectives/Perspectives";
+import { useIsTableActive } from "../../../view/navigateStore";
 import { migrate } from "../../store/migrate";
-import { TopicStoreState, useIsTableActive, useShowImpliedEdges } from "../../store/store";
+import { TopicStoreState, useShowImpliedEdges } from "../../store/store";
 import { useOnPlayground } from "../../store/topicHooks";
 import { getPersistState, resetTopicData, setTopicData } from "../../store/utilActions";
 import { getTopicTitle } from "../../store/utils";

@@ -1,7 +1,7 @@
 import { Cancel } from "@mui/icons-material";
 
+import { closeClaimTree } from "../../../view/navigateStore";
 import { useClaimTree } from "../../store/store";
-import { closeClaimTree } from "../../store/viewActions";
 import { PositionedCloseButton } from "./ClaimTree.styles";
 import { Diagram } from "./Diagram";
 

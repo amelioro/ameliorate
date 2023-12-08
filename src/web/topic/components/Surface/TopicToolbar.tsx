@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 
 import { emitter } from "../../../common/event";
 import { useSessionUser } from "../../../common/hooks";
+import { useSelectedGraphPart } from "../../../view/navigateStore";
 import {
   comparePerspectives,
   resetPerspectives,
   useIsComparingPerspectives,
 } from "../../../view/store/store";
 import { deleteGraphPart } from "../../store/createDeleteActions";
-import { useSelectedGraphPart } from "../../store/graphPartHooks";
 import { useOnPlayground } from "../../store/topicHooks";
 import { useUserCanEditTopicData } from "../../store/userHooks";
 import { redo, undo } from "../../store/utilActions";

@@ -28,8 +28,6 @@ export const populateFromApi = (topicData: TopicData) => {
       nodes: topicGraphNodes,
       edges: topicGraphEdges,
       userScores,
-      activeTableProblemId: null,
-      activeClaimTreeId: null,
     },
     false,
     "populateFromApi"

@@ -1,11 +1,9 @@
 import { createDraft, finishDraft } from "immer";
 import set from "lodash/set";
-import { type EdgeSelectionChange, type NodeSelectionChange } from "reactflow";
 
 import { errorWithData } from "../../../common/errorHandling";
 import { GraphPart, type Node, Score, findGraphPart, findNode } from "../utils/graph";
 import { useTopicStore } from "./store";
-import { setSelected as setSelectedUtil } from "./utils";
 
 // score setting is way more work than it needs to be because one score can live in multiple places:
 // - on the graphPart
@@ -66,33 +64,6 @@ export const setGraphPartNotes = (graphPart: GraphPart, value: string) => {
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   useTopicStore.setState(finishDraft(state), false, "setGraphPartNotes");
-};
-
-export const setSelected = (selectChanges: NodeSelectionChange[] | EdgeSelectionChange[]) => {
-  const state = createDraft(useTopicStore.getState());
-
-  selectChanges.forEach((selectChange) => {
-    const graphPart = findGraphPart(selectChange.id, state.nodes, state.edges);
-
-    /* eslint-disable functional/immutable-data, no-param-reassign */
-    graphPart.selected = selectChange.selected;
-    /* eslint-enable functional/immutable-data, no-param-reassign */
-  });
-
-  useTopicStore.temporal.getState().pause();
-  useTopicStore.setState(finishDraft(state), false, "setSelected");
-  useTopicStore.temporal.getState().resume();
-};
-
-export const setSelectedGraphPart = (graphPartId: string) => {
-  const state = createDraft(useTopicStore.getState());
-
-  const topicGraph = { nodes: state.nodes, edges: state.edges };
-  setSelectedUtil(graphPartId, topicGraph);
-
-  useTopicStore.temporal.getState().pause();
-  useTopicStore.setState(finishDraft(state), false, "setSelectedGraphPart");
-  useTopicStore.temporal.getState().resume();
 };
 
 export const finishAddingNode = (nodeId: string) => {
