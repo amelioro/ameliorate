@@ -1,4 +1,5 @@
-import { create } from "zustand";
+import { temporal } from "zundo";
+import { create, useStore } from "zustand";
 
 import { useGraphPart } from "../topic/store/graphPartHooks";
 import { useNode } from "../topic/store/nodeHooks";
@@ -15,7 +16,10 @@ const initialState: NavigateStoreState = {
   activeClaimTreeId: null,
 };
 
-const useNavigateStore = create<NavigateStoreState>()(() => initialState);
+const useNavigateStore = create<NavigateStoreState>()(temporal(() => initialState));
+
+// temporal store is a vanilla store, we need to wrap it to use it as a hook and be able to react to changes
+const useTemporalStore = () => useStore(useNavigateStore.temporal);
 
 // hooks
 export const useSelectedGraphPart = () => {
@@ -56,6 +60,14 @@ export const useActiveArguedDiagramPart = () => {
   return useGraphPart(activeClaimTreeId);
 };
 
+export const useCanGoBackForward = () => {
+  const temporalStore = useTemporalStore();
+
+  const canGoBack = temporalStore.pastStates.length > 0;
+  const canGoForward = temporalStore.futureStates.length > 0;
+  return [canGoBack, canGoForward];
+};
+
 // actions
 export const setSelected = (graphPartId: string | null) => {
   useNavigateStore.setState({ selectedGraphPartId: graphPartId });
@@ -79,4 +91,12 @@ export const viewClaimTree = (arguedDiagramPartId: string) => {
 
 export const closeClaimTree = () => {
   useNavigateStore.setState({ activeClaimTreeId: null });
+};
+
+export const goBack = () => {
+  useNavigateStore.temporal.getState().undo();
+};
+
+export const goForward = () => {
+  useNavigateStore.temporal.getState().redo();
 };
