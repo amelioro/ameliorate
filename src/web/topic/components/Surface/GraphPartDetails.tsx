@@ -13,6 +13,7 @@ import { GraphPart, isNode, isNodeType } from "../../utils/graph";
 import { nodeDecorations } from "../../utils/node";
 import { StandaloneEdge } from "../Edge/StandaloneEdge";
 import { EditableNode } from "../Node/EditableNode";
+import { AnswerDetails } from "./AnswerDetails";
 import { DetailsClaimsSection } from "./DetailsClaimsSection";
 import { DetailsExploreSection } from "./DetailsExploreSection";
 import { QuestionDetails } from "./QuestionDetails";
@@ -97,6 +98,7 @@ export const GraphPartDetails = ({ graphPart }: Props) => {
         <Divider />
 
         {isNodeType(graphPart, "question") && <QuestionDetails questionNode={graphPart} />}
+        {isNodeType(graphPart, "answer") && <AnswerDetails answerNode={graphPart} />}
 
         <Divider />
 
