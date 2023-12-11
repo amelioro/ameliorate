@@ -39,28 +39,34 @@ export const DetailsExploreSection = ({ graphPart }: Props) => {
           }}
           selectNewNode={false}
         />
-        <AddNodeButton
-          fromPartId={graphPart.id}
-          as="child"
-          toNodeType="fact"
-          relation={{
-            child: "fact",
-            name: "relevantFor",
-            parent: partType,
-          }}
-          selectNewNode={false}
-        />
-        <AddNodeButton
-          fromPartId={graphPart.id}
-          as="child"
-          toNodeType="source"
-          relation={{
-            child: "source",
-            name: "relevantFor",
-            parent: partType,
-          }}
-          selectNewNode={false}
-        />
+
+        {/* disallow facts and sources as relevant for other facts and sources, because that gets confusing */}
+        {graphPart.type !== "fact" && graphPart.type !== "source" && (
+          <>
+            <AddNodeButton
+              fromPartId={graphPart.id}
+              as="child"
+              toNodeType="fact"
+              relation={{
+                child: "fact",
+                name: "relevantFor",
+                parent: partType,
+              }}
+              selectNewNode={false}
+            />
+            <AddNodeButton
+              fromPartId={graphPart.id}
+              as="child"
+              toNodeType="source"
+              relation={{
+                child: "source",
+                name: "relevantFor",
+                parent: partType,
+              }}
+              selectNewNode={false}
+            />
+          </>
+        )}
       </Stack>
 
       <Stack

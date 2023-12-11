@@ -16,7 +16,9 @@ import { EditableNode } from "../Node/EditableNode";
 import { AnswerDetails } from "./AnswerDetails";
 import { DetailsClaimsSection } from "./DetailsClaimsSection";
 import { DetailsExploreSection } from "./DetailsExploreSection";
+import { FactDetails } from "./FactDetails";
 import { QuestionDetails } from "./QuestionDetails";
+import { SourceDetails } from "./SourceDetails";
 
 const formSchema = () => {
   return z.object({
@@ -99,6 +101,8 @@ export const GraphPartDetails = ({ graphPart }: Props) => {
 
         {isNodeType(graphPart, "question") && <QuestionDetails questionNode={graphPart} />}
         {isNodeType(graphPart, "answer") && <AnswerDetails answerNode={graphPart} />}
+        {isNodeType(graphPart, "fact") && <FactDetails factNode={graphPart} />}
+        {isNodeType(graphPart, "source") && <SourceDetails sourceNode={graphPart} />}
 
         <Divider />
 

@@ -38,3 +38,51 @@ export const useAnswerDetails = (answerNodeId: string) => {
     }
   });
 };
+
+export const useFactDetails = (factNodeId: string) => {
+  return useTopicStore((state) => {
+    const relevantForEdges = state.edges.filter(
+      (edge) => edge.target === factNodeId && edge.label === "relevantFor"
+    );
+
+    const nodesRelevantFor = state.nodes.filter((node) =>
+      relevantForEdges.some((relevantForEdge) => relevantForEdge.source === node.id)
+    );
+    const edgesRelevantFor = state.edges.filter((edge) =>
+      relevantForEdges.some((relevantForEdge) => relevantForEdge.source === edge.id)
+    );
+
+    const sourceEdges = state.edges.filter(
+      (edge) => edge.source === factNodeId && edge.label === "sourceOf"
+    );
+    const sources = state.nodes.filter((node) =>
+      sourceEdges.some((sourceEdge) => node.id === sourceEdge.target)
+    );
+
+    return { nodesRelevantFor, edgesRelevantFor, sources };
+  });
+};
+
+export const useSourceDetails = (sourceNodeId: string) => {
+  return useTopicStore((state) => {
+    const relevantForEdges = state.edges.filter(
+      (edge) => edge.target === sourceNodeId && edge.label === "relevantFor"
+    );
+
+    const nodesRelevantFor = state.nodes.filter((node) =>
+      relevantForEdges.some((relevantForEdge) => relevantForEdge.source === node.id)
+    );
+    const edgesRelevantFor = state.edges.filter((edge) =>
+      relevantForEdges.some((relevantForEdge) => relevantForEdge.source === edge.id)
+    );
+
+    const factEdges = state.edges.filter(
+      (edge) => edge.target === sourceNodeId && edge.label === "sourceOf"
+    );
+    const facts = state.nodes.filter((node) =>
+      factEdges.some((factEdge) => node.id === factEdge.source)
+    );
+
+    return { nodesRelevantFor, edgesRelevantFor, facts };
+  });
+};
