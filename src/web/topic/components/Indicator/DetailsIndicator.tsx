@@ -3,7 +3,7 @@ import { Article, ArticleOutlined } from "@mui/icons-material";
 import { setSelected } from "../../../view/navigateStore";
 import { useExplicitClaimCount, useExploreNodes } from "../../store/graphPartHooks";
 import { GraphPart } from "../../utils/graph";
-import { viewDetails } from "../Surface/TopicPane";
+import { viewDetails } from "../TopicPane/TopicPane";
 import { Indicator } from "./Indicator";
 
 interface Props {

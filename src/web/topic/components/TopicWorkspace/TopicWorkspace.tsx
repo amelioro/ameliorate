@@ -6,7 +6,7 @@ import { useActiveArguedDiagramPart, useActiveTableProblemNode } from "../../../
 import { CriteriaTable } from "../CriteriaTable/CriteriaTable";
 import { ClaimTree } from "../Diagram/ClaimTree";
 import { TopicDiagram } from "../Diagram/TopicDiagram";
-import { TopicPane } from "../Surface/TopicPane";
+import { TopicPane } from "../TopicPane/TopicPane";
 import { TopicToolbar } from "../Surface/TopicToolbar";
 
 export const TopicWorkspace = () => {
