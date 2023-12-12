@@ -3,6 +3,7 @@ import { v4 as uuid } from "uuid";
 
 import { RelationName } from "../../../common/edge";
 import { errorWithData } from "../../../common/errorHandling";
+import { NodeType } from "../../../common/node";
 import { composedRelations } from "./edge";
 import { FlowNodeType } from "./node";
 
@@ -144,6 +145,13 @@ export const findGraphPart = (graphPartId: string, nodes: Node[], edges: Edge[])
 export const isNode = (graphPart: GraphPart): graphPart is Node => {
   if (graphPart.type !== "FlowEdge") return true;
   return false;
+};
+
+export const isNodeType = <T extends NodeType>(
+  graphPart: GraphPart,
+  type: T
+): graphPart is Node & { type: T } => {
+  return isNode(graphPart) && graphPart.type === type;
 };
 
 export const getNodesComposedBy = (node: Node, topicGraph: Graph) => {

@@ -1,9 +1,10 @@
 import { Article, ArticleOutlined } from "@mui/icons-material";
+import { useCallback } from "react";
 
 import { setSelected } from "../../../view/navigateStore";
 import { useExplicitClaimCount, useExploreNodes } from "../../store/graphPartHooks";
 import { GraphPart } from "../../utils/graph";
-import { viewDetails } from "../Surface/TopicPane";
+import { viewDetails } from "../TopicPane/TopicPane";
 import { Indicator } from "./Indicator";
 
 interface Props {
@@ -20,14 +21,10 @@ export const DetailsIndicator = ({ graphPart }: Props) => {
   const hasDetails = hasNotes || hasClaims || hasExploreNodes;
   const Icon = hasDetails ? Article : ArticleOutlined;
 
-  return (
-    <Indicator
-      Icon={Icon}
-      title={"View details"}
-      onClick={() => {
-        setSelected(graphPart.id);
-        viewDetails();
-      }}
-    />
-  );
+  const onClick = useCallback(() => {
+    setSelected(graphPart.id);
+    viewDetails();
+  }, [graphPart.id]);
+
+  return <Indicator Icon={Icon} title={"View details"} onClick={onClick} />;
 };

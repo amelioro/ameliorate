@@ -9,7 +9,7 @@ import {
   type ThemeOptions,
   createTheme,
 } from "@mui/material";
-import { grey, lightGreen, orange, yellow } from "@mui/material/colors";
+import { grey, orange, yellow } from "@mui/material/colors";
 
 import { FlowNodeType } from "../topic/utils/node";
 
@@ -154,9 +154,9 @@ const sharedPalette = {
   criterion: augmentColor({ color: { main: "#4AB885" } }), // mint: analogous to solution; between solution & support because criteria are kind of like supports for solutions
   effect: augmentColor({ color: { main: yellow[500] } }), // random yellow that looks decent: somewhat similar to green/solution but also goes well with lightning bolt icon
 
-  // explore
+  // explore - palette https://coolors.co/9e9e9e-f57c00-0288d1-04f06a-1c110a
   question: augmentColor({ color: { main: grey[500] } }), // grey, ambiguous, uncertain
-  answer: augmentColor({ color: { main: lightGreen.A400 } }), // lime-green, answer
+  answer: augmentColor({ color: { main: "#04f06a" } }), // spring green, green like answer/good, but distinct from solution's green
   fact: augmentColor({ color: { main: orange["700"] } }), // orange, fact
   source: augmentColor({ color: { main: "#0288d1", contrastText: "rgba(0, 0, 0, 0.87)" } }), // blue, info
 

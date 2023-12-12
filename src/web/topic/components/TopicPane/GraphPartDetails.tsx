@@ -9,12 +9,16 @@ import { nodeSchema } from "../../../../common/node";
 import { useSessionUser } from "../../../common/hooks";
 import { setGraphPartNotes } from "../../store/actions";
 import { useUserCanEditTopicData } from "../../store/userHooks";
-import { GraphPart, isNode } from "../../utils/graph";
+import { GraphPart, isNode, isNodeType } from "../../utils/graph";
 import { nodeDecorations } from "../../utils/node";
 import { StandaloneEdge } from "../Edge/StandaloneEdge";
 import { EditableNode } from "../Node/EditableNode";
+import { AnswerDetails } from "./AnswerDetails";
 import { DetailsClaimsSection } from "./DetailsClaimsSection";
 import { DetailsExploreSection } from "./DetailsExploreSection";
+import { FactDetails } from "./FactDetails";
+import { QuestionDetails } from "./QuestionDetails";
+import { SourceDetails } from "./SourceDetails";
 
 const formSchema = () => {
   return z.object({
@@ -92,6 +96,13 @@ export const GraphPartDetails = ({ graphPart }: Props) => {
             disabled={!userCanEditTopicData}
           />
         </ListItem>
+
+        <Divider />
+
+        {isNodeType(graphPart, "question") && <QuestionDetails questionNode={graphPart} />}
+        {isNodeType(graphPart, "answer") && <AnswerDetails answerNode={graphPart} />}
+        {isNodeType(graphPart, "fact") && <FactDetails factNode={graphPart} />}
+        {isNodeType(graphPart, "source") && <SourceDetails sourceNode={graphPart} />}
 
         <Divider />
 

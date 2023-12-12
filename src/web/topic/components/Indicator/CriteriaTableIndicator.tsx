@@ -1,4 +1,5 @@
 import { TableChart, TableChartOutlined } from "@mui/icons-material";
+import { useCallback } from "react";
 
 import { viewCriteriaTable } from "../../../view/navigateStore";
 import { useNodeChildren } from "../../store/nodeHooks";
@@ -16,11 +17,7 @@ export const CriteriaTableIndicator = ({ node }: Props) => {
 
   const Icon = hasCriteria ? TableChart : TableChartOutlined;
 
-  return (
-    <Indicator
-      Icon={Icon}
-      title={"View criteria table"}
-      onClick={() => viewCriteriaTable(node.id)}
-    />
-  );
+  const onClick = useCallback(() => viewCriteriaTable(node.id), [node.id]);
+
+  return <Indicator Icon={Icon} title={"View criteria table"} onClick={onClick} />;
 };
