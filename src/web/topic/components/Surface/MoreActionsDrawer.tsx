@@ -14,7 +14,7 @@ import { StorageValue } from "zustand/middleware";
 
 import { errorWithData } from "../../../../common/errorHandling";
 import { Perspectives } from "../../../view/components/Perspectives/Perspectives";
-import { useIsTableActive } from "../../../view/navigateStore";
+import { useActiveView } from "../../../view/navigateStore";
 import { migrate } from "../../store/migrate";
 import { TopicStoreState, useShowImpliedEdges } from "../../store/store";
 import { useOnPlayground } from "../../store/topicHooks";
@@ -72,7 +72,8 @@ export const MoreActionsDrawer = ({
   userCanEditTopicData,
 }: Props) => {
   const onPlayground = useOnPlayground();
-  const isTableActive = useIsTableActive();
+  const activeView = useActiveView();
+  const isTableActive = activeView === "criteriaTable";
   const showImpliedEdges = useShowImpliedEdges();
 
   return (

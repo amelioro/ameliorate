@@ -34,6 +34,7 @@ export const ClaimTreeIndicator = ({ graphPartId }: Props) => {
   return (
     <Indicator
       Icon={Icon}
+      iconHasBackground={false}
       title={title}
       // Kind-of-hack to prevent viewing empty claim tree without edit access if there are no claims
       // because it'll try to create the root claim in the db, and give an authorize error

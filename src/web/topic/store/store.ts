@@ -7,7 +7,7 @@ import { Diagram, filterHiddenComponents } from "../utils/diagram";
 import { Edge, Node, Score, buildNode } from "../utils/graph";
 import { apiSyncer } from "./apiSyncerMiddleware";
 import { migrate } from "./migrate";
-import { getClaimTree, getTopicDiagram } from "./utils";
+import { getClaimTree, getExploreDiagram, getTopicDiagram } from "./utils";
 
 export interface PlaygroundTopic {
   id: undefined; // so we can check this to see if the store topic is a playground topic
@@ -80,6 +80,14 @@ export const useTopicDiagram = (): Diagram => {
     const topicDiagram = getTopicDiagram(topicGraph);
     const claimEdges = state.edges.filter((edge) => claimRelationNames.includes(edge.label));
     return filterHiddenComponents(topicDiagram, claimEdges, state.showImpliedEdges);
+  });
+};
+
+export const useExploreDiagram = (): Diagram => {
+  return useTopicStore((state) => {
+    const topicGraph = { nodes: state.nodes, edges: state.edges };
+    const exploreDiagram = getExploreDiagram(topicGraph);
+    return filterHiddenComponents(exploreDiagram, [], false); // no need to filter implied edges because explore diagram shouldn't have any
   });
 };
 

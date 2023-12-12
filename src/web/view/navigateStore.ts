@@ -6,13 +6,23 @@ import { useNode } from "../topic/store/nodeHooks";
 
 interface NavigateStoreState {
   selectedGraphPartId: string | null;
+  viewingExploreDiagram: boolean;
+
+  viewingCriteriaTable: boolean;
   activeTableProblemId: string | null;
+
+  viewingClaimTree: boolean;
   activeClaimTreeId: string | null;
 }
 
 const initialState: NavigateStoreState = {
   selectedGraphPartId: null,
+  viewingExploreDiagram: false,
+
+  viewingCriteriaTable: false,
   activeTableProblemId: null,
+
+  viewingClaimTree: false,
   activeClaimTreeId: null,
 };
 
@@ -42,16 +52,31 @@ export const useIsAnyGraphPartSelected = (graphPartIds: string[]) => {
   });
 };
 
+export const useActiveView = () => {
+  return useNavigateStore((state) => {
+    if (state.viewingClaimTree) return "claimTree";
+    if (state.viewingCriteriaTable) return "criteriaTable";
+    if (state.viewingExploreDiagram) return "exploreDiagram";
+    return "topicDiagram";
+  });
+};
+
+export const useSecondaryView = () => {
+  return useNavigateStore((state) => {
+    if (state.viewingClaimTree) {
+      // only claim tree is layered in front of another view for now
+      if (state.viewingCriteriaTable) return "criteriaTable";
+      if (state.viewingExploreDiagram) return "exploreDiagram";
+      return "topicDiagram";
+    }
+    return null;
+  });
+};
+
 export const useActiveTableProblemNode = () => {
   const activeTableProblemId = useNavigateStore((state) => state.activeTableProblemId);
 
   return useNode(activeTableProblemId);
-};
-
-export const useIsTableActive = () => {
-  return useNavigateStore(
-    (state) => state.activeClaimTreeId === null && state.activeTableProblemId !== null
-  );
 };
 
 export const useActiveArguedDiagramPart = () => {
@@ -74,23 +99,43 @@ export const setSelected = (graphPartId: string | null) => {
 };
 
 export const viewTopicDiagram = () => {
-  useNavigateStore.setState({ activeTableProblemId: null, activeClaimTreeId: null });
+  useNavigateStore.setState({
+    viewingExploreDiagram: false,
+    viewingCriteriaTable: false,
+    viewingClaimTree: false,
+  });
+};
+
+export const viewExploreDiagram = () => {
+  useNavigateStore.setState({
+    viewingExploreDiagram: true,
+    viewingCriteriaTable: false,
+    viewingClaimTree: false,
+  });
+};
+
+export const closeExploreDiagram = () => {
+  useNavigateStore.setState({ viewingExploreDiagram: false });
 };
 
 export const viewCriteriaTable = (problemNodeId: string) => {
-  useNavigateStore.setState({ activeTableProblemId: problemNodeId, activeClaimTreeId: null });
+  useNavigateStore.setState({
+    viewingCriteriaTable: true,
+    viewingClaimTree: false,
+    activeTableProblemId: problemNodeId,
+  });
 };
 
 export const closeTable = () => {
-  useNavigateStore.setState({ activeTableProblemId: null });
+  useNavigateStore.setState({ viewingCriteriaTable: false });
 };
 
 export const viewClaimTree = (arguedDiagramPartId: string) => {
-  useNavigateStore.setState({ activeClaimTreeId: arguedDiagramPartId });
+  useNavigateStore.setState({ viewingClaimTree: true, activeClaimTreeId: arguedDiagramPartId });
 };
 
 export const closeClaimTree = () => {
-  useNavigateStore.setState({ activeClaimTreeId: null });
+  useNavigateStore.setState({ viewingClaimTree: false });
 };
 
 export const goBack = () => {

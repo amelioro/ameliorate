@@ -3,7 +3,7 @@ import { isEdgeImplied } from "./edge";
 import { Edge, Node } from "./graph";
 import { Orientation } from "./layout";
 
-export type DiagramType = "topicDiagram" | "claimTree";
+export type DiagramType = "topicDiagram" | "exploreDiagram" | "claimTree";
 
 export interface Diagram {
   nodes: Node[];
