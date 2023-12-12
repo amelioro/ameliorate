@@ -6,6 +6,7 @@ import { create } from "zustand";
 import {
   useActiveArguedDiagramPart,
   useActiveTableProblemNode,
+  useActiveView,
   useSelectedGraphPart,
 } from "../../../view/navigateStore";
 import { GraphPartDetails } from "./GraphPartDetails";
@@ -46,6 +47,7 @@ export const TopicPane = ({ isLandscape }: Props) => {
   const { isTopicPaneOpen, selectedTab } = usePaneStore();
 
   const selectedGraphPart = useSelectedGraphPart();
+  const activeView = useActiveView();
   const activeArguedDiagramPart = useActiveArguedDiagramPart();
   const activeTableProblemNode = useActiveTableProblemNode();
 
@@ -93,12 +95,12 @@ export const TopicPane = ({ isLandscape }: Props) => {
                 // part details for parts outside of the shown diagram can be displayed, without
                 // losing tracking of the selected part per diagram.
                 <GraphPartDetails graphPart={selectedGraphPart} key={selectedGraphPart.id} />
-              ) : activeArguedDiagramPart !== null ? (
+              ) : activeView === "claimTree" && activeArguedDiagramPart !== null ? (
                 <GraphPartDetails
                   graphPart={activeArguedDiagramPart}
                   key={activeArguedDiagramPart.id}
                 />
-              ) : activeTableProblemNode !== null ? (
+              ) : activeView === "criteriaTable" && activeTableProblemNode !== null ? (
                 <GraphPartDetails
                   graphPart={activeTableProblemNode}
                   key={activeTableProblemNode.id}

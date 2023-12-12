@@ -5,7 +5,8 @@ import { ContextMenu } from "../../../common/components/ContextMenu/ContextMenu"
 import {
   useActiveArguedDiagramPart,
   useActiveTableProblemNode,
-  useViewingExploreDiagram,
+  useActiveView,
+  useSecondaryView,
 } from "../../../view/navigateStore";
 import { CriteriaTable } from "../CriteriaTable/CriteriaTable";
 import { ClaimTree } from "../Diagram/ClaimTree";
@@ -17,7 +18,8 @@ import { TopicPane } from "../TopicPane/TopicPane";
 export const TopicWorkspace = () => {
   const isLandscape = useMediaQuery("(orientation: landscape)");
 
-  const viewingExploreDiagram = useViewingExploreDiagram();
+  const activeView = useActiveView();
+  const secondaryView = useSecondaryView();
   const tableProblemNode = useActiveTableProblemNode();
   const arguedDiagramPart = useActiveArguedDiagramPart();
 
@@ -38,20 +40,45 @@ export const TopicWorkspace = () => {
         <TopicPane isLandscape={isLandscape} />
 
         <Box height="100%" flex="1" position="relative">
-          <Box width="100%" height="100%" position="absolute">
-            <>
-              {tableProblemNode && <CriteriaTable problemNodeId={tableProblemNode.id} />}
-              {viewingExploreDiagram && <ExploreDiagram />}
-              <TopicDiagram />
-            </>
+          <Box
+            width="100%"
+            height="100%"
+            position="absolute"
+            zIndex={activeView === "criteriaTable" ? 2 : secondaryView === "criteriaTable" ? 1 : 0}
+          >
+            {tableProblemNode && <CriteriaTable problemNodeId={tableProblemNode.id} />}
           </Box>
 
-          {arguedDiagramPart && (
-            // Criteria Table has header (z-index:2); expectation: overlay the component
-            <Box width="100%" height="100%" position="absolute" zIndex="2">
-              <ClaimTree arguedDiagramPartId={arguedDiagramPart.id} />
-            </Box>
-          )}
+          <Box
+            width="100%"
+            height="100%"
+            position="absolute"
+            zIndex={
+              activeView === "exploreDiagram" ? 2 : secondaryView === "exploreDiagram" ? 1 : 0
+            }
+            sx={{ backgroundColor: "white" }} // diagrams default to transparent background specifically to allow claim tree to retain visual context of the view behind it
+          >
+            <ExploreDiagram />
+          </Box>
+
+          <Box
+            width="100%"
+            height="100%"
+            position="absolute"
+            zIndex={activeView === "topicDiagram" ? 2 : secondaryView === "topicDiagram" ? 1 : 0}
+            sx={{ backgroundColor: "white" }} // diagrams default to transparent background specifically to allow claim tree to retain visual context of the view behind it
+          >
+            <TopicDiagram />
+          </Box>
+
+          <Box
+            width="100%"
+            height="100%"
+            position="absolute"
+            zIndex={activeView === "claimTree" ? 2 : 0}
+          >
+            {arguedDiagramPart && <ClaimTree arguedDiagramPartId={arguedDiagramPart.id} />}
+          </Box>
         </Box>
 
         {/* prevents body scrolling when workspace is rendered*/}

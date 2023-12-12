@@ -86,7 +86,7 @@ export const TopicViews = () => {
           {problems.map(({ id: nodeId, data }) => (
             <ListItem key={nodeId}>
               <NestedListItemButton
-                selected={!activeArguedDiagramPart && activeTableProblemNode?.id === nodeId}
+                selected={activeView === "criteriaTable" && activeTableProblemNode?.id === nodeId}
                 onClick={() => viewCriteriaTable(nodeId)}
               >
                 <ListItemIcon>
@@ -122,7 +122,9 @@ export const TopicViews = () => {
           {claimTreeIdentifiers.map(([arguedDiagramPartId, diagramTitle]) => (
             <ListItem key={arguedDiagramPartId}>
               <NestedListItemButton
-                selected={activeArguedDiagramPart?.id === arguedDiagramPartId}
+                selected={
+                  activeView === "claimTree" && activeArguedDiagramPart?.id === arguedDiagramPartId
+                }
                 onClick={() => viewClaimTree(arguedDiagramPartId)}
               >
                 <ListItemIcon>
