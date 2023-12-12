@@ -1,21 +1,17 @@
 import { Cancel } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 
-import { closeClaimTree } from "../../../view/navigateStore";
-import { useClaimTree } from "../../store/store";
+import { closeExploreDiagram } from "../../../view/navigateStore";
+import { useExploreDiagram } from "../../store/store";
 import { Diagram } from "./Diagram";
 
-interface Props {
-  arguedDiagramPartId: string;
-}
-
-export const ClaimTree = ({ arguedDiagramPartId }: Props) => {
-  const diagram = useClaimTree(arguedDiagramPartId);
+export const ExploreDiagram = () => {
+  const diagram = useExploreDiagram();
 
   return (
     <>
       <IconButton
-        onClick={() => closeClaimTree()}
+        onClick={() => closeExploreDiagram()}
         color="primary"
         sx={{ position: "absolute", zIndex: 1, right: 0 }}
       >

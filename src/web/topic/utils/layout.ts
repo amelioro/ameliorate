@@ -17,8 +17,8 @@ const partitionOrders: { [type in NodeType]: string } = {
   // explore
   question: "null",
   answer: "null",
-  fact: "null",
-  source: "null",
+  fact: "5",
+  source: "6", // generally nice to have sources along the bottom, below facts
 
   // claim
   rootClaim: "null",

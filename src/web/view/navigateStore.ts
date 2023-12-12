@@ -6,12 +6,14 @@ import { useNode } from "../topic/store/nodeHooks";
 
 interface NavigateStoreState {
   selectedGraphPartId: string | null;
+  viewingExploreDiagram: boolean;
   activeTableProblemId: string | null;
   activeClaimTreeId: string | null;
 }
 
 const initialState: NavigateStoreState = {
   selectedGraphPartId: null,
+  viewingExploreDiagram: false,
   activeTableProblemId: null,
   activeClaimTreeId: null,
 };
@@ -40,6 +42,19 @@ export const useIsAnyGraphPartSelected = (graphPartIds: string[]) => {
     if (!state.selectedGraphPartId) return false;
     return graphPartIds.includes(state.selectedGraphPartId);
   });
+};
+
+export const useActiveView = () => {
+  return useNavigateStore((state) => {
+    if (state.activeClaimTreeId) return "claimTree";
+    if (state.activeTableProblemId) return "criteriaTable";
+    if (state.viewingExploreDiagram) return "exploreDiagram";
+    return "topicDiagram";
+  });
+};
+
+export const useViewingExploreDiagram = () => {
+  return useNavigateStore((state) => state.viewingExploreDiagram);
 };
 
 export const useActiveTableProblemNode = () => {
@@ -74,7 +89,23 @@ export const setSelected = (graphPartId: string | null) => {
 };
 
 export const viewTopicDiagram = () => {
-  useNavigateStore.setState({ activeTableProblemId: null, activeClaimTreeId: null });
+  useNavigateStore.setState({
+    viewingExploreDiagram: false,
+    activeTableProblemId: null,
+    activeClaimTreeId: null,
+  });
+};
+
+export const viewExploreDiagram = () => {
+  useNavigateStore.setState({
+    viewingExploreDiagram: true,
+    activeTableProblemId: null,
+    activeClaimTreeId: null,
+  });
+};
+
+export const closeExploreDiagram = () => {
+  useNavigateStore.setState({ viewingExploreDiagram: false });
 };
 
 export const viewCriteriaTable = (problemNodeId: string) => {

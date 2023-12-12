@@ -2,9 +2,14 @@ import { Global } from "@emotion/react";
 import { Box, useMediaQuery } from "@mui/material";
 
 import { ContextMenu } from "../../../common/components/ContextMenu/ContextMenu";
-import { useActiveArguedDiagramPart, useActiveTableProblemNode } from "../../../view/navigateStore";
+import {
+  useActiveArguedDiagramPart,
+  useActiveTableProblemNode,
+  useViewingExploreDiagram,
+} from "../../../view/navigateStore";
 import { CriteriaTable } from "../CriteriaTable/CriteriaTable";
 import { ClaimTree } from "../Diagram/ClaimTree";
+import { ExploreDiagram } from "../Diagram/ExploreDiagram";
 import { TopicDiagram } from "../Diagram/TopicDiagram";
 import { TopicToolbar } from "../Surface/TopicToolbar";
 import { TopicPane } from "../TopicPane/TopicPane";
@@ -12,6 +17,7 @@ import { TopicPane } from "../TopicPane/TopicPane";
 export const TopicWorkspace = () => {
   const isLandscape = useMediaQuery("(orientation: landscape)");
 
+  const viewingExploreDiagram = useViewingExploreDiagram();
   const tableProblemNode = useActiveTableProblemNode();
   const arguedDiagramPart = useActiveArguedDiagramPart();
 
@@ -35,6 +41,7 @@ export const TopicWorkspace = () => {
           <Box width="100%" height="100%" position="absolute">
             <>
               {tableProblemNode && <CriteriaTable problemNodeId={tableProblemNode.id} />}
+              {viewingExploreDiagram && <ExploreDiagram />}
               <TopicDiagram />
             </>
           </Box>

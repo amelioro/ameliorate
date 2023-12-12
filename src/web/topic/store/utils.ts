@@ -1,5 +1,5 @@
-import { claimRelationNames, topicRelationNames } from "../../../common/edge";
-import { claimNodeTypes, topicNodeTypes } from "../../../common/node";
+import { claimRelationNames, exploreRelationNames, topicRelationNames } from "../../../common/edge";
+import { claimNodeTypes, exploreNodeTypes, topicNodeTypes } from "../../../common/node";
 import { Diagram, getDiagramTitle } from "../utils/diagram";
 import { Edge, Graph } from "../utils/graph";
 import { PlaygroundTopic, StoreTopic, TopicStoreState } from "./store";
@@ -15,6 +15,15 @@ export const getTopicDiagram = (topicGraph: Graph): Diagram => {
     edges: topicGraph.edges.filter((edge) => topicRelationNames.includes(edge.label)),
     orientation: "DOWN",
     type: "topicDiagram",
+  };
+};
+
+export const getExploreDiagram = (topicGraph: Graph): Diagram => {
+  return {
+    nodes: topicGraph.nodes.filter((node) => exploreNodeTypes.includes(node.type)),
+    edges: topicGraph.edges.filter((edge) => exploreRelationNames.includes(edge.label)),
+    orientation: "DOWN",
+    type: "exploreDiagram",
   };
 };
 

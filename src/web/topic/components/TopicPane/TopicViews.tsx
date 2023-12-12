@@ -3,6 +3,7 @@ import {
   AutoStories,
   ExpandLess,
   ExpandMore,
+  School,
   TableChart,
   TableView,
 } from "@mui/icons-material";
@@ -19,8 +20,10 @@ import { useState } from "react";
 import {
   useActiveArguedDiagramPart,
   useActiveTableProblemNode,
+  useActiveView,
   viewClaimTree,
   viewCriteriaTable,
+  viewExploreDiagram,
   viewTopicDiagram,
 } from "../../../view/navigateStore";
 import { useCriteriaTableProblemNodes } from "../../store/nodeHooks";
@@ -31,6 +34,7 @@ export const TopicViews = () => {
   const [isClaimsListOpen, setIsClaimsListOpen] = useState(true);
   const [isProblemsListOpen, setIsProblemsListOpen] = useState(true);
 
+  const activeView = useActiveView();
   const activeTableProblemNode = useActiveTableProblemNode();
   const activeArguedDiagramPart = useActiveArguedDiagramPart();
 
@@ -40,10 +44,7 @@ export const TopicViews = () => {
   return (
     <List>
       <ListItem key="1">
-        <ListItemButton
-          selected={!activeTableProblemNode && !activeArguedDiagramPart}
-          onClick={() => viewTopicDiagram()}
-        >
+        <ListItemButton selected={activeView === "topicDiagram"} onClick={() => viewTopicDiagram()}>
           <ListItemIcon>
             <AutoStories />
           </ListItemIcon>
@@ -51,6 +52,17 @@ export const TopicViews = () => {
         </ListItemButton>
       </ListItem>
       <ListItem key="2">
+        <ListItemButton
+          selected={activeView === "exploreDiagram"}
+          onClick={() => viewExploreDiagram()}
+        >
+          <ListItemIcon>
+            <School />
+          </ListItemIcon>
+          <ListItemText primary="Explore Diagram" />
+        </ListItemButton>
+      </ListItem>
+      <ListItem key="3">
         <ListItemButton onClick={() => setIsProblemsListOpen(!isProblemsListOpen)}>
           <ListItemIcon>
             <TableView />
@@ -86,7 +98,7 @@ export const TopicViews = () => {
           ))}
         </List>
       </Collapse>
-      <ListItem key="3">
+      <ListItem key="4">
         <ListItemButton onClick={() => setIsClaimsListOpen(!isClaimsListOpen)}>
           <ListItemIcon>
             <AccountTree />
