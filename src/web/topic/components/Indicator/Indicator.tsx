@@ -50,7 +50,11 @@ export const Indicator = ({
           variant="contained"
           color={color}
           onClick={onClick}
-          sx={{ border: "1px solid", pointerEvents: !onClick ? "none" : undefined }}
+          sx={{
+            border: "1px solid",
+            pointerEvents: !onClick ? "none" : undefined,
+            fontSize: "16px", // default seems to be 14px, but 16px fits more snuggly within button size
+          }}
         >
           <Icon color="neutralContrast" fontSize="inherit" />
         </StyledButton>
