@@ -270,6 +270,7 @@ export const deleteNode = (nodeId: string) => {
   state.edges = state.edges.filter(
     (edge) => !nodeEdges.includes(edge) && edge.data.arguedDiagramPartId !== nodeId
   );
+  deleteInvalidScores(state);
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   useTopicStore.setState(finishDraft(state), false, "deleteNode");
@@ -284,9 +285,24 @@ export const deleteEdge = (edgeId: string) => {
   state.edges = state.edges.filter(
     (edge) => edge.id !== edgeId && edge.data.arguedDiagramPartId !== edgeId
   );
+  deleteInvalidScores(state);
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   useTopicStore.setState(finishDraft(state), false, "deleteEdge");
+};
+
+const deleteInvalidScores = (state: TopicStoreState) => {
+  const graphPartIds = [...state.nodes, ...state.edges].map((graphPart) => graphPart.id);
+
+  Object.entries(state.userScores).forEach(([_username, scoreByGraphParts]) => {
+    Object.entries(scoreByGraphParts).forEach(([graphPartId, _score]) => {
+      if (!graphPartIds.includes(graphPartId)) {
+        /* eslint-disable functional/immutable-data, no-param-reassign, @typescript-eslint/no-dynamic-delete */
+        delete scoreByGraphParts[graphPartId];
+        /* eslint-enable functional/immutable-data, no-param-reassign, @typescript-eslint/no-dynamic-delete */
+      }
+    });
+  });
 };
 
 export const deleteGraphPart = (graphPart: GraphPart) => {
