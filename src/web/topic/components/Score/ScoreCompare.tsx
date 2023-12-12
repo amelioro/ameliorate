@@ -6,8 +6,8 @@ import set from "lodash/set";
 import { Data } from "react-minimal-pie-chart/types/commonTypes";
 
 import { Score } from "../../utils/graph";
+import { scoreColors } from "../../utils/score";
 import { CustomDataEntry, PieChart } from "./PieChart";
-import { scoreColors } from "./ScoreButton";
 
 interface Props {
   userScores: Record<string, Score>;

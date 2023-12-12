@@ -8,8 +8,4 @@ export const StyledButton = styled(Button)`
   min-width: ${indicatorLengthRem}rem;
   height: ${indicatorLengthRem}rem;
   padding: 0px;
-
-  &:hover > svg {
-    color: ${({ theme }) => theme.palette.neutral.dark};
-  }
 `;

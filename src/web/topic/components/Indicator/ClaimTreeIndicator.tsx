@@ -1,4 +1,5 @@
 import { AccountTree, AccountTreeOutlined } from "@mui/icons-material";
+import { MouseEventHandler, useCallback } from "react";
 
 import { useSessionUser } from "../../../common/hooks";
 import { useExplicitClaimCount, useNonTopLevelClaimCount } from "../../store/graphPartHooks";
@@ -16,6 +17,15 @@ export const ClaimTreeIndicator = ({ graphPartId }: Props) => {
   const explicitClaimCount = useExplicitClaimCount(graphPartId);
   const nonTopLevelClaimCount = useNonTopLevelClaimCount(graphPartId);
 
+  const onClick: MouseEventHandler<HTMLButtonElement> = useCallback(
+    (event) => {
+      // prevent setting the node as selected because we're about to navigate away from this diagram
+      event.stopPropagation();
+      viewOrCreateClaimTree(graphPartId);
+    },
+    [graphPartId]
+  );
+
   const Icon = nonTopLevelClaimCount > 0 ? AccountTree : AccountTreeOutlined;
   const title =
     "View claim tree" +
@@ -27,15 +37,7 @@ export const ClaimTreeIndicator = ({ graphPartId }: Props) => {
       title={title}
       // Kind-of-hack to prevent viewing empty claim tree without edit access if there are no claims
       // because it'll try to create the root claim in the db, and give an authorize error
-      onClick={
-        userCanEditTopicData || explicitClaimCount > 0
-          ? (event) => {
-              // prevent setting the node as selected because we're about to navigate away from this diagram
-              event.stopPropagation();
-              viewOrCreateClaimTree(graphPartId);
-            }
-          : undefined
-      }
+      onClick={userCanEditTopicData || explicitClaimCount > 0 ? onClick : undefined}
     />
   );
 };

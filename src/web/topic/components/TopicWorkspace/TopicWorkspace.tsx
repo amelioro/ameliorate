@@ -6,8 +6,8 @@ import { useActiveArguedDiagramPart, useActiveTableProblemNode } from "../../../
 import { CriteriaTable } from "../CriteriaTable/CriteriaTable";
 import { ClaimTree } from "../Diagram/ClaimTree";
 import { TopicDiagram } from "../Diagram/TopicDiagram";
-import { TopicPane } from "../TopicPane/TopicPane";
 import { TopicToolbar } from "../Surface/TopicToolbar";
+import { TopicPane } from "../TopicPane/TopicPane";
 
 export const TopicWorkspace = () => {
   const isLandscape = useMediaQuery("(orientation: landscape)");
