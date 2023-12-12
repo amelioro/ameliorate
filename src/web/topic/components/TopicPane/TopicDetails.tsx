@@ -9,6 +9,7 @@ import {
   TextField,
 } from "@mui/material";
 import NextLink from "next/link";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -35,6 +36,7 @@ export const TopicDetails = () => {
 
   const {
     register,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({
@@ -45,6 +47,11 @@ export const TopicDetails = () => {
       description: topic.description,
     },
   });
+
+  useEffect(() => {
+    // when notes changes from outside of form (e.g. undo/redo), make sure form is updated
+    reset({ description: topic.description });
+  }, [topic.description, reset]);
 
   return (
     <form

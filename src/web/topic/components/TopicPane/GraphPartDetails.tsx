@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Timeline } from "@mui/icons-material";
 import { Divider, List, ListItem, ListItemIcon, ListItemText, TextField } from "@mui/material";
 import lowerCase from "lodash/lowerCase";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -38,6 +39,7 @@ export const GraphPartDetails = ({ graphPart }: Props) => {
 
   const {
     register,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({
@@ -48,6 +50,11 @@ export const GraphPartDetails = ({ graphPart }: Props) => {
       notes: graphPart.data.notes,
     },
   });
+
+  useEffect(() => {
+    // when notes changes from outside of form (e.g. undo/redo), make sure form is updated
+    reset({ notes: graphPart.data.notes });
+  }, [graphPart.data.notes, reset]);
 
   const partIsNode = isNode(graphPart);
   const GraphPartIcon = partIsNode ? nodeDecorations[graphPart.type].NodeIcon : Timeline;
