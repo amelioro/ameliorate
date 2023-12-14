@@ -26,6 +26,7 @@ export const migrate = (persistedState: any, version: number) => {
     migrate_17_to_18,
     migrate_18_to_19,
     migrate_19_to_20,
+    migrate_20_to_21,
   ];
 
   let state = persistedState;
@@ -474,5 +475,14 @@ const migrate_19_to_20 = (state: FromState19) => {
   delete state.activeTableProblemId;
   delete state.activeClaimTreeId;
 
+  return state;
+};
+
+interface FromState20 {
+  showImpliedEdges?: boolean;
+}
+
+const migrate_20_to_21 = (state: FromState20) => {
+  delete state.showImpliedEdges;
   return state;
 };

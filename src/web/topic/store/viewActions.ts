@@ -66,9 +66,3 @@ export const toggleShowNeighbors = (
   useTopicStore.setState(finishDraft(state), false, "toggleShowNeighbors");
   useTopicStore.temporal.getState().resume();
 };
-
-export const toggleShowImpliedEdges = (show: boolean) => {
-  useTopicStore.temporal.getState().pause();
-  useTopicStore.setState({ showImpliedEdges: show }, false, "toggleShowImpliedEdges");
-  useTopicStore.temporal.getState().resume();
-};

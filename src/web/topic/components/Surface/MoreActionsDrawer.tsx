@@ -13,14 +13,14 @@ import fileDownload from "js-file-download";
 import { StorageValue } from "zustand/middleware";
 
 import { errorWithData } from "../../../../common/errorHandling";
+import { toggleShowImpliedEdges, useShowImpliedEdges } from "../../../view/actionConfigStore";
 import { Perspectives } from "../../../view/components/Perspectives/Perspectives";
 import { useActiveView } from "../../../view/navigateStore";
 import { migrate } from "../../store/migrate";
-import { TopicStoreState, useShowImpliedEdges } from "../../store/store";
+import { TopicStoreState } from "../../store/store";
 import { useOnPlayground } from "../../store/topicHooks";
 import { getPersistState, resetTopicData, setTopicData } from "../../store/utilActions";
 import { getTopicTitle } from "../../store/utils";
-import { toggleShowImpliedEdges } from "../../store/viewActions";
 
 // TODO: might be useful to have downloaded state be more human editable;
 // for this, probably should prettify the JSON, and remove position values (we can re-layout on import)
