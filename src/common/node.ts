@@ -25,6 +25,9 @@ export const nodeTypes = [
   "rootClaim",
   "support",
   "critique",
+
+  // generic
+  "custom",
 ] as const;
 
 const zNodeTypes = z.enum(nodeTypes);
@@ -48,6 +51,7 @@ export const topicNodeTypes: NodeType[] = [
   "effect",
   "solutionComponent",
   "solution",
+  "custom", // is a generic node but currently only seems worthwhile in topic
 ];
 export const exploreNodeTypes: NodeType[] = ["question", "answer", "fact", "source"];
 export const claimNodeTypes: NodeType[] = ["rootClaim", "support", "critique"];

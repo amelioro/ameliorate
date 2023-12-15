@@ -24,6 +24,9 @@ const partitionOrders: { [type in NodeType]: string } = {
   rootClaim: "null",
   support: "null",
   critique: "null",
+
+  // generic
+  custom: "null",
 };
 
 const priorities = Object.fromEntries(nodeTypes.map((type, index) => [type, index.toString()])) as {

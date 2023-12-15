@@ -167,6 +167,9 @@ const addableNodesFor: Record<NodeType, AddableNodes> = {
   rootClaim: { parent: [], child: ["support", "critique"] },
   support: { parent: [], child: ["support", "critique"] },
   critique: { parent: [], child: ["support", "critique"] },
+
+  // generic - will always add via unrestricted mode
+  custom: { parent: [], child: [] },
 };
 
 export const addableRelationsFrom = (nodeType: NodeType, addingAs: RelationDirection) => {
