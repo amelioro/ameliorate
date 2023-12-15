@@ -127,6 +127,9 @@ enum EdgeType {
   // claim
   supports
   critiques
+
+  // generic, for unrestricted editing
+  relatesTo
 }
 
 model UserScore {
