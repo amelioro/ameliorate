@@ -176,6 +176,9 @@ const sharedPalette = {
   critique2: augmentColor({ color: { main: "#ffb4a7", contrastText: "rgba(0, 0, 0, 0.87)" } }),
   critique3: augmentColor({ color: { main: "#ffdad4", contrastText: "rgba(0, 0, 0, 0.87)" } }),
   critique4: augmentColor({ color: { main: "#ffedea", contrastText: "rgba(0, 0, 0, 0.87)" } }),
+
+  // generic
+  custom: augmentColor({ color: { main: "#ffffff" } }), // neutral white
 };
 
 export const getThemeOptions = (mode: PaletteMode): ThemeOptions => ({

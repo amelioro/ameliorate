@@ -28,6 +28,7 @@ export const convertToStoreEdge = (apiEdge: TopicEdge) => {
     targetId: apiEdge.targetId,
     relation: apiEdge.type,
     arguedDiagramPartId: apiEdge.arguedDiagramPartId ?? undefined,
+    customLabel: apiEdge.customLabel ?? undefined,
   });
 };
 
@@ -66,6 +67,7 @@ export const convertToApiEdge = (storeEdge: StoreEdge, topicId: number): ApiEdge
     topicId: topicId,
     arguedDiagramPartId: storeEdge.data.arguedDiagramPartId ?? null,
     type: storeEdge.label,
+    customLabel: storeEdge.data.customLabel,
     notes: storeEdge.data.notes,
     sourceId: storeEdge.source,
     targetId: storeEdge.target,

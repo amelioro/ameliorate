@@ -1,8 +1,17 @@
 import { createDraft, finishDraft } from "immer";
 import set from "lodash/set";
 
+import { edgeSchema } from "../../../common/edge";
 import { errorWithData } from "../../../common/errorHandling";
-import { GraphPart, type Node, Score, findGraphPart, findNode } from "../utils/graph";
+import {
+  Edge,
+  GraphPart,
+  type Node,
+  Score,
+  findEdge,
+  findGraphPart,
+  findNode,
+} from "../utils/graph";
 import { useTopicStore } from "./store";
 
 // score setting is way more work than it needs to be because one score can live in multiple places:
@@ -52,6 +61,21 @@ export const setNodeLabel = (node: Node, value: string) => {
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   useTopicStore.setState(finishDraft(state), false, "setNodeLabel");
+};
+
+export const setCustomEdgeLabel = (edge: Edge, value: string) => {
+  const state = createDraft(useTopicStore.getState());
+
+  if (!edgeSchema.shape.customLabel.parse(value))
+    throw errorWithData("label should only contain alphaspace", value);
+
+  const foundEdge = findEdge(edge.id, state.edges);
+
+  /* eslint-disable functional/immutable-data, no-param-reassign */
+  foundEdge.data.customLabel = value;
+  /* eslint-enable functional/immutable-data, no-param-reassign */
+
+  useTopicStore.setState(finishDraft(state), false, "setCustomEdgeLabel");
 };
 
 export const setGraphPartNotes = (graphPart: GraphPart, value: string) => {

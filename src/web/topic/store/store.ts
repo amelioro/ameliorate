@@ -3,6 +3,7 @@ import { devtools, persist } from "zustand/middleware";
 import { createWithEqualityFn } from "zustand/traditional";
 
 import { claimRelationNames } from "../../../common/edge";
+import { useShowImpliedEdges } from "../../view/actionConfigStore";
 import { Diagram, filterHiddenComponents } from "../utils/diagram";
 import { Edge, Node, Score, buildNode } from "../utils/graph";
 import { apiSyncer } from "./apiSyncerMiddleware";
@@ -41,7 +42,6 @@ export interface TopicStoreState {
   nodes: Node[];
   edges: Edge[];
   userScores: UserScores;
-  showImpliedEdges: boolean;
 }
 
 export const initialState: TopicStoreState = {
@@ -49,7 +49,6 @@ export const initialState: TopicStoreState = {
   nodes: [buildNode({ type: "problem" })],
   edges: [],
   userScores: {},
-  showImpliedEdges: true, // TODO: probably belongs in a config store
 };
 
 // should probably be "topic-playground-storage" but don't know how to migrate
@@ -64,7 +63,7 @@ export const useTopicStore = createWithEqualityFn<TopicStoreState>()(
         devtools(() => initialState),
         {
           name: topicStorePlaygroundName,
-          version: 20,
+          version: 21,
           migrate: migrate,
           skipHydration: true,
         }
@@ -75,11 +74,13 @@ export const useTopicStore = createWithEqualityFn<TopicStoreState>()(
 );
 
 export const useTopicDiagram = (): Diagram => {
+  const showImpliedEdges = useShowImpliedEdges();
+
   return useTopicStore((state) => {
     const topicGraph = { nodes: state.nodes, edges: state.edges };
     const topicDiagram = getTopicDiagram(topicGraph);
     const claimEdges = state.edges.filter((edge) => claimRelationNames.includes(edge.label));
-    return filterHiddenComponents(topicDiagram, claimEdges, state.showImpliedEdges);
+    return filterHiddenComponents(topicDiagram, claimEdges, showImpliedEdges);
   });
 };
 
@@ -108,8 +109,4 @@ export const useClaimTreesWithExplicitClaims = () => {
       (node) => [node.data.arguedDiagramPartId, node.data.label] as [string, string]
     );
   });
-};
-
-export const useShowImpliedEdges = () => {
-  return useTopicStore((state) => state.showImpliedEdges);
 };

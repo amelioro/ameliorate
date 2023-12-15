@@ -1,4 +1,12 @@
-import { AutoStoriesOutlined, Build, Close, Download, Route, Upload } from "@mui/icons-material";
+import {
+  AutoStoriesOutlined,
+  Build,
+  Close,
+  Download,
+  Engineering,
+  Route,
+  Upload,
+} from "@mui/icons-material";
 import {
   Divider,
   Drawer,
@@ -13,14 +21,19 @@ import fileDownload from "js-file-download";
 import { StorageValue } from "zustand/middleware";
 
 import { errorWithData } from "../../../../common/errorHandling";
+import {
+  toggleShowImpliedEdges,
+  toggleUnrestrictedEditing,
+  useShowImpliedEdges,
+  useUnrestrictedEditing,
+} from "../../../view/actionConfigStore";
 import { Perspectives } from "../../../view/components/Perspectives/Perspectives";
 import { useActiveView } from "../../../view/navigateStore";
 import { migrate } from "../../store/migrate";
-import { TopicStoreState, useShowImpliedEdges } from "../../store/store";
+import { TopicStoreState } from "../../store/store";
 import { useOnPlayground } from "../../store/topicHooks";
 import { getPersistState, resetTopicData, setTopicData } from "../../store/utilActions";
 import { getTopicTitle } from "../../store/utils";
-import { toggleShowImpliedEdges } from "../../store/viewActions";
 
 // TODO: might be useful to have downloaded state be more human editable;
 // for this, probably should prettify the JSON, and remove position values (we can re-layout on import)
@@ -75,6 +88,7 @@ export const MoreActionsDrawer = ({
   const activeView = useActiveView();
   const isTableActive = activeView === "criteriaTable";
   const showImpliedEdges = useShowImpliedEdges();
+  const unrestrictedEditing = useUnrestrictedEditing();
 
   return (
     <Drawer
@@ -127,6 +141,19 @@ export const MoreActionsDrawer = ({
               <IconButton color="inherit" title="Reset" aria-label="Reset" onClick={resetTopicData}>
                 <AutoStoriesOutlined />
               </IconButton>
+
+              <ToggleButton
+                value={unrestrictedEditing}
+                title="Unrestrict editing"
+                aria-label="Unrestrict editing"
+                color="secondary"
+                size="small"
+                selected={unrestrictedEditing}
+                onClick={() => toggleUnrestrictedEditing(!unrestrictedEditing)}
+                sx={{ borderRadius: "50%", border: "0" }}
+              >
+                <Engineering />
+              </ToggleButton>
             </>
           )}
 

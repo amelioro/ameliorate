@@ -24,6 +24,9 @@ const partitionOrders: { [type in NodeType]: string } = {
   rootClaim: "null",
   support: "null",
   critique: "null",
+
+  // generic
+  custom: "null",
 };
 
 const priorities = Object.fromEntries(nodeTypes.map((type, index) => [type, index.toString()])) as {
@@ -76,6 +79,8 @@ export const layout = async (
     "elk.spacing.nodeNode": orientation === "DOWN" ? "20" : "50",
     // allow nodes to be partitioned into layers by type
     "elk.partitioning.activate": "true",
+    // ensure node islands don't overlap (needed for when node has 3 rows of text)
+    "elk.spacing.componentComponent": "30", // default is 20
   };
 
   const graph: ElkNode = {

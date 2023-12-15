@@ -3,9 +3,13 @@ import lowerCase from "lodash/lowerCase";
 import { EdgeLabelRenderer, getBezierPath } from "reactflow";
 
 import { RelationName } from "../../../../common/edge";
+import { useSessionUser } from "../../../common/hooks";
 import { openContextMenu } from "../../../common/store/contextMenuActions";
+import { useUnrestrictedEditing } from "../../../view/actionConfigStore";
 import { setSelected } from "../../../view/navigateStore";
+import { setCustomEdgeLabel } from "../../store/actions";
 import { useIsNodeSelected } from "../../store/edgeHooks";
+import { useUserCanEditTopicData } from "../../store/userHooks";
 import { Edge, markerStart } from "../../utils/graph";
 import { EdgeProps } from "../Diagram/Diagram";
 import { Spotlight } from "../Diagram/Diagram.styles";
@@ -64,8 +68,11 @@ interface Props {
 
 // base for custom edge taken from https://reactflow.dev/docs/examples/edges/edge-with-button/
 export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
-  const edge = convertToEdge(flowEdge);
+  const { sessionUser } = useSessionUser();
+  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
+  const unrestrictedEditing = useUnrestrictedEditing();
 
+  const edge = convertToEdge(flowEdge);
   const isNodeSelected = useIsNodeSelected(edge.id);
 
   const spotlight: Spotlight = flowEdge.selected
@@ -96,6 +103,8 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
     />
   );
 
+  const labelText = edge.data.customLabel ?? lowerCase(edge.label);
+
   const label = (
     <StyledDiv
       labelX={labelX}
@@ -104,8 +113,18 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
       onContextMenu={(event) => openContextMenu(event, { edge })}
       spotlight={spotlight}
     >
-      <Typography variant="body1" margin="0">
-        {lowerCase(edge.label)}
+      <Typography
+        variant="body1"
+        margin="0"
+        contentEditable={userCanEditTopicData && unrestrictedEditing}
+        suppressContentEditableWarning // https://stackoverflow.com/a/49639256/8409296
+        onBlur={(event) => {
+          if (event.target.textContent && event.target.textContent !== edge.data.customLabel)
+            setCustomEdgeLabel(edge, event.target.textContent.trim());
+        }}
+        className="nopan"
+      >
+        {labelText}
       </Typography>
       <EdgeIndicatorGroup edge={edge} />
     </StyledDiv>

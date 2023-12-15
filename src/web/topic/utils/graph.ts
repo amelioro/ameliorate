@@ -61,6 +61,10 @@ export interface Edge {
   data: {
     arguedDiagramPartId?: string;
     notes: string;
+    /**
+     * Distinguished from `label` because this is explicitly open user input, and `label` can maintain stricter typing
+     */
+    customLabel?: string;
   };
   label: RelationName;
   markerStart: { type: MarkerType; width: number; height: number };
@@ -92,6 +96,7 @@ interface BuildEdgeProps {
   targetId: string;
   relation: RelationName;
   arguedDiagramPartId?: string;
+  customLabel?: string;
 }
 export const buildEdge = ({
   id,
@@ -100,12 +105,14 @@ export const buildEdge = ({
   targetId,
   relation,
   arguedDiagramPartId,
+  customLabel,
 }: BuildEdgeProps): Edge => {
   return {
     id: id ?? uuid(),
     data: {
       arguedDiagramPartId: arguedDiagramPartId,
       notes: notes ?? "",
+      customLabel: customLabel,
     },
     label: relation,
     markerStart: markerStart,

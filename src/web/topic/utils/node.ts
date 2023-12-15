@@ -1,5 +1,6 @@
 import {
   Article,
+  AutoAwesome,
   Ballot,
   Bolt,
   Check,
@@ -86,6 +87,12 @@ export const nodeDecorations: Record<FlowNodeType, NodeDecoration> = {
   critique: {
     title: "Critique",
     NodeIcon: ThumbDown,
+  },
+
+  // generic
+  custom: {
+    title: "Custom",
+    NodeIcon: AutoAwesome, // like magic I guess?
   },
 };
 

@@ -50,6 +50,9 @@ const nodeTypes: Record<FlowNodeType, ComponentType<NodeProps>> = {
   rootClaim: buildNodeComponent("rootClaim"),
   support: buildNodeComponent("support"),
   critique: buildNodeComponent("critique"),
+
+  // generic
+  custom: buildNodeComponent("custom"),
 };
 
 const edgeTypes: Record<"FlowEdge", ComponentType<EdgeProps>> = { FlowEdge: FlowEdge };

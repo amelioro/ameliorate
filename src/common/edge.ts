@@ -20,6 +20,9 @@ export const relationNames = [
   // claim
   "supports",
   "critiques",
+
+  // generic, for unrestricted editing
+  "relatesTo",
 ] as const;
 
 const zRelationNames = z.enum(relationNames);
@@ -31,6 +34,11 @@ export const edgeSchema = z.object({
   topicId: z.number(),
   arguedDiagramPartId: z.string().uuid().nullable(),
   type: zRelationNames,
+  customLabel: z
+    .string()
+    .max(30)
+    .regex(/^[a-z ]+$/i)
+    .optional(),
   notes: z.string().max(10000),
   sourceId: z.string().uuid(),
   targetId: z.string().uuid(),
@@ -46,6 +54,7 @@ export const topicRelationNames: RelationName[] = [
   "criterionFor",
   "creates",
   "embodies",
+  "relatesTo", // is a generic relation but currently only seems worthwhile in topic
 ];
 export const exploreRelationNames: RelationName[] = [
   "asksAbout",
