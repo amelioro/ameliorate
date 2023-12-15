@@ -66,7 +66,7 @@ export const SourceDetails = ({ sourceNode }: Props) => {
         {facts.length > 0 ? (
           facts.map((source) => <EditableNode key={source.id} node={source} supplemental />)
         ) : (
-          <Typography>No sources yet!</Typography>
+          <Typography>No facts yet!</Typography>
         )}
       </Stack>
     </>
