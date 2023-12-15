@@ -2,6 +2,8 @@ import lowerCase from "lodash/lowerCase";
 import { v4 as uuid } from "uuid";
 import { z } from "zod";
 
+import { DiagramType } from "./diagram";
+
 // Not sure how to guarantee that this matches the schema enum.
 // This order is generally used for sorting, e.g.:
 // - the order in which add-node buttons are displayed,
@@ -45,16 +47,22 @@ export const nodeSchema = z.object({
 
 export type Node = z.infer<typeof nodeSchema>;
 
-export const topicNodeTypes: NodeType[] = [
-  "problem",
-  "criterion",
-  "effect",
-  "solutionComponent",
-  "solution",
-  "custom", // is a generic node but currently only seems worthwhile in topic
-];
-export const exploreNodeTypes: NodeType[] = ["question", "answer", "fact", "source"];
-export const claimNodeTypes: NodeType[] = ["rootClaim", "support", "critique"];
+export const diagramNodeTypes: Record<DiagramType, NodeType[]> = {
+  topicDiagram: [
+    "problem",
+    "criterion",
+    "effect",
+    "solutionComponent",
+    "solution",
+    "custom", // is a generic node but currently only seems worthwhile in topic
+  ],
+  exploreDiagram: ["question", "answer", "fact", "source"],
+  claimTree: ["rootClaim", "support", "critique"],
+};
+
+export const topicNodeTypes = diagramNodeTypes.topicDiagram;
+export const exploreNodeTypes = diagramNodeTypes.exploreDiagram;
+export const claimNodeTypes = diagramNodeTypes.claimTree;
 
 export const getNewTopicProblemNode = (topicId: number, topicTitle: string): Node => {
   return {

@@ -8,6 +8,7 @@ import {
   ReactFlowProvider,
 } from "reactflow";
 
+import { DiagramType } from "../../../../common/diagram";
 import { Loading } from "../../../common/components/Loading/Loading";
 import { emitter } from "../../../common/event";
 import { useSessionUser } from "../../../common/hooks";
@@ -137,12 +138,15 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
   );
 };
 
-export const DiagramContext = createContext<{ orientation: Orientation }>({ orientation: "DOWN" });
+export const DiagramContext = createContext<{ orientation: Orientation; type: DiagramType }>({
+  orientation: "DOWN",
+  type: "topicDiagram",
+});
 
 export const Diagram = (diagram: DiagramData) => {
   const diagramContext = useMemo(() => {
-    return { orientation: diagram.orientation };
-  }, [diagram.orientation]);
+    return { orientation: diagram.orientation, type: diagram.type };
+  }, [diagram.orientation, diagram.type]);
 
   // custom provider so that nodes can get the orientation based on the diagram they're in
   return (
