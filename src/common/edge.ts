@@ -54,13 +54,12 @@ export const topicRelationNames: RelationName[] = [
   "criterionFor",
   "creates",
   "embodies",
-  "relatesTo",
+  "relatesTo", // is a generic relation but currently only seems worthwhile in topic
 ];
 export const exploreRelationNames: RelationName[] = [
   "asksAbout",
   "potentialAnswerTo",
   "relevantFor",
   "sourceOf",
-  "relatesTo",
 ];
-export const claimRelationNames: RelationName[] = ["supports", "critiques", "relatesTo"];
+export const claimRelationNames: RelationName[] = ["supports", "critiques"];
