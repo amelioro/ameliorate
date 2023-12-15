@@ -86,6 +86,9 @@ enum NodeType {
   rootClaim
   support
   critique
+
+  // generic, for unrestricted editing
+  custom
 }
 
 model Edge {
