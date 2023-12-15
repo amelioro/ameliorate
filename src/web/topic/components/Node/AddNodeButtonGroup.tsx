@@ -1,6 +1,6 @@
 import { ButtonGroup } from "@mui/material";
 
-import { NodeType, nodeTypes } from "../../../../common/node";
+import { NodeType, topicNodeTypes } from "../../../../common/node";
 import { useUnrestrictedEditing } from "../../../view/actionConfigStore";
 import { Relation, addableRelationsFrom } from "../../utils/edge";
 import { type RelationDirection } from "../../utils/graph";
@@ -24,17 +24,18 @@ export const AddNodeButtonGroup = ({
 }: Props) => {
   const unrestrictedEditing = useUnrestrictedEditing();
 
-  const addableRelations: { toNodeType: NodeType; relation: Relation }[] = !unrestrictedEditing
-    ? addableRelationsFrom(fromNodeType, as)
-    : // if unrestricted, allow adding any node as parent or child
-      nodeTypes.map((nodeType) => ({
-        toNodeType: nodeType,
-        relation: {
-          child: as === "child" ? nodeType : fromNodeType,
-          name: "relatesTo",
-          parent: as === "parent" ? nodeType : fromNodeType,
-        },
-      }));
+  const addableRelations: { toNodeType: NodeType; relation: Relation }[] =
+    unrestrictedEditing && topicNodeTypes.includes(fromNodeType)
+      ? // if unrestricted, allow adding any topic node as parent or child (shouldn't be very useful to have outside of topic nodes)
+        topicNodeTypes.map((nodeType) => ({
+          toNodeType: nodeType,
+          relation: {
+            child: as === "child" ? nodeType : fromNodeType,
+            name: "relatesTo",
+            parent: as === "parent" ? nodeType : fromNodeType,
+          },
+        }))
+      : addableRelationsFrom(fromNodeType, as);
 
   if (addableRelations.length === 0) return <></>;
 
