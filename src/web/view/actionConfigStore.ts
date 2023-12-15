@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface ActionConfigStoreState {
   showImpliedEdges: boolean;
@@ -10,7 +11,11 @@ const initialState: ActionConfigStoreState = {
   unrestrictedEditing: false,
 };
 
-const useActionConfigStore = create<ActionConfigStoreState>()(() => initialState);
+const useActionConfigStore = create<ActionConfigStoreState>()(
+  persist(() => initialState, {
+    name: "action-config-storage",
+  })
+);
 
 // hooks
 export const useShowImpliedEdges = () => {
