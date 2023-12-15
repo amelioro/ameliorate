@@ -1,5 +1,7 @@
 import { NodeType } from "../../../../common/node";
+import { useSessionUser } from "../../../common/hooks";
 import { addNode } from "../../store/createDeleteActions";
+import { useUserCanEditTopicData } from "../../store/userHooks";
 import { Relation } from "../../utils/edge";
 import { type RelationDirection } from "../../utils/graph";
 import { nodeDecorations } from "../../utils/node";
@@ -26,6 +28,11 @@ export const AddNodeButton = ({
   selectNewNode,
   className,
 }: Props) => {
+  const { sessionUser } = useSessionUser();
+  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
+
+  if (!userCanEditTopicData) return <></>;
+
   const decoration = nodeDecorations[toNodeType];
 
   return (
