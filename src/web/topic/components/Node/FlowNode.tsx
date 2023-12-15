@@ -2,6 +2,7 @@ import { Global } from "@emotion/react";
 import { motion } from "framer-motion";
 import { useContext, useEffect, useState } from "react";
 
+import { topicNodeTypes } from "../../../../common/node";
 import { useSessionUser } from "../../../common/hooks";
 import { useIsEdgeSelected, useIsNeighborSelected } from "../../store/nodeHooks";
 import { useUserCanEditTopicData } from "../../store/userHooks";
@@ -34,7 +35,7 @@ export const FlowNode = (flowNode: NodeProps) => {
   const isNeighborSelected = useIsNeighborSelected(flowNode.id);
   const isEdgeSelected = useIsEdgeSelected(flowNode.id);
 
-  const orientation = useContext(DiagramContext).orientation;
+  const diagramContext = useContext(DiagramContext);
   const node = convertToNode(flowNode);
 
   const spotlight: Spotlight = flowNode.selected
@@ -42,6 +43,9 @@ export const FlowNode = (flowNode: NodeProps) => {
     : isNeighborSelected || isEdgeSelected
     ? "secondary"
     : "normal";
+
+  // avoids awkwardly allowing adding topic nodes to explore diagram when they won't show up after adding
+  const isContextual = topicNodeTypes.includes(node.type) && diagramContext.type !== "topicDiagram";
 
   useEffect(() => {
     // hack to avoid animation on first render; for some reason nodes were animating from position 0
@@ -56,12 +60,12 @@ export const FlowNode = (flowNode: NodeProps) => {
       <HoverBridgeDiv />
 
       {/* should this use react-flow's NodeToolbar? seems like it'd automatically handle positioning */}
-      {userCanEditTopicData && (
+      {userCanEditTopicData && !isContextual && (
         <AddNodeButtonGroupParent
           fromNodeId={flowNode.id}
           fromNodeType={node.type}
           as="parent"
-          orientation={orientation}
+          orientation={diagramContext.orientation}
         />
       )}
 
@@ -71,17 +75,17 @@ export const FlowNode = (flowNode: NodeProps) => {
         layout={animated}
         style={{ pointerEvents: "none" }}
       >
-        <NodeHandle node={node} direction="parent" orientation={orientation} />
+        <NodeHandle node={node} direction="parent" orientation={diagramContext.orientation} />
         <StyledEditableNode node={node} spotlight={spotlight} />
-        <NodeHandle node={node} direction="child" orientation={orientation} />
+        <NodeHandle node={node} direction="child" orientation={diagramContext.orientation} />
       </motion.div>
 
-      {userCanEditTopicData && (
+      {userCanEditTopicData && !isContextual && (
         <AddNodeButtonGroupChild
           fromNodeId={flowNode.id}
           fromNodeType={node.type}
           as="child"
-          orientation={orientation}
+          orientation={diagramContext.orientation}
         />
       )}
     </>

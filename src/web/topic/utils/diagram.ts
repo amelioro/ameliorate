@@ -1,9 +1,8 @@
+import { DiagramType } from "../../../common/diagram";
 import { errorWithData } from "../../../common/errorHandling";
 import { isEdgeImplied } from "./edge";
 import { Edge, Node } from "./graph";
 import { Orientation } from "./layout";
-
-export type DiagramType = "topicDiagram" | "exploreDiagram" | "claimTree";
 
 export interface Diagram {
   nodes: Node[];

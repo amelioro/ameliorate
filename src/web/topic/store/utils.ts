@@ -19,9 +19,17 @@ export const getTopicDiagram = (topicGraph: Graph): Diagram => {
 };
 
 export const getExploreDiagram = (topicGraph: Graph): Diagram => {
+  const edges = topicGraph.edges.filter((edge) => exploreRelationNames.includes(edge.label));
+  const nodes = topicGraph.nodes.filter(
+    (node) =>
+      exploreNodeTypes.includes(node.type) ||
+      // show contextual nodes (e.g. problem node that a question points at)
+      edges.some((edge) => edge.source === node.id || edge.target === node.id)
+  );
+
   return {
-    nodes: topicGraph.nodes.filter((node) => exploreNodeTypes.includes(node.type)),
-    edges: topicGraph.edges.filter((edge) => exploreRelationNames.includes(edge.label)),
+    nodes,
+    edges,
     orientation: "DOWN",
     type: "exploreDiagram",
   };
