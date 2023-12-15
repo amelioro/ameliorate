@@ -20,6 +20,9 @@ export const relationNames = [
   // claim
   "supports",
   "critiques",
+
+  // generic, for unrestricted editing
+  "relatesTo",
 ] as const;
 
 const zRelationNames = z.enum(relationNames);
@@ -46,11 +49,13 @@ export const topicRelationNames: RelationName[] = [
   "criterionFor",
   "creates",
   "embodies",
+  "relatesTo",
 ];
 export const exploreRelationNames: RelationName[] = [
   "asksAbout",
   "potentialAnswerTo",
   "relevantFor",
   "sourceOf",
+  "relatesTo",
 ];
-export const claimRelationNames: RelationName[] = ["supports", "critiques"];
+export const claimRelationNames: RelationName[] = ["supports", "critiques", "relatesTo"];

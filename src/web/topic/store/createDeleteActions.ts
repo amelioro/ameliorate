@@ -2,6 +2,7 @@ import { createDraft, finishDraft } from "immer";
 
 import { errorWithData } from "../../../common/errorHandling";
 import { emitter } from "../../common/event";
+import { getUnrestrictedEditing } from "../../view/actionConfigStore";
 import { setSelected } from "../../view/navigateStore";
 import { getImplicitLabel } from "../utils/claim";
 import { Relation, canCreateEdge, getConnectingEdge, getRelation } from "../utils/edge";
@@ -81,7 +82,7 @@ interface AddNodeProps {
 }
 
 export const addNode = ({ fromPartId, as, toNodeType, relation, selectNewNode }: AddNodeProps) => {
-  if (!getRelation(relation.parent, relation.child, relation.name))
+  if (!getUnrestrictedEditing() && !getRelation(relation.parent, relation.child, relation.name))
     throw errorWithData("invalid relation to add", relation);
 
   const state = createDraft(useTopicStore.getState());

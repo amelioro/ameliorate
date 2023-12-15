@@ -1,4 +1,12 @@
-import { AutoStoriesOutlined, Build, Close, Download, Route, Upload } from "@mui/icons-material";
+import {
+  AutoStoriesOutlined,
+  Build,
+  Close,
+  Download,
+  Engineering,
+  Route,
+  Upload,
+} from "@mui/icons-material";
 import {
   Divider,
   Drawer,
@@ -13,7 +21,12 @@ import fileDownload from "js-file-download";
 import { StorageValue } from "zustand/middleware";
 
 import { errorWithData } from "../../../../common/errorHandling";
-import { toggleShowImpliedEdges, useShowImpliedEdges } from "../../../view/actionConfigStore";
+import {
+  toggleShowImpliedEdges,
+  toggleUnrestrictedEditing,
+  useShowImpliedEdges,
+  useUnrestrictedEditing,
+} from "../../../view/actionConfigStore";
 import { Perspectives } from "../../../view/components/Perspectives/Perspectives";
 import { useActiveView } from "../../../view/navigateStore";
 import { migrate } from "../../store/migrate";
@@ -75,6 +88,7 @@ export const MoreActionsDrawer = ({
   const activeView = useActiveView();
   const isTableActive = activeView === "criteriaTable";
   const showImpliedEdges = useShowImpliedEdges();
+  const unrestrictedEditing = useUnrestrictedEditing();
 
   return (
     <Drawer
@@ -127,6 +141,19 @@ export const MoreActionsDrawer = ({
               <IconButton color="inherit" title="Reset" aria-label="Reset" onClick={resetTopicData}>
                 <AutoStoriesOutlined />
               </IconButton>
+
+              <ToggleButton
+                value={unrestrictedEditing}
+                title="Unrestrict editing"
+                aria-label="Unrestrict editing"
+                color="secondary"
+                size="small"
+                selected={unrestrictedEditing}
+                onClick={() => toggleUnrestrictedEditing(!unrestrictedEditing)}
+                sx={{ borderRadius: "50%", border: "0" }}
+              >
+                <Engineering />
+              </ToggleButton>
             </>
           )}
 

@@ -1,7 +1,8 @@
 import { ButtonGroup } from "@mui/material";
 
-import { NodeType } from "../../../../common/node";
-import { addableRelationsFrom } from "../../utils/edge";
+import { NodeType, nodeTypes } from "../../../../common/node";
+import { useUnrestrictedEditing } from "../../../view/actionConfigStore";
+import { Relation, addableRelationsFrom } from "../../utils/edge";
 import { type RelationDirection } from "../../utils/graph";
 import { Orientation } from "../../utils/layout";
 import { AddNodeButton } from "../Node/AddNodeButton";
@@ -21,7 +22,19 @@ export const AddNodeButtonGroup = ({
   as,
   orientation,
 }: Props) => {
-  const addableRelations = addableRelationsFrom(fromNodeType, as);
+  const unrestrictedEditing = useUnrestrictedEditing();
+
+  const addableRelations: { toNodeType: NodeType; relation: Relation }[] = !unrestrictedEditing
+    ? addableRelationsFrom(fromNodeType, as)
+    : // if unrestricted, allow adding any node as parent or child
+      nodeTypes.map((nodeType) => ({
+        toNodeType: nodeType,
+        relation: {
+          child: as === "child" ? nodeType : fromNodeType,
+          name: "relatesTo",
+          parent: as === "parent" ? nodeType : fromNodeType,
+        },
+      }));
 
   if (addableRelations.length === 0) return <></>;
 
