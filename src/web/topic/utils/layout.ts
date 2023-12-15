@@ -76,6 +76,8 @@ export const layout = async (
     "elk.spacing.nodeNode": orientation === "DOWN" ? "20" : "50",
     // allow nodes to be partitioned into layers by type
     "elk.partitioning.activate": "true",
+    // ensure node islands don't overlap (needed for when node has 3 rows of text)
+    "elk.spacing.componentComponent": "30", // default is 20
   };
 
   const graph: ElkNode = {
