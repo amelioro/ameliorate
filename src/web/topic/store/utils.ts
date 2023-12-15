@@ -1,7 +1,7 @@
 import { claimRelationNames, exploreRelationNames, topicRelationNames } from "../../../common/edge";
 import { claimNodeTypes, exploreNodeTypes, topicNodeTypes } from "../../../common/node";
 import { Diagram, getDiagramTitle } from "../utils/diagram";
-import { Edge, Graph } from "../utils/graph";
+import { Graph } from "../utils/graph";
 import { PlaygroundTopic, StoreTopic, TopicStoreState } from "./store";
 
 export const getTopicTitle = (state: TopicStoreState) => {
@@ -41,10 +41,6 @@ export const getClaimTree = (topicGraph: Graph, arguedDiagramPartId: string): Di
     orientation: "RIGHT",
     type: "claimTree",
   };
-};
-
-export const getClaimEdges = (edges: Edge[]) => {
-  return edges.filter((edge) => topicRelationNames.includes(edge.label));
 };
 
 export const isPlaygroundTopic = (topic: StoreTopic): topic is PlaygroundTopic => {
