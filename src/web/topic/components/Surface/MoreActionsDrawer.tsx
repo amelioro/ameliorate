@@ -92,7 +92,7 @@ export const MoreActionsDrawer = ({
 
   return (
     <Drawer
-      anchor="right"
+      anchor="left"
       open={isMoreActionsDrawerOpen}
       onClose={() => setIsMoreActionsDrawerOpen(false)}
     >
