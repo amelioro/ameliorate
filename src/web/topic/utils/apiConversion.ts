@@ -17,6 +17,7 @@ export const convertToStoreNode = (apiNode: TopicNode) => {
     notes: apiNode.notes,
     type: apiNode.type,
     arguedDiagramPartId: apiNode.arguedDiagramPartId ?? undefined,
+    customType: apiNode.customType ?? undefined,
   });
 };
 
@@ -56,6 +57,7 @@ export const convertToApiNode = (storeNode: StoreNode, topicId: number): ApiNode
     topicId: topicId,
     arguedDiagramPartId: storeNode.data.arguedDiagramPartId ?? null,
     type: storeNode.type,
+    customType: storeNode.data.customType,
     text: storeNode.data.label,
     notes: storeNode.data.notes,
   };

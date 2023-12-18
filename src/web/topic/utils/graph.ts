@@ -15,6 +15,10 @@ export interface Graph {
 export interface Node {
   id: string;
   data: {
+    /**
+     * Distinguished from `type` because this is explicitly open user input, and `type` can maintain stricter typing
+     */
+    customType?: string;
     label: string;
     notes: string;
     arguedDiagramPartId?: string;
@@ -30,15 +34,24 @@ export interface ProblemNode extends Node {
 
 interface BuildProps {
   id?: string;
+  customType?: string;
   label?: string;
   notes?: string;
   type: FlowNodeType;
   arguedDiagramPartId?: string;
 }
-export const buildNode = ({ id, label, notes, type, arguedDiagramPartId }: BuildProps): Node => {
+export const buildNode = ({
+  id,
+  customType,
+  label,
+  notes,
+  type,
+  arguedDiagramPartId,
+}: BuildProps): Node => {
   const node = {
     id: id ?? uuid(),
     data: {
+      customType: customType,
       label: label ?? `new node`,
       notes: notes ?? "",
       arguedDiagramPartId: arguedDiagramPartId,
@@ -59,12 +72,12 @@ export type RelationDirection = "parent" | "child";
 export interface Edge {
   id: string;
   data: {
-    arguedDiagramPartId?: string;
-    notes: string;
     /**
      * Distinguished from `label` because this is explicitly open user input, and `label` can maintain stricter typing
      */
     customLabel?: string;
+    notes: string;
+    arguedDiagramPartId?: string;
   };
   label: RelationName;
   markerStart: { type: MarkerType; width: number; height: number };
@@ -91,28 +104,28 @@ export interface Edge {
 
 interface BuildEdgeProps {
   id?: string;
+  customLabel?: string;
   notes?: string;
   sourceId: string;
   targetId: string;
   relation: RelationName;
   arguedDiagramPartId?: string;
-  customLabel?: string;
 }
 export const buildEdge = ({
   id,
+  customLabel,
   notes,
   sourceId,
   targetId,
   relation,
   arguedDiagramPartId,
-  customLabel,
 }: BuildEdgeProps): Edge => {
   return {
     id: id ?? uuid(),
     data: {
-      arguedDiagramPartId: arguedDiagramPartId,
-      notes: notes ?? "",
       customLabel: customLabel,
+      notes: notes ?? "",
+      arguedDiagramPartId: arguedDiagramPartId,
     },
     label: relation,
     markerStart: markerStart,

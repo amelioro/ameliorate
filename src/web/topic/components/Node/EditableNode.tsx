@@ -3,8 +3,9 @@ import { useEffect, useRef } from "react";
 
 import { useSessionUser } from "../../../common/hooks";
 import { openContextMenu } from "../../../common/store/contextMenuActions";
+import { useUnrestrictedEditing } from "../../../view/actionConfigStore";
 import { setSelected, useIsGraphPartSelected } from "../../../view/navigateStore";
-import { finishAddingNode, setNodeLabel } from "../../store/actions";
+import { finishAddingNode, setCustomNodeType, setNodeLabel } from "../../store/actions";
 import { useUserCanEditTopicData } from "../../store/userHooks";
 import { Node } from "../../utils/graph";
 import { nodeDecorations } from "../../utils/node";
@@ -35,6 +36,7 @@ interface Props {
 export const EditableNode = ({ node, supplemental = false, className = "" }: Props) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
+  const unrestrictedEditing = useUnrestrictedEditing();
   const selected = useIsGraphPartSelected(node.id);
 
   const theme = useTheme();
@@ -64,6 +66,7 @@ export const EditableNode = ({ node, supplemental = false, className = "" }: Pro
   const nodeDecoration = nodeDecorations[node.type];
   const color = theme.palette[node.type].main;
   const NodeIcon = nodeDecoration.NodeIcon;
+  const typeText = node.data.customType ?? nodeDecoration.title;
 
   // Require selecting a node before editing it, because oftentimes you'll want to select a node to
   // view more details, and the editing will be distracting. Only edit after clicking when selected.
@@ -80,7 +83,17 @@ export const EditableNode = ({ node, supplemental = false, className = "" }: Pro
       <YEdgeDiv>
         <NodeTypeDiv>
           <NodeIcon sx={{ width: "0.875rem", height: "0.875rem" }} />
-          <NodeTypeSpan>{nodeDecoration.title}</NodeTypeSpan>
+          <NodeTypeSpan
+            contentEditable={userCanEditTopicData && unrestrictedEditing}
+            suppressContentEditableWarning // https://stackoverflow.com/a/49639256/8409296
+            onBlur={(event) => {
+              if (event.target.textContent && event.target.textContent !== node.data.customType)
+                setCustomNodeType(node, event.target.textContent.trim());
+            }}
+            className="nopan"
+          >
+            {typeText}
+          </NodeTypeSpan>
         </NodeTypeDiv>
         <NodeIndicatorGroup node={node} />
       </YEdgeDiv>

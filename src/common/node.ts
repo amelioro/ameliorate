@@ -41,6 +41,11 @@ export const nodeSchema = z.object({
   topicId: z.number(),
   arguedDiagramPartId: z.string().uuid().nullable(),
   type: zNodeTypes,
+  customType: z
+    .string()
+    .max(30)
+    .regex(/^[a-z ]+$/i)
+    .optional(),
   text: z.string().max(200),
   notes: z.string().max(10000),
 });

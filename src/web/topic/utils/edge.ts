@@ -91,14 +91,15 @@ export const getRelation = (
   child: NodeType,
   relationName?: RelationName
 ): Relation | undefined => {
-  if (relationName) {
-    return relations.find(
-      (relation) =>
-        relation.parent === parent && relation.child === child && relation.name === relationName
-    );
-  } else {
-    return relations.find((relation) => relation.parent === parent && relation.child === child);
-  }
+  const relation = relationName
+    ? relations.find(
+        (relation) =>
+          relation.parent === parent && relation.child === child && relation.name === relationName
+      )
+    : relations.find((relation) => relation.parent === parent && relation.child === child);
+
+  // we're assuming that anything can relate to anything else; potentially this should only be true when unrestricted editing is on
+  return relation ?? { child, name: "relatesTo", parent };
 };
 
 export const composedRelations: Relation[] = [
