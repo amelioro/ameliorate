@@ -3,6 +3,7 @@ import set from "lodash/set";
 
 import { edgeSchema } from "../../../common/edge";
 import { errorWithData } from "../../../common/errorHandling";
+import { nodeSchema } from "../../../common/node";
 import {
   Edge,
   GraphPart,
@@ -61,6 +62,21 @@ export const setNodeLabel = (node: Node, value: string) => {
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   useTopicStore.setState(finishDraft(state), false, "setNodeLabel");
+};
+
+export const setCustomNodeType = (node: Node, value: string) => {
+  const state = createDraft(useTopicStore.getState());
+
+  if (!nodeSchema.shape.customType.parse(value))
+    throw errorWithData("label should only contain alphaspace", value);
+
+  const foundNode = findNode(node.id, state.nodes);
+
+  /* eslint-disable functional/immutable-data, no-param-reassign */
+  foundNode.data.customType = value;
+  /* eslint-enable functional/immutable-data, no-param-reassign */
+
+  useTopicStore.setState(finishDraft(state), false, "setCustomEdgeLabel");
 };
 
 export const setCustomEdgeLabel = (edge: Edge, value: string) => {
