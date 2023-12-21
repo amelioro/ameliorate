@@ -4,7 +4,7 @@ import Carousel from "react-material-ui-carousel";
 
 export const StyledBox = styled(Box)`
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
   margin: 5rem 0;
   text-align: center;
