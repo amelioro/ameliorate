@@ -67,6 +67,7 @@ export const relations: Relation[] = exploreRelations.concat([
   { child: "solution", name: "has", parent: "solutionComponent" },
 
   { child: "problem", name: "createdBy", parent: "solution" },
+  { child: "solution", name: "accomplishes", parent: "solution" },
 
   // claim relations
   { child: "support", name: "supports", parent: "rootClaim" },
@@ -155,7 +156,7 @@ const addableNodesFor: Record<NodeType, AddableNodes> = {
   },
   solution: {
     parent: ["problem", "effect", "solutionComponent"], // could have criteria, but need to select a specific problem for it & that requires design
-    child: ["problem"],
+    child: ["problem", "solution"],
   },
 
   // explore nodes

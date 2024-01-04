@@ -117,6 +117,7 @@ enum EdgeType {
   // topic
   causes
   addresses
+  accomplishes
   createdBy
   has
   criterionFor
