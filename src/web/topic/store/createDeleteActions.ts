@@ -264,13 +264,10 @@ export const deleteNode = (nodeId: string) => {
   const nodeEdges = edges(deletedNode, state.edges);
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
-  // delete this node, edges connected to this node, and node's claim tree
-  state.nodes = state.nodes.filter(
-    (node) => node.id !== nodeId && node.data.arguedDiagramPartId !== nodeId
-  );
-  state.edges = state.edges.filter(
-    (edge) => !nodeEdges.includes(edge) && edge.data.arguedDiagramPartId !== nodeId
-  );
+  // delete this node and edges connected to this node
+  state.nodes = state.nodes.filter((node) => node.id !== nodeId);
+  state.edges = state.edges.filter((edge) => !nodeEdges.includes(edge));
+  deleteInvalidClaims(state);
   deleteInvalidScores(state);
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
@@ -281,15 +278,30 @@ export const deleteEdge = (edgeId: string) => {
   const state = createDraft(useTopicStore.getState());
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
-  // delete this edge and edge's claim tree
-  state.nodes = state.nodes.filter((node) => node.data.arguedDiagramPartId !== edgeId);
-  state.edges = state.edges.filter(
-    (edge) => edge.id !== edgeId && edge.data.arguedDiagramPartId !== edgeId
-  );
+  // delete this edge
+  state.edges = state.edges.filter((edge) => edge.id !== edgeId);
+  deleteInvalidClaims(state);
   deleteInvalidScores(state);
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   useTopicStore.setState(finishDraft(state), false, "deleteEdge");
+};
+
+const deleteInvalidClaims = (state: TopicStoreState) => {
+  const graphPartIds = [...state.nodes, ...state.edges].map((graphPart) => graphPart.id);
+
+  /* eslint-disable functional/immutable-data, no-param-reassign */
+  state.nodes = state.nodes.filter(
+    (node) =>
+      node.data.arguedDiagramPartId === undefined ||
+      graphPartIds.includes(node.data.arguedDiagramPartId)
+  );
+  state.edges = state.edges.filter(
+    (edge) =>
+      edge.data.arguedDiagramPartId === undefined ||
+      graphPartIds.includes(edge.data.arguedDiagramPartId)
+  );
+  /* eslint-enable functional/immutable-data, no-param-reassign */
 };
 
 const deleteInvalidScores = (state: TopicStoreState) => {
