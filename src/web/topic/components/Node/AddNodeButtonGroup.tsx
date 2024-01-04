@@ -21,9 +21,10 @@ const AddNodeButtonGroup = memo(
     const unrestrictedEditing = useUnrestrictedEditing();
 
     const addableRelations: { toNodeType: NodeType; relation: Relation }[] =
-      unrestrictedEditing && topicNodeTypes.includes(fromNodeType)
-        ? // if unrestricted, allow adding any topic node as parent or child (shouldn't be very useful to have outside of topic nodes)
-          topicNodeTypes.map((nodeType) => ({
+      // if unrestricted, allow adding any topic node as parent or child (shouldn't be very useful to have outside of topic nodes)
+      // also allow adding any node from custom node
+      fromNodeType === "custom" || (unrestrictedEditing && topicNodeTypes.includes(fromNodeType))
+        ? topicNodeTypes.map((nodeType) => ({
             toNodeType: nodeType,
             relation: {
               child: as === "child" ? nodeType : fromNodeType,
