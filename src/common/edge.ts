@@ -5,6 +5,7 @@ export const relationNames = [
   // topic
   "causes",
   "addresses",
+  "accomplishes",
   "createdBy",
   "has",
   "criterionFor",
@@ -49,6 +50,7 @@ export type Edge = z.infer<typeof edgeSchema>;
 export const topicRelationNames: RelationName[] = [
   "causes",
   "addresses",
+  "accomplishes",
   "createdBy",
   "has",
   "criterionFor",
