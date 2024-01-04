@@ -5,7 +5,7 @@ import { emitter } from "../../common/event";
 import { getUnrestrictedEditing } from "../../view/actionConfigStore";
 import { setSelected } from "../../view/navigateStore";
 import { getImplicitLabel } from "../utils/claim";
-import { Relation, canCreateEdge, getConnectingEdge, getRelation } from "../utils/edge";
+import { Relation, canCreateEdge, getRelation } from "../utils/edge";
 import {
   Graph,
   type GraphPart,
@@ -148,20 +148,24 @@ const createEdgesImpliedByComposition = (
   relation: Relation
 ) => {
   const nodesComposedByParent = getNodesComposedBy(parent, topicGraph);
-  nodesComposedByParent.forEach((composedNode) => {
-    const relationForComposed = getRelation(composedNode.type, relation.child, relation.name);
-    if (!relationForComposed) return;
+  nodesComposedByParent
+    .filter((composedNode) => composedNode.id != child.id)
+    .forEach((composedNode) => {
+      const relationForComposed = getRelation(composedNode.type, relation.child, relation.name);
+      if (!relationForComposed) return;
 
-    createEdgeAndImpliedEdges(topicGraph, composedNode, child, relationForComposed);
-  });
+      createEdgeAndImpliedEdges(topicGraph, composedNode, child, relationForComposed);
+    });
 
   const nodesComposedByChild = getNodesComposedBy(child, topicGraph);
-  nodesComposedByChild.forEach((composedNode) => {
-    const relationForComposed = getRelation(relation.parent, composedNode.type, relation.name);
-    if (!relationForComposed) return;
+  nodesComposedByChild
+    .filter((composedNode) => composedNode.id != parent.id)
+    .forEach((composedNode) => {
+      const relationForComposed = getRelation(relation.parent, composedNode.type, relation.name);
+      if (!relationForComposed) return;
 
-    createEdgeAndImpliedEdges(topicGraph, parent, composedNode, relationForComposed);
-  });
+      createEdgeAndImpliedEdges(topicGraph, parent, composedNode, relationForComposed);
+    });
 };
 
 // see algorithm pseudocode & example at https://github.com/amelioro/ameliorate/issues/66#issuecomment-1465078133
@@ -171,9 +175,11 @@ const createEdgeAndImpliedEdges = (
   child: GraphPart,
   relation: Relation
 ) => {
-  // assumes only one edge can exist between two nodes - future may allow multiple edges of different relation type
-  if (getConnectingEdge(parent.id, child.id, topicGraph.edges) !== undefined)
-    return topicGraph.edges;
+  // We aren't yet fully supporting edges pointing to other edges.
+  // It's not clear at this time whether completely adding or removing support for edges to edges is better,
+  // so here's a hack assuming we won't use it for now.,
+  if (!isNode(parent) || !isNode(child)) throw new Error("parent or child is not a node");
+  if (!canCreateEdge(topicGraph, parent, child)) return topicGraph.edges;
 
   const newEdge = buildEdge({
     sourceId: parent.id,
