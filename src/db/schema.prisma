@@ -29,7 +29,7 @@ model User {
 
 model Topic {
   id          Int            @id @default(autoincrement())
-  title       String         @db.VarChar(100)
+  title       String         @db.VarChar(100) // uses collation to ensure comparisons are case insensitive, not yet supported by prisma schema https://github.com/prisma/prisma/issues/16781
   creatorName String
   description String         @default("") @db.VarChar(10000) // arbitrarily large max length
   visibility  VisibilityType @default(public)
