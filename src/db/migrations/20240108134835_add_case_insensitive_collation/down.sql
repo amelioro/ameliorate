@@ -1,0 +1,5 @@
+BEGIN;
+
+DROP COLLATION english_ci;
+
+COMMIT;
