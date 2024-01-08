@@ -70,7 +70,12 @@ const Home: NextPage = () => {
             <Divider />
 
             <SubscribeForm
-              header="Get invited to future discourse sessions"
+              header="Get invited to future"
+              headerAnchor={
+                <Link href="https://amelioro.substack.com/p/ameliorate-update-1824-a-place-for#§discourse-sessions">
+                  discourse sessions
+                </Link>
+              }
               action="https://buttondown.email/api/emails/embed-subscribe/ameliorate-discourse"
               buttonText="Invite me"
             />
