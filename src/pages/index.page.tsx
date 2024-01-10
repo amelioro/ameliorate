@@ -12,6 +12,7 @@ import { Blog } from "../web/common/components/Blog.styles";
 import { Link } from "../web/common/components/Link";
 import { SubscribeForm } from "../web/common/components/SubscribeForm/SubscribeForm";
 import { YoutubeEmbed } from "../web/common/components/YoutubeEmbed/YoutubeEmbed";
+import { youtubeLivestreams } from "../web/common/urls";
 import { StyledBox, StyledCarousel } from "./index.style";
 
 const Home: NextPage = () => {
@@ -87,6 +88,10 @@ const Home: NextPage = () => {
         <section id="how-it-works">
           <StyledBox flexDirection="column">
             <Typography variant="h4">How it works</Typography>
+            <Typography variant="body1">
+              (more recent but unedited livestream demos are uploaded to
+              <Link href={youtubeLivestreams}>Ameliorate's YouTube channel</Link>)
+            </Typography>
             <StyledCarousel autoPlay={false} navButtonsAlwaysVisible={true}>
               <YoutubeEmbed embedId="yM8RrwQWeJc" />
               <Image
