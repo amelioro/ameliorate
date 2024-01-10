@@ -145,3 +145,8 @@ export const goBack = () => {
 export const goForward = () => {
   useNavigateStore.temporal.getState().redo();
 };
+
+export const resetNavigation = () => {
+  useNavigateStore.setState(initialState);
+  useNavigateStore.temporal.getState().clear();
+};
