@@ -1,24 +1,10 @@
-import {
-  ArrowBack,
-  ArrowForward,
-  Build,
-  Delete,
-  Error,
-  Group,
-  Redo,
-  Undo,
-} from "@mui/icons-material";
+import { Build, Delete, Error, Group, Redo, Undo } from "@mui/icons-material";
 import { AppBar, Divider, IconButton, ToggleButton, Toolbar, Tooltip } from "@mui/material";
 import { useEffect, useState } from "react";
 
 import { emitter } from "../../../common/event";
 import { useSessionUser } from "../../../common/hooks";
-import {
-  goBack,
-  goForward,
-  useCanGoBackForward,
-  useSelectedGraphPart,
-} from "../../../view/navigateStore";
+import { useSelectedGraphPart } from "../../../view/navigateStore";
 import {
   comparePerspectives,
   resetPerspectives,
@@ -36,7 +22,6 @@ export const TopicToolbar = () => {
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const onPlayground = useOnPlayground();
   const [canUndo, canRedo] = useTemporalHooks();
-  const [canGoBack, canGoForward] = useCanGoBackForward();
   const isComparingPerspectives = useIsComparingPerspectives();
   const [hasErrored, setHasErrored] = useState(false);
 
@@ -57,25 +42,6 @@ export const TopicToolbar = () => {
   return (
     <AppBar position="sticky" color="primaryVariantLight">
       <Toolbar variant="dense">
-        <IconButton
-          color="inherit"
-          title="Back"
-          aria-label="Back"
-          onClick={goBack}
-          disabled={!canGoBack}
-        >
-          <ArrowBack />
-        </IconButton>
-        <IconButton
-          color="inherit"
-          title="Forward"
-          aria-label="Forward"
-          onClick={goForward}
-          disabled={!canGoForward}
-        >
-          <ArrowForward />
-        </IconButton>
-
         {userCanEditTopicData && (
           <>
             <Divider orientation="vertical" />
