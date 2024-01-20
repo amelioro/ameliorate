@@ -9,6 +9,7 @@ import { Loading } from "../../web/common/components/Loading/Loading";
 import { useSessionUser } from "../../web/common/hooks";
 import { trpc } from "../../web/common/trpc";
 import { populateFromApi } from "../../web/topic/store/loadActions";
+import { useSyncSearchParamsWithStore } from "../../web/view/navigateStore";
 import { setInitialPerspective } from "../../web/view/perspectiveStore";
 
 // Don't render the workspace server-side.
@@ -49,6 +50,9 @@ const Topic: NextPage = () => {
   // Track populating so we don't render workspace (along with default values for components) with
   // old data before populating the store with fresh data.
   const [populatedFromApi, setPopulatedFromApi] = useState(false);
+  const [initiallyPopulated, setInitiallyPopulated] = useState(false);
+
+  useSyncSearchParamsWithStore(initiallyPopulated);
 
   useEffect(() => {
     // Check isFetching so we don't populate if we know we're just about to do so again.
@@ -58,6 +62,7 @@ const Topic: NextPage = () => {
     setPopulatedFromApi(false);
     populateFromApi(diagramData);
     setPopulatedFromApi(true);
+    setInitiallyPopulated(true);
   }, [getDiagram.data, getDiagram.isFetching]);
 
   useEffect(() => {
