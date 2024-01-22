@@ -74,6 +74,8 @@ enum NodeType {
   problem
   criterion
   effect
+  benefit
+  detriment
   solutionComponent
   solution
 
