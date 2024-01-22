@@ -6,7 +6,9 @@ import {
   Check,
   Code,
   Extension,
+  Flood,
   Info,
+  LocalFlorist,
   PriorityHigh,
   QuestionMark,
   ThumbDown,
@@ -47,6 +49,14 @@ export const nodeDecorations: Record<FlowNodeType, NodeDecoration> = {
   effect: {
     title: "Effect",
     NodeIcon: Bolt,
+  },
+  benefit: {
+    title: "Benefit",
+    NodeIcon: LocalFlorist,
+  },
+  detriment: {
+    title: "Detriment",
+    NodeIcon: Flood,
   },
   solutionComponent: {
     title: "Component",

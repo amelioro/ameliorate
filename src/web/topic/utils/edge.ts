@@ -51,17 +51,29 @@ export const relations: Relation[] = exploreRelations.concat([
   // topic relations
   { child: "problem", name: "causes", parent: "problem" },
   { child: "criterion", name: "criterionFor", parent: "problem" },
-  { child: "effect", name: "addresses", parent: "problem" },
+  { child: "effect", name: "createdBy", parent: "problem" },
+  { child: "benefit", name: "createdBy", parent: "problem" },
+  { child: "detriment", name: "createdBy", parent: "problem" },
   { child: "solutionComponent", name: "addresses", parent: "problem" },
   { child: "solution", name: "addresses", parent: "problem" },
 
+  { child: "criterion", name: "relatesTo", parent: "effect" },
+  { child: "criterion", name: "relatesTo", parent: "benefit" },
+  { child: "criterion", name: "relatesTo", parent: "detriment" },
+
   { child: "effect", name: "embodies", parent: "criterion" },
+  { child: "benefit", name: "embodies", parent: "criterion" },
+  { child: "detriment", name: "relatesTo", parent: "criterion" },
   { child: "solutionComponent", name: "embodies", parent: "criterion" },
   { child: "solution", name: "embodies", parent: "criterion" },
 
   { child: "problem", name: "createdBy", parent: "effect" },
   { child: "solutionComponent", name: "creates", parent: "effect" },
   { child: "solution", name: "creates", parent: "effect" },
+  { child: "solutionComponent", name: "creates", parent: "benefit" },
+  { child: "solution", name: "creates", parent: "benefit" },
+  { child: "solutionComponent", name: "creates", parent: "detriment" },
+  { child: "solution", name: "creates", parent: "detriment" },
 
   { child: "problem", name: "createdBy", parent: "solutionComponent" },
   { child: "solution", name: "has", parent: "solutionComponent" },
@@ -141,21 +153,23 @@ type AddableNodes = {
 const addableNodesFor: Record<NodeType, AddableNodes> = {
   problem: {
     parent: ["problem", "solution"],
-    child: ["problem", "criterion", "solution"],
+    child: ["problem", "effect", "benefit", "detriment", "criterion", "solution"],
   },
 
   // can't have multiple problems;
   // could have multiple solutions but unintuitive to add from criterion because solution would be tied to parent & all sibling criteria
   criterion: { parent: [], child: [] },
 
-  effect: { parent: [], child: ["problem"] },
+  effect: { parent: [], child: [] },
+  benefit: { parent: [], child: [] },
+  detriment: { parent: [], child: [] },
 
   solutionComponent: {
-    parent: ["problem", "effect"],
+    parent: ["problem", "effect", "benefit", "detriment"],
     child: ["problem"],
   },
   solution: {
-    parent: ["problem", "effect", "solutionComponent"], // could have criteria, but need to select a specific problem for it & that requires design
+    parent: ["problem", "effect", "benefit", "detriment", "solutionComponent"], // could have criteria, but need to select a specific problem for it & that requires design
     child: ["problem", "solution"],
   },
 
