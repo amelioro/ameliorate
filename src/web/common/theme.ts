@@ -2,6 +2,7 @@
 // used material color tool to confirm accessibility (legibility) https://material.io/resources/color/#!/?view.left=1&view.right=1&primary.color=4ab74c&secondary.color=b74ab5
 // used mui-theme-creator to see the colors in action and pick light & dark palettes https://bareynol.github.io/mui-theme-creator/?firstName=&lastName=&email=&password=
 // color names from color-name.com
+// used color calculator for complementary, analagous colors https://www.sessions.edu/color-calculator/
 
 import {
   type Theme as MaterialUITheme,
@@ -153,6 +154,8 @@ const sharedPalette = {
   solutionComponent: augmentColor({ color: { main: primaryVariantLight } }),
   criterion: augmentColor({ color: { main: "#4AB885" } }), // mint: analogous to solution; between solution & support because criteria are kind of like supports for solutions
   effect: augmentColor({ color: { main: yellow[500] } }), // random yellow that looks decent: somewhat similar to green/solution but also goes well with lightning bolt icon
+  benefit: augmentColor({ color: { main: "#A0DC46" } }), // calculated analogous color to effect, solution, and support
+  detriment: augmentColor({ color: { main: "#DC477B", contrastText: "rgba(0, 0, 0, 0.87)" } }), // calculated analogous color to effect, problem, and critique
 
   // explore - palette https://coolors.co/9e9e9e-f57c00-0288d1-04f06a-1c110a
   question: augmentColor({ color: { main: grey[500] } }), // grey, ambiguous, uncertain

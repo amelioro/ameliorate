@@ -3,31 +3,9 @@ import ELK, { ElkNode, LayoutOptions } from "elkjs";
 import { NodeType, nodeTypes } from "../../../common/node";
 import { nodeHeightPx, nodeWidthPx } from "../components/Node/EditableNode.styles";
 import { type Edge, type Node } from "./graph";
+import { children, parents } from "./node";
 
 export type Orientation = "DOWN" | "UP" | "RIGHT" | "LEFT";
-
-const partitionOrders: { [type in NodeType]: string } = {
-  // topic
-  problem: "null",
-  criterion: "1",
-  effect: "2",
-  solutionComponent: "3",
-  solution: "4",
-
-  // explore
-  question: "null",
-  answer: "null",
-  fact: "5",
-  source: "6", // generally nice to have sources along the bottom, below facts
-
-  // claim
-  rootClaim: "null",
-  support: "null",
-  critique: "null",
-
-  // generic
-  custom: "null",
-};
 
 const priorities = Object.fromEntries(nodeTypes.map((type, index) => [type, index.toString()])) as {
   [type in NodeType]: string;
@@ -49,6 +27,50 @@ const compareEdges = (edge1: Edge, edge2: Edge, nodes: Node[]) => {
   if (sourceCompare !== 0) return sourceCompare;
 
   return Number(priorities[target1.type]) - Number(priorities[target2.type]);
+};
+
+/**
+ * "null" means no partition; the node will be placed in any layer that makes sense based on edges.
+ * "[number]" means the node will be placed in a layer higher than nodes with lower [number], and lower than nodes with higher [number].
+ * "calculated" is a string that will error if it remains; it should be replaced before layout.
+ */
+const partitionOrders: { [type in NodeType]: string } = {
+  // topic
+  problem: "null",
+  criterion: "1",
+  effect: "calculated",
+  benefit: "calculated",
+  detriment: "calculated",
+  solutionComponent: "3",
+  solution: "4",
+
+  // explore
+  question: "null",
+  answer: "null",
+  fact: "5",
+  source: "6", // generally nice to have sources along the bottom, below facts
+
+  // claim
+  rootClaim: "null",
+  support: "null",
+  critique: "null",
+
+  // generic
+  custom: "null",
+};
+
+const calculatePartition = (node: Node, nodes: Node[], edges: Edge[]) => {
+  const topicGraph = { nodes, edges };
+
+  if (["effect", "benefit", "detriment"].includes(node.type)) {
+    const hasProblemSource = parents(node, topicGraph).some((parent) => parent.type === "problem");
+    const hasSolutionTarget = children(node, topicGraph).some((child) => child.type === "solution");
+    if (hasProblemSource && hasSolutionTarget) return "null";
+    else if (hasProblemSource) return "0";
+    else return "2";
+  } else {
+    return partitionOrders[node.type];
+  }
 };
 
 export interface NodePosition {
@@ -96,7 +118,7 @@ export const layout = async (
           // solutions, components, effects; we might be able to improve that situation by modeling
           // each problem within a nested node. Or maybe we could just do partitioning within
           // a special "problem context view" rather than in the main topic diagram view.
-          "elk.partitioning.partition": partitionOrders[node.type],
+          "elk.partitioning.partition": calculatePartition(node, nodes, edges),
         },
       };
     }),
