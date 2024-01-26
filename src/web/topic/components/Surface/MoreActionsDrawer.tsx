@@ -4,6 +4,7 @@ import {
   Close,
   Download,
   Engineering,
+  Layers,
   Route,
   Upload,
 } from "@mui/icons-material";
@@ -22,8 +23,10 @@ import { StorageValue } from "zustand/middleware";
 
 import { errorWithData } from "../../../../common/errorHandling";
 import {
+  toggleForceNodesIntoLayers,
   toggleShowImpliedEdges,
   toggleUnrestrictedEditing,
+  useForceNodesIntoLayers,
   useShowImpliedEdges,
   useUnrestrictedEditing,
 } from "../../../view/actionConfigStore";
@@ -89,6 +92,7 @@ export const MoreActionsDrawer = ({
   const isTableActive = activeView === "criteriaTable";
   const showImpliedEdges = useShowImpliedEdges();
   const unrestrictedEditing = useUnrestrictedEditing();
+  const forceNodesIntoLayers = useForceNodesIntoLayers();
 
   return (
     <Drawer
@@ -170,6 +174,18 @@ export const MoreActionsDrawer = ({
                 sx={{ borderRadius: "50%", border: "0" }}
               >
                 <Route />
+              </ToggleButton>
+              <ToggleButton
+                value={forceNodesIntoLayers}
+                title="Force nodes into layers"
+                aria-label="Force nodes into layers"
+                color="secondary"
+                size="small"
+                selected={forceNodesIntoLayers}
+                onClick={() => toggleForceNodesIntoLayers(!forceNodesIntoLayers)}
+                sx={{ borderRadius: "50%", border: "0" }}
+              >
+                <Layers />
               </ToggleButton>
             </>
           )}

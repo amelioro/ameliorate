@@ -82,7 +82,8 @@ export interface NodePosition {
 export const layout = async (
   nodes: Node[],
   edges: Edge[],
-  orientation: Orientation
+  orientation: Orientation,
+  partition: boolean
 ): Promise<NodePosition[]> => {
   // see support layout options at https://www.eclipse.org/elk/reference/algorithms/org-eclipse-elk-layered.html
   const layoutOptions: LayoutOptions = {
@@ -100,7 +101,7 @@ export const layout = async (
     "elk.layered.spacing.nodeNodeBetweenLayers": orientation === "DOWN" ? "130" : "220",
     "elk.spacing.nodeNode": orientation === "DOWN" ? "20" : "50",
     // allow nodes to be partitioned into layers by type
-    "elk.partitioning.activate": "true",
+    "elk.partitioning.activate": partition ? "true" : "false",
     // ensure node islands don't overlap (needed for when node has 3 rows of text)
     "elk.spacing.componentComponent": "30", // default is 20
   };
