@@ -73,6 +73,8 @@ export const EditableNode = ({ node, supplemental = false, className = "" }: Pro
   // Supplemental nodes are always editable, because clicking does not select them.
   const editable = userCanEditTopicData && (supplemental || selected);
 
+  const customizable = userCanEditTopicData && (unrestrictedEditing || node.type === "custom");
+
   return (
     <NodeDiv
       color={color}
@@ -84,7 +86,7 @@ export const EditableNode = ({ node, supplemental = false, className = "" }: Pro
         <NodeTypeDiv>
           <NodeIcon sx={{ width: "0.875rem", height: "0.875rem" }} />
           <NodeTypeSpan
-            contentEditable={userCanEditTopicData && unrestrictedEditing}
+            contentEditable={customizable}
             suppressContentEditableWarning // https://stackoverflow.com/a/49639256/8409296
             onBlur={(event) => {
               if (event.target.textContent && event.target.textContent !== node.data.customType)
