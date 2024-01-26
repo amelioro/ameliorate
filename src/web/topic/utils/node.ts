@@ -1,10 +1,10 @@
 import {
   Article,
-  AutoAwesome,
   Ballot,
   Bolt,
   Check,
   Code,
+  Edit,
   Extension,
   Flood,
   Info,
@@ -102,7 +102,7 @@ export const nodeDecorations: Record<FlowNodeType, NodeDecoration> = {
   // generic
   custom: {
     title: "Custom",
-    NodeIcon: AutoAwesome, // like magic I guess?
+    NodeIcon: Edit,
   },
 };
 
