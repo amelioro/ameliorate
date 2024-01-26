@@ -6,7 +6,7 @@ import { setSelected } from "../../../view/navigateStore";
 import { useExploreNodes } from "../../store/graphPartHooks";
 import { useDisplayScoresByGraphPart } from "../../store/scoreHooks";
 import { GraphPart, Score } from "../../utils/graph";
-import { scoreColors } from "../../utils/score";
+import { getNumericScore, scoreColors } from "../../utils/score";
 import { viewDetails } from "../TopicPane/TopicPane";
 import { Indicator } from "./Indicator";
 
@@ -25,9 +25,7 @@ export const QuestionIndicator = ({ graphPart }: Props) => {
 
   if (questions.length === 0) return <></>;
 
-  const questionScores = Object.values(scoresByGraphPart).map((score) =>
-    score === "-" ? 5 : Number(score)
-  );
+  const questionScores = Object.values(scoresByGraphPart).map((score) => getNumericScore(score));
   const highestScore = Math.max(...questionScores);
 
   const color =

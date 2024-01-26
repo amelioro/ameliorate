@@ -257,7 +257,7 @@ export const getConnectingEdge = (graphPartId1: string, graphPartId2: string, ed
   const edge = edges.find(
     (edge) =>
       (edge.source === graphPartId1 && edge.target === graphPartId2) ||
-      (edge.source === graphPartId2 && edge.target === graphPartId2)
+      (edge.source === graphPartId2 && edge.target === graphPartId1)
   );
 
   return edge;

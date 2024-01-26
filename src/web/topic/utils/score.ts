@@ -33,3 +33,7 @@ export const getAverageScore = (userScores: Score[]): Score => {
 
   return roundedAverage.toString() as Score; // average should still result in a Score
 };
+
+export const getNumericScore = (score: Score): number => {
+  return score === "-" ? 5 : Number(score);
+};
