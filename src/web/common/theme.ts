@@ -132,11 +132,13 @@ const darkPalette = {
 const primary = "#4AB84E"; // apple (green): good, optimistic, let's solve things
 const primaryVariantLight = "#82CE84"; // 200 lower than primary on material design color tool
 const secondary = "#B84AB4"; // deep fuchsia (purple): truth; complementary to primary
+export const infoColor = "#0288d1"; // mui default info https://mui.com/material-ui/customization/palette/#values
 const { palette } = createTheme();
 const { augmentColor } = palette; // automatically creates light and dark colors too, thanks https://stackoverflow.com/a/69836010
 
 const sharedPalette = {
   primary: { main: primary },
+  info: { main: infoColor },
 
   // material design recommends variants for contrasting UI elements, see Primary Colors at https://m2.material.io/design/color/the-color-system.html#color-theme-creation
   primaryVariantDark: { main: "#359639" }, // 200 higher than primary on material design color tool
