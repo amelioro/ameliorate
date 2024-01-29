@@ -1,4 +1,3 @@
-import { MarkerType } from "reactflow";
 import { v4 as uuid } from "uuid";
 
 import { RelationName } from "../../../common/edge";
@@ -64,9 +63,6 @@ export const buildNode = ({
   return node;
 };
 
-// assumes that we always want to point from child to parent
-export const markerStart = { type: MarkerType.ArrowClosed, width: 30, height: 30 };
-
 export type RelationDirection = "parent" | "child";
 
 export interface Edge {
@@ -80,7 +76,6 @@ export interface Edge {
     arguedDiagramPartId?: string;
   };
   label: RelationName;
-  markerStart: { type: MarkerType; width: number; height: number };
   /**
    * id of the source graph part. Can be a node or an edge, but most UI edge operations only work
    * with node sources.
@@ -128,7 +123,6 @@ export const buildEdge = ({
       arguedDiagramPartId: arguedDiagramPartId,
     },
     label: relation,
-    markerStart: markerStart,
     source: sourceId,
     target: targetId,
     type: "FlowEdge" as const,

@@ -3,6 +3,8 @@ import styled from "@emotion/styled";
 
 import { Spotlight, zIndex } from "../Diagram/Diagram.styles";
 
+const highlightedEdgeWidth = "2px";
+
 interface PathProps {
   spotlight: Spotlight;
 }
@@ -19,12 +21,14 @@ export const StyledPath = styled("path", pathOptions)<PathProps>`
       if (spotlight === "primary") {
         return css`
           opacity: 1;
+          stroke-width: ${highlightedEdgeWidth};
         `;
       } else if (spotlight === "secondary") {
         return css`
           // marker should be styled too but reactflow's default only styles this, and that's probably
           // because marker styles need to be specified when creating the marker element, without css
           stroke: ${theme.palette.info.main};
+          stroke-width: ${highlightedEdgeWidth};
         `;
       }
     }}
@@ -64,11 +68,13 @@ export const StyledDiv = styled("div", divOptions)<DivProps>`
     if (spotlight === "primary") {
       return css`
         border-color: #555;
+        border-width: ${highlightedEdgeWidth};
         z-index: ${zIndex.primary};
       `;
     } else if (spotlight === "secondary") {
       return css`
         border-color: ${theme.palette.info.main};
+        border-width: ${highlightedEdgeWidth};
         z-index: ${zIndex.secondary};
       `;
     }
