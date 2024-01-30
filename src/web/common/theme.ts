@@ -152,6 +152,7 @@ const sharedPalette = {
 
   // topic
   problem: augmentColor({ color: { main: secondary, contrastText: "rgba(0, 0, 0, 0.87)" } }),
+  cause: augmentColor({ color: { main: "#D795D3" } }), // 200 lower than problem color on material design color tool
   solution: augmentColor({ color: { main: primary } }),
   solutionComponent: augmentColor({ color: { main: primaryVariantLight } }),
   criterion: augmentColor({ color: { main: "#4AB885" } }), // mint: analogous to solution; between solution & support because criteria are kind of like supports for solutions

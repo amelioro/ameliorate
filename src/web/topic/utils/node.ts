@@ -9,6 +9,7 @@ import {
   Flood,
   Info,
   LocalFlorist,
+  Mediation,
   PriorityHigh,
   QuestionMark,
   ThumbDown,
@@ -41,6 +42,10 @@ export const nodeDecorations: Record<FlowNodeType, NodeDecoration> = {
   problem: {
     title: "Problem",
     NodeIcon: Extension,
+  },
+  cause: {
+    title: "Cause",
+    NodeIcon: Mediation,
   },
   criterion: {
     title: "Criterion",

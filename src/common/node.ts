@@ -12,6 +12,7 @@ import { DiagramType } from "./diagram";
 export const nodeTypes = [
   // topic
   "problem",
+  "cause",
   "criterion",
   "effect",
   "benefit",
@@ -57,6 +58,7 @@ export type Node = z.infer<typeof nodeSchema>;
 export const diagramNodeTypes: Record<DiagramType, NodeType[]> = {
   topicDiagram: [
     "problem",
+    "cause",
     "criterion",
     "effect",
     "benefit",
