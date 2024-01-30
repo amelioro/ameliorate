@@ -37,6 +37,7 @@ const compareEdges = (edge1: Edge, edge2: Edge, nodes: Node[]) => {
 const partitionOrders: { [type in NodeType]: string } = {
   // topic
   problem: "null",
+  cause: "null",
   criterion: "1",
   effect: "calculated",
   benefit: "calculated",

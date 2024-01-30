@@ -36,6 +36,7 @@ const buildNodeComponent = (type: FlowNodeType) => {
 const nodeTypes: Record<FlowNodeType, ComponentType<NodeProps>> = {
   // topic
   problem: buildNodeComponent("problem"),
+  cause: buildNodeComponent("cause"),
   solution: buildNodeComponent("solution"),
   solutionComponent: buildNodeComponent("solutionComponent"),
   criterion: buildNodeComponent("criterion"),
