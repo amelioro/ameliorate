@@ -1,106 +1,103 @@
-import { RelationName, claimRelationNames, relationNames } from "../../../common/edge";
-import { NodeType, claimNodeTypes, nodeTypes } from "../../../common/node";
+import { RelationName, claimRelationNames } from "../../../common/edge";
+import { NodeType, claimNodeTypes, exploreNodeTypes, nodeTypes } from "../../../common/node";
 import { hasClaims } from "./claim";
 import { Diagram } from "./diagram";
 import { Edge, Graph, Node, RelationDirection, findNode } from "./graph";
 import { children, components, parents } from "./node";
 
-const questionRelations: Relation[] = [...nodeTypes, ...relationNames].map((partType) => ({
+const questionRelations: AddableRelation[] = nodeTypes.map((nodeType) => ({
   child: "question",
   name: "asksAbout",
-  parent: partType,
+  parent: nodeType,
+  addableFrom: exploreNodeTypes.includes(nodeType) ? "parent" : "neither",
 }));
 
-const factRelations: Relation[] = [...nodeTypes, ...relationNames]
-  .filter(
-    (partType) =>
-      partType !== "fact" &&
-      partType !== "source" &&
-      partType !== "relevantFor" &&
-      partType !== "sourceOf"
-  )
-  .map((partType) => ({
+const factRelations: AddableRelation[] = nodeTypes
+  .filter((nodeType) => nodeType !== "fact" && nodeType !== "source")
+  .map((nodeType) => ({
     child: "fact",
     name: "relevantFor",
-    parent: partType,
+    parent: nodeType,
+    addableFrom: exploreNodeTypes.includes(nodeType) ? "parent" : "neither",
   }));
 
-const sourceRelations: Relation[] = [...nodeTypes, ...relationNames]
-  .filter(
-    (partType) =>
-      partType !== "fact" &&
-      partType !== "source" &&
-      partType !== "relevantFor" &&
-      partType !== "sourceOf"
-  )
+const sourceRelations: AddableRelation[] = nodeTypes
+  .filter((nodeType) => nodeType !== "fact" && nodeType !== "source")
   .map((nodeType) => ({
     child: "source",
     name: "relevantFor",
     parent: nodeType,
+    addableFrom: exploreNodeTypes.includes(nodeType) ? "parent" : "neither",
   }));
 
-const exploreRelations: Relation[] = questionRelations.concat(factRelations, sourceRelations, [
-  { child: "answer", name: "potentialAnswerTo", parent: "question" },
-  { child: "source", name: "sourceOf", parent: "fact" },
-]);
+const exploreRelations: AddableRelation[] = questionRelations.concat(
+  factRelations,
+  sourceRelations,
+  [
+    { child: "answer", name: "potentialAnswerTo", parent: "question", addableFrom: "parent" },
+    { child: "source", name: "sourceOf", parent: "fact", addableFrom: "both" },
+  ]
+);
 
 // Assumes that we're always pointing from child to parent.
 // This list is sorted by `parent` and then `child` so that it matches the partition order of nodes
 // in the layout.
-export const relations: Relation[] = exploreRelations.concat([
+export const relations: AddableRelation[] = exploreRelations.concat([
   // topic relations
-  { child: "problem", name: "causes", parent: "problem" },
-  { child: "criterion", name: "criterionFor", parent: "problem" },
-  { child: "effect", name: "createdBy", parent: "problem" },
-  { child: "benefit", name: "createdBy", parent: "problem" },
-  { child: "detriment", name: "createdBy", parent: "problem" },
-  { child: "solutionComponent", name: "addresses", parent: "problem" },
-  { child: "solution", name: "addresses", parent: "problem" },
+  { child: "problem", name: "causes", parent: "problem", addableFrom: "both" },
+  { child: "criterion", name: "criterionFor", parent: "problem", addableFrom: "parent" },
+  { child: "effect", name: "createdBy", parent: "problem", addableFrom: "parent" },
+  { child: "benefit", name: "createdBy", parent: "problem", addableFrom: "parent" },
+  { child: "detriment", name: "createdBy", parent: "problem", addableFrom: "parent" },
+  { child: "solutionComponent", name: "addresses", parent: "problem", addableFrom: "child" },
+  { child: "solution", name: "addresses", parent: "problem", addableFrom: "both" },
 
-  { child: "criterion", name: "relatesTo", parent: "effect" },
-  { child: "criterion", name: "relatesTo", parent: "benefit" },
-  { child: "criterion", name: "relatesTo", parent: "detriment" },
+  { child: "criterion", name: "relatesTo", parent: "effect", addableFrom: "neither" },
+  { child: "criterion", name: "relatesTo", parent: "benefit", addableFrom: "neither" },
+  { child: "criterion", name: "relatesTo", parent: "detriment", addableFrom: "neither" },
 
-  { child: "effect", name: "embodies", parent: "criterion" },
-  { child: "benefit", name: "embodies", parent: "criterion" },
-  { child: "detriment", name: "relatesTo", parent: "criterion" },
-  { child: "solutionComponent", name: "embodies", parent: "criterion" },
-  { child: "solution", name: "embodies", parent: "criterion" },
+  { child: "effect", name: "embodies", parent: "criterion", addableFrom: "neither" },
+  { child: "benefit", name: "embodies", parent: "criterion", addableFrom: "neither" },
+  { child: "detriment", name: "relatesTo", parent: "criterion", addableFrom: "neither" },
+  { child: "solutionComponent", name: "embodies", parent: "criterion", addableFrom: "neither" },
+  { child: "solution", name: "embodies", parent: "criterion", addableFrom: "neither" },
 
-  { child: "problem", name: "createdBy", parent: "effect" },
-  { child: "solutionComponent", name: "creates", parent: "effect" },
-  { child: "solution", name: "creates", parent: "effect" },
-  { child: "solutionComponent", name: "creates", parent: "benefit" },
-  { child: "solution", name: "creates", parent: "benefit" },
-  { child: "solutionComponent", name: "creates", parent: "detriment" },
-  { child: "solution", name: "creates", parent: "detriment" },
+  { child: "solutionComponent", name: "creates", parent: "effect", addableFrom: "child" },
+  { child: "solution", name: "creates", parent: "effect", addableFrom: "child" },
+  { child: "solutionComponent", name: "creates", parent: "benefit", addableFrom: "child" },
+  { child: "solution", name: "creates", parent: "benefit", addableFrom: "child" },
+  { child: "solutionComponent", name: "creates", parent: "detriment", addableFrom: "child" },
+  { child: "solution", name: "creates", parent: "detriment", addableFrom: "child" },
 
-  { child: "problem", name: "createdBy", parent: "solutionComponent" },
-  { child: "solution", name: "has", parent: "solutionComponent" },
+  { child: "problem", name: "createdBy", parent: "solutionComponent", addableFrom: "parent" },
+  { child: "solution", name: "has", parent: "solutionComponent", addableFrom: "child" },
 
-  { child: "problem", name: "createdBy", parent: "solution" },
-  { child: "solution", name: "accomplishes", parent: "solution" },
+  { child: "problem", name: "createdBy", parent: "solution", addableFrom: "parent" },
+  { child: "solution", name: "accomplishes", parent: "solution", addableFrom: "parent" },
 
   // claim relations
-  { child: "support", name: "supports", parent: "rootClaim" },
-  { child: "critique", name: "critiques", parent: "rootClaim" },
+  { child: "support", name: "supports", parent: "rootClaim", addableFrom: "parent" },
+  { child: "critique", name: "critiques", parent: "rootClaim", addableFrom: "parent" },
 
-  { child: "support", name: "supports", parent: "support" },
-  { child: "critique", name: "critiques", parent: "support" },
+  { child: "support", name: "supports", parent: "support", addableFrom: "parent" },
+  { child: "critique", name: "critiques", parent: "support", addableFrom: "parent" },
 
-  { child: "support", name: "supports", parent: "critique" },
-  { child: "critique", name: "critiques", parent: "critique" },
+  { child: "support", name: "supports", parent: "critique", addableFrom: "parent" },
+  { child: "critique", name: "critiques", parent: "critique", addableFrom: "parent" },
 ]);
 
 export interface Relation {
   child: NodeType;
   name: RelationName;
-  // right now, only parents can point to other edges, but this could change if need be
-  parent: NodeType | RelationName;
+  parent: NodeType;
+}
+
+interface AddableRelation extends Relation {
+  addableFrom: RelationDirection | "both" | "neither";
 }
 
 export const getRelation = (
-  parent: NodeType | RelationName,
+  parent: NodeType,
   child: NodeType,
   relationName?: RelationName
 ): Relation | undefined => {
@@ -147,54 +144,12 @@ export const shortcutRelations: ShortcutRelation[] = [
   },
 ];
 
-type AddableNodes = {
-  [key in RelationDirection]: NodeType[];
-};
-const addableNodesFor: Record<NodeType, AddableNodes> = {
-  problem: {
-    parent: ["problem", "solution"],
-    child: ["problem", "effect", "benefit", "detriment", "criterion", "solution"],
-  },
-
-  // can't have multiple problems;
-  // could have multiple solutions but unintuitive to add from criterion because solution would be tied to parent & all sibling criteria
-  criterion: { parent: [], child: [] },
-
-  effect: { parent: [], child: [] },
-  benefit: { parent: [], child: [] },
-  detriment: { parent: [], child: [] },
-
-  solutionComponent: {
-    parent: ["problem", "effect", "benefit", "detriment"],
-    child: ["problem"],
-  },
-  solution: {
-    parent: ["problem", "effect", "benefit", "detriment", "solutionComponent"], // could have criteria, but need to select a specific problem for it & that requires design
-    child: ["problem", "solution"],
-  },
-
-  // explore nodes
-  question: { parent: [], child: ["question", "answer", "fact", "source"] },
-  answer: { parent: [], child: ["question", "fact", "source"] },
-  fact: { parent: [], child: ["question", "source"] },
-  source: { parent: ["fact"], child: ["question"] },
-
-  // claims are in a tree so claim nodes can't add parents
-  rootClaim: { parent: [], child: ["support", "critique"] },
-  support: { parent: [], child: ["support", "critique"] },
-  critique: { parent: [], child: ["support", "critique"] },
-
-  // generic - will always add via unrestricted mode
-  custom: { parent: [], child: [] },
-};
-
 export const addableRelationsFrom = (nodeType: NodeType, addingAs: RelationDirection) => {
   const fromDirection = addingAs === "parent" ? "child" : "parent";
-  const addableNodes = addableNodesFor[nodeType][addingAs];
 
   const addableRelations = relations.filter(
     (relation) =>
-      addableNodes.includes(relation[addingAs] as NodeType) && relation[fromDirection] === nodeType
+      relation[fromDirection] === nodeType && ["both", fromDirection].includes(relation.addableFrom)
   );
 
   const formattedRelations = addableRelations.map((relation) => ({

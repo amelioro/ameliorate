@@ -2,20 +2,19 @@ import { School } from "@mui/icons-material";
 import { ListItem, ListItemIcon, ListItemText, Stack, Typography } from "@mui/material";
 
 import { useExploreNodes } from "../../store/graphPartHooks";
-import { GraphPart, isNode } from "../../utils/graph";
+import { Node } from "../../utils/graph";
 import { AddNodeButton } from "../Node/AddNodeButton";
 import { EditableNode } from "../Node/EditableNode";
 
 interface Props {
-  graphPart: GraphPart;
+  node: Node;
 }
 
 // make work for topic (when no graphPart is passed)
-export const DetailsExploreSection = ({ graphPart }: Props) => {
-  const { questions, facts, sources } = useExploreNodes(graphPart.id);
+export const DetailsExploreSection = ({ node }: Props) => {
+  const { questions, facts, sources } = useExploreNodes(node.id);
 
   const exploreNodes = [...questions, ...facts, ...sources];
-  const partType = isNode(graphPart) ? graphPart.type : graphPart.label;
 
   return (
     <>
@@ -29,39 +28,39 @@ export const DetailsExploreSection = ({ graphPart }: Props) => {
       {/* spacing is the amount that centers the add buttons above the columns */}
       <Stack direction="row" justifyContent="center" alignItems="center" marginBottom="8px">
         <AddNodeButton
-          fromPartId={graphPart.id}
+          fromPartId={node.id}
           as="child"
           toNodeType="question"
           relation={{
             child: "question",
             name: "asksAbout",
-            parent: partType,
+            parent: node.type,
           }}
           selectNewNode={false}
         />
 
         {/* disallow facts and sources as relevant for other facts and sources, because that gets confusing */}
-        {graphPart.type !== "fact" && graphPart.type !== "source" && (
+        {node.type !== "fact" && node.type !== "source" && (
           <>
             <AddNodeButton
-              fromPartId={graphPart.id}
+              fromPartId={node.id}
               as="child"
               toNodeType="fact"
               relation={{
                 child: "fact",
                 name: "relevantFor",
-                parent: partType,
+                parent: node.type,
               }}
               selectNewNode={false}
             />
             <AddNodeButton
-              fromPartId={graphPart.id}
+              fromPartId={node.id}
               as="child"
               toNodeType="source"
               relation={{
                 child: "source",
                 name: "relevantFor",
-                parent: partType,
+                parent: node.type,
               }}
               selectNewNode={false}
             />
