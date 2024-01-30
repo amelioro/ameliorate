@@ -118,7 +118,7 @@ export const GraphPartDetails = ({ graphPart }: Props) => {
         <Divider />
 
         {/* prevent adding explore nodes to edges; not 100% sure that we want to restrict this, but if it continues to seem good, this section can accept node instead of graphPart */}
-        {partIsNode && <DetailsExploreSection graphPart={graphPart} />}
+        {partIsNode && <DetailsExploreSection node={graphPart} />}
       </List>
     </form>
   );

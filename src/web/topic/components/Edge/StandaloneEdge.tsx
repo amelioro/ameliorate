@@ -7,7 +7,7 @@ import { Edge } from "../../utils/graph";
 import { EdgeProps } from "../Diagram/Diagram";
 import { EditableNode } from "../Node/EditableNode";
 import { nodeWidthPx } from "../Node/EditableNode.styles";
-import { ScoreEdge, svgMarkerDefId } from "./ScoreEdge";
+import { ScoreEdge } from "./ScoreEdge";
 
 const convertToStandaloneFlowEdge = (edge: Edge, selected: boolean): EdgeProps => {
   return {
@@ -24,8 +24,6 @@ const convertToStandaloneFlowEdge = (edge: Edge, selected: boolean): EdgeProps =
     targetX: nodeWidthPx / 2,
     targetY: 100,
     targetPosition: Position.Bottom,
-
-    markerStart: `url(#${svgMarkerDefId})`,
   };
 };
 

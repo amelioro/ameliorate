@@ -1,7 +1,12 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
+import { infoColor } from "../../../common/theme";
 import { Spotlight, zIndex } from "../Diagram/Diagram.styles";
+
+const highlightedEdgeWidth = "2px";
+export const edgeColor = "#b1b1b7"; // react flow default
+export const highlightedEdgeColor = "#555"; // darker than react flow default
 
 interface PathProps {
   spotlight: Spotlight;
@@ -15,16 +20,16 @@ export const StyledPath = styled("path", pathOptions)<PathProps>`
   cursor: default;
 
   &.react-flow__edge-path {
-    ${({ theme, spotlight }) => {
+    ${({ spotlight }) => {
       if (spotlight === "primary") {
         return css`
           opacity: 1;
+          stroke-width: ${highlightedEdgeWidth};
         `;
       } else if (spotlight === "secondary") {
         return css`
-          // marker should be styled too but reactflow's default only styles this, and that's probably
-          // because marker styles need to be specified when creating the marker element, without css
-          stroke: ${theme.palette.info.main};
+          stroke: ${infoColor};
+          stroke-width: ${highlightedEdgeWidth};
         `;
       }
     }}
@@ -51,7 +56,7 @@ export const StyledDiv = styled("div", divOptions)<DivProps>`
   align-items: center;
 
   background-color: white;
-  border: 1px solid #b1b1b7; // match edge stroke color that comes from react-flow default css
+  border: 1px solid ${edgeColor};
   border-radius: 15%;
   padding: 4px;
 
@@ -60,15 +65,17 @@ export const StyledDiv = styled("div", divOptions)<DivProps>`
     transform: translate(-50%, -50%) translate(${labelX}px, ${labelY}px);
   `}
 
-  ${({ theme, spotlight }) => {
+  ${({ spotlight }) => {
     if (spotlight === "primary") {
       return css`
-        border-color: #555;
+        border-color: ${highlightedEdgeColor};
+        border-width: ${highlightedEdgeWidth};
         z-index: ${zIndex.primary};
       `;
     } else if (spotlight === "secondary") {
       return css`
-        border-color: ${theme.palette.info.main};
+        border-color: ${infoColor};
+        border-width: ${highlightedEdgeWidth};
         z-index: ${zIndex.secondary};
       `;
     }
