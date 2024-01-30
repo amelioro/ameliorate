@@ -56,6 +56,27 @@ export const relations: AddableRelation[] = exploreRelations.concat([
   { child: "criterion", name: "relatesTo", parent: "benefit", addableFrom: "neither" },
   { child: "criterion", name: "relatesTo", parent: "detriment", addableFrom: "neither" },
 
+  // effects, benefits, detriments, can each create each other (when coming up from solution)
+  // and be created by each other (when going up to problem)
+  { child: "effect", name: "creates", parent: "effect", addableFrom: "child" },
+  { child: "benefit", name: "creates", parent: "effect", addableFrom: "child" },
+  { child: "detriment", name: "creates", parent: "effect", addableFrom: "child" },
+  { child: "effect", name: "creates", parent: "benefit", addableFrom: "child" },
+  { child: "benefit", name: "creates", parent: "benefit", addableFrom: "child" },
+  { child: "detriment", name: "creates", parent: "benefit", addableFrom: "child" },
+  { child: "effect", name: "creates", parent: "detriment", addableFrom: "child" },
+  { child: "benefit", name: "creates", parent: "detriment", addableFrom: "child" },
+  { child: "detriment", name: "creates", parent: "detriment", addableFrom: "child" },
+  { child: "effect", name: "createdBy", parent: "effect", addableFrom: "parent" },
+  { child: "benefit", name: "createdBy", parent: "effect", addableFrom: "parent" },
+  { child: "detriment", name: "createdBy", parent: "effect", addableFrom: "parent" },
+  { child: "effect", name: "createdBy", parent: "benefit", addableFrom: "parent" },
+  { child: "benefit", name: "createdBy", parent: "benefit", addableFrom: "parent" },
+  { child: "detriment", name: "createdBy", parent: "benefit", addableFrom: "parent" },
+  { child: "effect", name: "createdBy", parent: "detriment", addableFrom: "parent" },
+  { child: "benefit", name: "createdBy", parent: "detriment", addableFrom: "parent" },
+  { child: "detriment", name: "createdBy", parent: "detriment", addableFrom: "parent" },
+
   { child: "effect", name: "embodies", parent: "criterion", addableFrom: "neither" },
   { child: "benefit", name: "embodies", parent: "criterion", addableFrom: "neither" },
   { child: "detriment", name: "relatesTo", parent: "criterion", addableFrom: "neither" },
