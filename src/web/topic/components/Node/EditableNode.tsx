@@ -89,8 +89,9 @@ export const EditableNode = ({ node, supplemental = false, className = "" }: Pro
             contentEditable={customizable}
             suppressContentEditableWarning // https://stackoverflow.com/a/49639256/8409296
             onBlur={(event) => {
-              if (event.target.textContent && event.target.textContent !== node.data.customType)
-                setCustomNodeType(node, event.target.textContent.trim());
+              const text = event.target.textContent?.trim();
+              if (text && text !== nodeDecoration.title && text !== node.data.customType)
+                setCustomNodeType(node, text);
             }}
             className="nopan"
           >

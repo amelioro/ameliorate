@@ -1,9 +1,9 @@
 import { createDraft, finishDraft } from "immer";
 import set from "lodash/set";
 
-import { edgeSchema } from "../../../common/edge";
+import { RelationName, edgeSchema } from "../../../common/edge";
 import { errorWithData } from "../../../common/errorHandling";
-import { nodeSchema } from "../../../common/node";
+import { NodeType, nodeSchema } from "../../../common/node";
 import {
   Edge,
   GraphPart,
@@ -92,6 +92,31 @@ export const setCustomEdgeLabel = (edge: Edge, value: string) => {
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   useTopicStore.setState(finishDraft(state), false, "setCustomEdgeLabel");
+};
+
+export const changeNodeType = (node: Node, newType: NodeType) => {
+  const state = createDraft(useTopicStore.getState());
+
+  const foundNode = findNode(node.id, state.nodes);
+
+  /* eslint-disable functional/immutable-data, no-param-reassign */
+  foundNode.type = newType;
+  /* eslint-enable functional/immutable-data, no-param-reassign */
+
+  useTopicStore.setState(finishDraft(state), false, "changeNodeType");
+};
+
+export const changeEdgeType = (edge: Edge, newType: RelationName) => {
+  const state = createDraft(useTopicStore.getState());
+
+  const foundEdge = findEdge(edge.id, state.edges);
+
+  /* eslint-disable functional/immutable-data, no-param-reassign */
+  foundEdge.label = newType;
+  foundEdge.data.customLabel = null; // reset custom label so new type is used for label
+  /* eslint-enable functional/immutable-data, no-param-reassign */
+
+  useTopicStore.setState(finishDraft(state), false, "changeEdgeType");
 };
 
 export const setGraphPartNotes = (graphPart: GraphPart, value: string) => {

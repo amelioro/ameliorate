@@ -2,6 +2,8 @@ import { Menu as MuiMenu } from "@mui/material";
 
 import { closeContextMenu } from "../../store/contextMenuActions";
 import { useAnchorPosition, useContextMenuContext } from "../../store/contextMenuStore";
+import { ChangeEdgeTypeMenuItem } from "./ChangeEdgeTypeMenuItem";
+import { ChangeNodeTypeMenuItem } from "./ChangeNodeTypeMenuItem";
 import { DeleteEdgeMenuItem } from "./DeleteEdgeMenuItem";
 import { DeleteNodeMenuItem } from "./DeleteNodeMenuItem";
 import { ShowComponentsMenuItem } from "./ShowComponentsMenuItem";
@@ -18,6 +20,12 @@ export const ContextMenu = () => {
 
   // create these based on what's set in the context
   const menuItems = [
+    contextMenuContext.node && (
+      <ChangeNodeTypeMenuItem node={contextMenuContext.node} parentMenuOpen={isOpen} key={7} />
+    ),
+    contextMenuContext.edge && (
+      <ChangeEdgeTypeMenuItem edge={contextMenuContext.edge} parentMenuOpen={isOpen} key={8} />
+    ),
     contextMenuContext.node && <ShowComponentsMenuItem node={contextMenuContext.node} key={1} />,
     contextMenuContext.node && <ShowCriteriaMenuItem node={contextMenuContext.node} key={2} />,
     contextMenuContext.node && <ShowEffectsMenuItem node={contextMenuContext.node} key={3} />,
