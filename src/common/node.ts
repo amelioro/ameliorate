@@ -85,3 +85,10 @@ export const getNewTopicProblemNode = (topicId: number, topicTitle: string): Nod
     notes: "",
   };
 };
+
+export const getSiblingNodeTypes = (nodeType: NodeType): NodeType[] => {
+  if (topicNodeTypes.includes(nodeType)) return topicNodeTypes;
+  else if (exploreNodeTypes.includes(nodeType)) return exploreNodeTypes;
+  else if (claimNodeTypes.includes(nodeType)) return claimNodeTypes;
+  else return [];
+};

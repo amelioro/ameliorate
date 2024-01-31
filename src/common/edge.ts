@@ -65,3 +65,10 @@ export const exploreRelationNames: RelationName[] = [
   "sourceOf",
 ];
 export const claimRelationNames: RelationName[] = ["supports", "critiques"];
+
+export const getSiblingEdgeTypes = (edgeType: RelationName): RelationName[] => {
+  if (topicRelationNames.includes(edgeType)) return topicRelationNames;
+  else if (exploreRelationNames.includes(edgeType)) return exploreRelationNames;
+  else if (claimRelationNames.includes(edgeType)) return claimRelationNames;
+  else return [];
+};
