@@ -113,7 +113,7 @@ export const changeEdgeType = (edge: Edge, newType: RelationName) => {
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   foundEdge.label = newType;
-  foundEdge.data.customLabel = undefined; // reset custom label so new type is used for label
+  foundEdge.data.customLabel = null; // reset custom label so new type is used for label
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   useTopicStore.setState(finishDraft(state), false, "changeEdgeType");

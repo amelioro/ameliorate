@@ -39,7 +39,7 @@ export const edgeSchema = z.object({
     .string()
     .max(30)
     .regex(/^[a-z ]+$/i)
-    .optional(),
+    .nullable(),
   notes: z.string().max(10000),
   sourceId: z.string().uuid(),
   targetId: z.string().uuid(),

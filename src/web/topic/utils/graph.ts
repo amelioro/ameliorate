@@ -71,7 +71,7 @@ export interface Edge {
     /**
      * Distinguished from `label` because this is explicitly open user input, and `label` can maintain stricter typing
      */
-    customLabel?: string;
+    customLabel: string | null;
     notes: string;
     arguedDiagramPartId?: string;
   };
@@ -99,7 +99,7 @@ export interface Edge {
 
 interface BuildEdgeProps {
   id?: string;
-  customLabel?: string;
+  customLabel?: string | null;
   notes?: string;
   sourceId: string;
   targetId: string;
@@ -108,7 +108,7 @@ interface BuildEdgeProps {
 }
 export const buildEdge = ({
   id,
-  customLabel,
+  customLabel = null,
   notes,
   sourceId,
   targetId,
