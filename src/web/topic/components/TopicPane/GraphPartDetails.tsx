@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { nodeSchema } from "../../../../common/node";
+import { exploreNodeTypes, nodeSchema } from "../../../../common/node";
 import { useSessionUser } from "../../../common/hooks";
 import { setGraphPartNotes } from "../../store/actions";
 import { useUserCanEditTopicData } from "../../store/userHooks";
@@ -21,13 +21,11 @@ import { FactDetails } from "./FactDetails";
 import { QuestionDetails } from "./QuestionDetails";
 import { SourceDetails } from "./SourceDetails";
 
-const formSchema = () => {
-  return z.object({
-    // same restrictions as edge, so we should be fine reusing node's schema
-    notes: nodeSchema.shape.notes,
-  });
-};
-type FormData = z.infer<ReturnType<typeof formSchema>>;
+const formSchema = z.object({
+  // same restrictions as edge, so we should be fine reusing node's schema
+  notes: nodeSchema.shape.notes,
+});
+type FormData = z.infer<typeof formSchema>;
 
 interface Props {
   graphPart: GraphPart;
@@ -45,7 +43,7 @@ export const GraphPartDetails = ({ graphPart }: Props) => {
   } = useForm<FormData>({
     mode: "onBlur",
     reValidateMode: "onBlur",
-    resolver: zodResolver(formSchema()),
+    resolver: zodResolver(formSchema),
     defaultValues: {
       notes: graphPart.data.notes,
     },
@@ -104,7 +102,7 @@ export const GraphPartDetails = ({ graphPart }: Props) => {
           />
         </ListItem>
 
-        <Divider />
+        {isNode(graphPart) && exploreNodeTypes.includes(graphPart.type) && <Divider />}
 
         {isNodeType(graphPart, "question") && <QuestionDetails questionNode={graphPart} />}
         {isNodeType(graphPart, "answer") && <AnswerDetails answerNode={graphPart} />}
