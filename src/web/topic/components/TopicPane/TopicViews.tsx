@@ -3,12 +3,14 @@ import {
   AutoStories,
   ExpandLess,
   ExpandMore,
+  FilterAlt,
   School,
   TableChart,
   TableView,
 } from "@mui/icons-material";
 import {
   Collapse,
+  Divider,
   List,
   ListItem,
   ListItemButton,
@@ -17,6 +19,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
+import { FilterOptions } from "../../../view/components/FilterOptions/FilterOptions";
 import {
   useActiveArguedDiagramPart,
   useActiveTableProblemNode,
@@ -33,6 +36,7 @@ import { NestedListItemButton } from "./TopicViews.styles";
 export const TopicViews = () => {
   const [isClaimsListOpen, setIsClaimsListOpen] = useState(true);
   const [isProblemsListOpen, setIsProblemsListOpen] = useState(true);
+  const [isFilterOptionsOpen, setIsFilterOptionsOpen] = useState(true);
 
   const activeView = useActiveView();
   const activeTableProblemNode = useActiveTableProblemNode();
@@ -136,6 +140,24 @@ export const TopicViews = () => {
           ))}
         </List>
       </Collapse>
+      {(activeView === "topicDiagram" || activeView === "exploreDiagram") && (
+        <>
+          <Divider sx={{ marginY: 1 }} />
+
+          <ListItem key="5">
+            <ListItemButton onClick={() => setIsFilterOptionsOpen(!isFilterOptionsOpen)}>
+              <ListItemIcon>
+                <FilterAlt />
+              </ListItemIcon>
+              <ListItemText primary="Filter Options" />
+              {isFilterOptionsOpen ? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
+          </ListItem>
+          <Collapse in={isFilterOptionsOpen} timeout="auto" unmountOnExit>
+            <FilterOptions key={activeView} activeView={activeView} />
+          </Collapse>
+        </>
+      )}
     </List>
   );
 };

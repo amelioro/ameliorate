@@ -2,10 +2,12 @@ import { temporal } from "zundo";
 import { devtools, persist } from "zustand/middleware";
 import { createWithEqualityFn } from "zustand/traditional";
 
-import { claimRelationNames } from "../../../common/edge";
 import { useShowImpliedEdges } from "../../view/actionConfigStore";
-import { Diagram, filterHiddenComponents } from "../utils/diagram";
-import { Edge, Node, Score, buildNode } from "../utils/graph";
+import { useFilterOptions } from "../../view/navigateStore";
+import { applyFilter } from "../../view/utils/filter";
+import { Diagram } from "../utils/diagram";
+import { hideImpliedEdges } from "../utils/edge";
+import { Edge, Node, Score, buildNode, getRelevantEdges } from "../utils/graph";
 import { apiSyncer } from "./apiSyncerMiddleware";
 import { migrate } from "./migrate";
 import { getClaimTree, getExploreDiagram, getTopicDiagram } from "./utils";
@@ -75,20 +77,36 @@ export const useTopicStore = createWithEqualityFn<TopicStoreState>()(
 
 export const useTopicDiagram = (): Diagram => {
   const showImpliedEdges = useShowImpliedEdges();
+  const filterOptions = useFilterOptions("topicDiagram");
 
   return useTopicStore((state) => {
     const topicGraph = { nodes: state.nodes, edges: state.edges };
     const topicDiagram = getTopicDiagram(topicGraph);
-    const claimEdges = state.edges.filter((edge) => claimRelationNames.includes(edge.label));
-    return filterHiddenComponents(topicDiagram, claimEdges, showImpliedEdges);
+    const { nodes: filteredPrimaryNodes } = applyFilter(topicDiagram, filterOptions);
+
+    const nodes = filteredPrimaryNodes;
+
+    const relevantEdges = getRelevantEdges(nodes, topicGraph);
+    const edges = showImpliedEdges
+      ? relevantEdges
+      : hideImpliedEdges(relevantEdges, { nodes, edges: relevantEdges }, topicGraph);
+
+    return { nodes, edges, orientation: "DOWN", type: "topicDiagram" };
   });
 };
 
 export const useExploreDiagram = (): Diagram => {
+  const filterOptions = useFilterOptions("exploreDiagram");
+
   return useTopicStore((state) => {
     const topicGraph = { nodes: state.nodes, edges: state.edges };
     const exploreDiagram = getExploreDiagram(topicGraph);
-    return filterHiddenComponents(exploreDiagram, [], false); // no need to filter implied edges because explore diagram shouldn't have any
+    const { nodes: filteredPrimaryNodes } = applyFilter(exploreDiagram, filterOptions);
+
+    const nodes = filteredPrimaryNodes;
+
+    const edges = getRelevantEdges(nodes, topicGraph);
+    return { nodes, edges, orientation: "DOWN", type: "exploreDiagram" };
   });
 };
 

@@ -16,8 +16,8 @@ export const Perspectives = () => {
 
   return (
     <Autocomplete
-      multiple={true}
-      disableCloseOnSelect={true}
+      multiple
+      disableCloseOnSelect
       limitTags={10} // there's a ton of space in the drawer, so limiting isn't super necessary
       options={usernameOptions}
       value={perspectives}

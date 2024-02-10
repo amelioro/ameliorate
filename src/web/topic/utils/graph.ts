@@ -1,3 +1,4 @@
+import uniqBy from "lodash/uniqBy";
 import { v4 as uuid } from "uuid";
 
 import { RelationName } from "../../../common/edge";
@@ -182,4 +183,43 @@ export const getNodesComposedBy = (node: Node, topicGraph: Graph) => {
       .filter((node) => node.type === composedRelation.child)
       .map((node) => node);
   });
+};
+
+const findNodesRecursivelyFrom = (
+  fromNode: Node,
+  toDirection: RelationDirection,
+  graph: Graph,
+  labels?: RelationName[]
+): Node[] => {
+  const from = toDirection === "child" ? "source" : "target";
+  const to = toDirection === "child" ? "target" : "source";
+
+  const foundEdges = graph.edges.filter(
+    (edge) => edge[from] === fromNode.id && (!labels || labels.includes(edge.label))
+  );
+  const foundNodes = foundEdges.map((edge) => findNode(edge[to], graph.nodes));
+
+  if (foundNodes.length === 0) return [];
+
+  const furtherNodes = foundNodes.flatMap((node) =>
+    findNodesRecursivelyFrom(node, toDirection, graph, labels)
+  );
+
+  return uniqBy(foundNodes.concat(furtherNodes), (node) => node.id);
+};
+
+export const ancestors = (fromNode: Node, graph: Graph, labels?: RelationName[]) => {
+  return findNodesRecursivelyFrom(fromNode, "parent", graph, labels);
+};
+
+export const descendants = (fromNode: Node, graph: Graph, labels?: RelationName[]) => {
+  return findNodesRecursivelyFrom(fromNode, "child", graph, labels);
+};
+
+export const getRelevantEdges = (nodes: Node[], graph: Graph) => {
+  const nodeIds = nodes.map((node) => node.id);
+
+  return graph.edges.filter(
+    (edge) => nodeIds.includes(edge.target) && nodeIds.includes(edge.source)
+  );
 };

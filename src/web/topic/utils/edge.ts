@@ -1,7 +1,6 @@
 import { RelationName, claimRelationNames } from "../../../common/edge";
 import { NodeType, claimNodeTypes, exploreNodeTypes, nodeTypes } from "../../../common/node";
 import { hasClaims } from "./claim";
-import { Diagram } from "./diagram";
 import { Edge, Graph, Node, RelationDirection, findNode } from "./graph";
 import { children, components, parents } from "./node";
 
@@ -312,9 +311,15 @@ export const isEdgeImpliedByComposition = (edge: Edge, topicGraph: Graph) => {
 // We don't want users to apply scores and then never see them again due to an implied edge being
 // hidden. The button to show implied edges should reduce this pain, but maybe we need a better view
 // to reduce the need to hide implied edges?
-export const isEdgeImplied = (edge: Edge, displayDiagram: Diagram, claimEdges: Edge[]) => {
+const isEdgeImplied = (edge: Edge, graph: Graph, claimEdges: Edge[]) => {
   if (claimRelationNames.includes(edge.label)) return false; // claims can't be implied
   if (hasClaims(edge, claimEdges)) return false;
 
-  return isEdgeAShortcut(edge, displayDiagram) || isEdgeImpliedByComposition(edge, displayDiagram);
+  return isEdgeAShortcut(edge, graph) || isEdgeImpliedByComposition(edge, graph);
+};
+
+export const hideImpliedEdges = (edges: Edge[], displayGraph: Graph, topicGraph: Graph) => {
+  const claimEdges = topicGraph.edges.filter((edge) => claimRelationNames.includes(edge.label));
+
+  return edges.filter((edge) => !isEdgeImplied(edge, displayGraph, claimEdges));
 };

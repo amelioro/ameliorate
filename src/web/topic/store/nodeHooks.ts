@@ -121,3 +121,39 @@ export const useIsEdgeSelected = (nodeId: string) => {
 
   return useIsAnyGraphPartSelected(neighborEdges.map((edge) => edge.id));
 };
+
+export const useProblems = () => {
+  return useTopicStore((state) => state.nodes.filter((node) => node.type === "problem"), shallow);
+};
+
+export const useQuestions = () => {
+  return useTopicStore((state) => state.nodes.filter((node) => node.type === "question"), shallow);
+};
+
+export const useSolutions = (problemId?: string) => {
+  return useTopicStore((state) => {
+    if (!problemId) return [];
+
+    const allSolutions = state.nodes.filter((node) => node.type === "solution");
+    return allSolutions.filter((solution) =>
+      state.edges.find(
+        (edge) =>
+          edge.source === problemId && edge.label === "addresses" && edge.target === solution.id
+      )
+    );
+  }, shallow);
+};
+
+export const useCriteria = (problemId?: string) => {
+  return useTopicStore((state) => {
+    if (!problemId) return [];
+
+    const allCriteria = state.nodes.filter((node) => node.type === "criterion");
+    return allCriteria.filter((criterion) =>
+      state.edges.find(
+        (edge) =>
+          edge.source === problemId && edge.label === "criterionFor" && edge.target === criterion.id
+      )
+    );
+  }, shallow);
+};

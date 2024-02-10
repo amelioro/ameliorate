@@ -78,7 +78,7 @@ const onEdgeUpdate: OnEdgeUpdateFunc = (oldEdge, newConnection) => {
 };
 
 const DiagramWithoutProvider = (diagram: DiagramData) => {
-  const [topicNewlyLoaded, setTopicNewlyLoaded] = useState(false);
+  const [topicViewUpdated, setTopicViewUpdated] = useState(false);
   const [newNodeId, setNewNodeId] = useState<string | null>(null);
 
   const { sessionUser } = useSessionUser();
@@ -88,11 +88,13 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
 
   useEffect(() => {
     const unbindAdd = emitter.on("addNode", (node) => setNewNodeId(node.id));
-    const unbindLoad = emitter.on("loadedTopicData", () => setTopicNewlyLoaded(true));
+    const unbindLoad = emitter.on("loadedTopicData", () => setTopicViewUpdated(true));
+    const unbindFilter = emitter.on("changedFilter", () => setTopicViewUpdated(true));
 
     return () => {
       unbindAdd();
       unbindLoad();
+      unbindFilter();
     };
   }, []);
 
@@ -106,9 +108,9 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
     setNewNodeId(null);
   }
 
-  if (topicNewlyLoaded && hasNewLayout) {
+  if (topicViewUpdated && hasNewLayout) {
     fitViewForNodes(nodes);
-    setTopicNewlyLoaded(false);
+    setTopicViewUpdated(false);
   }
 
   if (hasNewLayout) setHasNewLayout(false);
