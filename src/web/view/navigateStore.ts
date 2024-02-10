@@ -3,9 +3,11 @@ import Router from "next/router";
 import { useEffect, useState } from "react";
 import { createWithEqualityFn } from "zustand/traditional";
 
+import { throwError } from "../../common/errorHandling";
 import { useGraphPart } from "../topic/store/graphPartHooks";
 import { useNode } from "../topic/store/nodeHooks";
 import { useTopicStore } from "../topic/store/store";
+import { FilterOptions } from "./utils/filter";
 
 type View = "topicDiagram" | "exploreDiagram" | "criteriaTable" | "claimTree";
 
@@ -18,6 +20,8 @@ interface NavigateStoreState {
 
   viewingClaimTree: boolean;
   activeClaimTreeId: string | null;
+
+  filterOptions: Partial<Record<View, FilterOptions>>;
 }
 
 const initialState: NavigateStoreState = {
@@ -29,6 +33,15 @@ const initialState: NavigateStoreState = {
 
   viewingClaimTree: false,
   activeClaimTreeId: null,
+
+  filterOptions: {
+    topicDiagram: {
+      type: "none",
+    },
+    exploreDiagram: {
+      type: "none",
+    },
+  },
 };
 
 const useNavigateStore = createWithEqualityFn<NavigateStoreState>()(
@@ -91,6 +104,19 @@ export const useActiveArguedDiagramPart = () => {
   return useGraphPart(activeClaimTreeId);
 };
 
+export const useFilterOptions = (view: View) => {
+  return useNavigateStore((state) => {
+    return (
+      state.filterOptions[view] ??
+      throwError(
+        "Filter options only exist for the topic or explore diagrams",
+        view,
+        state.filterOptions
+      )
+    );
+  });
+};
+
 // actions
 export const setSelected = (graphPartId: string | null) => {
   useNavigateStore.setState({ selectedGraphPartId: graphPartId });
@@ -138,6 +164,18 @@ export const closeClaimTree = () => {
 
 export const resetNavigation = () => {
   useNavigateStore.setState(initialState);
+};
+
+export const setFilterOptions = (filterOptions: FilterOptions) => {
+  const state = useNavigateStore.getState();
+  const activeView = getActiveView(state);
+
+  if (!state.filterOptions[activeView])
+    throw new Error("Filter options can only be set when viewing the topic or explore diagrams");
+
+  useNavigateStore.setState({
+    filterOptions: { ...state.filterOptions, [activeView]: filterOptions },
+  });
 };
 
 // helpers
