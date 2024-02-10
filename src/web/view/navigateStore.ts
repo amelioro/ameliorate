@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { createWithEqualityFn } from "zustand/traditional";
 
 import { throwError } from "../../common/errorHandling";
+import { emitter } from "../common/event";
 import { useGraphPart } from "../topic/store/graphPartHooks";
 import { useNode } from "../topic/store/nodeHooks";
 import { useTopicStore } from "../topic/store/store";
@@ -176,6 +177,8 @@ export const setFilterOptions = (filterOptions: FilterOptions) => {
   useNavigateStore.setState({
     filterOptions: { ...state.filterOptions, [activeView]: filterOptions },
   });
+
+  emitter.emit("changedFilter");
 };
 
 // helpers

@@ -7,6 +7,7 @@ interface Events {
   addNode: (node: Node) => void;
   errored: () => void;
   loadedTopicData: () => void;
+  changedFilter: () => void;
 }
 
 export const emitter = createNanoEvents<Events>();
