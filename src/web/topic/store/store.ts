@@ -85,7 +85,11 @@ export const useTopicDiagram = (): Diagram => {
 
     const { nodes: filteredPrimaryNodes } = applyStandardFilter(topicDiagram, filterOptions);
     const nodesAfterTypeFilter = applyNodeTypeFilter(filteredPrimaryNodes, filterOptions.nodeTypes);
-    const nodes = nodesAfterTypeFilter;
+
+    const contextualNodes = filterOptions.includeContextualNodes
+      ? getContextualNodes(nodesAfterTypeFilter, topicGraph, "topicDiagram")
+      : [];
+    const nodes = nodesAfterTypeFilter.concat(contextualNodes);
 
     const relevantEdges = getRelevantEdges(nodes, topicGraph);
     const edges = showImpliedEdges
@@ -106,7 +110,9 @@ export const useExploreDiagram = (): Diagram => {
     const { nodes: filteredPrimaryNodes } = applyStandardFilter(exploreDiagram, filterOptions);
     const nodesAfterTypeFilter = applyNodeTypeFilter(filteredPrimaryNodes, filterOptions.nodeTypes);
 
-    const contextualNodes = getContextualNodes(nodesAfterTypeFilter, topicGraph);
+    const contextualNodes = filterOptions.includeContextualNodes
+      ? getContextualNodes(nodesAfterTypeFilter, topicGraph, "exploreDiagram")
+      : [];
     const nodes = nodesAfterTypeFilter.concat(contextualNodes);
 
     const edges = getRelevantEdges(nodes, topicGraph);

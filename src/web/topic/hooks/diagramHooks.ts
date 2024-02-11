@@ -23,12 +23,7 @@ export const useLayoutedDiagram = (diagram: Diagram) => {
     setPrevDiagramHash(diagramHash);
 
     const layoutDiagram = async () => {
-      const newLayoutedNodes = await layout(
-        diagram.nodes,
-        diagram.edges,
-        diagram.orientation,
-        forceNodesIntoLayers
-      );
+      const newLayoutedNodes = await layout(diagram, forceNodesIntoLayers);
       setLayoutedNodes(newLayoutedNodes);
       setHasNewLayout(true);
     };

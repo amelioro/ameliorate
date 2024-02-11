@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Autocomplete, Stack, TextField } from "@mui/material";
+import { Autocomplete, FormControlLabel, Stack, Switch, TextField } from "@mui/material";
 import { useCallback, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -25,6 +25,7 @@ type ValidatedFormData = z.infer<typeof filterOptionsSchema>;
 // how to build this based on schemas? .merge doesn't work because `type` is overridden by the last schema's literal
 interface FormData {
   nodeTypes: NodeType[];
+  includeContextualNodes: boolean;
   type: FilterTypes;
   centralProblemId?: string;
   detail: "all" | "connectedToCriteria" | "none";
@@ -70,6 +71,7 @@ export const FilterOptions = ({ activeView }: Props) => {
     resolver: zodResolver(filterOptionsSchema),
     defaultValues: {
       nodeTypes: filterOptions.nodeTypes,
+      includeContextualNodes: filterOptions.includeContextualNodes,
       type: filterOptions.type,
       centralProblemId: getProp<string | undefined>(
         filterOptions,
@@ -175,6 +177,25 @@ export const FilterOptions = ({ activeView }: Props) => {
                 />
               )}
               size="small"
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="includeContextualNodes"
+          render={({ field }) => (
+            <FormControlLabel
+              label="Include Contextual Nodes"
+              control={
+                <Switch
+                  {...field}
+                  checked={field.value}
+                  onChange={(_event, checked) => {
+                    field.onChange(checked);
+                    submit();
+                  }}
+                />
+              }
             />
           )}
         />

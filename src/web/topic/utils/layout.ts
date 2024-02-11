@@ -1,7 +1,9 @@
 import ELK, { ElkNode, LayoutOptions } from "elkjs";
 
-import { NodeType, nodeTypes } from "../../../common/node";
+import { DiagramType } from "../../../common/diagram";
+import { NodeType, diagramNodeTypes, nodeTypes } from "../../../common/node";
 import { nodeHeightPx, nodeWidthPx } from "../components/Node/EditableNode.styles";
+import { Diagram } from "./diagram";
 import { type Edge, type Node, ancestors, descendants } from "./graph";
 
 export type Orientation = "DOWN" | "UP" | "RIGHT" | "LEFT";
@@ -59,7 +61,10 @@ const partitionOrders: { [type in NodeType]: string } = {
   custom: "null",
 };
 
-const calculatePartition = (node: Node, nodes: Node[], edges: Edge[]) => {
+const calculatePartition = (node: Node, nodes: Node[], edges: Edge[], type: DiagramType) => {
+  // don't partition contextual nodes, e.g. questions in the topic diagram
+  if (!diagramNodeTypes[type].includes(node.type)) return "null";
+
   const topicGraph = { nodes, edges };
 
   if (["effect", "benefit", "detriment"].includes(node.type)) {
@@ -94,12 +99,10 @@ export interface NodePosition {
   y: number;
 }
 
-export const layout = async (
-  nodes: Node[],
-  edges: Edge[],
-  orientation: Orientation,
-  partition: boolean
-): Promise<NodePosition[]> => {
+// TODO?: feels a little weird to have layout know Ameliorate domain, like DiagramType
+export const layout = async (diagram: Diagram, partition: boolean): Promise<NodePosition[]> => {
+  const { nodes, edges, orientation, type } = diagram;
+
   // see support layout options at https://www.eclipse.org/elk/reference/algorithms/org-eclipse-elk-layered.html
   const layoutOptions: LayoutOptions = {
     algorithm: "layered",
@@ -134,7 +137,7 @@ export const layout = async (
           // solutions, components, effects; we might be able to improve that situation by modeling
           // each problem within a nested node. Or maybe we could just do partitioning within
           // a special "problem context view" rather than in the main topic diagram view.
-          "elk.partitioning.partition": calculatePartition(node, nodes, edges),
+          "elk.partitioning.partition": calculatePartition(node, nodes, edges, type),
         },
       };
     }),

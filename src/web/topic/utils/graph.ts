@@ -1,9 +1,10 @@
 import uniqBy from "lodash/uniqBy";
 import { v4 as uuid } from "uuid";
 
+import { DiagramType } from "../../../common/diagram";
 import { RelationName } from "../../../common/edge";
 import { errorWithData } from "../../../common/errorHandling";
-import { NodeType } from "../../../common/node";
+import { NodeType, diagramNodeTypes } from "../../../common/node";
 import { composedRelations } from "./edge";
 import { FlowNodeType } from "./node";
 
@@ -224,12 +225,18 @@ export const getRelevantEdges = (nodes: Node[], graph: Graph) => {
   );
 };
 
-export const getContextualNodes = (nodes: Node[], graph: Graph) => {
+/**
+ * A node is contextual if it neighbors a node being displayed, and its node type is not primary for the current diagram.
+ *
+ * TODO?: contextual might be better off as defined per filter, rather than per diagram type?
+ */
+export const getContextualNodes = (nodes: Node[], graph: Graph, currentDiagram: DiagramType) => {
   const nodeIds = nodes.map((node) => node.id);
 
   return graph.nodes.filter(
     (node) =>
       !nodeIds.includes(node.id) &&
+      !diagramNodeTypes[currentDiagram].includes(node.type) &&
       graph.edges.some(
         (edge) =>
           (edge.source === node.id && nodeIds.includes(edge.target)) ||
