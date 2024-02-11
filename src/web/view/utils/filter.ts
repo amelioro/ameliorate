@@ -1,9 +1,16 @@
 import { z } from "zod";
 
 import { exploreRelationNames } from "../../../common/edge";
-import { nodeSchema } from "../../../common/node";
-import { Graph, ancestors, descendants, getRelevantEdges } from "../../topic/utils/graph";
+import { NodeType, nodeSchema, zNodeTypes } from "../../../common/node";
+import { Graph, Node, ancestors, descendants, getRelevantEdges } from "../../topic/utils/graph";
 import { children, parents } from "../../topic/utils/node";
+
+// general filter options
+const generalSchema = z.object({
+  nodeTypes: zNodeTypes.array(),
+});
+
+// standard filters
 
 // none filter
 const noneSchema = z.object({
@@ -147,7 +154,11 @@ export const exploreFilterTypes = ["none", "question"] as const;
 const filterTypes = [...topicFilterTypes, ...exploreFilterTypes] as const;
 export type FilterTypes = typeof filterTypes[number];
 
-export const applyFilter = (graph: Graph, options: FilterOptions): Graph => {
+export const applyNodeTypeFilter = (nodes: Node[], nodeTypes: NodeType[]) => {
+  return nodes.filter((node) => nodeTypes.includes(node.type));
+};
+
+export const applyStandardFilter = (graph: Graph, options: FilterOptions): Graph => {
   // TODO?: is there a way to use a Record<Type, ApplyMethod> rather than a big if-else?
   // while still maintaining that the applyMethod only accepts the correct options type
   if (options.type === "none") return graph;
@@ -157,10 +168,10 @@ export const applyFilter = (graph: Graph, options: FilterOptions): Graph => {
 };
 
 export const filterOptionsSchema = z.discriminatedUnion("type", [
-  noneSchema,
-  causesSchema,
-  solutionsSchema,
-  questionSchema,
+  generalSchema.merge(noneSchema),
+  generalSchema.merge(causesSchema),
+  generalSchema.merge(solutionsSchema),
+  generalSchema.merge(questionSchema),
 ]);
 
 export const filterSchemas = {

@@ -35,7 +35,7 @@ export const nodeTypes = [
   "custom",
 ] as const;
 
-const zNodeTypes = z.enum(nodeTypes);
+export const zNodeTypes = z.enum(nodeTypes);
 
 export type NodeType = z.infer<typeof zNodeTypes>;
 

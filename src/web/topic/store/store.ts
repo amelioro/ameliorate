@@ -4,10 +4,10 @@ import { createWithEqualityFn } from "zustand/traditional";
 
 import { useShowImpliedEdges } from "../../view/actionConfigStore";
 import { useFilterOptions } from "../../view/navigateStore";
-import { applyFilter } from "../../view/utils/filter";
+import { applyNodeTypeFilter, applyStandardFilter } from "../../view/utils/filter";
 import { Diagram } from "../utils/diagram";
 import { hideImpliedEdges } from "../utils/edge";
-import { Edge, Node, Score, buildNode, getRelevantEdges } from "../utils/graph";
+import { Edge, Node, Score, buildNode, getContextualNodes, getRelevantEdges } from "../utils/graph";
 import { apiSyncer } from "./apiSyncerMiddleware";
 import { migrate } from "./migrate";
 import { getClaimTree, getExploreDiagram, getTopicDiagram } from "./utils";
@@ -82,9 +82,10 @@ export const useTopicDiagram = (): Diagram => {
   return useTopicStore((state) => {
     const topicGraph = { nodes: state.nodes, edges: state.edges };
     const topicDiagram = getTopicDiagram(topicGraph);
-    const { nodes: filteredPrimaryNodes } = applyFilter(topicDiagram, filterOptions);
 
-    const nodes = filteredPrimaryNodes;
+    const { nodes: filteredPrimaryNodes } = applyStandardFilter(topicDiagram, filterOptions);
+    const nodesAfterTypeFilter = applyNodeTypeFilter(filteredPrimaryNodes, filterOptions.nodeTypes);
+    const nodes = nodesAfterTypeFilter;
 
     const relevantEdges = getRelevantEdges(nodes, topicGraph);
     const edges = showImpliedEdges
@@ -101,9 +102,12 @@ export const useExploreDiagram = (): Diagram => {
   return useTopicStore((state) => {
     const topicGraph = { nodes: state.nodes, edges: state.edges };
     const exploreDiagram = getExploreDiagram(topicGraph);
-    const { nodes: filteredPrimaryNodes } = applyFilter(exploreDiagram, filterOptions);
 
-    const nodes = filteredPrimaryNodes;
+    const { nodes: filteredPrimaryNodes } = applyStandardFilter(exploreDiagram, filterOptions);
+    const nodesAfterTypeFilter = applyNodeTypeFilter(filteredPrimaryNodes, filterOptions.nodeTypes);
+
+    const contextualNodes = getContextualNodes(nodesAfterTypeFilter, topicGraph);
+    const nodes = nodesAfterTypeFilter.concat(contextualNodes);
 
     const edges = getRelevantEdges(nodes, topicGraph);
     return { nodes, edges, orientation: "DOWN", type: "exploreDiagram" };

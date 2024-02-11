@@ -223,3 +223,17 @@ export const getRelevantEdges = (nodes: Node[], graph: Graph) => {
     (edge) => nodeIds.includes(edge.target) && nodeIds.includes(edge.source)
   );
 };
+
+export const getContextualNodes = (nodes: Node[], graph: Graph) => {
+  const nodeIds = nodes.map((node) => node.id);
+
+  return graph.nodes.filter(
+    (node) =>
+      !nodeIds.includes(node.id) &&
+      graph.edges.some(
+        (edge) =>
+          (edge.source === node.id && nodeIds.includes(edge.target)) ||
+          (edge.target === node.id && nodeIds.includes(edge.source))
+      )
+  );
+};
