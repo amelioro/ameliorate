@@ -2,8 +2,7 @@ import ELK, { ElkNode, LayoutOptions } from "elkjs";
 
 import { NodeType, nodeTypes } from "../../../common/node";
 import { nodeHeightPx, nodeWidthPx } from "../components/Node/EditableNode.styles";
-import { type Edge, type Node } from "./graph";
-import { children, parents } from "./node";
+import { type Edge, type Node, ancestors, descendants } from "./graph";
 
 export type Orientation = "DOWN" | "UP" | "RIGHT" | "LEFT";
 
@@ -64,10 +63,25 @@ const calculatePartition = (node: Node, nodes: Node[], edges: Edge[]) => {
   const topicGraph = { nodes, edges };
 
   if (["effect", "benefit", "detriment"].includes(node.type)) {
-    const hasProblemSource = parents(node, topicGraph).some((parent) => parent.type === "problem");
-    const hasSolutionTarget = children(node, topicGraph).some((child) => child.type === "solution");
-    if (hasProblemSource && hasSolutionTarget) return "null";
-    else if (hasProblemSource) return "0";
+    const nodeAncestors = ancestors(node, topicGraph);
+    const nodeDescendants = descendants(node, topicGraph);
+
+    const hasProblemAncestor = nodeAncestors.some((ancestor) => ancestor.type === "problem");
+    const hasCriterionAncestor = nodeAncestors.some((ancestor) => ancestor.type === "criterion");
+    const hasSolutionDescendant = nodeDescendants.some(
+      (descendant) => descendant.type === "solution"
+    );
+    const hasCriterionDescendant = nodeDescendants.some(
+      (descendant) => descendant.type === "criterion"
+    );
+
+    // this implementation seems solid but if it becomes unperformant, it might be good enough to
+    // just check if this node has a "created by" vs "creates" relation
+    const shouldBeAboveCriteria = hasProblemAncestor && !hasCriterionAncestor; // problem is _not_ through criterion
+    const shouldBeBelowCriteria = hasSolutionDescendant && !hasCriterionDescendant; // solution is _not_ through criterion
+
+    if (shouldBeAboveCriteria && shouldBeBelowCriteria) return "null";
+    else if (shouldBeAboveCriteria) return "0";
     else return "2";
   } else {
     return partitionOrders[node.type];
