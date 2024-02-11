@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { createWithEqualityFn } from "zustand/traditional";
 
 import { throwError } from "../../common/errorHandling";
+import { exploreNodeTypes, topicNodeTypes } from "../../common/node";
 import { emitter } from "../common/event";
 import { useGraphPart } from "../topic/store/graphPartHooks";
 import { useNode } from "../topic/store/nodeHooks";
@@ -37,9 +38,11 @@ const initialState: NavigateStoreState = {
 
   filterOptions: {
     topicDiagram: {
+      nodeTypes: topicNodeTypes,
       type: "none",
     },
     exploreDiagram: {
+      nodeTypes: exploreNodeTypes,
       type: "none",
     },
   },

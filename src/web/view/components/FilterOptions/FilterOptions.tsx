@@ -4,6 +4,7 @@ import { useCallback, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { NodeType, exploreNodeTypes, topicNodeTypes } from "../../../../common/node";
 import {
   useCriteria,
   useProblems,
@@ -23,6 +24,7 @@ type ValidatedFormData = z.infer<typeof filterOptionsSchema>;
 
 // how to build this based on schemas? .merge doesn't work because `type` is overridden by the last schema's literal
 interface FormData {
+  nodeTypes: NodeType[];
   type: FilterTypes;
   centralProblemId?: string;
   detail: "all" | "connectedToCriteria" | "none";
@@ -67,6 +69,7 @@ export const FilterOptions = ({ activeView }: Props) => {
   } = useForm<FormData>({
     resolver: zodResolver(filterOptionsSchema),
     defaultValues: {
+      nodeTypes: filterOptions.nodeTypes,
       type: filterOptions.type,
       centralProblemId: getProp<string | undefined>(
         filterOptions,
@@ -89,6 +92,7 @@ export const FilterOptions = ({ activeView }: Props) => {
     },
   });
 
+  const filterNodeTypes = activeView === "topicDiagram" ? topicNodeTypes : exploreNodeTypes;
   const filterTypes = activeView === "topicDiagram" ? topicFilterTypes : exploreFilterTypes;
 
   const type = watch("type");
@@ -147,6 +151,33 @@ export const FilterOptions = ({ activeView }: Props) => {
   return (
     <form style={{ padding: "8px" }}>
       <Stack spacing={1.5}>
+        <Controller
+          control={control}
+          name="nodeTypes"
+          render={({ field }) => (
+            <Autocomplete
+              {...field}
+              multiple
+              limitTags={2} // one line's worth
+              disableCloseOnSelect
+              options={filterNodeTypes}
+              onChange={(_event, values) => {
+                field.onChange([...values]);
+                submit();
+              }}
+              disableClearable
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Node Types"
+                  error={!!errors.nodeTypes}
+                  helperText={errors.nodeTypes?.message}
+                />
+              )}
+              size="small"
+            />
+          )}
+        />
         {/* GitHub code search found this example implementing Mui Autocomplete with react-hook-form https://github.com/GeoWerkstatt/ews-boda/blob/79cb1484db53170aace5a4b01ed1f9c56269f7c4/src/ClientApp/src/components/SchichtForm.js#L126-L153 */}
         <Controller
           control={control}
@@ -160,7 +191,7 @@ export const FilterOptions = ({ activeView }: Props) => {
                 submit(); // how otherwise to ensure submit happens on change of any form input?
               }}
               disableClearable
-              renderInput={(params) => <TextField {...params} label="Filter" />}
+              renderInput={(params) => <TextField {...params} label="Standard Filter" />}
               size="small"
             />
           )}

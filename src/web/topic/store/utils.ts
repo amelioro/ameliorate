@@ -1,7 +1,7 @@
-import { claimRelationNames, exploreRelationNames, topicRelationNames } from "../../../common/edge";
+import { claimRelationNames, topicRelationNames } from "../../../common/edge";
 import { claimNodeTypes, exploreNodeTypes, topicNodeTypes } from "../../../common/node";
 import { Diagram, getDiagramTitle } from "../utils/diagram";
-import { Graph } from "../utils/graph";
+import { Graph, getRelevantEdges } from "../utils/graph";
 import { PlaygroundTopic, StoreTopic, TopicStoreState } from "./store";
 
 export const getTopicTitle = (state: TopicStoreState) => {
@@ -19,13 +19,8 @@ export const getTopicDiagram = (topicGraph: Graph): Diagram => {
 };
 
 export const getExploreDiagram = (topicGraph: Graph): Diagram => {
-  const edges = topicGraph.edges.filter((edge) => exploreRelationNames.includes(edge.label));
-  const nodes = topicGraph.nodes.filter(
-    (node) =>
-      exploreNodeTypes.includes(node.type) ||
-      // show contextual nodes (e.g. problem node that a question points at)
-      edges.some((edge) => edge.source === node.id || edge.target === node.id)
-  );
+  const nodes = topicGraph.nodes.filter((node) => exploreNodeTypes.includes(node.type));
+  const edges = getRelevantEdges(nodes, topicGraph);
 
   return {
     nodes,
