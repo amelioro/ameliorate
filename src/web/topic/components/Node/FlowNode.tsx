@@ -45,7 +45,7 @@ export const FlowNode = (flowNode: NodeProps) => {
     : "normal";
 
   // avoids awkwardly allowing adding topic nodes to explore diagram when they won't show up after adding
-  const isContextual = topicNodeTypes.includes(node.type) && diagramContext.type !== "topicDiagram";
+  const isSecondary = topicNodeTypes.includes(node.type) && diagramContext.type !== "topicDiagram";
 
   useEffect(() => {
     // hack to avoid animation on first render; for some reason nodes were animating from position 0
@@ -60,7 +60,7 @@ export const FlowNode = (flowNode: NodeProps) => {
       <HoverBridgeDiv />
 
       {/* should this use react-flow's NodeToolbar? seems like it'd automatically handle positioning */}
-      {userCanEditTopicData && !isContextual && (
+      {userCanEditTopicData && !isSecondary && (
         <AddNodeButtonGroupParent
           fromNodeId={flowNode.id}
           fromNodeType={node.type}
@@ -80,7 +80,7 @@ export const FlowNode = (flowNode: NodeProps) => {
         <NodeHandle node={node} direction="child" orientation={diagramContext.orientation} />
       </motion.div>
 
-      {userCanEditTopicData && !isContextual && (
+      {userCanEditTopicData && !isSecondary && (
         <AddNodeButtonGroupChild
           fromNodeId={flowNode.id}
           fromNodeType={node.type}

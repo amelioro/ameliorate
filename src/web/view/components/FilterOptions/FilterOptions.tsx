@@ -1,5 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Autocomplete, FormControlLabel, Stack, Switch, TextField } from "@mui/material";
+import { Info } from "@mui/icons-material";
+import {
+  Autocomplete,
+  FormControlLabel,
+  IconButton,
+  Stack,
+  Switch,
+  TextField,
+  Tooltip,
+} from "@mui/material";
 import { useCallback, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -25,7 +34,7 @@ type ValidatedFormData = z.infer<typeof filterOptionsSchema>;
 // how to build this based on schemas? .merge doesn't work because `type` is overridden by the last schema's literal
 interface FormData {
   nodeTypes: NodeType[];
-  includeContextualNodes: boolean;
+  showSecondaryNeighbors: boolean;
   type: FilterTypes;
   centralProblemId?: string;
   detail: "all" | "connectedToCriteria" | "none";
@@ -71,7 +80,7 @@ export const FilterOptions = ({ activeView }: Props) => {
     resolver: zodResolver(filterOptionsSchema),
     defaultValues: {
       nodeTypes: filterOptions.nodeTypes,
-      includeContextualNodes: filterOptions.includeContextualNodes,
+      showSecondaryNeighbors: filterOptions.showSecondaryNeighbors,
       type: filterOptions.type,
       centralProblemId: getProp<string | undefined>(
         filterOptions,
@@ -182,10 +191,41 @@ export const FilterOptions = ({ activeView }: Props) => {
         />
         <Controller
           control={control}
-          name="includeContextualNodes"
+          name="showSecondaryNeighbors"
           render={({ field }) => (
             <FormControlLabel
-              label="Include Contextual Nodes"
+              label={
+                <Stack direction="row" alignItems="center">
+                  Show Secondary Neighbors
+                  <Tooltip
+                    title={
+                      <span>
+                        Secondary nodes are those that aren't the focus of the current diagram.
+                        <br />
+                        <br />
+                        For example, question and fact nodes are secondary in the topic diagram, and
+                        problem and solution nodes are secondary in the explore diagram.
+                      </span>
+                    }
+                    enterTouchDelay={0} // allow touch to immediately trigger
+                    leaveTouchDelay={Infinity} // touch-away to close on mobile, since message is long
+                  >
+                    <IconButton
+                      color="info"
+                      aria-label="Show Secondary Neighbors Info"
+                      sx={{
+                        // Don't make it look like clicking will do something, since it won't.
+                        // Using a button here is an attempt to make it accessible, since the tooltip will show
+                        // on focus.
+                        cursor: "default",
+                        alignSelf: "center",
+                      }}
+                    >
+                      <Info />
+                    </IconButton>
+                  </Tooltip>
+                </Stack>
+              }
               control={
                 <Switch
                   {...field}
