@@ -1,14 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Info } from "@mui/icons-material";
-import {
-  Autocomplete,
-  FormControlLabel,
-  IconButton,
-  Stack,
-  Switch,
-  TextField,
-  Tooltip,
-} from "@mui/material";
+import { Autocomplete, FormControlLabel, Stack, Switch, TextField, Tooltip } from "@mui/material";
 import { useCallback, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -37,6 +28,11 @@ interface FormData {
   showSecondaryNeighbors: boolean;
   type: FilterTypes;
   centralProblemId?: string;
+  showCauses: boolean;
+  showEffects: boolean;
+  showCriteria: boolean;
+  showSolutions: boolean;
+  centralSolutionId?: string;
   detail: "all" | "connectedToCriteria" | "none";
   solutions: string[];
   criteria: string[];
@@ -67,7 +63,8 @@ interface Props {
  */
 export const FilterOptions = ({ activeView }: Props) => {
   const filterOptions = useFilterOptions(activeView);
-  const problems = useProblems(); // could consider selecting causes here, but probably don't want causes as options for solutions filter
+  const problems = useProblems(); // could consider selecting causes here, but probably don't want causes as options for tradeoffs filter
+  const allSolutions = useSolutions();
   const questions = useQuestions();
 
   const {
@@ -86,6 +83,15 @@ export const FilterOptions = ({ activeView }: Props) => {
         filterOptions,
         "centralProblemId",
         problems[0]?.id
+      ),
+      showCauses: getProp<boolean>(filterOptions, "showCauses", true),
+      showEffects: getProp<boolean>(filterOptions, "showEffects", true),
+      showCriteria: getProp<boolean>(filterOptions, "showCriteria", false),
+      showSolutions: getProp<boolean>(filterOptions, "showSolutions", false),
+      centralSolutionId: getProp<string | undefined>(
+        filterOptions,
+        "centralSolutionId",
+        allSolutions[0]?.id
       ),
       detail: getProp<"all" | "connectedToCriteria" | "none">(filterOptions, "detail", "all"),
       solutions: getProp<string[]>(filterOptions, "solutions", []),
@@ -121,11 +127,21 @@ export const FilterOptions = ({ activeView }: Props) => {
     return value ?? centralProblemOptions[0];
   }, [centralProblemId, centralProblemOptions, setValue]);
 
-  const solutions = useSolutions(centralProblemId);
+  const centralSolutionId = watch("centralSolutionId");
+  const centralSolutionOptions = useMemo(() => {
+    return allSolutions.map((solution) => ({ label: solution.data.label, id: solution.id }));
+  }, [allSolutions]);
+  const centralSolutionValue = useMemo(() => {
+    const value = centralSolutionOptions.find((option) => option.id === centralSolutionId);
+    if (centralSolutionId && !value) setValue("centralSolutionId", centralSolutionOptions[0]?.id); // if node is deleted, make sure we don't retain the deleted id to make the form think it's valid
+    return value ?? centralSolutionOptions[0];
+  }, [centralSolutionId, centralSolutionOptions, setValue]);
+
+  const problemSolutions = useSolutions(centralProblemId);
   const selectedSolutions = watch("solutions");
   const solutionOptions = useMemo(() => {
-    return solutions.map((solution) => ({ label: solution.data.label, id: solution.id }));
-  }, [solutions]);
+    return problemSolutions.map((solution) => ({ label: solution.data.label, id: solution.id }));
+  }, [problemSolutions]);
   const solutionValues = useMemo(() => {
     return solutionOptions.filter((option) => selectedSolutions.includes(option.id));
   }, [selectedSolutions, solutionOptions]);
@@ -158,7 +174,7 @@ export const FilterOptions = ({ activeView }: Props) => {
     })();
   }, [handleSubmit]);
 
-  // TODO?: can form onBlur be used to submit when any input changes?
+  // TODO?: is there a way to submit when any input changes, without using onChange for each individual component?
   return (
     <form style={{ padding: "8px" }}>
       <Stack spacing={1.5}>
@@ -196,7 +212,7 @@ export const FilterOptions = ({ activeView }: Props) => {
             <FormControlLabel
               label={
                 <Stack direction="row" alignItems="center">
-                  Show Secondary Neighbors
+                  Show
                   <Tooltip
                     title={
                       <span>
@@ -210,20 +226,13 @@ export const FilterOptions = ({ activeView }: Props) => {
                     enterTouchDelay={0} // allow touch to immediately trigger
                     leaveTouchDelay={Infinity} // touch-away to close on mobile, since message is long
                   >
-                    <IconButton
-                      color="info"
-                      aria-label="Show Secondary Neighbors Info"
-                      sx={{
-                        // Don't make it look like clicking will do something, since it won't.
-                        // Using a button here is an attempt to make it accessible, since the tooltip will show
-                        // on focus.
-                        cursor: "default",
-                        alignSelf: "center",
-                      }}
+                    <span
+                      style={{ textDecoration: "underline", marginLeft: "4px", marginRight: "4px" }}
                     >
-                      <Info />
-                    </IconButton>
+                      Secondary
+                    </span>
                   </Tooltip>
+                  Neighbors
                 </Stack>
               }
               control={
@@ -293,6 +302,126 @@ export const FilterOptions = ({ activeView }: Props) => {
             )}
           />
         )}
+        {"showCauses" in filterSchemas[type].shape && (
+          <Controller
+            control={control}
+            name="showCauses"
+            render={({ field }) => (
+              <FormControlLabel
+                label="Show Causes"
+                control={
+                  <Switch
+                    {...field}
+                    checked={field.value}
+                    onChange={(_event, checked) => {
+                      field.onChange(checked);
+                      submit();
+                    }}
+                  />
+                }
+              />
+            )}
+          />
+        )}
+        {"showEffects" in filterSchemas[type].shape && (
+          <Controller
+            control={control}
+            name="showEffects"
+            render={({ field }) => (
+              <FormControlLabel
+                label="Show Effects"
+                control={
+                  <Switch
+                    {...field}
+                    checked={field.value}
+                    onChange={(_event, checked) => {
+                      field.onChange(checked);
+                      submit();
+                    }}
+                  />
+                }
+              />
+            )}
+          />
+        )}
+        {"showCriteria" in filterSchemas[type].shape && (
+          <Controller
+            control={control}
+            name="showCriteria"
+            render={({ field }) => (
+              <FormControlLabel
+                label="Show Criteria"
+                control={
+                  <Switch
+                    {...field}
+                    checked={field.value}
+                    onChange={(_event, checked) => {
+                      field.onChange(checked);
+                      submit();
+                    }}
+                  />
+                }
+              />
+            )}
+          />
+        )}
+        {"showSolutions" in filterSchemas[type].shape && (
+          <Controller
+            control={control}
+            name="showSolutions"
+            render={({ field }) => (
+              <FormControlLabel
+                label="Show Solutions"
+                control={
+                  <Switch
+                    {...field}
+                    checked={field.value}
+                    onChange={(_event, checked) => {
+                      field.onChange(checked);
+                      submit();
+                    }}
+                  />
+                }
+              />
+            )}
+          />
+        )}
+        {"centralSolutionId" in filterSchemas[type].shape && (
+          <Controller
+            control={control}
+            name="centralSolutionId"
+            render={({ field }) => (
+              <Autocomplete
+                {...field}
+                options={centralSolutionOptions}
+                value={centralSolutionValue}
+                onChange={(_event, value) => {
+                  if (!value) return;
+                  field.onChange(value.id);
+                  submit();
+                }}
+                disableClearable={centralSolutionValue !== undefined}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Central Solution"
+                    error={!!errors.centralSolutionId}
+                    helperText={errors.centralSolutionId?.message}
+                  />
+                )}
+                // required to avoid duplicate key error if two nodes have the same text
+                renderOption={(props, option) => {
+                  return (
+                    <li {...props} key={option.id}>
+                      {option.label}
+                    </li>
+                  );
+                }}
+                size="small"
+              />
+            )}
+          />
+        )}
         {"detail" in typeSchemaShape && (
           <Controller
             control={control}
@@ -321,6 +450,7 @@ export const FilterOptions = ({ activeView }: Props) => {
               <Autocomplete
                 {...field}
                 multiple
+                limitTags={1}
                 disableCloseOnSelect
                 options={solutionOptions}
                 value={solutionValues}
@@ -357,6 +487,7 @@ export const FilterOptions = ({ activeView }: Props) => {
               <Autocomplete
                 {...field}
                 multiple
+                limitTags={1}
                 disableCloseOnSelect
                 options={criteriaOptions}
                 value={criteriaValues}

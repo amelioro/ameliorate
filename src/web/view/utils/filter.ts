@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { exploreRelationNames } from "../../../common/edge";
+import { RelationName, exploreRelationNames } from "../../../common/edge";
 import { NodeType, nodeSchema, zNodeTypes } from "../../../common/node";
 import { Graph, Node, ancestors, descendants, getRelevantEdges } from "../../topic/utils/graph";
 import { children, parents } from "../../topic/utils/node";
@@ -20,29 +20,80 @@ const noneSchema = z.object({
 
 /**
  * Description:
- * - Show all recursive "causes" child relations from the central problem
+ * - If there are problems, show each problems' immediate causes, effects, solutions
+ * - Otherwise show whole diagram
  *
  * Use cases:
- * - Brainstorm causes
+ * - Give a quick overview of the topic
  */
-const applyCausesFilter = (graph: Graph, filterOptions: CausesOptions) => {
-  const centralProblem = graph.nodes.find((node) => node.id === filterOptions.centralProblemId);
-  if (!centralProblem) return graph;
+const applyHighLevelFilter = (graph: Graph, _filterOptions: HighLevelOptions) => {
+  const problems = graph.nodes.filter((node) => node.type === "problem");
+  if (problems.length === 0) return graph;
 
-  const causes = descendants(centralProblem, graph, ["causes"]);
+  const details = problems.flatMap((problem) =>
+    children(problem, graph).filter((child) =>
+      ["cause", "effect", "benefit", "detriment", "solution"].includes(child.type)
+    )
+  );
 
-  const nodes = [centralProblem, ...causes];
+  const nodes = [...problems, ...details];
   const edges = getRelevantEdges(nodes, graph);
 
   return { nodes, edges };
 };
 
-const causesSchema = z.object({
-  type: z.literal("causes"),
-  centralProblemId: nodeSchema.shape.id,
+const highLevelSchema = z.object({
+  type: z.literal("highLevel"),
 });
 
-type CausesOptions = z.infer<typeof causesSchema>;
+type HighLevelOptions = z.infer<typeof highLevelSchema>;
+
+/**
+ * Description:
+ * - Based on options, show recursive causes, effects, criteria, and/or solutions to the central problem
+ *
+ * Options:
+ * - show causes (default true)
+ * - show effects (default true)
+ * - show criteria (default false)
+ * - show solutions (default false)
+ *
+ * Use cases:
+ * - Brainstorm causes
+ * - Brainstorm effects
+ * - Brainstorm criteria from causes/effects
+ * - Brainstorm solutions
+ */
+const applyProblemFilter = (graph: Graph, filterOptions: ProblemOptions) => {
+  const centralProblem = graph.nodes.find((node) => node.id === filterOptions.centralProblemId);
+  if (!centralProblem) return graph;
+
+  const detailEdges: RelationName[] = [];
+  /* eslint-disable functional/immutable-data */
+  if (filterOptions.showCauses) detailEdges.push("causes");
+  if (filterOptions.showEffects) detailEdges.push("createdBy");
+  if (filterOptions.showCriteria) detailEdges.push("criterionFor");
+  if (filterOptions.showSolutions) detailEdges.push("addresses");
+  /* eslint-enable functional/immutable-data */
+
+  const details = descendants(centralProblem, graph, detailEdges);
+
+  const nodes = [centralProblem, ...details];
+  const edges = getRelevantEdges(nodes, graph);
+
+  return { nodes, edges };
+};
+
+const problemSchema = z.object({
+  type: z.literal("problem"),
+  centralProblemId: nodeSchema.shape.id,
+  showCauses: z.boolean(),
+  showEffects: z.boolean(),
+  showCriteria: z.boolean(),
+  showSolutions: z.boolean(),
+});
+
+type ProblemOptions = z.infer<typeof problemSchema>;
 
 /**
  * Description:
@@ -57,10 +108,9 @@ type CausesOptions = z.infer<typeof causesSchema>;
  *
  * Use cases:
  * - Brainstorm solutions
- * - Detail a solution
  * - Compare solutions
  */
-const applySolutionsFilter = (graph: Graph, filterOptions: SolutionsOptions) => {
+const applyTradeoffsFilter = (graph: Graph, filterOptions: TradeoffsOptions) => {
   const centralProblem = graph.nodes.find((node) => node.id === filterOptions.centralProblemId);
   if (!centralProblem) return graph;
 
@@ -108,20 +158,46 @@ const applySolutionsFilter = (graph: Graph, filterOptions: SolutionsOptions) => 
   return { nodes, edges };
 };
 
-const solutionsSchema = z.object({
-  type: z.literal("solutions"),
+const tradeoffsSchema = z.object({
+  type: z.literal("tradeoffs"),
   centralProblemId: nodeSchema.shape.id,
   detail: z.union([z.literal("all"), z.literal("connectedToCriteria"), z.literal("none")]),
   solutions: z.array(nodeSchema.shape.id),
   criteria: z.array(nodeSchema.shape.id),
 });
 
-type SolutionsOptions = z.infer<typeof solutionsSchema>;
+type TradeoffsOptions = z.infer<typeof tradeoffsSchema>;
+
+/**
+ * Description:
+ * - Show solution with all components and effects
+ *
+ * Use cases:
+ * - Detail a solution
+ */
+const applySolutionFilter = (graph: Graph, filterOptions: SolutionOptions) => {
+  const centralSolution = graph.nodes.find((node) => node.id === filterOptions.centralSolutionId);
+  if (!centralSolution) return graph;
+
+  const details = ancestors(centralSolution, graph, ["has", "creates"]);
+
+  const nodes = [centralSolution, ...details];
+  const edges = getRelevantEdges(nodes, graph);
+
+  return { nodes, edges };
+};
+
+const solutionSchema = z.object({
+  type: z.literal("solution"),
+  centralSolutionId: nodeSchema.shape.id,
+});
+
+type SolutionOptions = z.infer<typeof solutionSchema>;
 
 /**
  * Description:
  * - Show question, depth-1 parents for context, all recursive child questions, answers, facts,
- * solutions
+ * sources.
  *
  * Use cases:
  * - Explore a question
@@ -149,7 +225,7 @@ type QuestionOptions = z.infer<typeof questionSchema>;
 // filter methods
 
 // TODO?: is there a way to type-guarantee that these values come from the defined schemas?
-export const topicFilterTypes = ["none", "causes", "solutions"] as const;
+export const topicFilterTypes = ["none", "highLevel", "problem", "tradeoffs", "solution"] as const;
 export const exploreFilterTypes = ["none", "question"] as const;
 
 const filterTypes = [...topicFilterTypes, ...exploreFilterTypes] as const;
@@ -163,22 +239,28 @@ export const applyStandardFilter = (graph: Graph, options: FilterOptions): Graph
   // TODO?: is there a way to use a Record<Type, ApplyMethod> rather than a big if-else?
   // while still maintaining that the applyMethod only accepts the correct options type
   if (options.type === "none") return graph;
-  else if (options.type === "causes") return applyCausesFilter(graph, options);
-  else if (options.type === "solutions") return applySolutionsFilter(graph, options);
+  else if (options.type === "highLevel") return applyHighLevelFilter(graph, options);
+  else if (options.type === "problem") return applyProblemFilter(graph, options);
+  else if (options.type === "tradeoffs") return applyTradeoffsFilter(graph, options);
+  else if (options.type === "solution") return applySolutionFilter(graph, options);
   else return applyQuestionFilter(graph, options);
 };
 
 export const filterOptionsSchema = z.discriminatedUnion("type", [
   generalSchema.merge(noneSchema),
-  generalSchema.merge(causesSchema),
-  generalSchema.merge(solutionsSchema),
+  generalSchema.merge(highLevelSchema),
+  generalSchema.merge(problemSchema),
+  generalSchema.merge(tradeoffsSchema),
+  generalSchema.merge(solutionSchema),
   generalSchema.merge(questionSchema),
 ]);
 
 export const filterSchemas = {
   none: noneSchema,
-  causes: causesSchema,
-  solutions: solutionsSchema,
+  highLevel: highLevelSchema,
+  problem: problemSchema,
+  tradeoffs: tradeoffsSchema,
+  solution: solutionSchema,
   question: questionSchema,
 };
 

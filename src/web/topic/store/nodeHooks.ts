@@ -132,9 +132,9 @@ export const useQuestions = () => {
 
 export const useSolutions = (problemId?: string) => {
   return useTopicStore((state) => {
-    if (!problemId) return [];
-
     const allSolutions = state.nodes.filter((node) => node.type === "solution");
+    if (!problemId) return allSolutions;
+
     return allSolutions.filter((solution) =>
       state.edges.find(
         (edge) =>

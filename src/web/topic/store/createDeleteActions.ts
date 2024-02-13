@@ -1,6 +1,7 @@
 import { createDraft, finishDraft } from "immer";
 
 import { errorWithData } from "../../../common/errorHandling";
+import { topicNodeTypes } from "../../../common/node";
 import { emitter } from "../../common/event";
 import { getUnrestrictedEditing } from "../../view/actionConfigStore";
 import { setSelected } from "../../view/navigateStore";
@@ -192,8 +193,10 @@ const createEdgeAndImpliedEdges = (
   topicGraph.edges.push(newEdge);
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  // we're going to keep the assumption for now that edges to edges won't imply other edges
-  if (isNode(parent) && isNode(child)) {
+  // don't create implied edges if the node being added is not in the topic diagram
+  // e.g. when adding a question to the solution component, don't also link the solution to that
+  // question, because it's not as relevant
+  if (topicNodeTypes.includes(parent.type) && topicNodeTypes.includes(child.type)) {
     // indirectly recurses by calling this method after determining which implied edges to create
     // note: modifies topicGraph.edges through `state` (via the line above)
     createEdgesImpliedByComposition(topicGraph, parent, child, relation);
