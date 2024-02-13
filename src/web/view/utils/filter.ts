@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { exploreRelationNames } from "../../../common/edge";
+import { RelationName, exploreRelationNames } from "../../../common/edge";
 import { NodeType, nodeSchema, zNodeTypes } from "../../../common/node";
 import { Graph, Node, ancestors, descendants, getRelevantEdges } from "../../topic/utils/graph";
 import { children, parents } from "../../topic/utils/node";
@@ -20,29 +20,50 @@ const noneSchema = z.object({
 
 /**
  * Description:
- * - Show all recursive "causes" child relations from the central problem
+ * - Based on options, show recursive causes, effects, criteria, and/or solutions to the central problem
+ *
+ * Options:
+ * - show causes (default true)
+ * - show effects (default true)
+ * - show criteria (default false)
+ * - show solutions (default false)
  *
  * Use cases:
  * - Brainstorm causes
+ * - Brainstorm effects
+ * - Brainstorm criteria from causes/effects
+ * - Brainstorm solutions
  */
-const applyCausesFilter = (graph: Graph, filterOptions: CausesOptions) => {
+const applyProblemFilter = (graph: Graph, filterOptions: ProblemOptions) => {
   const centralProblem = graph.nodes.find((node) => node.id === filterOptions.centralProblemId);
   if (!centralProblem) return graph;
 
-  const causes = descendants(centralProblem, graph, ["causes"]);
+  const detailEdges: RelationName[] = [];
+  /* eslint-disable functional/immutable-data */
+  if (filterOptions.showCauses) detailEdges.push("causes");
+  if (filterOptions.showEffects) detailEdges.push("createdBy");
+  if (filterOptions.showCriteria) detailEdges.push("criterionFor");
+  if (filterOptions.showSolutions) detailEdges.push("addresses");
+  /* eslint-enable functional/immutable-data */
 
-  const nodes = [centralProblem, ...causes];
+  const details = descendants(centralProblem, graph, detailEdges);
+
+  const nodes = [centralProblem, ...details];
   const edges = getRelevantEdges(nodes, graph);
 
   return { nodes, edges };
 };
 
-const causesSchema = z.object({
-  type: z.literal("causes"),
+const problemSchema = z.object({
+  type: z.literal("problem"),
   centralProblemId: nodeSchema.shape.id,
+  showCauses: z.boolean(),
+  showEffects: z.boolean(),
+  showCriteria: z.boolean(),
+  showSolutions: z.boolean(),
 });
 
-type CausesOptions = z.infer<typeof causesSchema>;
+type ProblemOptions = z.infer<typeof problemSchema>;
 
 /**
  * Description:
@@ -174,7 +195,7 @@ type QuestionOptions = z.infer<typeof questionSchema>;
 // filter methods
 
 // TODO?: is there a way to type-guarantee that these values come from the defined schemas?
-export const topicFilterTypes = ["none", "causes", "tradeoffs", "solution"] as const;
+export const topicFilterTypes = ["none", "problem", "tradeoffs", "solution"] as const;
 export const exploreFilterTypes = ["none", "question"] as const;
 
 const filterTypes = [...topicFilterTypes, ...exploreFilterTypes] as const;
@@ -188,7 +209,7 @@ export const applyStandardFilter = (graph: Graph, options: FilterOptions): Graph
   // TODO?: is there a way to use a Record<Type, ApplyMethod> rather than a big if-else?
   // while still maintaining that the applyMethod only accepts the correct options type
   if (options.type === "none") return graph;
-  else if (options.type === "causes") return applyCausesFilter(graph, options);
+  else if (options.type === "problem") return applyProblemFilter(graph, options);
   else if (options.type === "tradeoffs") return applyTradeoffsFilter(graph, options);
   else if (options.type === "solution") return applySolutionFilter(graph, options);
   else return applyQuestionFilter(graph, options);
@@ -196,7 +217,7 @@ export const applyStandardFilter = (graph: Graph, options: FilterOptions): Graph
 
 export const filterOptionsSchema = z.discriminatedUnion("type", [
   generalSchema.merge(noneSchema),
-  generalSchema.merge(causesSchema),
+  generalSchema.merge(problemSchema),
   generalSchema.merge(tradeoffsSchema),
   generalSchema.merge(solutionSchema),
   generalSchema.merge(questionSchema),
@@ -204,7 +225,7 @@ export const filterOptionsSchema = z.discriminatedUnion("type", [
 
 export const filterSchemas = {
   none: noneSchema,
-  causes: causesSchema,
+  problem: problemSchema,
   tradeoffs: tradeoffsSchema,
   solution: solutionSchema,
   question: questionSchema,

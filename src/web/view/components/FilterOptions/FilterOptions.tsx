@@ -28,6 +28,10 @@ interface FormData {
   showSecondaryNeighbors: boolean;
   type: FilterTypes;
   centralProblemId?: string;
+  showCauses: boolean;
+  showEffects: boolean;
+  showCriteria: boolean;
+  showSolutions: boolean;
   centralSolutionId?: string;
   detail: "all" | "connectedToCriteria" | "none";
   solutions: string[];
@@ -80,6 +84,10 @@ export const FilterOptions = ({ activeView }: Props) => {
         "centralProblemId",
         problems[0]?.id
       ),
+      showCauses: getProp<boolean>(filterOptions, "showCauses", true),
+      showEffects: getProp<boolean>(filterOptions, "showEffects", true),
+      showCriteria: getProp<boolean>(filterOptions, "showCriteria", false),
+      showSolutions: getProp<boolean>(filterOptions, "showSolutions", false),
       centralSolutionId: getProp<string | undefined>(
         filterOptions,
         "centralSolutionId",
@@ -290,6 +298,90 @@ export const FilterOptions = ({ activeView }: Props) => {
                   );
                 }}
                 size="small"
+              />
+            )}
+          />
+        )}
+        {"showCauses" in filterSchemas[type].shape && (
+          <Controller
+            control={control}
+            name="showCauses"
+            render={({ field }) => (
+              <FormControlLabel
+                label="Show Causes"
+                control={
+                  <Switch
+                    {...field}
+                    checked={field.value}
+                    onChange={(_event, checked) => {
+                      field.onChange(checked);
+                      submit();
+                    }}
+                  />
+                }
+              />
+            )}
+          />
+        )}
+        {"showEffects" in filterSchemas[type].shape && (
+          <Controller
+            control={control}
+            name="showEffects"
+            render={({ field }) => (
+              <FormControlLabel
+                label="Show Effects"
+                control={
+                  <Switch
+                    {...field}
+                    checked={field.value}
+                    onChange={(_event, checked) => {
+                      field.onChange(checked);
+                      submit();
+                    }}
+                  />
+                }
+              />
+            )}
+          />
+        )}
+        {"showCriteria" in filterSchemas[type].shape && (
+          <Controller
+            control={control}
+            name="showCriteria"
+            render={({ field }) => (
+              <FormControlLabel
+                label="Show Criteria"
+                control={
+                  <Switch
+                    {...field}
+                    checked={field.value}
+                    onChange={(_event, checked) => {
+                      field.onChange(checked);
+                      submit();
+                    }}
+                  />
+                }
+              />
+            )}
+          />
+        )}
+        {"showSolutions" in filterSchemas[type].shape && (
+          <Controller
+            control={control}
+            name="showSolutions"
+            render={({ field }) => (
+              <FormControlLabel
+                label="Show Solutions"
+                control={
+                  <Switch
+                    {...field}
+                    checked={field.value}
+                    onChange={(_event, checked) => {
+                      field.onChange(checked);
+                      submit();
+                    }}
+                  />
+                }
               />
             )}
           />
