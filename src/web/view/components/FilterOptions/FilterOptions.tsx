@@ -158,7 +158,7 @@ export const FilterOptions = ({ activeView }: Props) => {
     })();
   }, [handleSubmit]);
 
-  // TODO?: can form onBlur be used to submit when any input changes?
+  // TODO?: is there a way to submit when any input changes, without using onChange for each individual component?
   return (
     <form style={{ padding: "8px" }}>
       <Stack spacing={1.5}>
