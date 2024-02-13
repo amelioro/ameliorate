@@ -321,6 +321,7 @@ export const FilterOptions = ({ activeView }: Props) => {
               <Autocomplete
                 {...field}
                 multiple
+                limitTags={1}
                 disableCloseOnSelect
                 options={solutionOptions}
                 value={solutionValues}
@@ -357,6 +358,7 @@ export const FilterOptions = ({ activeView }: Props) => {
               <Autocomplete
                 {...field}
                 multiple
+                limitTags={1}
                 disableCloseOnSelect
                 options={criteriaOptions}
                 value={criteriaValues}
