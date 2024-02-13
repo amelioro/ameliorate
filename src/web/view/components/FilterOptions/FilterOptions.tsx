@@ -1,14 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Info } from "@mui/icons-material";
-import {
-  Autocomplete,
-  FormControlLabel,
-  IconButton,
-  Stack,
-  Switch,
-  TextField,
-  Tooltip,
-} from "@mui/material";
+import { Autocomplete, FormControlLabel, Stack, Switch, TextField, Tooltip } from "@mui/material";
 import { useCallback, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -196,7 +187,7 @@ export const FilterOptions = ({ activeView }: Props) => {
             <FormControlLabel
               label={
                 <Stack direction="row" alignItems="center">
-                  Show Secondary Neighbors
+                  Show
                   <Tooltip
                     title={
                       <span>
@@ -210,20 +201,13 @@ export const FilterOptions = ({ activeView }: Props) => {
                     enterTouchDelay={0} // allow touch to immediately trigger
                     leaveTouchDelay={Infinity} // touch-away to close on mobile, since message is long
                   >
-                    <IconButton
-                      color="info"
-                      aria-label="Show Secondary Neighbors Info"
-                      sx={{
-                        // Don't make it look like clicking will do something, since it won't.
-                        // Using a button here is an attempt to make it accessible, since the tooltip will show
-                        // on focus.
-                        cursor: "default",
-                        alignSelf: "center",
-                      }}
+                    <span
+                      style={{ textDecoration: "underline", marginLeft: "4px", marginRight: "4px" }}
                     >
-                      <Info />
-                    </IconButton>
+                      Secondary
+                    </span>
                   </Tooltip>
+                  Neighbors
                 </Stack>
               }
               control={
