@@ -8,7 +8,7 @@ interface ActionConfigStoreState {
 }
 
 const initialState: ActionConfigStoreState = {
-  showImpliedEdges: true,
+  showImpliedEdges: false,
   unrestrictedEditing: false,
   forceNodesIntoLayers: true,
 };

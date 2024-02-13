@@ -8,7 +8,7 @@ import { children, parents } from "../../topic/utils/node";
 // general filter options
 const generalSchema = z.object({
   nodeTypes: zNodeTypes.array(),
-  includeContextualNodes: z.boolean(),
+  showSecondaryNeighbors: z.boolean(),
 });
 
 // standard filters

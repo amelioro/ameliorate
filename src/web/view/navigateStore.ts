@@ -39,12 +39,12 @@ const initialState: NavigateStoreState = {
   filterOptions: {
     topicDiagram: {
       nodeTypes: topicNodeTypes,
-      includeContextualNodes: false,
+      showSecondaryNeighbors: false,
       type: "none",
     },
     exploreDiagram: {
       nodeTypes: exploreNodeTypes,
-      includeContextualNodes: true,
+      showSecondaryNeighbors: true,
       type: "none",
     },
   },

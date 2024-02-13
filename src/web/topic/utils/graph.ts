@@ -19,7 +19,7 @@ export interface Node {
     /**
      * Distinguished from `type` because this is explicitly open user input, and `type` can maintain stricter typing
      */
-    customType?: string;
+    customType: string | null;
     label: string;
     notes: string;
     arguedDiagramPartId?: string;
@@ -35,7 +35,7 @@ export interface ProblemNode extends Node {
 
 interface BuildProps {
   id?: string;
-  customType?: string;
+  customType?: string | null;
   label?: string;
   notes?: string;
   type: FlowNodeType;
@@ -43,7 +43,7 @@ interface BuildProps {
 }
 export const buildNode = ({
   id,
-  customType,
+  customType = null,
   label,
   notes,
   type,
@@ -226,11 +226,12 @@ export const getRelevantEdges = (nodes: Node[], graph: Graph) => {
 };
 
 /**
- * A node is contextual if it neighbors a node being displayed, and its node type is not primary for the current diagram.
+ * Secondary nodes are those that aren't the focus of the current diagram.
  *
- * TODO?: contextual might be better off as defined per filter, rather than per diagram type?
+ * For example, question and fact nodes are secondary in the topic diagram, and problem and solution
+ * nodes are secondary in the explore diagram.
  */
-export const getContextualNodes = (nodes: Node[], graph: Graph, currentDiagram: DiagramType) => {
+export const getSecondaryNeighbors = (nodes: Node[], graph: Graph, currentDiagram: DiagramType) => {
   const nodeIds = nodes.map((node) => node.id);
 
   return graph.nodes.filter(

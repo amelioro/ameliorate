@@ -62,7 +62,7 @@ const partitionOrders: { [type in NodeType]: string } = {
 };
 
 const calculatePartition = (node: Node, nodes: Node[], edges: Edge[], type: DiagramType) => {
-  // don't partition contextual nodes, e.g. questions in the topic diagram
+  // don't partition secondary nodes, e.g. questions in the topic diagram
   if (!diagramNodeTypes[type].includes(node.type)) return "null";
 
   const topicGraph = { nodes, edges };
