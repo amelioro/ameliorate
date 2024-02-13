@@ -119,6 +119,32 @@ type TradeoffsOptions = z.infer<typeof tradeoffsSchema>;
 
 /**
  * Description:
+ * - Show solution with all components and effects
+ *
+ * Use cases:
+ * - Detail a solution
+ */
+const applySolutionFilter = (graph: Graph, filterOptions: SolutionOptions) => {
+  const centralSolution = graph.nodes.find((node) => node.id === filterOptions.centralSolutionId);
+  if (!centralSolution) return graph;
+
+  const details = ancestors(centralSolution, graph, ["has", "creates"]);
+
+  const nodes = [centralSolution, ...details];
+  const edges = getRelevantEdges(nodes, graph);
+
+  return { nodes, edges };
+};
+
+const solutionSchema = z.object({
+  type: z.literal("solution"),
+  centralSolutionId: nodeSchema.shape.id,
+});
+
+type SolutionOptions = z.infer<typeof solutionSchema>;
+
+/**
+ * Description:
  * - Show question, depth-1 parents for context, all recursive child questions, answers, facts,
  * sources.
  *
@@ -148,7 +174,7 @@ type QuestionOptions = z.infer<typeof questionSchema>;
 // filter methods
 
 // TODO?: is there a way to type-guarantee that these values come from the defined schemas?
-export const topicFilterTypes = ["none", "causes", "tradeoffs"] as const;
+export const topicFilterTypes = ["none", "causes", "tradeoffs", "solution"] as const;
 export const exploreFilterTypes = ["none", "question"] as const;
 
 const filterTypes = [...topicFilterTypes, ...exploreFilterTypes] as const;
@@ -164,6 +190,7 @@ export const applyStandardFilter = (graph: Graph, options: FilterOptions): Graph
   if (options.type === "none") return graph;
   else if (options.type === "causes") return applyCausesFilter(graph, options);
   else if (options.type === "tradeoffs") return applyTradeoffsFilter(graph, options);
+  else if (options.type === "solution") return applySolutionFilter(graph, options);
   else return applyQuestionFilter(graph, options);
 };
 
@@ -171,6 +198,7 @@ export const filterOptionsSchema = z.discriminatedUnion("type", [
   generalSchema.merge(noneSchema),
   generalSchema.merge(causesSchema),
   generalSchema.merge(tradeoffsSchema),
+  generalSchema.merge(solutionSchema),
   generalSchema.merge(questionSchema),
 ]);
 
@@ -178,6 +206,7 @@ export const filterSchemas = {
   none: noneSchema,
   causes: causesSchema,
   tradeoffs: tradeoffsSchema,
+  solution: solutionSchema,
   question: questionSchema,
 };
 
