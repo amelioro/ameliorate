@@ -57,10 +57,9 @@ type CausesOptions = z.infer<typeof causesSchema>;
  *
  * Use cases:
  * - Brainstorm solutions
- * - Detail a solution
  * - Compare solutions
  */
-const applySolutionsFilter = (graph: Graph, filterOptions: SolutionsOptions) => {
+const applyTradeoffsFilter = (graph: Graph, filterOptions: TradeoffsOptions) => {
   const centralProblem = graph.nodes.find((node) => node.id === filterOptions.centralProblemId);
   if (!centralProblem) return graph;
 
@@ -108,20 +107,20 @@ const applySolutionsFilter = (graph: Graph, filterOptions: SolutionsOptions) => 
   return { nodes, edges };
 };
 
-const solutionsSchema = z.object({
-  type: z.literal("solutions"),
+const tradeoffsSchema = z.object({
+  type: z.literal("tradeoffs"),
   centralProblemId: nodeSchema.shape.id,
   detail: z.union([z.literal("all"), z.literal("connectedToCriteria"), z.literal("none")]),
   solutions: z.array(nodeSchema.shape.id),
   criteria: z.array(nodeSchema.shape.id),
 });
 
-type SolutionsOptions = z.infer<typeof solutionsSchema>;
+type TradeoffsOptions = z.infer<typeof tradeoffsSchema>;
 
 /**
  * Description:
  * - Show question, depth-1 parents for context, all recursive child questions, answers, facts,
- * solutions
+ * sources.
  *
  * Use cases:
  * - Explore a question
@@ -149,7 +148,7 @@ type QuestionOptions = z.infer<typeof questionSchema>;
 // filter methods
 
 // TODO?: is there a way to type-guarantee that these values come from the defined schemas?
-export const topicFilterTypes = ["none", "causes", "solutions"] as const;
+export const topicFilterTypes = ["none", "causes", "tradeoffs"] as const;
 export const exploreFilterTypes = ["none", "question"] as const;
 
 const filterTypes = [...topicFilterTypes, ...exploreFilterTypes] as const;
@@ -164,21 +163,21 @@ export const applyStandardFilter = (graph: Graph, options: FilterOptions): Graph
   // while still maintaining that the applyMethod only accepts the correct options type
   if (options.type === "none") return graph;
   else if (options.type === "causes") return applyCausesFilter(graph, options);
-  else if (options.type === "solutions") return applySolutionsFilter(graph, options);
+  else if (options.type === "tradeoffs") return applyTradeoffsFilter(graph, options);
   else return applyQuestionFilter(graph, options);
 };
 
 export const filterOptionsSchema = z.discriminatedUnion("type", [
   generalSchema.merge(noneSchema),
   generalSchema.merge(causesSchema),
-  generalSchema.merge(solutionsSchema),
+  generalSchema.merge(tradeoffsSchema),
   generalSchema.merge(questionSchema),
 ]);
 
 export const filterSchemas = {
   none: noneSchema,
   causes: causesSchema,
-  solutions: solutionsSchema,
+  tradeoffs: tradeoffsSchema,
   question: questionSchema,
 };
 

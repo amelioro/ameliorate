@@ -58,7 +58,7 @@ interface Props {
  */
 export const FilterOptions = ({ activeView }: Props) => {
   const filterOptions = useFilterOptions(activeView);
-  const problems = useProblems(); // could consider selecting causes here, but probably don't want causes as options for solutions filter
+  const problems = useProblems(); // could consider selecting causes here, but probably don't want causes as options for tradeoffs filter
   const questions = useQuestions();
 
   const {
