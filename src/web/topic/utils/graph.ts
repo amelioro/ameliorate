@@ -19,7 +19,7 @@ export interface Node {
     /**
      * Distinguished from `type` because this is explicitly open user input, and `type` can maintain stricter typing
      */
-    customType?: string;
+    customType: string | null;
     label: string;
     notes: string;
     arguedDiagramPartId?: string;
@@ -35,7 +35,7 @@ export interface ProblemNode extends Node {
 
 interface BuildProps {
   id?: string;
-  customType?: string;
+  customType?: string | null;
   label?: string;
   notes?: string;
   type: FlowNodeType;
@@ -43,7 +43,7 @@ interface BuildProps {
 }
 export const buildNode = ({
   id,
-  customType,
+  customType = null,
   label,
   notes,
   type,

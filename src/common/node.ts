@@ -48,7 +48,7 @@ export const nodeSchema = z.object({
     .string()
     .max(30)
     .regex(/^[a-z ]+$/i)
-    .optional(),
+    .nullable(),
   text: z.string().max(200),
   notes: z.string().max(10000),
 });
@@ -81,6 +81,7 @@ export const getNewTopicProblemNode = (topicId: number, topicTitle: string): Nod
     topicId,
     arguedDiagramPartId: null,
     type: "problem",
+    customType: null,
     text: lowerCase(topicTitle),
     notes: "",
   };

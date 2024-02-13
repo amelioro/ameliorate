@@ -101,6 +101,7 @@ export const changeNodeType = (node: Node, newType: NodeType) => {
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   foundNode.type = newType;
+  foundNode.data.customType = null; // reset custom type so new type is used for label
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   useTopicStore.setState(finishDraft(state), false, "changeNodeType");
