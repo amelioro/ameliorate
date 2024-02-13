@@ -20,6 +20,36 @@ const noneSchema = z.object({
 
 /**
  * Description:
+ * - If there are problems, show each problems' immediate causes, effects, solutions
+ * - Otherwise show whole diagram
+ *
+ * Use cases:
+ * - Give a quick overview of the topic
+ */
+const applyHighLevelFilter = (graph: Graph, _filterOptions: HighLevelOptions) => {
+  const problems = graph.nodes.filter((node) => node.type === "problem");
+  if (problems.length === 0) return graph;
+
+  const details = problems.flatMap((problem) =>
+    children(problem, graph).filter((child) =>
+      ["cause", "effect", "benefit", "detriment", "solution"].includes(child.type)
+    )
+  );
+
+  const nodes = [...problems, ...details];
+  const edges = getRelevantEdges(nodes, graph);
+
+  return { nodes, edges };
+};
+
+const highLevelSchema = z.object({
+  type: z.literal("highLevel"),
+});
+
+type HighLevelOptions = z.infer<typeof highLevelSchema>;
+
+/**
+ * Description:
  * - Based on options, show recursive causes, effects, criteria, and/or solutions to the central problem
  *
  * Options:
@@ -195,7 +225,7 @@ type QuestionOptions = z.infer<typeof questionSchema>;
 // filter methods
 
 // TODO?: is there a way to type-guarantee that these values come from the defined schemas?
-export const topicFilterTypes = ["none", "problem", "tradeoffs", "solution"] as const;
+export const topicFilterTypes = ["none", "highLevel", "problem", "tradeoffs", "solution"] as const;
 export const exploreFilterTypes = ["none", "question"] as const;
 
 const filterTypes = [...topicFilterTypes, ...exploreFilterTypes] as const;
@@ -209,6 +239,7 @@ export const applyStandardFilter = (graph: Graph, options: FilterOptions): Graph
   // TODO?: is there a way to use a Record<Type, ApplyMethod> rather than a big if-else?
   // while still maintaining that the applyMethod only accepts the correct options type
   if (options.type === "none") return graph;
+  else if (options.type === "highLevel") return applyHighLevelFilter(graph, options);
   else if (options.type === "problem") return applyProblemFilter(graph, options);
   else if (options.type === "tradeoffs") return applyTradeoffsFilter(graph, options);
   else if (options.type === "solution") return applySolutionFilter(graph, options);
@@ -217,6 +248,7 @@ export const applyStandardFilter = (graph: Graph, options: FilterOptions): Graph
 
 export const filterOptionsSchema = z.discriminatedUnion("type", [
   generalSchema.merge(noneSchema),
+  generalSchema.merge(highLevelSchema),
   generalSchema.merge(problemSchema),
   generalSchema.merge(tradeoffsSchema),
   generalSchema.merge(solutionSchema),
@@ -225,6 +257,7 @@ export const filterOptionsSchema = z.discriminatedUnion("type", [
 
 export const filterSchemas = {
   none: noneSchema,
+  highLevel: highLevelSchema,
   problem: problemSchema,
   tradeoffs: tradeoffsSchema,
   solution: solutionSchema,
