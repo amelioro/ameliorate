@@ -1,3 +1,4 @@
+import uniqBy from "lodash/uniqBy";
 import { z } from "zod";
 
 import { RelationName, exploreRelationNames } from "../../../common/edge";
@@ -134,7 +135,11 @@ const applyTradeoffsFilter = (graph: Graph, filterOptions: TradeoffsOptions) => 
   const solutionDetails =
     filterOptions.detail === "none"
       ? []
-      : selectedSolutions.flatMap((solution) => ancestors(solution, graph, ["has", "creates"]));
+      : uniqBy(
+          // two solutions can share ancesotrs
+          selectedSolutions.flatMap((solution) => ancestors(solution, graph, ["has", "creates"])),
+          (node) => node.id
+        );
 
   const criteriaIds = selectedCriteria.map((criterion) => criterion.id);
   const filteredSolutionDetails =
