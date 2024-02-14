@@ -78,7 +78,23 @@ export const useViewportUpdater = () => {
   const fitViewForNodes = (nodes: PositionedNode[]) => {
     // roughly figured the code here by referencing the fitView implementation https://github.com/wbkd/react-flow/blob/9dba3c5e7fb0d7edb6a3015bf65282f7030ca929/packages/core/src/store/utils.ts#L128
     const rect = getRectOfNodes(nodes);
-    const transform = getTransformForBounds(rect, viewportWidth, viewportHeight, minZoom, 1);
+    const adjustedRect = {
+      ...rect,
+      // Matches flow's built-in `fitView`, except it might be off a few px because flow's built-in
+      // `fitView` uses the nodes' rendered heights, which are different if 2-3 lines of text.
+      // Width/height adjustment is needed likely because nodes are positioned based on their upper-left corner?
+      width: rect.width + nodeWidthPx,
+      height: rect.height + nodeHeightPx,
+    };
+
+    const transform = getTransformForBounds(
+      adjustedRect,
+      viewportWidth,
+      viewportHeight,
+      minZoom,
+      1
+    );
+
     const viewport = { x: transform[0], y: transform[1], zoom: transform[2] };
     setViewport(viewport);
   };
