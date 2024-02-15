@@ -1,8 +1,16 @@
+import { v4 as uuid } from "uuid";
 import { StorageValue } from "zustand/middleware";
 
 import { errorWithData } from "../../../common/errorHandling";
 import { emitter } from "../../common/event";
-import { TopicStoreState, initialState, playgroundUsername, useTopicStore } from "./store";
+import { Edge, Node } from "../utils/graph";
+import {
+  TopicStoreState,
+  UserScores,
+  initialState,
+  playgroundUsername,
+  useTopicStore,
+} from "./store";
 import { isPlaygroundTopic } from "./utils";
 
 export const getPersistState = () => {
@@ -19,6 +27,49 @@ export const getScoringUsernames = () => {
   return Object.keys(userScores);
 };
 
+/**
+ * Generate new ids for nodes and edges to avoid conflicts with the topic that this was downloaded
+ * from.
+ *
+ * Also, ensure that related scores, claims, and edges are updated accordingly.
+ */
+const ensureUnique = (nodes: Node[], edges: Edge[], userScores: UserScores) => {
+  [...nodes, ...edges].forEach((graphPart) => {
+    const newId = uuid();
+
+    // update edges
+    edges.forEach((edge) => {
+      // eslint-disable-next-line functional/immutable-data, no-param-reassign
+      if (edge.source === graphPart.id) edge.source = newId;
+      // eslint-disable-next-line functional/immutable-data, no-param-reassign
+      if (edge.target === graphPart.id) edge.target = newId;
+    });
+
+    // update claims
+    [...nodes, ...edges].forEach((otherGraphPart) => {
+      if (otherGraphPart.data.arguedDiagramPartId === graphPart.id) {
+        // eslint-disable-next-line functional/immutable-data, no-param-reassign
+        otherGraphPart.data.arguedDiagramPartId = newId;
+      }
+    });
+
+    // update scores
+    Object.entries(userScores).forEach(([_username, partScores]) => {
+      const partScore = partScores[graphPart.id];
+      if (partScore) {
+        // eslint-disable-next-line functional/immutable-data, no-param-reassign
+        partScores[newId] = partScore;
+        // eslint-disable-next-line functional/immutable-data, @typescript-eslint/no-dynamic-delete, no-param-reassign
+        delete partScores[graphPart.id];
+      }
+    });
+
+    // update graph part
+    // eslint-disable-next-line functional/immutable-data, no-param-reassign
+    graphPart.id = newId;
+  });
+};
+
 export const setTopicData = (state: TopicStoreState, sessionUsername?: string) => {
   // Don't override topic - this way, topic data from playground can be downloaded and uploaded as
   // a means of saving playground data to the db.
@@ -32,6 +83,8 @@ export const setTopicData = (state: TopicStoreState, sessionUsername?: string) =
   const myScores = sessionScores ?? state.userScores[playgroundUsername]; // state should only have one of these at most
   const myUsername = isPlaygroundTopic(topic) ? playgroundUsername : sessionUsername;
   const userScores = myScores && myUsername ? { [myUsername]: myScores } : {};
+
+  ensureUnique(state.nodes, state.edges, userScores);
 
   useTopicStore.setState({ ...state, topic, userScores }, false, "setState");
 
