@@ -1,4 +1,4 @@
-# Contributing to ameliorate
+# Contributing to Ameliorate
 
 🔥🙂 Welcome, and thanks for considering contributing! 🙂🔥
 
@@ -34,7 +34,7 @@ There are also [quite a few ideas](https://github.com/orgs/amelioro/projects/2/v
 
 ## Finding an issue to work on
 
-Check out the [first issues filter](https://github.com/orgs/amelioro/projects/2/views/7) in the project backlog - `good first issue`s have a narrow scope and are expected to entail a small number of changes, and `ok first issue`s have a narrow scope, but are expected to be a bit tougher. You can check out the [backlog of all refined issues](https://github.com/orgs/amelioro/projects/2/views/11) if you're feeling daring, plucky, or if this isn't your first rodeo. This list should be prioritized, but you don't need to limit yourself to the top.
+Check out the [first issues filter](https://github.com/orgs/amelioro/projects/2/views/7) in the project backlog - `good first issue`s have a narrow scope and are expected to entail a small number of changes, and `ok first issue`s have a narrow scope, but are expected to be a bit tougher. You can check out the [backlog of all issues](https://github.com/orgs/amelioro/projects/2/views/1) if you're feeling daring, plucky, or if this isn't your first rodeo. This list should be prioritized, but you don't need to limit yourself to the top.
 
 Feel free to clarify any issues via commenting on the issue or asking in [Discord](https://discord.gg/3KhdyJkTWT). When you find an issue you want to work on, please comment on it to avoid duplicating work on it.
 
