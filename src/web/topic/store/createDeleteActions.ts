@@ -142,6 +142,18 @@ export const addNode = ({ fromPartId, as, toNodeType, relation, selectNewNode }:
   useTopicStore.setState(finishDraft(state), false, "addNode");
 };
 
+export const addNodeWithoutParent = (nodeType: FlowNodeType, selectNewNode = true) => {
+  const state = createDraft(useTopicStore.getState());
+
+  const newNode = createNode(state, nodeType, undefined, selectNewNode);
+
+  // trigger event so viewport can be updated.
+  // seems like there should be a cleaner way to do this - perhaps custom zustand middleware to emit for any action
+  emitter.emit("addNode", newNode);
+
+  useTopicStore.setState(finishDraft(state), false, "addNodeWithoutParent");
+};
+
 const createEdgesImpliedByComposition = (
   topicGraph: Graph,
   parent: Node,
