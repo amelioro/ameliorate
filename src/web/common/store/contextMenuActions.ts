@@ -4,6 +4,10 @@ import { Context, useContextMenuStore } from "./contextMenuStore";
 
 export const openContextMenu = (event: React.MouseEvent, context: Context) => {
   event.preventDefault(); // prevent opening default context menu
+  // Prevent overriding context if a parent element also triggers a context menu.
+  // e.g. clicking a node would add node to context but then diagram click would trigger and
+  // overwrite with empty context.
+  event.stopPropagation();
 
   useContextMenuStore.setState((state) => {
     return {

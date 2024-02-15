@@ -2,6 +2,7 @@ import { Menu as MuiMenu } from "@mui/material";
 
 import { closeContextMenu } from "../../store/contextMenuActions";
 import { useAnchorPosition, useContextMenuContext } from "../../store/contextMenuStore";
+import { AddNodeMenuItem } from "./AddNodeMenuItem";
 import { ChangeEdgeTypeMenuItem } from "./ChangeEdgeTypeMenuItem";
 import { ChangeNodeTypeMenuItem } from "./ChangeNodeTypeMenuItem";
 import { DeleteEdgeMenuItem } from "./DeleteEdgeMenuItem";
@@ -20,6 +21,9 @@ export const ContextMenu = () => {
 
   // create these based on what's set in the context
   const menuItems = [
+    !contextMenuContext.node && !contextMenuContext.edge && (
+      <AddNodeMenuItem parentMenuOpen={isOpen} key={9} />
+    ),
     contextMenuContext.node && (
       <ChangeNodeTypeMenuItem node={contextMenuContext.node} parentMenuOpen={isOpen} key={7} />
     ),

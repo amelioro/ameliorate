@@ -12,6 +12,7 @@ import { DiagramType } from "../../../../common/diagram";
 import { Loading } from "../../../common/components/Loading/Loading";
 import { emitter } from "../../../common/event";
 import { useSessionUser } from "../../../common/hooks";
+import { openContextMenu } from "../../../common/store/contextMenuActions";
 import { setSelected } from "../../../view/navigateStore";
 import { useLayoutedDiagram } from "../../hooks/diagramHooks";
 import { useViewportUpdater } from "../../hooks/flowHooks";
@@ -129,7 +130,7 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
         onConnect={
           userCanEditTopicData ? ({ source, target }) => connectNodes(source, target) : undefined
         }
-        onContextMenu={(e) => e.preventDefault()}
+        onContextMenu={(event) => openContextMenu(event, {})}
         onEdgeUpdate={userCanEditTopicData ? onEdgeUpdate : undefined}
         nodesDraggable={false}
         nodesConnectable={userCanEditTopicData}
