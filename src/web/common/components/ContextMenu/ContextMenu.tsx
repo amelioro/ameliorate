@@ -5,6 +5,7 @@ import { useAnchorPosition, useContextMenuContext } from "../../store/contextMen
 import { AddNodeMenuItem } from "./AddNodeMenuItem";
 import { ChangeEdgeTypeMenuItem } from "./ChangeEdgeTypeMenuItem";
 import { ChangeNodeTypeMenuItem } from "./ChangeNodeTypeMenuItem";
+import { CloseOnClickMenuItem } from "./CloseOnClickMenuItem";
 import { DeleteEdgeMenuItem } from "./DeleteEdgeMenuItem";
 import { DeleteNodeMenuItem } from "./DeleteNodeMenuItem";
 import { ShowComponentsMenuItem } from "./ShowComponentsMenuItem";
@@ -35,7 +36,10 @@ export const ContextMenu = () => {
     contextMenuContext.node && <ShowEffectsMenuItem node={contextMenuContext.node} key={3} />,
     contextMenuContext.node && <DeleteNodeMenuItem node={contextMenuContext.node} key={5} />,
     contextMenuContext.edge && <DeleteEdgeMenuItem edge={contextMenuContext.edge} key={6} />,
-  ];
+
+    // ensure there's never an empty context menu; that shows an empty bubble and feels awkward
+    <CloseOnClickMenuItem key={10}>Cancel</CloseOnClickMenuItem>,
+  ].filter((item): item is JSX.Element => !!item);
 
   return (
     <MuiMenu
