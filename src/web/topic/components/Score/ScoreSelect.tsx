@@ -10,9 +10,10 @@ import { CustomDataEntry, PieChart } from "./PieChart";
 interface Props {
   username: string;
   graphPartId: string;
+  onSelect: () => void;
 }
 
-export const ScoreSelect = ({ username, graphPartId }: Props) => {
+export const ScoreSelect = ({ username, graphPartId, onSelect }: Props) => {
   const theme = useTheme();
 
   const data: Data<CustomDataEntry> = possibleScores.map((score) => {
@@ -29,7 +30,10 @@ export const ScoreSelect = ({ username, graphPartId }: Props) => {
 
   return (
     <PieChart
-      onClick={(segmentData) => setScore(username, graphPartId, segmentData.key as Score)}
+      onClick={(segmentData) => {
+        setScore(username, graphPartId, segmentData.key as Score);
+        onSelect();
+      }}
       customData={data}
       startAngle={-90 - 360 / possibleScores.length / 2} // shift first slice to top center
     />
