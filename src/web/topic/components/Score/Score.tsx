@@ -49,7 +49,14 @@ export const Score = ({ graphPartId }: ScoreProps) => {
   const hoverCircle = isComparing ? (
     <ScoreCompare userScores={userScores} />
   ) : canEdit ? (
-    <ScoreSelect username={myUsername} graphPartId={graphPartId} />
+    <ScoreSelect
+      username={myUsername}
+      graphPartId={graphPartId}
+      onSelect={() => {
+        setSelected(false);
+        setHovering(false);
+      }}
+    />
   ) : undefined;
   const isInteractive = hoverCircle !== undefined;
 
