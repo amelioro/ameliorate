@@ -18,7 +18,7 @@ import { Link } from "../../../common/components/Link";
 import { useSessionUser } from "../../../common/hooks";
 import { setTopicDetails } from "../../store/topicActions";
 import { useTopic } from "../../store/topicHooks";
-import { useUserCanEditTopicData } from "../../store/userHooks";
+import { useUserCanEditTopicData, useUserIsCreator } from "../../store/userHooks";
 
 const formSchema = () => {
   return z.object({
@@ -30,6 +30,7 @@ type FormData = z.infer<ReturnType<typeof formSchema>>;
 export const TopicDetails = () => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
+  const userIsCreator = useUserIsCreator(sessionUser?.username);
 
   const topic = useTopic();
   const isPlaygroundTopic = topic.id === undefined;
@@ -93,7 +94,7 @@ export const TopicDetails = () => {
           />
         </ListItem>
 
-        {!isPlaygroundTopic && userCanEditTopicData && (
+        {!isPlaygroundTopic && userIsCreator && (
           <ListItem>
             <ListItemButton
               LinkComponent={NextLink}

@@ -27,4 +27,5 @@ export const topicSchema = z.object({
   creatorName: userSchema.shape.username,
   description: z.string().max(10000),
   visibility: zVisibilityTypes,
+  allowAnyoneToEdit: z.boolean(),
 });

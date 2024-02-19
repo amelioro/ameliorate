@@ -2,12 +2,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Info } from "@mui/icons-material";
 import {
   Button,
+  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
   Divider,
+  FormControlLabel,
   IconButton,
   MenuItem,
   Stack,
@@ -18,7 +20,7 @@ import {
 import { Topic, User } from "@prisma/client";
 import Router from "next/router";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { topicSchema, visibilityTypes } from "../../../../common/topic";
@@ -48,6 +50,7 @@ export const CreateTopicForm = ({ user }: { user: User }) => {
       title: data.title,
       description: data.description,
       visibility: data.visibility,
+      allowAnyoneToEdit: data.allowAnyoneToEdit,
     });
   };
 
@@ -118,6 +121,7 @@ export const EditTopicForm = ({ topic, user }: { topic: Topic; user: User }) => 
       title: data.title,
       description: data.description,
       visibility: data.visibility,
+      allowAnyoneToEdit: data.allowAnyoneToEdit,
     });
   };
 
@@ -185,6 +189,7 @@ const formSchema = (utils: ReturnType<typeof trpc.useContext>, user: User, topic
     ),
     description: topicSchema.shape.description,
     visibility: topicSchema.shape.visibility,
+    allowAnyoneToEdit: topicSchema.shape.allowAnyoneToEdit,
   });
 };
 type FormData = z.infer<ReturnType<typeof formSchema>>;
@@ -200,6 +205,7 @@ const TopicForm = ({ topic, user, onSubmit, DeleteSection }: Props) => {
   const utils = trpc.useContext();
 
   const {
+    control,
     reset,
     register,
     handleSubmit,
@@ -214,6 +220,7 @@ const TopicForm = ({ topic, user, onSubmit, DeleteSection }: Props) => {
       title: topic?.title,
       description: topic?.description,
       visibility: topic?.visibility ?? "public",
+      allowAnyoneToEdit: topic?.allowAnyoneToEdit ?? false,
     },
   });
 
@@ -324,6 +331,17 @@ const TopicForm = ({ topic, user, onSubmit, DeleteSection }: Props) => {
               </IconButton>
             </Tooltip>
           </Stack>
+
+          <Controller
+            control={control}
+            name="allowAnyoneToEdit"
+            render={({ field }) => (
+              <FormControlLabel
+                label="Allow anyone to edit this topic"
+                control={<Checkbox {...field} checked={field.value} />}
+              />
+            )}
+          />
 
           <Typography variant="body2">
             View your topic at: ameliorate.app/{user.username}/{topicTitle || "{title}"}
