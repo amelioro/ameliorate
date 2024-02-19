@@ -4,6 +4,7 @@ import {
   Close,
   Download,
   Engineering,
+  Image as ImageIcon,
   Layers,
   Route,
   Upload,
@@ -18,7 +19,9 @@ import {
   ListItemText,
   ToggleButton,
 } from "@mui/material";
+import { toPng } from "html-to-image";
 import fileDownload from "js-file-download";
+import { getRectOfNodes, getTransformForBounds } from "reactflow";
 import { StorageValue } from "zustand/middleware";
 
 import { errorWithData } from "../../../../common/errorHandling";
@@ -31,12 +34,13 @@ import {
   useUnrestrictedEditing,
 } from "../../../view/actionConfigStore";
 import { Perspectives } from "../../../view/components/Perspectives/Perspectives";
-import { useActiveView } from "../../../view/navigateStore";
+import { View, useActiveView } from "../../../view/navigateStore";
 import { migrate } from "../../store/migrate";
 import { TopicStoreState } from "../../store/store";
 import { useOnPlayground } from "../../store/topicHooks";
 import { getPersistState, resetTopicData, setTopicData } from "../../store/utilActions";
 import { getTopicTitle } from "../../store/utils";
+import { getDisplayNodes } from "../Diagram/externalFlowStore";
 
 // TODO: might be useful to have downloaded state be more human editable;
 // for this, probably should prettify the JSON, and remove position values (we can re-layout on import)
@@ -68,6 +72,43 @@ const uploadTopic = (event: React.ChangeEvent<HTMLInputElement>, sessionUsername
       const migratedState = migrate(persistState.state, persistState.version) as TopicStoreState;
 
       setTopicData(migratedState, sessionUsername);
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
+
+const imageWidth = 2560;
+const imageHeight = 1440;
+
+const downloadScreenshot = (activeView: View) => {
+  if (activeView === "criteriaTable") throw new Error("Cannot take screenshot of table view");
+
+  const nodes = getDisplayNodes(activeView);
+  if (!nodes) throw new Error("Couldn't get nodes to take screenshot of");
+
+  // thanks react flow example https://reactflow.dev/examples/misc/download-image
+  const nodesBounds = getRectOfNodes(nodes);
+  const transform = getTransformForBounds(nodesBounds, imageWidth, imageHeight, 0.5, 2);
+  const viewportElement = document.querySelector(`#${activeView} .react-flow__viewport`);
+  if (!viewportElement) throw new Error("Couldn't find viewport element to take screenshot of");
+
+  toPng(viewportElement as HTMLElement, {
+    backgroundColor: "#fff",
+    width: imageWidth,
+    height: imageHeight,
+    style: {
+      width: imageWidth.toString(),
+      height: imageHeight.toString(),
+      transform: `translate(${transform[0]}px, ${transform[1]}px) scale(${transform[2]})`,
+    },
+  })
+    .then((dataUrl) => {
+      const a = document.createElement("a");
+
+      a.setAttribute("download", "topic.png");
+      a.setAttribute("href", dataUrl);
+      a.click();
     })
     .catch((error) => {
       throw error;
@@ -121,6 +162,7 @@ export const MoreActionsDrawer = ({
 
         <Divider />
 
+        {/* actions */}
         <ListItem disablePadding={false}>
           <IconButton
             color="inherit"
@@ -145,7 +187,27 @@ export const MoreActionsDrawer = ({
               <IconButton color="inherit" title="Reset" aria-label="Reset" onClick={resetTopicData}>
                 <AutoStoriesOutlined />
               </IconButton>
+            </>
+          )}
 
+          {!isTableActive && (
+            <IconButton
+              color="inherit"
+              title="Take Screenshot of Diagram"
+              aria-label="Take Screenshot of Diagram"
+              onClick={() => downloadScreenshot(activeView)}
+            >
+              <ImageIcon />
+            </IconButton>
+          )}
+        </ListItem>
+
+        <Divider />
+
+        {/* modes */}
+        <ListItem disablePadding={false}>
+          {userCanEditTopicData && (
+            <>
               <ToggleButton
                 value={unrestrictedEditing}
                 title="Unrestrict editing"

@@ -6,6 +6,7 @@ import {
   type NodeProps as DefaultNodeProps,
   OnEdgeUpdateFunc,
   ReactFlowProvider,
+  useStore,
 } from "reactflow";
 
 import { DiagramType } from "../../../../common/diagram";
@@ -25,6 +26,7 @@ import { FlowNodeType } from "../../utils/node";
 import { FlowEdge } from "../Edge/FlowEdge";
 import { FlowNode } from "../Node/FlowNode";
 import { StyledReactFlow } from "./Diagram.styles";
+import { setDisplayNodesGetter } from "./externalFlowStore";
 
 const buildNodeComponent = (type: FlowNodeType) => {
   // eslint-disable-next-line react/display-name -- react flow dynamically creates these components without name anyway
@@ -86,6 +88,7 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const { fitViewForNodes, moveViewportToIncludeNode } = useViewportUpdater();
   const { layoutedDiagram, hasNewLayout, setHasNewLayout } = useLayoutedDiagram(diagram);
+  const getNodes = useStore((state) => state.getNodes);
 
   useEffect(() => {
     const unbindAdd = emitter.on("addNode", (node) => setNewNodeId(node.id));
@@ -98,6 +101,10 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
       unbindFilter();
     };
   }, []);
+
+  useEffect(() => {
+    setDisplayNodesGetter(diagram.type, getNodes);
+  }, [diagram.type, getNodes]);
 
   if (!layoutedDiagram) return <Loading />;
 

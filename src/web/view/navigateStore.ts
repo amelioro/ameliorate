@@ -11,7 +11,7 @@ import { useNode } from "../topic/store/nodeHooks";
 import { useTopicStore } from "../topic/store/store";
 import { FilterOptions } from "./utils/filter";
 
-type View = "topicDiagram" | "exploreDiagram" | "criteriaTable" | "claimTree";
+export type View = "topicDiagram" | "exploreDiagram" | "criteriaTable" | "claimTree";
 
 interface NavigateStoreState {
   selectedGraphPartId: string | null;
