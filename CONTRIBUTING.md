@@ -42,7 +42,7 @@ Note: be particularly wary of [issues with a "needs [x]" label](https://github.c
 
 ## Running the project
 
-Make sure you have [git](https://git-scm.com/downloads), [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm), and [docker](https://docs.docker.com/get-docker/) installed.
+Make sure you have [git](https://git-scm.com/downloads), [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm), and [docker](https://docs.docker.com/get-docker/) installed. If you're on Windows, you may also need to install [WSL](https://learn.microsoft.com/en-us/windows/wsl/install#install-wsl-command) to run the bash setup scripts.
 
 Setup:
 
