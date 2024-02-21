@@ -15,7 +15,7 @@ With it, you can:
 - compare the [tradeoffs](https://ameliorate.app/examples/ORM?view=criteriaTable:fda13add) of each solution
   <img src="https://github.com/amelioro/ameliorate/assets/13872370/a6579feb-a32e-4e00-989b-a5939f80e601" width="800"/>
 
-- clearly [question, justify, and critique](https://ameliorate.app/examples/cars-going-too-fast?selected=acd0c18d&view=criteriaTable:acd0c18d) anything in an off-to-the-side but easy-to-access way
+- clearly [question, justify, and critique](https://ameliorate.app/examples/ORM?view=criteriaTable:fda13add&selected=c25ad3ea) anything in an off-to-the-side but easy-to-access way
   <img src="https://github.com/amelioro/ameliorate/assets/13872370/20f9af78-785f-4a91-88ef-3ef64da5c90a" width="800"/>
 
 See the [about](https://www.ameliorate.app/about) page for more details about purpose, vision, and mission.
