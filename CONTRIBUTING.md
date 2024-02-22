@@ -74,15 +74,15 @@ npm run update # run new migrations, install new dependencies
 
 These are diagrams that might help provide high-level views of different pieces of the codebase:
 
-- [Architecture by Environment](https://github.com/amelioro/ameliorate/blob/main/docs/architecture-by-env.md)
-- [Database Schema](https://github.com/amelioro/ameliorate/blob/main/docs/database-schema.md)
-- [Data Flow](https://github.com/amelioro/ameliorate/blob/main/docs/data-flow.md)
+- [Architecture by Environment](https://github.com/amelioro/ameliorate/blob/main/design-docs/architecture-by-env.md)
+- [Database Schema](https://github.com/amelioro/ameliorate/blob/main/design-docs/database-schema.md)
+- [Data Flow](https://github.com/amelioro/ameliorate/blob/main/design-docs/data-flow.md)
 
 Reading up on the tech listed in the [Built with](https://github.com/amelioro/ameliorate#built-with) section of the readme will likely provide useful context.
 
 Known deviations from standard usage of the above tech:
 
-- zustand: see [docs/state-management.md](https://github.com/amelioro/ameliorate/blob/main/docs/state-management.md)
+- zustand: see [design-docs/state-management.md](https://github.com/amelioro/ameliorate/blob/main/design-docs/state-management.md)
 - emotion: styled components are stored in co-located .styles.tsx files
 
 Core directory structure (here are helpful docs on how nextjs uses directories to serve [pages](https://nextjs.org/docs/pages/building-your-application/routing/pages-and-layouts) and [api routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes)):
@@ -127,7 +127,7 @@ Code formatting is managed by [prettier](https://prettier.io/), which is automat
 
 ### UX / UI style
 
-For user experience & user interface design, please read [uxui-guidelines.md](./docs/uxui-guidelines.md).
+For user experience & user interface design, please read [uxui-guidelines.md](./design-docs/uxui-guidelines.md).
 
 ### Database
 
