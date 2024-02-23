@@ -1,0 +1,11 @@
+# thanks https://answers.netlify.com/t/support-guide-can-i-deploy-multiple-repositories-in-a-single-site/179
+[[redirects]]
+  from = "/docs/*"
+  to = "https://ameliorate-docs.netlify.app/docs/:splat"
+  status = 200
+
+[build]
+  # Build app only if there are changes outside the docs-site directory.
+  # If grep finds files changed outside of docs-site/, it will exit with 0 status, so we use `!` to invert the status and run build if files are found.
+  # `ignore` command examples here https://answers.netlify.com/t/support-guide-how-to-use-the-ignore-command/37517
+  ignore = "! git diff --name-only $CACHED_COMMIT_REF $COMMIT_REF | grep -v -q docs-site"
