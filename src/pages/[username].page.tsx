@@ -8,6 +8,7 @@ import {
   MaterialReactTable,
 } from "material-react-table";
 import { NextPage } from "next";
+import Head from "next/head";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 
@@ -97,6 +98,11 @@ const User: NextPage = () => {
 
   return (
     <>
+      <Head>
+        <title>{username} | Ameliorate</title>
+        <meta name="description" content={`${username} - view your topics.`} />
+      </Head>
+
       <MaterialReactTable
         columns={columnData}
         data={rowData}
