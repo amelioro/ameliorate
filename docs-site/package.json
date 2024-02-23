@@ -1,7 +1,6 @@
 {
   "name": "docs-site",
   "version": "1.0.0",
-  "type": "module",
   "scripts": {
     "//dev": "port 3008 for docs, to distinguish from deploying app",
     "dev": "next -p 3008",
@@ -14,5 +13,17 @@
     "nextra-theme-docs": "^2.13.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "20.11.20",
+    "@typescript-eslint/eslint-plugin": "^7.0.2",
+    "@typescript-eslint/parser": "^7.0.2",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "^14.1.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-functional": "^6.0.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-storybook": "^0.8.0",
+    "typescript": "5.3.3"
   }
 }
