@@ -1,0 +1,16 @@
+{
+  "index": "Welcome",
+  "getting-started": "",
+  "-- App": {
+    "type": "separator",
+    "title": "App"
+  },
+  "indicators": "",
+  "-- Project": {
+    "type": "separator",
+    "title": "Project"
+  },
+  "release-status": "",
+  "discourse-sessions": "",
+  "contributing": ""
+}
