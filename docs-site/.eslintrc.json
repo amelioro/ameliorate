@@ -20,7 +20,7 @@
       "plugins": ["@typescript-eslint"],
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
-        "tsconfigRootDir": ".",
+        "tsconfigRootDir": "./docs-site",
         "project": ["./tsconfig.json"]
       },
       "rules": {
