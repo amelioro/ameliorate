@@ -2,7 +2,9 @@ import Image from "next/image";
 
 import { discordInvite, feedbackPage, githubRepo } from "../src/web/common/urls";
 
-const faviconSrc = "https://ameliorate.app/favicon.ico";
+const faviconIco = "https://ameliorate.app/favicon.ico";
+// Image doesn't work with .ico
+const faviconPng = "https://ameliorate.app/favicon.png";
 
 const config = {
   // links
@@ -10,7 +12,7 @@ const config = {
     link: githubRepo,
   },
   // TODO: Make this identical to the logo in the main app (i.e. add "Alpha", and "Ameliorate")
-  logo: <Image src={faviconSrc} height={32} width={32} alt="home" />,
+  logo: <Image src={faviconPng} height={32} width={32} alt="home" />,
   logoLink: "https://ameliorate.app",
   chat: {
     link: discordInvite,
@@ -26,7 +28,7 @@ const config = {
   },
   head: (
     <>
-      <link rel="icon" href={faviconSrc} />
+      <link rel="icon" href={faviconIco} />
 
       {/* https://mui.com/material-ui/getting-started/usage/#responsive-meta-tag */}
       <meta name="viewport" content="initial-scale=1, width=device-width" />
