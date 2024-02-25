@@ -17,6 +17,7 @@ export const relationNames = [
   "potentialAnswerTo", //answer to question
   "relevantFor", //fact, source to any node except fact, source
   "sourceOf", //source to fact
+  "mentions", //source to source
 
   // claim
   "supports",
@@ -63,6 +64,7 @@ export const exploreRelationNames: RelationName[] = [
   "potentialAnswerTo",
   "relevantFor",
   "sourceOf",
+  "mentions",
 ];
 export const claimRelationNames: RelationName[] = ["supports", "critiques"];
 

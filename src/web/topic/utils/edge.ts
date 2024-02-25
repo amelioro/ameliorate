@@ -34,7 +34,9 @@ const exploreRelations: AddableRelation[] = questionRelations.concat(
   sourceRelations,
   [
     { child: "answer", name: "potentialAnswerTo", parent: "question", addableFrom: "parent" },
+    { child: "answer", name: "accomplishes", parent: "answer", addableFrom: "parent" },
     { child: "source", name: "sourceOf", parent: "fact", addableFrom: "both" },
+    { child: "source", name: "mentions", parent: "source", addableFrom: "child" },
   ]
 );
 

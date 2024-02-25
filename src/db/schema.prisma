@@ -133,6 +133,7 @@ enum EdgeType {
   potentialAnswerTo
   relevantFor
   sourceOf
+  mentions
 
   // claim
   supports

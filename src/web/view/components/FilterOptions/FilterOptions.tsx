@@ -10,6 +10,7 @@ import {
   useProblems,
   useQuestions,
   useSolutions,
+  useSources,
 } from "../../../topic/store/nodeHooks";
 import { setFilterOptions, useFilterOptions } from "../../navigateStore";
 import {
@@ -37,6 +38,7 @@ interface FormData {
   solutions: string[];
   criteria: string[];
   centralQuestionId?: string;
+  centralSourceId?: string;
 }
 
 /**
@@ -66,6 +68,7 @@ export const FilterOptions = ({ activeView }: Props) => {
   const problems = useProblems(); // could consider selecting causes here, but probably don't want causes as options for tradeoffs filter
   const allSolutions = useSolutions();
   const questions = useQuestions();
+  const sources = useSources();
 
   const {
     control,
@@ -105,6 +108,11 @@ export const FilterOptions = ({ activeView }: Props) => {
         filterOptions,
         "centralQuestionId",
         questions[0]?.id
+      ),
+      centralSourceId: getProp<string | undefined>(
+        filterOptions,
+        "centralSourceId",
+        sources[0]?.id
       ),
     },
   });
@@ -164,6 +172,16 @@ export const FilterOptions = ({ activeView }: Props) => {
     if (centralQuestionId && !value) setValue("centralQuestionId", centralQuestionOptions[0]?.id); // if node is deleted, make sure we don't retain the deleted id to make the form think it's valid
     return value ?? centralQuestionOptions[0];
   }, [centralQuestionId, centralQuestionOptions, setValue]);
+
+  const centralSourceId = watch("centralSourceId");
+  const centralSourceOptions = useMemo(() => {
+    return sources.map((source) => ({ label: source.data.label, id: source.id }));
+  }, [sources]);
+  const centralSourceValue = useMemo(() => {
+    const value = centralSourceOptions.find((option) => option.id === centralSourceId);
+    if (centralSourceId && !value) setValue("centralSourceId", centralSourceOptions[0]?.id); // if node is deleted, make sure we don't retain the deleted id to make the form think it's valid
+    return value ?? centralSourceOptions[0];
+  }, [centralSourceId, centralSourceOptions, setValue]);
 
   const submit = useCallback(() => {
     void handleSubmit((data) => {
@@ -540,6 +558,42 @@ export const FilterOptions = ({ activeView }: Props) => {
                   />
                 )}
                 // required to avoid duplicate key error if two nodes have the same text https://github.com/mui/material-ui/issues/26492#issuecomment-901089142
+                renderOption={(props, option) => {
+                  return (
+                    <li {...props} key={option.id}>
+                      {option.label}
+                    </li>
+                  );
+                }}
+                size="small"
+              />
+            )}
+          />
+        )}
+        {"centralSourceId" in filterSchemas[type].shape && (
+          <Controller
+            control={control}
+            name="centralSourceId"
+            render={({ field }) => (
+              <Autocomplete
+                {...field}
+                options={centralSourceOptions}
+                value={centralSourceValue}
+                onChange={(_event, value) => {
+                  if (!value) return;
+                  field.onChange(value.id);
+                  submit();
+                }}
+                disableClearable={centralSourceValue !== undefined}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Central Source"
+                    error={!!errors.centralSourceId}
+                    helperText={errors.centralSourceId?.message}
+                  />
+                )}
+                // required to avoid duplicate key error if two nodes have the same text
                 renderOption={(props, option) => {
                   return (
                     <li {...props} key={option.id}>
