@@ -130,6 +130,10 @@ export const useQuestions = () => {
   return useTopicStore((state) => state.nodes.filter((node) => node.type === "question"), shallow);
 };
 
+export const useSources = () => {
+  return useTopicStore((state) => state.nodes.filter((node) => node.type === "source"), shallow);
+};
+
 export const useSolutions = (problemId?: string) => {
   return useTopicStore((state) => {
     const allSolutions = state.nodes.filter((node) => node.type === "solution");

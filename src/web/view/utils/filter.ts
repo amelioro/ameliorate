@@ -227,11 +227,38 @@ const questionSchema = z.object({
 
 type QuestionOptions = z.infer<typeof questionSchema>;
 
+/**
+ * Description:
+ * - Show source and all ancestors that it's relevant for.
+ *
+ * Use cases:
+ * - Take notes on a source
+ * - Understand what a source says
+ */
+const applySourceFilter = (graph: Graph, filterOptions: SourceOptions) => {
+  const centralSource = graph.nodes.find((node) => node.id === filterOptions.centralSourceId);
+  if (!centralSource) return graph;
+
+  const details = ancestors(centralSource, graph, ["sourceOf", "relevantFor", "mentions"]);
+
+  const nodes = [centralSource, ...details];
+  const edges = getRelevantEdges(nodes, graph);
+
+  return { nodes, edges };
+};
+
+const sourceSchema = z.object({
+  type: z.literal("source"),
+  centralSourceId: nodeSchema.shape.id,
+});
+
+type SourceOptions = z.infer<typeof sourceSchema>;
+
 // filter methods
 
 // TODO?: is there a way to type-guarantee that these values come from the defined schemas?
 export const topicFilterTypes = ["none", "highLevel", "problem", "tradeoffs", "solution"] as const;
-export const exploreFilterTypes = ["none", "question"] as const;
+export const exploreFilterTypes = ["none", "question", "source"] as const;
 
 const filterTypes = [...topicFilterTypes, ...exploreFilterTypes] as const;
 export type FilterTypes = typeof filterTypes[number];
@@ -248,7 +275,8 @@ export const applyStandardFilter = (graph: Graph, options: FilterOptions): Graph
   else if (options.type === "problem") return applyProblemFilter(graph, options);
   else if (options.type === "tradeoffs") return applyTradeoffsFilter(graph, options);
   else if (options.type === "solution") return applySolutionFilter(graph, options);
-  else return applyQuestionFilter(graph, options);
+  else if (options.type === "question") return applyQuestionFilter(graph, options);
+  else return applySourceFilter(graph, options);
 };
 
 export const filterOptionsSchema = z.discriminatedUnion("type", [
@@ -258,6 +286,7 @@ export const filterOptionsSchema = z.discriminatedUnion("type", [
   generalSchema.merge(tradeoffsSchema),
   generalSchema.merge(solutionSchema),
   generalSchema.merge(questionSchema),
+  generalSchema.merge(sourceSchema),
 ]);
 
 export const filterSchemas = {
@@ -267,6 +296,7 @@ export const filterSchemas = {
   tradeoffs: tradeoffsSchema,
   solution: solutionSchema,
   question: questionSchema,
+  source: sourceSchema,
 };
 
 export type FilterOptions = z.infer<typeof filterOptionsSchema>;
