@@ -1,15 +1,13 @@
 import { ArrowDownward } from "@mui/icons-material";
-import { Box, Button, Divider, Typography } from "@mui/material";
+import { Box, Button, Divider, Link as MuiLink, Typography } from "@mui/material";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import NextLink from "next/link";
 
 import comparingSolutions from "../../public/Comparing-Solutions.png";
 import justifyingAndCritiquingClaims from "../../public/Justifying-And-Critiquing-Claims.png";
 import mappingSolutionsToProblems from "../../public/Mapping-Solutions-To-Problems.png";
 import { Blog } from "../web/common/components/Blog.styles";
-import { Link } from "../web/common/components/Link";
 import { SubscribeForm } from "../web/common/components/SubscribeForm/SubscribeForm";
 import { YoutubeEmbed } from "../web/common/components/YoutubeEmbed/YoutubeEmbed";
 import { youtubeLivestreams } from "../web/common/urls";
@@ -42,11 +40,7 @@ const Home: NextPage = () => {
             </Typography>
 
             <Box display="flex" flexWrap="wrap" justifyContent="center" margin="0.75rem" gap={1}>
-              <Button
-                variant="contained"
-                LinkComponent={NextLink}
-                href="https://ameliorate.app/docs/getting-started"
-              >
+              <Button variant="contained" href="https://ameliorate.app/docs/getting-started">
                 Get Started
               </Button>
               <Button variant="outlined" endIcon={<ArrowDownward />} href="#demo">
@@ -64,7 +58,7 @@ const Home: NextPage = () => {
           >
             <SubscribeForm
               header="Get progress updates"
-              headerAnchor={<Link href="https://amelioro.substack.com/">(blog)</Link>}
+              headerAnchor={<MuiLink href="https://amelioro.substack.com/">(blog)</MuiLink>}
               action="https://amelioro.substack.com/api/v1/free"
               buttonText="Subscribe"
             />
@@ -74,9 +68,9 @@ const Home: NextPage = () => {
             <SubscribeForm
               header="Get invited to future"
               headerAnchor={
-                <Link href="https://amelioro.substack.com/p/ameliorate-update-1824-a-place-for#§discourse-sessions">
+                <MuiLink href="https://ameliorate.app/docs/discourse-sessions">
                   discourse sessions
-                </Link>
+                </MuiLink>
               }
               action="https://buttondown.email/api/emails/embed-subscribe/ameliorate-discourse"
               buttonText="Invite me"
@@ -91,7 +85,7 @@ const Home: NextPage = () => {
             <Typography variant="h4">Demo</Typography>
             <Typography variant="body1">
               (more recent but unedited livestream demos are uploaded to
-              <Link href={youtubeLivestreams}>Ameliorate's YouTube channel</Link>)
+              <MuiLink href={youtubeLivestreams}>Ameliorate's YouTube channel</MuiLink>)
             </Typography>
             <StyledCarousel autoPlay={false} navButtonsAlwaysVisible={true}>
               <YoutubeEmbed embedId="q3kpbV90eOw" />

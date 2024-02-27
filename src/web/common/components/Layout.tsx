@@ -101,7 +101,9 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
             <Box display="flex" gap={2} alignItems="center">
               {usingBigScreen && (
                 <>
-                  <NavLink href="https://ameliorate.app/docs">Documentation</NavLink>
+                  <NavLink href="https://ameliorate.app/docs" target="_blank">
+                    Documentation
+                  </NavLink>
                   <Link href={discordInvite} target="_blank" display="flex">
                     <Image
                       src={`/${theme.palette.mode}/Discord-Mark.png`}
