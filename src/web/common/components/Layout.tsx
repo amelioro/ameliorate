@@ -15,7 +15,7 @@ import { ReactNode, forwardRef, useEffect, useState } from "react";
 
 import favicon from "../../../../public/favicon.png";
 import { useSessionUser } from "../hooks";
-import { discordInvite, feedbackPage, githubRepo } from "../urls";
+import { discordInvite, githubRepo } from "../urls";
 import { Link } from "./Link";
 import { SiteDrawer } from "./SiteDrawer/SiteDrawer";
 import { UserDrawer } from "./UserDrawer/UserDrawer";
@@ -78,7 +78,7 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
                   <Image src={favicon} height={32} width={32} alt="home" />
                 </Link>
                 <NavLink
-                  href="/about#release-status"
+                  href="https://ameliorate.app/docs/release-status"
                   variant="caption"
                   sx={{
                     position: "absolute",
@@ -101,10 +101,7 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
             <Box display="flex" gap={2} alignItems="center">
               {usingBigScreen && (
                 <>
-                  <NavLink href={feedbackPage} target="_blank">
-                    Feedback
-                  </NavLink>
-                  <NavLink href="/about">About</NavLink>
+                  <NavLink href="https://ameliorate.app/docs">Documentation</NavLink>
                   <Link href={discordInvite} target="_blank" display="flex">
                     <Image
                       src={`/${theme.palette.mode}/Discord-Mark.png`}
