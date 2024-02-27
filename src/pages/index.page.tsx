@@ -42,14 +42,15 @@ const Home: NextPage = () => {
             </Typography>
 
             <Box display="flex" flexWrap="wrap" justifyContent="center" margin="0.75rem" gap={1}>
-              <Button variant="contained" LinkComponent={NextLink} href="/playground">
-                Playground
+              <Button
+                variant="contained"
+                LinkComponent={NextLink}
+                href="https://ameliorate.app/docs/getting-started"
+              >
+                Get Started
               </Button>
-              <Button variant="outlined" LinkComponent={NextLink} href="/examples">
-                Examples
-              </Button>
-              <Button variant="outlined" endIcon={<ArrowDownward />} href="#how-it-works">
-                See how it works
+              <Button variant="outlined" endIcon={<ArrowDownward />} href="#demo">
+                Demo
               </Button>
             </Box>
           </Box>
@@ -85,15 +86,15 @@ const Home: NextPage = () => {
 
         <Divider />
 
-        <section id="how-it-works">
+        <section id="demo">
           <StyledBox flexDirection="column">
-            <Typography variant="h4">How it works</Typography>
+            <Typography variant="h4">Demo</Typography>
             <Typography variant="body1">
               (more recent but unedited livestream demos are uploaded to
               <Link href={youtubeLivestreams}>Ameliorate's YouTube channel</Link>)
             </Typography>
             <StyledCarousel autoPlay={false} navButtonsAlwaysVisible={true}>
-              <YoutubeEmbed embedId="yM8RrwQWeJc" />
+              <YoutubeEmbed embedId="q3kpbV90eOw" />
               <Image
                 src={mappingSolutionsToProblems}
                 alt="mapping solutions to problems"

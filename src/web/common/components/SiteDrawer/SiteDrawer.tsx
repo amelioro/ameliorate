@@ -1,4 +1,4 @@
-import { Abc, AutoStories, Campaign, Close, Info } from "@mui/icons-material";
+import { Abc, AutoStories, Close, Info } from "@mui/icons-material";
 import {
   Divider,
   Drawer,
@@ -16,7 +16,7 @@ import Image from "next/image";
 import NextLink from "next/link";
 
 import favicon from "../../../../../public/favicon.png";
-import { discordInvite, facebookPage, feedbackPage, githubRepo } from "../../urls";
+import { discordInvite, facebookPage, githubRepo } from "../../urls";
 
 interface Props {
   isSiteDrawerOpen: boolean;
@@ -65,19 +65,11 @@ export const SiteDrawer = ({ isSiteDrawerOpen, setIsSiteDrawerOpen }: Props) => 
         <Divider />
 
         <ListItem>
-          <ListItemButton LinkComponent={NextLink} href={feedbackPage}>
-            <ListItemIcon>
-              <Campaign />
-            </ListItemIcon>
-            <ListItemText primary="Feedback" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem>
-          <ListItemButton LinkComponent={NextLink} href="/about">
+          <ListItemButton LinkComponent={NextLink} href="https://ameliorate.app/docs">
             <ListItemIcon>
               <Info />
             </ListItemIcon>
-            <ListItemText primary="About" />
+            <ListItemText primary="Documentation" />
           </ListItemButton>
         </ListItem>
 

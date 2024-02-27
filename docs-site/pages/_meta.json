@@ -1,10 +1,10 @@
 {
-  "index": "Welcome",
-  "getting-started": "",
+  "index": "Introduction",
   "-- App": {
     "type": "separator",
     "title": "App"
   },
+  "getting-started": "",
   "indicators": "",
   "-- Project": {
     "type": "separator",

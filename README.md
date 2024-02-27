@@ -4,7 +4,7 @@
 
 [Ameliorate](https://www.ameliorate.app/) is a tool for discussing and mutually understanding tough problems.
 
-It aims to provide a [standard](https://ameliorate.app/keyserj/ameliorate-ontology?selected=c2ecf470), precise way of representing all information relevant to solving a problem, along with efficient ways to understand, discuss, and improve that information.
+It provides a [standard](https://ameliorate.app/keyserj/ameliorate-ontology?selected=c2ecf470), precise way of representing all information relevant to solving a problem, along with efficient ways to understand, discuss, and improve that information.
 
 With it, you can:
 
@@ -18,7 +18,7 @@ With it, you can:
 - clearly [question, justify, and critique](https://ameliorate.app/examples/ORM?view=criteriaTable:fda13add&selected=c25ad3ea) anything in an off-to-the-side but easy-to-access way
   <img src="https://github.com/amelioro/ameliorate/assets/13872370/20f9af78-785f-4a91-88ef-3ef64da5c90a" width="800"/>
 
-See the [about](https://www.ameliorate.app/about) page for more details about purpose, vision, and mission.
+See the [docs](https://www.ameliorate.app/docs) for more details about the app.
 
 ## Roadmap
 
