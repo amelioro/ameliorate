@@ -219,7 +219,7 @@ const TopicForm = ({ topic, user, onSubmit, DeleteSection }: Props) => {
     defaultValues: {
       title: topic?.title,
       description: topic?.description,
-      visibility: topic?.visibility ?? "public",
+      visibility: topic?.visibility ?? "private", // prevent people from accidentally sharing something sensitive
       allowAnyoneToEdit: topic?.allowAnyoneToEdit ?? false,
     },
   });
@@ -300,17 +300,17 @@ const TopicForm = ({ topic, user, onSubmit, DeleteSection }: Props) => {
                   This determines who can view your topic.
                   <br />
                   <br />
-                  Public: anyone with the link can view your topic, but additionally your topic will
-                  show up in your topic list, and it may show up in future topic-sharing
-                  functionality, such as topic search.
+                  Private: only you can view your topic (note: Ameliorate maintainers still have
+                  access to any topic you save - you must use the playground if you want your topic
+                  to be truly private).
                   <br />
                   <br />
                   Unlisted: anyone with the link can view your topic.
                   <br />
                   <br />
-                  Private: only you can view your topic (note: Ameliorate maintainers still have
-                  access to any topic you save - you must use the playground if you want your topic
-                  to be truly private).
+                  Public: anyone with the link can view your topic, but additionally your topic will
+                  show up in your topic list, and it may show up in future topic-sharing
+                  functionality, such as topic search.
                 </span>
               }
               enterTouchDelay={0} // allow touch to immediately trigger
