@@ -47,10 +47,10 @@ export const relations: AddableRelation[] = exploreRelations.concat([
   // topic relations
   { child: "problem", name: "causes", parent: "problem", addableFrom: "child" },
   { child: "cause", name: "causes", parent: "problem", addableFrom: "both" },
-  { child: "criterion", name: "criterionFor", parent: "problem", addableFrom: "parent" },
   { child: "effect", name: "createdBy", parent: "problem", addableFrom: "parent" },
   { child: "benefit", name: "createdBy", parent: "problem", addableFrom: "parent" },
   { child: "detriment", name: "createdBy", parent: "problem", addableFrom: "parent" },
+  { child: "criterion", name: "criterionFor", parent: "problem", addableFrom: "parent" },
   { child: "solutionComponent", name: "addresses", parent: "problem", addableFrom: "child" },
   { child: "solution", name: "addresses", parent: "problem", addableFrom: "both" },
 
