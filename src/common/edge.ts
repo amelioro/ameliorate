@@ -12,7 +12,7 @@ export const relationNames = [
   "creates",
   "embodies",
 
-  // explore
+  // research
   "asksAbout", //question to any node
   "potentialAnswerTo", //answer to question
   "relevantFor", //fact, source to any node except fact, source
@@ -59,7 +59,7 @@ export const topicRelationNames: RelationName[] = [
   "embodies",
   "relatesTo", // is a generic relation but currently only seems worthwhile in topic
 ];
-export const exploreRelationNames: RelationName[] = [
+export const researchRelationNames: RelationName[] = [
   "asksAbout",
   "potentialAnswerTo",
   "relevantFor",
@@ -70,7 +70,7 @@ export const claimRelationNames: RelationName[] = ["supports", "critiques"];
 
 export const getSiblingEdgeTypes = (edgeType: RelationName): RelationName[] => {
   if (topicRelationNames.includes(edgeType)) return topicRelationNames;
-  else if (exploreRelationNames.includes(edgeType)) return exploreRelationNames;
+  else if (researchRelationNames.includes(edgeType)) return researchRelationNames;
   else if (claimRelationNames.includes(edgeType)) return claimRelationNames;
   else return [];
 };

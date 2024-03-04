@@ -26,7 +26,7 @@ import {
   useActiveView,
   viewClaimTree,
   viewCriteriaTable,
-  viewExploreDiagram,
+  viewResearchDiagram,
   viewTopicDiagram,
 } from "../../../view/navigateStore";
 import { useCriteriaTableProblemNodes } from "../../store/nodeHooks";
@@ -57,13 +57,13 @@ export const TopicViews = () => {
       </ListItem>
       <ListItem key="2">
         <ListItemButton
-          selected={activeView === "exploreDiagram"}
-          onClick={() => viewExploreDiagram()}
+          selected={activeView === "researchDiagram"}
+          onClick={() => viewResearchDiagram()}
         >
           <ListItemIcon>
             <School />
           </ListItemIcon>
-          <ListItemText primary="Explore Diagram" />
+          <ListItemText primary="Research Diagram" />
         </ListItemButton>
       </ListItem>
       <ListItem key="3">
@@ -140,7 +140,7 @@ export const TopicViews = () => {
           ))}
         </List>
       </Collapse>
-      {(activeView === "topicDiagram" || activeView === "exploreDiagram") && (
+      {(activeView === "topicDiagram" || activeView === "researchDiagram") && (
         <>
           <Divider sx={{ marginY: 1 }} />
 

@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { exploreNodeTypes, nodeSchema } from "../../../../common/node";
+import { nodeSchema, researchNodeTypes } from "../../../../common/node";
 import { useSessionUser } from "../../../common/hooks";
 import { setGraphPartNotes } from "../../store/actions";
 import { useUserCanEditTopicData } from "../../store/userHooks";
@@ -16,7 +16,7 @@ import { StandaloneEdge } from "../Edge/StandaloneEdge";
 import { EditableNode } from "../Node/EditableNode";
 import { AnswerDetails } from "./AnswerDetails";
 import { DetailsClaimsSection } from "./DetailsClaimsSection";
-import { DetailsExploreSection } from "./DetailsExploreSection";
+import { DetailsResearchSection } from "./DetailsResearchSection";
 import { FactDetails } from "./FactDetails";
 import { QuestionDetails } from "./QuestionDetails";
 import { SourceDetails } from "./SourceDetails";
@@ -102,7 +102,7 @@ export const GraphPartDetails = ({ graphPart }: Props) => {
           />
         </ListItem>
 
-        {isNode(graphPart) && exploreNodeTypes.includes(graphPart.type) && <Divider />}
+        {isNode(graphPart) && researchNodeTypes.includes(graphPart.type) && <Divider />}
 
         {isNodeType(graphPart, "question") && <QuestionDetails questionNode={graphPart} />}
         {isNodeType(graphPart, "answer") && <AnswerDetails answerNode={graphPart} />}
@@ -115,8 +115,8 @@ export const GraphPartDetails = ({ graphPart }: Props) => {
 
         <Divider />
 
-        {/* prevent adding explore nodes to edges; not 100% sure that we want to restrict this, but if it continues to seem good, this section can accept node instead of graphPart */}
-        {partIsNode && <DetailsExploreSection node={graphPart} />}
+        {/* prevent adding research nodes to edges; not 100% sure that we want to restrict this, but if it continues to seem good, this section can accept node instead of graphPart */}
+        {partIsNode && <DetailsResearchSection node={graphPart} />}
       </List>
     </form>
   );

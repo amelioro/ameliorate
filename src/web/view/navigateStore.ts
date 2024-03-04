@@ -4,18 +4,18 @@ import { useEffect, useState } from "react";
 import { createWithEqualityFn } from "zustand/traditional";
 
 import { throwError } from "../../common/errorHandling";
-import { exploreNodeTypes, topicNodeTypes } from "../../common/node";
+import { researchNodeTypes, topicNodeTypes } from "../../common/node";
 import { emitter } from "../common/event";
 import { useGraphPart } from "../topic/store/graphPartHooks";
 import { useNode } from "../topic/store/nodeHooks";
 import { useTopicStore } from "../topic/store/store";
 import { FilterOptions } from "./utils/filter";
 
-export type View = "topicDiagram" | "exploreDiagram" | "criteriaTable" | "claimTree";
+export type View = "topicDiagram" | "researchDiagram" | "criteriaTable" | "claimTree";
 
 interface NavigateStoreState {
   selectedGraphPartId: string | null;
-  viewingExploreDiagram: boolean;
+  viewingResearchDiagram: boolean;
 
   viewingCriteriaTable: boolean;
   activeTableProblemId: string | null;
@@ -28,7 +28,7 @@ interface NavigateStoreState {
 
 const initialState: NavigateStoreState = {
   selectedGraphPartId: null,
-  viewingExploreDiagram: false,
+  viewingResearchDiagram: false,
 
   viewingCriteriaTable: false,
   activeTableProblemId: null,
@@ -42,8 +42,8 @@ const initialState: NavigateStoreState = {
       showSecondaryNeighbors: false,
       type: "none",
     },
-    exploreDiagram: {
-      nodeTypes: exploreNodeTypes,
+    researchDiagram: {
+      nodeTypes: researchNodeTypes,
       showSecondaryNeighbors: true,
       type: "none",
     },
@@ -91,7 +91,7 @@ export const useSecondaryView = () => {
     if (state.viewingClaimTree) {
       // only claim tree is layered in front of another view for now
       if (state.viewingCriteriaTable) return "criteriaTable";
-      if (state.viewingExploreDiagram) return "exploreDiagram";
+      if (state.viewingResearchDiagram) return "researchDiagram";
       return "topicDiagram";
     }
     return null;
@@ -115,7 +115,7 @@ export const useFilterOptions = (view: View) => {
     return (
       state.filterOptions[view] ??
       throwError(
-        "Filter options only exist for the topic or explore diagrams",
+        "Filter options only exist for the topic or research diagrams",
         view,
         state.filterOptions
       )
@@ -130,22 +130,22 @@ export const setSelected = (graphPartId: string | null) => {
 
 export const viewTopicDiagram = () => {
   useNavigateStore.setState({
-    viewingExploreDiagram: false,
+    viewingResearchDiagram: false,
     viewingCriteriaTable: false,
     viewingClaimTree: false,
   });
 };
 
-export const viewExploreDiagram = () => {
+export const viewResearchDiagram = () => {
   useNavigateStore.setState({
-    viewingExploreDiagram: true,
+    viewingResearchDiagram: true,
     viewingCriteriaTable: false,
     viewingClaimTree: false,
   });
 };
 
-export const closeExploreDiagram = () => {
-  useNavigateStore.setState({ viewingExploreDiagram: false });
+export const closeResearchDiagram = () => {
+  useNavigateStore.setState({ viewingResearchDiagram: false });
 };
 
 export const viewCriteriaTable = (problemNodeId: string) => {
@@ -177,7 +177,7 @@ export const setFilterOptions = (filterOptions: FilterOptions) => {
   const activeView = getActiveView(state);
 
   if (!state.filterOptions[activeView])
-    throw new Error("Filter options can only be set when viewing the topic or explore diagrams");
+    throw new Error("Filter options can only be set when viewing the topic or research diagrams");
 
   useNavigateStore.setState({
     filterOptions: { ...state.filterOptions, [activeView]: filterOptions },
@@ -190,7 +190,7 @@ export const setFilterOptions = (filterOptions: FilterOptions) => {
 const getActiveView = (state: NavigateStoreState): View => {
   if (state.viewingClaimTree) return "claimTree";
   if (state.viewingCriteriaTable) return "criteriaTable";
-  if (state.viewingExploreDiagram) return "exploreDiagram";
+  if (state.viewingResearchDiagram) return "researchDiagram";
   return "topicDiagram";
 };
 
@@ -215,8 +215,8 @@ const processSearchParams = (searchParams: URLSearchParams) => {
   if (viewParam) {
     const [view, graphPartIdSubstring] = viewParam.split(":") as [View, string];
     const graphPartId = findGraphPartIdBySubstring(graphPartIdSubstring);
-    if (view === "exploreDiagram".toLowerCase()) {
-      viewExploreDiagram();
+    if (view === "researchDiagram".toLowerCase()) {
+      viewResearchDiagram();
     } else if (view === "criteriaTable".toLowerCase() && graphPartId) {
       viewCriteriaTable(graphPartId);
     } else if (view === "claimTree".toLowerCase() && graphPartId) {
@@ -243,7 +243,7 @@ const getCalculatedSearchParams = (state: NavigateStoreState) => {
 
   const activeView = getActiveView(state);
   const viewParam =
-    activeView === "exploreDiagram"
+    activeView === "researchDiagram"
       ? `view=${activeView}`
       : activeView === "criteriaTable" && state.activeTableProblemId
       ? `view=${activeView}:${trimPartId(state.activeTableProblemId)}`

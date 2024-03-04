@@ -2,7 +2,7 @@ import { Article, ArticleOutlined } from "@mui/icons-material";
 import { useCallback } from "react";
 
 import { setSelected } from "../../../view/navigateStore";
-import { useExplicitClaimCount, useExploreNodes } from "../../store/graphPartHooks";
+import { useExplicitClaimCount, useResearchNodes } from "../../store/graphPartHooks";
 import { GraphPart } from "../../utils/graph";
 import { viewDetails } from "../TopicPane/TopicPane";
 import { Indicator } from "./Indicator";
@@ -13,12 +13,12 @@ interface Props {
 
 export const DetailsIndicator = ({ graphPart }: Props) => {
   const explicitClaimCount = useExplicitClaimCount(graphPart.id);
-  const { facts, sources } = useExploreNodes(graphPart.id);
+  const { facts, sources } = useResearchNodes(graphPart.id);
 
   const hasNotes = graphPart.data.notes.length > 0;
   const hasClaims = explicitClaimCount > 0; // TODO: add separate indicator for claims
-  const hasExploreNodes = [...facts, ...sources].length > 0; // excluding questions because that has its own indicator
-  const hasDetails = hasNotes || hasClaims || hasExploreNodes;
+  const hasResearchNodes = [...facts, ...sources].length > 0; // excluding questions because that has its own indicator
+  const hasDetails = hasNotes || hasClaims || hasResearchNodes;
   const Icon = hasDetails ? Article : ArticleOutlined;
 
   const onClick = useCallback(() => {

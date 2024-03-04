@@ -1,5 +1,5 @@
 import { RelationName, claimRelationNames } from "../../../common/edge";
-import { NodeType, claimNodeTypes, exploreNodeTypes, nodeTypes } from "../../../common/node";
+import { NodeType, claimNodeTypes, nodeTypes, researchNodeTypes } from "../../../common/node";
 import { hasClaims } from "./claim";
 import { Edge, Graph, Node, RelationDirection, findNode } from "./graph";
 import { children, components, parents } from "./node";
@@ -8,7 +8,7 @@ const questionRelations: AddableRelation[] = nodeTypes.map((nodeType) => ({
   child: "question",
   name: "asksAbout",
   parent: nodeType,
-  addableFrom: exploreNodeTypes.includes(nodeType) ? "parent" : "neither",
+  addableFrom: researchNodeTypes.includes(nodeType) ? "parent" : "neither",
 }));
 
 const factRelations: AddableRelation[] = nodeTypes
@@ -17,7 +17,7 @@ const factRelations: AddableRelation[] = nodeTypes
     child: "fact",
     name: "relevantFor",
     parent: nodeType,
-    addableFrom: exploreNodeTypes.includes(nodeType) ? "parent" : "neither",
+    addableFrom: researchNodeTypes.includes(nodeType) ? "parent" : "neither",
   }));
 
 const sourceRelations: AddableRelation[] = nodeTypes
@@ -26,10 +26,10 @@ const sourceRelations: AddableRelation[] = nodeTypes
     child: "source",
     name: "relevantFor",
     parent: nodeType,
-    addableFrom: exploreNodeTypes.includes(nodeType) ? "parent" : "neither",
+    addableFrom: researchNodeTypes.includes(nodeType) ? "parent" : "neither",
   }));
 
-const exploreRelations: AddableRelation[] = questionRelations.concat(
+const researchRelations: AddableRelation[] = questionRelations.concat(
   factRelations,
   sourceRelations,
   [
@@ -43,7 +43,7 @@ const exploreRelations: AddableRelation[] = questionRelations.concat(
 // Assumes that we're always pointing from child to parent.
 // This list is sorted by `parent` and then `child` so that it matches the partition order of nodes
 // in the layout.
-export const relations: AddableRelation[] = exploreRelations.concat([
+export const relations: AddableRelation[] = researchRelations.concat([
   // topic relations
   { child: "problem", name: "causes", parent: "problem", addableFrom: "child" },
   { child: "cause", name: "causes", parent: "problem", addableFrom: "both" },
