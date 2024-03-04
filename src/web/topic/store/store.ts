@@ -17,7 +17,7 @@ import {
 } from "../utils/graph";
 import { apiSyncer } from "./apiSyncerMiddleware";
 import { migrate } from "./migrate";
-import { getClaimTree, getExploreDiagram, getTopicDiagram } from "./utils";
+import { getClaimTree, getResearchDiagram, getTopicDiagram } from "./utils";
 
 export interface PlaygroundTopic {
   id: undefined; // so we can check this to see if the store topic is a playground topic
@@ -107,23 +107,23 @@ export const useTopicDiagram = (): Diagram => {
   });
 };
 
-export const useExploreDiagram = (): Diagram => {
-  const filterOptions = useFilterOptions("exploreDiagram");
+export const useResearchDiagram = (): Diagram => {
+  const filterOptions = useFilterOptions("researchDiagram");
 
   return useTopicStore((state) => {
     const topicGraph = { nodes: state.nodes, edges: state.edges };
-    const exploreDiagram = getExploreDiagram(topicGraph);
+    const researchDiagram = getResearchDiagram(topicGraph);
 
-    const { nodes: filteredPrimaryNodes } = applyStandardFilter(exploreDiagram, filterOptions);
+    const { nodes: filteredPrimaryNodes } = applyStandardFilter(researchDiagram, filterOptions);
     const nodesAfterTypeFilter = applyNodeTypeFilter(filteredPrimaryNodes, filterOptions.nodeTypes);
 
     const secondaryNeighbors = filterOptions.showSecondaryNeighbors
-      ? getSecondaryNeighbors(nodesAfterTypeFilter, topicGraph, "exploreDiagram")
+      ? getSecondaryNeighbors(nodesAfterTypeFilter, topicGraph, "researchDiagram")
       : [];
     const nodes = nodesAfterTypeFilter.concat(secondaryNeighbors);
 
     const edges = getRelevantEdges(nodes, topicGraph);
-    return { nodes, edges, orientation: "DOWN", type: "exploreDiagram" };
+    return { nodes, edges, orientation: "DOWN", type: "researchDiagram" };
   });
 };
 

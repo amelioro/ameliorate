@@ -81,7 +81,7 @@ enum NodeType {
   solutionComponent
   solution
 
-  // explore
+  // research
   question
   answer
   fact
@@ -128,7 +128,7 @@ enum EdgeType {
   creates
   embodies
 
-  // explore
+  // research
   asksAbout
   potentialAnswerTo
   relevantFor

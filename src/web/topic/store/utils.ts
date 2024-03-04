@@ -1,5 +1,5 @@
 import { claimRelationNames, topicRelationNames } from "../../../common/edge";
-import { claimNodeTypes, exploreNodeTypes, topicNodeTypes } from "../../../common/node";
+import { claimNodeTypes, researchNodeTypes, topicNodeTypes } from "../../../common/node";
 import { Diagram, getDiagramTitle } from "../utils/diagram";
 import { Graph, getRelevantEdges } from "../utils/graph";
 import { PlaygroundTopic, StoreTopic, TopicStoreState } from "./store";
@@ -18,15 +18,15 @@ export const getTopicDiagram = (topicGraph: Graph): Diagram => {
   };
 };
 
-export const getExploreDiagram = (topicGraph: Graph): Diagram => {
-  const nodes = topicGraph.nodes.filter((node) => exploreNodeTypes.includes(node.type));
+export const getResearchDiagram = (topicGraph: Graph): Diagram => {
+  const nodes = topicGraph.nodes.filter((node) => researchNodeTypes.includes(node.type));
   const edges = getRelevantEdges(nodes, topicGraph);
 
   return {
     nodes,
     edges,
     orientation: "DOWN",
-    type: "exploreDiagram",
+    type: "researchDiagram",
   };
 };
 

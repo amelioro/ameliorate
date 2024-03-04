@@ -2,4 +2,150 @@ import { Callout } from "nextra/components";
 
 # Diagramming Basics
 
-<Callout type="warning">Docs under construction.</Callout>
+After creating your first Topic, you'll be greeted by the Topic Workspace:
+
+![image](https://github.com/amelioro/ameliorate/assets/13872370/e0a8b631-d759-4959-9400-e12f52b17531)
+
+The Topic Workspace is divided into a few sections:
+
+1. the Topic Diagram - this is where you'll build out the structure of your Topic with concepts (via boxes called nodes) and relations between them (via lines called edges).
+2. the Topic Pane - on the Details tab, you can see more details about the Topic, or about the currently-selected node or edge; on the Views tab, you can switch between ways of looking at the Topic Diagram.
+3. the Topic Toolbar - here you'll find buttons to take different actions, like undo/redo and delete.
+
+## Nodes
+
+At the center of your diagram, there's a purple node with a few details on it:
+
+![image](https://github.com/amelioro/ameliorate/assets/13872370/5b031702-52ca-499e-aac1-880490d9fb6f)
+
+1. the node's text - a brief summary of the concept that the node represents.
+2. the node's type - conveys what kind of concept the node represents. In this case, this node represents a Problem.
+3. the node's indicators - these indicate some information; you can see what each indicator does [here](/features/indicators).
+
+You might want to start your Topic with a solution proposal, or a question, or something else, but the default is starting with a problem. For our example, we're going to model a situation where cars are going too fast in a neighborhood, and we're worried about the safety of the neighborhood's children.
+
+### Editing a node's text
+
+Let's start by changing the node's text to "cars going too fast in my neighborhood". Select the node by clicking on it, then the node's text will become editable.
+
+![image](https://github.com/amelioro/ameliorate/assets/13872370/c4f74efa-41cc-4f32-afdc-6d21841ed0f3)
+
+### Adding a node
+
+After selecting the node, you'll notice some buttons appear above and below the node. These are for adding related nodes. You can hover them to see which button adds which kind of node.
+
+When you're modeling your Topic, you can add nodes in whatever order they come to mind for you, but we're going to start by justifying why this is a problem. Detriments can help us here - they're negative effects created by the problem. Let's add a Detriment by clicking the magenta sinking house button, and edit the text to "pedestrians might get hit".
+
+![image](https://github.com/amelioro/ameliorate/assets/13872370/12099a44-4162-45c7-9848-4811e77eb802)
+
+<Callout type="info">
+  You can delete your node by right-clicking the node and clicking delete, selecting the node and
+  clicking the trash can in the Topic Toolbar, or using the undo button in the Topic Toolbar.
+</Callout>
+
+<Callout type="info">
+  You can add a node without relation to an existing node by right-clicking the diagram background
+  and picking the "Add node" option.
+</Callout>
+
+## Scoring to convey opinion
+
+One key feature in Ameliorate is that you can score nodes to convey how important you think they are. To score a node, hover over or click the circular score in the node's upper-right corner, and click on a score.
+
+![image](https://github.com/amelioro/ameliorate/assets/13872370/dc5063e6-a0ec-4d6a-b7fd-a988a166e63e)
+
+Generally, 1-4 are negative, 5 and unscored ("-") are neutral, and 6-9 are positive. Let's score the Detriment as a 9, conveying that we think it's a big detriment that pedestrians could get hit by cars.
+
+<Callout type="info">
+  Much of what you can do per-node can also be done per-edge. If you score the "created by" edge
+  connecting these nodes, that would indicate how much "pedestrians might get hit" is created by
+  "cars going too fast in my neighborhood". A score of 9 would convey that the Detriment is
+  definitely created by the Problem, and a score of 1 would convey that the Detriment is definitely
+  not created by the Problem.
+</Callout>
+
+<Callout type="info">As long as you're logged in, you can score other people's Topics too.</Callout>
+
+### Acknowledging small details
+
+Something nice here is that we can acknowledge that the problem actually creates a positive effect, while clearly specifying that we think it's not as important as the negative effect. Let's add a Benefit node "people get places faster", but score it as a 2 to convey that we think it's relatively unimportant.
+
+![image](https://github.com/amelioro/ameliorate/assets/13872370/7f7964a1-bfd0-43c2-9aa8-ed02cd92f2cf)
+
+## Justifying a node
+
+Just as any node can be scored, any node can also be supported or critiqued. If you select the Detriment node, you'll notice the Topic Pane shows details specific to the selected node:
+
+![image](https://github.com/amelioro/ameliorate/assets/13872370/f03ccd09-9407-409b-b9f9-cf81c1b5ec5d)
+
+1. notes for the node - scratch details, or any extra context to clarify the node
+2. claims - supports or critiques for the node; these can be used to justify why the node may be more important or less important
+3. research - questions, facts, or sources that are relevant to the node
+
+Let's add a Support "reduces feeling of safety in neighborhood" to the Detriment node.
+
+![image](https://github.com/amelioro/ameliorate/assets/13872370/0a0d4f40-39fa-414e-ab3e-b511727e6372)
+
+### Chaining justification
+
+You can also chain claims together, for example to justify why the feeling of safety is important. You can do this two different ways. The first way is to go to the details for the Support you added by clicking the Details Indicator:
+
+![image](https://github.com/amelioro/ameliorate/assets/13872370/84659b35-c4b4-4956-9869-a3090ed8e8c7)
+
+then you can add your justification the same way you added the first Support. Let's add a Support "reduced safety correlates with reduced home values":
+
+![image](https://github.com/amelioro/ameliorate/assets/13872370/0cec2503-7f79-4b8c-a11d-3f00bcd18559)
+
+The second way is to view the claim tree for the node; let's click the Claim Tree indicator:
+
+![image](https://github.com/amelioro/ameliorate/assets/13872370/0f253a0d-5899-4f9e-aa0d-b775342598c1)
+
+then we can add a node the same way we added our Benefit and Detriment nodes:
+
+![image](https://github.com/amelioro/ameliorate/assets/13872370/e96678d4-cfc7-4a7f-a4a0-fc36b2bdec48)
+
+### Diagramming choices
+
+You might have noticed that sometimes justification can be represented either in an argumentative manner or as part of the Topic's structure. In this case, reduced safety is modeled as a Support, but could also be modeled as a Detriment that's created by "pedestrians might get hit".
+
+The author's opinion is: trains of thought are easier to model as argument, but modeling through the Topic's structure makes it easier to understand how it relates to the rest of the topic. It may be best to initially model as argument, and later adjust the Topic's structure to reflect the argument.
+
+Sometimes there are a few different ways to represent the same thing; check out the [Diagramming Choices](/diagramming-choices) page for some thoughts on these situations and their trade-offs.
+
+## Research nodes
+
+Oftentimes, you won't have all the information you want for your Topic, and you'll have to do some research. There are a few nodes intended for facilitating and organizing research:
+
+- Questions: to identify information that may be useful to find out
+- Answers: to directly answer a question; sometimes the answer might just be reflected through your Topic's structure
+- Facts: to identify information (usually statistical) that may be relevant
+- Sources: to identify places that may have relevant information
+
+Let's return to our Topic structure by clicking the 'x' in the upper-right corner of this Claim Tree, select the Detriment node again, and take a look at the Research section:
+
+![image](https://github.com/amelioro/ameliorate/assets/13872370/7d7ef02e-bf8c-420d-8b84-19cd9609fcdc)
+
+### Adding research nodes
+
+This is where we can add research nodes. Let's click the question mark button to add a Question "are there many children, handicapped, elderly, in the area?":
+
+![image](https://github.com/amelioro/ameliorate/assets/13872370/bf3d9342-9279-4045-9504-1ec0d1e2068f)
+
+Let's also add a Fact "residential street has 25 mph speed limit" to the Problem "cars going too fast in my neighborhood":
+
+![image](https://github.com/amelioro/ameliorate/assets/13872370/0e91786f-6369-469a-8c8e-9f7c57d83dba)
+
+### The Research Diagram
+
+Sometimes navigating between research details can be cumbersome. The Research Diagram can help alleviate this - go to the Views tab in the Topic Pane, and click the Research Diagram button:
+
+![image](https://github.com/amelioro/ameliorate/assets/13872370/090fad3e-6aed-4268-aefe-9e0b17bfcad2)
+
+Now we can view all the research nodes for our Topic, along with the nodes they're relevant for. Let's add a Source "WI traffic manual" to our Fact, and put the link "https://wisconsindot.gov/dtsdManuals/traffic-ops/manuals-and-standards/teops/13-05.pdf" in the Source's notes:
+
+![image](https://github.com/amelioro/ameliorate/assets/13872370/26da4210-0533-4ec8-b39a-ed97ff6fdf4c)
+
+<Callout type="info">
+  Putting a source link in the notes may feel a little awkward - there's work planned to attach
+  links in the node's display text.
+</Callout>

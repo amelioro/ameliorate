@@ -10,7 +10,7 @@ import {
 } from "../../../view/navigateStore";
 import { CriteriaTable } from "../CriteriaTable/CriteriaTable";
 import { ClaimTree } from "../Diagram/ClaimTree";
-import { ExploreDiagram } from "../Diagram/ExploreDiagram";
+import { ResearchDiagram } from "../Diagram/ResearchDiagram";
 import { TopicDiagram } from "../Diagram/TopicDiagram";
 import { TopicToolbar } from "../Surface/TopicToolbar";
 import { TopicPane } from "../TopicPane/TopicPane";
@@ -54,11 +54,11 @@ export const TopicWorkspace = () => {
             height="100%"
             position="absolute"
             zIndex={
-              activeView === "exploreDiagram" ? 2 : secondaryView === "exploreDiagram" ? 1 : 0
+              activeView === "researchDiagram" ? 2 : secondaryView === "researchDiagram" ? 1 : 0
             }
             sx={{ backgroundColor: "white" }} // diagrams default to transparent background specifically to allow claim tree to retain visual context of the view behind it
           >
-            <ExploreDiagram />
+            <ResearchDiagram />
           </Box>
 
           <Box

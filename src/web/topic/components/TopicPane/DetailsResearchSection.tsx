@@ -1,7 +1,7 @@
 import { School } from "@mui/icons-material";
 import { ListItem, ListItemIcon, ListItemText, Stack, Typography } from "@mui/material";
 
-import { useExploreNodes } from "../../store/graphPartHooks";
+import { useResearchNodes } from "../../store/graphPartHooks";
 import { Node } from "../../utils/graph";
 import { AddNodeButton } from "../Node/AddNodeButton";
 import { EditableNode } from "../Node/EditableNode";
@@ -11,10 +11,10 @@ interface Props {
 }
 
 // make work for topic (when no graphPart is passed)
-export const DetailsExploreSection = ({ node }: Props) => {
-  const { questions, facts, sources } = useExploreNodes(node.id);
+export const DetailsResearchSection = ({ node }: Props) => {
+  const { questions, facts, sources } = useResearchNodes(node.id);
 
-  const exploreNodes = [...questions, ...facts, ...sources];
+  const researchNodes = [...questions, ...facts, ...sources];
 
   return (
     <>
@@ -22,7 +22,7 @@ export const DetailsExploreSection = ({ node }: Props) => {
         <ListItemIcon>
           <School />
         </ListItemIcon>
-        <ListItemText primary="Exploration" />
+        <ListItemText primary="Research" />
       </ListItem>
 
       {/* spacing is the amount that centers the add buttons above the columns */}
@@ -76,12 +76,12 @@ export const DetailsExploreSection = ({ node }: Props) => {
         useFlexGap
         spacing="2px"
       >
-        {exploreNodes.length > 0 ? (
-          exploreNodes.map((exploreNode) => (
-            <EditableNode key={exploreNode.id} node={exploreNode} supplemental />
+        {researchNodes.length > 0 ? (
+          researchNodes.map((researchNode) => (
+            <EditableNode key={researchNode.id} node={researchNode} supplemental />
           ))
         ) : (
-          <Typography>No explore nodes yet!</Typography>
+          <Typography>No research nodes yet!</Typography>
         )}
       </Stack>
     </>

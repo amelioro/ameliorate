@@ -1,1 +1,1 @@
-export type DiagramType = "topicDiagram" | "exploreDiagram" | "claimTree";
+export type DiagramType = "topicDiagram" | "researchDiagram" | "claimTree";

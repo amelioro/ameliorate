@@ -44,7 +44,7 @@ export const FlowNode = (flowNode: NodeProps) => {
     ? "secondary"
     : "normal";
 
-  // avoids awkwardly allowing adding topic nodes to explore diagram when they won't show up after adding
+  // avoids awkwardly allowing adding topic nodes to research diagram when they won't show up after adding
   const isSecondary = topicNodeTypes.includes(node.type) && diagramContext.type !== "topicDiagram";
 
   useEffect(() => {

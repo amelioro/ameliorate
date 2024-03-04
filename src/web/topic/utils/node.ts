@@ -72,7 +72,7 @@ export const nodeDecorations: Record<FlowNodeType, NodeDecoration> = {
     NodeIcon: Check,
   },
 
-  // explore
+  // research
   question: {
     title: "Question",
     NodeIcon: QuestionMark,

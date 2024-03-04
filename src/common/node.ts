@@ -20,7 +20,7 @@ export const nodeTypes = [
   "solutionComponent",
   "solution",
 
-  // explore
+  // research
   "question",
   "answer",
   "fact",
@@ -67,12 +67,12 @@ export const diagramNodeTypes: Record<DiagramType, NodeType[]> = {
     "solution",
     "custom", // is a generic node but currently only seems worthwhile in topic
   ],
-  exploreDiagram: ["question", "answer", "fact", "source"],
+  researchDiagram: ["question", "answer", "fact", "source"],
   claimTree: ["rootClaim", "support", "critique"],
 };
 
 export const topicNodeTypes = diagramNodeTypes.topicDiagram;
-export const exploreNodeTypes = diagramNodeTypes.exploreDiagram;
+export const researchNodeTypes = diagramNodeTypes.researchDiagram;
 export const claimNodeTypes = diagramNodeTypes.claimTree;
 
 export const getNewTopicProblemNode = (topicId: number, topicTitle: string): Node => {
@@ -89,7 +89,7 @@ export const getNewTopicProblemNode = (topicId: number, topicTitle: string): Nod
 
 export const getSiblingNodeTypes = (nodeType: NodeType): NodeType[] => {
   if (topicNodeTypes.includes(nodeType)) return topicNodeTypes;
-  else if (exploreNodeTypes.includes(nodeType)) return exploreNodeTypes;
+  else if (researchNodeTypes.includes(nodeType)) return researchNodeTypes;
   else if (claimNodeTypes.includes(nodeType)) return claimNodeTypes;
   else return [];
 };

@@ -1,5 +1,5 @@
 import { RelationName, claimRelationNames } from "../../../common/edge";
-import { NodeType, claimNodeTypes, exploreNodeTypes } from "../../../common/node";
+import { NodeType, claimNodeTypes, researchNodeTypes } from "../../../common/node";
 import { isClaimEdge } from "../utils/claim";
 import { Node, findGraphPart } from "../utils/graph";
 import { useTopicStore } from "./store";
@@ -59,23 +59,24 @@ export const useNonTopLevelClaimCount = (graphPartId: string) => {
   });
 };
 
-const commonExploreRelations: RelationName[] = ["asksAbout", "relevantFor"];
+const commonResearchRelations: RelationName[] = ["asksAbout", "relevantFor"];
 
-export const useExploreNodes = (graphPartId: string) => {
+export const useResearchNodes = (graphPartId: string) => {
   return useTopicStore((state) => {
-    const exploreEdges = state.edges.filter(
-      (edge) => edge.source === graphPartId && commonExploreRelations.includes(edge.label)
+    const researchEdges = state.edges.filter(
+      (edge) => edge.source === graphPartId && commonResearchRelations.includes(edge.label)
     );
 
-    const exploreNodes = state.nodes.filter(
+    const researchNodes = state.nodes.filter(
       (node) =>
-        exploreNodeTypes.includes(node.type) && exploreEdges.find((edge) => edge.target === node.id)
+        researchNodeTypes.includes(node.type) &&
+        researchEdges.find((edge) => edge.target === node.id)
     );
 
     return {
-      questions: exploreNodes.filter((node) => node.type === "question"),
-      facts: exploreNodes.filter((node) => node.type === "fact"),
-      sources: exploreNodes.filter((node) => node.type === "source"),
+      questions: researchNodes.filter((node) => node.type === "question"),
+      facts: researchNodes.filter((node) => node.type === "fact"),
+      sources: researchNodes.filter((node) => node.type === "source"),
     };
   });
 };

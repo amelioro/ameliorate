@@ -4,8 +4,9 @@
     "type": "separator",
     "title": "App"
   },
-  "getting-started": "",
-  "indicators": "",
+  "getting-started": "Getting Started 🚧",
+  "features": "Features 🚧",
+  "diagramming-choices": "Diagramming Choices 🚧",
   "-- Project": {
     "type": "separator",
     "title": "Project"

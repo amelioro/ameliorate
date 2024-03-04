@@ -4,7 +4,7 @@ import { useCallback, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { NodeType, exploreNodeTypes, topicNodeTypes } from "../../../../common/node";
+import { NodeType, researchNodeTypes, topicNodeTypes } from "../../../../common/node";
 import {
   useCriteria,
   useProblems,
@@ -15,9 +15,9 @@ import {
 import { setFilterOptions, useFilterOptions } from "../../navigateStore";
 import {
   FilterTypes,
-  exploreFilterTypes,
   filterOptionsSchema,
   filterSchemas,
+  researchFilterTypes,
   topicFilterTypes,
 } from "../../utils/filter";
 
@@ -53,7 +53,7 @@ const getProp = <T,>(obj: object | null, prop: string, defaultValue: T): T => {
 };
 
 interface Props {
-  activeView: "topicDiagram" | "exploreDiagram";
+  activeView: "topicDiagram" | "researchDiagram";
 }
 
 /**
@@ -117,8 +117,8 @@ export const FilterOptions = ({ activeView }: Props) => {
     },
   });
 
-  const filterNodeTypes = activeView === "topicDiagram" ? topicNodeTypes : exploreNodeTypes;
-  const filterTypes = activeView === "topicDiagram" ? topicFilterTypes : exploreFilterTypes;
+  const filterNodeTypes = activeView === "topicDiagram" ? topicNodeTypes : researchNodeTypes;
+  const filterTypes = activeView === "topicDiagram" ? topicFilterTypes : researchFilterTypes;
 
   const type = watch("type");
   const typeSchemaShape = filterSchemas[type].shape;
@@ -238,7 +238,7 @@ export const FilterOptions = ({ activeView }: Props) => {
                         <br />
                         <br />
                         For example, question and fact nodes are secondary in the topic diagram, and
-                        problem and solution nodes are secondary in the explore diagram.
+                        problem and solution nodes are secondary in the research diagram.
                       </span>
                     }
                     enterTouchDelay={0} // allow touch to immediately trigger

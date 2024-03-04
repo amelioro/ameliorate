@@ -1,7 +1,7 @@
 import uniqBy from "lodash/uniqBy";
 import { z } from "zod";
 
-import { RelationName, exploreRelationNames } from "../../../common/edge";
+import { RelationName, researchRelationNames } from "../../../common/edge";
 import { NodeType, nodeSchema, zNodeTypes } from "../../../common/node";
 import { Graph, Node, ancestors, descendants, getRelevantEdges } from "../../topic/utils/graph";
 import { children, parents } from "../../topic/utils/node";
@@ -212,9 +212,9 @@ const applyQuestionFilter = (graph: Graph, filterOptions: QuestionOptions) => {
   if (!centralQuestion) return graph;
 
   const parentsForContext = parents(centralQuestion, graph);
-  const exploreChildren = descendants(centralQuestion, graph, exploreRelationNames);
+  const researchChildren = descendants(centralQuestion, graph, researchRelationNames);
 
-  const nodes = [centralQuestion, ...parentsForContext, ...exploreChildren];
+  const nodes = [centralQuestion, ...parentsForContext, ...researchChildren];
   const edges = getRelevantEdges(nodes, graph);
 
   return { nodes, edges };
@@ -258,9 +258,9 @@ type SourceOptions = z.infer<typeof sourceSchema>;
 
 // TODO?: is there a way to type-guarantee that these values come from the defined schemas?
 export const topicFilterTypes = ["none", "highLevel", "problem", "tradeoffs", "solution"] as const;
-export const exploreFilterTypes = ["none", "question", "source"] as const;
+export const researchFilterTypes = ["none", "question", "source"] as const;
 
-const filterTypes = [...topicFilterTypes, ...exploreFilterTypes] as const;
+const filterTypes = [...topicFilterTypes, ...researchFilterTypes] as const;
 export type FilterTypes = typeof filterTypes[number];
 
 export const applyNodeTypeFilter = (nodes: Node[], nodeTypes: NodeType[]) => {

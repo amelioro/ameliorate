@@ -160,7 +160,7 @@ const sharedPalette = {
   benefit: augmentColor({ color: { main: "#A0DC46" } }), // calculated analogous color to effect, solution, and support
   detriment: augmentColor({ color: { main: "#DC477B", contrastText: "rgba(0, 0, 0, 0.87)" } }), // calculated analogous color to effect, problem, and critique
 
-  // explore - palette https://coolors.co/9e9e9e-f57c00-0288d1-04f06a-1c110a
+  // research - palette https://coolors.co/9e9e9e-f57c00-0288d1-04f06a-1c110a
   question: augmentColor({ color: { main: grey[500] } }), // grey, ambiguous, uncertain
   answer: augmentColor({ color: { main: "#04f06a" } }), // spring green, green like answer/good, but distinct from solution's green
   fact: augmentColor({ color: { main: orange["700"] } }), // orange, fact

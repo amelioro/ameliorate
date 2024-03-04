@@ -229,7 +229,7 @@ export const getRelevantEdges = (nodes: Node[], graph: Graph) => {
  * Secondary nodes are those that aren't the focus of the current diagram.
  *
  * For example, question and fact nodes are secondary in the topic diagram, and problem and solution
- * nodes are secondary in the explore diagram.
+ * nodes are secondary in the research diagram.
  */
 export const getSecondaryNeighbors = (nodes: Node[], graph: Graph, currentDiagram: DiagramType) => {
   const nodeIds = nodes.map((node) => node.id);
