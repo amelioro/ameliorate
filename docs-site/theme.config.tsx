@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import { discordInvite, feedbackPage, githubRepo } from "../src/web/common/urls";
 
@@ -23,6 +24,30 @@ const config = {
   },
 
   // other config
+  banner: {
+    text: (
+      <>
+        While Ameliorate is in{" "}
+        <Link
+          href="/release-status"
+          // not sure why this isn't applied to banner, but just took these classes from a link generated from an mdx file
+          className="nx-text-primary-600 nx-underline nx-decoration-from-font [text-underline-position:from-font]"
+        >
+          Alpha
+        </Link>
+        , it's expected to change a lot; feel free to{" "}
+        <Link
+          href="https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md#providing-feedback"
+          target="_blank"
+          // not sure why this isn't applied to banner, but just took these classes from a link generated from an mdx file
+          className="nx-text-primary-600 nx-underline nx-decoration-from-font [text-underline-position:from-font]"
+        >
+          mention
+        </Link>{" "}
+        out-of-date docs, or ideas for improvement
+      </>
+    ),
+  },
   useNextSeoProps() {
     return { titleTemplate: "%s | Ameliorate" };
   },
