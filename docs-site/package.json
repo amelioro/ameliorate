@@ -4,6 +4,7 @@
   "scripts": {
     "//dev": "port 3008 for docs, to distinguish from deploying app",
     "dev": "next -p 3008",
+    "//build": "delete .next to prevent netlify from caching and not updating sidebar when page titles change - thanks https://github.com/shuding/nextra/issues/1564#issuecomment-1688460307",
     "build": "npm run clean && next build",
     "clean": "rm -rf .next",
     "start": "next start -p 3008"

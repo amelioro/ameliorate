@@ -13,6 +13,12 @@ module.exports = withNextra({
         hostname: "ameliorate.app",
         port: "",
       },
+      {
+        protocol: "https",
+        hostname: "github.com",
+        port: "",
+        pathname: "/amelioro/ameliorate/assets/**",
+      },
     ],
   },
 });
