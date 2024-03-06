@@ -14,20 +14,9 @@ const priorities = Object.fromEntries(nodeTypes.map((type, index) => [type, inde
 
 const elk = new ELK();
 
-// sort by source priority, then target priority
-const compareEdges = (edge1: Edge, edge2: Edge, nodes: Node[]) => {
-  const source1 = nodes.find((node) => node.id === edge1.source);
-  const source2 = nodes.find((node) => node.id === edge2.source);
-  const target1 = nodes.find((node) => node.id === edge1.target);
-  const target2 = nodes.find((node) => node.id === edge2.target);
-
-  if (!source1 || !source2 || !target1 || !target2)
-    throw new Error("Edge source or target not found");
-
-  const sourceCompare = Number(priorities[source1.type]) - Number(priorities[source2.type]);
-  if (sourceCompare !== 0) return sourceCompare;
-
-  return Number(priorities[target1.type]) - Number(priorities[target2.type]);
+// sort nodes by type
+const compareNodes = (node1: Node, node2: Node) => {
+  return Number(priorities[node1.type]) - Number(priorities[node2.type]);
 };
 
 /**
@@ -112,9 +101,9 @@ export const layout = async (diagram: Diagram, partition: boolean): Promise<Node
     "elk.spacing.edgeEdge": "0",
     // other placement strategies seem to either spread nodes out too much, or ignore edges between layers
     "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX",
-    // allows grouping nodes by type (within a layer) when edges are sorted by type
+    // allows grouping nodes by type (within a layer) when nodes are sorted by type
     // tried using `position` to do this but it doesn't group nodes near their source node
-    "elk.layered.considerModelOrder.strategy": "NODES_AND_EDGES",
+    "elk.layered.considerModelOrder.strategy": "PREFER_NODES",
     // these spacings are just what roughly seem to look good
     "elk.layered.spacing.nodeNodeBetweenLayers": orientation === "DOWN" ? "130" : "220",
     "elk.spacing.nodeNode": orientation === "DOWN" ? "20" : "50",
@@ -122,34 +111,38 @@ export const layout = async (diagram: Diagram, partition: boolean): Promise<Node
     "elk.partitioning.activate": partition ? "true" : "false",
     // ensure node islands don't overlap (needed for when node has 3 rows of text)
     "elk.spacing.componentComponent": "30", // default is 20
+    // prioritize shorter edges e.g. if a problem has multiple direct causes, prioritize putting
+    // them in the same layer over using space efficiently
+    "elk.layered.priority.shortness": "10",
+    // Try fewer random layouts to see if better layout exists.
+    // No idea why this seems to preserve node order (and therefore group node types) better;
+    // perhaps higher thoroughness means it'll find a layout that better uses space,
+    // caring less about node order.
+    "elk.layered.thoroughness": "1",
   };
 
   const graph: ElkNode = {
     id: "elkgraph",
-    children: nodes.map((node) => {
-      return {
-        id: node.id,
-        width: nodeWidthPx,
-        height: nodeHeightPx,
-        layoutOptions: {
-          // Allow nodes to be partitioned into layers by type.
-          // This can get awkward if there are multiple problems with their own sets of criteria,
-          // solutions, components, effects; we might be able to improve that situation by modeling
-          // each problem within a nested node. Or maybe we could just do partitioning within
-          // a special "problem context view" rather than in the main topic diagram view.
-          "elk.partitioning.partition": calculatePartition(node, nodes, edges, type),
-        },
-      };
-    }),
-    edges: [...edges]
-      // This order results in grouping nodes by type under their source node.
-      // This is a requirement for the claim tree but less so for the topic diagram - if performance
-      // in the diagram is a concern, this can probably just be done in the tree (and maybe `position`
-      // would be more suited for the diagram, see https://github.com/kieler/elkjs/issues/21#issuecomment-382574679).
-      .sort((edge1, edge2) => compareEdges(edge1, edge2, nodes))
-      .map((edge) => {
-        return { id: edge.id, sources: [edge.source], targets: [edge.target] };
+    children: [...nodes]
+      .sort((node1, node2) => compareNodes(node1, node2))
+      .map((node) => {
+        return {
+          id: node.id,
+          width: nodeWidthPx,
+          height: nodeHeightPx,
+          layoutOptions: {
+            // Allow nodes to be partitioned into layers by type.
+            // This can get awkward if there are multiple problems with their own sets of criteria,
+            // solutions, components, effects; we might be able to improve that situation by modeling
+            // each problem within a nested node. Or maybe we could just do partitioning within
+            // a special "problem context view" rather than in the main topic diagram view.
+            "elk.partitioning.partition": calculatePartition(node, nodes, edges, type),
+          },
+        };
       }),
+    edges: edges.map((edge) => {
+      return { id: edge.id, sources: [edge.source], targets: [edge.target] };
+    }),
   };
 
   // hack to try laying out without partition if partitions cause error
