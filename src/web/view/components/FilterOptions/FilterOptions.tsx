@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Autocomplete, FormControlLabel, Stack, Switch, TextField, Tooltip } from "@mui/material";
-import { useCallback, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -183,16 +183,21 @@ export const FilterOptions = ({ activeView }: Props) => {
     return value ?? centralSourceOptions[0];
   }, [centralSourceId, centralSourceOptions, setValue]);
 
-  const submit = useCallback(() => {
-    void handleSubmit((data) => {
-      // We know that zod has validated the data by this point.
-      // `FormData` is used for the form's data type so that form `errors` type has all props;
-      // without this, `errors` only knows the props that intersect all the schemas, i.e. `type`.
-      setFilterOptions(data as ValidatedFormData);
-    })();
-  }, [handleSubmit]);
+  useEffect(() => {
+    // trigger submit every time the form changes
+    const subscription = watch(
+      () =>
+        void handleSubmit((data) => {
+          // We know that zod has validated the data by this point.
+          // `FormData` is used for the form's data type so that form `errors` type has all props;
+          // without this, `errors` only knows the props that intersect all the schemas, i.e. `type`.
+          setFilterOptions(data as ValidatedFormData);
+        })()
+    );
 
-  // TODO?: is there a way to submit when any input changes, without using onChange for each individual component?
+    return subscription.unsubscribe;
+  }, [handleSubmit, watch]);
+
   return (
     <form style={{ padding: "8px" }}>
       <Stack spacing={1.5}>
@@ -206,10 +211,7 @@ export const FilterOptions = ({ activeView }: Props) => {
               limitTags={2} // one line's worth
               disableCloseOnSelect
               options={filterNodeTypes}
-              onChange={(_event, values) => {
-                field.onChange([...values]);
-                submit();
-              }}
+              onChange={(_event, values) => field.onChange([...values])}
               disableClearable
               renderInput={(params) => (
                 <TextField
@@ -257,10 +259,7 @@ export const FilterOptions = ({ activeView }: Props) => {
                 <Switch
                   {...field}
                   checked={field.value}
-                  onChange={(_event, checked) => {
-                    field.onChange(checked);
-                    submit();
-                  }}
+                  onChange={(_event, checked) => field.onChange(checked)}
                 />
               }
             />
@@ -274,12 +273,16 @@ export const FilterOptions = ({ activeView }: Props) => {
             <Autocomplete
               {...field}
               options={filterTypes}
-              onChange={(_event, value) => {
-                field.onChange(value);
-                submit(); // how otherwise to ensure submit happens on change of any form input?
-              }}
+              onChange={(_event, value) => field.onChange(value)}
               disableClearable
-              renderInput={(params) => <TextField {...params} label="Standard Filter" />}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Standard Filter"
+                  error={!!errors.type}
+                  helperText={errors.type?.message}
+                />
+              )}
               size="small"
             />
           )}
@@ -296,7 +299,6 @@ export const FilterOptions = ({ activeView }: Props) => {
                 onChange={(_event, value) => {
                   if (!value) return;
                   field.onChange(value.id);
-                  submit();
                 }}
                 disableClearable={centralProblemValue !== undefined}
                 renderInput={(params) => (
@@ -331,10 +333,7 @@ export const FilterOptions = ({ activeView }: Props) => {
                   <Switch
                     {...field}
                     checked={field.value}
-                    onChange={(_event, checked) => {
-                      field.onChange(checked);
-                      submit();
-                    }}
+                    onChange={(_event, checked) => field.onChange(checked)}
                   />
                 }
               />
@@ -352,10 +351,7 @@ export const FilterOptions = ({ activeView }: Props) => {
                   <Switch
                     {...field}
                     checked={field.value}
-                    onChange={(_event, checked) => {
-                      field.onChange(checked);
-                      submit();
-                    }}
+                    onChange={(_event, checked) => field.onChange(checked)}
                   />
                 }
               />
@@ -373,10 +369,7 @@ export const FilterOptions = ({ activeView }: Props) => {
                   <Switch
                     {...field}
                     checked={field.value}
-                    onChange={(_event, checked) => {
-                      field.onChange(checked);
-                      submit();
-                    }}
+                    onChange={(_event, checked) => field.onChange(checked)}
                   />
                 }
               />
@@ -394,10 +387,7 @@ export const FilterOptions = ({ activeView }: Props) => {
                   <Switch
                     {...field}
                     checked={field.value}
-                    onChange={(_event, checked) => {
-                      field.onChange(checked);
-                      submit();
-                    }}
+                    onChange={(_event, checked) => field.onChange(checked)}
                   />
                 }
               />
@@ -416,7 +406,6 @@ export const FilterOptions = ({ activeView }: Props) => {
                 onChange={(_event, value) => {
                   if (!value) return;
                   field.onChange(value.id);
-                  submit();
                 }}
                 disableClearable={centralSolutionValue !== undefined}
                 renderInput={(params) => (
@@ -449,12 +438,16 @@ export const FilterOptions = ({ activeView }: Props) => {
                 {...field}
                 // TODO: build options with Pascal Case
                 options={typeSchemaShape.detail.options.map((option) => option.value)}
-                onChange={(_event, value) => {
-                  field.onChange(value);
-                  submit();
-                }}
+                onChange={(_event, value) => field.onChange(value)}
                 disableClearable
-                renderInput={(params) => <TextField {...params} label="Detail" />}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Detail"
+                    error={!!errors.detail}
+                    helperText={errors.detail?.message}
+                  />
+                )}
                 size="small"
               />
             )}
@@ -472,10 +465,7 @@ export const FilterOptions = ({ activeView }: Props) => {
                 disableCloseOnSelect
                 options={solutionOptions}
                 value={solutionValues}
-                onChange={(_event, values) => {
-                  field.onChange(values.map((value) => value.id));
-                  submit();
-                }}
+                onChange={(_event, values) => field.onChange(values.map((value) => value.id))}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -509,10 +499,7 @@ export const FilterOptions = ({ activeView }: Props) => {
                 disableCloseOnSelect
                 options={criteriaOptions}
                 value={criteriaValues}
-                onChange={(_event, values) => {
-                  field.onChange(values.map((value) => value.id));
-                  submit();
-                }}
+                onChange={(_event, values) => field.onChange(values.map((value) => value.id))}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -546,7 +533,6 @@ export const FilterOptions = ({ activeView }: Props) => {
                 onChange={(_event, value) => {
                   if (!value) return;
                   field.onChange(value.id);
-                  submit();
                 }}
                 disableClearable={centralQuestionValue !== undefined}
                 renderInput={(params) => (
@@ -582,7 +568,6 @@ export const FilterOptions = ({ activeView }: Props) => {
                 onChange={(_event, value) => {
                   if (!value) return;
                   field.onChange(value.id);
-                  submit();
                 }}
                 disableClearable={centralSourceValue !== undefined}
                 renderInput={(params) => (
