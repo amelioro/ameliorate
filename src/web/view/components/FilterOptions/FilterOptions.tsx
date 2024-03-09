@@ -1,10 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Autocomplete, FormControlLabel, Stack, Switch, TextField, Tooltip } from "@mui/material";
+import { Autocomplete, Stack, TextField } from "@mui/material";
 import { useEffect, useMemo } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { NodeType, researchNodeTypes, topicNodeTypes } from "../../../../common/node";
+import { Switch } from "../../../common/components/Form/Switch";
 import {
   useCriteria,
   useProblems,
@@ -20,6 +21,7 @@ import {
   researchFilterTypes,
   topicFilterTypes,
 } from "../../utils/filter";
+import { ShowSecondaryNeighborsLabel } from "./ShowSecondaryNeighborsLabel";
 
 type ValidatedFormData = z.infer<typeof filterOptionsSchema>;
 
@@ -70,13 +72,7 @@ export const FilterOptions = ({ activeView }: Props) => {
   const questions = useQuestions();
   const sources = useSources();
 
-  const {
-    control,
-    handleSubmit,
-    watch,
-    setValue,
-    formState: { errors },
-  } = useForm<FormData>({
+  const methods = useForm<FormData>({
     resolver: zodResolver(filterOptionsSchema),
     defaultValues: {
       nodeTypes: filterOptions.nodeTypes,
@@ -116,6 +112,13 @@ export const FilterOptions = ({ activeView }: Props) => {
       ),
     },
   });
+  const {
+    control,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+  } = methods;
 
   const filterNodeTypes = activeView === "topicDiagram" ? topicNodeTypes : researchNodeTypes;
   const filterTypes = activeView === "topicDiagram" ? topicFilterTypes : researchFilterTypes;
@@ -199,399 +202,298 @@ export const FilterOptions = ({ activeView }: Props) => {
   }, [handleSubmit, watch]);
 
   return (
-    <form style={{ padding: "8px" }}>
-      <Stack spacing={1.5}>
-        <Controller
-          control={control}
-          name="nodeTypes"
-          render={({ field }) => (
-            <Autocomplete
-              {...field}
-              multiple
-              limitTags={2} // one line's worth
-              disableCloseOnSelect
-              options={filterNodeTypes}
-              onChange={(_event, values) => field.onChange([...values])}
-              disableClearable
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Node Types"
-                  error={!!errors.nodeTypes}
-                  helperText={errors.nodeTypes?.message}
-                />
-              )}
-              size="small"
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="showSecondaryNeighbors"
-          render={({ field }) => (
-            <FormControlLabel
-              label={
-                <Stack direction="row" alignItems="center">
-                  Show
-                  <Tooltip
-                    title={
-                      <span>
-                        Secondary nodes are those that aren't the focus of the current diagram.
-                        <br />
-                        <br />
-                        For example, question and fact nodes are secondary in the topic diagram, and
-                        problem and solution nodes are secondary in the research diagram.
-                      </span>
-                    }
-                    enterTouchDelay={0} // allow touch to immediately trigger
-                    leaveTouchDelay={Infinity} // touch-away to close on mobile, since message is long
-                  >
-                    <span
-                      style={{ textDecoration: "underline", marginLeft: "4px", marginRight: "4px" }}
-                    >
-                      Secondary
-                    </span>
-                  </Tooltip>
-                  Neighbors
-                </Stack>
-              }
-              control={
-                <Switch
-                  {...field}
-                  checked={field.value}
-                  onChange={(_event, checked) => field.onChange(checked)}
-                />
-              }
-            />
-          )}
-        />
-        {/* GitHub code search found this example implementing Mui Autocomplete with react-hook-form https://github.com/GeoWerkstatt/ews-boda/blob/79cb1484db53170aace5a4b01ed1f9c56269f7c4/src/ClientApp/src/components/SchichtForm.js#L126-L153 */}
-        <Controller
-          control={control}
-          name="type"
-          render={({ field }) => (
-            <Autocomplete
-              {...field}
-              options={filterTypes}
-              onChange={(_event, value) => field.onChange(value)}
-              disableClearable
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Standard Filter"
-                  error={!!errors.type}
-                  helperText={errors.type?.message}
-                />
-              )}
-              size="small"
-            />
-          )}
-        />
-        {"centralProblemId" in filterSchemas[type].shape && (
+    // FormProvider is used to enable useController in extracted form components without passing `control`
+    <FormProvider {...methods}>
+      <form style={{ padding: "8px" }}>
+        <Stack spacing={1.5}>
           <Controller
             control={control}
-            name="centralProblemId"
+            name="nodeTypes"
             render={({ field }) => (
               <Autocomplete
                 {...field}
-                options={centralProblemOptions}
-                value={centralProblemValue}
-                onChange={(_event, value) => {
-                  if (!value) return;
-                  field.onChange(value.id);
-                }}
-                disableClearable={centralProblemValue !== undefined}
+                multiple
+                limitTags={2} // one line's worth
+                disableCloseOnSelect
+                options={filterNodeTypes}
+                onChange={(_event, values) => field.onChange([...values])}
+                disableClearable
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="Central Problem"
-                    error={!!errors.centralProblemId}
-                    helperText={errors.centralProblemId?.message}
+                    label="Node Types"
+                    error={!!errors.nodeTypes}
+                    helperText={errors.nodeTypes?.message}
                   />
                 )}
-                // required to avoid duplicate key error if two nodes have the same text https://github.com/mui/material-ui/issues/26492#issuecomment-901089142
-                renderOption={(props, option) => {
-                  return (
-                    <li {...props} key={option.id}>
-                      {option.label}
-                    </li>
-                  );
-                }}
                 size="small"
               />
             )}
           />
-        )}
-        {"showCauses" in filterSchemas[type].shape && (
+
+          <Switch name="showSecondaryNeighbors" label={<ShowSecondaryNeighborsLabel />} />
+
+          {/* GitHub code search found this example implementing Mui Autocomplete with react-hook-form https://github.com/GeoWerkstatt/ews-boda/blob/79cb1484db53170aace5a4b01ed1f9c56269f7c4/src/ClientApp/src/components/SchichtForm.js#L126-L153 */}
           <Controller
             control={control}
-            name="showCauses"
-            render={({ field }) => (
-              <FormControlLabel
-                label="Show Causes"
-                control={
-                  <Switch
-                    {...field}
-                    checked={field.value}
-                    onChange={(_event, checked) => field.onChange(checked)}
-                  />
-                }
-              />
-            )}
-          />
-        )}
-        {"showEffects" in filterSchemas[type].shape && (
-          <Controller
-            control={control}
-            name="showEffects"
-            render={({ field }) => (
-              <FormControlLabel
-                label="Show Effects"
-                control={
-                  <Switch
-                    {...field}
-                    checked={field.value}
-                    onChange={(_event, checked) => field.onChange(checked)}
-                  />
-                }
-              />
-            )}
-          />
-        )}
-        {"showCriteria" in filterSchemas[type].shape && (
-          <Controller
-            control={control}
-            name="showCriteria"
-            render={({ field }) => (
-              <FormControlLabel
-                label="Show Criteria"
-                control={
-                  <Switch
-                    {...field}
-                    checked={field.value}
-                    onChange={(_event, checked) => field.onChange(checked)}
-                  />
-                }
-              />
-            )}
-          />
-        )}
-        {"showSolutions" in filterSchemas[type].shape && (
-          <Controller
-            control={control}
-            name="showSolutions"
-            render={({ field }) => (
-              <FormControlLabel
-                label="Show Solutions"
-                control={
-                  <Switch
-                    {...field}
-                    checked={field.value}
-                    onChange={(_event, checked) => field.onChange(checked)}
-                  />
-                }
-              />
-            )}
-          />
-        )}
-        {"centralSolutionId" in filterSchemas[type].shape && (
-          <Controller
-            control={control}
-            name="centralSolutionId"
+            name="type"
             render={({ field }) => (
               <Autocomplete
                 {...field}
-                options={centralSolutionOptions}
-                value={centralSolutionValue}
-                onChange={(_event, value) => {
-                  if (!value) return;
-                  field.onChange(value.id);
-                }}
-                disableClearable={centralSolutionValue !== undefined}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Central Solution"
-                    error={!!errors.centralSolutionId}
-                    helperText={errors.centralSolutionId?.message}
-                  />
-                )}
-                // required to avoid duplicate key error if two nodes have the same text
-                renderOption={(props, option) => {
-                  return (
-                    <li {...props} key={option.id}>
-                      {option.label}
-                    </li>
-                  );
-                }}
-                size="small"
-              />
-            )}
-          />
-        )}
-        {"detail" in typeSchemaShape && (
-          <Controller
-            control={control}
-            name="detail"
-            render={({ field }) => (
-              <Autocomplete
-                {...field}
-                // TODO: build options with Pascal Case
-                options={typeSchemaShape.detail.options.map((option) => option.value)}
+                options={filterTypes}
                 onChange={(_event, value) => field.onChange(value)}
                 disableClearable
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="Detail"
-                    error={!!errors.detail}
-                    helperText={errors.detail?.message}
+                    label="Standard Filter"
+                    error={!!errors.type}
+                    helperText={errors.type?.message}
                   />
                 )}
                 size="small"
               />
             )}
           />
-        )}
-        {"solutions" in filterSchemas[type].shape && (
-          <Controller
-            control={control}
-            name="solutions"
-            render={({ field }) => (
-              <Autocomplete
-                {...field}
-                multiple
-                limitTags={1}
-                disableCloseOnSelect
-                options={solutionOptions}
-                value={solutionValues}
-                onChange={(_event, values) => field.onChange(values.map((value) => value.id))}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Solutions"
-                    error={!!errors.solutions}
-                    helperText={errors.solutions?.message}
-                  />
-                )}
-                // required to avoid duplicate key error if two nodes have the same text https://github.com/mui/material-ui/issues/26492#issuecomment-901089142
-                renderOption={(props, option) => {
-                  return (
-                    <li {...props} key={option.id}>
-                      {option.label}
-                    </li>
-                  );
-                }}
-                size="small"
-              />
-            )}
-          />
-        )}
-        {"criteria" in filterSchemas[type].shape && (
-          <Controller
-            control={control}
-            name="criteria"
-            render={({ field }) => (
-              <Autocomplete
-                {...field}
-                multiple
-                limitTags={1}
-                disableCloseOnSelect
-                options={criteriaOptions}
-                value={criteriaValues}
-                onChange={(_event, values) => field.onChange(values.map((value) => value.id))}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Criteria"
-                    error={!!errors.criteria}
-                    helperText={errors.criteria?.message}
-                  />
-                )}
-                // required to avoid duplicate key error if two nodes have the same text https://github.com/mui/material-ui/issues/26492#issuecomment-901089142
-                renderOption={(props, option) => {
-                  return (
-                    <li {...props} key={option.id}>
-                      {option.label}
-                    </li>
-                  );
-                }}
-                size="small"
-              />
-            )}
-          />
-        )}
-        {"centralQuestionId" in filterSchemas[type].shape && (
-          <Controller
-            control={control}
-            name="centralQuestionId"
-            render={({ field }) => (
-              <Autocomplete
-                {...field}
-                options={centralQuestionOptions}
-                value={centralQuestionValue}
-                onChange={(_event, value) => {
-                  if (!value) return;
-                  field.onChange(value.id);
-                }}
-                disableClearable={centralQuestionValue !== undefined}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Central Question"
-                    error={!!errors.centralQuestionId}
-                    helperText={errors.centralQuestionId?.message}
-                  />
-                )}
-                // required to avoid duplicate key error if two nodes have the same text https://github.com/mui/material-ui/issues/26492#issuecomment-901089142
-                renderOption={(props, option) => {
-                  return (
-                    <li {...props} key={option.id}>
-                      {option.label}
-                    </li>
-                  );
-                }}
-                size="small"
-              />
-            )}
-          />
-        )}
-        {"centralSourceId" in filterSchemas[type].shape && (
-          <Controller
-            control={control}
-            name="centralSourceId"
-            render={({ field }) => (
-              <Autocomplete
-                {...field}
-                options={centralSourceOptions}
-                value={centralSourceValue}
-                onChange={(_event, value) => {
-                  if (!value) return;
-                  field.onChange(value.id);
-                }}
-                disableClearable={centralSourceValue !== undefined}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Central Source"
-                    error={!!errors.centralSourceId}
-                    helperText={errors.centralSourceId?.message}
-                  />
-                )}
-                // required to avoid duplicate key error if two nodes have the same text
-                renderOption={(props, option) => {
-                  return (
-                    <li {...props} key={option.id}>
-                      {option.label}
-                    </li>
-                  );
-                }}
-                size="small"
-              />
-            )}
-          />
-        )}
-      </Stack>
-    </form>
+          {"centralProblemId" in filterSchemas[type].shape && (
+            <Controller
+              control={control}
+              name="centralProblemId"
+              render={({ field }) => (
+                <Autocomplete
+                  {...field}
+                  options={centralProblemOptions}
+                  value={centralProblemValue}
+                  onChange={(_event, value) => {
+                    field.onChange(value.id);
+                  }}
+                  disableClearable={true}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Central Problem"
+                      error={!!errors.centralProblemId}
+                      helperText={errors.centralProblemId?.message}
+                    />
+                  )}
+                  // required to avoid duplicate key error if two nodes have the same text https://github.com/mui/material-ui/issues/26492#issuecomment-901089142
+                  renderOption={(props, option) => {
+                    return (
+                      <li {...props} key={option.id}>
+                        {option.label}
+                      </li>
+                    );
+                  }}
+                  size="small"
+                />
+              )}
+            />
+          )}
+
+          {"showCauses" in filterSchemas[type].shape && <Switch name="showCauses" />}
+          {"showEffects" in filterSchemas[type].shape && <Switch name="showEffects" />}
+          {"showCriteria" in filterSchemas[type].shape && <Switch name="showCriteria" />}
+          {"showSolutions" in filterSchemas[type].shape && <Switch name="showSolutions" />}
+
+          {"centralSolutionId" in filterSchemas[type].shape && (
+            <Controller
+              control={control}
+              name="centralSolutionId"
+              render={({ field }) => (
+                <Autocomplete
+                  {...field}
+                  options={centralSolutionOptions}
+                  value={centralSolutionValue}
+                  onChange={(_event, value) => {
+                    if (!value) return;
+                    field.onChange(value.id);
+                  }}
+                  disableClearable={centralSolutionValue !== undefined}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Central Solution"
+                      error={!!errors.centralSolutionId}
+                      helperText={errors.centralSolutionId?.message}
+                    />
+                  )}
+                  // required to avoid duplicate key error if two nodes have the same text
+                  renderOption={(props, option) => {
+                    return (
+                      <li {...props} key={option.id}>
+                        {option.label}
+                      </li>
+                    );
+                  }}
+                  size="small"
+                />
+              )}
+            />
+          )}
+          {"detail" in typeSchemaShape && (
+            <Controller
+              control={control}
+              name="detail"
+              render={({ field }) => (
+                <Autocomplete
+                  {...field}
+                  // TODO: build options with Pascal Case
+                  options={typeSchemaShape.detail.options.map((option) => option.value)}
+                  onChange={(_event, value) => field.onChange(value)}
+                  disableClearable
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Detail"
+                      error={!!errors.detail}
+                      helperText={errors.detail?.message}
+                    />
+                  )}
+                  size="small"
+                />
+              )}
+            />
+          )}
+          {"solutions" in filterSchemas[type].shape && (
+            <Controller
+              control={control}
+              name="solutions"
+              render={({ field }) => (
+                <Autocomplete
+                  {...field}
+                  multiple
+                  limitTags={1}
+                  disableCloseOnSelect
+                  options={solutionOptions}
+                  value={solutionValues}
+                  onChange={(_event, values) => field.onChange(values.map((value) => value.id))}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Solutions"
+                      error={!!errors.solutions}
+                      helperText={errors.solutions?.message}
+                    />
+                  )}
+                  // required to avoid duplicate key error if two nodes have the same text https://github.com/mui/material-ui/issues/26492#issuecomment-901089142
+                  renderOption={(props, option) => {
+                    return (
+                      <li {...props} key={option.id}>
+                        {option.label}
+                      </li>
+                    );
+                  }}
+                  size="small"
+                />
+              )}
+            />
+          )}
+          {"criteria" in filterSchemas[type].shape && (
+            <Controller
+              control={control}
+              name="criteria"
+              render={({ field }) => (
+                <Autocomplete
+                  {...field}
+                  multiple
+                  limitTags={1}
+                  disableCloseOnSelect
+                  options={criteriaOptions}
+                  value={criteriaValues}
+                  onChange={(_event, values) => field.onChange(values.map((value) => value.id))}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Criteria"
+                      error={!!errors.criteria}
+                      helperText={errors.criteria?.message}
+                    />
+                  )}
+                  // required to avoid duplicate key error if two nodes have the same text https://github.com/mui/material-ui/issues/26492#issuecomment-901089142
+                  renderOption={(props, option) => {
+                    return (
+                      <li {...props} key={option.id}>
+                        {option.label}
+                      </li>
+                    );
+                  }}
+                  size="small"
+                />
+              )}
+            />
+          )}
+          {"centralQuestionId" in filterSchemas[type].shape && (
+            <Controller
+              control={control}
+              name="centralQuestionId"
+              render={({ field }) => (
+                <Autocomplete
+                  {...field}
+                  options={centralQuestionOptions}
+                  value={centralQuestionValue}
+                  onChange={(_event, value) => {
+                    if (!value) return;
+                    field.onChange(value.id);
+                  }}
+                  disableClearable={centralQuestionValue !== undefined}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Central Question"
+                      error={!!errors.centralQuestionId}
+                      helperText={errors.centralQuestionId?.message}
+                    />
+                  )}
+                  // required to avoid duplicate key error if two nodes have the same text https://github.com/mui/material-ui/issues/26492#issuecomment-901089142
+                  renderOption={(props, option) => {
+                    return (
+                      <li {...props} key={option.id}>
+                        {option.label}
+                      </li>
+                    );
+                  }}
+                  size="small"
+                />
+              )}
+            />
+          )}
+          {"centralSourceId" in filterSchemas[type].shape && (
+            <Controller
+              control={control}
+              name="centralSourceId"
+              render={({ field }) => (
+                <Autocomplete
+                  {...field}
+                  options={centralSourceOptions}
+                  value={centralSourceValue}
+                  onChange={(_event, value) => {
+                    if (!value) return;
+                    field.onChange(value.id);
+                  }}
+                  disableClearable={centralSourceValue !== undefined}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Central Source"
+                      error={!!errors.centralSourceId}
+                      helperText={errors.centralSourceId?.message}
+                    />
+                  )}
+                  // required to avoid duplicate key error if two nodes have the same text
+                  renderOption={(props, option) => {
+                    return (
+                      <li {...props} key={option.id}>
+                        {option.label}
+                      </li>
+                    );
+                  }}
+                  size="small"
+                />
+              )}
+            />
+          )}
+        </Stack>
+      </form>
+    </FormProvider>
   );
 };
