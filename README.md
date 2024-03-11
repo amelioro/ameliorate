@@ -4,7 +4,7 @@
 
 [Ameliorate](https://www.ameliorate.app/) is a tool for discussing and mutually understanding tough problems.
 
-It provides a [standard](https://ameliorate.app/keyserj/ameliorate-ontology?selected=c2ecf470), precise way of representing all information relevant to solving a problem, along with efficient ways to understand, discuss, and improve that information.
+It provides a [standard](https://ameliorate.app/docs/getting-started/core-ideas), precise way of representing all information relevant to solving a problem, along with efficient ways to understand, discuss, and improve that information.
 
 With it, you can:
 
