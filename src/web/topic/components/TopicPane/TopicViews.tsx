@@ -39,6 +39,7 @@ export const TopicViews = () => {
   const [isFilterOptionsOpen, setIsFilterOptionsOpen] = useState(true);
 
   const activeView = useActiveView();
+  const activeDiagram = activeView === "criteriaTable" ? "topicDiagram" : activeView;
   const activeTableProblemNode = useActiveTableProblemNode();
   const activeArguedDiagramPart = useActiveArguedDiagramPart();
 
@@ -140,7 +141,7 @@ export const TopicViews = () => {
           ))}
         </List>
       </Collapse>
-      {(activeView === "topicDiagram" || activeView === "researchDiagram") && (
+      {(activeDiagram === "topicDiagram" || activeDiagram === "researchDiagram") && (
         <>
           <Divider sx={{ marginY: 1 }} />
 
@@ -154,7 +155,7 @@ export const TopicViews = () => {
             </ListItemButton>
           </ListItem>
           <Collapse in={isFilterOptionsOpen} timeout="auto" unmountOnExit>
-            <FilterOptions key={activeView} activeView={activeView} />
+            <FilterOptions key={activeDiagram} activeDiagram={activeDiagram} />
           </Collapse>
         </>
       )}
