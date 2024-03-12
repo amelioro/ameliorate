@@ -8,6 +8,7 @@ import { NodeType, researchNodeTypes, topicNodeTypes } from "../../../../common/
 import { NodeSelect } from "../../../common/components/Form/NodeSelect";
 import { Select } from "../../../common/components/Form/Select";
 import { Switch } from "../../../common/components/Form/Switch";
+import { getNodes } from "../../../topic/store/nodeGetters";
 import {
   useCriteria,
   useProblems,
@@ -57,7 +58,7 @@ const getProp = <T,>(obj: object | null, prop: string, defaultValue: T): T => {
 };
 
 interface Props {
-  activeView: "topicDiagram" | "researchDiagram";
+  activeDiagram: "topicDiagram" | "researchDiagram";
 }
 
 /**
@@ -67,15 +68,15 @@ interface Props {
  * - Defaults field values based on nodes that exist in the diagram
  * - Shows field components and validates based on filter type
  */
-export const FilterOptions = ({ activeView }: Props) => {
-  const filterOptions = useFilterOptions(activeView);
+export const FilterOptions = ({ activeDiagram }: Props) => {
+  const filterOptions = useFilterOptions(activeDiagram);
 
-  // exclusively used for defaulting, and not ideal because child Select components use these hooks again anyway
-  // not sure how to allow the child components to default values for the form
-  const problems = useProblems(); // could consider selecting causes here, but probably don't want causes as options for tradeoffs filter
-  const allSolutions = useSolutions();
-  const questions = useQuestions();
-  const sources = useSources();
+  // exclusively used for defaulting, and not ideal because child Select components use these through hooks again anyway
+  // not sure how to allow the child components to be responsible for default values for the form
+  const problems = getNodes("problem"); // could consider selecting causes here, but probably don't want causes as options for tradeoffs filter
+  const allSolutions = getNodes("solution");
+  const questions = getNodes("question");
+  const sources = getNodes("source");
 
   const methods = useForm<FormData>({
     resolver: zodResolver(filterOptionsSchema),
@@ -119,8 +120,8 @@ export const FilterOptions = ({ activeView }: Props) => {
   });
   const { handleSubmit, watch } = methods;
 
-  const filterNodeTypes = activeView === "topicDiagram" ? topicNodeTypes : researchNodeTypes;
-  const filterTypes = activeView === "topicDiagram" ? topicFilterTypes : researchFilterTypes;
+  const filterNodeTypes = activeDiagram === "topicDiagram" ? topicNodeTypes : researchNodeTypes;
+  const filterTypes = activeDiagram === "topicDiagram" ? topicFilterTypes : researchFilterTypes;
 
   const type = watch("type");
   const typeSchemaShape = filterSchemas[type].shape;

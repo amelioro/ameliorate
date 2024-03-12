@@ -3,6 +3,7 @@ import Router from "next/router";
 import { useEffect, useState } from "react";
 import { createWithEqualityFn } from "zustand/traditional";
 
+import { DiagramType } from "../../common/diagram";
 import { throwError } from "../../common/errorHandling";
 import { researchNodeTypes, topicNodeTypes } from "../../common/node";
 import { emitter } from "../common/event";
@@ -23,7 +24,7 @@ interface NavigateStoreState {
   viewingClaimTree: boolean;
   activeClaimTreeId: string | null;
 
-  filterOptions: Partial<Record<View, FilterOptions>>;
+  filterOptions: Partial<Record<DiagramType, FilterOptions>>;
 }
 
 const initialState: NavigateStoreState = {
@@ -110,13 +111,13 @@ export const useActiveArguedDiagramPart = () => {
   return useGraphPart(activeClaimTreeId);
 };
 
-export const useFilterOptions = (view: View) => {
+export const useFilterOptions = (diagramType: DiagramType) => {
   return useNavigateStore((state) => {
     return (
-      state.filterOptions[view] ??
+      state.filterOptions[diagramType] ??
       throwError(
         "Filter options only exist for the topic or research diagrams",
-        view,
+        diagramType,
         state.filterOptions
       )
     );
@@ -174,19 +175,26 @@ export const resetNavigation = () => {
 
 export const setFilterOptions = (filterOptions: FilterOptions) => {
   const state = useNavigateStore.getState();
-  const activeView = getActiveView(state);
+  const activeDiagram = getActiveDiagram(state);
 
-  if (!state.filterOptions[activeView])
+  if (!state.filterOptions[activeDiagram])
     throw new Error("Filter options can only be set when viewing the topic or research diagrams");
 
   useNavigateStore.setState({
-    filterOptions: { ...state.filterOptions, [activeView]: filterOptions },
+    filterOptions: { ...state.filterOptions, [activeDiagram]: filterOptions },
   });
 
   emitter.emit("changedFilter");
 };
 
 // helpers
+const getActiveDiagram = (state: NavigateStoreState): DiagramType => {
+  if (state.viewingClaimTree) return "claimTree";
+  if (state.viewingCriteriaTable) return "topicDiagram";
+  if (state.viewingResearchDiagram) return "researchDiagram";
+  return "topicDiagram";
+};
+
 const getActiveView = (state: NavigateStoreState): View => {
   if (state.viewingClaimTree) return "claimTree";
   if (state.viewingCriteriaTable) return "criteriaTable";
