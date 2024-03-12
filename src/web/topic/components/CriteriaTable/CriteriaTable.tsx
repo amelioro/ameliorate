@@ -4,9 +4,7 @@ import { Button, IconButton, Tooltip } from "@mui/material";
 import {
   type MRT_ColumnDef,
   MRT_FullScreenToggleButton,
-  MRT_ShowHideColumnsButton,
   type MRT_TableInstance,
-  MRT_ToggleFiltersButton,
   MRT_ToggleGlobalFilterButton,
   MaterialReactTable,
 } from "material-react-table";
@@ -15,7 +13,8 @@ import React, { useState } from "react";
 import { errorWithData } from "../../../../common/errorHandling";
 import { Loading } from "../../../common/components/Loading/Loading";
 import { useSessionUser } from "../../../common/hooks";
-import { closeTable } from "../../../view/navigateStore";
+import { closeTable, useFilterOptions } from "../../../view/navigateStore";
+import { getSelectedTradeoffNodes } from "../../../view/utils/filter";
 import { useCriterionSolutionEdges, useNode, useNodeChildren } from "../../store/nodeHooks";
 import { useUserCanEditTopicData } from "../../store/userHooks";
 import { getConnectingEdge } from "../../utils/edge";
@@ -139,8 +138,6 @@ const buildTableDefs = (
       accessorKey: "rowHeaderLabel", // this determines how cols should sort/filter
       header: useSolutionsForColumns ? "criteria" : "solutions",
       Header: headerRow[0].render(),
-      filterVariant: "multi-select",
-      filterSelectOptions: bodyRows.map((row) => row[0].label),
       enableHiding: false,
       Cell: ({ row }) => row.original.rowHeader.render(),
     },
@@ -190,13 +187,19 @@ export const CriteriaTable = ({ problemNodeId }: Props) => {
   const problemNode = useNode(problemNodeId);
   const nodeChildren = useNodeChildren(problemNodeId);
   const edges = useCriterionSolutionEdges(problemNodeId);
+  const filterOptions = useFilterOptions("topicDiagram");
 
   if (!problemNode) return <Loading />;
 
-  const solutions = nodeChildren.filter((node) => node.type === "solution");
-  const criteria = nodeChildren.filter((node) => node.type === "criterion");
+  const solutions = nodeChildren.filter((child) => child.type === "solution");
+  const criteria = nodeChildren.filter((child) => child.type === "criterion");
 
-  const tableData = buildTableCells(problemNode, solutions, criteria, edges);
+  const { selectedSolutions, selectedCriteria } =
+    filterOptions.type === "tradeoffs"
+      ? getSelectedTradeoffNodes(solutions, criteria, filterOptions)
+      : { selectedSolutions: solutions, selectedCriteria: criteria };
+
+  const tableData = buildTableCells(problemNode, selectedSolutions, selectedCriteria, edges);
   const [headerRow, ..._bodyRows] = tableData;
 
   const transposedTableData = useSolutionsForColumns
@@ -212,8 +215,6 @@ export const CriteriaTable = ({ problemNodeId }: Props) => {
     return (
       <>
         <MRT_ToggleGlobalFilterButton table={table} />
-        <MRT_ToggleFiltersButton table={table} />
-        <MRT_ShowHideColumnsButton table={table} />
 
         {userCanEditTopicData && (
           <>

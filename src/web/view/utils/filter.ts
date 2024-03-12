@@ -116,15 +116,13 @@ const applyTradeoffsFilter = (graph: Graph, filterOptions: TradeoffsOptions) => 
   if (!centralProblem) return graph;
 
   const problemChildren = children(centralProblem, graph);
-  const selectedSolutions = problemChildren.filter(
-    (child) =>
-      child.type === "solution" &&
-      (filterOptions.solutions.length === 0 || filterOptions.solutions.includes(child.id))
-  );
-  const selectedCriteria = problemChildren.filter(
-    (child) =>
-      child.type === "criterion" &&
-      (filterOptions.criteria.length === 0 || filterOptions.criteria.includes(child.id))
+  const solutions = problemChildren.filter((child) => child.type === "solution");
+  const criteria = problemChildren.filter((child) => child.type === "criterion");
+
+  const { selectedSolutions, selectedCriteria } = getSelectedTradeoffNodes(
+    solutions,
+    criteria,
+    filterOptions
   );
 
   const criteriaParents = selectedCriteria.flatMap((criterion) =>
@@ -161,6 +159,23 @@ const applyTradeoffsFilter = (graph: Graph, filterOptions: TradeoffsOptions) => 
   const edges = getRelevantEdges(nodes, graph);
 
   return { nodes, edges };
+};
+
+export const getSelectedTradeoffNodes = (
+  problemSolutions: Node[],
+  problemCriteria: Node[],
+  filterOptions: TradeoffsOptions
+) => {
+  const selectedSolutions = problemSolutions.filter(
+    (solution) =>
+      filterOptions.solutions.length === 0 || filterOptions.solutions.includes(solution.id)
+  );
+  const selectedCriteria = problemCriteria.filter(
+    (criterion) =>
+      filterOptions.criteria.length === 0 || filterOptions.criteria.includes(criterion.id)
+  );
+
+  return { selectedSolutions, selectedCriteria };
 };
 
 const tradeoffsSchema = z.object({
