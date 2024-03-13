@@ -16,12 +16,15 @@ import {
   useSolutions,
   useSources,
 } from "../../../topic/store/nodeHooks";
+import { Score, possibleScores } from "../../../topic/utils/graph";
 import { setFilterOptions, useFilterOptions } from "../../navigateStore";
 import {
   FilterTypes,
+  ScoredComparer,
   filterOptionsSchema,
   filterSchemas,
   researchFilterTypes,
+  scoredComparers,
   topicFilterTypes,
 } from "../../utils/filter";
 import { ShowSecondaryNeighborsLabel } from "./ShowSecondaryNeighborsLabel";
@@ -31,6 +34,9 @@ type ValidatedFormData = z.infer<typeof filterOptionsSchema>;
 // how to build this based on schemas? .merge doesn't work because `type` is overridden by the last schema's literal
 interface FormData {
   nodeTypes: NodeType[];
+  showOnlyScored: boolean;
+  scoredComparer: ScoredComparer;
+  scoreToCompare: Score;
   showSecondaryNeighbors: boolean;
   type: FilterTypes;
   centralProblemId?: string;
@@ -81,9 +87,7 @@ export const FilterOptions = ({ activeDiagram }: Props) => {
   const methods = useForm<FormData>({
     resolver: zodResolver(filterOptionsSchema),
     defaultValues: {
-      nodeTypes: filterOptions.nodeTypes,
-      showSecondaryNeighbors: filterOptions.showSecondaryNeighbors,
-      type: filterOptions.type,
+      ...filterOptions,
       centralProblemId: getProp<string | undefined>(
         filterOptions,
         "centralProblemId",
@@ -151,6 +155,13 @@ export const FilterOptions = ({ activeDiagram }: Props) => {
       <form style={{ padding: "8px" }}>
         <Stack spacing={1.5}>
           <Select name="nodeTypes" options={filterNodeTypes} multiple />
+
+          <Stack direction="row" spacing={1}>
+            <Switch name="showOnlyScored" label="Show only nodes scored" />
+            <Select name="scoredComparer" options={scoredComparers} label="" width="55px" />
+            <Select name="scoreToCompare" options={possibleScores} label="" width="55px" />
+          </Stack>
+
           <Switch name="showSecondaryNeighbors" label={<ShowSecondaryNeighborsLabel />} />
           <Select name="type" label="Standard Filter" options={filterTypes} />
 

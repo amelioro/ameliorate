@@ -40,11 +40,17 @@ const initialState: NavigateStoreState = {
   filterOptions: {
     topicDiagram: {
       nodeTypes: topicNodeTypes,
+      showOnlyScored: false,
+      scoredComparer: "≥",
+      scoreToCompare: "5",
       showSecondaryNeighbors: false,
       type: "none",
     },
     researchDiagram: {
       nodeTypes: researchNodeTypes,
+      showOnlyScored: false,
+      scoredComparer: "≥",
+      scoreToCompare: "5",
       showSecondaryNeighbors: true,
       type: "none",
     },

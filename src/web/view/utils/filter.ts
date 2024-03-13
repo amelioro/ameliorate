@@ -3,14 +3,33 @@ import { z } from "zod";
 
 import { RelationName, researchRelationNames } from "../../../common/edge";
 import { NodeType, nodeSchema, zNodeTypes } from "../../../common/node";
-import { Graph, Node, ancestors, descendants, getRelevantEdges } from "../../topic/utils/graph";
+import {
+  Graph,
+  GraphPart,
+  Node,
+  Score,
+  ancestors,
+  descendants,
+  getRelevantEdges,
+  possibleScores,
+} from "../../topic/utils/graph";
 import { children, parents } from "../../topic/utils/node";
+import { getNumericScore } from "../../topic/utils/score";
 
 // general filter options
+export const scoredComparers = ["≥", ">", "≤", "<", "="] as const;
+const zScoredComparers = z.enum(scoredComparers);
+export type ScoredComparer = z.infer<typeof zScoredComparers>;
+
 const generalSchema = z.object({
   nodeTypes: zNodeTypes.array(),
+  showOnlyScored: z.boolean(),
+  scoredComparer: zScoredComparers,
+  scoreToCompare: z.enum(possibleScores),
   showSecondaryNeighbors: z.boolean(),
 });
+
+type GeneralOptions = z.infer<typeof generalSchema>;
 
 // standard filters
 
@@ -280,6 +299,28 @@ export type FilterTypes = typeof filterTypes[number];
 
 export const applyNodeTypeFilter = (nodes: Node[], nodeTypes: NodeType[]) => {
   return nodes.filter((node) => nodeTypes.includes(node.type));
+};
+
+export const applyScoreFilter = <T extends GraphPart>(
+  graphParts: T[],
+  filterOptions: GeneralOptions,
+  scores: Record<string, Score>
+) => {
+  const { showOnlyScored, scoredComparer, scoreToCompare } = filterOptions;
+  if (!showOnlyScored) return graphParts;
+
+  return graphParts.filter((graphPart) => {
+    const score = scores[graphPart.id] ?? "-";
+    if (scoredComparer === "=") return score === scoreToCompare;
+
+    const numericScore = getNumericScore(score);
+    const numericScoreToCompare = getNumericScore(scoreToCompare);
+
+    if (scoredComparer === "≥") return numericScore >= numericScoreToCompare;
+    if (scoredComparer === ">") return numericScore > numericScoreToCompare;
+    if (scoredComparer === "≤") return numericScore <= numericScoreToCompare;
+    return numericScore < numericScoreToCompare;
+  });
 };
 
 export const applyStandardFilter = (graph: Graph, options: FilterOptions): Graph => {

@@ -4,7 +4,12 @@ import { createWithEqualityFn } from "zustand/traditional";
 
 import { useShowImpliedEdges } from "../../view/actionConfigStore";
 import { useFilterOptions } from "../../view/navigateStore";
-import { applyNodeTypeFilter, applyStandardFilter } from "../../view/utils/filter";
+import { usePerspectives } from "../../view/perspectiveStore";
+import {
+  applyNodeTypeFilter,
+  applyScoreFilter,
+  applyStandardFilter,
+} from "../../view/utils/filter";
 import { Diagram } from "../utils/diagram";
 import { hideImpliedEdges } from "../utils/edge";
 import {
@@ -17,6 +22,7 @@ import {
 } from "../utils/graph";
 import { apiSyncer } from "./apiSyncerMiddleware";
 import { migrate } from "./migrate";
+import { getDisplayScores } from "./scoreGetters";
 import { getClaimTree, getResearchDiagram, getTopicDiagram } from "./utils";
 
 export interface PlaygroundTopic {
@@ -85,6 +91,7 @@ export const useTopicStore = createWithEqualityFn<TopicStoreState>()(
 export const useTopicDiagram = (): Diagram => {
   const showImpliedEdges = useShowImpliedEdges();
   const filterOptions = useFilterOptions("topicDiagram");
+  const perspectives = usePerspectives();
 
   return useTopicStore((state) => {
     const topicGraph = { nodes: state.nodes, edges: state.edges };
@@ -93,12 +100,17 @@ export const useTopicDiagram = (): Diagram => {
     const { nodes: filteredPrimaryNodes } = applyStandardFilter(topicDiagram, filterOptions);
     const nodesAfterTypeFilter = applyNodeTypeFilter(filteredPrimaryNodes, filterOptions.nodeTypes);
 
+    const partIdsForScores = state.nodes.map((part) => part.id);
+    const scores = getDisplayScores(partIdsForScores, perspectives, state.userScores);
+    const nodesAfterScoreFilter = applyScoreFilter(nodesAfterTypeFilter, filterOptions, scores);
+
     const secondaryNeighbors = filterOptions.showSecondaryNeighbors
-      ? getSecondaryNeighbors(nodesAfterTypeFilter, topicGraph, "topicDiagram")
+      ? getSecondaryNeighbors(nodesAfterScoreFilter, topicGraph, "topicDiagram")
       : [];
-    const nodes = nodesAfterTypeFilter.concat(secondaryNeighbors);
+    const nodes = nodesAfterScoreFilter.concat(secondaryNeighbors);
 
     const relevantEdges = getRelevantEdges(nodes, topicGraph);
+    // don't filter edges because hard to prevent awkwardness when edge doesn't pass filter and suddenly nodes are scattered
     const edges = showImpliedEdges
       ? relevantEdges
       : hideImpliedEdges(relevantEdges, { nodes, edges: relevantEdges }, topicGraph);
@@ -109,6 +121,7 @@ export const useTopicDiagram = (): Diagram => {
 
 export const useResearchDiagram = (): Diagram => {
   const filterOptions = useFilterOptions("researchDiagram");
+  const perspectives = usePerspectives();
 
   return useTopicStore((state) => {
     const topicGraph = { nodes: state.nodes, edges: state.edges };
@@ -117,12 +130,18 @@ export const useResearchDiagram = (): Diagram => {
     const { nodes: filteredPrimaryNodes } = applyStandardFilter(researchDiagram, filterOptions);
     const nodesAfterTypeFilter = applyNodeTypeFilter(filteredPrimaryNodes, filterOptions.nodeTypes);
 
-    const secondaryNeighbors = filterOptions.showSecondaryNeighbors
-      ? getSecondaryNeighbors(nodesAfterTypeFilter, topicGraph, "researchDiagram")
-      : [];
-    const nodes = nodesAfterTypeFilter.concat(secondaryNeighbors);
+    const partIdsForScores = state.nodes.map((part) => part.id);
+    const scores = getDisplayScores(partIdsForScores, perspectives, state.userScores);
+    const nodesAfterScoreFilter = applyScoreFilter(nodesAfterTypeFilter, filterOptions, scores);
 
+    const secondaryNeighbors = filterOptions.showSecondaryNeighbors
+      ? getSecondaryNeighbors(nodesAfterScoreFilter, topicGraph, "researchDiagram")
+      : [];
+    const nodes = nodesAfterScoreFilter.concat(secondaryNeighbors);
+
+    // don't filter edges because hard to prevent awkwardness when edge doesn't pass filter and suddenly nodes are scattered
     const edges = getRelevantEdges(nodes, topicGraph);
+
     return { nodes, edges, orientation: "DOWN", type: "researchDiagram" };
   });
 };
