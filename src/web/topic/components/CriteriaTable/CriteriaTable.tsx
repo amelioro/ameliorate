@@ -14,8 +14,9 @@ import { errorWithData } from "../../../../common/errorHandling";
 import { Loading } from "../../../common/components/Loading/Loading";
 import { useSessionUser } from "../../../common/hooks";
 import { closeTable, useFilterOptions } from "../../../view/navigateStore";
-import { getSelectedTradeoffNodes } from "../../../view/utils/filter";
+import { applyScoreFilter, getSelectedTradeoffNodes } from "../../../view/utils/filter";
 import { useCriterionSolutionEdges, useNode, useNodeChildren } from "../../store/nodeHooks";
+import { useDisplayScores } from "../../store/scoreHooks";
 import { useUserCanEditTopicData } from "../../store/userHooks";
 import { getConnectingEdge } from "../../utils/edge";
 import { Edge, Node } from "../../utils/graph";
@@ -181,13 +182,17 @@ interface Props {
  *   b. subsequent rows turn into row objects (`rowData`) that know their row header details (for filtering)
  */
 export const CriteriaTable = ({ problemNodeId }: Props) => {
+  const [useSolutionsForColumns, setUseSolutionsForColumns] = useState<boolean>(true);
+
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
-  const [useSolutionsForColumns, setUseSolutionsForColumns] = useState<boolean>(true);
+
   const problemNode = useNode(problemNodeId);
   const nodeChildren = useNodeChildren(problemNodeId);
   const edges = useCriterionSolutionEdges(problemNodeId);
+
   const filterOptions = useFilterOptions("topicDiagram");
+  const scores = useDisplayScores(nodeChildren.map((node) => node.id));
 
   if (!problemNode) return <Loading />;
 
@@ -199,7 +204,10 @@ export const CriteriaTable = ({ problemNodeId }: Props) => {
       ? getSelectedTradeoffNodes(solutions, criteria, filterOptions)
       : { selectedSolutions: solutions, selectedCriteria: criteria };
 
-  const tableData = buildTableCells(problemNode, selectedSolutions, selectedCriteria, edges);
+  const filteredSolutions = applyScoreFilter(selectedSolutions, filterOptions, scores);
+  const filteredCriteria = applyScoreFilter(selectedCriteria, filterOptions, scores);
+
+  const tableData = buildTableCells(problemNode, filteredSolutions, filteredCriteria, edges);
   const [headerRow, ..._bodyRows] = tableData;
 
   const transposedTableData = useSolutionsForColumns
