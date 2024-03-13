@@ -7,32 +7,14 @@ import { throwError } from "../../../common/errorHandling";
 import { usePerspectives } from "../../view/perspectiveStore";
 import { Node, Score } from "../utils/graph";
 import { children, edges } from "../utils/node";
-import { getAverageScore, getNumericScore } from "../utils/score";
+import { getNumericScore } from "../utils/score";
+import { getDisplayScores } from "./scoreGetters";
 import { useTopicStore } from "./store";
 
-export const useDisplayScoresByGraphPart = (graphPartIds: string[]): Record<string, Score> => {
+export const useDisplayScores = (graphPartIds: string[]): Record<string, Score> => {
   const perspectives = usePerspectives();
 
-  const userScoresByGraphPart = useUserScoresByGraphPart(graphPartIds, perspectives);
-
-  const averagedScoreWithGraphPart = Object.entries(userScoresByGraphPart).map(
-    ([graphPartId, scores]) => [graphPartId, getAverageScore(scores)] as [string, Score]
-  );
-  return Object.fromEntries(averagedScoreWithGraphPart);
-};
-
-const useUserScoresByGraphPart = (graphPartIds: string[], perspectives: string[]) => {
-  return useTopicStore((state) => {
-    const scoresWithGraphPart: [string, Score[]][] = graphPartIds.map((graphPartId) => {
-      const userScores = perspectives.map((perspective) => {
-        return get(state.userScores, [perspective, graphPartId], "-");
-      });
-
-      return [graphPartId, userScores];
-    });
-
-    return Object.fromEntries(scoresWithGraphPart);
-  });
+  return useTopicStore((state) => getDisplayScores(graphPartIds, perspectives, state.userScores));
 };
 
 export const useUserScores = (graphPartId: string, perspectives: string[]) => {
@@ -68,7 +50,7 @@ export const useSolutionTotal = (solution: Node, problem: Node) => {
   });
 
   const graphPartIds = criteriaSolutionEdges.flatMap((edge) => [edge.id, edge.source]);
-  const scores = useDisplayScoresByGraphPart(graphPartIds);
+  const scores = useDisplayScores(graphPartIds);
 
   return sum(
     criteriaSolutionEdges.map((edge) => {

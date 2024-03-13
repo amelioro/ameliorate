@@ -9,6 +9,7 @@ interface Props {
   options: readonly { id: string; label: string }[] | readonly string[];
   multiple?: boolean;
   disableClearable?: boolean;
+  width?: string;
 }
 
 export const Select = ({
@@ -17,6 +18,7 @@ export const Select = ({
   options,
   multiple = false,
   disableClearable = true,
+  width,
 }: Props) => {
   // assumes this component is used within a FormProvider
   const {
@@ -72,6 +74,7 @@ export const Select = ({
         );
       }}
       size="small"
+      sx={{ width: width }}
     />
   ) : (
     <Autocomplete
@@ -95,6 +98,7 @@ export const Select = ({
         );
       }}
       size="small"
+      sx={{ width: width }}
     />
   );
 };

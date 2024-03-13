@@ -4,7 +4,7 @@ import { useCallback } from "react";
 
 import { setSelected } from "../../../view/navigateStore";
 import { useResearchNodes } from "../../store/graphPartHooks";
-import { useDisplayScoresByGraphPart } from "../../store/scoreHooks";
+import { useDisplayScores } from "../../store/scoreHooks";
 import { GraphPart, Score } from "../../utils/graph";
 import { getNumericScore, scoreColors } from "../../utils/score";
 import { viewDetails } from "../TopicPane/TopicPane";
@@ -16,7 +16,7 @@ interface Props {
 
 export const QuestionIndicator = ({ graphPart }: Props) => {
   const { questions } = useResearchNodes(graphPart.id);
-  const scoresByGraphPart = useDisplayScoresByGraphPart(questions.map((question) => question.id));
+  const scoresByGraphPart = useDisplayScores(questions.map((question) => question.id));
 
   const onClick = useCallback(() => {
     setSelected(graphPart.id);
