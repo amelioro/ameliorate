@@ -1,16 +1,16 @@
 import { shallow } from "zustand/shallow";
 
 import { trpc } from "../../common/trpc";
-import { useTopicStore } from "./store";
+import { UserTopic, useTopicStore } from "./store";
 import { isPlaygroundTopic } from "./utils";
 
 // TODO: for security, this should probably get the session user rather than assume the username is from the session user
 export const useUserCanEditTopicData = (username?: string) => {
   const storeTopic = useTopicStore((state) => state.topic, shallow);
 
-  const findTopic = trpc.topic.find.useQuery(
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- `enabled` guarantees non-null before query is run
-    { id: storeTopic.id! },
+  const findTopic = trpc.topic.findByUsernameAndTitle.useQuery(
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- `enabled` guarantees non-null id, and if there's an id, it's a UserTopic
+    { username: (storeTopic as UserTopic).creatorName, title: (storeTopic as UserTopic).title },
     { enabled: storeTopic.id !== undefined, staleTime: Infinity }
   );
 

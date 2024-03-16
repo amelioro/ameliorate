@@ -12,15 +12,6 @@ import { isLoggedIn } from "../auth";
 import { procedure, router } from "../trpc";
 
 export const topicRouter = router({
-  find: procedure.input(z.object({ id: topicSchema.shape.id })).query(async (opts) => {
-    const topic = await xprisma.topic.findUnique({ where: { id: opts.input.id } });
-
-    if (!topic) return null;
-    if (topic.visibility === "private" && topic.creatorName !== opts.ctx.user?.username)
-      return null;
-
-    return topic;
-  }),
   findByUsernameAndTitle: procedure
     .input(
       z.object({

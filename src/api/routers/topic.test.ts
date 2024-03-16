@@ -64,48 +64,6 @@ beforeEach(async () => {
   });
 });
 
-describe("find", () => {
-  describe("when viewing your own topics", () => {
-    test("can view private topic", async () => {
-      const trpc = appRouter.createCaller({
-        userAuthId: userWithTopics.authId,
-        userEmailVerified: true,
-        user: userWithTopics,
-      });
-
-      const topic = await trpc.topic.find({ id: privateTopic.id });
-
-      expect(topic).toStrictEqual(privateTopic);
-    });
-  });
-
-  describe("when viewing someone else's topics", () => {
-    test("can view public topic", async () => {
-      const trpc = appRouter.createCaller({});
-
-      const topic = await trpc.topic.find({ id: publicTopic.id });
-
-      expect(topic).toStrictEqual(publicTopic);
-    });
-
-    test("can view unlisted topic", async () => {
-      const trpc = appRouter.createCaller({});
-
-      const topic = await trpc.topic.find({ id: unlistedTopic.id });
-
-      expect(topic).toStrictEqual(unlistedTopic);
-    });
-
-    test("cannot view private topic", async () => {
-      const trpc = appRouter.createCaller({});
-
-      const topic = await trpc.topic.find({ id: privateTopic.id });
-
-      expect(topic).not.toStrictEqual(privateTopic);
-    });
-  });
-});
-
 describe("findByUsernameAndTitle", () => {
   describe("when viewing your own topic", () => {
     test("can view private topic", async () => {
