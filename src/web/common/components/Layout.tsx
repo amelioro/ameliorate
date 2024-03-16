@@ -5,6 +5,7 @@ import {
   IconButton,
   type LinkProps,
   Toolbar,
+  Tooltip,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
@@ -131,18 +132,20 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
 
               {isLoggedIn && (
                 <>
-                  <IconButton
-                    onClick={() => setIsUserDrawerOpen(true)}
-                    sx={{
-                      height: "32px",
-                      width: "32px",
-                      padding: "0",
-                      "& svg": { height: "100%", width: "100%" },
-                    }}
-                  >
-                    {/* annoyingly this svg doesn't stretch to the edge, so it looks smaller than 32px. oh well */}
-                    <AccountCircle />
-                  </IconButton>
+                  <Tooltip title="My Profile">
+                    <IconButton
+                      onClick={() => setIsUserDrawerOpen(true)}
+                      sx={{
+                        height: "32px",
+                        width: "32px",
+                        padding: "0",
+                        "& svg": { height: "100%", width: "100%" },
+                      }}
+                    >
+                      {/* annoyingly this svg doesn't stretch to the edge, so it looks smaller than 32px. oh well */}
+                      <AccountCircle />
+                    </IconButton>
+                  </Tooltip>
                   <UserDrawer
                     user={sessionUser}
                     isUserDrawerOpen={isUserDrawerOpen}
