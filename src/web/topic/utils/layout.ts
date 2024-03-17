@@ -34,6 +34,7 @@ const partitionOrders: { [type in NodeType]: string } = {
   detriment: "calculated",
   solutionComponent: "3",
   solution: "4",
+  obstacle: "null",
 
   // research
   question: "null",

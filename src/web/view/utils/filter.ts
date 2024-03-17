@@ -149,32 +149,34 @@ const applyTradeoffsFilter = (graph: Graph, filterOptions: TradeoffsOptions) => 
     parents(criterion, graph).filter((parent) => parent.type !== "problem")
   );
 
-  const solutionDetails =
-    filterOptions.detail === "none"
-      ? []
-      : uniqBy(
-          // two solutions can share ancesotrs
-          selectedSolutions.flatMap((solution) => ancestors(solution, graph, ["has", "creates"])),
-          (node) => node.id
-        );
+  const solutionComponentsEffects = selectedSolutions.flatMap((solution) =>
+    ancestors(solution, graph, ["has", "creates"])
+  );
+
+  const solutionObstacles = selectedSolutions.flatMap((solution) =>
+    descendants(solution, graph, ["obstacleOf", "addresses"])
+  );
 
   const criteriaIds = selectedCriteria.map((criterion) => criterion.id);
   const filteredSolutionDetails =
     filterOptions.detail === "none"
       ? []
       : filterOptions.detail === "all"
-      ? solutionDetails
-      : solutionDetails.filter((detail) =>
+      ? [...solutionComponentsEffects, ...solutionObstacles]
+      : solutionComponentsEffects.filter((detail) =>
           ancestors(detail, graph).some((ancestor) => criteriaIds.includes(ancestor.id))
         );
 
-  const nodes = [
-    centralProblem,
-    ...selectedSolutions,
-    ...selectedCriteria,
-    ...criteriaParents,
-    ...filteredSolutionDetails,
-  ];
+  const nodes = uniqBy(
+    [
+      centralProblem,
+      ...selectedSolutions,
+      ...selectedCriteria,
+      ...criteriaParents,
+      ...filteredSolutionDetails,
+    ],
+    (node) => node.id
+  );
   const edges = getRelevantEdges(nodes, graph);
 
   return { nodes, edges };
@@ -218,9 +220,10 @@ const applySolutionFilter = (graph: Graph, filterOptions: SolutionOptions) => {
   const centralSolution = graph.nodes.find((node) => node.id === filterOptions.centralSolutionId);
   if (!centralSolution) return graph;
 
-  const details = ancestors(centralSolution, graph, ["has", "creates"]);
+  const ancestorDetails = ancestors(centralSolution, graph, ["has", "creates"]);
+  const descendantDetails = descendants(centralSolution, graph, ["obstacleOf", "addresses"]);
 
-  const nodes = [centralSolution, ...details];
+  const nodes = [centralSolution, ...ancestorDetails, ...descendantDetails];
   const edges = getRelevantEdges(nodes, graph);
 
   return { nodes, edges };

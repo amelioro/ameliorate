@@ -80,6 +80,7 @@ enum NodeType {
   detriment
   solutionComponent
   solution
+  obstacle
 
   // research
   question
@@ -127,6 +128,7 @@ enum EdgeType {
   criterionFor
   creates
   embodies
+  obstacleOf
 
   // research
   asksAbout

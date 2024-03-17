@@ -11,6 +11,7 @@ export const relationNames = [
   "criterionFor",
   "creates",
   "embodies",
+  "obstacleOf",
 
   // research
   "asksAbout", //question to any node
@@ -57,6 +58,7 @@ export const topicRelationNames: RelationName[] = [
   "criterionFor",
   "creates",
   "embodies",
+  "obstacleOf",
   "relatesTo", // is a generic relation but currently only seems worthwhile in topic
 ];
 export const researchRelationNames: RelationName[] = [

@@ -6,11 +6,12 @@ import {
   Code,
   Edit,
   Extension,
+  Fence,
   Flood,
   Info,
+  LightbulbRounded,
   LocalFlorist,
   Mediation,
-  PriorityHigh,
   QuestionMark,
   ThumbDown,
   ThumbUp,
@@ -71,6 +72,10 @@ export const nodeDecorations: Record<FlowNodeType, NodeDecoration> = {
     title: "Solution",
     NodeIcon: Check,
   },
+  obstacle: {
+    title: "Obstacle",
+    NodeIcon: Fence,
+  },
 
   // research
   question: {
@@ -79,7 +84,7 @@ export const nodeDecorations: Record<FlowNodeType, NodeDecoration> = {
   },
   answer: {
     title: "Answer",
-    NodeIcon: PriorityHigh,
+    NodeIcon: LightbulbRounded,
   },
   fact: {
     title: "Fact",
