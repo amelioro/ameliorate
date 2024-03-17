@@ -19,6 +19,7 @@ export const nodeTypes = [
   "detriment",
   "solutionComponent",
   "solution",
+  "obstacle",
 
   // research
   "question",
@@ -65,6 +66,7 @@ export const diagramNodeTypes: Record<DiagramType, NodeType[]> = {
     "detriment",
     "solutionComponent",
     "solution",
+    "obstacle",
     "custom", // is a generic node but currently only seems worthwhile in topic
   ],
   researchDiagram: ["question", "answer", "fact", "source"],

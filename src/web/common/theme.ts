@@ -159,6 +159,7 @@ const sharedPalette = {
   effect: augmentColor({ color: { main: yellow[500] } }), // random yellow that looks decent: somewhat similar to green/solution but also goes well with lightning bolt icon
   benefit: augmentColor({ color: { main: "#A0DC46" } }), // calculated analogous color to effect, solution, and support
   detriment: augmentColor({ color: { main: "#DC477B", contrastText: "rgba(0, 0, 0, 0.87)" } }), // calculated analogous color to effect, problem, and critique
+  obstacle: augmentColor({ color: { main: "#C26586", contrastText: "rgba(0, 0, 0, 0.87)" } }), // calculated monochromatic color to detriment (hard to find a decent color, butobstaclen's relation to solution is kind of similar to detriment's)
 
   // research - palette https://coolors.co/9e9e9e-f57c00-0288d1-04f06a-1c110a
   question: augmentColor({ color: { main: grey[500] } }), // grey, ambiguous, uncertain
