@@ -33,6 +33,11 @@ type GeneralOptions = z.infer<typeof generalSchema>;
 
 // standard filters
 
+// cross-standard-filter options
+const detailTypes = ["all", "connectedToCriteria", "none"] as const;
+const zDetailTypes = z.enum(detailTypes);
+type DetailType = z.infer<typeof zDetailTypes>;
+
 // none filter
 const noneSchema = z.object({
   type: z.literal("none"),
@@ -96,9 +101,18 @@ const applyProblemFilter = (graph: Graph, filterOptions: ProblemOptions) => {
   if (filterOptions.showSolutions) detailEdges.push("addresses");
   /* eslint-enable functional/immutable-data */
 
-  const details = descendants(centralProblem, graph, detailEdges);
+  const problemDetails = descendants(centralProblem, graph, detailEdges);
 
-  const nodes = [centralProblem, ...details];
+  const solutions = problemDetails.filter((detail) => detail.type === "solution");
+  const criteria = problemDetails.filter((detail) => detail.type === "criterion");
+  const filteredSolutionDetails = getSolutionDetails(
+    solutions,
+    criteria,
+    filterOptions.solutionDetail,
+    graph
+  );
+
+  const nodes = [centralProblem, ...problemDetails, ...filteredSolutionDetails];
   const edges = getRelevantEdges(nodes, graph);
 
   return { nodes, edges };
@@ -111,6 +125,7 @@ const problemSchema = z.object({
   showEffects: z.boolean(),
   showCriteria: z.boolean(),
   showSolutions: z.boolean(),
+  solutionDetail: zDetailTypes,
 });
 
 type ProblemOptions = z.infer<typeof problemSchema>;
@@ -149,23 +164,12 @@ const applyTradeoffsFilter = (graph: Graph, filterOptions: TradeoffsOptions) => 
     parents(criterion, graph).filter((parent) => parent.type !== "problem")
   );
 
-  const solutionComponentsEffects = selectedSolutions.flatMap((solution) =>
-    ancestors(solution, graph, ["has", "creates"])
+  const filteredSolutionDetails = getSolutionDetails(
+    selectedSolutions,
+    selectedCriteria,
+    filterOptions.solutionDetail,
+    graph
   );
-
-  const solutionObstacles = selectedSolutions.flatMap((solution) =>
-    descendants(solution, graph, ["obstacleOf", "addresses"])
-  );
-
-  const criteriaIds = selectedCriteria.map((criterion) => criterion.id);
-  const filteredSolutionDetails =
-    filterOptions.detail === "none"
-      ? []
-      : filterOptions.detail === "all"
-      ? [...solutionComponentsEffects, ...solutionObstacles]
-      : solutionComponentsEffects.filter((detail) =>
-          ancestors(detail, graph).some((ancestor) => criteriaIds.includes(ancestor.id))
-        );
 
   const nodes = uniqBy(
     [
@@ -180,6 +184,31 @@ const applyTradeoffsFilter = (graph: Graph, filterOptions: TradeoffsOptions) => 
   const edges = getRelevantEdges(nodes, graph);
 
   return { nodes, edges };
+};
+
+const getSolutionDetails = (
+  solutions: Node[],
+  criteria: Node[],
+  detailType: DetailType,
+  graph: Graph
+) => {
+  if (detailType === "none") return [];
+
+  const solutionComponentsEffects = solutions.flatMap((solution) =>
+    ancestors(solution, graph, ["has", "creates"])
+  );
+
+  const solutionObstacles = solutions.flatMap((solution) =>
+    descendants(solution, graph, ["obstacleOf", "addresses"])
+  );
+
+  const criteriaIds = criteria.map((criterion) => criterion.id);
+
+  return detailType === "all"
+    ? [...solutionComponentsEffects, ...solutionObstacles]
+    : solutionComponentsEffects.filter((detail) =>
+        ancestors(detail, graph).some((ancestor) => criteriaIds.includes(ancestor.id))
+      );
 };
 
 export const getSelectedTradeoffNodes = (
@@ -202,7 +231,7 @@ export const getSelectedTradeoffNodes = (
 const tradeoffsSchema = z.object({
   type: z.literal("tradeoffs"),
   centralProblemId: nodeSchema.shape.id,
-  detail: z.union([z.literal("all"), z.literal("connectedToCriteria"), z.literal("none")]),
+  solutionDetail: zDetailTypes,
   solutions: z.array(nodeSchema.shape.id),
   criteria: z.array(nodeSchema.shape.id),
 });

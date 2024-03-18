@@ -45,7 +45,7 @@ interface FormData {
   showCriteria: boolean;
   showSolutions: boolean;
   centralSolutionId?: string;
-  detail: "all" | "connectedToCriteria" | "none";
+  solutionDetail: "all" | "connectedToCriteria" | "none";
   solutions: string[];
   criteria: string[];
   centralQuestionId?: string;
@@ -102,7 +102,11 @@ export const FilterOptions = ({ activeDiagram }: Props) => {
         "centralSolutionId",
         allSolutions[0]?.id
       ),
-      detail: getProp<"all" | "connectedToCriteria" | "none">(filterOptions, "detail", "all"),
+      solutionDetail: getProp<"all" | "connectedToCriteria" | "none">(
+        filterOptions,
+        "detail",
+        "all"
+      ),
       solutions: getProp<string[]>(filterOptions, "solutions", []),
       // TODO?: ideally this defaults to all criteria so that empty can mean no criteria displayed,
       // but we can't rely on `watch("centralProblemId")` with `useCriteria(centralProblemId)` since
@@ -185,11 +189,11 @@ export const FilterOptions = ({ activeDiagram }: Props) => {
               useNodeOptions={useSolutions}
             />
           )}
-          {"detail" in typeSchemaShape && (
+          {"solutionDetail" in typeSchemaShape && (
             // TODO: build options with Pascal Case
             <Select
-              name="detail"
-              options={typeSchemaShape.detail.options.map((option) => option.value)}
+              name="solutionDetail"
+              options={typeSchemaShape.solutionDetail.options.map((option) => option)}
             />
           )}
           {"solutions" in filterSchemas[type].shape && (
