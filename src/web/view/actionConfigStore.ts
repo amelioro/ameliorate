@@ -5,12 +5,14 @@ interface ActionConfigStoreState {
   showImpliedEdges: boolean;
   unrestrictedEditing: boolean;
   forceNodesIntoLayers: boolean;
+  layoutThoroughness: number;
 }
 
 const initialState: ActionConfigStoreState = {
   showImpliedEdges: false,
   unrestrictedEditing: false,
   forceNodesIntoLayers: true,
+  layoutThoroughness: 1,
 };
 
 const useActionConfigStore = create<ActionConfigStoreState>()(
@@ -32,6 +34,10 @@ export const useForceNodesIntoLayers = () => {
   return useActionConfigStore((state) => state.forceNodesIntoLayers);
 };
 
+export const useLayoutThoroughness = () => {
+  return useActionConfigStore((state) => state.layoutThoroughness);
+};
+
 // actions
 export const toggleShowImpliedEdges = (show: boolean) => {
   useActionConfigStore.setState({ showImpliedEdges: show });
@@ -43,6 +49,10 @@ export const toggleUnrestrictedEditing = (unrestricted: boolean) => {
 
 export const toggleForceNodesIntoLayers = (force: boolean) => {
   useActionConfigStore.setState({ forceNodesIntoLayers: force });
+};
+
+export const setLayoutThoroughness = (thoroughness: number) => {
+  useActionConfigStore.setState({ layoutThoroughness: thoroughness });
 };
 
 // utils

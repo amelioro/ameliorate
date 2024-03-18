@@ -5,6 +5,7 @@ import {
   Download,
   Engineering,
   Image as ImageIcon,
+  Info,
   Layers,
   Route,
   Upload,
@@ -18,6 +19,8 @@ import {
   ListItemIcon,
   ListItemText,
   ToggleButton,
+  Tooltip,
+  Typography,
 } from "@mui/material";
 import { toPng } from "html-to-image";
 import fileDownload from "js-file-download";
@@ -25,11 +28,14 @@ import { getRectOfNodes, getTransformForBounds } from "reactflow";
 import { StorageValue } from "zustand/middleware";
 
 import { errorWithData } from "../../../../common/errorHandling";
+import { NumberInput } from "../../../common/components/NumberInput/NumberInput";
 import {
+  setLayoutThoroughness,
   toggleForceNodesIntoLayers,
   toggleShowImpliedEdges,
   toggleUnrestrictedEditing,
   useForceNodesIntoLayers,
+  useLayoutThoroughness,
   useShowImpliedEdges,
   useUnrestrictedEditing,
 } from "../../../view/actionConfigStore";
@@ -131,9 +137,11 @@ export const MoreActionsDrawer = ({
   const onPlayground = useOnPlayground();
   const activeView = useActiveView();
   const isTableActive = activeView === "criteriaTable";
+
   const showImpliedEdges = useShowImpliedEdges();
   const unrestrictedEditing = useUnrestrictedEditing();
   const forceNodesIntoLayers = useForceNodesIntoLayers();
+  const layoutThoroughness = useLayoutThoroughness();
 
   return (
     <Drawer
@@ -252,6 +260,41 @@ export const MoreActionsDrawer = ({
             </>
           )}
         </ListItem>
+
+        {!isTableActive && (
+          <>
+            <ListItem disablePadding={false}>
+              <Typography variant="body2">Layout Thoroughness</Typography>
+              <Tooltip
+                title="Determines how much effort the layout algorithm puts into making the diagram look good. 1 = lowest effort, 100 = highest effort."
+                enterTouchDelay={0} // allow touch to immediately trigger
+                leaveTouchDelay={Infinity} // touch-away to close on mobile, since message is long
+              >
+                <IconButton
+                  color="info"
+                  aria-label="Thoroughness info"
+                  sx={{
+                    // Don't make it look like clicking will do something, since it won't.
+                    // Using a button here is an attempt to make it accessible, since the tooltip will show
+                    // on focus.
+                    cursor: "default",
+                    alignSelf: "center",
+                  }}
+                >
+                  <Info />
+                </IconButton>
+              </Tooltip>
+              <NumberInput
+                min={1}
+                max={100}
+                value={layoutThoroughness}
+                onChange={(_event, value) => {
+                  if (value) setLayoutThoroughness(value);
+                }}
+              />
+            </ListItem>
+          </>
+        )}
 
         {!onPlayground && (
           <ListItem disablePadding={false}>

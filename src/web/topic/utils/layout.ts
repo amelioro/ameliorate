@@ -90,7 +90,11 @@ export interface NodePosition {
 }
 
 // TODO?: feels a little weird to have layout know Ameliorate domain, like DiagramType
-export const layout = async (diagram: Diagram, partition: boolean): Promise<NodePosition[]> => {
+export const layout = async (
+  diagram: Diagram,
+  partition: boolean,
+  thoroughness: number
+): Promise<NodePosition[]> => {
   const { nodes, edges, orientation, type } = diagram;
 
   // see support layout options at https://www.eclipse.org/elk/reference/algorithms/org-eclipse-elk-layered.html
@@ -119,7 +123,7 @@ export const layout = async (diagram: Diagram, partition: boolean): Promise<Node
     // No idea why this seems to preserve node order (and therefore group node types) better;
     // perhaps higher thoroughness means it'll find a layout that better uses space,
     // caring less about node order.
-    "elk.layered.thoroughness": "1",
+    "elk.layered.thoroughness": thoroughness.toString(),
   };
 
   const graph: ElkNode = {

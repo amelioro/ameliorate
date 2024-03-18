@@ -158,8 +158,8 @@ export const FilterOptions = ({ activeDiagram }: Props) => {
 
           <Stack direction="row" spacing={1}>
             <Switch name="showOnlyScored" label="Show only nodes scored" />
-            <Select name="scoredComparer" options={scoredComparers} label="" width="55px" />
-            <Select name="scoreToCompare" options={possibleScores} label="" width="55px" />
+            <Select name="scoredComparer" options={scoredComparers} label="" width="50px" />
+            <Select name="scoreToCompare" options={possibleScores} label="" width="50px" />
           </Stack>
 
           <Switch name="showSecondaryNeighbors" label={<ShowSecondaryNeighborsLabel />} />
