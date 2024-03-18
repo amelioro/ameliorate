@@ -37,7 +37,7 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
   // Potentially use getInitialProps in _app.tsx because that's for all pages but it seems like that'd
   // remove automatic usage of static pages https://nextjs.org/docs/pages/api-reference/functions/get-initial-props
   const { sessionUser, authUser } = useSessionUser();
-  const { pathname } = useRouter();
+  const { asPath } = useRouter();
 
   const usingTinyScreen = useMediaQuery(theme.breakpoints.down("xs"));
   const usingBigScreen = useMediaQuery(theme.breakpoints.up("sm"));
@@ -49,7 +49,7 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
     // close drawers after navigating
     setIsUserDrawerOpen(false);
     setIsSiteDrawerOpen(false);
-  }, [pathname]);
+  }, [asPath]);
 
   const isAuthed = authUser != null;
   const isLoggedIn = sessionUser != null;
@@ -125,7 +125,13 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
               )}
 
               {!isLoggedIn && (
-                <NavLink href={isAuthed ? "/choose-username" : "/api/auth/login"}>
+                <NavLink
+                  href={
+                    isAuthed
+                      ? "/choose-username"
+                      : `/api/auth/login?returnTo=${encodeURIComponent(asPath)}`
+                  }
+                >
                   {isAuthed ? "Username" : "Log in"}
                 </NavLink>
               )}

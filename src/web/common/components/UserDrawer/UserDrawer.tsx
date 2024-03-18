@@ -46,7 +46,11 @@ export const UserDrawer = ({ user, isUserDrawerOpen, setIsUserDrawerOpen }: Prop
           </ListItemButton>
         </ListItem>
         <ListItem>
-          <ListItemButton LinkComponent={NextLink} href="/api/auth/logout">
+          <ListItemButton
+            LinkComponent={NextLink}
+            // might ideally `returnTo` same as `Login` button does, but doesn't seem to work for logout endpoint
+            href="/api/auth/logout"
+          >
             <ListItemIcon>
               <Logout />
             </ListItemIcon>

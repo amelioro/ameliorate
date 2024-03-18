@@ -14,9 +14,13 @@ const afterCallback: AfterCallback = async (_req, res, session, _state) => {
   // There should be an easier way to just remove the ?code and ?state params from oauth, but this works for now.
   const params = "?login-success";
 
-  // redirect to /choose-username if user doesn't exist, otherwise redirect to user's page
-  const location = user ? `/${user.username}` : "/choose-username";
-  res.setHeader("Location", `${location}${params}`);
+  // redirect to /choose-username if user doesn't exist, otherwise let `returnTo` return to the page the user was last on
+  if (!user) {
+    const location = "/choose-username";
+    // causes server-client mismatch because this callback only runs on client, and `Login` button is rendered serverside-first
+    // seems ok.
+    res.setHeader("Location", `${location}${params}`);
+  }
 
   return session;
 };
