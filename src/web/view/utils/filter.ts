@@ -305,7 +305,12 @@ const applySourceFilter = (graph: Graph, filterOptions: SourceOptions) => {
   const centralSource = graph.nodes.find((node) => node.id === filterOptions.centralSourceId);
   if (!centralSource) return graph;
 
-  const details = ancestors(centralSource, graph, ["sourceOf", "relevantFor", "mentions"]);
+  const details = ancestors(centralSource, graph, [
+    "sourceOf",
+    "relevantFor",
+    "mentions",
+    "relatesTo",
+  ]);
 
   const nodes = [centralSource, ...details];
   const edges = getRelevantEdges(nodes, graph);
