@@ -30,11 +30,15 @@ const sourceRelations: AddableRelation[] = nodeTypes
   }));
 
 const researchRelations: AddableRelation[] = questionRelations.concat(
-  factRelations,
-  sourceRelations,
+  // ordered this way so that answer add buttons are to the right of question-add and left of fact/source-add
   [
     { child: "answer", name: "potentialAnswerTo", parent: "question", addableFrom: "parent" },
     { child: "answer", name: "accomplishes", parent: "answer", addableFrom: "parent" },
+  ],
+  factRelations,
+  sourceRelations,
+  [
+    { child: "fact", name: "relatesTo", parent: "fact", addableFrom: "child" }, // allow chaining facts, which feels natural
     { child: "source", name: "sourceOf", parent: "fact", addableFrom: "both" },
     { child: "source", name: "mentions", parent: "source", addableFrom: "child" },
   ]
