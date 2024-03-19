@@ -51,6 +51,7 @@ export const relations: AddableRelation[] = researchRelations.concat([
   // topic relations
   { child: "problem", name: "causes", parent: "problem", addableFrom: "child" },
   { child: "cause", name: "causes", parent: "problem", addableFrom: "both" },
+  { child: "problem", name: "subproblemOf", parent: "problem", addableFrom: "parent" },
   { child: "effect", name: "createdBy", parent: "problem", addableFrom: "parent" },
   { child: "benefit", name: "createdBy", parent: "problem", addableFrom: "parent" },
   { child: "detriment", name: "createdBy", parent: "problem", addableFrom: "parent" },

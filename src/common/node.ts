@@ -11,8 +11,8 @@ import { DiagramType } from "./diagram";
 // - (future) the order to group node types in different layers of the diagram
 export const nodeTypes = [
   // topic
-  "problem",
   "cause",
+  "problem", // weird for problem not to be first, but subproblems should be to the right of causes for layout - maybe just make a subproblem node so this isn't awkward?
   "criterion",
   "effect",
   "benefit",

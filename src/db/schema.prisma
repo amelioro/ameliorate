@@ -121,6 +121,7 @@ model Edge {
 enum EdgeType {
   // topic
   causes
+  subproblemOf
   addresses
   accomplishes
   createdBy

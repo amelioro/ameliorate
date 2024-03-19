@@ -4,6 +4,7 @@ import { z } from "zod";
 export const relationNames = [
   // topic
   "causes",
+  "subproblemOf",
   "addresses",
   "accomplishes",
   "createdBy",
@@ -51,6 +52,7 @@ export type Edge = z.infer<typeof edgeSchema>;
 
 export const topicRelationNames: RelationName[] = [
   "causes",
+  "subproblemOf",
   "addresses",
   "accomplishes",
   "createdBy",
