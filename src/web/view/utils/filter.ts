@@ -36,7 +36,7 @@ type GeneralOptions = z.infer<typeof generalSchema>;
 // cross-standard-filter options
 const detailTypes = ["all", "connectedToCriteria", "none"] as const;
 const zDetailTypes = z.enum(detailTypes);
-type DetailType = z.infer<typeof zDetailTypes>;
+export type DetailType = z.infer<typeof zDetailTypes>;
 
 // none filter
 const noneSchema = z.object({
@@ -95,10 +95,11 @@ const applyProblemFilter = (graph: Graph, filterOptions: ProblemOptions) => {
 
   const detailEdges: RelationName[] = [];
   /* eslint-disable functional/immutable-data */
-  if (filterOptions.showCauses) detailEdges.push("causes");
-  if (filterOptions.showEffects) detailEdges.push("createdBy");
-  if (filterOptions.showCriteria) detailEdges.push("criterionFor");
-  if (filterOptions.showSolutions) detailEdges.push("addresses");
+  if (filterOptions.problemDetails.includes("causes")) detailEdges.push("causes");
+  if (filterOptions.problemDetails.includes("effects")) detailEdges.push("createdBy");
+  if (filterOptions.problemDetails.includes("subproblems")) detailEdges.push("subproblemOf");
+  if (filterOptions.problemDetails.includes("criteria")) detailEdges.push("criterionFor");
+  if (filterOptions.problemDetails.includes("solutions")) detailEdges.push("addresses");
   /* eslint-enable functional/immutable-data */
 
   const problemDetails = descendants(centralProblem, graph, detailEdges);
@@ -118,13 +119,20 @@ const applyProblemFilter = (graph: Graph, filterOptions: ProblemOptions) => {
   return { nodes, edges };
 };
 
+export const problemDetails = [
+  "causes",
+  "effects",
+  "subproblems",
+  "criteria",
+  "solutions",
+] as const;
+const zProblemDetails = z.enum(problemDetails);
+export type ProblemDetail = z.infer<typeof zProblemDetails>;
+
 const problemSchema = z.object({
   type: z.literal("problem"),
   centralProblemId: nodeSchema.shape.id,
-  showCauses: z.boolean(),
-  showEffects: z.boolean(),
-  showCriteria: z.boolean(),
-  showSolutions: z.boolean(),
+  problemDetails: zProblemDetails.array(),
   solutionDetail: zDetailTypes,
 });
 

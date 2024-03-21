@@ -19,10 +19,13 @@ import {
 import { Score, possibleScores } from "../../../topic/utils/graph";
 import { setFilterOptions, useFilterOptions } from "../../navigateStore";
 import {
+  DetailType,
   FilterTypes,
+  ProblemDetail,
   ScoredComparer,
   filterOptionsSchema,
   filterSchemas,
+  problemDetails,
   researchFilterTypes,
   scoredComparers,
   topicFilterTypes,
@@ -40,12 +43,9 @@ interface FormData {
   showSecondaryNeighbors: boolean;
   type: FilterTypes;
   centralProblemId?: string;
-  showCauses: boolean;
-  showEffects: boolean;
-  showCriteria: boolean;
-  showSolutions: boolean;
+  problemDetails: ProblemDetail[];
   centralSolutionId?: string;
-  solutionDetail: "all" | "connectedToCriteria" | "none";
+  solutionDetail: DetailType;
   solutions: string[];
   criteria: string[];
   centralQuestionId?: string;
@@ -93,10 +93,11 @@ export const FilterOptions = ({ activeDiagram }: Props) => {
         "centralProblemId",
         problems[0]?.id
       ),
-      showCauses: getProp<boolean>(filterOptions, "showCauses", true),
-      showEffects: getProp<boolean>(filterOptions, "showEffects", true),
-      showCriteria: getProp<boolean>(filterOptions, "showCriteria", false),
-      showSolutions: getProp<boolean>(filterOptions, "showSolutions", false),
+      problemDetails: getProp<ProblemDetail[]>(filterOptions, "problemDetails", [
+        "causes",
+        "effects",
+        "subproblems",
+      ]),
       centralSolutionId: getProp<string | undefined>(
         filterOptions,
         "centralSolutionId",
@@ -177,10 +178,9 @@ export const FilterOptions = ({ activeDiagram }: Props) => {
             />
           )}
 
-          {"showCauses" in filterSchemas[type].shape && <Switch name="showCauses" />}
-          {"showEffects" in filterSchemas[type].shape && <Switch name="showEffects" />}
-          {"showCriteria" in filterSchemas[type].shape && <Switch name="showCriteria" />}
-          {"showSolutions" in filterSchemas[type].shape && <Switch name="showSolutions" />}
+          {"problemDetails" in filterSchemas[type].shape && (
+            <Select name="problemDetails" options={problemDetails} multiple />
+          )}
 
           {"centralSolutionId" in filterSchemas[type].shape && (
             <NodeSelect
