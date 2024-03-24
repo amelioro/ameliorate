@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Community
+    url: https://discord.gg/3KhdyJkTWT
+    about: You can ask questions or discuss things on Discord.
+  - name: Documentation
+    url: https://ameliorate.app/docs
+    about: Learn about how the app is intended to work
