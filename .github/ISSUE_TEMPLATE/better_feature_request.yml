@@ -1,0 +1,43 @@
+name: Feature request
+description: Suggest an idea for this project
+title: ""
+labels: ["enhancement", "needs review"]
+assignees: []
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Describe your issue
+      placeholder: A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Solution you'd like
+      placeholder: A clear and concise description of what you want to happen.
+  - type: textarea
+    id: solution-questions
+    attributes:
+      label: Questions to answer
+      placeholder: Any relevant questions that are unanswered that probably should be answered.
+  - type: textarea
+    id: solution-questions
+    attributes:
+      label: Alternatives you've considered
+      placeholder: A clear and concise description of any alternative solutions or features you've considered.
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      placeholder: Add any other context or screenshots about the feature request here.
+  - type: textarea
+    id: technical
+    attributes:
+      label: Technical ideas
+      placeholder: Any ideas for possible implementations/technical designs. Linking to specific lines of code can be helpful.
+  - type: textarea
+    id: technical
+    attributes:
+      label: Technical questions
+      placeholder: Any questions you know that will probably be relevant for the technical design or implementation.
