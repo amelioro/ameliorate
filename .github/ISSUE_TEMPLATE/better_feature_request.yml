@@ -36,7 +36,7 @@ body:
       label: Technical ideas
       placeholder: Any ideas for possible implementations/technical designs. Linking to specific lines of code can be helpful.
   - type: textarea
-    id: technical
+    id: technical-questions
     attributes:
       label: Technical questions
       placeholder: Any questions you know that will probably be relevant for the technical design or implementation.
