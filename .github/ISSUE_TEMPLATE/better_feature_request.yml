@@ -1,6 +1,5 @@
 name: Feature request
 description: Suggest an idea for this project
-title: ""
 labels: ["enhancement", "needs review"]
 assignees: []
 body:
@@ -22,7 +21,7 @@ body:
       label: Questions to answer
       placeholder: Any relevant questions that are unanswered that probably should be answered.
   - type: textarea
-    id: solution-questions
+    id: alternatives
     attributes:
       label: Alternatives you've considered
       placeholder: A clear and concise description of any alternative solutions or features you've considered.
