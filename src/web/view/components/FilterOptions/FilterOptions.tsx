@@ -97,6 +97,8 @@ export const FilterOptions = ({ activeDiagram }: Props) => {
         "causes",
         "effects",
         "subproblems",
+        "criteria",
+        "solutions",
       ]),
       centralSolutionId: getProp<string | undefined>(
         filterOptions,
