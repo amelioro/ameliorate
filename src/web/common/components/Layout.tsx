@@ -4,6 +4,7 @@ import {
   Box,
   IconButton,
   type LinkProps,
+  Link as MuiLink,
   Toolbar,
   Tooltip,
   useMediaQuery,
@@ -78,9 +79,10 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
                 <Link href="/" display="flex">
                   <Image src={favicon} height={32} width={32} alt="home" />
                 </Link>
-                <NavLink
+                <MuiLink
                   href="https://ameliorate.app/docs/release-status"
                   variant="caption"
+                  underline="hover"
                   sx={{
                     position: "absolute",
                     top: "-2px",
@@ -89,7 +91,7 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
                   }}
                 >
                   Alpha
-                </NavLink>
+                </MuiLink>
               </Box>
               {!usingTinyScreen && (
                 <>
