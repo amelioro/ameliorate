@@ -29,18 +29,9 @@ export const TopicWorkspace = () => {
       >
         <TopicPane isLandscape={isLandscape} />
 
-        <Box height="100%" flex="1" position="relative">
-          {format === "table" && (
-            <Box width="100%" height="100%" position="absolute">
-              <CriteriaTable />
-            </Box>
-          )}
-
-          {format === "diagram" && (
-            <Box width="100%" height="100%" position="absolute">
-              <Diagram />
-            </Box>
-          )}
+        <Box height="100%" flex="1">
+          {format === "table" && <CriteriaTable />}
+          {format === "diagram" && <Diagram />}
         </Box>
 
         {/* prevents body scrolling when workspace is rendered*/}
