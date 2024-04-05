@@ -1,10 +1,10 @@
 import uniqBy from "lodash/uniqBy";
 import { v4 as uuid } from "uuid";
 
-import { DiagramType } from "../../../common/diagram";
 import { RelationName } from "../../../common/edge";
 import { errorWithData } from "../../../common/errorHandling";
-import { NodeType, diagramNodeTypes } from "../../../common/node";
+import { NodeType, infoNodeTypes } from "../../../common/node";
+import { GeneralFilter } from "../../view/utils/generalFilter";
 import { composedRelations } from "./edge";
 import { FlowNodeType } from "./node";
 
@@ -231,17 +231,46 @@ export const getRelevantEdges = (nodes: Node[], graph: Graph) => {
  * For example, question and fact nodes are secondary in the topic diagram, and problem and solution
  * nodes are secondary in the research diagram.
  */
-export const getSecondaryNeighbors = (nodes: Node[], graph: Graph, currentDiagram: DiagramType) => {
-  const nodeIds = nodes.map((node) => node.id);
+export const getSecondaryNeighbors = (
+  primaryNodes: Node[],
+  graph: Graph,
+  generalFilter: GeneralFilter
+) => {
+  const primaryNodeIds = primaryNodes.map((node) => node.id);
 
-  return graph.nodes.filter(
-    (node) =>
-      !nodeIds.includes(node.id) &&
-      !diagramNodeTypes[currentDiagram].includes(node.type) &&
-      graph.edges.some(
-        (edge) =>
-          (edge.source === node.id && nodeIds.includes(edge.target)) ||
-          (edge.target === node.id && nodeIds.includes(edge.source))
-      )
-  );
+  const secondaryNeighbors = [];
+
+  if (generalFilter.showSecondaryResearch) {
+    const secondaryResearch = graph.nodes.filter(
+      (node) =>
+        !primaryNodeIds.includes(node.id) &&
+        infoNodeTypes.research.includes(node.type) &&
+        graph.edges.some(
+          (edge) =>
+            (edge.source === node.id && primaryNodeIds.includes(edge.target)) ||
+            (edge.target === node.id && primaryNodeIds.includes(edge.source))
+        )
+    );
+
+    // eslint-disable-next-line functional/immutable-data
+    secondaryNeighbors.push(...secondaryResearch);
+  }
+
+  if (generalFilter.showSecondaryStructure) {
+    const secondaryStructure = graph.nodes.filter(
+      (node) =>
+        !primaryNodeIds.includes(node.id) &&
+        infoNodeTypes.structure.includes(node.type) &&
+        graph.edges.some(
+          (edge) =>
+            (edge.source === node.id && primaryNodeIds.includes(edge.target)) ||
+            (edge.target === node.id && primaryNodeIds.includes(edge.source))
+        )
+    );
+
+    // eslint-disable-next-line functional/immutable-data
+    secondaryNeighbors.push(...secondaryStructure);
+  }
+
+  return secondaryNeighbors;
 };

@@ -1,14 +1,14 @@
 import { Global } from "@emotion/react";
 import { motion } from "framer-motion";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-import { topicNodeTypes } from "../../../../common/node";
 import { useSessionUser } from "../../../common/hooks";
 import { useIsEdgeSelected, useIsNeighborSelected } from "../../store/nodeHooks";
 import { useUserCanEditTopicData } from "../../store/userHooks";
 import { Node } from "../../utils/graph";
+import { orientation } from "../../utils/layout";
 import { FlowNodeType } from "../../utils/node";
-import { DiagramContext, NodeProps } from "../Diagram/Diagram";
+import { NodeProps } from "../Diagram/Diagram";
 import { Spotlight } from "../Diagram/Diagram.styles";
 import {
   AddNodeButtonGroupChild,
@@ -35,7 +35,6 @@ export const FlowNode = (flowNode: NodeProps) => {
   const isNeighborSelected = useIsNeighborSelected(flowNode.id);
   const isEdgeSelected = useIsEdgeSelected(flowNode.id);
 
-  const diagramContext = useContext(DiagramContext);
   const node = convertToNode(flowNode);
 
   const spotlight: Spotlight = flowNode.selected
@@ -43,9 +42,6 @@ export const FlowNode = (flowNode: NodeProps) => {
     : isNeighborSelected || isEdgeSelected
     ? "secondary"
     : "normal";
-
-  // avoids awkwardly allowing adding topic nodes to research diagram when they won't show up after adding
-  const isSecondary = topicNodeTypes.includes(node.type) && diagramContext.type !== "topicDiagram";
 
   useEffect(() => {
     // hack to avoid animation on first render; for some reason nodes were animating from position 0
@@ -60,12 +56,12 @@ export const FlowNode = (flowNode: NodeProps) => {
       <HoverBridgeDiv />
 
       {/* should this use react-flow's NodeToolbar? seems like it'd automatically handle positioning */}
-      {userCanEditTopicData && !isSecondary && (
+      {userCanEditTopicData && (
         <AddNodeButtonGroupParent
           fromNodeId={flowNode.id}
           fromNodeType={node.type}
           as="parent"
-          orientation={diagramContext.orientation}
+          orientation={orientation}
         />
       )}
 
@@ -75,17 +71,17 @@ export const FlowNode = (flowNode: NodeProps) => {
         layout={animated}
         style={{ pointerEvents: "none" }}
       >
-        <NodeHandle node={node} direction="parent" orientation={diagramContext.orientation} />
+        <NodeHandle node={node} direction="parent" orientation={orientation} />
         <StyledEditableNode node={node} spotlight={spotlight} />
-        <NodeHandle node={node} direction="child" orientation={diagramContext.orientation} />
+        <NodeHandle node={node} direction="child" orientation={orientation} />
       </motion.div>
 
-      {userCanEditTopicData && !isSecondary && (
+      {userCanEditTopicData && (
         <AddNodeButtonGroupChild
           fromNodeId={flowNode.id}
           fromNodeType={node.type}
           as="child"
-          orientation={diagramContext.orientation}
+          orientation={orientation}
         />
       )}
     </>

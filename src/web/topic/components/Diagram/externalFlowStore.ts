@@ -1,14 +1,12 @@
 import { Node as FlowNode } from "reactflow";
 import { create } from "zustand";
 
-import { DiagramType } from "../../../../common/diagram";
-
 interface ExternalFlowStoreState {
-  getFlowDisplayedNodes: Partial<Record<DiagramType, () => FlowNode[]>>;
+  getFlowDisplayedNodes: () => FlowNode[];
 }
 
 const initialState = {
-  getFlowDisplayedNodes: {},
+  getFlowDisplayedNodes: () => [],
 };
 
 /**
@@ -19,15 +17,13 @@ const initialState = {
  */
 const useExternalFlowStoreState = create<ExternalFlowStoreState>()(() => initialState);
 
-export const setDisplayNodesGetter = (diagramType: DiagramType, getter: () => FlowNode[]) => {
-  const state = useExternalFlowStoreState.getState();
-
+export const setDisplayNodesGetter = (getter: () => FlowNode[]) => {
   useExternalFlowStoreState.setState({
-    getFlowDisplayedNodes: { ...state.getFlowDisplayedNodes, [diagramType]: getter },
+    getFlowDisplayedNodes: getter,
   });
 };
 
-export const getDisplayNodes = (diagramType: DiagramType) => {
+export const getDisplayNodes = () => {
   const state = useExternalFlowStoreState.getState();
-  return state.getFlowDisplayedNodes[diagramType]?.();
+  return state.getFlowDisplayedNodes();
 };

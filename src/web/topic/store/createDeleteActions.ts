@@ -1,7 +1,7 @@
 import { createDraft, finishDraft } from "immer";
 
 import { errorWithData } from "../../../common/errorHandling";
-import { topicNodeTypes } from "../../../common/node";
+import { structureNodeTypes } from "../../../common/node";
 import { emitter } from "../../common/event";
 import { getUnrestrictedEditing } from "../../view/actionConfigStore";
 import { setSelected } from "../../view/navigateStore";
@@ -21,7 +21,6 @@ import {
 } from "../utils/graph";
 import { FlowNodeType, edges } from "../utils/node";
 import { TopicStoreState, useTopicStore } from "./store";
-import { getTopicDiagram } from "./utils";
 
 const createNode = (
   state: TopicStoreState,
@@ -44,19 +43,17 @@ const createNode = (
 // if adding a criterion, connect to solutions
 // if adding a solution, connect to criteria
 const connectCriteriaToSolutions = (state: TopicStoreState, newNode: Node, problemNode: Node) => {
-  const topicDiagram = getTopicDiagram(state); // solutions & criteria only will be in the topic diagram
-
   const targetRelation: Relation =
     newNode.type === "criterion"
       ? { child: "solution", name: "addresses", parent: "problem" }
       : { child: "criterion", name: "criterionFor", parent: "problem" };
 
-  const newCriterionEdges = topicDiagram.edges
+  const newCriterionEdges = state.edges
     .filter(
       (edge) =>
         edge.source === problemNode.id &&
         edge.label === targetRelation.name &&
-        findNode(edge.target, topicDiagram.nodes).type === targetRelation.child
+        findNode(edge.target, state.nodes).type === targetRelation.child
     )
     .map((edge) => {
       const sourceId = newNode.type === "criterion" ? newNode.id : edge.target;
@@ -208,7 +205,7 @@ const createEdgeAndImpliedEdges = (
   // don't create implied edges if the node being added is not in the topic diagram
   // e.g. when adding a question to the solution component, don't also link the solution to that
   // question, because it's not as relevant
-  if (topicNodeTypes.includes(parent.type) && topicNodeTypes.includes(child.type)) {
+  if (structureNodeTypes.includes(parent.type) && structureNodeTypes.includes(child.type)) {
     // indirectly recurses by calling this method after determining which implied edges to create
     // note: modifies topicGraph.edges through `state` (via the line above)
     createEdgesImpliedByComposition(topicGraph, parent, child, relation);

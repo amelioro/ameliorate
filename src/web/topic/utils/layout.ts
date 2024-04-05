@@ -1,12 +1,12 @@
 import ELK, { ElkNode, LayoutOptions } from "elkjs";
 
-import { DiagramType } from "../../../common/diagram";
-import { NodeType, diagramNodeTypes, nodeTypes } from "../../../common/node";
+import { NodeType, nodeTypes } from "../../../common/node";
 import { nodeHeightPx, nodeWidthPx } from "../components/Node/EditableNode.styles";
 import { Diagram } from "./diagram";
 import { type Edge, type Node, ancestors, descendants } from "./graph";
 
 export type Orientation = "DOWN" | "UP" | "RIGHT" | "LEFT";
+export const orientation: Orientation = "DOWN" as Orientation; // not constant to allow potential other orientations in the future, and keeping code that currently exists for handling "LEFT" orientation
 
 const priorities = Object.fromEntries(nodeTypes.map((type, index) => [type, index.toString()])) as {
   [type in NodeType]: string;
@@ -39,8 +39,10 @@ const partitionOrders: { [type in NodeType]: string } = {
   // research
   question: "null",
   answer: "null",
-  fact: "5",
-  source: "6", // generally nice to have sources along the bottom, below facts
+  // was partitioning facts/sources along bottom, but that's not desirable if structure nodes are primary,
+  // so partitioning was removed. can conditionally partition if that seems worthwhile.
+  fact: "null",
+  source: "null",
 
   // claim
   rootClaim: "null",
@@ -51,10 +53,7 @@ const partitionOrders: { [type in NodeType]: string } = {
   custom: "null",
 };
 
-const calculatePartition = (node: Node, nodes: Node[], edges: Edge[], type: DiagramType) => {
-  // don't partition secondary nodes, e.g. questions in the topic diagram
-  if (!diagramNodeTypes[type].includes(node.type)) return "null";
-
+const calculatePartition = (node: Node, nodes: Node[], edges: Edge[]) => {
   const topicGraph = { nodes, edges };
 
   if (["effect", "benefit", "detriment"].includes(node.type)) {
@@ -95,7 +94,7 @@ export const layout = async (
   partition: boolean,
   thoroughness: number
 ): Promise<NodePosition[]> => {
-  const { nodes, edges, orientation, type } = diagram;
+  const { nodes, edges } = diagram;
 
   // see support layout options at https://www.eclipse.org/elk/reference/algorithms/org-eclipse-elk-layered.html
   const layoutOptions: LayoutOptions = {
@@ -141,7 +140,7 @@ export const layout = async (
             // solutions, components, effects; we might be able to improve that situation by modeling
             // each problem within a nested node. Or maybe we could just do partitioning within
             // a special "problem context view" rather than in the main topic diagram view.
-            "elk.partitioning.partition": calculatePartition(node, nodes, edges, type),
+            "elk.partitioning.partition": calculatePartition(node, nodes, edges),
           },
         };
       }),

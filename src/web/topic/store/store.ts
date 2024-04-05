@@ -3,13 +3,10 @@ import { devtools, persist } from "zustand/middleware";
 import { createWithEqualityFn } from "zustand/traditional";
 
 import { useShowImpliedEdges } from "../../view/actionConfigStore";
-import { useFilterOptions } from "../../view/navigateStore";
+import { useDiagramFilter, useGeneralFilter } from "../../view/navigateStore";
 import { usePerspectives } from "../../view/perspectiveStore";
-import {
-  applyNodeTypeFilter,
-  applyScoreFilter,
-  applyStandardFilter,
-} from "../../view/utils/filter";
+import { applyDiagramFilter } from "../../view/utils/diagramFilter";
+import { applyNodeTypeFilter, applyScoreFilter } from "../../view/utils/generalFilter";
 import { Diagram } from "../utils/diagram";
 import { hideImpliedEdges } from "../utils/edge";
 import {
@@ -23,7 +20,6 @@ import {
 import { apiSyncer } from "./apiSyncerMiddleware";
 import { migrate } from "./migrate";
 import { getDisplayScores } from "./scoreGetters";
-import { getClaimTree, getResearchDiagram, getTopicDiagram } from "./utils";
 
 export interface PlaygroundTopic {
   id: undefined; // so we can check this to see if the store topic is a playground topic
@@ -88,71 +84,46 @@ export const useTopicStore = createWithEqualityFn<TopicStoreState>()(
   Object.is // using `createWithEqualityFn` so that we can do shallow or deep diffs in hooks that return new arrays/objects so that we can avoid extra renders
 );
 
-export const useTopicDiagram = (): Diagram => {
+export const useDiagram = (): Diagram => {
+  const diagramFilter = useDiagramFilter();
+  const generalFilter = useGeneralFilter();
+
   const showImpliedEdges = useShowImpliedEdges();
-  const filterOptions = useFilterOptions("topicDiagram");
   const perspectives = usePerspectives();
 
   return useTopicStore((state) => {
     const topicGraph = { nodes: state.nodes, edges: state.edges };
-    const topicDiagram = getTopicDiagram(topicGraph);
 
-    const { nodes: filteredPrimaryNodes } = applyStandardFilter(topicDiagram, filterOptions);
-    const nodesAfterTypeFilter = applyNodeTypeFilter(filteredPrimaryNodes, filterOptions.nodeTypes);
+    const nodesAfterDiagramFilter = applyDiagramFilter(topicGraph, diagramFilter);
 
+    const nodesAfterTypeFilter = applyNodeTypeFilter(
+      nodesAfterDiagramFilter,
+      generalFilter.nodeTypes
+    );
+
+    // don't filter edges because hard to prevent awkwardness when edge doesn't pass filter and suddenly nodes are scattered
     const partIdsForScores = state.nodes.map((part) => part.id);
     const scores = getDisplayScores(partIdsForScores, perspectives, state.userScores);
-    const nodesAfterScoreFilter = applyScoreFilter(nodesAfterTypeFilter, filterOptions, scores);
+    const nodesAfterScoreFilter = applyScoreFilter(nodesAfterTypeFilter, generalFilter, scores);
 
-    const secondaryNeighbors = filterOptions.showSecondaryNeighbors
-      ? getSecondaryNeighbors(nodesAfterScoreFilter, topicGraph, "topicDiagram")
-      : [];
+    const secondaryNeighbors = getSecondaryNeighbors(
+      nodesAfterScoreFilter,
+      topicGraph,
+      generalFilter
+    );
+
     const nodes = nodesAfterScoreFilter.concat(secondaryNeighbors);
 
     const relevantEdges = getRelevantEdges(nodes, topicGraph);
-    // don't filter edges because hard to prevent awkwardness when edge doesn't pass filter and suddenly nodes are scattered
     const edges = showImpliedEdges
       ? relevantEdges
       : hideImpliedEdges(relevantEdges, { nodes, edges: relevantEdges }, topicGraph);
 
-    return { nodes, edges, orientation: "DOWN", type: "topicDiagram" };
+    return { nodes, edges };
   });
 };
 
-export const useResearchDiagram = (): Diagram => {
-  const filterOptions = useFilterOptions("researchDiagram");
-  const perspectives = usePerspectives();
-
-  return useTopicStore((state) => {
-    const topicGraph = { nodes: state.nodes, edges: state.edges };
-    const researchDiagram = getResearchDiagram(topicGraph);
-
-    const { nodes: filteredPrimaryNodes } = applyStandardFilter(researchDiagram, filterOptions);
-    const nodesAfterTypeFilter = applyNodeTypeFilter(filteredPrimaryNodes, filterOptions.nodeTypes);
-
-    const partIdsForScores = state.nodes.map((part) => part.id);
-    const scores = getDisplayScores(partIdsForScores, perspectives, state.userScores);
-    const nodesAfterScoreFilter = applyScoreFilter(nodesAfterTypeFilter, filterOptions, scores);
-
-    const secondaryNeighbors = filterOptions.showSecondaryNeighbors
-      ? getSecondaryNeighbors(nodesAfterScoreFilter, topicGraph, "researchDiagram")
-      : [];
-    const nodes = nodesAfterScoreFilter.concat(secondaryNeighbors);
-
-    // don't filter edges because hard to prevent awkwardness when edge doesn't pass filter and suddenly nodes are scattered
-    const edges = getRelevantEdges(nodes, topicGraph);
-
-    return { nodes, edges, orientation: "DOWN", type: "researchDiagram" };
-  });
-};
-
-export const useClaimTree = (arguedDiagramPartId: string): Diagram => {
-  return useTopicStore((state) => {
-    const topicGraph = { nodes: state.nodes, edges: state.edges };
-    return getClaimTree(topicGraph, arguedDiagramPartId);
-  });
-};
-
+// TODO: refactor to populate root claim filter
 export const useClaimTreesWithExplicitClaims = () => {
   return useTopicStore((state) => {
     const rootNodes = state.nodes.filter(

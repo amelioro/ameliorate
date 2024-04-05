@@ -3,12 +3,7 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Tab } from "@mui/material";
 import { create } from "zustand";
 
-import {
-  useActiveArguedDiagramPart,
-  useActiveTableProblemNode,
-  useActiveView,
-  useSelectedGraphPart,
-} from "../../../view/navigateStore";
+import { useSelectedGraphPart } from "../../../view/navigateStore";
 import { GraphPartDetails } from "./GraphPartDetails";
 import { TopicDetails } from "./TopicDetails";
 import { PositionedDiv, StyledDrawer, TogglePaneButton } from "./TopicPane.styles";
@@ -47,9 +42,6 @@ export const TopicPane = ({ isLandscape }: Props) => {
   const { isTopicPaneOpen, selectedTab } = usePaneStore();
 
   const selectedGraphPart = useSelectedGraphPart();
-  const activeView = useActiveView();
-  const activeArguedDiagramPart = useActiveArguedDiagramPart();
-  const activeTableProblemNode = useActiveTableProblemNode();
 
   const handlePaneToggle = () => {
     if (isTopicPaneOpen) {
@@ -95,16 +87,6 @@ export const TopicPane = ({ isLandscape }: Props) => {
                 // part details for parts outside of the shown diagram can be displayed, without
                 // losing tracking of the selected part per diagram.
                 <GraphPartDetails graphPart={selectedGraphPart} key={selectedGraphPart.id} />
-              ) : activeView === "claimTree" && activeArguedDiagramPart !== null ? (
-                <GraphPartDetails
-                  graphPart={activeArguedDiagramPart}
-                  key={activeArguedDiagramPart.id}
-                />
-              ) : activeView === "criteriaTable" && activeTableProblemNode !== null ? (
-                <GraphPartDetails
-                  graphPart={activeTableProblemNode}
-                  key={activeTableProblemNode.id}
-                />
               ) : (
                 <TopicDetails />
               )}

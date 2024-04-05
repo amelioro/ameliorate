@@ -2,26 +2,16 @@ import { Global } from "@emotion/react";
 import { Box, useMediaQuery } from "@mui/material";
 
 import { ContextMenu } from "../../../common/components/ContextMenu/ContextMenu";
-import {
-  useActiveArguedDiagramPart,
-  useActiveTableProblemNode,
-  useActiveView,
-  useSecondaryView,
-} from "../../../view/navigateStore";
+import { useFormat } from "../../../view/navigateStore";
 import { CriteriaTable } from "../CriteriaTable/CriteriaTable";
-import { ClaimTree } from "../Diagram/ClaimTree";
-import { ResearchDiagram } from "../Diagram/ResearchDiagram";
-import { TopicDiagram } from "../Diagram/TopicDiagram";
+import { Diagram } from "../Diagram/Diagram";
 import { TopicToolbar } from "../Surface/TopicToolbar";
 import { TopicPane } from "../TopicPane/TopicPane";
 
 export const TopicWorkspace = () => {
   const isLandscape = useMediaQuery("(orientation: landscape)");
 
-  const activeView = useActiveView();
-  const secondaryView = useSecondaryView();
-  const tableProblemNode = useActiveTableProblemNode();
-  const arguedDiagramPart = useActiveArguedDiagramPart();
+  const format = useFormat();
 
   return (
     <>
@@ -40,45 +30,22 @@ export const TopicWorkspace = () => {
         <TopicPane isLandscape={isLandscape} />
 
         <Box height="100%" flex="1" position="relative">
-          <Box
-            width="100%"
-            height="100%"
-            position="absolute"
-            zIndex={activeView === "criteriaTable" ? 2 : secondaryView === "criteriaTable" ? 1 : 0}
-          >
-            {tableProblemNode && <CriteriaTable problemNodeId={tableProblemNode.id} />}
-          </Box>
+          {format === "table" && (
+            <Box width="100%" height="100%" position="absolute">
+              <CriteriaTable />
+            </Box>
+          )}
 
-          <Box
-            width="100%"
-            height="100%"
-            position="absolute"
-            zIndex={
-              activeView === "researchDiagram" ? 2 : secondaryView === "researchDiagram" ? 1 : 0
-            }
-            sx={{ backgroundColor: "white" }} // diagrams default to transparent background specifically to allow claim tree to retain visual context of the view behind it
-          >
-            <ResearchDiagram />
-          </Box>
-
-          <Box
-            width="100%"
-            height="100%"
-            position="absolute"
-            zIndex={activeView === "topicDiagram" ? 2 : secondaryView === "topicDiagram" ? 1 : 0}
-            sx={{ backgroundColor: "white" }} // diagrams default to transparent background specifically to allow claim tree to retain visual context of the view behind it
-          >
-            <TopicDiagram />
-          </Box>
-
-          <Box
-            width="100%"
-            height="100%"
-            position="absolute"
-            zIndex={activeView === "claimTree" ? 2 : 0}
-          >
-            {arguedDiagramPart && <ClaimTree arguedDiagramPartId={arguedDiagramPart.id} />}
-          </Box>
+          {format === "diagram" && (
+            <Box
+              width="100%"
+              height="100%"
+              position="absolute"
+              sx={{ backgroundColor: "white" }} // diagrams default to transparent background specifically to allow claim tree to retain visual context of the view behind it
+            >
+              <Diagram />
+            </Box>
+          )}
         </Box>
 
         {/* prevents body scrolling when workspace is rendered*/}

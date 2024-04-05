@@ -2,7 +2,7 @@ import lowerCase from "lodash/lowerCase";
 import { v4 as uuid } from "uuid";
 import { z } from "zod";
 
-import { DiagramType } from "./diagram";
+import { InfoCategory } from "./infoCategory";
 
 // Not sure how to guarantee that this matches the schema enum.
 // This order is generally used for sorting, e.g.:
@@ -56,8 +56,8 @@ export const nodeSchema = z.object({
 
 export type Node = z.infer<typeof nodeSchema>;
 
-export const diagramNodeTypes: Record<DiagramType, NodeType[]> = {
-  topicDiagram: [
+export const infoNodeTypes: Record<InfoCategory, NodeType[]> = {
+  structure: [
     "problem",
     "cause",
     "criterion",
@@ -69,13 +69,13 @@ export const diagramNodeTypes: Record<DiagramType, NodeType[]> = {
     "obstacle",
     "custom", // is a generic node but currently only seems worthwhile in topic
   ],
-  researchDiagram: ["question", "answer", "fact", "source"],
-  claimTree: ["rootClaim", "support", "critique"],
+  research: ["question", "answer", "fact", "source"],
+  justification: ["rootClaim", "support", "critique"],
 };
 
-export const topicNodeTypes = diagramNodeTypes.topicDiagram;
-export const researchNodeTypes = diagramNodeTypes.researchDiagram;
-export const claimNodeTypes = diagramNodeTypes.claimTree;
+export const structureNodeTypes = infoNodeTypes.structure;
+export const researchNodeTypes = infoNodeTypes.research;
+export const justificationNodeTypes = infoNodeTypes.justification;
 
 export const getNewTopicProblemNode = (topicId: number, topicTitle: string): Node => {
   return {
@@ -90,8 +90,8 @@ export const getNewTopicProblemNode = (topicId: number, topicTitle: string): Nod
 };
 
 export const getSiblingNodeTypes = (nodeType: NodeType): NodeType[] => {
-  if (topicNodeTypes.includes(nodeType)) return topicNodeTypes;
+  if (structureNodeTypes.includes(nodeType)) return structureNodeTypes;
   else if (researchNodeTypes.includes(nodeType)) return researchNodeTypes;
-  else if (claimNodeTypes.includes(nodeType)) return claimNodeTypes;
+  else if (justificationNodeTypes.includes(nodeType)) return justificationNodeTypes;
   else return [];
 };

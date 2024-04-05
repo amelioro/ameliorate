@@ -1,5 +1,10 @@
 import { RelationName, claimRelationNames } from "../../../common/edge";
-import { NodeType, claimNodeTypes, nodeTypes, researchNodeTypes } from "../../../common/node";
+import {
+  NodeType,
+  justificationNodeTypes,
+  nodeTypes,
+  researchNodeTypes,
+} from "../../../common/node";
 import { hasClaims } from "./claim";
 import { Edge, Graph, Node, RelationDirection, findNode } from "./graph";
 import { children, components, parents } from "./node";
@@ -215,7 +220,7 @@ export const canCreateEdge = (topicGraph: Graph, parent: Node, child: Node) => {
   }
 
   const secondParentForClaim =
-    claimNodeTypes.includes(child.type) &&
+    justificationNodeTypes.includes(child.type) &&
     topicGraph.edges.find((edge) => edge.target === child.id);
   if (secondParentForClaim) {
     console.log("cannot connect nodes: claims are in a tree so can't have multiple parents");

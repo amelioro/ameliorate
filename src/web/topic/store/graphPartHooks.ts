@@ -1,5 +1,5 @@
 import { RelationName, claimRelationNames } from "../../../common/edge";
-import { NodeType, claimNodeTypes, researchNodeTypes } from "../../../common/node";
+import { NodeType, justificationNodeTypes, researchNodeTypes } from "../../../common/node";
 import { isClaimEdge } from "../utils/claim";
 import { Node, findGraphPart } from "../utils/graph";
 import { useTopicStore } from "./store";
@@ -8,7 +8,7 @@ export const useExplicitClaimCount = (graphPartId: string) => {
   return useTopicStore((state) => {
     return state.nodes.filter(
       (node) =>
-        claimNodeTypes.includes(node.type) &&
+        justificationNodeTypes.includes(node.type) &&
         node.type !== "rootClaim" &&
         node.data.arguedDiagramPartId === graphPartId
     ).length;
@@ -21,7 +21,7 @@ export const useTopLevelClaims = (graphPartId: string) => {
     if (isClaimEdge(graphPart)) return { supports: [], critiques: [] };
 
     // TODO: cleanup when root claims are removed
-    const nodeToCheckForClaims = claimNodeTypes.includes(graphPart.type as NodeType)
+    const nodeToCheckForClaims = justificationNodeTypes.includes(graphPart.type as NodeType)
       ? graphPart
       : state.nodes.find(
           (node) => node.type === "rootClaim" && node.data.arguedDiagramPartId === graphPartId

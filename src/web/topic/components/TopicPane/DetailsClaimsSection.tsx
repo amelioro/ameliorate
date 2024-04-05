@@ -1,7 +1,7 @@
 import { ThumbsUpDown } from "@mui/icons-material";
 import { ListItem, ListItemIcon, ListItemText, Stack, Typography } from "@mui/material";
 
-import { claimNodeTypes } from "../../../../common/node";
+import { justificationNodeTypes } from "../../../../common/node";
 import { useTopLevelClaims } from "../../store/graphPartHooks";
 import { isClaimEdge } from "../../utils/claim";
 import { GraphPart, isNode } from "../../utils/graph";
@@ -19,7 +19,7 @@ export const DetailsClaimsSection = ({ graphPart }: Props) => {
 
   if (isClaimEdge(graphPart)) return <></>; // claim edges can't have their own claims
 
-  const isClaimNode = isNode(graphPart) && claimNodeTypes.includes(graphPart.type);
+  const isClaimNode = isNode(graphPart) && justificationNodeTypes.includes(graphPart.type);
 
   return (
     <>

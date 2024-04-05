@@ -1,10 +1,9 @@
 import { NestedMenuItem } from "mui-nested-menu";
 
-import { diagramNodeTypes } from "../../../../common/node";
 import { addNodeWithoutParent } from "../../../topic/store/createDeleteActions";
 import { useUserCanEditTopicData } from "../../../topic/store/userHooks";
 import { nodeDecorations } from "../../../topic/utils/node";
-import { useActiveView } from "../../../view/navigateStore";
+import { useFormat, usePrimaryNodeTypes } from "../../../view/navigateStore";
 import { useSessionUser } from "../../hooks";
 import { CloseOnClickMenuItem } from "./CloseOnClickMenuItem";
 
@@ -16,10 +15,11 @@ export const AddNodeMenuItem = ({ parentMenuOpen }: Props) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
 
-  const activeView = useActiveView();
+  const format = useFormat();
+  const shownNodeTypes = usePrimaryNodeTypes();
 
-  // shouldn't be able to view this menu item if we're in the criteria table view
-  if (!userCanEditTopicData || activeView == "criteriaTable") return <></>;
+  // shouldn't be able to view this menu item if we're in the table view
+  if (!userCanEditTopicData || format == "table") return <></>;
 
   return (
     <>
@@ -34,7 +34,7 @@ export const AddNodeMenuItem = ({ parentMenuOpen }: Props) => {
           },
         }}
       >
-        {diagramNodeTypes[activeView].map((type) => (
+        {shownNodeTypes.map((type) => (
           <CloseOnClickMenuItem key={type} onClick={() => addNodeWithoutParent(type)}>
             {nodeDecorations[type].title}
           </CloseOnClickMenuItem>

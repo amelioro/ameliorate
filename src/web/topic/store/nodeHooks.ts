@@ -5,7 +5,6 @@ import { useIsAnyGraphPartSelected } from "../../view/navigateStore";
 import { RelationDirection, findNode } from "../utils/graph";
 import { children, edges, neighbors, parents } from "../utils/node";
 import { useTopicStore } from "./store";
-import { getTopicDiagram } from "./utils";
 
 export const useNode = (nodeId: string | null) => {
   return useTopicStore((state) => {
@@ -19,8 +18,10 @@ export const useNode = (nodeId: string | null) => {
   });
 };
 
-export const useNodeChildren = (nodeId: string) => {
+export const useNodeChildren = (nodeId: string | undefined) => {
   return useTopicStore((state) => {
+    if (!nodeId) return [];
+
     try {
       const node = findNode(nodeId, state.nodes);
       const topicGraph = { nodes: state.nodes, edges: state.edges };
@@ -45,13 +46,13 @@ export const useNodeParents = (nodeId: string) => {
 
 export const useCriteriaTableProblemNodes = () => {
   return useTopicStore((state) => {
-    try {
-      const topicDiagram = getTopicDiagram(state);
+    const topicGraph = { nodes: state.nodes, edges: state.edges };
 
-      return topicDiagram.nodes.filter(
+    try {
+      return topicGraph.nodes.filter(
         (node) =>
           node.type === "problem" &&
-          children(node, topicDiagram).some((child) => child.type === "criterion")
+          children(node, topicGraph).some((child) => child.type === "criterion")
       );
     } catch {
       return [];
@@ -59,8 +60,10 @@ export const useCriteriaTableProblemNodes = () => {
   }, shallow);
 };
 
-export const useCriterionSolutionEdges = (problemNodeId: string) => {
+export const useCriterionSolutionEdges = (problemNodeId: string | undefined) => {
   return useTopicStore((state) => {
+    if (!problemNodeId) return [];
+
     try {
       const problemNode = findNode(problemNodeId, state.nodes);
       if (problemNode.type !== "problem") {

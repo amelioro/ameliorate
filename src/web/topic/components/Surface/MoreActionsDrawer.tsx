@@ -40,7 +40,7 @@ import {
   useUnrestrictedEditing,
 } from "../../../view/actionConfigStore";
 import { Perspectives } from "../../../view/components/Perspectives/Perspectives";
-import { View, useActiveView } from "../../../view/navigateStore";
+import { useFormat } from "../../../view/navigateStore";
 import { migrate } from "../../store/migrate";
 import { TopicStoreState } from "../../store/store";
 import { useOnPlayground } from "../../store/topicHooks";
@@ -87,16 +87,13 @@ const uploadTopic = (event: React.ChangeEvent<HTMLInputElement>, sessionUsername
 const imageWidth = 2560;
 const imageHeight = 1440;
 
-const downloadScreenshot = (activeView: View) => {
-  if (activeView === "criteriaTable") throw new Error("Cannot take screenshot of table view");
-
-  const nodes = getDisplayNodes(activeView);
-  if (!nodes) throw new Error("Couldn't get nodes to take screenshot of");
+const downloadScreenshot = () => {
+  const nodes = getDisplayNodes();
 
   // thanks react flow example https://reactflow.dev/examples/misc/download-image
   const nodesBounds = getRectOfNodes(nodes);
   const transform = getTransformForBounds(nodesBounds, imageWidth, imageHeight, 0.5, 2);
-  const viewportElement = document.querySelector(`#${activeView} .react-flow__viewport`);
+  const viewportElement = document.querySelector(".react-flow__viewport");
   if (!viewportElement) throw new Error("Couldn't find viewport element to take screenshot of");
 
   toPng(viewportElement as HTMLElement, {
@@ -135,8 +132,8 @@ export const MoreActionsDrawer = ({
   userCanEditTopicData,
 }: Props) => {
   const onPlayground = useOnPlayground();
-  const activeView = useActiveView();
-  const isTableActive = activeView === "criteriaTable";
+  const format = useFormat();
+  const isTableActive = format === "table";
 
   const showImpliedEdges = useShowImpliedEdges();
   const unrestrictedEditing = useUnrestrictedEditing();
@@ -203,7 +200,7 @@ export const MoreActionsDrawer = ({
               color="inherit"
               title="Take Screenshot of Diagram"
               aria-label="Take Screenshot of Diagram"
-              onClick={() => downloadScreenshot(activeView)}
+              onClick={() => downloadScreenshot()}
             >
               <ImageIcon />
             </IconButton>
