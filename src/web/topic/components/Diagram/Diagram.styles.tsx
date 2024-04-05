@@ -22,9 +22,6 @@ export const StyledReactFlow = styled(ReactFlow)`
   justify-content: center;
   align-items: center;
 
-  // maintain some visual context when overlaying diagrams
-  background-color: rgba(255, 255, 255, 0.87);
-
   // Very fragile "z-index:" selector because there's no other differentiation between the
   // svg for elevated edges and the svg for not-elevated edges.
   // We don't want to rely on the lib's 1000 because that pulls edges in front of primary and

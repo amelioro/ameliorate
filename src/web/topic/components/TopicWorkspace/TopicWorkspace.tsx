@@ -37,12 +37,7 @@ export const TopicWorkspace = () => {
           )}
 
           {format === "diagram" && (
-            <Box
-              width="100%"
-              height="100%"
-              position="absolute"
-              sx={{ backgroundColor: "white" }} // diagrams default to transparent background specifically to allow claim tree to retain visual context of the view behind it
-            >
+            <Box width="100%" height="100%" position="absolute">
               <Diagram />
             </Box>
           )}
