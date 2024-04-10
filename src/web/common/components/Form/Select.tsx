@@ -25,27 +25,41 @@ export const Select = ({
     field,
     fieldState: { error },
   } = useController({ name });
-
   // if options is array of strings, use the strings as both value and label
-  const optionsObjects = options.map((option) => {
-    return typeof option === "object" ? option : { id: option, label: option };
-  });
-
-  // array if multiple, string if single
-  const selectedIds = field.value as string[] | string;
+  const optionsObjects = useMemo(
+    () =>
+      options.map((option) => {
+        return typeof option === "object" ? option : { id: option, label: option };
+      }),
+    [options]
+  );
 
   // Use object for the value so that a label can differ from the value (particularly if the value is an id),
   // but notably the form data will still just use the value (id) because the label is only for display.
+  // Using null as a fallback so that value is never undefined, resulting in an uncontrolled input that could change to controlled when a value is set.
   const valueObject = useMemo(() => {
     if (multiple) {
-      return optionsObjects.filter((option) => (selectedIds as string[]).includes(option.id));
+      const selectedIds = (field.value ?? null) as string[] | null;
+      return optionsObjects.filter((option) => selectedIds?.includes(option.id));
     } else {
-      const value = optionsObjects.find((option) => option.id === selectedIds);
-      // if the selected value has been deleted, remove it from the list
-      if (selectedIds && !value) field.onChange(optionsObjects[0]?.id);
-      return value ?? optionsObjects[0];
+      const selectedId = (field.value ?? null) as string | null;
+      const valueInOptions = optionsObjects.find((option) => option.id === selectedId) ?? null;
+
+      const fallback = optionsObjects[0] ?? null;
+      const fallbackId = fallback?.id ?? null;
+      const invalidSelectedId = selectedId && !valueInOptions;
+      // TODO(bug1): if selection is invalid and there's no fallback, field will be empty with an error;
+      // but if the selection becomes valid (perhaps via undo action), the filter will correctly activate
+      // and the field will still show empty with an error (instead of showing what's correctly being used in the filter).
+      // This is because the null value is never actually set in the store, only in the form (because validation fails).
+      // TODO(bug2): when viewing criteria table, deleting the problem will throw error because this
+      // onChange can result in parent Filter component re-rendering during this Select render;
+      // presumably the fix is to trigger onChange within `useEffect`.
+      if (invalidSelectedId) field.onChange(fallbackId);
+
+      return !invalidSelectedId ? valueInOptions : fallback;
     }
-  }, [multiple, optionsObjects, selectedIds, field]);
+  }, [multiple, optionsObjects, field]);
 
   const fieldLabel = label ?? startCase(name);
 
@@ -80,7 +94,7 @@ export const Select = ({
     <Autocomplete
       {...field}
       options={optionsObjects}
-      value={valueObject as { id: string; label: string }}
+      value={valueObject as { id: string; label: string } | null}
       onChange={(_event, option) => {
         if (!option) return;
         field.onChange(option.id);

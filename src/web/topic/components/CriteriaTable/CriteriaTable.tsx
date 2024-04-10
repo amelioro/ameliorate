@@ -11,12 +11,11 @@ import {
 import React, { useState } from "react";
 
 import { errorWithData } from "../../../../common/errorHandling";
-import { Loading } from "../../../common/components/Loading/Loading";
 import { useSessionUser } from "../../../common/hooks";
 import { useGeneralFilter, useTableFilter } from "../../../view/navigateStore";
 import { getSelectedTradeoffNodes } from "../../../view/utils/diagramFilter";
 import { applyScoreFilter } from "../../../view/utils/generalFilter";
-import { useCriterionSolutionEdges, useNode, useNodeChildren } from "../../store/nodeHooks";
+import { useCriterionSolutionEdges, useDefaultNode, useNodeChildren } from "../../store/nodeHooks";
 import { useDisplayScores } from "../../store/scoreHooks";
 import { useUserCanEditTopicData } from "../../store/userHooks";
 import { getConnectingEdge } from "../../utils/edge";
@@ -187,18 +186,18 @@ export const CriteriaTable = () => {
   const tableFilter = useTableFilter();
   const generalFilter = useGeneralFilter();
 
-  const problemNode = useNode(tableFilter.centralProblemId);
+  // if no problem is selected, show the criteria table for a fallback problem
+  const problemNode = useDefaultNode("problem", tableFilter.centralProblemId);
   const nodeChildren = useNodeChildren(problemNode?.id);
   const edges = useCriterionSolutionEdges(problemNode?.id);
   const scores = useDisplayScores(nodeChildren.map((node) => node.id));
 
-  if (!tableFilter.centralProblemId)
+  if (!problemNode)
     return (
       <Box display="flex" justifyContent="center" alignItems="center" height="100%">
         <Typography>Select a central problem node to view the tradeoff table</Typography>
       </Box>
     );
-  if (!problemNode) return <Loading />;
 
   const solutions = nodeChildren.filter((child) => child.type === "solution");
   const criteria = nodeChildren.filter((child) => child.type === "criterion");

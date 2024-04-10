@@ -142,7 +142,7 @@ const applyTradeoffsFilter = (graph: Graph, filters: TradeoffsOptions) => {
   );
 
   const criteriaParents = selectedCriteria.flatMap((criterion) =>
-    // filter problem because we want to include the problem regardless of if we're showing criteria, for context
+    // filter problem because we want to separately include the problem regardless of if we're showing criteria, for context
     parents(criterion, graph).filter((parent) => parent.type !== "problem")
   );
 
@@ -193,19 +193,26 @@ const getSolutionDetails = (
       );
 };
 
+/**
+ * Return the selected solutions/criteria if they're valid.
+ * If there are no valid solutions/criteria selected, return all solutions/criteria for the problem.
+ */
 export const getSelectedTradeoffNodes = (
   problemSolutions: Node[],
   problemCriteria: Node[],
   filters: { solutions: string[]; criteria: string[] }
 ) => {
-  const selectedSolutions = problemSolutions.filter(
-    (solution) => filters.solutions.length === 0 || filters.solutions.includes(solution.id)
+  const selectedSolutions = problemSolutions.filter((solution) =>
+    filters.solutions.includes(solution.id)
   );
-  const selectedCriteria = problemCriteria.filter(
-    (criterion) => filters.criteria.length === 0 || filters.criteria.includes(criterion.id)
+  const selectedCriteria = problemCriteria.filter((criterion) =>
+    filters.criteria.includes(criterion.id)
   );
 
-  return { selectedSolutions, selectedCriteria };
+  return {
+    selectedSolutions: selectedSolutions.length === 0 ? problemSolutions : selectedSolutions,
+    selectedCriteria: selectedCriteria.length === 0 ? problemCriteria : selectedCriteria,
+  };
 };
 
 const tradeoffsSchema = z.object({
@@ -306,13 +313,23 @@ const sourceSchema = z.object({
 type SourceOptions = z.infer<typeof sourceSchema>;
 
 // filter methods
+const standardFilterTypes = [
+  "none",
+  "highLevel",
+  "problem",
+  "tradeoffs",
+  "solution",
+  "question",
+  "source",
+] as const;
+const zStandardFilterTypes = z.enum(standardFilterTypes);
+type StandardFilterType = z.infer<typeof zStandardFilterTypes>;
 
-// TODO?: is there a way to type-guarantee that these values come from the defined schemas?
-export const topicFilterTypes = ["none", "highLevel", "problem", "tradeoffs", "solution"] as const;
-export const researchFilterTypes = ["none", "question", "source"] as const;
-
-const diagramFilterTypes = [...topicFilterTypes, ...researchFilterTypes] as const;
-export type DiagramFilterTypes = typeof diagramFilterTypes[number];
+export const infoStandardFilterTypes: Record<InfoCategory, StandardFilterType[]> = {
+  structure: ["none", "highLevel", "problem", "tradeoffs", "solution"],
+  research: ["none", "question", "source"],
+  justification: ["none"],
+};
 
 export const applyStandardFilter = (graph: Graph, filter: StandardFilter): Graph => {
   // TODO?: is there a way to use a Record<Type, ApplyMethod> rather than a big if-else?
@@ -353,6 +370,20 @@ export const standardFilterSchema = z.discriminatedUnion("type", [
   sourceSchema,
 ]);
 
+// intentionally use spread operators instead of chaining `.merge(schema)` to avoid "type instantiation is excessively deep and possibly infinite" error
+const standardFilterWithFallbacksSchema = z
+  .object({
+    ...noneSchema.shape,
+    ...highLevelSchema.shape,
+    ...problemSchema.shape,
+    ...tradeoffsSchema.shape,
+    ...solutionSchema.shape,
+    ...questionSchema.shape,
+    ...sourceSchema.shape,
+    type: zStandardFilterTypes,
+  })
+  .deepPartial(); // all defaults should be optional to specify
+
 export const standardFilterSchemasByType = {
   none: noneSchema,
   highLevel: highLevelSchema,
@@ -364,4 +395,5 @@ export const standardFilterSchemasByType = {
 };
 
 export type StandardFilter = z.infer<typeof standardFilterSchema>;
+export type StandardFilterWithFallbacks = z.infer<typeof standardFilterWithFallbacksSchema>;
 export type DiagramFilter = Record<InfoCategory, StandardFilter & { show: boolean }>;

@@ -2,6 +2,7 @@ import { AutoStories, School, ThumbsUpDown } from "@mui/icons-material";
 import { FormControlLabel, Switch as MuiSwitch, Stack, Typography } from "@mui/material";
 
 import { setShowInformation, useDiagramFilter } from "../../navigateStore";
+import { StandardFilter } from "./StandardFilter";
 
 export const InformationFilters = () => {
   const diagramFilter = useDiagramFilter();
@@ -23,7 +24,10 @@ export const InformationFilters = () => {
           />
         }
       />
-      {/* TODO: conditionally show standard filters */}
+      {diagramFilter.structure.show && (
+        <StandardFilter infoCategory="structure" filter={diagramFilter.structure} />
+      )}
+
       <FormControlLabel
         label={
           <Stack direction="row" spacing={0.5}>
@@ -38,6 +42,10 @@ export const InformationFilters = () => {
           />
         }
       />
+      {diagramFilter.research.show && (
+        <StandardFilter infoCategory="research" filter={diagramFilter.research} />
+      )}
+
       <FormControlLabel
         label={
           <Stack direction="row" spacing={0.5}>

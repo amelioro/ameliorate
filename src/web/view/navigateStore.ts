@@ -7,8 +7,9 @@ import { Format, InfoCategory, zFormats } from "../../common/infoCategory";
 import { infoNodeTypes, nodeTypes } from "../../common/node";
 import { emitter } from "../common/event";
 import { useGraphPart } from "../topic/store/graphPartHooks";
+import { getDefaultNode } from "../topic/store/nodeGetters";
 import { useTopicStore } from "../topic/store/store";
-import { DiagramFilter } from "./utils/diagramFilter";
+import { DiagramFilter, StandardFilter, StandardFilterWithFallbacks } from "./utils/diagramFilter";
 import { GeneralFilter } from "./utils/generalFilter";
 import { TableFilter } from "./utils/tableFilter";
 
@@ -31,7 +32,6 @@ const initialState: NavigateStoreState = {
     justification: { show: false, type: "none" },
   },
   tableFilter: {
-    centralProblemId: "",
     solutions: [],
     criteria: [],
   },
@@ -79,14 +79,18 @@ export const useFormat = () => {
   return useNavigateStore((state) => state.format);
 };
 
-// TODO: return defaults via topic store if not set
-// For example, if centralProblemId is null, it should instead be the first problem node in the topic store, if there is one.
-export const useDiagramFilter = () => {
-  return useNavigateStore((state) => state.diagramFilter);
+export const useDiagramFilter = (): DiagramFilter => {
+  return useNavigateStore(
+    (state) => state.diagramFilter,
+    (before, after) => JSON.stringify(before) === JSON.stringify(after)
+  );
 };
 
-export const useTableFilter = () => {
-  return useNavigateStore((state) => state.tableFilter);
+export const useTableFilter = (): TableFilter => {
+  return useNavigateStore(
+    (state) => state.tableFilter,
+    (before, after) => JSON.stringify(before) === JSON.stringify(after)
+  );
 };
 
 export const useGeneralFilter = () => {
@@ -125,6 +129,26 @@ export const setShowInformation = (category: InfoCategory, show: boolean) => {
   emitter.emit("changedDiagramFilter");
 };
 
+export const setStandardFilter = (category: InfoCategory, filter: StandardFilter) => {
+  const diagramFilter = useNavigateStore.getState().diagramFilter;
+
+  // can flatten store a little more...
+  // TODO: separate show into infoCategoriesToShow
+  // TODO: separate diagramFilter into structureFilter, researchFilter, justificationFilter
+  // then useDiagramFilter can still exist and return the combo of them (or separate hooks could still be used)
+  const newDiagramFilter = {
+    ...diagramFilter,
+    [category]: {
+      ...diagramFilter[category],
+      ...filter,
+    },
+  };
+
+  useNavigateStore.setState({ diagramFilter: newDiagramFilter });
+
+  emitter.emit("changedDiagramFilter");
+};
+
 export const setTableFilter = (tableFilter: TableFilter) => {
   useNavigateStore.setState({ tableFilter });
 };
@@ -148,6 +172,46 @@ export const resetNavigation = () => {
 };
 
 // helpers
+export const getStandardFilterWithFallbacks = (
+  category: InfoCategory
+): StandardFilterWithFallbacks => {
+  const standardFilter = useNavigateStore.getState().diagramFilter[category];
+
+  const centralProblemId = getDefaultNode("problem")?.id;
+  const centralSolutionId = getDefaultNode("solution")?.id;
+  const centralQuestionId = getDefaultNode("question")?.id;
+  const centralSourceId = getDefaultNode("source")?.id;
+
+  const standardFilterDefaults: StandardFilterWithFallbacks = {
+    type: "none",
+    centralProblemId,
+    problemDetails: ["causes", "effects", "subproblems", "criteria", "solutions"],
+    centralSolutionId,
+    solutionDetail: "all",
+    solutions: [],
+    criteria: [],
+    centralQuestionId,
+    centralSourceId,
+  };
+
+  // override any defaults using the stored filter
+  return { ...standardFilterDefaults, ...standardFilter };
+};
+
+export const getTableFilterWithFallbacks = (): TableFilter => {
+  const tableFilter = useNavigateStore.getState().tableFilter;
+
+  const centralProblemId = getDefaultNode("problem")?.id;
+
+  const tableFilterDefaults = {
+    centralProblemId,
+    solutions: [],
+    criteria: [],
+  };
+
+  return { ...tableFilterDefaults, ...tableFilter };
+};
+
 const findGraphPartIdBySubstring = (graphPartIdSubstring: string | null) => {
   if (!graphPartIdSubstring) return null;
 

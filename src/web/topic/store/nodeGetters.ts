@@ -1,8 +1,7 @@
 import { NodeType } from "../../../common/node";
 import { useTopicStore } from "./store";
 
-export const getNodes = (nodeType: NodeType) => {
+export const getDefaultNode = (nodeType: NodeType) => {
   const state = useTopicStore.getState();
-
-  return state.nodes.filter((node) => node.type === nodeType);
+  return state.nodes.find((node) => node.type === nodeType);
 };
