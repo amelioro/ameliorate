@@ -181,6 +181,7 @@ export const getStandardFilterWithFallbacks = (
   const centralSolutionId = getDefaultNode("solution")?.id;
   const centralQuestionId = getDefaultNode("question")?.id;
   const centralSourceId = getDefaultNode("source")?.id;
+  const centralRootClaimId = getDefaultNode("rootClaim")?.id;
 
   const standardFilterDefaults: StandardFilterWithFallbacks = {
     type: "none",
@@ -192,6 +193,7 @@ export const getStandardFilterWithFallbacks = (
     criteria: [],
     centralQuestionId,
     centralSourceId,
+    centralRootClaimId,
   };
 
   // override any defaults using the stored filter

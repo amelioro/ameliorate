@@ -312,6 +312,32 @@ const sourceSchema = z.object({
 
 type SourceOptions = z.infer<typeof sourceSchema>;
 
+/**
+ * Description:
+ * - Show root claim and all children that support or critique it.
+ *
+ * Use cases:
+ * - Focus on justification for a specific score.
+ */
+const applyRootClaimFilter = (graph: Graph, filters: RootClaimOptions) => {
+  const centralRootClaim = graph.nodes.find((node) => node.id === filters.centralRootClaimId);
+  if (!centralRootClaim) return graph;
+
+  const justification = descendants(centralRootClaim, graph, ["supports", "critiques"]);
+
+  const nodes = [centralRootClaim, ...justification];
+  const edges = getRelevantEdges(nodes, graph);
+
+  return { nodes, edges };
+};
+
+const rootClaimSchema = z.object({
+  type: z.literal("rootClaim"),
+  centralRootClaimId: nodeSchema.shape.id,
+});
+
+type RootClaimOptions = z.infer<typeof rootClaimSchema>;
+
 // filter methods
 const standardFilterTypes = [
   "none",
@@ -321,6 +347,7 @@ const standardFilterTypes = [
   "solution",
   "question",
   "source",
+  "rootClaim",
 ] as const;
 const zStandardFilterTypes = z.enum(standardFilterTypes);
 type StandardFilterType = z.infer<typeof zStandardFilterTypes>;
@@ -328,19 +355,20 @@ type StandardFilterType = z.infer<typeof zStandardFilterTypes>;
 export const infoStandardFilterTypes: Record<InfoCategory, StandardFilterType[]> = {
   structure: ["none", "highLevel", "problem", "tradeoffs", "solution"],
   research: ["none", "question", "source"],
-  justification: ["none"],
+  justification: ["none", "rootClaim"],
 };
 
 export const applyStandardFilter = (graph: Graph, filter: StandardFilter): Graph => {
   // TODO?: is there a way to use a Record<Type, ApplyMethod> rather than a big if-else?
   // while still maintaining that the applyMethod only accepts the correct options type
-  if (filter.type === "none") return graph;
-  else if (filter.type === "highLevel") return applyHighLevelFilter(graph, filter);
+  if (filter.type === "highLevel") return applyHighLevelFilter(graph, filter);
   else if (filter.type === "problem") return applyProblemFilter(graph, filter);
   else if (filter.type === "tradeoffs") return applyTradeoffsFilter(graph, filter);
   else if (filter.type === "solution") return applySolutionFilter(graph, filter);
   else if (filter.type === "question") return applyQuestionFilter(graph, filter);
-  else return applySourceFilter(graph, filter);
+  else if (filter.type === "source") return applySourceFilter(graph, filter);
+  else if (filter.type === "rootClaim") return applyRootClaimFilter(graph, filter);
+  else return graph;
 };
 
 /**
@@ -379,6 +407,7 @@ export const standardFilterSchema = z.discriminatedUnion("type", [
   solutionSchema,
   questionSchema,
   sourceSchema,
+  rootClaimSchema,
 ]);
 
 // intentionally use spread operators instead of chaining `.merge(schema)` to avoid "type instantiation is excessively deep and possibly infinite" error
@@ -391,6 +420,7 @@ const standardFilterWithFallbacksSchema = z
     ...solutionSchema.shape,
     ...questionSchema.shape,
     ...sourceSchema.shape,
+    ...rootClaimSchema.shape,
     type: zStandardFilterTypes,
   })
   .deepPartial(); // all defaults should be optional to specify
@@ -403,6 +433,7 @@ export const standardFilterSchemasByType = {
   solution: solutionSchema,
   question: questionSchema,
   source: sourceSchema,
+  rootClaim: rootClaimSchema,
 };
 
 export type StandardFilter = z.infer<typeof standardFilterSchema>;

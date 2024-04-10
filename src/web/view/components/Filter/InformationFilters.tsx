@@ -60,6 +60,9 @@ export const InformationFilters = () => {
           />
         }
       />
+      {diagramFilter.justification.show && (
+        <StandardFilter infoCategory="justification" filter={diagramFilter.justification} />
+      )}
     </Stack>
   );
 };

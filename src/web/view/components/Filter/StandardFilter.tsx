@@ -6,13 +6,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { InfoCategory } from "../../../../common/infoCategory";
 import { NodeSelect } from "../../../common/components/Form/NodeSelect";
 import { Select } from "../../../common/components/Form/Select";
-import {
-  useCriteria,
-  useProblems,
-  useQuestions,
-  useSolutions,
-  useSources,
-} from "../../../topic/store/nodeHooks";
+import { useCriteria, useNodesOfType, useSolutions } from "../../../topic/store/nodeHooks";
 import { getStandardFilterWithFallbacks, setStandardFilter } from "../../navigateStore";
 import {
   StandardFilter as StandardFilterData,
@@ -46,6 +40,11 @@ export const StandardFilter = ({ infoCategory }: Props) => {
 
   const type = watch("type");
   const typeSchemaShape = standardFilterSchemasByType[type].shape;
+
+  const useProblems = () => useNodesOfType("problem");
+  const useQuestions = () => useNodesOfType("question");
+  const useSources = () => useNodesOfType("source");
+  const useRootClaims = () => useNodesOfType("rootClaim");
 
   const centralProblemId = watch("centralProblemId");
   const useProblemSolutions = () => useSolutions(centralProblemId);
@@ -111,6 +110,13 @@ export const StandardFilter = ({ infoCategory }: Props) => {
           )}
           {"centralSourceId" in typeSchemaShape && (
             <NodeSelect name="centralSourceId" label="Central Source" useNodeOptions={useSources} />
+          )}
+          {"centralRootClaimId" in typeSchemaShape && (
+            <NodeSelect
+              name="centralRootClaimId"
+              label="Central Root Claim"
+              useNodeOptions={useRootClaims}
+            />
           )}
         </Stack>
       </form>

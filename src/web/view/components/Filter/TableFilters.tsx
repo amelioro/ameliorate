@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 import { NodeSelect } from "../../../common/components/Form/NodeSelect";
-import { useCriteria, useProblems, useSolutions } from "../../../topic/store/nodeHooks";
+import { useCriteria, useNodesOfType, useSolutions } from "../../../topic/store/nodeHooks";
 import { getTableFilterWithFallbacks, setTableFilter } from "../../navigateStore";
 import { TableFilter, tableFilterSchema } from "../../utils/tableFilter";
 
@@ -16,6 +16,8 @@ export const TableFilters = () => {
     defaultValues: tableFilter,
   });
   const { handleSubmit, watch } = methods;
+
+  const useProblems = () => useNodesOfType("problem");
 
   const centralProblemId = watch("centralProblemId");
   const useProblemSolutions = () => useSolutions(centralProblemId);

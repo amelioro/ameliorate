@@ -141,16 +141,8 @@ export const useDefaultNode = (nodeType: NodeType, nodeId?: string) => {
   }, shallow);
 };
 
-export const useProblems = () => {
-  return useTopicStore((state) => state.nodes.filter((node) => node.type === "problem"), shallow);
-};
-
-export const useQuestions = () => {
-  return useTopicStore((state) => state.nodes.filter((node) => node.type === "question"), shallow);
-};
-
-export const useSources = () => {
-  return useTopicStore((state) => state.nodes.filter((node) => node.type === "source"), shallow);
+export const useNodesOfType = (type: NodeType) => {
+  return useTopicStore((state) => state.nodes.filter((node) => node.type === type), shallow);
 };
 
 export const useSolutions = (problemId?: string) => {
