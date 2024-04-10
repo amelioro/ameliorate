@@ -343,6 +343,10 @@ export const applyStandardFilter = (graph: Graph, filter: StandardFilter): Graph
   else return applySourceFilter(graph, filter);
 };
 
+/**
+ * Show nodes for each information category whose toggle is on.
+ * For each category, if it has a standard filter, its nodes are filtered by that.
+ */
 export const applyDiagramFilter = (graph: Graph, diagramFilter: DiagramFilter) => {
   return Object.entries(diagramFilter)
     .filter(([_, filter]) => filter.show)
@@ -351,8 +355,15 @@ export const applyDiagramFilter = (graph: Graph, diagramFilter: DiagramFilter) =
         infoNodeTypes[category as InfoCategory].includes(node.type)
       );
 
+      if (filter.type === "none") return categoryNodes;
+
+      const categoryEdges = getRelevantEdges(categoryNodes, graph);
+
+      // If we ever want standard filters to be able to add nodes of other info categories, we could
+      // consider passing all nodes to the filter + have invalid filters return no nodes +
+      // return all nodes of the category if no filtered nodes are returned.
       const filteredCategoryNodes = applyStandardFilter(
-        { nodes: categoryNodes, edges: graph.edges },
+        { nodes: categoryNodes, edges: categoryEdges },
         filter
       ).nodes;
 
