@@ -167,13 +167,23 @@ export const setGeneralFilter = (generalFilter: GeneralFilter) => {
   emitter.emit("changedDiagramFilter");
 };
 
-export const viewCriteriaTable = (_problemNodeId: string) => {
-  // TODO: set table filter
-  useNavigateStore.setState({ format: "table" });
+export const viewCriteriaTable = (problemNodeId: string) => {
+  useNavigateStore.setState({
+    format: "table",
+    tableFilter: {
+      centralProblemId: problemNodeId,
+      solutions: [],
+      criteria: [],
+    },
+  });
 };
 
-export const viewClaimTree = (_arguedDiagramPartId: string) => {
-  // TODO: set justification standard filter
+export const viewJustification = (arguedDiagramPartId: string) => {
+  useNavigateStore.setState({
+    format: "diagram",
+    categoriesToShow: ["justification"],
+    justificationFilter: { type: "rootClaim", centralRootClaimId: arguedDiagramPartId },
+  });
 };
 
 export const resetNavigation = () => {

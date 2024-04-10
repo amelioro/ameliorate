@@ -20,6 +20,7 @@ import {
   isNode,
 } from "../utils/graph";
 import { FlowNodeType, edges } from "../utils/node";
+import { getExplicitClaimCount } from "./graphPartHooks";
 import { TopicStoreState, useTopicStore } from "./store";
 
 const createNode = (
@@ -266,17 +267,22 @@ export const deleteNode = (nodeId: string) => {
   const state = createDraft(useTopicStore.getState());
 
   const deletedNode = findNode(nodeId, state.nodes);
-  if (deletedNode.type === "rootClaim") {
-    /* eslint-disable functional/immutable-data, no-param-reassign */
-    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete -- consider using a map instead of an object?
-    state.nodes = state.nodes.filter(
-      (node) => node.data.arguedDiagramPartId !== deletedNode.data.arguedDiagramPartId
-    );
-    state.edges = state.edges.filter(
-      (edge) => edge.data.arguedDiagramPartId !== deletedNode.data.arguedDiagramPartId
-    );
-    /* eslint-enable functional/immutable-data, no-param-reassign */
-    return;
+
+  const arguedDiagramPartId = deletedNode.data.arguedDiagramPartId;
+  if (arguedDiagramPartId) {
+    const remainingArguedClaims = getExplicitClaimCount(state, arguedDiagramPartId);
+    // deleted node was the last
+    if (remainingArguedClaims <= 1) {
+      /* eslint-disable functional/immutable-data, no-param-reassign */
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete -- consider using a map instead of an object?
+      state.nodes = state.nodes.filter(
+        (node) => node.data.arguedDiagramPartId !== deletedNode.data.arguedDiagramPartId
+      );
+      state.edges = state.edges.filter(
+        (edge) => edge.data.arguedDiagramPartId !== deletedNode.data.arguedDiagramPartId
+      );
+      /* eslint-enable functional/immutable-data, no-param-reassign */
+    }
   }
 
   const nodeEdges = edges(deletedNode, state.edges);

@@ -1,18 +1,30 @@
+import { shallow } from "zustand/shallow";
+
 import { RelationName, claimRelationNames } from "../../../common/edge";
 import { NodeType, justificationNodeTypes, researchNodeTypes } from "../../../common/node";
 import { isClaimEdge } from "../utils/claim";
 import { Node, findGraphPart } from "../utils/graph";
-import { useTopicStore } from "./store";
+import { TopicStoreState, useTopicStore } from "./store";
+
+export const useRootClaim = (graphPartId: string) => {
+  return useTopicStore((state) => {
+    return state.nodes.find(
+      (node) => node.type === "rootClaim" && node.data.arguedDiagramPartId === graphPartId
+    );
+  }, shallow);
+};
+
+export const getExplicitClaimCount = (state: TopicStoreState, graphPartId: string) => {
+  return state.nodes.filter(
+    (node) =>
+      justificationNodeTypes.includes(node.type) &&
+      node.type !== "rootClaim" &&
+      node.data.arguedDiagramPartId === graphPartId
+  ).length;
+};
 
 export const useExplicitClaimCount = (graphPartId: string) => {
-  return useTopicStore((state) => {
-    return state.nodes.filter(
-      (node) =>
-        justificationNodeTypes.includes(node.type) &&
-        node.type !== "rootClaim" &&
-        node.data.arguedDiagramPartId === graphPartId
-    ).length;
-  });
+  return useTopicStore((state) => getExplicitClaimCount(state, graphPartId));
 };
 
 export const useTopLevelClaims = (graphPartId: string) => {

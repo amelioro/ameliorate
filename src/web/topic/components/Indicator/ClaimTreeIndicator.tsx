@@ -1,10 +1,12 @@
 import { AccountTree, AccountTreeOutlined } from "@mui/icons-material";
 import { MouseEventHandler, useCallback } from "react";
 
-import { useSessionUser } from "../../../common/hooks";
-import { useExplicitClaimCount, useNonTopLevelClaimCount } from "../../store/graphPartHooks";
-import { useUserCanEditTopicData } from "../../store/userHooks";
-import { viewOrCreateClaimTree } from "../../store/viewActions";
+import { viewJustification } from "../../../view/navigateStore";
+import {
+  useExplicitClaimCount,
+  useNonTopLevelClaimCount,
+  useRootClaim,
+} from "../../store/graphPartHooks";
 import { Indicator } from "./Indicator";
 
 interface Props {
@@ -12,8 +14,7 @@ interface Props {
 }
 
 export const ClaimTreeIndicator = ({ graphPartId }: Props) => {
-  const { sessionUser } = useSessionUser();
-  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
+  const rootClaim = useRootClaim(graphPartId);
   const explicitClaimCount = useExplicitClaimCount(graphPartId);
   const nonTopLevelClaimCount = useNonTopLevelClaimCount(graphPartId);
 
@@ -21,12 +22,14 @@ export const ClaimTreeIndicator = ({ graphPartId }: Props) => {
     (event) => {
       // prevent setting the node as selected because we're about to navigate away from this diagram
       event.stopPropagation();
-      viewOrCreateClaimTree(graphPartId);
+
+      if (!rootClaim) return;
+      viewJustification(rootClaim.id);
     },
-    [graphPartId]
+    [rootClaim]
   );
 
-  const Icon = nonTopLevelClaimCount > 0 ? AccountTree : AccountTreeOutlined;
+  const Icon = explicitClaimCount > 0 ? AccountTree : AccountTreeOutlined;
   const title =
     "View claim tree" +
     (nonTopLevelClaimCount > 0 ? ` (${nonTopLevelClaimCount} claims not shown here)` : "");
@@ -36,9 +39,7 @@ export const ClaimTreeIndicator = ({ graphPartId }: Props) => {
       Icon={Icon}
       iconHasBackground={false}
       title={title}
-      // Kind-of-hack to prevent viewing empty claim tree without edit access if there are no claims
-      // because it'll try to create the root claim in the db, and give an authorize error
-      onClick={userCanEditTopicData || explicitClaimCount > 0 ? onClick : undefined}
+      onClick={explicitClaimCount > 0 ? onClick : undefined}
     />
   );
 };
