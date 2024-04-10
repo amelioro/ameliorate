@@ -241,14 +241,18 @@ export const getSecondaryNeighbors = (
   const secondaryNeighbors = [];
 
   if (generalFilter.showSecondaryResearch) {
+    const primaryNonResearchIds = primaryNodes
+      .filter((node) => !infoNodeTypes.research.includes(node.type))
+      .map((node) => node.id);
+
     const secondaryResearch = graph.nodes.filter(
       (node) =>
         !primaryNodeIds.includes(node.id) &&
         infoNodeTypes.research.includes(node.type) &&
         graph.edges.some(
           (edge) =>
-            (edge.source === node.id && primaryNodeIds.includes(edge.target)) ||
-            (edge.target === node.id && primaryNodeIds.includes(edge.source))
+            (edge.source === node.id && primaryNonResearchIds.includes(edge.target)) ||
+            (edge.target === node.id && primaryNonResearchIds.includes(edge.source))
         )
     );
 
@@ -257,14 +261,18 @@ export const getSecondaryNeighbors = (
   }
 
   if (generalFilter.showSecondaryStructure) {
+    const primaryNonStructureIds = primaryNodes
+      .filter((node) => !infoNodeTypes.structure.includes(node.type))
+      .map((node) => node.id);
+
     const secondaryStructure = graph.nodes.filter(
       (node) =>
         !primaryNodeIds.includes(node.id) &&
         infoNodeTypes.structure.includes(node.type) &&
         graph.edges.some(
           (edge) =>
-            (edge.source === node.id && primaryNodeIds.includes(edge.target)) ||
-            (edge.target === node.id && primaryNodeIds.includes(edge.source))
+            (edge.source === node.id && primaryNonStructureIds.includes(edge.target)) ||
+            (edge.target === node.id && primaryNonStructureIds.includes(edge.source))
         )
     );
 
