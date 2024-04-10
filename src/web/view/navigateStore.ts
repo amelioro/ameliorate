@@ -1,6 +1,7 @@
 import { useSearchParams } from "next/navigation";
 import Router from "next/router";
 import { useEffect, useState } from "react";
+import { shallow } from "zustand/shallow";
 import { createWithEqualityFn } from "zustand/traditional";
 
 import { Format, InfoCategory, zFormats } from "../../common/infoCategory";
@@ -18,7 +19,13 @@ export type View = "topicDiagram" | "researchDiagram" | "criteriaTable" | "claim
 interface NavigateStoreState {
   selectedGraphPartId: string | null;
   format: Format;
-  diagramFilter: DiagramFilter;
+
+  // info category state is flattened (rather than `[category]: state`) for ease of modifying
+  categoriesToShow: InfoCategory[];
+  structureFilter: StandardFilter;
+  researchFilter: StandardFilter;
+  justificationFilter: StandardFilter;
+
   tableFilter: TableFilter;
   generalFilter: GeneralFilter;
 }
@@ -26,11 +33,12 @@ interface NavigateStoreState {
 const initialState: NavigateStoreState = {
   selectedGraphPartId: null,
   format: "diagram",
-  diagramFilter: {
-    structure: { show: true, type: "none" },
-    research: { show: false, type: "none" },
-    justification: { show: false, type: "none" },
-  },
+
+  categoriesToShow: ["structure"],
+  structureFilter: { type: "none" },
+  researchFilter: { type: "none" },
+  justificationFilter: { type: "none" },
+
   tableFilter: {
     solutions: [],
     criteria: [],
@@ -79,11 +87,25 @@ export const useFormat = () => {
   return useNavigateStore((state) => state.format);
 };
 
+const useCategoriesToShow = () => {
+  return useNavigateStore((state) => state.categoriesToShow, shallow);
+};
+
+const useStandardFilter = (category: InfoCategory) => {
+  return useNavigateStore((state) => state[`${category}Filter`], shallow);
+};
+
 export const useDiagramFilter = (): DiagramFilter => {
-  return useNavigateStore(
-    (state) => state.diagramFilter,
-    (before, after) => JSON.stringify(before) === JSON.stringify(after)
-  );
+  const categoriesToShow = useCategoriesToShow();
+  const structureFilter = useStandardFilter("structure");
+  const researchFilter = useStandardFilter("research");
+  const justificationFilter = useStandardFilter("justification");
+
+  return {
+    structure: { show: categoriesToShow.includes("structure"), ...structureFilter },
+    research: { show: categoriesToShow.includes("research"), ...researchFilter },
+    justification: { show: categoriesToShow.includes("justification"), ...justificationFilter },
+  };
 };
 
 export const useTableFilter = (): TableFilter => {
@@ -99,11 +121,7 @@ export const useGeneralFilter = () => {
 
 export const usePrimaryNodeTypes = () => {
   return useNavigateStore((state) => {
-    const shownInfoCategories = Object.entries(state.diagramFilter)
-      .filter(([_, filter]) => filter.show)
-      .map(([category]) => category as InfoCategory);
-
-    return shownInfoCategories.flatMap((category) => infoNodeTypes[category]);
+    return state.categoriesToShow.flatMap((category) => infoNodeTypes[category]);
   });
 };
 
@@ -117,34 +135,25 @@ export const setFormat = (format: Format) => {
 };
 
 export const setShowInformation = (category: InfoCategory, show: boolean) => {
-  const diagramFilter = useNavigateStore.getState().diagramFilter;
+  const categoriesToShow = useNavigateStore.getState().categoriesToShow;
 
-  useNavigateStore.setState({
-    diagramFilter: {
-      ...diagramFilter,
-      [category]: { ...diagramFilter[category], show },
-    },
-  });
+  if (show && !categoriesToShow.includes(category)) {
+    useNavigateStore.setState({ categoriesToShow: [...categoriesToShow, category] });
+  } else if (!show && categoriesToShow.includes(category)) {
+    useNavigateStore.setState({ categoriesToShow: categoriesToShow.filter((c) => c !== category) });
+  }
 
   emitter.emit("changedDiagramFilter");
 };
 
 export const setStandardFilter = (category: InfoCategory, filter: StandardFilter) => {
-  const diagramFilter = useNavigateStore.getState().diagramFilter;
-
-  // can flatten store a little more...
-  // TODO: separate show into infoCategoriesToShow
-  // TODO: separate diagramFilter into structureFilter, researchFilter, justificationFilter
-  // then useDiagramFilter can still exist and return the combo of them (or separate hooks could still be used)
-  const newDiagramFilter = {
-    ...diagramFilter,
-    [category]: {
-      ...diagramFilter[category],
-      ...filter,
-    },
-  };
-
-  useNavigateStore.setState({ diagramFilter: newDiagramFilter });
+  if (category === "structure") {
+    useNavigateStore.setState({ structureFilter: filter });
+  } else if (category === "research") {
+    useNavigateStore.setState({ researchFilter: filter });
+  } else {
+    useNavigateStore.setState({ justificationFilter: filter });
+  }
 
   emitter.emit("changedDiagramFilter");
 };
@@ -175,7 +184,12 @@ export const resetNavigation = () => {
 export const getStandardFilterWithFallbacks = (
   category: InfoCategory
 ): StandardFilterWithFallbacks => {
-  const standardFilter = useNavigateStore.getState().diagramFilter[category];
+  const standardFilter =
+    category === "structure"
+      ? useNavigateStore.getState().structureFilter
+      : category === "research"
+      ? useNavigateStore.getState().researchFilter
+      : useNavigateStore.getState().justificationFilter;
 
   const centralProblemId = getDefaultNode("problem")?.id;
   const centralSolutionId = getDefaultNode("solution")?.id;
