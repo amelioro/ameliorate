@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { InfoCategory } from "./infoCategory";
+
 // not sure how to guarantee that this matches the schema enum
 export const relationNames = [
   // topic
@@ -50,31 +52,31 @@ export const edgeSchema = z.object({
 
 export type Edge = z.infer<typeof edgeSchema>;
 
-export const topicRelationNames: RelationName[] = [
-  "causes",
-  "subproblemOf",
-  "addresses",
-  "accomplishes",
-  "createdBy",
-  "has",
-  "criterionFor",
-  "creates",
-  "embodies",
-  "obstacleOf",
-  "relatesTo", // is a generic relation but currently only seems worthwhile in topic
-];
-export const researchRelationNames: RelationName[] = [
-  "asksAbout",
-  "potentialAnswerTo",
-  "relevantFor",
-  "sourceOf",
-  "mentions",
-];
-export const claimRelationNames: RelationName[] = ["supports", "critiques"];
+export const infoRelationNames: Record<InfoCategory, RelationName[]> = {
+  structure: [
+    "causes",
+    "subproblemOf",
+    "addresses",
+    "accomplishes",
+    "createdBy",
+    "has",
+    "criterionFor",
+    "creates",
+    "embodies",
+    "obstacleOf",
+    "relatesTo", // is a generic relation but currently only seems worthwhile in topic
+  ],
+  research: ["asksAbout", "potentialAnswerTo", "relevantFor", "sourceOf", "mentions"],
+  justification: ["supports", "critiques"],
+};
+
+export const structureRelationNames = infoRelationNames.structure;
+export const researchRelationNames = infoRelationNames.research;
+export const justificationRelationNames = infoRelationNames.justification;
 
 export const getSiblingEdgeTypes = (edgeType: RelationName): RelationName[] => {
-  if (topicRelationNames.includes(edgeType)) return topicRelationNames;
+  if (structureRelationNames.includes(edgeType)) return structureRelationNames;
   else if (researchRelationNames.includes(edgeType)) return researchRelationNames;
-  else if (claimRelationNames.includes(edgeType)) return claimRelationNames;
+  else if (justificationRelationNames.includes(edgeType)) return justificationRelationNames;
   else return [];
 };

@@ -1,59 +1,55 @@
 import { useSearchParams } from "next/navigation";
 import Router from "next/router";
 import { useEffect, useState } from "react";
+import { shallow } from "zustand/shallow";
 import { createWithEqualityFn } from "zustand/traditional";
 
-import { DiagramType } from "../../common/diagram";
-import { throwError } from "../../common/errorHandling";
-import { researchNodeTypes, topicNodeTypes } from "../../common/node";
+import { Format, InfoCategory, zFormats } from "../../common/infoCategory";
+import { infoNodeTypes, nodeTypes } from "../../common/node";
 import { emitter } from "../common/event";
 import { useGraphPart } from "../topic/store/graphPartHooks";
-import { useNode } from "../topic/store/nodeHooks";
+import { getDefaultNode } from "../topic/store/nodeGetters";
 import { useTopicStore } from "../topic/store/store";
-import { FilterOptions } from "./utils/filter";
+import { DiagramFilter, StandardFilter, StandardFilterWithFallbacks } from "./utils/diagramFilter";
+import { GeneralFilter } from "./utils/generalFilter";
+import { TableFilter } from "./utils/tableFilter";
 
 export type View = "topicDiagram" | "researchDiagram" | "criteriaTable" | "claimTree";
 
 interface NavigateStoreState {
   selectedGraphPartId: string | null;
-  viewingResearchDiagram: boolean;
+  format: Format;
 
-  viewingCriteriaTable: boolean;
-  activeTableProblemId: string | null;
+  // info category state is flattened (rather than `[category]: state`) for ease of modifying
+  categoriesToShow: InfoCategory[];
+  structureFilter: StandardFilter;
+  researchFilter: StandardFilter;
+  justificationFilter: StandardFilter;
 
-  viewingClaimTree: boolean;
-  activeClaimTreeId: string | null;
-
-  filterOptions: Partial<Record<DiagramType, FilterOptions>>;
+  tableFilter: TableFilter;
+  generalFilter: GeneralFilter;
 }
 
 const initialState: NavigateStoreState = {
   selectedGraphPartId: null,
-  viewingResearchDiagram: false,
+  format: "diagram",
 
-  viewingCriteriaTable: false,
-  activeTableProblemId: null,
+  categoriesToShow: ["structure"],
+  structureFilter: { type: "none" },
+  researchFilter: { type: "none" },
+  justificationFilter: { type: "none" },
 
-  viewingClaimTree: false,
-  activeClaimTreeId: null,
-
-  filterOptions: {
-    topicDiagram: {
-      nodeTypes: topicNodeTypes,
-      showOnlyScored: false,
-      scoredComparer: "≥",
-      scoreToCompare: "5",
-      showSecondaryNeighbors: false,
-      type: "none",
-    },
-    researchDiagram: {
-      nodeTypes: researchNodeTypes,
-      showOnlyScored: false,
-      scoredComparer: "≥",
-      scoreToCompare: "5",
-      showSecondaryNeighbors: true,
-      type: "none",
-    },
+  tableFilter: {
+    solutions: [],
+    criteria: [],
+  },
+  generalFilter: {
+    nodeTypes: [...nodeTypes], // spread because this value is otherwise readonly
+    showOnlyScored: false,
+    scoredComparer: "≥",
+    scoreToCompare: "5",
+    showSecondaryResearch: false,
+    showSecondaryStructure: true,
   },
 };
 
@@ -87,46 +83,45 @@ export const useIsAnyGraphPartSelected = (graphPartIds: string[]) => {
   });
 };
 
-export const useActiveView = () => {
+export const useFormat = () => {
+  return useNavigateStore((state) => state.format);
+};
+
+const useCategoriesToShow = () => {
+  return useNavigateStore((state) => state.categoriesToShow, shallow);
+};
+
+const useStandardFilter = (category: InfoCategory) => {
+  return useNavigateStore((state) => state[`${category}Filter`], shallow);
+};
+
+export const useDiagramFilter = (): DiagramFilter => {
+  const categoriesToShow = useCategoriesToShow();
+  const structureFilter = useStandardFilter("structure");
+  const researchFilter = useStandardFilter("research");
+  const justificationFilter = useStandardFilter("justification");
+
+  return {
+    structure: { show: categoriesToShow.includes("structure"), ...structureFilter },
+    research: { show: categoriesToShow.includes("research"), ...researchFilter },
+    justification: { show: categoriesToShow.includes("justification"), ...justificationFilter },
+  };
+};
+
+export const useTableFilter = (): TableFilter => {
+  return useNavigateStore(
+    (state) => state.tableFilter,
+    (before, after) => JSON.stringify(before) === JSON.stringify(after)
+  );
+};
+
+export const useGeneralFilter = () => {
+  return useNavigateStore((state) => state.generalFilter);
+};
+
+export const usePrimaryNodeTypes = () => {
   return useNavigateStore((state) => {
-    return getActiveView(state);
-  });
-};
-
-export const useSecondaryView = () => {
-  return useNavigateStore((state) => {
-    if (state.viewingClaimTree) {
-      // only claim tree is layered in front of another view for now
-      if (state.viewingCriteriaTable) return "criteriaTable";
-      if (state.viewingResearchDiagram) return "researchDiagram";
-      return "topicDiagram";
-    }
-    return null;
-  });
-};
-
-export const useActiveTableProblemNode = () => {
-  const activeTableProblemId = useNavigateStore((state) => state.activeTableProblemId);
-
-  return useNode(activeTableProblemId);
-};
-
-export const useActiveArguedDiagramPart = () => {
-  const activeClaimTreeId = useNavigateStore((state) => state.activeClaimTreeId);
-
-  return useGraphPart(activeClaimTreeId);
-};
-
-export const useFilterOptions = (diagramType: DiagramType) => {
-  return useNavigateStore((state) => {
-    return (
-      state.filterOptions[diagramType] ??
-      throwError(
-        "Filter options only exist for the topic or research diagrams",
-        diagramType,
-        state.filterOptions
-      )
-    );
+    return state.categoriesToShow.flatMap((category) => infoNodeTypes[category]);
   });
 };
 
@@ -135,77 +130,112 @@ export const setSelected = (graphPartId: string | null) => {
   useNavigateStore.setState({ selectedGraphPartId: graphPartId });
 };
 
-export const viewTopicDiagram = () => {
-  useNavigateStore.setState({
-    viewingResearchDiagram: false,
-    viewingCriteriaTable: false,
-    viewingClaimTree: false,
-  });
+export const setFormat = (format: Format) => {
+  useNavigateStore.setState({ format });
 };
 
-export const viewResearchDiagram = () => {
-  useNavigateStore.setState({
-    viewingResearchDiagram: true,
-    viewingCriteriaTable: false,
-    viewingClaimTree: false,
-  });
+export const setShowInformation = (category: InfoCategory, show: boolean) => {
+  const categoriesToShow = useNavigateStore.getState().categoriesToShow;
+
+  if (show && !categoriesToShow.includes(category)) {
+    useNavigateStore.setState({ categoriesToShow: [...categoriesToShow, category] });
+  } else if (!show && categoriesToShow.includes(category)) {
+    useNavigateStore.setState({ categoriesToShow: categoriesToShow.filter((c) => c !== category) });
+  }
+
+  emitter.emit("changedDiagramFilter");
 };
 
-export const closeResearchDiagram = () => {
-  useNavigateStore.setState({ viewingResearchDiagram: false });
+export const setStandardFilter = (category: InfoCategory, filter: StandardFilter) => {
+  if (category === "structure") {
+    useNavigateStore.setState({ structureFilter: filter });
+  } else if (category === "research") {
+    useNavigateStore.setState({ researchFilter: filter });
+  } else {
+    useNavigateStore.setState({ justificationFilter: filter });
+  }
+
+  emitter.emit("changedDiagramFilter");
+};
+
+export const setTableFilter = (tableFilter: TableFilter) => {
+  useNavigateStore.setState({ tableFilter });
+};
+
+export const setGeneralFilter = (generalFilter: GeneralFilter) => {
+  useNavigateStore.setState({ generalFilter });
+  emitter.emit("changedDiagramFilter");
 };
 
 export const viewCriteriaTable = (problemNodeId: string) => {
   useNavigateStore.setState({
-    viewingCriteriaTable: true,
-    viewingClaimTree: false,
-    activeTableProblemId: problemNodeId,
+    format: "table",
+    tableFilter: {
+      centralProblemId: problemNodeId,
+      solutions: [],
+      criteria: [],
+    },
   });
 };
 
-export const closeTable = () => {
-  useNavigateStore.setState({ viewingCriteriaTable: false });
-};
-
-export const viewClaimTree = (arguedDiagramPartId: string) => {
-  useNavigateStore.setState({ viewingClaimTree: true, activeClaimTreeId: arguedDiagramPartId });
-};
-
-export const closeClaimTree = () => {
-  useNavigateStore.setState({ viewingClaimTree: false });
+export const viewJustification = (arguedDiagramPartId: string) => {
+  useNavigateStore.setState({
+    format: "diagram",
+    categoriesToShow: ["justification"],
+    justificationFilter: { type: "rootClaim", centralRootClaimId: arguedDiagramPartId },
+  });
 };
 
 export const resetNavigation = () => {
   useNavigateStore.setState(initialState);
 };
 
-export const setFilterOptions = (filterOptions: FilterOptions) => {
-  const state = useNavigateStore.getState();
-  const activeDiagram = getActiveDiagram(state);
-
-  if (!state.filterOptions[activeDiagram])
-    throw new Error("Filter options can only be set when viewing the topic or research diagrams");
-
-  useNavigateStore.setState({
-    filterOptions: { ...state.filterOptions, [activeDiagram]: filterOptions },
-  });
-
-  emitter.emit("changedFilter");
-};
-
 // helpers
-const getActiveDiagram = (state: NavigateStoreState): DiagramType => {
-  if (state.viewingClaimTree) return "claimTree";
-  if (state.viewingCriteriaTable) return "topicDiagram";
-  if (state.viewingResearchDiagram) return "researchDiagram";
-  return "topicDiagram";
+export const getStandardFilterWithFallbacks = (
+  category: InfoCategory
+): StandardFilterWithFallbacks => {
+  const standardFilter =
+    category === "structure"
+      ? useNavigateStore.getState().structureFilter
+      : category === "research"
+      ? useNavigateStore.getState().researchFilter
+      : useNavigateStore.getState().justificationFilter;
+
+  const centralProblemId = getDefaultNode("problem")?.id;
+  const centralSolutionId = getDefaultNode("solution")?.id;
+  const centralQuestionId = getDefaultNode("question")?.id;
+  const centralSourceId = getDefaultNode("source")?.id;
+  const centralRootClaimId = getDefaultNode("rootClaim")?.id;
+
+  const standardFilterDefaults: StandardFilterWithFallbacks = {
+    type: "none",
+    centralProblemId,
+    problemDetails: ["causes", "effects", "subproblems", "criteria", "solutions"],
+    centralSolutionId,
+    solutionDetail: "all",
+    solutions: [],
+    criteria: [],
+    centralQuestionId,
+    centralSourceId,
+    centralRootClaimId,
+  };
+
+  // override any defaults using the stored filter
+  return { ...standardFilterDefaults, ...standardFilter };
 };
 
-const getActiveView = (state: NavigateStoreState): View => {
-  if (state.viewingClaimTree) return "claimTree";
-  if (state.viewingCriteriaTable) return "criteriaTable";
-  if (state.viewingResearchDiagram) return "researchDiagram";
-  return "topicDiagram";
+export const getTableFilterWithFallbacks = (): TableFilter => {
+  const tableFilter = useNavigateStore.getState().tableFilter;
+
+  const centralProblemId = getDefaultNode("problem")?.id;
+
+  const tableFilterDefaults = {
+    centralProblemId,
+    solutions: [],
+    criteria: [],
+  };
+
+  return { ...tableFilterDefaults, ...tableFilter };
 };
 
 const findGraphPartIdBySubstring = (graphPartIdSubstring: string | null) => {
@@ -225,19 +255,11 @@ const processSearchParams = (searchParams: URLSearchParams) => {
   const selectedGraphPartId = findGraphPartIdBySubstring(selectedGraphPartIdSubstring);
   setSelected(selectedGraphPartId);
 
-  const viewParam = searchParams.get("view")?.toLowerCase();
-  if (viewParam) {
-    const [view, graphPartIdSubstring] = viewParam.split(":") as [View, string];
-    const graphPartId = findGraphPartIdBySubstring(graphPartIdSubstring);
-    if (view === "researchDiagram".toLowerCase()) {
-      viewResearchDiagram();
-    } else if (view === "criteriaTable".toLowerCase() && graphPartId) {
-      viewCriteriaTable(graphPartId);
-    } else if (view === "claimTree".toLowerCase() && graphPartId) {
-      viewClaimTree(graphPartId);
-    }
+  const parsedFormat = zFormats.safeParse(searchParams.get("format")?.toLowerCase());
+  if (parsedFormat.success) {
+    setFormat(parsedFormat.data);
   } else {
-    viewTopicDiagram();
+    setFormat("diagram"); // default
   }
 };
 
@@ -255,17 +277,9 @@ const getCalculatedSearchParams = (state: NavigateStoreState) => {
     ? `selected=${trimPartId(state.selectedGraphPartId)}`
     : "";
 
-  const activeView = getActiveView(state);
-  const viewParam =
-    activeView === "researchDiagram"
-      ? `view=${activeView}`
-      : activeView === "criteriaTable" && state.activeTableProblemId
-      ? `view=${activeView}:${trimPartId(state.activeTableProblemId)}`
-      : activeView === "claimTree" && state.activeClaimTreeId
-      ? `view=${activeView}:${trimPartId(state.activeClaimTreeId)}`
-      : "";
+  const formatParam = state.format !== initialState.format ? `format=${state.format}` : "";
 
-  return new URLSearchParams([selectedParam, viewParam].join("&"));
+  return new URLSearchParams([selectedParam, formatParam].join("&"));
 };
 
 const useCalculatedSearchParams = () => {
@@ -303,9 +317,9 @@ const getNewSearchParamsString = (
 ) => {
   const newUrlSearchParams = new URLSearchParams(oldUrlSearchParams.toString());
 
-  const view = calculatedSearchParams.get("view");
-  if (view) newUrlSearchParams.set("view", view);
-  else newUrlSearchParams.delete("view");
+  const format = calculatedSearchParams.get("format");
+  if (format) newUrlSearchParams.set("format", format);
+  else newUrlSearchParams.delete("format");
 
   const selected = calculatedSearchParams.get("selected");
   if (selected) newUrlSearchParams.set("selected", selected);

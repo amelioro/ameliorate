@@ -1,7 +1,7 @@
 import { ButtonGroup } from "@mui/material";
 import { memo } from "react";
 
-import { NodeType, topicNodeTypes } from "../../../../common/node";
+import { NodeType, structureNodeTypes } from "../../../../common/node";
 import { useUnrestrictedEditing } from "../../../view/actionConfigStore";
 import { Relation, addableRelationsFrom } from "../../utils/edge";
 import { type RelationDirection } from "../../utils/graph";
@@ -23,8 +23,9 @@ const AddNodeButtonGroup = memo(
     const addableRelations: { toNodeType: NodeType; relation: Relation }[] =
       // if unrestricted, allow adding any topic node as parent or child (shouldn't be very useful to have outside of topic nodes)
       // also allow adding any node from custom node
-      fromNodeType === "custom" || (unrestrictedEditing && topicNodeTypes.includes(fromNodeType))
-        ? topicNodeTypes.map((nodeType) => ({
+      fromNodeType === "custom" ||
+      (unrestrictedEditing && structureNodeTypes.includes(fromNodeType))
+        ? structureNodeTypes.map((nodeType) => ({
             toNodeType: nodeType,
             relation: {
               child: as === "child" ? nodeType : fromNodeType,

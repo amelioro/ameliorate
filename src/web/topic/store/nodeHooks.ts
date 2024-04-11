@@ -1,11 +1,12 @@
 import { shallow } from "zustand/shallow";
 
 import { errorWithData } from "../../../common/errorHandling";
+import { NodeType } from "../../../common/node";
 import { useIsAnyGraphPartSelected } from "../../view/navigateStore";
 import { RelationDirection, findNode } from "../utils/graph";
 import { children, edges, neighbors, parents } from "../utils/node";
+import { getDefaultNode } from "./nodeGetters";
 import { useTopicStore } from "./store";
-import { getTopicDiagram } from "./utils";
 
 export const useNode = (nodeId: string | null) => {
   return useTopicStore((state) => {
@@ -19,8 +20,10 @@ export const useNode = (nodeId: string | null) => {
   });
 };
 
-export const useNodeChildren = (nodeId: string) => {
+export const useNodeChildren = (nodeId: string | undefined) => {
   return useTopicStore((state) => {
+    if (!nodeId) return [];
+
     try {
       const node = findNode(nodeId, state.nodes);
       const topicGraph = { nodes: state.nodes, edges: state.edges };
@@ -43,24 +46,10 @@ export const useNodeParents = (nodeId: string) => {
   }, shallow);
 };
 
-export const useCriteriaTableProblemNodes = () => {
+export const useCriterionSolutionEdges = (problemNodeId: string | undefined) => {
   return useTopicStore((state) => {
-    try {
-      const topicDiagram = getTopicDiagram(state);
+    if (!problemNodeId) return [];
 
-      return topicDiagram.nodes.filter(
-        (node) =>
-          node.type === "problem" &&
-          children(node, topicDiagram).some((child) => child.type === "criterion")
-      );
-    } catch {
-      return [];
-    }
-  }, shallow);
-};
-
-export const useCriterionSolutionEdges = (problemNodeId: string) => {
-  return useTopicStore((state) => {
     try {
       const problemNode = findNode(problemNodeId, state.nodes);
       if (problemNode.type !== "problem") {
@@ -122,42 +111,52 @@ export const useIsEdgeSelected = (nodeId: string) => {
   return useIsAnyGraphPartSelected(neighborEdges.map((edge) => edge.id));
 };
 
-export const useProblems = () => {
-  return useTopicStore((state) => state.nodes.filter((node) => node.type === "problem"), shallow);
+/**
+ * @param nodeType type of node to fallback to if node with nodeId doesn't exist
+ * @param nodeId id of node to return if exists
+ */
+export const useDefaultNode = (nodeType: NodeType, nodeId?: string) => {
+  return useTopicStore((state) => {
+    const defaultNode = getDefaultNode(nodeType);
+    if (!nodeId) return defaultNode;
+
+    const node = state.nodes.find((node) => node.id === nodeId);
+    return node ?? defaultNode;
+  }, shallow);
 };
 
-export const useQuestions = () => {
-  return useTopicStore((state) => state.nodes.filter((node) => node.type === "question"), shallow);
-};
-
-export const useSources = () => {
-  return useTopicStore((state) => state.nodes.filter((node) => node.type === "source"), shallow);
+export const useNodesOfType = (type: NodeType) => {
+  return useTopicStore((state) => state.nodes.filter((node) => node.type === type), shallow);
 };
 
 export const useSolutions = (problemId?: string) => {
   return useTopicStore((state) => {
-    const allSolutions = state.nodes.filter((node) => node.type === "solution");
-    if (!problemId) return allSolutions;
+    const solutions = state.nodes.filter((node) => node.type === "solution");
+    if (!problemId) return solutions;
 
-    return allSolutions.filter((solution) =>
+    const problemSolutions = solutions.filter((solution) =>
       state.edges.find(
         (edge) =>
           edge.source === problemId && edge.label === "addresses" && edge.target === solution.id
       )
     );
+
+    return problemSolutions;
   }, shallow);
 };
 
 export const useCriteria = (problemId?: string) => {
   return useTopicStore((state) => {
-    if (!problemId) return [];
+    const criteria = state.nodes.filter((node) => node.type === "criterion");
+    if (!problemId) return criteria;
 
-    const allCriteria = state.nodes.filter((node) => node.type === "criterion");
-    return allCriteria.filter((criterion) =>
+    const problemCriteria = criteria.filter((criterion) =>
       state.edges.find(
         (edge) =>
           edge.source === problemId && edge.label === "criterionFor" && edge.target === criterion.id
       )
     );
+
+    return problemCriteria;
   }, shallow);
 };

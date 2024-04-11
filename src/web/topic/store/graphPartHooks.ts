@@ -1,18 +1,30 @@
-import { RelationName, claimRelationNames } from "../../../common/edge";
-import { NodeType, claimNodeTypes, researchNodeTypes } from "../../../common/node";
+import { shallow } from "zustand/shallow";
+
+import { RelationName, justificationRelationNames } from "../../../common/edge";
+import { NodeType, justificationNodeTypes, researchNodeTypes } from "../../../common/node";
 import { isClaimEdge } from "../utils/claim";
 import { Node, findGraphPart } from "../utils/graph";
-import { useTopicStore } from "./store";
+import { TopicStoreState, useTopicStore } from "./store";
+
+export const useRootClaim = (graphPartId: string) => {
+  return useTopicStore((state) => {
+    return state.nodes.find(
+      (node) => node.type === "rootClaim" && node.data.arguedDiagramPartId === graphPartId
+    );
+  }, shallow);
+};
+
+export const getExplicitClaimCount = (state: TopicStoreState, graphPartId: string) => {
+  return state.nodes.filter(
+    (node) =>
+      justificationNodeTypes.includes(node.type) &&
+      node.type !== "rootClaim" &&
+      node.data.arguedDiagramPartId === graphPartId
+  ).length;
+};
 
 export const useExplicitClaimCount = (graphPartId: string) => {
-  return useTopicStore((state) => {
-    return state.nodes.filter(
-      (node) =>
-        claimNodeTypes.includes(node.type) &&
-        node.type !== "rootClaim" &&
-        node.data.arguedDiagramPartId === graphPartId
-    ).length;
-  });
+  return useTopicStore((state) => getExplicitClaimCount(state, graphPartId));
 };
 
 export const useTopLevelClaims = (graphPartId: string) => {
@@ -21,7 +33,7 @@ export const useTopLevelClaims = (graphPartId: string) => {
     if (isClaimEdge(graphPart)) return { supports: [], critiques: [] };
 
     // TODO: cleanup when root claims are removed
-    const nodeToCheckForClaims = claimNodeTypes.includes(graphPart.type as NodeType)
+    const nodeToCheckForClaims = justificationNodeTypes.includes(graphPart.type as NodeType)
       ? graphPart
       : state.nodes.find(
           (node) => node.type === "rootClaim" && node.data.arguedDiagramPartId === graphPartId
@@ -29,7 +41,8 @@ export const useTopLevelClaims = (graphPartId: string) => {
     if (!nodeToCheckForClaims) return { supports: [], critiques: [] };
 
     const topLevelClaimEdges = state.edges.filter(
-      (edge) => claimRelationNames.includes(edge.label) && edge.source === nodeToCheckForClaims.id
+      (edge) =>
+        justificationRelationNames.includes(edge.label) && edge.source === nodeToCheckForClaims.id
     );
 
     const supports = topLevelClaimEdges

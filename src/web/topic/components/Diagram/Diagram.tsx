@@ -1,4 +1,4 @@
-import { ComponentType, createContext, useEffect, useMemo, useState } from "react";
+import { ComponentType, useEffect, useState } from "react";
 import {
   Background,
   BackgroundVariant,
@@ -9,7 +9,6 @@ import {
   useStore,
 } from "reactflow";
 
-import { DiagramType } from "../../../../common/diagram";
 import { Loading } from "../../../common/components/Loading/Loading";
 import { emitter } from "../../../common/event";
 import { useSessionUser } from "../../../common/hooks";
@@ -18,10 +17,10 @@ import { setSelected } from "../../../view/navigateStore";
 import { useLayoutedDiagram } from "../../hooks/diagramHooks";
 import { useViewportUpdater } from "../../hooks/flowHooks";
 import { connectNodes, reconnectEdge } from "../../store/createDeleteActions";
+import { useDiagram } from "../../store/store";
 import { useUserCanEditTopicData } from "../../store/userHooks";
 import { Diagram as DiagramData } from "../../utils/diagram";
 import { type Edge, type Node } from "../../utils/graph";
-import { Orientation } from "../../utils/layout";
 import { FlowNodeType } from "../../utils/node";
 import { FlowEdge } from "../Edge/FlowEdge";
 import { FlowNode } from "../Node/FlowNode";
@@ -94,7 +93,7 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
   useEffect(() => {
     const unbindAdd = emitter.on("addNode", (node) => setNewNodeId(node.id));
     const unbindLoad = emitter.on("loadedTopicData", () => setTopicViewUpdated(true));
-    const unbindFilter = emitter.on("changedFilter", () => setTopicViewUpdated(true));
+    const unbindFilter = emitter.on("changedDiagramFilter", () => setTopicViewUpdated(true));
 
     return () => {
       unbindAdd();
@@ -104,12 +103,12 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
   }, []);
 
   useEffect(() => {
-    setDisplayNodesGetter(diagram.type, getNodes);
-  }, [diagram.type, getNodes]);
+    setDisplayNodesGetter(getNodes);
+  }, [getNodes]);
 
   if (!layoutedDiagram) return <Loading />;
 
-  const { nodes, edges, type } = layoutedDiagram;
+  const { nodes, edges } = layoutedDiagram;
 
   if (newNodeId && hasNewLayout) {
     const newNode = nodes.find((node) => node.id === newNodeId);
@@ -127,7 +126,6 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
   return (
     <>
       <StyledReactFlow
-        id={type} // need unique ids to use multiple flow instances on the same page
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}
@@ -152,23 +150,13 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
   );
 };
 
-export const DiagramContext = createContext<{ orientation: Orientation; type: DiagramType }>({
-  orientation: "DOWN",
-  type: "topicDiagram",
-});
+export const Diagram = () => {
+  const diagram = useDiagram();
 
-export const Diagram = (diagram: DiagramData) => {
-  const diagramContext = useMemo(() => {
-    return { orientation: diagram.orientation, type: diagram.type };
-  }, [diagram.orientation, diagram.type]);
-
-  // custom provider so that nodes can get the orientation based on the diagram they're in
   return (
-    <DiagramContext.Provider value={diagramContext}>
-      {/* wrap in provider so we can use react-flow state https://reactflow.dev/docs/api/react-flow-provider/ */}
-      <ReactFlowProvider>
-        <DiagramWithoutProvider {...diagram} />
-      </ReactFlowProvider>
-    </DiagramContext.Provider>
+    // wrap in provider so we can use react-flow state https://reactflow.dev/docs/api/react-flow-provider/
+    <ReactFlowProvider>
+      <DiagramWithoutProvider {...diagram} />
+    </ReactFlowProvider>
   );
 };

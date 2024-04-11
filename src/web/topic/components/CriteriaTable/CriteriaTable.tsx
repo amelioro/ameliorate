@@ -1,6 +1,6 @@
 import { Global } from "@emotion/react";
-import { Cancel, PivotTableChart } from "@mui/icons-material";
-import { Button, IconButton, Tooltip } from "@mui/material";
+import { PivotTableChart } from "@mui/icons-material";
+import { Box, Button, Tooltip, Typography } from "@mui/material";
 import {
   type MRT_ColumnDef,
   MRT_FullScreenToggleButton,
@@ -11,11 +11,11 @@ import {
 import React, { useState } from "react";
 
 import { errorWithData } from "../../../../common/errorHandling";
-import { Loading } from "../../../common/components/Loading/Loading";
 import { useSessionUser } from "../../../common/hooks";
-import { closeTable, useFilterOptions } from "../../../view/navigateStore";
-import { applyScoreFilter, getSelectedTradeoffNodes } from "../../../view/utils/filter";
-import { useCriterionSolutionEdges, useNode, useNodeChildren } from "../../store/nodeHooks";
+import { useGeneralFilter, useTableFilter } from "../../../view/navigateStore";
+import { getSelectedTradeoffNodes } from "../../../view/utils/diagramFilter";
+import { applyScoreFilter } from "../../../view/utils/generalFilter";
+import { useCriterionSolutionEdges, useDefaultNode, useNodeChildren } from "../../store/nodeHooks";
 import { useDisplayScores } from "../../store/scoreHooks";
 import { useUserCanEditTopicData } from "../../store/userHooks";
 import { getConnectingEdge } from "../../utils/edge";
@@ -161,10 +161,6 @@ const buildTableDefs = (
   return { rowData, columnData };
 };
 
-interface Props {
-  problemNodeId: string;
-}
-
 /**
  * Pseudocode:
  * 1. create 2D array `tableData` like (each cell knows how it should render too):
@@ -181,31 +177,39 @@ interface Props {
  *   a. first row turns into headers (`columnData`) that specify filter config and tell cells to render themselves
  *   b. subsequent rows turn into row objects (`rowData`) that know their row header details (for filtering)
  */
-export const CriteriaTable = ({ problemNodeId }: Props) => {
+export const CriteriaTable = () => {
   const [useSolutionsForColumns, setUseSolutionsForColumns] = useState<boolean>(true);
 
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
 
-  const problemNode = useNode(problemNodeId);
-  const nodeChildren = useNodeChildren(problemNodeId);
-  const edges = useCriterionSolutionEdges(problemNodeId);
+  const tableFilter = useTableFilter();
+  const generalFilter = useGeneralFilter();
 
-  const filterOptions = useFilterOptions("topicDiagram");
+  // if no problem is selected, show the criteria table for a fallback problem
+  const problemNode = useDefaultNode("problem", tableFilter.centralProblemId);
+  const nodeChildren = useNodeChildren(problemNode?.id);
+  const edges = useCriterionSolutionEdges(problemNode?.id);
   const scores = useDisplayScores(nodeChildren.map((node) => node.id));
 
-  if (!problemNode) return <Loading />;
+  if (!problemNode)
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+        <Typography>Select a central problem node to view the tradeoff table</Typography>
+      </Box>
+    );
 
   const solutions = nodeChildren.filter((child) => child.type === "solution");
   const criteria = nodeChildren.filter((child) => child.type === "criterion");
 
-  const { selectedSolutions, selectedCriteria } =
-    filterOptions.type === "tradeoffs"
-      ? getSelectedTradeoffNodes(solutions, criteria, filterOptions)
-      : { selectedSolutions: solutions, selectedCriteria: criteria };
+  const { selectedSolutions, selectedCriteria } = getSelectedTradeoffNodes(
+    solutions,
+    criteria,
+    tableFilter
+  );
 
-  const filteredSolutions = applyScoreFilter(selectedSolutions, filterOptions, scores);
-  const filteredCriteria = applyScoreFilter(selectedCriteria, filterOptions, scores);
+  const filteredSolutions = applyScoreFilter(selectedSolutions, generalFilter, scores);
+  const filteredCriteria = applyScoreFilter(selectedCriteria, generalFilter, scores);
 
   const tableData = buildTableCells(problemNode, filteredSolutions, filteredCriteria, edges);
   const [headerRow, ..._bodyRows] = tableData;
@@ -227,14 +231,14 @@ export const CriteriaTable = ({ problemNodeId }: Props) => {
         {userCanEditTopicData && (
           <>
             <AddNodeButton
-              fromPartId={problemNodeId}
+              fromPartId={problemNode.id}
               as="child"
               toNodeType="solution"
               relation={{ child: "solution", name: "addresses", parent: "problem" }}
             />
 
             <AddNodeButton
-              fromPartId={problemNodeId}
+              fromPartId={problemNode.id}
               as="child"
               toNodeType="criterion"
               relation={{ child: "criterion", name: "criterionFor", parent: "problem" }}
@@ -254,11 +258,6 @@ export const CriteriaTable = ({ problemNodeId }: Props) => {
         </Tooltip>
 
         <MRT_FullScreenToggleButton table={table} />
-        <Tooltip title="Close">
-          <IconButton onClick={() => closeTable()} color="primary">
-            <Cancel />
-          </IconButton>
-        </Tooltip>
       </>
     );
   };

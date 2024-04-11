@@ -2,36 +2,10 @@ import uniqBy from "lodash/uniqBy";
 import { z } from "zod";
 
 import { RelationName, researchRelationNames } from "../../../common/edge";
-import { NodeType, nodeSchema, zNodeTypes } from "../../../common/node";
-import {
-  Graph,
-  GraphPart,
-  Node,
-  Score,
-  ancestors,
-  descendants,
-  getRelevantEdges,
-  possibleScores,
-} from "../../topic/utils/graph";
+import { InfoCategory } from "../../../common/infoCategory";
+import { infoNodeTypes, nodeSchema } from "../../../common/node";
+import { Graph, Node, ancestors, descendants, getRelevantEdges } from "../../topic/utils/graph";
 import { children, parents } from "../../topic/utils/node";
-import { getNumericScore } from "../../topic/utils/score";
-
-// general filter options
-export const scoredComparers = ["≥", ">", "≤", "<", "="] as const;
-const zScoredComparers = z.enum(scoredComparers);
-export type ScoredComparer = z.infer<typeof zScoredComparers>;
-
-const generalSchema = z.object({
-  nodeTypes: zNodeTypes.array(),
-  showOnlyScored: z.boolean(),
-  scoredComparer: zScoredComparers,
-  scoreToCompare: z.enum(possibleScores),
-  showSecondaryNeighbors: z.boolean(),
-});
-
-type GeneralOptions = z.infer<typeof generalSchema>;
-
-// standard filters
 
 // cross-standard-filter options
 const detailTypes = ["all", "connectedToCriteria", "none"] as const;
@@ -51,7 +25,7 @@ const noneSchema = z.object({
  * Use cases:
  * - Give a quick overview of the topic
  */
-const applyHighLevelFilter = (graph: Graph, _filterOptions: HighLevelOptions) => {
+const applyHighLevelFilter = (graph: Graph, _filters: HighLevelOptions) => {
   const problems = graph.nodes.filter((node) => node.type === "problem");
   if (problems.length === 0) return graph;
 
@@ -89,17 +63,17 @@ type HighLevelOptions = z.infer<typeof highLevelSchema>;
  * - Brainstorm criteria from causes/effects
  * - Brainstorm solutions
  */
-const applyProblemFilter = (graph: Graph, filterOptions: ProblemOptions) => {
-  const centralProblem = graph.nodes.find((node) => node.id === filterOptions.centralProblemId);
+const applyProblemFilter = (graph: Graph, filters: ProblemOptions) => {
+  const centralProblem = graph.nodes.find((node) => node.id === filters.centralProblemId);
   if (!centralProblem) return graph;
 
   const detailEdges: RelationName[] = [];
   /* eslint-disable functional/immutable-data */
-  if (filterOptions.problemDetails.includes("causes")) detailEdges.push("causes");
-  if (filterOptions.problemDetails.includes("effects")) detailEdges.push("createdBy");
-  if (filterOptions.problemDetails.includes("subproblems")) detailEdges.push("subproblemOf");
-  if (filterOptions.problemDetails.includes("criteria")) detailEdges.push("criterionFor");
-  if (filterOptions.problemDetails.includes("solutions")) detailEdges.push("addresses");
+  if (filters.problemDetails.includes("causes")) detailEdges.push("causes");
+  if (filters.problemDetails.includes("effects")) detailEdges.push("createdBy");
+  if (filters.problemDetails.includes("subproblems")) detailEdges.push("subproblemOf");
+  if (filters.problemDetails.includes("criteria")) detailEdges.push("criterionFor");
+  if (filters.problemDetails.includes("solutions")) detailEdges.push("addresses");
   /* eslint-enable functional/immutable-data */
 
   const problemDetails = descendants(centralProblem, graph, detailEdges);
@@ -109,7 +83,7 @@ const applyProblemFilter = (graph: Graph, filterOptions: ProblemOptions) => {
   const filteredSolutionDetails = getSolutionDetails(
     solutions,
     criteria,
-    filterOptions.solutionDetail,
+    filters.solutionDetail,
     graph
   );
 
@@ -153,8 +127,8 @@ type ProblemOptions = z.infer<typeof problemSchema>;
  * - Brainstorm solutions
  * - Compare solutions
  */
-const applyTradeoffsFilter = (graph: Graph, filterOptions: TradeoffsOptions) => {
-  const centralProblem = graph.nodes.find((node) => node.id === filterOptions.centralProblemId);
+const applyTradeoffsFilter = (graph: Graph, filters: TradeoffsOptions) => {
+  const centralProblem = graph.nodes.find((node) => node.id === filters.centralProblemId);
   if (!centralProblem) return graph;
 
   const problemChildren = children(centralProblem, graph);
@@ -164,18 +138,18 @@ const applyTradeoffsFilter = (graph: Graph, filterOptions: TradeoffsOptions) => 
   const { selectedSolutions, selectedCriteria } = getSelectedTradeoffNodes(
     solutions,
     criteria,
-    filterOptions
+    filters
   );
 
   const criteriaParents = selectedCriteria.flatMap((criterion) =>
-    // filter problem because we want to include the problem regardless of if we're showing criteria, for context
+    // filter problem because we want to separately include the problem regardless of if we're showing criteria, for context
     parents(criterion, graph).filter((parent) => parent.type !== "problem")
   );
 
   const filteredSolutionDetails = getSolutionDetails(
     selectedSolutions,
     selectedCriteria,
-    filterOptions.solutionDetail,
+    filters.solutionDetail,
     graph
   );
 
@@ -219,21 +193,26 @@ const getSolutionDetails = (
       );
 };
 
+/**
+ * Return the selected solutions/criteria if they're valid.
+ * If there are no valid solutions/criteria selected, return all solutions/criteria for the problem.
+ */
 export const getSelectedTradeoffNodes = (
   problemSolutions: Node[],
   problemCriteria: Node[],
-  filterOptions: TradeoffsOptions
+  filters: { solutions: string[]; criteria: string[] }
 ) => {
-  const selectedSolutions = problemSolutions.filter(
-    (solution) =>
-      filterOptions.solutions.length === 0 || filterOptions.solutions.includes(solution.id)
+  const selectedSolutions = problemSolutions.filter((solution) =>
+    filters.solutions.includes(solution.id)
   );
-  const selectedCriteria = problemCriteria.filter(
-    (criterion) =>
-      filterOptions.criteria.length === 0 || filterOptions.criteria.includes(criterion.id)
+  const selectedCriteria = problemCriteria.filter((criterion) =>
+    filters.criteria.includes(criterion.id)
   );
 
-  return { selectedSolutions, selectedCriteria };
+  return {
+    selectedSolutions: selectedSolutions.length === 0 ? problemSolutions : selectedSolutions,
+    selectedCriteria: selectedCriteria.length === 0 ? problemCriteria : selectedCriteria,
+  };
 };
 
 const tradeoffsSchema = z.object({
@@ -253,8 +232,8 @@ type TradeoffsOptions = z.infer<typeof tradeoffsSchema>;
  * Use cases:
  * - Detail a solution
  */
-const applySolutionFilter = (graph: Graph, filterOptions: SolutionOptions) => {
-  const centralSolution = graph.nodes.find((node) => node.id === filterOptions.centralSolutionId);
+const applySolutionFilter = (graph: Graph, filters: SolutionOptions) => {
+  const centralSolution = graph.nodes.find((node) => node.id === filters.centralSolutionId);
   if (!centralSolution) return graph;
 
   const ancestorDetails = ancestors(centralSolution, graph, ["has", "creates"]);
@@ -281,8 +260,8 @@ type SolutionOptions = z.infer<typeof solutionSchema>;
  * Use cases:
  * - Explore a question
  */
-const applyQuestionFilter = (graph: Graph, filterOptions: QuestionOptions) => {
-  const centralQuestion = graph.nodes.find((node) => node.id === filterOptions.centralQuestionId);
+const applyQuestionFilter = (graph: Graph, filters: QuestionOptions) => {
+  const centralQuestion = graph.nodes.find((node) => node.id === filters.centralQuestionId);
   if (!centralQuestion) return graph;
 
   const parentsForContext = parents(centralQuestion, graph);
@@ -309,8 +288,8 @@ type QuestionOptions = z.infer<typeof questionSchema>;
  * - Take notes on a source
  * - Understand what a source says
  */
-const applySourceFilter = (graph: Graph, filterOptions: SourceOptions) => {
-  const centralSource = graph.nodes.find((node) => node.id === filterOptions.centralSourceId);
+const applySourceFilter = (graph: Graph, filters: SourceOptions) => {
+  const centralSource = graph.nodes.find((node) => node.id === filters.centralSourceId);
   if (!centralSource) return graph;
 
   const details = ancestors(centralSource, graph, [
@@ -333,64 +312,120 @@ const sourceSchema = z.object({
 
 type SourceOptions = z.infer<typeof sourceSchema>;
 
+/**
+ * Description:
+ * - Show root claim and all children that support or critique it.
+ *
+ * Use cases:
+ * - Focus on justification for a specific score.
+ */
+const applyRootClaimFilter = (graph: Graph, filters: RootClaimOptions) => {
+  const centralRootClaim = graph.nodes.find((node) => node.id === filters.centralRootClaimId);
+  if (!centralRootClaim) return graph;
+
+  const justification = descendants(centralRootClaim, graph, ["supports", "critiques"]);
+
+  const nodes = [centralRootClaim, ...justification];
+  const edges = getRelevantEdges(nodes, graph);
+
+  return { nodes, edges };
+};
+
+const rootClaimSchema = z.object({
+  type: z.literal("rootClaim"),
+  centralRootClaimId: nodeSchema.shape.id,
+});
+
+type RootClaimOptions = z.infer<typeof rootClaimSchema>;
+
 // filter methods
+const standardFilterTypes = [
+  "none",
+  "highLevel",
+  "problem",
+  "tradeoffs",
+  "solution",
+  "question",
+  "source",
+  "rootClaim",
+] as const;
+const zStandardFilterTypes = z.enum(standardFilterTypes);
+type StandardFilterType = z.infer<typeof zStandardFilterTypes>;
 
-// TODO?: is there a way to type-guarantee that these values come from the defined schemas?
-export const topicFilterTypes = ["none", "highLevel", "problem", "tradeoffs", "solution"] as const;
-export const researchFilterTypes = ["none", "question", "source"] as const;
-
-const filterTypes = [...topicFilterTypes, ...researchFilterTypes] as const;
-export type FilterTypes = typeof filterTypes[number];
-
-export const applyNodeTypeFilter = (nodes: Node[], nodeTypes: NodeType[]) => {
-  return nodes.filter((node) => nodeTypes.includes(node.type));
+export const infoStandardFilterTypes: Record<InfoCategory, StandardFilterType[]> = {
+  structure: ["none", "highLevel", "problem", "tradeoffs", "solution"],
+  research: ["none", "question", "source"],
+  justification: ["none", "rootClaim"],
 };
 
-export const applyScoreFilter = <T extends GraphPart>(
-  graphParts: T[],
-  filterOptions: GeneralOptions,
-  scores: Record<string, Score>
-) => {
-  const { showOnlyScored, scoredComparer, scoreToCompare } = filterOptions;
-  if (!showOnlyScored) return graphParts;
-
-  return graphParts.filter((graphPart) => {
-    const score = scores[graphPart.id] ?? "-";
-    if (scoredComparer === "=") return score === scoreToCompare;
-
-    const numericScore = getNumericScore(score);
-    const numericScoreToCompare = getNumericScore(scoreToCompare);
-
-    if (scoredComparer === "≥") return numericScore >= numericScoreToCompare;
-    if (scoredComparer === ">") return numericScore > numericScoreToCompare;
-    if (scoredComparer === "≤") return numericScore <= numericScoreToCompare;
-    return numericScore < numericScoreToCompare;
-  });
-};
-
-export const applyStandardFilter = (graph: Graph, options: FilterOptions): Graph => {
+export const applyStandardFilter = (graph: Graph, filter: StandardFilter): Graph => {
   // TODO?: is there a way to use a Record<Type, ApplyMethod> rather than a big if-else?
   // while still maintaining that the applyMethod only accepts the correct options type
-  if (options.type === "none") return graph;
-  else if (options.type === "highLevel") return applyHighLevelFilter(graph, options);
-  else if (options.type === "problem") return applyProblemFilter(graph, options);
-  else if (options.type === "tradeoffs") return applyTradeoffsFilter(graph, options);
-  else if (options.type === "solution") return applySolutionFilter(graph, options);
-  else if (options.type === "question") return applyQuestionFilter(graph, options);
-  else return applySourceFilter(graph, options);
+  if (filter.type === "highLevel") return applyHighLevelFilter(graph, filter);
+  else if (filter.type === "problem") return applyProblemFilter(graph, filter);
+  else if (filter.type === "tradeoffs") return applyTradeoffsFilter(graph, filter);
+  else if (filter.type === "solution") return applySolutionFilter(graph, filter);
+  else if (filter.type === "question") return applyQuestionFilter(graph, filter);
+  else if (filter.type === "source") return applySourceFilter(graph, filter);
+  else if (filter.type === "rootClaim") return applyRootClaimFilter(graph, filter);
+  else return graph;
 };
 
-export const filterOptionsSchema = z.discriminatedUnion("type", [
-  generalSchema.merge(noneSchema),
-  generalSchema.merge(highLevelSchema),
-  generalSchema.merge(problemSchema),
-  generalSchema.merge(tradeoffsSchema),
-  generalSchema.merge(solutionSchema),
-  generalSchema.merge(questionSchema),
-  generalSchema.merge(sourceSchema),
+/**
+ * Show nodes for each information category whose toggle is on.
+ * For each category, if it has a standard filter, its nodes are filtered by that.
+ */
+export const applyDiagramFilter = (graph: Graph, diagramFilter: DiagramFilter) => {
+  return Object.entries(diagramFilter)
+    .filter(([_, filter]) => filter.show)
+    .flatMap(([category, filter]) => {
+      const categoryNodes = graph.nodes.filter((node) =>
+        infoNodeTypes[category as InfoCategory].includes(node.type)
+      );
+
+      if (filter.type === "none") return categoryNodes;
+
+      const categoryEdges = getRelevantEdges(categoryNodes, graph);
+
+      // If we ever want standard filters to be able to add nodes of other info categories, we could
+      // consider passing all nodes to the filter + have invalid filters return no nodes +
+      // return all nodes of the category if no filtered nodes are returned.
+      const filteredCategoryNodes = applyStandardFilter(
+        { nodes: categoryNodes, edges: categoryEdges },
+        filter
+      ).nodes;
+
+      return filteredCategoryNodes;
+    });
+};
+
+export const standardFilterSchema = z.discriminatedUnion("type", [
+  noneSchema,
+  highLevelSchema,
+  problemSchema,
+  tradeoffsSchema,
+  solutionSchema,
+  questionSchema,
+  sourceSchema,
+  rootClaimSchema,
 ]);
 
-export const filterSchemas = {
+// intentionally use spread operators instead of chaining `.merge(schema)` to avoid "type instantiation is excessively deep and possibly infinite" error
+const standardFilterWithFallbacksSchema = z
+  .object({
+    ...noneSchema.shape,
+    ...highLevelSchema.shape,
+    ...problemSchema.shape,
+    ...tradeoffsSchema.shape,
+    ...solutionSchema.shape,
+    ...questionSchema.shape,
+    ...sourceSchema.shape,
+    ...rootClaimSchema.shape,
+    type: zStandardFilterTypes,
+  })
+  .deepPartial(); // all defaults should be optional to specify
+
+export const standardFilterSchemasByType = {
   none: noneSchema,
   highLevel: highLevelSchema,
   problem: problemSchema,
@@ -398,6 +433,9 @@ export const filterSchemas = {
   solution: solutionSchema,
   question: questionSchema,
   source: sourceSchema,
+  rootClaim: rootClaimSchema,
 };
 
-export type FilterOptions = z.infer<typeof filterOptionsSchema>;
+export type StandardFilter = z.infer<typeof standardFilterSchema>;
+export type StandardFilterWithFallbacks = z.infer<typeof standardFilterWithFallbacksSchema>;
+export type DiagramFilter = Record<InfoCategory, StandardFilter & { show: boolean }>;

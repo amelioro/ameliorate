@@ -1,6 +1,6 @@
 import lowerCase from "lodash/lowerCase";
 
-import { claimRelationNames } from "../../../common/edge";
+import { justificationRelationNames } from "../../../common/edge";
 import { errorWithData } from "../../../common/errorHandling";
 import { Edge, Graph, GraphPart, findGraphPart, isNode } from "./graph";
 
@@ -28,5 +28,5 @@ export const getImplicitLabel = (arguedDiagramPartId: string, topicGraph: Graph)
 };
 
 export const isClaimEdge = (graphPart: GraphPart) => {
-  return !isNode(graphPart) && claimRelationNames.includes(graphPart.label);
+  return !isNode(graphPart) && justificationRelationNames.includes(graphPart.label);
 };
