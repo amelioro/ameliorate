@@ -46,22 +46,6 @@ export const useNodeParents = (nodeId: string) => {
   }, shallow);
 };
 
-export const useCriteriaTableProblemNodes = () => {
-  return useTopicStore((state) => {
-    const topicGraph = { nodes: state.nodes, edges: state.edges };
-
-    try {
-      return topicGraph.nodes.filter(
-        (node) =>
-          node.type === "problem" &&
-          children(node, topicGraph).some((child) => child.type === "criterion")
-      );
-    } catch {
-      return [];
-    }
-  }, shallow);
-};
-
 export const useCriterionSolutionEdges = (problemNodeId: string | undefined) => {
   return useTopicStore((state) => {
     if (!problemNodeId) return [];
