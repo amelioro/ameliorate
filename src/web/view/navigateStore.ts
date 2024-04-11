@@ -258,6 +258,8 @@ const processSearchParams = (searchParams: URLSearchParams) => {
   const parsedFormat = zFormats.safeParse(searchParams.get("format")?.toLowerCase());
   if (parsedFormat.success) {
     setFormat(parsedFormat.data);
+  } else {
+    setFormat("diagram"); // default
   }
 };
 
