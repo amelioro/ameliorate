@@ -1,4 +1,4 @@
-import { RelationName, claimRelationNames } from "../../../common/edge";
+import { RelationName, justificationRelationNames } from "../../../common/edge";
 import {
   NodeType,
   justificationNodeTypes,
@@ -327,14 +327,16 @@ export const isEdgeImpliedByComposition = (edge: Edge, topicGraph: Graph) => {
 // hidden. The button to show implied edges should reduce this pain, but maybe we need a better view
 // to reduce the need to hide implied edges?
 const isEdgeImplied = (edge: Edge, graph: Graph, claimEdges: Edge[]) => {
-  if (claimRelationNames.includes(edge.label)) return false; // claims can't be implied
+  if (justificationRelationNames.includes(edge.label)) return false; // claims can't be implied
   if (hasClaims(edge, claimEdges)) return false;
 
   return isEdgeAShortcut(edge, graph) || isEdgeImpliedByComposition(edge, graph);
 };
 
 export const hideImpliedEdges = (edges: Edge[], displayGraph: Graph, topicGraph: Graph) => {
-  const claimEdges = topicGraph.edges.filter((edge) => claimRelationNames.includes(edge.label));
+  const claimEdges = topicGraph.edges.filter((edge) =>
+    justificationRelationNames.includes(edge.label)
+  );
 
   return edges.filter((edge) => !isEdgeImplied(edge, displayGraph, claimEdges));
 };

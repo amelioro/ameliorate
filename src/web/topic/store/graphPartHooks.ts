@@ -1,6 +1,6 @@
 import { shallow } from "zustand/shallow";
 
-import { RelationName, claimRelationNames } from "../../../common/edge";
+import { RelationName, justificationRelationNames } from "../../../common/edge";
 import { NodeType, justificationNodeTypes, researchNodeTypes } from "../../../common/node";
 import { isClaimEdge } from "../utils/claim";
 import { Node, findGraphPart } from "../utils/graph";
@@ -41,7 +41,8 @@ export const useTopLevelClaims = (graphPartId: string) => {
     if (!nodeToCheckForClaims) return { supports: [], critiques: [] };
 
     const topLevelClaimEdges = state.edges.filter(
-      (edge) => claimRelationNames.includes(edge.label) && edge.source === nodeToCheckForClaims.id
+      (edge) =>
+        justificationRelationNames.includes(edge.label) && edge.source === nodeToCheckForClaims.id
     );
 
     const supports = topLevelClaimEdges
