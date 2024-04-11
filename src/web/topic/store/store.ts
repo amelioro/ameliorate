@@ -122,16 +122,3 @@ export const useDiagram = (): Diagram => {
     return { nodes, edges };
   });
 };
-
-// TODO: refactor to populate root claim filter
-export const useClaimTreesWithExplicitClaims = () => {
-  return useTopicStore((state) => {
-    const rootNodes = state.nodes.filter(
-      (node) => node.type === "rootClaim" && state.edges.some((edge) => edge.source === node.id)
-    );
-
-    return rootNodes.map(
-      (node) => [node.data.arguedDiagramPartId, node.data.label] as [string, string]
-    );
-  });
-};
