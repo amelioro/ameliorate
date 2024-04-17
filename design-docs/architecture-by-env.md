@@ -4,7 +4,9 @@ Here's a diagram of the architecture, along with where each service is hosted, b
 
 ```mermaid
 flowchart TD
-  Client --> Server
+  Client -- / --> Server
+  Client -- localhost:3008/docs --> DocsServer
+  Server -- if netlify: /docs proxy --> DocsServer
   Server --> Database
   Server --> Auth
 
@@ -14,6 +16,12 @@ flowchart TD
   "]
   Server["
     Nextjs API & Web Server
+    <font color=red>(local server)</font>
+    <font color=orange>(per-PR Netlify serverless functions & domain)</font>
+    <font color=forestgreen>(prod Netlify serverless functions & domain)</font>
+  "]
+  DocsServer["
+    Nextra API & Web Server
     <font color=red>(local server)</font>
     <font color=orange>(per-PR Netlify serverless functions & domain)</font>
     <font color=forestgreen>(prod Netlify serverless functions & domain)</font>
