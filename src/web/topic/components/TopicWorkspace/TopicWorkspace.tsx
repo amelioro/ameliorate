@@ -29,7 +29,7 @@ export const TopicWorkspace = () => {
       >
         <TopicPane isLandscape={isLandscape} />
 
-        <Box height="100%" flex="1">
+        <Box height="100%" flex="1" overflow="auto">
           {format === "table" && <CriteriaTable />}
           {format === "diagram" && <Diagram />}
         </Box>
