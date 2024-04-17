@@ -1,3 +1,5 @@
+import { shallow } from "zustand/shallow";
+
 import { useIsAnyGraphPartSelected } from "../../view/navigateStore";
 import { nodes } from "../utils/edge";
 import { findEdge } from "../utils/graph";
@@ -11,7 +13,7 @@ export const useIsNodeSelected = (edgeId: string) => {
     } catch {
       return [];
     }
-  });
+  }, shallow);
 
   return useIsAnyGraphPartSelected(neighborNodes.map((node) => node.id));
 };
