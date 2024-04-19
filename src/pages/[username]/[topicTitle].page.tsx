@@ -9,8 +9,8 @@ import { Loading } from "../../web/common/components/Loading/Loading";
 import { useSessionUser } from "../../web/common/hooks";
 import { trpc } from "../../web/common/trpc";
 import { populateFromApi } from "../../web/topic/store/loadActions";
-import { useSyncSearchParamsWithStore } from "../../web/view/navigateStore";
 import { setInitialPerspective } from "../../web/view/perspectiveStore";
+import { useSyncSearchParamsWithStore } from "../../web/view/urlParamHooks";
 
 // Don't render the workspace server-side.
 // Known reasons:
