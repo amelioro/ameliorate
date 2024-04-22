@@ -8,8 +8,8 @@ import { NotFoundError, QueryError } from "../../web/common/components/Error/Err
 import { Loading } from "../../web/common/components/Loading/Loading";
 import { useSessionUser } from "../../web/common/hooks";
 import { trpc } from "../../web/common/trpc";
-import { populateFromApi } from "../../web/topic/store/loadActions";
-import { useSyncSearchParamsWithStore } from "../../web/view/navigateStore";
+import { populateDiagramFromApi } from "../../web/topic/store/loadActions";
+import { loadNavigateStore } from "../../web/view/navigateStore";
 import { setInitialPerspective } from "../../web/view/perspectiveStore";
 
 // Don't render the workspace server-side.
@@ -50,19 +50,19 @@ const Topic: NextPage = () => {
   // Track populating so we don't render workspace (along with default values for components) with
   // old data before populating the store with fresh data.
   const [populatedFromApi, setPopulatedFromApi] = useState(false);
-  const [initiallyPopulated, setInitiallyPopulated] = useState(false);
-
-  useSyncSearchParamsWithStore(initiallyPopulated);
 
   useEffect(() => {
     // Check isFetching so we don't populate if we know we're just about to do so again.
     if (!getDiagram.data || getDiagram.isFetching) return;
     const diagramData = getDiagram.data;
 
-    setPopulatedFromApi(false);
-    populateFromApi(diagramData);
-    setPopulatedFromApi(true);
-    setInitiallyPopulated(true);
+    const populate = async () => {
+      setPopulatedFromApi(false);
+      populateDiagramFromApi(diagramData);
+      await loadNavigateStore(`${diagramData.creatorName}/${diagramData.title}`);
+      setPopulatedFromApi(true);
+    };
+    void populate();
   }, [getDiagram.data, getDiagram.isFetching]);
 
   useEffect(() => {

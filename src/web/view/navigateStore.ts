@@ -1,15 +1,14 @@
-import { useSearchParams } from "next/navigation";
-import Router from "next/router";
-import { useEffect, useState } from "react";
+import { temporal } from "zundo";
+import { useStore } from "zustand";
+import { devtools, persist } from "zustand/middleware";
 import { shallow } from "zustand/shallow";
 import { createWithEqualityFn } from "zustand/traditional";
 
-import { Format, InfoCategory, zFormats } from "../../common/infoCategory";
+import { Format, InfoCategory } from "../../common/infoCategory";
 import { infoNodeTypes, nodeTypes } from "../../common/node";
 import { emitter } from "../common/event";
 import { useGraphPart } from "../topic/store/graphPartHooks";
 import { getDefaultNode } from "../topic/store/nodeGetters";
-import { useTopicStore } from "../topic/store/store";
 import { DiagramFilter, StandardFilter, StandardFilterWithFallbacks } from "./utils/diagramFilter";
 import { GeneralFilter } from "./utils/generalFilter";
 import { TableFilter } from "./utils/tableFilter";
@@ -53,14 +52,28 @@ const initialState: NavigateStoreState = {
   },
 };
 
+const persistedNameBase = "navigateStore";
+
 const useNavigateStore = createWithEqualityFn<NavigateStoreState>()(
-  () => initialState,
+  temporal(
+    persist(
+      devtools(() => initialState),
+      {
+        name: persistedNameBase,
+        version: 1,
+        skipHydration: true,
+      }
+    )
+  ),
 
   // Using `createWithEqualityFn` so that we can do a diff in hooks that return new arrays/objects
   // so that we can avoid extra renders
   // e.g. when we return URLSearchParams
   Object.is
 );
+
+// temporal store is a vanilla store, we need to wrap it to use it as a hook and be able to react to changes
+const useTemporalStore = () => useStore(useNavigateStore.temporal);
 
 // hooks
 export const useSelectedGraphPart = () => {
@@ -125,69 +138,119 @@ export const usePrimaryNodeTypes = () => {
   });
 };
 
+export const useCanGoBackForward = () => {
+  const temporalStore = useTemporalStore();
+
+  const canGoBack = temporalStore.pastStates.length > 0;
+  const canGoForward = temporalStore.futureStates.length > 0;
+  return [canGoBack, canGoForward];
+};
+
 // actions
 export const setSelected = (graphPartId: string | null) => {
-  useNavigateStore.setState({ selectedGraphPartId: graphPartId });
+  useNavigateStore.setState({ selectedGraphPartId: graphPartId }, false, "setSelected");
 };
 
 export const setFormat = (format: Format) => {
-  useNavigateStore.setState({ format });
+  useNavigateStore.setState({ format }, false, "setFormat");
 };
 
 export const setShowInformation = (category: InfoCategory, show: boolean) => {
-  const categoriesToShow = useNavigateStore.getState().categoriesToShow;
+  const oldCategoriesToShow = useNavigateStore.getState().categoriesToShow;
 
-  if (show && !categoriesToShow.includes(category)) {
-    useNavigateStore.setState({ categoriesToShow: [...categoriesToShow, category] });
-  } else if (!show && categoriesToShow.includes(category)) {
-    useNavigateStore.setState({ categoriesToShow: categoriesToShow.filter((c) => c !== category) });
+  const newCategoriesToShow =
+    show && !oldCategoriesToShow.includes(category)
+      ? [...oldCategoriesToShow, category]
+      : !show && oldCategoriesToShow.includes(category)
+      ? oldCategoriesToShow.filter((c) => c !== category)
+      : null;
+
+  if (newCategoriesToShow) {
+    useNavigateStore.setState(
+      { categoriesToShow: newCategoriesToShow },
+      false,
+      "setShowInformation"
+    );
+    emitter.emit("changedDiagramFilter");
   }
-
-  emitter.emit("changedDiagramFilter");
 };
 
 export const setStandardFilter = (category: InfoCategory, filter: StandardFilter) => {
-  if (category === "structure") {
-    useNavigateStore.setState({ structureFilter: filter });
-  } else if (category === "research") {
-    useNavigateStore.setState({ researchFilter: filter });
-  } else {
-    useNavigateStore.setState({ justificationFilter: filter });
-  }
+  const newFilter =
+    category === "structure"
+      ? { structureFilter: filter }
+      : category === "research"
+      ? { researchFilter: filter }
+      : { justificationFilter: filter };
+
+  useNavigateStore.setState(newFilter, false, "setStandardFilter");
 
   emitter.emit("changedDiagramFilter");
 };
 
 export const setTableFilter = (tableFilter: TableFilter) => {
-  useNavigateStore.setState({ tableFilter });
+  useNavigateStore.setState({ tableFilter }, false, "setTableFilter");
 };
 
 export const setGeneralFilter = (generalFilter: GeneralFilter) => {
-  useNavigateStore.setState({ generalFilter });
+  useNavigateStore.setState({ generalFilter }, false, "setGeneralFilter");
   emitter.emit("changedDiagramFilter");
 };
 
 export const viewCriteriaTable = (problemNodeId: string) => {
-  useNavigateStore.setState({
-    format: "table",
-    tableFilter: {
-      centralProblemId: problemNodeId,
-      solutions: [],
-      criteria: [],
+  useNavigateStore.setState(
+    {
+      format: "table",
+      tableFilter: {
+        centralProblemId: problemNodeId,
+        solutions: [],
+        criteria: [],
+      },
     },
-  });
+    false,
+    "viewCriteriaTable"
+  );
 };
 
 export const viewJustification = (arguedDiagramPartId: string) => {
-  useNavigateStore.setState({
-    format: "diagram",
-    categoriesToShow: ["justification"],
-    justificationFilter: { type: "rootClaim", centralRootClaimId: arguedDiagramPartId },
-  });
+  useNavigateStore.setState(
+    {
+      format: "diagram",
+      categoriesToShow: ["justification"],
+      justificationFilter: { type: "rootClaim", centralRootClaimId: arguedDiagramPartId },
+    },
+    false,
+    "viewJustification"
+  );
+};
+
+export const goBack = () => {
+  useNavigateStore.temporal.getState().undo();
+};
+
+export const goForward = () => {
+  useNavigateStore.temporal.getState().redo();
 };
 
 export const resetNavigation = () => {
-  useNavigateStore.setState(initialState);
+  useNavigateStore.setState(initialState, true, "resetNavigation");
+  useNavigateStore.temporal.getState().clear();
+};
+
+export const loadNavigateStore = async (persistId: string) => {
+  const builtPersistedName = `${persistedNameBase}-${persistId}`;
+
+  useNavigateStore.persist.setOptions({ name: builtPersistedName });
+
+  if (useNavigateStore.persist.getOptions().storage?.getItem(builtPersistedName)) {
+    // TODO(bug): for some reason, this results in an empty undo action _after_ clear() is run - despite awaiting this promise
+    await useNavigateStore.persist.rehydrate();
+  } else {
+    useNavigateStore.setState(initialState, true, "loadNavigateStore");
+  }
+
+  // it doesn't make sense to want to undo a page load
+  useNavigateStore.temporal.getState().clear();
 };
 
 // helpers
@@ -236,138 +299,4 @@ export const getTableFilterWithFallbacks = (): TableFilter => {
   };
 
   return { ...tableFilterDefaults, ...tableFilter };
-};
-
-const findGraphPartIdBySubstring = (graphPartIdSubstring: string | null) => {
-  if (!graphPartIdSubstring) return null;
-
-  const state = useTopicStore.getState();
-
-  const graphPart =
-    state.nodes.find((node) => node.id.startsWith(graphPartIdSubstring)) ??
-    state.edges.find((edge) => edge.id.startsWith(graphPartIdSubstring));
-
-  return graphPart?.id ?? null;
-};
-
-const processSearchParams = (searchParams: URLSearchParams) => {
-  const selectedGraphPartIdSubstring = searchParams.get("selected")?.toLowerCase() ?? null;
-  const selectedGraphPartId = findGraphPartIdBySubstring(selectedGraphPartIdSubstring);
-  setSelected(selectedGraphPartId);
-
-  const parsedFormat = zFormats.safeParse(searchParams.get("format")?.toLowerCase());
-  if (parsedFormat.success) {
-    setFormat(parsedFormat.data);
-  } else {
-    setFormat("diagram"); // default
-  }
-};
-
-/**
- * Used for search params to keep them short and readable.
- */
-const trimPartId = (partId: string) => {
-  // Using the first 8 chars, 10000 guids have 1% probability collision
-  // This seems reasonable; most topics will have a number of graph parts in the 100s
-  return partId.substring(0, 8);
-};
-
-const getCalculatedSearchParams = (state: NavigateStoreState) => {
-  const selectedParam = state.selectedGraphPartId
-    ? `selected=${trimPartId(state.selectedGraphPartId)}`
-    : "";
-
-  const formatParam = state.format !== initialState.format ? `format=${state.format}` : "";
-
-  return new URLSearchParams([selectedParam, formatParam].join("&"));
-};
-
-const useCalculatedSearchParams = () => {
-  return useNavigateStore(
-    (state) => getCalculatedSearchParams(state),
-    (a, b) => {
-      return a.toString() === b.toString();
-    }
-  );
-};
-
-const useUpdateStoreFromSearchParams = (topicDiagramInitiallyLoaded: boolean) => {
-  const readonlyUrlSearchParams = useSearchParams();
-
-  // has to be in useEffect because can trigger render of other components
-  useEffect(() => {
-    // `useSearchParams` was fixed to exclude path params in next 13.4.20-canary.37 https://github.com/vercel/next.js/pull/55280
-    // but netlify doesn't support next versions beyond 13.4.19 https://answers.netlify.com/t/runtime-importmoduleerror-error-cannot-find-module-styled-jsx-style/102375/28
-    const urlSearchParams = new URLSearchParams(readonlyUrlSearchParams);
-    urlSearchParams.delete("username");
-    urlSearchParams.delete("topicTitle");
-
-    const calculatedSearchParams = getCalculatedSearchParams(useNavigateStore.getState());
-    const storeMatchesURL = urlSearchParams.toString() == calculatedSearchParams.toString();
-
-    if (storeMatchesURL || !topicDiagramInitiallyLoaded) return;
-
-    processSearchParams(urlSearchParams);
-  }, [readonlyUrlSearchParams, topicDiagramInitiallyLoaded]);
-};
-
-const getNewSearchParamsString = (
-  calculatedSearchParams: URLSearchParams,
-  oldUrlSearchParams: URLSearchParams
-) => {
-  const newUrlSearchParams = new URLSearchParams(oldUrlSearchParams.toString());
-
-  const format = calculatedSearchParams.get("format");
-  if (format) newUrlSearchParams.set("format", format);
-  else newUrlSearchParams.delete("format");
-
-  const selected = calculatedSearchParams.get("selected");
-  if (selected) newUrlSearchParams.set("selected", selected);
-  else newUrlSearchParams.delete("selected"); // annoying that setting no value doesn't do this
-
-  const searchParamsString = newUrlSearchParams.toString()
-    ? // decode to allow `:` in params; this should be ok https://stackoverflow.com/a/5330261/8409296
-      `?${decodeURIComponent(newUrlSearchParams.toString())}`
-    : "";
-
-  return searchParamsString;
-};
-
-const useUpdateSearchParamsFromStore = (topicDiagramInitiallyLoaded: boolean) => {
-  const calculatedSearchParams = useCalculatedSearchParams();
-  const [oldCalculatedParams, setOldCalculatedParams] = useState(calculatedSearchParams);
-
-  // useEffect so that Router exists; maybe also necessary to setOldCalculatedParams without optimizing and skipping over the rest
-  useEffect(() => {
-    const calculatedParamsChanged =
-      calculatedSearchParams.toString() !== oldCalculatedParams.toString();
-    if (!calculatedParamsChanged) return; // other things could trigger this hook, but we don't care about those
-
-    setOldCalculatedParams(calculatedSearchParams);
-
-    const [pathWithoutSearchParams, urlSearchParamsString] = Router.asPath.split("?");
-    const urlSearchParams = new URLSearchParams(urlSearchParamsString);
-    const storeMatchesURL = urlSearchParams.toString() == calculatedSearchParams.toString();
-
-    if (storeMatchesURL || !topicDiagramInitiallyLoaded) return;
-
-    const searchParamsString = getNewSearchParamsString(calculatedSearchParams, urlSearchParams);
-    const newPath = pathWithoutSearchParams + searchParamsString;
-
-    void Router.push(newPath, undefined);
-  }, [calculatedSearchParams, oldCalculatedParams, topicDiagramInitiallyLoaded]);
-};
-
-/**
- * Update the store when URL search params change, and vice versa.
- *
- * Infinite loops should be prevented because both sides return if store params == URL params.
- *
- * @param topicDiagramInitiallyLoaded we want to be able to use a substring for graph part ids, which
- * means we need to be able to search the topic store for graph part ids, which meanas we need to
- * start syncing after the topic store is loaded.
- */
-export const useSyncSearchParamsWithStore = (topicDiagramInitiallyLoaded: boolean) => {
-  useUpdateStoreFromSearchParams(topicDiagramInitiallyLoaded);
-  useUpdateSearchParamsFromStore(topicDiagramInitiallyLoaded);
 };
