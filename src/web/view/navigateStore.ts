@@ -1,5 +1,6 @@
 import { temporal } from "zundo";
 import { useStore } from "zustand";
+import { devtools } from "zustand/middleware";
 import { shallow } from "zustand/shallow";
 import { createWithEqualityFn } from "zustand/traditional";
 
@@ -52,7 +53,7 @@ const initialState: NavigateStoreState = {
 };
 
 const useNavigateStore = createWithEqualityFn<NavigateStoreState>()(
-  temporal(() => initialState),
+  temporal(devtools(() => initialState)),
 
   // Using `createWithEqualityFn` so that we can do a diff in hooks that return new arrays/objects
   // so that we can avoid extra renders
@@ -136,63 +137,80 @@ export const useCanGoBackForward = () => {
 
 // actions
 export const setSelected = (graphPartId: string | null) => {
-  useNavigateStore.setState({ selectedGraphPartId: graphPartId });
+  useNavigateStore.setState({ selectedGraphPartId: graphPartId }, false, "setSelected");
 };
 
 export const setFormat = (format: Format) => {
-  useNavigateStore.setState({ format });
+  useNavigateStore.setState({ format }, false, "setFormat");
 };
 
 export const setShowInformation = (category: InfoCategory, show: boolean) => {
-  const categoriesToShow = useNavigateStore.getState().categoriesToShow;
+  const oldCategoriesToShow = useNavigateStore.getState().categoriesToShow;
 
-  if (show && !categoriesToShow.includes(category)) {
-    useNavigateStore.setState({ categoriesToShow: [...categoriesToShow, category] });
-  } else if (!show && categoriesToShow.includes(category)) {
-    useNavigateStore.setState({ categoriesToShow: categoriesToShow.filter((c) => c !== category) });
+  const newCategoriesToShow =
+    show && !oldCategoriesToShow.includes(category)
+      ? [...oldCategoriesToShow, category]
+      : !show && oldCategoriesToShow.includes(category)
+      ? oldCategoriesToShow.filter((c) => c !== category)
+      : null;
+
+  if (newCategoriesToShow) {
+    useNavigateStore.setState(
+      { categoriesToShow: newCategoriesToShow },
+      false,
+      "setShowInformation"
+    );
+    emitter.emit("changedDiagramFilter");
   }
-
-  emitter.emit("changedDiagramFilter");
 };
 
 export const setStandardFilter = (category: InfoCategory, filter: StandardFilter) => {
-  if (category === "structure") {
-    useNavigateStore.setState({ structureFilter: filter });
-  } else if (category === "research") {
-    useNavigateStore.setState({ researchFilter: filter });
-  } else {
-    useNavigateStore.setState({ justificationFilter: filter });
-  }
+  const newFilter =
+    category === "structure"
+      ? { structureFilter: filter }
+      : category === "research"
+      ? { researchFilter: filter }
+      : { justificationFilter: filter };
+
+  useNavigateStore.setState(newFilter, false, "setStandardFilter");
 
   emitter.emit("changedDiagramFilter");
 };
 
 export const setTableFilter = (tableFilter: TableFilter) => {
-  useNavigateStore.setState({ tableFilter });
+  useNavigateStore.setState({ tableFilter }, false, "setTableFilter");
 };
 
 export const setGeneralFilter = (generalFilter: GeneralFilter) => {
-  useNavigateStore.setState({ generalFilter });
+  useNavigateStore.setState({ generalFilter }, false, "setGeneralFilter");
   emitter.emit("changedDiagramFilter");
 };
 
 export const viewCriteriaTable = (problemNodeId: string) => {
-  useNavigateStore.setState({
-    format: "table",
-    tableFilter: {
-      centralProblemId: problemNodeId,
-      solutions: [],
-      criteria: [],
+  useNavigateStore.setState(
+    {
+      format: "table",
+      tableFilter: {
+        centralProblemId: problemNodeId,
+        solutions: [],
+        criteria: [],
+      },
     },
-  });
+    false,
+    "viewCriteriaTable"
+  );
 };
 
 export const viewJustification = (arguedDiagramPartId: string) => {
-  useNavigateStore.setState({
-    format: "diagram",
-    categoriesToShow: ["justification"],
-    justificationFilter: { type: "rootClaim", centralRootClaimId: arguedDiagramPartId },
-  });
+  useNavigateStore.setState(
+    {
+      format: "diagram",
+      categoriesToShow: ["justification"],
+      justificationFilter: { type: "rootClaim", centralRootClaimId: arguedDiagramPartId },
+    },
+    false,
+    "viewJustification"
+  );
 };
 
 export const goBack = () => {
@@ -204,7 +222,7 @@ export const goForward = () => {
 };
 
 export const resetNavigation = () => {
-  useNavigateStore.setState(initialState);
+  useNavigateStore.setState(initialState, true, "resetNavigation");
   useNavigateStore.temporal.getState().clear();
 };
 
