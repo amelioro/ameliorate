@@ -1,6 +1,6 @@
 import { temporal } from "zundo";
 import { useStore } from "zustand";
-import { devtools } from "zustand/middleware";
+import { devtools, persist } from "zustand/middleware";
 import { shallow } from "zustand/shallow";
 import { createWithEqualityFn } from "zustand/traditional";
 
@@ -52,8 +52,19 @@ const initialState: NavigateStoreState = {
   },
 };
 
+const persistedNameBase = "navigateStore";
+
 const useNavigateStore = createWithEqualityFn<NavigateStoreState>()(
-  temporal(devtools(() => initialState)),
+  temporal(
+    persist(
+      devtools(() => initialState),
+      {
+        name: persistedNameBase,
+        version: 1,
+        skipHydration: true,
+      }
+    )
+  ),
 
   // Using `createWithEqualityFn` so that we can do a diff in hooks that return new arrays/objects
   // so that we can avoid extra renders
@@ -223,6 +234,22 @@ export const goForward = () => {
 
 export const resetNavigation = () => {
   useNavigateStore.setState(initialState, true, "resetNavigation");
+  useNavigateStore.temporal.getState().clear();
+};
+
+export const loadNavigateStore = async (persistId: string) => {
+  const builtPersistedName = `${persistedNameBase}-${persistId}`;
+
+  useNavigateStore.persist.setOptions({ name: builtPersistedName });
+
+  if (useNavigateStore.persist.getOptions().storage?.getItem(builtPersistedName)) {
+    // TODO(bug): for some reason, this results in an empty undo action _after_ clear() is run - despite awaiting this promise
+    await useNavigateStore.persist.rehydrate();
+  } else {
+    useNavigateStore.setState(initialState, true, "loadNavigateStore");
+  }
+
+  // it doesn't make sense to want to undo a page load
   useNavigateStore.temporal.getState().clear();
 };
 

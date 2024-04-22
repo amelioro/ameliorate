@@ -92,7 +92,7 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
 
   useEffect(() => {
     const unbindAdd = emitter.on("addNode", (node) => setNewNodeId(node.id));
-    const unbindLoad = emitter.on("loadedTopicData", () => setTopicViewUpdated(true));
+    const unbindLoad = emitter.on("overwroteTopicData", () => setTopicViewUpdated(true));
     const unbindFilter = emitter.on("changedDiagramFilter", () => setTopicViewUpdated(true));
 
     return () => {

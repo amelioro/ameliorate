@@ -8,7 +8,8 @@ import { NotFoundError, QueryError } from "../../web/common/components/Error/Err
 import { Loading } from "../../web/common/components/Loading/Loading";
 import { useSessionUser } from "../../web/common/hooks";
 import { trpc } from "../../web/common/trpc";
-import { populateFromApi } from "../../web/topic/store/loadActions";
+import { populateDiagramFromApi } from "../../web/topic/store/loadActions";
+import { loadNavigateStore } from "../../web/view/navigateStore";
 import { setInitialPerspective } from "../../web/view/perspectiveStore";
 
 // Don't render the workspace server-side.
@@ -55,9 +56,13 @@ const Topic: NextPage = () => {
     if (!getDiagram.data || getDiagram.isFetching) return;
     const diagramData = getDiagram.data;
 
-    setPopulatedFromApi(false);
-    populateFromApi(diagramData);
-    setPopulatedFromApi(true);
+    const populate = async () => {
+      setPopulatedFromApi(false);
+      populateDiagramFromApi(diagramData);
+      await loadNavigateStore(`${diagramData.creatorName}/${diagramData.title}`);
+      setPopulatedFromApi(true);
+    };
+    void populate();
   }, [getDiagram.data, getDiagram.isFetching]);
 
   useEffect(() => {

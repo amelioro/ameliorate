@@ -88,7 +88,7 @@ export const setTopicData = (state: TopicStoreState, sessionUsername?: string) =
 
   useTopicStore.setState({ ...state, topic, userScores }, false, "setState");
 
-  emitter.emit("loadedTopicData");
+  emitter.emit("overwroteTopicData");
 };
 
 /**
@@ -100,7 +100,7 @@ export const resetTopicData = () => {
   const topic = useTopicStore.getState().topic;
   useTopicStore.setState({ ...initialState, topic }, false, "resetState");
 
-  emitter.emit("loadedTopicData");
+  emitter.emit("overwroteTopicData");
 };
 
 export const undo = () => {

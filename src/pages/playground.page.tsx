@@ -4,8 +4,9 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 
 import { Loading } from "../web/common/components/Loading/Loading";
-import { populateFromLocalStorage } from "../web/topic/store/loadActions";
+import { populateDiagramFromLocalStorage } from "../web/topic/store/loadActions";
 import { playgroundUsername } from "../web/topic/store/store";
+import { loadNavigateStore } from "../web/view/navigateStore";
 import { setInitialPerspective } from "../web/view/perspectiveStore";
 
 // Don't render the workspace server-side.
@@ -35,7 +36,8 @@ const Playground: NextPage = () => {
   // rendering, there will be a render mismatch between client and server
   useEffect(() => {
     const populate = async () => {
-      await populateFromLocalStorage();
+      await populateDiagramFromLocalStorage();
+      await loadNavigateStore("playground");
       setInitiallyPopulated(true);
     };
     void populate();

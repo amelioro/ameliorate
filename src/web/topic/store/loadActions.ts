@@ -1,4 +1,3 @@
-import { emitter } from "../../common/event";
 import {
   type TopicData,
   convertToStoreEdge,
@@ -7,7 +6,7 @@ import {
 } from "../utils/apiConversion";
 import { initialState, topicStorePlaygroundName, useTopicStore } from "./store";
 
-export const populateFromApi = (topicData: TopicData) => {
+export const populateDiagramFromApi = (topicData: TopicData) => {
   // Ensure we use distinct persistence for topic page compared to playground.
   // Persisting saved-to-db topics allows us to use upload/download with persist migrations.
   useTopicStore.persist.setOptions({ name: "diagram-storage-saved-to-db" });
@@ -33,13 +32,11 @@ export const populateFromApi = (topicData: TopicData) => {
     "populateFromApi"
   );
 
-  emitter.emit("loadedTopicData");
-
   // it doesn't make sense to want to undo a page load
   useTopicStore.temporal.getState().clear();
 };
 
-export const populateFromLocalStorage = async () => {
+export const populateDiagramFromLocalStorage = async () => {
   // Ensure we use distinct persistence for topic page compared to playground.
   useTopicStore.persist.setOptions({ name: topicStorePlaygroundName });
 
@@ -49,8 +46,6 @@ export const populateFromLocalStorage = async () => {
   } else {
     useTopicStore.setState(initialState, true, "populateFromLocalStorage");
   }
-
-  emitter.emit("loadedTopicData");
 
   // it doesn't make sense to want to undo a page load
   useTopicStore.temporal.getState().clear();
