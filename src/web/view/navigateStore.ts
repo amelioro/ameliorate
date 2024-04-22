@@ -1,3 +1,5 @@
+import { temporal } from "zundo";
+import { useStore } from "zustand";
 import { shallow } from "zustand/shallow";
 import { createWithEqualityFn } from "zustand/traditional";
 
@@ -50,13 +52,16 @@ const initialState: NavigateStoreState = {
 };
 
 const useNavigateStore = createWithEqualityFn<NavigateStoreState>()(
-  () => initialState,
+  temporal(() => initialState),
 
   // Using `createWithEqualityFn` so that we can do a diff in hooks that return new arrays/objects
   // so that we can avoid extra renders
   // e.g. when we return URLSearchParams
   Object.is
 );
+
+// temporal store is a vanilla store, we need to wrap it to use it as a hook and be able to react to changes
+const useTemporalStore = () => useStore(useNavigateStore.temporal);
 
 // hooks
 export const useSelectedGraphPart = () => {
@@ -121,6 +126,14 @@ export const usePrimaryNodeTypes = () => {
   });
 };
 
+export const useCanGoBackForward = () => {
+  const temporalStore = useTemporalStore();
+
+  const canGoBack = temporalStore.pastStates.length > 0;
+  const canGoForward = temporalStore.futureStates.length > 0;
+  return [canGoBack, canGoForward];
+};
+
 // actions
 export const setSelected = (graphPartId: string | null) => {
   useNavigateStore.setState({ selectedGraphPartId: graphPartId });
@@ -182,8 +195,17 @@ export const viewJustification = (arguedDiagramPartId: string) => {
   });
 };
 
+export const goBack = () => {
+  useNavigateStore.temporal.getState().undo();
+};
+
+export const goForward = () => {
+  useNavigateStore.temporal.getState().redo();
+};
+
 export const resetNavigation = () => {
   useNavigateStore.setState(initialState);
+  useNavigateStore.temporal.getState().clear();
 };
 
 // helpers
