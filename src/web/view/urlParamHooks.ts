@@ -123,6 +123,9 @@ const getFilterAsParamsString = <TFilter extends object>(
   filter: TFilter,
   filterSchema: ZodSchema<TFilter>
 ) => {
+  // We actually can save more params into the filter objects than the type lets on
+  // (so that switching between filter types will retain previously-selected values),
+  // so this will parse those out.
   const parsedFilter = filterSchema.parse(filter);
 
   const trimmedFilter = trimAllUuids(parsedFilter);
@@ -161,7 +164,7 @@ const processSearchParams = (searchParams: URLSearchParams) => {
   if (tableFilter) {
     setFormat("table");
     setTableFilter(tableFilter);
-  }
+  } else setFormat("diagram");
 
   const generalString = searchParams.get("general") ?? "{}";
   const generalFilter = getFilterFromParamsString(generalString, generalFilterSchema);
