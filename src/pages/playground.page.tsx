@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { Loading } from "../web/common/components/Loading/Loading";
 import { populateFromLocalStorage } from "../web/topic/store/loadActions";
 import { playgroundUsername } from "../web/topic/store/store";
-import { useSyncSearchParamsWithStore } from "../web/view/navigateStore";
 import { setInitialPerspective } from "../web/view/perspectiveStore";
 
 // Don't render the workspace server-side.
@@ -31,8 +30,6 @@ const Playground: NextPage = () => {
   // Track populating so we don't render workspace (along with default values for components) with
   // old data before populating the store with fresh data.
   const [initiallyPopulated, setInitiallyPopulated] = useState(false);
-
-  useSyncSearchParamsWithStore(initiallyPopulated);
 
   // must hydrate store after page is rendered, otherwise if hydration starts before page finishes
   // rendering, there will be a render mismatch between client and server
