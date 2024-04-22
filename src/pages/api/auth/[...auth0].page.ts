@@ -1,6 +1,7 @@
-import { AfterCallback, handleAuth, handleCallback, handleProfile } from "@auth0/nextjs-auth0";
+import { AfterCallback } from "@auth0/nextjs-auth0";
 import { UserProfile } from "@auth0/nextjs-auth0/client";
 
+import { auth0 } from "../../../api/initAuth0";
 import { xprisma } from "../../../db/extendedPrisma";
 
 const afterCallback: AfterCallback = async (_req, res, session, state) => {
@@ -34,7 +35,7 @@ const afterCallback: AfterCallback = async (_req, res, session, state) => {
   return session;
 };
 
-export default handleAuth({
-  callback: handleCallback({ afterCallback }),
-  "refresh-profile": handleProfile({ refetch: true }),
+export default auth0.handleAuth({
+  callback: auth0.handleCallback({ afterCallback }),
+  "refresh-profile": auth0.handleProfile({ refetch: true }),
 });
