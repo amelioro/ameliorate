@@ -109,7 +109,10 @@ const getFilterFromParamsString = <TFilter extends object>(
   const paramsWithBracesRestored = paramsString.replace(/\(/g, "{").replace(/\)/g, "}");
 
   const restoredJsonString = tryOrNull(() => jsonrepair(paramsWithBracesRestored)); // restore quotes
-  if (!restoredJsonString) return null;
+  if (!restoredJsonString) {
+    console.log("did not restore JSON", paramsWithBracesRestored);
+    return null;
+  }
 
   const restoredJson = JSON.parse(restoredJsonString) as object;
   const restoredJsonWithUuids = untrimAllUuids(restoredJson);
@@ -144,16 +147,21 @@ const processSearchParams = (searchParams: URLSearchParams) => {
   const selectedGraphPartId = findGraphPartIdBySubstring(selectedGraphPartIdSubstring);
   setSelected(selectedGraphPartId);
 
+  // TODO: if no structure, set to initial filter state
+  // right now if no structure, it loads the previous structure instead of using the URL
   const structureString = searchParams.get("structure") ?? "";
   if (structureString === "off") setShowInformation("structure", false);
   else {
     const structureFilter = getFilterFromParamsString(structureString, standardFilterSchema);
     if (structureFilter) setStandardFilter("structure", structureFilter);
+    else setStandardFilter("structure", initialState.structureFilter);
   }
 
+  // should research filter be set to initial state with show: false if no research in param?
   const researchString = searchParams.get("research") ?? "";
   const researchFilter = getFilterFromParamsString(researchString, standardFilterSchema);
   if (researchFilter) setStandardFilter("research", researchFilter);
+  else setStandardFilter("research", initialState.researchFilter);
 
   const justificationString = searchParams.get("justification") ?? "{}";
   const justificationFilter = getFilterFromParamsString(justificationString, standardFilterSchema);
