@@ -143,12 +143,17 @@ export const setShowInformation = (category: InfoCategory, show: boolean) => {
 };
 
 export const setStandardFilter = (category: InfoCategory, filter: StandardFilter) => {
+  const currentCategoriesToShow = useNavigateStore.getState().categoriesToShow;
+  const categoriesToShow = currentCategoriesToShow.includes(category)
+    ? currentCategoriesToShow
+    : [...currentCategoriesToShow, category];
+
   if (category === "structure") {
-    useNavigateStore.setState({ structureFilter: filter });
+    useNavigateStore.setState({ categoriesToShow, structureFilter: filter });
   } else if (category === "research") {
-    useNavigateStore.setState({ researchFilter: filter });
+    useNavigateStore.setState({ categoriesToShow, researchFilter: filter });
   } else {
-    useNavigateStore.setState({ justificationFilter: filter });
+    useNavigateStore.setState({ categoriesToShow, justificationFilter: filter });
   }
 
   emitter.emit("changedDiagramFilter");

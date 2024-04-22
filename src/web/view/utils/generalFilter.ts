@@ -12,7 +12,11 @@ export const generalFilterSchema = z.object({
   nodeTypes: zNodeTypes.array(),
   showOnlyScored: z.boolean(),
   scoredComparer: zScoredComparers,
-  scoreToCompare: z.enum(possibleScores),
+  // tried using z.preprocess but it results in scoreToCompare of type unknown, found z.effect via https://github.com/colinhacks/zod/issues/2486#issuecomment-1582599365
+  scoreToCompare: z.effect(z.enum(possibleScores), {
+    type: "preprocess",
+    transform: (arg) => String(arg), // allow number to be parsed (jsonrepair will not add quotes for numbers being parsed from URL Params)
+  }),
   showSecondaryResearch: z.boolean(),
   showSecondaryStructure: z.boolean(),
 });

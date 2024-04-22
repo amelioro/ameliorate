@@ -20,3 +20,14 @@ export const errorWithData = (message: string, ...data: any[]) => {
 export const throwError = (message: string, ...data: any[]) => {
   throw errorWithData(message, data);
 };
+
+/**
+ * Convenient way to wrap a function and return null if an error is thrown.
+ */
+export const tryOrNull = <T>(fn: () => T): T | null => {
+  try {
+    return fn();
+  } catch {
+    return null;
+  }
+};
