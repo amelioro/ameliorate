@@ -1,6 +1,7 @@
 import { useTheme } from "@mui/material";
 import { useEffect, useRef } from "react";
 
+import { RichTextEditor } from "../../../common/components/RichTextEditor/RichTextEditor";
 import { useSessionUser } from "../../../common/hooks";
 import { openContextMenu } from "../../../common/store/contextMenuActions";
 import { useUnrestrictedEditing } from "../../../view/actionConfigStore";
@@ -101,7 +102,7 @@ export const EditableNode = ({ node, supplemental = false, className = "" }: Pro
         <NodeIndicatorGroup node={node} />
       </YEdgeDiv>
       <MiddleDiv>
-        <StyledTextareaAutosize
+        {/* <StyledTextareaAutosize
           ref={textAreaRef}
           color={color}
           placeholder="Enter text..."
@@ -112,7 +113,8 @@ export const EditableNode = ({ node, supplemental = false, className = "" }: Pro
           }}
           className="nopan" // allow regular text input drag functionality without using reactflow's pan behavior
           readOnly={!editable}
-        />
+        /> */}
+        <RichTextEditor />
       </MiddleDiv>
     </NodeDiv>
   );
