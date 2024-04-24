@@ -5,6 +5,9 @@
   "editor.tabSize": 2,
   "editor.wordWrapColumn": 100,
   "files.insertFinalNewline": true,
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
   }

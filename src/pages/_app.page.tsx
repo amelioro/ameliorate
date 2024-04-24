@@ -10,6 +10,7 @@ import Layout from "../web/common/components/Layout";
 import { getThemeOptions } from "../web/common/theme";
 import { trpc } from "../web/common/trpc";
 import { globals } from "./_app.styles";
+import "../web/common/globals.css";
 
 // eslint-disable-next-line functional/no-let -- jank way to enable trpc queries outside of react tree, e.g. from zustand middleware https://github.com/trpc/trpc/discussions/2926#discussioncomment-5647033
 export let trpcClient = null as unknown as ReturnType<typeof trpc.useContext>["client"];
