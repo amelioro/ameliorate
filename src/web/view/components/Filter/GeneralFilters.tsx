@@ -3,21 +3,16 @@ import { Stack } from "@mui/material";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
+import { nodeTypes } from "../../../../common/node";
 import { Select } from "../../../common/components/Form/Select";
 import { Switch } from "../../../common/components/Form/Switch";
 import { possibleScores } from "../../../topic/utils/graph";
-import {
-  setGeneralFilter,
-  useFormat,
-  useGeneralFilter,
-  usePrimaryNodeTypes,
-} from "../../navigateStore";
+import { setGeneralFilter, useFormat, useGeneralFilter } from "../../navigateStore";
 import { GeneralFilter, generalFilterSchema, scoredComparers } from "../../utils/generalFilter";
 import { ShowSecondaryNeighborsLabel } from "./ShowSecondaryNeighborsLabel";
 
 export const GeneralFilters = () => {
   const generalFilter = useGeneralFilter();
-  const shownNodeTypes = usePrimaryNodeTypes();
   const format = useFormat();
 
   const methods = useForm<GeneralFilter>({
@@ -44,7 +39,7 @@ export const GeneralFilters = () => {
       <form style={{ padding: "8px" }}>
         {format === "diagram" && (
           <Stack spacing={1}>
-            <Select name="nodeTypes" options={shownNodeTypes} multiple />
+            <Select name="nodeTypes" options={nodeTypes} multiple />
 
             <Stack direction="row" spacing={1}>
               <Switch name="showOnlyScored" label="Show only nodes scored" />

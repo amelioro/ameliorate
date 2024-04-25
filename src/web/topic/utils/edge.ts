@@ -105,10 +105,9 @@ export const relations: AddableRelation[] = researchRelations.concat([
   { child: "solutionComponent", name: "creates", parent: "detriment", addableFrom: "child" },
   { child: "solution", name: "creates", parent: "detriment", addableFrom: "child" },
 
-  { child: "problem", name: "createdBy", parent: "solutionComponent", addableFrom: "parent" },
   { child: "solution", name: "has", parent: "solutionComponent", addableFrom: "child" },
+  { child: "obstacle", name: "obstacleOf", parent: "solutionComponent", addableFrom: "parent" },
 
-  { child: "problem", name: "createdBy", parent: "solution", addableFrom: "parent" },
   { child: "solution", name: "accomplishes", parent: "solution", addableFrom: "parent" },
   { child: "obstacle", name: "obstacleOf", parent: "solution", addableFrom: "parent" },
 
