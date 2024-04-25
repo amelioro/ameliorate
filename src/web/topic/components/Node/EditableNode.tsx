@@ -1,6 +1,7 @@
 import { useTheme } from "@mui/material";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
+import { RichTextEditor } from "../../../common/components/RichTextEditor/RichTextEditor";
 import { useSessionUser } from "../../../common/hooks";
 import { openContextMenu } from "../../../common/store/contextMenuActions";
 import { useUnrestrictedEditing } from "../../../view/actionConfigStore";
@@ -15,7 +16,7 @@ import {
   NodeDiv,
   NodeTypeDiv,
   NodeTypeSpan,
-  StyledTextareaAutosize,
+  // StyledTextareaAutosize,
   YEdgeDiv,
 } from "./EditableNode.styles";
 
@@ -56,6 +57,13 @@ export const EditableNode = ({ node, supplemental = false, className = "" }: Pro
     }, 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- if we select the node after initial render, we don't care about re-focusing. we mainly care about focusing on node add. focusing on node click is annoying because our cursor jumps to the end of the input.
   }, []);
+
+  const setLabel = useCallback(
+    (html: string) => {
+      if (html !== node.data.label) setNodeLabel(node, html);
+    },
+    [node]
+  );
 
   // prefer this over binding value={node.data.label} because this allows us to update node.data.label onBlur instead of onChange, creating significantly fewer unnecessary re-renders
   if (textAreaRef.current && textAreaRef.current.value !== node.data.label) {
@@ -101,7 +109,7 @@ export const EditableNode = ({ node, supplemental = false, className = "" }: Pro
         <NodeIndicatorGroup node={node} />
       </YEdgeDiv>
       <MiddleDiv>
-        <StyledTextareaAutosize
+        {/* <StyledTextareaAutosize
           ref={textAreaRef}
           color={color}
           placeholder="Enter text..."
@@ -112,7 +120,8 @@ export const EditableNode = ({ node, supplemental = false, className = "" }: Pro
           }}
           className="nopan" // allow regular text input drag functionality without using reactflow's pan behavior
           readOnly={!editable}
-        />
+        /> */}
+        <RichTextEditor text={node.data.label} editable={editable} onBlur={setLabel} />
       </MiddleDiv>
     </NodeDiv>
   );
