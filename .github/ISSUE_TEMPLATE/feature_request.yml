@@ -14,12 +14,7 @@ body:
     id: solution
     attributes:
       label: Solution you'd like
-      placeholder: A clear and concise description of what you want to happen.
-  - type: textarea
-    id: solution-questions
-    attributes:
-      label: Questions to answer
-      placeholder: Any relevant questions that are unanswered that probably should be answered.
+      placeholder: A clear and concise description of what you want to happen. Include questions about behavior that should be figured out.
   - type: textarea
     id: alternatives
     attributes:
@@ -33,10 +28,5 @@ body:
   - type: textarea
     id: technical
     attributes:
-      label: Technical ideas
-      placeholder: Any ideas for possible implementations/technical designs. Linking to specific lines of code can be helpful.
-  - type: textarea
-    id: technical-questions
-    attributes:
-      label: Technical questions
-      placeholder: Any questions you know that will probably be relevant for the technical design or implementation.
+      label: Technical ideas and questions
+      placeholder: Any ideas or questions to answer for possible implementations/technical designs. Linking to specific lines of code can be helpful.
