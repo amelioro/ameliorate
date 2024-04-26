@@ -73,24 +73,14 @@ export const AddNodeButtonGroupChild = styled(StyledAddNodeButtonGroup)<{
   }}
 `;
 
-interface NodeProps {
-  spotlight: Spotlight;
-}
-
-const options = {
-  shouldForwardProp: (prop: string) => !["spotlight"].includes(prop),
-};
-
-export const StyledEditableNode = styled(EditableNode, options)<NodeProps>`
-  ${({ theme, spotlight }) => {
-    if (spotlight === "primary") {
-      return css``;
-    } else if (spotlight === "secondary") {
-      return css`
+export const StyledEditableNode = styled(EditableNode)`
+  ${({ theme }) => {
+    return css`
+      &.spotlight-secondary {
         border-color: ${theme.palette.info.main};
         z-index: ${zIndex.secondary};
-      `;
-    }
+      }
+    `;
   }};
 `;
 
