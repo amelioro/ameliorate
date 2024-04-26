@@ -4,6 +4,7 @@ import {
   Close,
   Download,
   Engineering,
+  FormatColorFill,
   Image as ImageIcon,
   Info,
   Layers,
@@ -31,9 +32,11 @@ import { errorWithData } from "../../../../common/errorHandling";
 import { NumberInput } from "../../../common/components/NumberInput/NumberInput";
 import {
   setLayoutThoroughness,
+  toggleFillNodesWithColor,
   toggleForceNodesIntoLayers,
   toggleShowImpliedEdges,
   toggleUnrestrictedEditing,
+  useFillNodesWithColor,
   useForceNodesIntoLayers,
   useLayoutThoroughness,
   useShowImpliedEdges,
@@ -138,6 +141,7 @@ export const MoreActionsDrawer = ({
   const showImpliedEdges = useShowImpliedEdges();
   const unrestrictedEditing = useUnrestrictedEditing();
   const forceNodesIntoLayers = useForceNodesIntoLayers();
+  const fillNodesWithColor = useFillNodesWithColor();
   const layoutThoroughness = useLayoutThoroughness();
 
   return (
@@ -256,6 +260,19 @@ export const MoreActionsDrawer = ({
               </ToggleButton>
             </>
           )}
+
+          <ToggleButton
+            value={fillNodesWithColor}
+            title="Fill nodes with color"
+            aria-label="Fill nodes with color"
+            color="secondary"
+            size="small"
+            selected={fillNodesWithColor}
+            onClick={() => toggleFillNodesWithColor(!fillNodesWithColor)}
+            sx={{ borderRadius: "50%", border: "0" }}
+          >
+            <FormatColorFill />
+          </ToggleButton>
         </ListItem>
 
         {!isTableActive && (

@@ -1,9 +1,9 @@
-import { useTheme } from "@mui/material";
+import { type SxProps, useTheme } from "@mui/material";
 import { useEffect, useRef } from "react";
 
 import { useSessionUser } from "../../../common/hooks";
 import { openContextMenu } from "../../../common/store/contextMenuActions";
-import { useUnrestrictedEditing } from "../../../view/actionConfigStore";
+import { useFillNodesWithColor, useUnrestrictedEditing } from "../../../view/actionConfigStore";
 import { setSelected, useIsGraphPartSelected } from "../../../view/navigateStore";
 import { finishAddingNode, setCustomNodeType, setNodeLabel } from "../../store/actions";
 import { useUserCanEditTopicData } from "../../store/userHooks";
@@ -12,8 +12,8 @@ import { nodeDecorations } from "../../utils/node";
 import { NodeIndicatorGroup } from "../Indicator/NodeIndicatorGroup";
 import {
   MiddleDiv,
-  NodeDiv,
-  NodeTypeDiv,
+  NodeBox,
+  NodeTypeBox,
   NodeTypeSpan,
   StyledTextareaAutosize,
   YEdgeDiv,
@@ -37,6 +37,7 @@ export const EditableNode = ({ node, supplemental = false, className = "" }: Pro
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const unrestrictedEditing = useUnrestrictedEditing();
+  const fillNodesWithColor = useFillNodesWithColor();
   const selected = useIsGraphPartSelected(node.id);
 
   const theme = useTheme();
@@ -75,16 +76,42 @@ export const EditableNode = ({ node, supplemental = false, className = "" }: Pro
 
   const customizable = userCanEditTopicData && (unrestrictedEditing || node.type === "custom");
 
+  // TODO: use `fill-node`/`no-fill-node` class, and extract these to styles file; not sure how to use type-specific colors without js though? maybe css vars for type-specific colors, and a var for the node type that's scoped to the current node?
+  const nodeStyles: SxProps =
+    fillNodesWithColor || node.type === "custom" // since custom is white, it can't be used as the border color because it doesn't contrast against the white background; so just treat custom as if it's filled with color
+      ? {
+          backgroundColor: color,
+          borderColor: "black",
+        }
+      : {
+          backgroundColor: "white",
+          borderColor: color,
+
+          [NodeTypeBox.toString()]: {
+            backgroundColor: color,
+            // anti-aliasing between white node background and colored border/icon background creates a gray line - add colored shadow to hide this https://stackoverflow.com/a/40100710/8409296
+            boxShadow: `-1px -1px 0px 1px ${color}`,
+          },
+
+          [`&.selected ${NodeTypeBox.toString()}`]: {
+            boxShadow: "-1px -1px 0px 1px black",
+          },
+
+          [`&.spotlight-secondary ${NodeTypeBox.toString()}`]: {
+            boxShadow: `-1px -1px 0px 1px ${theme.palette.info.main}`,
+          },
+        };
+
   return (
-    <NodeDiv
-      color={color}
+    <NodeBox
       className={className + (selected ? " selected" : "")}
       onClick={() => !supplemental && setSelected(node.id)}
       onContextMenu={(event) => openContextMenu(event, { node })}
+      sx={nodeStyles}
     >
       <YEdgeDiv>
-        <NodeTypeDiv>
-          <NodeIcon sx={{ width: "0.875rem", height: "0.875rem" }} />
+        <NodeTypeBox sx={{ borderTopLeftRadius: "4px", borderBottomRightRadius: "4px" }}>
+          <NodeIcon sx={{ width: "0.875rem", height: "0.875rem", marginX: "4px" }} />
           <NodeTypeSpan
             contentEditable={customizable}
             suppressContentEditableWarning // https://stackoverflow.com/a/49639256/8409296
@@ -97,13 +124,12 @@ export const EditableNode = ({ node, supplemental = false, className = "" }: Pro
           >
             {typeText}
           </NodeTypeSpan>
-        </NodeTypeDiv>
+        </NodeTypeBox>
         <NodeIndicatorGroup node={node} />
       </YEdgeDiv>
       <MiddleDiv>
         <StyledTextareaAutosize
           ref={textAreaRef}
-          color={color}
           placeholder="Enter text..."
           defaultValue={node.data.label}
           maxRows={3}
@@ -114,6 +140,6 @@ export const EditableNode = ({ node, supplemental = false, className = "" }: Pro
           readOnly={!editable}
         />
       </MiddleDiv>
-    </NodeDiv>
+    </NodeBox>
   );
 };

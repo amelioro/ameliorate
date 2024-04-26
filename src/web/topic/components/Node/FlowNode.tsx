@@ -72,7 +72,7 @@ export const FlowNode = (flowNode: NodeProps) => {
         style={{ pointerEvents: "none" }}
       >
         <NodeHandle node={node} direction="parent" orientation={orientation} />
-        <StyledEditableNode node={node} spotlight={spotlight} />
+        <StyledEditableNode node={node} className={`spotlight-${spotlight}`} />
         <NodeHandle node={node} direction="child" orientation={orientation} />
       </motion.div>
 
