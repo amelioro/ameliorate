@@ -23,7 +23,14 @@ export const SourceDetails = ({ sourceNode }: Props) => {
         <ListItemText primary="Relevant For" />
       </ListItem>
 
-      <Stack direction="row" justifyContent="center" alignItems="center">
+      <Stack
+        direction="row"
+        justifyContent="center"
+        alignItems="stretch"
+        flexWrap="wrap"
+        useFlexGap
+        spacing="2px"
+      >
         {nodesRelevantFor.length === 0 && edgesRelevantFor.length === 0 && (
           <Typography>No relevant parts yet!</Typography>
         )}
