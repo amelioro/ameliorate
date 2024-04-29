@@ -1,8 +1,16 @@
+# added to the rule below so that the root docs redirect doesn't infinitely redirect, see https://answers.netlify.com/t/err-too-many-redirects-after-upgrading-to-nextjs-v5-runtime-from-v4/117358
+[[redirects]]
+  from = "/docs"
+  to = "https://ameliorate-docs.netlify.app/docs"
+  status = 200
+  force = true
+
 # thanks https://answers.netlify.com/t/support-guide-can-i-deploy-multiple-repositories-in-a-single-site/179
 [[redirects]]
   from = "/docs/*"
   to = "https://ameliorate-docs.netlify.app/docs/:splat"
   status = 200
+  force = true
 
 [build]
   # Build app only if there are changes outside the docs-site directory.
