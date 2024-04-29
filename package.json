@@ -84,6 +84,7 @@
     "@commitlint/cli": "17.6.6",
     "@commitlint/config-conventional": "17.6.6",
     "@emotion/babel-plugin": "11.10.5",
+    "@netlify/plugin-nextjs": "5.1.2",
     "@sindresorhus/slugify": "2.2.1",
     "@storybook/addon-actions": "7.0.0-alpha.47",
     "@storybook/addon-essentials": "7.0.0-alpha.47",
