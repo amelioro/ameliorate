@@ -270,8 +270,8 @@ export const isEdgeAShortcut = (edge: Edge, topicGraph: Graph) => {
 
     if (!edgeCouldBeAShortcut) return false;
 
-    const childrenOfParent = children(edgeParent, topicGraph);
-    const parentsOfChild = parents(edgeChild, topicGraph);
+    const childrenOfParent = children(edgeParent.id, topicGraph);
+    const parentsOfChild = parents(edgeChild.id, topicGraph);
 
     const detourNodeAsChild = childrenOfParent.find(
       (child) => child.type === shortcutRelation.detourNodeType

@@ -25,9 +25,8 @@ export const useNodeChildren = (nodeId: string | undefined) => {
     if (!nodeId) return [];
 
     try {
-      const node = findNode(nodeId, state.nodes);
       const topicGraph = { nodes: state.nodes, edges: state.edges };
-      return children(node, topicGraph);
+      return children(nodeId, topicGraph);
     } catch {
       return [];
     }
@@ -37,9 +36,8 @@ export const useNodeChildren = (nodeId: string | undefined) => {
 export const useNodeParents = (nodeId: string) => {
   return useTopicStore((state) => {
     try {
-      const node = findNode(nodeId, state.nodes);
       const topicGraph = { nodes: state.nodes, edges: state.edges };
-      return parents(node, topicGraph);
+      return parents(nodeId, topicGraph);
     } catch {
       return [];
     }
@@ -57,7 +55,7 @@ export const useCriterionSolutionEdges = (problemNodeId: string | undefined) => 
       }
 
       const topicGraph = { nodes: state.nodes, edges: state.edges };
-      const nodeChildren = children(problemNode, topicGraph);
+      const nodeChildren = children(problemNode.id, topicGraph);
       const criteria = nodeChildren.filter((node) => node.type === "criterion");
       const criteriaIds = criteria.map((node) => node.id);
       const solutions = nodeChildren.filter((node) => node.type === "solution");
@@ -75,9 +73,8 @@ export const useCriterionSolutionEdges = (problemNodeId: string | undefined) => 
 export const useNeighbors = (nodeId: string, direction: RelationDirection) => {
   return useTopicStore((state) => {
     try {
-      const node = findNode(nodeId, state.nodes);
       const topicGraph = { nodes: state.nodes, edges: state.edges };
-      return direction === "parent" ? parents(node, topicGraph) : children(node, topicGraph);
+      return direction === "parent" ? parents(nodeId, topicGraph) : children(nodeId, topicGraph);
     } catch {
       return [];
     }
@@ -87,9 +84,8 @@ export const useNeighbors = (nodeId: string, direction: RelationDirection) => {
 export const useIsNeighborSelected = (nodeId: string) => {
   const neighborNodes = useTopicStore((state) => {
     try {
-      const node = findNode(nodeId, state.nodes);
       const topicGraph = { nodes: state.nodes, edges: state.edges };
-      return neighbors(node, topicGraph);
+      return neighbors(nodeId, topicGraph);
     } catch {
       return [];
     }
@@ -101,8 +97,7 @@ export const useIsNeighborSelected = (nodeId: string) => {
 export const useIsEdgeSelected = (nodeId: string) => {
   const neighborEdges = useTopicStore((state) => {
     try {
-      const node = findNode(nodeId, state.nodes);
-      return edges(node, state.edges);
+      return edges(nodeId, state.edges);
     } catch {
       return [];
     }

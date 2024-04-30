@@ -40,12 +40,12 @@ export const useScoringUsernames = () => {
 export const useSolutionTotal = (solution: Node, problem: Node) => {
   const criteriaSolutionEdges = useTopicStore((state) => {
     const topicGraph = { nodes: state.nodes, edges: state.edges };
-    const criteriaForProblem = children(problem, topicGraph).filter(
+    const criteriaForProblem = children(problem.id, topicGraph).filter(
       (node) => node.type === "criterion"
     );
     const criteriaSolutionEdges = compact(
       criteriaForProblem.map((criterion) =>
-        edges(criterion, state.edges).find((edge) => edge.target === solution.id)
+        edges(criterion.id, state.edges).find((edge) => edge.target === solution.id)
       )
     );
 

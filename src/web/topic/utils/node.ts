@@ -117,8 +117,8 @@ export const nodeDecorations: Record<FlowNodeType, NodeDecoration> = {
 };
 
 // TODO: memoize? this could traverse a lot of nodes & edges, seems not performant
-export const parents = (node: Node, topicGraph: Graph) => {
-  const parentEdges = topicGraph.edges.filter((edge) => edge.target === node.id);
+export const parents = (nodeId: string, topicGraph: Graph) => {
+  const parentEdges = topicGraph.edges.filter((edge) => edge.target === nodeId);
 
   return parentEdges.map((edge) => {
     const node = topicGraph.nodes.find((node) => edge.source === node.id);
@@ -128,8 +128,8 @@ export const parents = (node: Node, topicGraph: Graph) => {
   });
 };
 
-export const children = (node: Node, topicGraph: Graph) => {
-  const childEdges = topicGraph.edges.filter((edge) => edge.source === node.id);
+export const children = (nodeId: string, topicGraph: Graph) => {
+  const childEdges = topicGraph.edges.filter((edge) => edge.source === nodeId);
   return childEdges.map((edge) => {
     const node = topicGraph.nodes.find((node) => edge.target === node.id);
     if (!node) throw errorWithData(`node ${edge.target} not found`, topicGraph);
@@ -138,14 +138,14 @@ export const children = (node: Node, topicGraph: Graph) => {
   });
 };
 
-export const neighbors = (node: Node, topicGraph: Graph) => {
-  return [...parents(node, topicGraph), ...children(node, topicGraph)];
+export const neighbors = (nodeId: string, topicGraph: Graph) => {
+  return [...parents(nodeId, topicGraph), ...children(nodeId, topicGraph)];
 };
 
 export const components = (node: Node, topicGraph: Graph) => {
-  return parents(node, topicGraph).filter((parent) => componentTypes.includes(parent.type));
+  return parents(node.id, topicGraph).filter((parent) => componentTypes.includes(parent.type));
 };
 
-export const edges = (node: Node, edges: Edge[]) => {
-  return edges.filter((edge) => edge.source === node.id || edge.target === node.id);
+export const edges = (nodeId: string, edges: Edge[]) => {
+  return edges.filter((edge) => edge.source === nodeId || edge.target === nodeId);
 };

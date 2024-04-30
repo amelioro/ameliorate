@@ -1,6 +1,6 @@
 import { createDraft, finishDraft } from "immer";
 
-import { RelationDirection, findNode } from "../utils/graph";
+import { RelationDirection } from "../utils/graph";
 import { FlowNodeType, children, parents } from "../utils/node";
 import { useTopicStore } from "./store";
 
@@ -15,10 +15,8 @@ export const toggleShowNeighbors = (
 
   const topicGraph = { nodes: state.nodes, edges: state.edges };
 
-  const node = findNode(nodeId, topicGraph.nodes);
-
   const neighborsInDirection =
-    direction === "parent" ? parents(node, topicGraph) : children(node, topicGraph);
+    direction === "parent" ? parents(nodeId, topicGraph) : children(nodeId, topicGraph);
 
   const neighborsToToggle = neighborsInDirection.filter(
     (neighbor) => neighbor.type === neighborType
