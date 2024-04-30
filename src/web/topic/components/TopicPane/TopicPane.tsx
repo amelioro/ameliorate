@@ -1,38 +1,13 @@
 import { AutoStories, ChevronLeft, KeyboardArrowDown } from "@mui/icons-material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Tab } from "@mui/material";
-import { create } from "zustand";
 
 import { useSelectedGraphPart } from "../../../view/navigateStore";
 import { GraphPartDetails } from "./GraphPartDetails";
 import { TopicDetails } from "./TopicDetails";
 import { PositionedDiv, StyledDrawer, TogglePaneButton } from "./TopicPane.styles";
 import { TopicViews } from "./TopicViews";
-
-interface PaneStoreState {
-  isTopicPaneOpen: boolean;
-  selectedTab: "Details" | "Views";
-}
-
-const initialState: PaneStoreState = {
-  isTopicPaneOpen: true,
-  selectedTab: "Details",
-};
-
-const usePaneStore = create<PaneStoreState>()(() => initialState);
-
-const setIsTopicPaneOpen = (isTopicPaneOpen: boolean) => {
-  usePaneStore.setState({ isTopicPaneOpen });
-};
-
-const setSelectedTab = (selectedTab: "Details" | "Views") => {
-  usePaneStore.setState({ selectedTab });
-};
-
-export const viewDetails = () => {
-  setIsTopicPaneOpen(true);
-  setSelectedTab("Details");
-};
+import { setIsTopicPaneOpen, setSelectedTab, usePaneStore } from "./paneStore";
 
 interface Props {
   isLandscape: boolean;

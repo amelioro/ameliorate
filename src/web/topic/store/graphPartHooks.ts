@@ -2,8 +2,9 @@ import { shallow } from "zustand/shallow";
 
 import { RelationName, justificationRelationNames } from "../../../common/edge";
 import { NodeType, justificationNodeTypes, researchNodeTypes } from "../../../common/node";
+import { deepCompare } from "../../common/store/utils";
 import { isClaimEdge } from "../utils/claim";
-import { Node, findGraphPart } from "../utils/graph";
+import { Node } from "../utils/graph";
 import { TopicStoreState, useTopicStore } from "./store";
 
 export const useRootClaim = (graphPartId: string) => {
@@ -29,8 +30,8 @@ export const useExplicitClaimCount = (graphPartId: string) => {
 
 export const useTopLevelClaims = (graphPartId: string) => {
   return useTopicStore((state) => {
-    const graphPart = findGraphPart(graphPartId, state.nodes, state.edges);
-    if (isClaimEdge(graphPart)) return { supports: [], critiques: [] };
+    const graphPart = [...state.nodes, ...state.edges].find((part) => part.id === graphPartId);
+    if (!graphPart || isClaimEdge(graphPart)) return { supports: [], critiques: [] };
 
     // TODO: cleanup when root claims are removed
     const nodeToCheckForClaims = justificationNodeTypes.includes(graphPart.type as NodeType)
@@ -56,7 +57,7 @@ export const useTopLevelClaims = (graphPartId: string) => {
       .filter((node): node is Node => !!node);
 
     return { supports, critiques };
-  });
+  }, deepCompare);
 };
 
 export const useNonTopLevelClaimCount = (graphPartId: string) => {
@@ -91,7 +92,7 @@ export const useResearchNodes = (graphPartId: string) => {
       facts: researchNodes.filter((node) => node.type === "fact"),
       sources: researchNodes.filter((node) => node.type === "source"),
     };
-  });
+  }, deepCompare);
 };
 
 export const useGraphPart = (graphPartId: string | null) => {

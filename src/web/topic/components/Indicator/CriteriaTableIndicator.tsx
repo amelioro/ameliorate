@@ -1,23 +1,30 @@
 import { TableChart, TableChartOutlined } from "@mui/icons-material";
-import { useCallback } from "react";
+import { memo, useCallback } from "react";
 
 import { viewCriteriaTable } from "../../../view/navigateStore";
-import { useNodeChildren } from "../../store/nodeHooks";
-import { ProblemNode } from "../../utils/graph";
+import { useNode, useNodeChildren } from "../../store/nodeHooks";
+import { Node, ProblemNode } from "../../utils/graph";
 import { Indicator } from "../Indicator/Indicator";
 
+const isProblem = (node: Node): node is ProblemNode => node.type === "problem";
+
 interface Props {
-  node: ProblemNode;
+  nodeId: string;
 }
 
-export const CriteriaTableIndicator = ({ node }: Props) => {
-  const nodeChildren = useNodeChildren(node.id);
+const CriteriaTableIndicatorBase = ({ nodeId }: Props) => {
+  const node = useNode(nodeId);
+  const nodeChildren = useNodeChildren(nodeId);
+
+  const onClick = useCallback(() => viewCriteriaTable(nodeId), [nodeId]);
+
+  if (!node || !isProblem(node)) return <></>;
 
   const hasCriteria = nodeChildren.some((child) => child.type === "criterion");
 
   const Icon = hasCriteria ? TableChart : TableChartOutlined;
 
-  const onClick = useCallback(() => viewCriteriaTable(node.id), [node.id]);
-
   return <Indicator Icon={Icon} title={"View criteria table"} onClick={onClick} />;
 };
+
+export const CriteriaTableIndicator = memo(CriteriaTableIndicatorBase);

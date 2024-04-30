@@ -8,13 +8,16 @@ import { usePerspectives } from "../../view/perspectiveStore";
 import { Node, Score } from "../utils/graph";
 import { children, edges } from "../utils/node";
 import { getNumericScore } from "../utils/score";
-import { getDisplayScores } from "./scoreGetters";
+import { getDisplayScoresByGraphPartId } from "./scoreGetters";
 import { useTopicStore } from "./store";
 
 export const useDisplayScores = (graphPartIds: string[]): Record<string, Score> => {
   const perspectives = usePerspectives();
 
-  return useTopicStore((state) => getDisplayScores(graphPartIds, perspectives, state.userScores));
+  return useTopicStore(
+    (state) => getDisplayScoresByGraphPartId(graphPartIds, perspectives, state.userScores),
+    shallow
+  );
 };
 
 export const useUserScores = (graphPartId: string, perspectives: string[]) => {

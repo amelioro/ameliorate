@@ -19,7 +19,7 @@ import {
 } from "../utils/graph";
 import { apiSyncer } from "./apiSyncerMiddleware";
 import { migrate } from "./migrate";
-import { getDisplayScores } from "./scoreGetters";
+import { getDisplayScoresByGraphPartId } from "./scoreGetters";
 
 export interface PlaygroundTopic {
   id: undefined; // so we can check this to see if the store topic is a playground topic
@@ -103,7 +103,7 @@ export const useDiagram = (): Diagram => {
 
     // don't filter edges because hard to prevent awkwardness when edge doesn't pass filter and suddenly nodes are scattered
     const partIdsForScores = state.nodes.map((part) => part.id);
-    const scores = getDisplayScores(partIdsForScores, perspectives, state.userScores);
+    const scores = getDisplayScoresByGraphPartId(partIdsForScores, perspectives, state.userScores);
     const nodesAfterScoreFilter = applyScoreFilter(nodesAfterTypeFilter, generalFilter, scores);
 
     const secondaryNeighbors = getSecondaryNeighbors(

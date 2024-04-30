@@ -4,7 +4,7 @@ import { Score } from "../utils/graph";
 import { getAverageScore } from "../utils/score";
 import { UserScores } from "./store";
 
-export const getDisplayScores = (
+export const getDisplayScoresByGraphPartId = (
   graphPartIds: string[],
   perspectives: string[],
   userScores: UserScores
