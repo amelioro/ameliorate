@@ -1,4 +1,4 @@
-import { type SxProps, useTheme } from "@mui/material";
+import { type ButtonProps, type SxProps, useTheme } from "@mui/material";
 import { useEffect, useRef } from "react";
 
 import { useSessionUser } from "../../../common/hooks";
@@ -9,14 +9,16 @@ import { finishAddingNode, setCustomNodeType, setNodeLabel } from "../../store/a
 import { useUserCanEditTopicData } from "../../store/userHooks";
 import { Node } from "../../utils/graph";
 import { nodeDecorations } from "../../utils/node";
-import { NodeIndicatorGroup } from "../Indicator/NodeIndicatorGroup";
+import { CommonIndicators } from "../Indicator/CommonIndicators";
 import {
+  LeftCornerStatisticIndicators,
   MiddleDiv,
   NodeBox,
   NodeTypeBox,
   NodeTypeSpan,
+  RightCornerContentIndicators,
   StyledTextareaAutosize,
-  YEdgeDiv,
+  YEdgeBox,
 } from "./EditableNode.styles";
 
 interface Props {
@@ -76,6 +78,9 @@ export const EditableNode = ({ node, supplemental = false, className = "" }: Pro
 
   const customizable = userCanEditTopicData && (unrestrictedEditing || node.type === "custom");
 
+  const backgroundColorType: ButtonProps["color"] =
+    fillNodesWithColor || node.type === "custom" ? node.type : "paper";
+
   // TODO: use `fill-node`/`no-fill-node` class, and extract these to styles file; not sure how to use type-specific colors without js though? maybe css vars for type-specific colors, and a var for the node type that's scoped to the current node?
   const nodeStyles: SxProps =
     fillNodesWithColor || node.type === "custom" // since custom is white, it can't be used as the border color because it doesn't contrast against the white background; so just treat custom as if it's filled with color
@@ -109,7 +114,7 @@ export const EditableNode = ({ node, supplemental = false, className = "" }: Pro
       onContextMenu={(event) => openContextMenu(event, { node })}
       sx={nodeStyles}
     >
-      <YEdgeDiv>
+      <YEdgeBox height="24px">
         <NodeTypeBox sx={{ borderTopLeftRadius: "4px", borderBottomRightRadius: "4px" }}>
           <NodeIcon sx={{ width: "0.875rem", height: "0.875rem", marginX: "4px" }} />
           <NodeTypeSpan
@@ -125,8 +130,8 @@ export const EditableNode = ({ node, supplemental = false, className = "" }: Pro
             {typeText}
           </NodeTypeSpan>
         </NodeTypeBox>
-        <NodeIndicatorGroup node={node} />
-      </YEdgeDiv>
+        <CommonIndicators graphPartId={node.id} notes={node.data.notes} />
+      </YEdgeBox>
       <MiddleDiv>
         <StyledTextareaAutosize
           ref={textAreaRef}
@@ -140,6 +145,15 @@ export const EditableNode = ({ node, supplemental = false, className = "" }: Pro
           readOnly={!editable}
         />
       </MiddleDiv>
+      <YEdgeBox position="relative">
+        {node.type !== "rootClaim" && ( // root claim indicators don't seem very helpful
+          <>
+            {/* TODO?: how to make corner indicators not look bad in the table? they're cut off */}
+            <LeftCornerStatisticIndicators />
+            <RightCornerContentIndicators graphPartId={node.id} color={backgroundColorType} />
+          </>
+        )}
+      </YEdgeBox>
     </NodeBox>
   );
 };

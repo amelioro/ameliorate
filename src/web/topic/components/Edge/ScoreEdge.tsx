@@ -14,8 +14,12 @@ import { useUserCanEditTopicData } from "../../store/userHooks";
 import { Edge } from "../../utils/graph";
 import { EdgeProps } from "../Diagram/Diagram";
 import { Spotlight } from "../Diagram/Diagram.styles";
-import { EdgeIndicatorGroup } from "../Indicator/EdgeIndicatorGroup";
-import { nodeWidthPx } from "../Node/EditableNode.styles";
+import { CommonIndicators } from "../Indicator/CommonIndicators";
+import {
+  LeftCornerStatisticIndicators,
+  RightCornerContentIndicators,
+  nodeWidthPx,
+} from "../Node/EditableNode.styles";
 import { StyledDiv, StyledPath, edgeColor, highlightedEdgeColor } from "./ScoreEdge.styles";
 
 const flowMarkerId = "flowMarker";
@@ -128,6 +132,7 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
       onContextMenu={(event) => openContextMenu(event, { edge })}
       spotlight={spotlight}
     >
+      <CommonIndicators graphPartId={edge.id} notes={edge.data.notes} />
       <Typography
         variant="body1"
         margin="0"
@@ -142,7 +147,8 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
       >
         {labelText}
       </Typography>
-      <EdgeIndicatorGroup edge={edge} />
+      <LeftCornerStatisticIndicators />
+      <RightCornerContentIndicators graphPartId={edge.id} color="paper" />
     </StyledDiv>
   );
 

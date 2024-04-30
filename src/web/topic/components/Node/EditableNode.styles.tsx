@@ -2,17 +2,18 @@ import styled from "@emotion/styled";
 import { Box, TextareaAutosize } from "@mui/material";
 
 import { htmlDefaultFontSize } from "../../../../pages/_document.page";
+import { ContentIndicators } from "../Indicator/ContentIndicators";
+import { StatisticIndicators } from "../Indicator/StatisticIndicators";
 
 export const nodeWidthRem = 11;
 
 export const nodeWidthPx = nodeWidthRem * htmlDefaultFontSize;
 export const nodeHeightPx = 66;
 
-export const YEdgeDiv = styled.div`
+export const YEdgeBox = styled(Box)`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  min-height: 24px;
 `;
 
 export const NodeTypeBox = styled(Box)`
@@ -92,4 +93,20 @@ export const NodeBox = styled(Box)`
     border-color: black;
     box-shadow: 0 0 0 1px black;
   }
+`;
+
+export const RightCornerContentIndicators = styled(ContentIndicators)`
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  // amount that looks decent hanging over the edge of node
+  transform: translate(10px, 65%);
+`;
+
+export const LeftCornerStatisticIndicators = styled(StatisticIndicators)`
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  // amount that looks decent hanging over the edge of node
+  transform: translate(-10px, 65%);
 `;

@@ -5,30 +5,31 @@ import { useCallback } from "react";
 import { setSelected } from "../../../view/navigateStore";
 import { useResearchNodes } from "../../store/graphPartHooks";
 import { useDisplayScores } from "../../store/scoreHooks";
-import { GraphPart, Score } from "../../utils/graph";
+import { Score } from "../../utils/graph";
 import { getNumericScore, scoreColors } from "../../utils/score";
-import { viewDetails } from "../TopicPane/TopicPane";
+import { viewDetails } from "../TopicPane/paneStore";
 import { Indicator } from "./Indicator";
 
 interface Props {
-  graphPart: GraphPart;
+  graphPartId: string;
+  partColor: ButtonProps["color"];
 }
 
-export const QuestionIndicator = ({ graphPart }: Props) => {
-  const { questions } = useResearchNodes(graphPart.id);
+export const QuestionIndicator = ({ graphPartId, partColor }: Props) => {
+  const { questions } = useResearchNodes(graphPartId);
   const scoresByGraphPart = useDisplayScores(questions.map((question) => question.id));
 
   const onClick = useCallback(() => {
-    setSelected(graphPart.id);
+    setSelected(graphPartId);
     viewDetails();
-  }, [graphPart.id]);
+  }, [graphPartId]);
 
   if (questions.length === 0) return <></>;
 
   const questionScores = Object.values(scoresByGraphPart).map((score) => getNumericScore(score));
   const highestScore = Math.max(...questionScores);
 
-  const color =
+  const scoreColor =
     highestScore > 5
       ? (scoreColors[highestScore.toString() as Score] as ButtonProps["color"])
       : undefined;
@@ -41,7 +42,7 @@ export const QuestionIndicator = ({ graphPart }: Props) => {
       title={`Has ${questions.length} questions`}
       onClick={onClick}
       iconHasBackground={false}
-      color={color}
+      color={scoreColor ?? partColor}
     />
   );
 };
