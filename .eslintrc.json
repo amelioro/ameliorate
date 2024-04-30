@@ -5,6 +5,7 @@
     "eslint:recommended",
     "plugin:import/recommended",
     "plugin:storybook/recommended",
+    "plugin:tailwindcss/recommended",
     "prettier"
   ],
   "plugins": ["functional", "import"],
@@ -93,6 +94,7 @@
         "ignoreDeclarationSort": true, // don"t want to sort import lines, use eslint-plugin-import instead
         "allowSeparatedGroups": true // separating imports by group seems more readable
       }
-    ]
+    ],
+    "tailwindcss/no-custom-classname": "off"
   }
 }
