@@ -4,16 +4,15 @@ import pluralize from "pluralize";
 import { Position } from "reactflow";
 
 import { useNeighbors } from "../../store/nodeHooks";
-import { toggleShowNeighbors } from "../../store/viewActions";
 import { Node, RelationDirection } from "../../utils/graph";
 import { Orientation } from "../../utils/layout";
 import { hideableNodeTypes, nodeDecorations } from "../../utils/node";
 import { StyledHandle } from "./NodeHandle.styles";
 
 const tooltipItems = (
-  parentNodeId: string,
+  _parentNodeId: string,
   neighbors: Node[],
-  direction: RelationDirection,
+  _direction: RelationDirection,
   shown: boolean
 ) => {
   return hideableNodeTypes
@@ -34,11 +33,8 @@ const tooltipItems = (
             sx={!shown ? { backgroundColor: "rgb(90, 90, 90)" } : {}}
             key={`${typeLabel}-${shownLabel}`}
           >
-            <IconButton
-              onClick={() => toggleShowNeighbors(parentNodeId, nodeType, direction, !shown)}
-            >
-              {shown ? <Visibility /> : <VisibilityOff />}
-            </IconButton>
+            {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
+            <IconButton onClick={() => {}}>{shown ? <Visibility /> : <VisibilityOff />}</IconButton>
             <Typography variant="body1" display="flex" alignItems="center">
               {nodes.length} <Icon color={nodeType} sx={{ marginX: "2px" }} /> {typeLabel}{" "}
               {shownLabel}
