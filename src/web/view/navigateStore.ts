@@ -140,6 +140,10 @@ export const useGeneralFilter = () => {
   return useNavigateStore((state) => state.generalFilter);
 };
 
+export const useIsNodeForcedToShow = (nodeId: string) => {
+  return useNavigateStore((state) => state.generalFilter.nodesToShow.includes(nodeId));
+};
+
 export const usePrimaryNodeTypes = () => {
   return useNavigateStore((state) => {
     return state.categoriesToShow.flatMap((category) => infoNodeTypes[category]);
@@ -255,6 +259,17 @@ export const showNodeAndNeighbors = (nodeId: string, addNodes: boolean) => {
   });
 
   emitter.emit("changedDiagramFilter");
+};
+
+export const stopForcingNodeToShow = (nodeId: string) => {
+  const generalFilter = useNavigateStore.getState().generalFilter;
+
+  useNavigateStore.setState({
+    generalFilter: {
+      ...generalFilter,
+      nodesToShow: without(generalFilter.nodesToShow, nodeId),
+    },
+  });
 };
 
 export const hideNode = (nodeId: string) => {

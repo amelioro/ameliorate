@@ -11,7 +11,7 @@ import { Node } from "../../utils/graph";
 import { nodeDecorations } from "../../utils/node";
 import { CommonIndicators } from "../Indicator/CommonIndicators";
 import {
-  LeftCornerStatisticIndicators,
+  LeftCornerStatusIndicators,
   MiddleDiv,
   NodeBox,
   NodeTypeBox,
@@ -149,7 +149,7 @@ const EditableNodeBase = ({ node, supplemental = false, className = "" }: Props)
         {node.type !== "rootClaim" && ( // root claim indicators don't seem very helpful
           <>
             {/* TODO?: how to make corner indicators not look bad in the table? they're cut off */}
-            <LeftCornerStatisticIndicators />
+            <LeftCornerStatusIndicators graphPartId={node.id} color={backgroundColorType} />
             <RightCornerContentIndicators graphPartId={node.id} color={backgroundColorType} />
           </>
         )}

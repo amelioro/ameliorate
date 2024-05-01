@@ -16,7 +16,7 @@ import { EdgeProps } from "../Diagram/Diagram";
 import { Spotlight } from "../Diagram/Diagram.styles";
 import { CommonIndicators } from "../Indicator/CommonIndicators";
 import {
-  LeftCornerStatisticIndicators,
+  LeftCornerStatusIndicators,
   RightCornerContentIndicators,
   nodeWidthPx,
 } from "../Node/EditableNode.styles";
@@ -147,7 +147,7 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
       >
         {labelText}
       </Typography>
-      <LeftCornerStatisticIndicators />
+      <LeftCornerStatusIndicators graphPartId={edge.id} color="paper" />
       <RightCornerContentIndicators graphPartId={edge.id} color="paper" />
     </StyledDiv>
   );
