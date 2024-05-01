@@ -20,6 +20,12 @@ export const useNode = (nodeId: string | null) => {
   });
 };
 
+export const useAllNodes = (nodeIds: string[]) => {
+  return useTopicStore((state) => {
+    return state.nodes.filter((node) => nodeIds.includes(node.id));
+  }, shallow);
+};
+
 export const useNodeChildren = (nodeId: string | undefined) => {
   return useTopicStore((state) => {
     if (!nodeId) return [];

@@ -95,3 +95,7 @@ export const getSiblingNodeTypes = (nodeType: NodeType): NodeType[] => {
   else if (justificationNodeTypes.includes(nodeType)) return justificationNodeTypes;
   else return [];
 };
+
+export const areSiblingNodes = (node1Type: NodeType, node2Type: NodeType): boolean => {
+  return getSiblingNodeTypes(node1Type).includes(node2Type);
+};

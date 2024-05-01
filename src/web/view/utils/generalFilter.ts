@@ -13,6 +13,8 @@ export const generalFilterSchema = z.object({
   showOnlyScored: z.boolean(),
   scoredComparer: zScoredComparers,
   scoreToCompare: z.enum(possibleScores),
+  nodesToShow: z.string().uuid().array(),
+  nodesToHide: z.string().uuid().array(),
   showSecondaryResearch: z.boolean(),
   showSecondaryStructure: z.boolean(),
 });

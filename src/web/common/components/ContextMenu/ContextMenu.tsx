@@ -3,11 +3,14 @@ import { Menu as MuiMenu } from "@mui/material";
 import { closeContextMenu } from "../../store/contextMenuActions";
 import { useAnchorPosition, useContextMenuContext } from "../../store/contextMenuStore";
 import { AddNodeMenuItem } from "./AddNodeMenuItem";
+import { AlsoShowNodeAndNeighborsMenuItem } from "./AlsoShowNodeAndNeighborsMenuItem";
 import { ChangeEdgeTypeMenuItem } from "./ChangeEdgeTypeMenuItem";
 import { ChangeNodeTypeMenuItem } from "./ChangeNodeTypeMenuItem";
 import { CloseOnClickMenuItem } from "./CloseOnClickMenuItem";
 import { DeleteEdgeMenuItem } from "./DeleteEdgeMenuItem";
 import { DeleteNodeMenuItem } from "./DeleteNodeMenuItem";
+import { HideMenuItem } from "./HideMenuItem";
+import { OnlyShowNodeAndNeighborsMenuItem } from "./OnlyShowNodeAndNeighborsMenuItem";
 import { ShowComponentsMenuItem } from "./ShowComponentsMenuItem";
 import { ShowCriteriaMenuItem } from "./ShowCriteriaMenuItem";
 import { ShowEffectsMenuItem } from "./ShowEffectsMenuItem";
@@ -31,9 +34,16 @@ export const ContextMenu = () => {
     contextMenuContext.edge && (
       <ChangeEdgeTypeMenuItem edge={contextMenuContext.edge} parentMenuOpen={isOpen} key={8} />
     ),
+    contextMenuContext.node && (
+      <AlsoShowNodeAndNeighborsMenuItem node={contextMenuContext.node} key={11} />
+    ),
+    contextMenuContext.node && (
+      <OnlyShowNodeAndNeighborsMenuItem node={contextMenuContext.node} key={12} />
+    ),
     contextMenuContext.node && <ShowComponentsMenuItem node={contextMenuContext.node} key={1} />,
     contextMenuContext.node && <ShowCriteriaMenuItem node={contextMenuContext.node} key={2} />,
     contextMenuContext.node && <ShowEffectsMenuItem node={contextMenuContext.node} key={3} />,
+    contextMenuContext.node && <HideMenuItem node={contextMenuContext.node} key={13} />,
     contextMenuContext.node && <DeleteNodeMenuItem node={contextMenuContext.node} key={5} />,
     contextMenuContext.edge && <DeleteEdgeMenuItem edge={contextMenuContext.edge} key={6} />,
 
