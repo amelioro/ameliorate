@@ -279,9 +279,11 @@ export const goForward = () => {
   useNavigateStore.temporal.getState().redo();
 };
 
-export const resetNavigation = () => {
+export const resetNavigation = (keepHistory = false) => {
   useNavigateStore.setState(initialState, true, "resetNavigation");
-  useNavigateStore.temporal.getState().clear();
+  if (!keepHistory) useNavigateStore.temporal.getState().clear();
+
+  emitter.emit("changedDiagramFilter");
 };
 
 const withDefaults = <T>(value: Partial<T>, defaultValue: T): T => {
