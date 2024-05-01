@@ -36,6 +36,8 @@ const createNode = (
   newNode.data.newlyAdded = true;
   /* eslint-enable functional/immutable-data */
 
+  // TODO?: add node to nodesToShow if we're adding from the diagram so that we never awkwardly add a node and can't see it.
+
   if (selectNewNode) setSelected(newNode.id);
 
   return newNode;

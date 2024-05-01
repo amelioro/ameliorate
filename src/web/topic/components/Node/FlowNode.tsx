@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 
 import { useSessionUser } from "../../../common/hooks";
+import { getFlashlightMode } from "../../../view/actionConfigStore";
+import { showNodeAndNeighbors } from "../../../view/navigateStore";
 import { useIsEdgeSelected, useIsNeighborSelected } from "../../store/nodeHooks";
 import { useUserCanEditTopicData } from "../../store/userHooks";
 import { Node } from "../../utils/graph";
@@ -72,6 +74,9 @@ export const FlowNode = (flowNode: NodeProps) => {
         key={node.id.concat(animated.toString())}
         layout={animated}
         style={{ pointerEvents: "none" }}
+        onClick={() => {
+          if (getFlashlightMode()) showNodeAndNeighbors(node.id, true);
+        }}
       >
         <NodeHandle node={node} direction="parent" orientation={orientation} />
         <StyledEditableNode node={node} className={`spotlight-${spotlight}`} />

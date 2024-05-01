@@ -5,6 +5,7 @@ import {
   Delete,
   Error,
   Group,
+  Highlight,
   Redo,
   Undo,
 } from "@mui/icons-material";
@@ -13,6 +14,7 @@ import { useEffect, useState } from "react";
 
 import { emitter } from "../../../common/event";
 import { useSessionUser } from "../../../common/hooks";
+import { toggleFlashlightMode, useFlashlightMode } from "../../../view/actionConfigStore";
 import {
   goBack,
   goForward,
@@ -38,6 +40,7 @@ export const TopicToolbar = () => {
   const [canUndo, canRedo] = useTemporalHooks();
   const [canGoBack, canGoForward] = useCanGoBackForward();
   const isComparingPerspectives = useIsComparingPerspectives();
+  const flashlightMode = useFlashlightMode();
   const [hasErrored, setHasErrored] = useState(false);
 
   const selectedGraphPart = useSelectedGraphPart();
@@ -140,6 +143,23 @@ export const TopicToolbar = () => {
         )}
 
         <Divider orientation="vertical" />
+
+        {/* TODO?: seems a bit awkward to only show when flashlight mode is on, but it's more awkward */}
+        {/* if we have no way of telling that it's on when we're clicking around the diagram */}
+        {flashlightMode && (
+          <ToggleButton
+            value={flashlightMode}
+            title="Flashlight mode"
+            aria-label="Flashlight mode"
+            color="secondary"
+            size="small"
+            selected={flashlightMode}
+            onClick={() => toggleFlashlightMode(!flashlightMode)}
+            sx={{ borderRadius: "50%", border: "0" }}
+          >
+            <Highlight />
+          </ToggleButton>
+        )}
 
         <IconButton
           color="inherit"

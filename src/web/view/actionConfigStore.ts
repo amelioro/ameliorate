@@ -5,6 +5,7 @@ interface ActionConfigStoreState {
   showImpliedEdges: boolean;
   unrestrictedEditing: boolean;
   forceNodesIntoLayers: boolean;
+  flashlightMode: boolean;
   fillNodesWithColor: boolean;
   layoutThoroughness: number;
 }
@@ -13,6 +14,7 @@ const initialState: ActionConfigStoreState = {
   showImpliedEdges: false,
   unrestrictedEditing: false,
   forceNodesIntoLayers: true,
+  flashlightMode: false,
   fillNodesWithColor: true,
   layoutThoroughness: 1,
 };
@@ -36,6 +38,10 @@ export const useForceNodesIntoLayers = () => {
   return useActionConfigStore((state) => state.forceNodesIntoLayers);
 };
 
+export const useFlashlightMode = () => {
+  return useActionConfigStore((state) => state.flashlightMode);
+};
+
 export const useFillNodesWithColor = () => {
   return useActionConfigStore((state) => state.fillNodesWithColor);
 };
@@ -57,6 +63,10 @@ export const toggleForceNodesIntoLayers = (force: boolean) => {
   useActionConfigStore.setState({ forceNodesIntoLayers: force });
 };
 
+export const toggleFlashlightMode = (flashlight: boolean) => {
+  useActionConfigStore.setState({ flashlightMode: flashlight });
+};
+
 export const toggleFillNodesWithColor = (fill: boolean) => {
   useActionConfigStore.setState({ fillNodesWithColor: fill });
 };
@@ -68,4 +78,8 @@ export const setLayoutThoroughness = (thoroughness: number) => {
 // utils
 export const getUnrestrictedEditing = () => {
   return useActionConfigStore.getState().unrestrictedEditing;
+};
+
+export const getFlashlightMode = () => {
+  return useActionConfigStore.getState().flashlightMode;
 };
