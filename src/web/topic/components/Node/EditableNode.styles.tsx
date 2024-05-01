@@ -3,7 +3,7 @@ import { Box, TextareaAutosize } from "@mui/material";
 
 import { htmlDefaultFontSize } from "../../../../pages/_document.page";
 import { ContentIndicators } from "../Indicator/ContentIndicators";
-import { StatisticIndicators } from "../Indicator/StatisticIndicators";
+import { StatusIndicators } from "../Indicator/StatusIndicators";
 
 export const nodeWidthRem = 11;
 
@@ -103,7 +103,7 @@ export const RightCornerContentIndicators = styled(ContentIndicators)`
   transform: translate(10px, 65%);
 `;
 
-export const LeftCornerStatisticIndicators = styled(StatisticIndicators)`
+export const LeftCornerStatusIndicators = styled(StatusIndicators)`
   position: absolute;
   left: 0;
   bottom: 0;

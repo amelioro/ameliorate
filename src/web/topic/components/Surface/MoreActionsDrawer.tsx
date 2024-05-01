@@ -6,6 +6,7 @@ import {
   Engineering,
   FilterAltOutlined,
   FormatColorFill,
+  Highlight,
   Image as ImageIcon,
   Info,
   Layers,
@@ -34,10 +35,12 @@ import { NumberInput } from "../../../common/components/NumberInput/NumberInput"
 import {
   setLayoutThoroughness,
   toggleFillNodesWithColor,
+  toggleFlashlightMode,
   toggleForceNodesIntoLayers,
   toggleShowImpliedEdges,
   toggleUnrestrictedEditing,
   useFillNodesWithColor,
+  useFlashlightMode,
   useForceNodesIntoLayers,
   useLayoutThoroughness,
   useShowImpliedEdges,
@@ -142,6 +145,7 @@ export const MoreActionsDrawer = ({
   const showImpliedEdges = useShowImpliedEdges();
   const unrestrictedEditing = useUnrestrictedEditing();
   const forceNodesIntoLayers = useForceNodesIntoLayers();
+  const flashlightMode = useFlashlightMode();
   const fillNodesWithColor = useFillNodesWithColor();
   const layoutThoroughness = useLayoutThoroughness();
 
@@ -202,16 +206,17 @@ export const MoreActionsDrawer = ({
               >
                 <AutoStoriesOutlined />
               </IconButton>
-              <IconButton
-                color="inherit"
-                title="Reset Filters"
-                aria-label="Reset Filters"
-                onClick={() => resetNavigation(true)}
-              >
-                <FilterAltOutlined />
-              </IconButton>
             </>
           )}
+
+          <IconButton
+            color="inherit"
+            title="Reset Filters"
+            aria-label="Reset Filters"
+            onClick={() => resetNavigation(true)}
+          >
+            <FilterAltOutlined />
+          </IconButton>
 
           {!isTableActive && (
             <IconButton
@@ -271,6 +276,18 @@ export const MoreActionsDrawer = ({
                 sx={{ borderRadius: "50%", border: "0" }}
               >
                 <Layers />
+              </ToggleButton>
+              <ToggleButton
+                value={flashlightMode}
+                title="Flashlight mode"
+                aria-label="Flashlight mode"
+                color="secondary"
+                size="small"
+                selected={flashlightMode}
+                onClick={() => toggleFlashlightMode(!flashlightMode)}
+                sx={{ borderRadius: "50%", border: "0" }}
+              >
+                <Highlight />
               </ToggleButton>
             </>
           )}

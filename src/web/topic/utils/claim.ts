@@ -2,7 +2,7 @@ import lowerCase from "lodash/lowerCase";
 
 import { justificationRelationNames } from "../../../common/edge";
 import { errorWithData } from "../../../common/errorHandling";
-import { Edge, Graph, GraphPart, findGraphPart, isNode } from "./graph";
+import { Edge, Graph, GraphPart, findGraphPartOrThrow, isNode } from "./graph";
 
 // Using claimEdges instead of claimNodes because eventually we'll probably replace Root Claim nodes
 // with direct edges from a claim to diagram part.
@@ -11,7 +11,11 @@ export const hasClaims = (edge: Edge, claimEdges: Edge[]) => {
 };
 
 export const getImplicitLabel = (arguedDiagramPartId: string, topicGraph: Graph): string => {
-  const arguedDiagramPart = findGraphPart(arguedDiagramPartId, topicGraph.nodes, topicGraph.edges);
+  const arguedDiagramPart = findGraphPartOrThrow(
+    arguedDiagramPartId,
+    topicGraph.nodes,
+    topicGraph.edges
+  );
   if (isNode(arguedDiagramPart)) {
     return `"${arguedDiagramPart.data.label}" is important`;
   } else {

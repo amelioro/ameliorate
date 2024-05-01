@@ -9,9 +9,9 @@ import {
   GraphPart,
   type Node,
   Score,
-  findEdge,
-  findGraphPart,
-  findNode,
+  findEdgeOrThrow,
+  findGraphPartOrThrow,
+  findNodeOrThrow,
 } from "../utils/graph";
 import { useTopicStore } from "./store";
 
@@ -29,7 +29,7 @@ export const setScore = (username: string, graphPartId: string, score: Score) =>
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   // update parent graphPart's score if this is a RootClaim
-  const graphPart = findGraphPart(graphPartId, state.nodes, state.edges);
+  const graphPart = findGraphPartOrThrow(graphPartId, state.nodes, state.edges);
   if (graphPart.type === "rootClaim") {
     if (graphPart.data.arguedDiagramPartId === undefined)
       throw errorWithData("no arguedDiagramPartId on root claim", graphPart);
@@ -55,7 +55,7 @@ export const setScore = (username: string, graphPartId: string, score: Score) =>
 export const setNodeLabel = (node: Node, value: string) => {
   const state = createDraft(useTopicStore.getState());
 
-  const foundNode = findNode(node.id, state.nodes);
+  const foundNode = findNodeOrThrow(node.id, state.nodes);
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   foundNode.data.label = value;
@@ -70,7 +70,7 @@ export const setCustomNodeType = (node: Node, value: string) => {
   if (!nodeSchema.shape.customType.parse(value))
     throw errorWithData("label should only contain alphaspace", value);
 
-  const foundNode = findNode(node.id, state.nodes);
+  const foundNode = findNodeOrThrow(node.id, state.nodes);
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   foundNode.data.customType = value;
@@ -85,7 +85,7 @@ export const setCustomEdgeLabel = (edge: Edge, value: string) => {
   if (!edgeSchema.shape.customLabel.parse(value))
     throw errorWithData("label should only contain alphaspace", value);
 
-  const foundEdge = findEdge(edge.id, state.edges);
+  const foundEdge = findEdgeOrThrow(edge.id, state.edges);
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   foundEdge.data.customLabel = value;
@@ -97,7 +97,7 @@ export const setCustomEdgeLabel = (edge: Edge, value: string) => {
 export const changeNodeType = (node: Node, newType: NodeType) => {
   const state = createDraft(useTopicStore.getState());
 
-  const foundNode = findNode(node.id, state.nodes);
+  const foundNode = findNodeOrThrow(node.id, state.nodes);
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   foundNode.type = newType;
@@ -110,7 +110,7 @@ export const changeNodeType = (node: Node, newType: NodeType) => {
 export const changeEdgeType = (edge: Edge, newType: RelationName) => {
   const state = createDraft(useTopicStore.getState());
 
-  const foundEdge = findEdge(edge.id, state.edges);
+  const foundEdge = findEdgeOrThrow(edge.id, state.edges);
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   foundEdge.label = newType;
@@ -123,7 +123,7 @@ export const changeEdgeType = (edge: Edge, newType: RelationName) => {
 export const setGraphPartNotes = (graphPart: GraphPart, value: string) => {
   const state = createDraft(useTopicStore.getState());
 
-  const foundGraphPart = findGraphPart(graphPart.id, state.nodes, state.edges);
+  const foundGraphPart = findGraphPartOrThrow(graphPart.id, state.nodes, state.edges);
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   foundGraphPart.data.notes = value;
@@ -135,7 +135,7 @@ export const setGraphPartNotes = (graphPart: GraphPart, value: string) => {
 export const finishAddingNode = (nodeId: string) => {
   const state = createDraft(useTopicStore.getState());
 
-  const node = findNode(nodeId, state.nodes);
+  const node = findNodeOrThrow(nodeId, state.nodes);
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   node.data.newlyAdded = false;

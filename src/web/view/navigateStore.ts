@@ -13,7 +13,7 @@ import { emitter } from "../common/event";
 import { useGraphPart } from "../topic/store/graphPartHooks";
 import { getDefaultNode } from "../topic/store/nodeGetters";
 import { useTopicStore } from "../topic/store/store";
-import { findNode } from "../topic/utils/graph";
+import { findNodeOrThrow } from "../topic/utils/graph";
 import { neighbors } from "../topic/utils/node";
 import { DiagramFilter, StandardFilter, StandardFilterWithFallbacks } from "./utils/diagramFilter";
 import { GeneralFilter } from "./utils/generalFilter";
@@ -140,6 +140,10 @@ export const useGeneralFilter = () => {
   return useNavigateStore((state) => state.generalFilter);
 };
 
+export const useIsNodeForcedToShow = (nodeId: string) => {
+  return useNavigateStore((state) => state.generalFilter.nodesToShow.includes(nodeId));
+};
+
 export const usePrimaryNodeTypes = () => {
   return useNavigateStore((state) => {
     return state.categoriesToShow.flatMap((category) => infoNodeTypes[category]);
@@ -235,7 +239,7 @@ export const viewJustification = (arguedDiagramPartId: string) => {
 export const showNodeAndNeighbors = (nodeId: string, addNodes: boolean) => {
   const generalFilter = useNavigateStore.getState().generalFilter;
   const graph = useTopicStore.getState();
-  const node = findNode(nodeId, graph.nodes);
+  const node = findNodeOrThrow(nodeId, graph.nodes);
 
   // assume we only care about neighbors of the same category
   const nodeNeighborsSharingCategory = neighbors(nodeId, graph).filter((neighbor) =>
@@ -255,6 +259,17 @@ export const showNodeAndNeighbors = (nodeId: string, addNodes: boolean) => {
   });
 
   emitter.emit("changedDiagramFilter");
+};
+
+export const stopForcingNodeToShow = (nodeId: string) => {
+  const generalFilter = useNavigateStore.getState().generalFilter;
+
+  useNavigateStore.setState({
+    generalFilter: {
+      ...generalFilter,
+      nodesToShow: without(generalFilter.nodesToShow, nodeId),
+    },
+  });
 };
 
 export const hideNode = (nodeId: string) => {

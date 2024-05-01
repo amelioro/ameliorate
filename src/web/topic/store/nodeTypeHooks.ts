@@ -1,4 +1,4 @@
-import { findGraphPart, findNode } from "../utils/graph";
+import { findGraphPartOrThrow, findNodeOrThrow } from "../utils/graph";
 import { useTopicStore } from "./store";
 
 export const useQuestionDetails = (questionNodeId: string) => {
@@ -8,7 +8,7 @@ export const useQuestionDetails = (questionNodeId: string) => {
         (edge) => edge.target === questionNodeId && edge.label === "asksAbout"
       );
       const partAskingAbout = asksAboutEdge
-        ? findGraphPart(asksAboutEdge.source, state.nodes, state.edges)
+        ? findGraphPartOrThrow(asksAboutEdge.source, state.nodes, state.edges)
         : null;
 
       const answerEdges = state.edges.filter(
@@ -31,7 +31,7 @@ export const useAnswerDetails = (answerNodeId: string) => {
       const answerToEdge = state.edges.find(
         (edge) => edge.target === answerNodeId && edge.label === "potentialAnswerTo"
       );
-      const question = answerToEdge ? findNode(answerToEdge.source, state.nodes) : null;
+      const question = answerToEdge ? findNodeOrThrow(answerToEdge.source, state.nodes) : null;
       return { question };
     } catch {
       return { question: null };

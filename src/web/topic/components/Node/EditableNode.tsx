@@ -1,5 +1,5 @@
 import { type ButtonProps, type SxProps, useTheme } from "@mui/material";
-import { useEffect, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 
 import { useSessionUser } from "../../../common/hooks";
 import { openContextMenu } from "../../../common/store/contextMenuActions";
@@ -11,7 +11,7 @@ import { Node } from "../../utils/graph";
 import { nodeDecorations } from "../../utils/node";
 import { CommonIndicators } from "../Indicator/CommonIndicators";
 import {
-  LeftCornerStatisticIndicators,
+  LeftCornerStatusIndicators,
   MiddleDiv,
   NodeBox,
   NodeTypeBox,
@@ -35,7 +35,7 @@ interface Props {
   className?: string;
 }
 
-export const EditableNode = ({ node, supplemental = false, className = "" }: Props) => {
+const EditableNodeBase = ({ node, supplemental = false, className = "" }: Props) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const unrestrictedEditing = useUnrestrictedEditing();
@@ -149,7 +149,7 @@ export const EditableNode = ({ node, supplemental = false, className = "" }: Pro
         {node.type !== "rootClaim" && ( // root claim indicators don't seem very helpful
           <>
             {/* TODO?: how to make corner indicators not look bad in the table? they're cut off */}
-            <LeftCornerStatisticIndicators />
+            <LeftCornerStatusIndicators graphPartId={node.id} color={backgroundColorType} />
             <RightCornerContentIndicators graphPartId={node.id} color={backgroundColorType} />
           </>
         )}
@@ -157,3 +157,5 @@ export const EditableNode = ({ node, supplemental = false, className = "" }: Pro
     </NodeBox>
   );
 };
+
+export const EditableNode = memo(EditableNodeBase);

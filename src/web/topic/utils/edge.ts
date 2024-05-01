@@ -6,7 +6,7 @@ import {
   researchNodeTypes,
 } from "../../../common/node";
 import { hasClaims } from "./claim";
-import { Edge, Graph, Node, RelationDirection, findNode } from "./graph";
+import { Edge, Graph, Node, RelationDirection, findNodeOrThrow } from "./graph";
 import { children, components, parents } from "./node";
 
 const questionRelations: AddableRelation[] = nodeTypes.map((nodeType) => ({
@@ -237,11 +237,11 @@ export const canCreateEdge = (topicGraph: Graph, parent: Node, child: Node) => {
 };
 
 export const parentNode = (edge: Edge, nodes: Node[]) => {
-  return findNode(edge.source, nodes);
+  return findNodeOrThrow(edge.source, nodes);
 };
 
 export const childNode = (edge: Edge, nodes: Node[]) => {
-  return findNode(edge.target, nodes);
+  return findNodeOrThrow(edge.target, nodes);
 };
 
 export const nodes = (edge: Edge, nodes: Node[]) => {

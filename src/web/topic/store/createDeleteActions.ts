@@ -14,8 +14,8 @@ import {
   RelationDirection,
   buildEdge,
   buildNode,
-  findGraphPart,
-  findNode,
+  findGraphPartOrThrow,
+  findNodeOrThrow,
   getNodesComposedBy,
   isNode,
 } from "../utils/graph";
@@ -36,6 +36,8 @@ const createNode = (
   newNode.data.newlyAdded = true;
   /* eslint-enable functional/immutable-data */
 
+  // TODO?: add node to nodesToShow if we're adding from the diagram so that we never awkwardly add a node and can't see it.
+
   if (selectNewNode) setSelected(newNode.id);
 
   return newNode;
@@ -54,7 +56,7 @@ const connectCriteriaToSolutions = (state: TopicStoreState, newNode: Node, probl
       (edge) =>
         edge.source === problemNode.id &&
         edge.label === targetRelation.name &&
-        findNode(edge.target, state.nodes).type === targetRelation.child
+        findNodeOrThrow(edge.target, state.nodes).type === targetRelation.child
     )
     .map((edge) => {
       const sourceId = newNode.type === "criterion" ? newNode.id : edge.target;
@@ -114,7 +116,8 @@ export const addNode = ({ fromPartId, as, toNodeType, relation, selectNewNode }:
             (node.data.arguedDiagramPartId === fromPartId || node.id === fromPartId)
         )
       : undefined;
-  const fromPart = rootClaim ?? findGraphPart(fromPartId, topicGraph.nodes, topicGraph.edges);
+  const fromPart =
+    rootClaim ?? findGraphPartOrThrow(fromPartId, topicGraph.nodes, topicGraph.edges);
 
   // create and connect node
   const newNode = createNode(state, toNodeType, fromPart.data.arguedDiagramPartId, selectNewNode);
@@ -266,7 +269,7 @@ export const reconnectEdge = (
 export const deleteNode = (nodeId: string) => {
   const state = createDraft(useTopicStore.getState());
 
-  const deletedNode = findNode(nodeId, state.nodes);
+  const deletedNode = findNodeOrThrow(nodeId, state.nodes);
 
   const arguedDiagramPartId = deletedNode.data.arguedDiagramPartId;
   if (arguedDiagramPartId) {
