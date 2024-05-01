@@ -202,16 +202,17 @@ export const MoreActionsDrawer = ({
               >
                 <AutoStoriesOutlined />
               </IconButton>
-              <IconButton
-                color="inherit"
-                title="Reset Filters"
-                aria-label="Reset Filters"
-                onClick={() => resetNavigation(true)}
-              >
-                <FilterAltOutlined />
-              </IconButton>
             </>
           )}
+
+          <IconButton
+            color="inherit"
+            title="Reset Filters"
+            aria-label="Reset Filters"
+            onClick={() => resetNavigation(true)}
+          >
+            <FilterAltOutlined />
+          </IconButton>
 
           {!isTableActive && (
             <IconButton
