@@ -4,6 +4,7 @@ import {
   Close,
   Download,
   Engineering,
+  FilterAltOutlined,
   FormatColorFill,
   Image as ImageIcon,
   Info,
@@ -43,7 +44,7 @@ import {
   useUnrestrictedEditing,
 } from "../../../view/actionConfigStore";
 import { Perspectives } from "../../../view/components/Perspectives/Perspectives";
-import { useFormat } from "../../../view/navigateStore";
+import { resetNavigation, useFormat } from "../../../view/navigateStore";
 import { migrate } from "../../store/migrate";
 import { TopicStoreState } from "../../store/store";
 import { useOnPlayground } from "../../store/topicHooks";
@@ -193,8 +194,21 @@ export const MoreActionsDrawer = ({
                   onChange={(event) => uploadTopic(event, sessionUser?.username)}
                 />
               </IconButton>
-              <IconButton color="inherit" title="Reset" aria-label="Reset" onClick={resetTopicData}>
+              <IconButton
+                color="inherit"
+                title="Reset Topic"
+                aria-label="Reset Topic"
+                onClick={resetTopicData}
+              >
                 <AutoStoriesOutlined />
+              </IconButton>
+              <IconButton
+                color="inherit"
+                title="Reset Filters"
+                aria-label="Reset Filters"
+                onClick={() => resetNavigation(true)}
+              >
+                <FilterAltOutlined />
               </IconButton>
             </>
           )}

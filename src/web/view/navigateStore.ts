@@ -1,3 +1,6 @@
+import mergeWith from "lodash/mergeWith";
+import union from "lodash/union";
+import without from "lodash/without";
 import { temporal } from "zundo";
 import { useStore } from "zustand";
 import { devtools, persist } from "zustand/middleware";
@@ -5,10 +8,13 @@ import { shallow } from "zustand/shallow";
 import { createWithEqualityFn } from "zustand/traditional";
 
 import { Format, InfoCategory } from "../../common/infoCategory";
-import { infoNodeTypes, nodeTypes } from "../../common/node";
+import { areSiblingNodes, infoNodeTypes, nodeTypes } from "../../common/node";
 import { emitter } from "../common/event";
 import { useGraphPart } from "../topic/store/graphPartHooks";
 import { getDefaultNode } from "../topic/store/nodeGetters";
+import { useTopicStore } from "../topic/store/store";
+import { findNode } from "../topic/utils/graph";
+import { neighbors } from "../topic/utils/node";
 import { DiagramFilter, StandardFilter, StandardFilterWithFallbacks } from "./utils/diagramFilter";
 import { GeneralFilter } from "./utils/generalFilter";
 import { TableFilter } from "./utils/tableFilter";
@@ -47,6 +53,8 @@ const initialState: NavigateStoreState = {
     showOnlyScored: false,
     scoredComparer: "≥",
     scoreToCompare: "5",
+    nodesToShow: [],
+    nodesToHide: [],
     showSecondaryResearch: false,
     showSecondaryStructure: true,
   },
@@ -224,6 +232,45 @@ export const viewJustification = (arguedDiagramPartId: string) => {
   );
 };
 
+export const showNodeAndNeighbors = (nodeId: string, addNodes: boolean) => {
+  const generalFilter = useNavigateStore.getState().generalFilter;
+  const graph = useTopicStore.getState();
+  const node = findNode(nodeId, graph.nodes);
+
+  // assume we only care about neighbors of the same category
+  const nodeNeighborsSharingCategory = neighbors(nodeId, graph).filter((neighbor) =>
+    areSiblingNodes(node.type, neighbor.type)
+  );
+
+  const nodeAndNeighbors = [nodeId, ...nodeNeighborsSharingCategory.map((neighbor) => neighbor.id)];
+
+  useNavigateStore.setState({
+    format: "diagram",
+    categoriesToShow: [],
+    generalFilter: {
+      ...generalFilter,
+      nodesToShow: addNodes ? union(generalFilter.nodesToShow, nodeAndNeighbors) : nodeAndNeighbors,
+      nodesToHide: without(generalFilter.nodesToHide, ...nodeAndNeighbors),
+    },
+  });
+
+  emitter.emit("changedDiagramFilter");
+};
+
+export const hideNode = (nodeId: string) => {
+  const generalFilter = useNavigateStore.getState().generalFilter;
+
+  useNavigateStore.setState({
+    generalFilter: {
+      ...generalFilter,
+      nodesToShow: without(generalFilter.nodesToShow, nodeId),
+      nodesToHide: union(generalFilter.nodesToHide, [nodeId]),
+    },
+  });
+
+  emitter.emit("changedDiagramFilter");
+};
+
 export const goBack = () => {
   useNavigateStore.temporal.getState().undo();
 };
@@ -232,9 +279,17 @@ export const goForward = () => {
   useNavigateStore.temporal.getState().redo();
 };
 
-export const resetNavigation = () => {
+export const resetNavigation = (keepHistory = false) => {
   useNavigateStore.setState(initialState, true, "resetNavigation");
-  useNavigateStore.temporal.getState().clear();
+  if (!keepHistory) useNavigateStore.temporal.getState().clear();
+
+  emitter.emit("changedDiagramFilter");
+};
+
+const withDefaults = <T>(value: Partial<T>, defaultValue: T): T => {
+  // thanks https://stackoverflow.com/a/66247134/8409296
+  // empty object to avoid mutation
+  return mergeWith({}, defaultValue, value, (_a, b) => (Array.isArray(b) ? b : undefined));
 };
 
 export const loadNavigateStore = async (persistId: string) => {
@@ -245,6 +300,14 @@ export const loadNavigateStore = async (persistId: string) => {
   if (useNavigateStore.persist.getOptions().storage?.getItem(builtPersistedName)) {
     // TODO(bug): for some reason, this results in an empty undo action _after_ clear() is run - despite awaiting this promise
     await useNavigateStore.persist.rehydrate();
+
+    // use initial state to fill missing values in the persisted state
+    // e.g. so that a new non-null value in initialState is non-null in the persisted state,
+    // removing the need to write a migration for every new field
+    const persistedState = useNavigateStore.getState();
+    const persistedWithDefaults = withDefaults(persistedState, initialState);
+
+    useNavigateStore.setState(persistedWithDefaults, true, "loadNavigateStore");
   } else {
     useNavigateStore.setState(initialState, true, "loadNavigateStore");
   }

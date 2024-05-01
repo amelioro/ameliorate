@@ -1,3 +1,4 @@
+import uniqBy from "lodash/uniqBy";
 import { temporal } from "zundo";
 import { devtools, persist } from "zustand/middleware";
 import { createWithEqualityFn } from "zustand/traditional";
@@ -106,13 +107,17 @@ export const useDiagram = (): Diagram => {
     const scores = getDisplayScoresByGraphPartId(partIdsForScores, perspectives, state.userScores);
     const nodesAfterScoreFilter = applyScoreFilter(nodesAfterTypeFilter, generalFilter, scores);
 
-    const secondaryNeighbors = getSecondaryNeighbors(
-      nodesAfterScoreFilter,
-      topicGraph,
-      generalFilter
+    const nodesToShow = state.nodes.filter((node) => generalFilter.nodesToShow.includes(node.id));
+    const nodesAfterToShow = uniqBy(nodesAfterScoreFilter.concat(nodesToShow), "id");
+
+    const secondaryNeighbors = getSecondaryNeighbors(nodesAfterToShow, topicGraph, generalFilter);
+
+    const nodesBeforeHide = nodesAfterToShow.concat(secondaryNeighbors);
+    const nodesAfterHide = nodesBeforeHide.filter(
+      (node) => !generalFilter.nodesToHide.includes(node.id)
     );
 
-    const nodes = nodesAfterScoreFilter.concat(secondaryNeighbors);
+    const nodes = uniqBy(nodesAfterHide, "id");
 
     const relevantEdges = getRelevantEdges(nodes, topicGraph);
     const edges = showImpliedEdges
