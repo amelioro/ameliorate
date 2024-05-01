@@ -3,7 +3,7 @@ import { shallow } from "zustand/shallow";
 import { errorWithData } from "../../../common/errorHandling";
 import { NodeType } from "../../../common/node";
 import { useIsAnyGraphPartSelected } from "../../view/navigateStore";
-import { RelationDirection, findNode } from "../utils/graph";
+import { RelationDirection, findNodeOrThrow } from "../utils/graph";
 import { children, edges, neighbors, parents } from "../utils/node";
 import { getDefaultNode } from "./nodeGetters";
 import { useTopicStore } from "./store";
@@ -13,7 +13,7 @@ export const useNode = (nodeId: string | null) => {
     if (!nodeId) return null;
 
     try {
-      return findNode(nodeId, state.nodes);
+      return findNodeOrThrow(nodeId, state.nodes);
     } catch {
       return null;
     }
@@ -55,7 +55,7 @@ export const useCriterionSolutionEdges = (problemNodeId: string | undefined) => 
     if (!problemNodeId) return [];
 
     try {
-      const problemNode = findNode(problemNodeId, state.nodes);
+      const problemNode = findNodeOrThrow(problemNodeId, state.nodes);
       if (problemNode.type !== "problem") {
         throw errorWithData("node is not a problem node", problemNode);
       }

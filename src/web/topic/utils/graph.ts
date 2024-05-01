@@ -137,21 +137,21 @@ export type GraphPartType = "node" | "edge";
 export const possibleScores = ["-", "1", "2", "3", "4", "5", "6", "7", "8", "9"] as const;
 export type Score = typeof possibleScores[number];
 
-export const findNode = (nodeId: string, nodes: Node[]) => {
+export const findNodeOrThrow = (nodeId: string, nodes: Node[]) => {
   const node = nodes.find((node) => node.id === nodeId);
   if (!node) throw errorWithData("node not found", nodeId, nodes);
 
   return node;
 };
 
-export const findEdge = (edgeId: string, edges: Edge[]) => {
+export const findEdgeOrThrow = (edgeId: string, edges: Edge[]) => {
   const edge = edges.find((edge) => edge.id === edgeId);
   if (!edge) throw errorWithData("edge not found", edgeId, edges);
 
   return edge;
 };
 
-export const findGraphPart = (graphPartId: string, nodes: Node[], edges: Edge[]) => {
+export const findGraphPartOrThrow = (graphPartId: string, nodes: Node[], edges: Edge[]) => {
   const graphPart = [...nodes, ...edges].find((graphPart) => graphPart.id === graphPartId);
   if (!graphPart) throw errorWithData("graph part not found", graphPartId, nodes, edges);
 
@@ -177,7 +177,7 @@ export const getNodesComposedBy = (node: Node, topicGraph: Graph) => {
     });
 
     const potentialComposedNodes = composingEdges.map((edge) =>
-      findNode(edge.target, topicGraph.nodes)
+      findNodeOrThrow(edge.target, topicGraph.nodes)
     );
 
     return potentialComposedNodes
@@ -198,7 +198,7 @@ const findNodesRecursivelyFrom = (
   const foundEdges = graph.edges.filter(
     (edge) => edge[from] === fromNodeId && (!labels || labels.includes(edge.label))
   );
-  const foundNodes = foundEdges.map((edge) => findNode(edge[to], graph.nodes));
+  const foundNodes = foundEdges.map((edge) => findNodeOrThrow(edge[to], graph.nodes));
 
   if (foundNodes.length === 0) return [];
 

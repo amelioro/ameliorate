@@ -2,13 +2,13 @@ import { shallow } from "zustand/shallow";
 
 import { useIsAnyGraphPartSelected } from "../../view/navigateStore";
 import { nodes } from "../utils/edge";
-import { findEdge } from "../utils/graph";
+import { findEdgeOrThrow } from "../utils/graph";
 import { useTopicStore } from "./store";
 
 export const useIsNodeSelected = (edgeId: string) => {
   const neighborNodes = useTopicStore((state) => {
     try {
-      const edge = findEdge(edgeId, state.edges);
+      const edge = findEdgeOrThrow(edgeId, state.edges);
       return nodes(edge, state.nodes);
     } catch {
       return [];
