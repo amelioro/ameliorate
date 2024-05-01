@@ -1,5 +1,5 @@
 import { type ButtonProps, type SxProps, useTheme } from "@mui/material";
-import { useEffect, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 
 import { useSessionUser } from "../../../common/hooks";
 import { openContextMenu } from "../../../common/store/contextMenuActions";
@@ -35,7 +35,7 @@ interface Props {
   className?: string;
 }
 
-export const EditableNode = ({ node, supplemental = false, className = "" }: Props) => {
+const EditableNodeBase = ({ node, supplemental = false, className = "" }: Props) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const unrestrictedEditing = useUnrestrictedEditing();
@@ -157,3 +157,5 @@ export const EditableNode = ({ node, supplemental = false, className = "" }: Pro
     </NodeBox>
   );
 };
+
+export const EditableNode = memo(EditableNodeBase);

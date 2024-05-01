@@ -1,6 +1,6 @@
 import { Global } from "@emotion/react";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { useSessionUser } from "../../../common/hooks";
 import { useIsEdgeSelected, useIsNeighborSelected } from "../../store/nodeHooks";
@@ -35,7 +35,9 @@ export const FlowNode = (flowNode: NodeProps) => {
   const isNeighborSelected = useIsNeighborSelected(flowNode.id);
   const isEdgeSelected = useIsEdgeSelected(flowNode.id);
 
-  const node = convertToNode(flowNode);
+  const node = useMemo(() => {
+    return convertToNode(flowNode);
+  }, [flowNode]);
 
   const spotlight: Spotlight = flowNode.selected
     ? "primary"
