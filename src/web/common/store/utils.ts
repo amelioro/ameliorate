@@ -1,5 +1,5 @@
 import isEqual from "lodash/isEqual";
 
-export const deepCompare = (a: unknown, b: unknown) => {
+export const deepIsEqual = (a: unknown, b: unknown) => {
   return isEqual(a, b);
 };
