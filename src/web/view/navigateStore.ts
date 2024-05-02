@@ -236,8 +236,11 @@ export const viewJustification = (arguedDiagramPartId: string) => {
   );
 };
 
-export const showNodeAndNeighbors = (nodeId: string, addNodes: boolean) => {
-  const generalFilter = useNavigateStore.getState().generalFilter;
+/**
+ * @param also true if these nodes should be added to the current filter, false if they should be the only nodes displayed
+ */
+export const showNodeAndNeighbors = (nodeId: string, also: boolean) => {
+  const { categoriesToShow, generalFilter } = useNavigateStore.getState();
   const graph = useTopicStore.getState();
   const node = findNodeOrThrow(nodeId, graph.nodes);
 
@@ -250,10 +253,10 @@ export const showNodeAndNeighbors = (nodeId: string, addNodes: boolean) => {
 
   useNavigateStore.setState({
     format: "diagram",
-    categoriesToShow: [],
+    categoriesToShow: also ? categoriesToShow : [],
     generalFilter: {
       ...generalFilter,
-      nodesToShow: addNodes ? union(generalFilter.nodesToShow, nodeAndNeighbors) : nodeAndNeighbors,
+      nodesToShow: also ? union(generalFilter.nodesToShow, nodeAndNeighbors) : nodeAndNeighbors,
       nodesToHide: without(generalFilter.nodesToHide, ...nodeAndNeighbors),
     },
   });
