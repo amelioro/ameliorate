@@ -56,8 +56,18 @@ export const GeneralFilters = () => {
             </Stack>
 
             {/* potentially could just use all nodes as options here, but that'd re-render pretty often, and would be a ton of nodes to choose from */}
-            <NodeSelect name="nodesToShow" useNodeOptions={useNodesToShow} multiple />
-            <NodeSelect name="nodesToHide" useNodeOptions={useNodesToHide} multiple />
+            <NodeSelect
+              name="nodesToShow"
+              useNodeOptions={useNodesToShow}
+              multiple
+              disableClearable={false}
+            />
+            <NodeSelect
+              name="nodesToHide"
+              useNodeOptions={useNodesToHide}
+              multiple
+              disableClearable={false}
+            />
 
             <Switch
               name="showSecondaryResearch"
