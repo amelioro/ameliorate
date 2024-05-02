@@ -1,11 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Stack } from "@mui/material";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 import { InfoCategory } from "../../../../common/infoCategory";
+import { FormContext } from "../../../common/components/Form/FormContext";
 import { NodeSelect } from "../../../common/components/Form/NodeSelect";
 import { Select } from "../../../common/components/Form/Select";
+import { deepIsEqual } from "../../../common/store/utils";
 import { useCriteria, useNodesOfType, useSolutions } from "../../../topic/store/nodeHooks";
 import { getStandardFilterWithFallbacks, setStandardFilter } from "../../navigateStore";
 import {
@@ -27,14 +29,14 @@ interface Props {
  * - Defaults field values based on nodes that exist in the diagram
  * - Shows field components and validates based on filter type
  */
-export const StandardFilter = ({ infoCategory }: Props) => {
-  const filter = getStandardFilterWithFallbacks(infoCategory);
+export const StandardFilter = ({ infoCategory, filter }: Props) => {
+  const filterWithFallbacks = getStandardFilterWithFallbacks(filter);
 
   const methods = useForm<StandardFilterData>({
     resolver: zodResolver(standardFilterSchema),
-    defaultValues: filter,
+    defaultValues: filterWithFallbacks,
   });
-  const { handleSubmit, watch } = methods;
+  const { getValues, handleSubmit, reset, watch } = methods;
 
   const filterTypes = infoStandardFilterTypes[infoCategory];
 
@@ -50,76 +52,80 @@ export const StandardFilter = ({ infoCategory }: Props) => {
   const useProblemSolutions = () => useSolutions(centralProblemId);
   const useProblemCriteria = () => useCriteria(centralProblemId);
 
-  useEffect(() => {
-    // trigger submit every time the form changes
-    const subscription = watch(
-      () =>
-        void handleSubmit((data) => {
-          setStandardFilter(infoCategory, data);
-        })()
-    );
+  const submit = useCallback(() => {
+    void handleSubmit((data) => setStandardFilter(infoCategory, data))();
+  }, [handleSubmit, infoCategory]);
 
-    return subscription.unsubscribe;
-  }, [handleSubmit, infoCategory, watch]);
+  // update form when filter changes externally e.g. via undo/redo
+  useEffect(() => {
+    if (deepIsEqual(filterWithFallbacks, getValues())) return;
+    reset(filterWithFallbacks);
+  }, [filterWithFallbacks, getValues, reset]);
 
   return (
     // FormProvider is used to enable useController in extracted form components without passing `control`
     <FormProvider {...methods}>
-      <form style={{ padding: "8px" }}>
-        <Stack spacing={1.5}>
-          <Select name="type" label="Standard Filter" options={filterTypes} />
+      <FormContext.Provider value={{ submit }}>
+        <form style={{ padding: "8px" }}>
+          <Stack spacing={1.5}>
+            <Select name="type" label="Standard Filter" options={filterTypes} />
 
-          {"centralProblemId" in typeSchemaShape && (
-            <NodeSelect
-              name="centralProblemId"
-              label="Central Problem"
-              useNodeOptions={useProblems}
-            />
-          )}
+            {"centralProblemId" in typeSchemaShape && (
+              <NodeSelect
+                name="centralProblemId"
+                label="Central Problem"
+                useNodeOptions={useProblems}
+              />
+            )}
 
-          {"problemDetails" in typeSchemaShape && (
-            <Select name="problemDetails" options={problemDetails} multiple />
-          )}
+            {"problemDetails" in typeSchemaShape && (
+              <Select name="problemDetails" options={problemDetails} multiple />
+            )}
 
-          {"centralSolutionId" in typeSchemaShape && (
-            <NodeSelect
-              name="centralSolutionId"
-              label="Central Solution"
-              useNodeOptions={useSolutions}
-            />
-          )}
-          {"solutionDetail" in typeSchemaShape && (
-            // TODO: build options with Pascal Case
-            <Select
-              name="solutionDetail"
-              options={typeSchemaShape.solutionDetail.options.map((option) => option)}
-            />
-          )}
-          {"solutions" in typeSchemaShape && (
-            <NodeSelect name="solutions" useNodeOptions={useProblemSolutions} multiple />
-          )}
-          {"criteria" in typeSchemaShape && (
-            <NodeSelect name="criteria" useNodeOptions={useProblemCriteria} multiple />
-          )}
-          {"centralQuestionId" in typeSchemaShape && (
-            <NodeSelect
-              name="centralQuestionId"
-              label="Central Question"
-              useNodeOptions={useQuestions}
-            />
-          )}
-          {"centralSourceId" in typeSchemaShape && (
-            <NodeSelect name="centralSourceId" label="Central Source" useNodeOptions={useSources} />
-          )}
-          {"centralRootClaimId" in typeSchemaShape && (
-            <NodeSelect
-              name="centralRootClaimId"
-              label="Central Root Claim"
-              useNodeOptions={useRootClaims}
-            />
-          )}
-        </Stack>
-      </form>
+            {"centralSolutionId" in typeSchemaShape && (
+              <NodeSelect
+                name="centralSolutionId"
+                label="Central Solution"
+                useNodeOptions={useSolutions}
+              />
+            )}
+            {"solutionDetail" in typeSchemaShape && (
+              // TODO: build options with Pascal Case
+              <Select
+                name="solutionDetail"
+                options={typeSchemaShape.solutionDetail.options.map((option) => option)}
+              />
+            )}
+            {"solutions" in typeSchemaShape && (
+              <NodeSelect name="solutions" useNodeOptions={useProblemSolutions} multiple />
+            )}
+            {"criteria" in typeSchemaShape && (
+              <NodeSelect name="criteria" useNodeOptions={useProblemCriteria} multiple />
+            )}
+            {"centralQuestionId" in typeSchemaShape && (
+              <NodeSelect
+                name="centralQuestionId"
+                label="Central Question"
+                useNodeOptions={useQuestions}
+              />
+            )}
+            {"centralSourceId" in typeSchemaShape && (
+              <NodeSelect
+                name="centralSourceId"
+                label="Central Source"
+                useNodeOptions={useSources}
+              />
+            )}
+            {"centralRootClaimId" in typeSchemaShape && (
+              <NodeSelect
+                name="centralRootClaimId"
+                label="Central Root Claim"
+                useNodeOptions={useRootClaims}
+              />
+            )}
+          </Stack>
+        </form>
+      </FormContext.Provider>
     </FormProvider>
   );
 };

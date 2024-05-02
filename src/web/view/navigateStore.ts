@@ -136,6 +136,20 @@ export const useTableFilter = (): TableFilter => {
   );
 };
 
+export const useTableFilterWithFallbacks = (): TableFilter => {
+  const tableFilter = useTableFilter();
+
+  const centralProblemId = getDefaultNode("problem")?.id;
+
+  const tableFilterDefaults = {
+    centralProblemId,
+    solutions: [],
+    criteria: [],
+  };
+
+  return { ...tableFilterDefaults, ...tableFilter };
+};
+
 export const useGeneralFilter = () => {
   return useNavigateStore((state) => state.generalFilter);
 };
@@ -335,16 +349,7 @@ export const loadNavigateStore = async (persistId: string) => {
 };
 
 // helpers
-export const getStandardFilterWithFallbacks = (
-  category: InfoCategory
-): StandardFilterWithFallbacks => {
-  const standardFilter =
-    category === "structure"
-      ? useNavigateStore.getState().structureFilter
-      : category === "research"
-      ? useNavigateStore.getState().researchFilter
-      : useNavigateStore.getState().justificationFilter;
-
+export const getStandardFilterWithFallbacks = (standardFilter: StandardFilter): StandardFilter => {
   const centralProblemId = getDefaultNode("problem")?.id;
   const centralSolutionId = getDefaultNode("solution")?.id;
   const centralQuestionId = getDefaultNode("question")?.id;
@@ -366,18 +371,4 @@ export const getStandardFilterWithFallbacks = (
 
   // override any defaults using the stored filter
   return { ...standardFilterDefaults, ...standardFilter };
-};
-
-export const getTableFilterWithFallbacks = (): TableFilter => {
-  const tableFilter = useNavigateStore.getState().tableFilter;
-
-  const centralProblemId = getDefaultNode("problem")?.id;
-
-  const tableFilterDefaults = {
-    centralProblemId,
-    solutions: [],
-    criteria: [],
-  };
-
-  return { ...tableFilterDefaults, ...tableFilter };
 };

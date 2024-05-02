@@ -1,12 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Stack } from "@mui/material";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 import { nodeTypes } from "../../../../common/node";
+import { FormContext } from "../../../common/components/Form/FormContext";
 import { NodeSelect } from "../../../common/components/Form/NodeSelect";
 import { Select } from "../../../common/components/Form/Select";
 import { Switch } from "../../../common/components/Form/Switch";
+import { deepIsEqual } from "../../../common/store/utils";
 import { useAllNodes } from "../../../topic/store/nodeHooks";
 import { possibleScores } from "../../../topic/utils/graph";
 import { setGeneralFilter, useFormat, useGeneralFilter } from "../../navigateStore";
@@ -21,70 +23,67 @@ export const GeneralFilters = () => {
     resolver: zodResolver(generalFilterSchema),
     defaultValues: generalFilter,
   });
-  const { handleSubmit, watch } = methods;
+  const { getValues, handleSubmit, reset } = methods;
 
-  // TODO(bug): filter components don't update if filter changes outside of this component (e.g. right-click hide this node)
-  // Can't just useEffect to reset form whenever generalFilter changes because that triggers this subscription, setting filter and infinite looping.
-  // It's probably worth triggering handleSubmit on each filter component change, then we can reset the form every time the filter changes without looping.
+  const submit = useCallback(() => {
+    void handleSubmit((data) => setGeneralFilter(data))();
+  }, [handleSubmit]);
+
+  // update form when filter changes externally e.g. via undo/redo
   useEffect(() => {
-    // trigger submit every time the form changes
-    const subscription = watch(
-      () =>
-        void handleSubmit((data) => {
-          setGeneralFilter(data);
-        })()
-    );
-
-    return subscription.unsubscribe;
-  }, [handleSubmit, watch]);
+    if (deepIsEqual(generalFilter, getValues())) return;
+    reset(generalFilter);
+  }, [generalFilter, getValues, reset]);
 
   return (
     // FormProvider is used to enable useController in extracted form components without passing `control`
     <FormProvider {...methods}>
-      <form style={{ padding: "8px" }}>
-        {format === "diagram" && (
-          <Stack spacing={1}>
-            <Select name="nodeTypes" options={nodeTypes} multiple />
+      <FormContext.Provider value={{ submit }}>
+        <form style={{ padding: "8px" }}>
+          {format === "diagram" && (
+            <Stack spacing={1}>
+              <Select name="nodeTypes" options={nodeTypes} multiple />
 
-            <Stack direction="row" spacing={1}>
-              <Switch name="showOnlyScored" label="Show only nodes scored" />
-              <Select name="scoredComparer" options={scoredComparers} label="" width="50px" />
-              <Select name="scoreToCompare" options={possibleScores} label="" width="50px" />
+              <Stack direction="row" spacing={1}>
+                <Switch name="showOnlyScored" label="Show only nodes scored" />
+                <Select name="scoredComparer" options={scoredComparers} label="" width="50px" />
+                <Select name="scoreToCompare" options={possibleScores} label="" width="50px" />
+              </Stack>
+
+              <NodeSelect
+                name="nodesToShow"
+                useNodeOptions={useAllNodes}
+                multiple
+                disableClearable={false}
+              />
+              <NodeSelect
+                name="nodesToHide"
+                useNodeOptions={useAllNodes}
+                multiple
+                disableClearable={false}
+              />
+
+              <Switch
+                name="showSecondaryResearch"
+                label={<ShowSecondaryNeighborsLabel secondaryInfoCategory="research" />}
+              />
+              <Switch
+                name="showSecondaryStructure"
+                label={<ShowSecondaryNeighborsLabel secondaryInfoCategory="structure" />}
+              />
             </Stack>
-
-            <NodeSelect
-              name="nodesToShow"
-              useNodeOptions={useAllNodes}
-              multiple
-              disableClearable={false}
-            />
-            <NodeSelect
-              name="nodesToHide"
-              useNodeOptions={useAllNodes}
-              multiple
-              disableClearable={false}
-            />
-
-            <Switch
-              name="showSecondaryResearch"
-              label={<ShowSecondaryNeighborsLabel secondaryInfoCategory="research" />}
-            />
-            <Switch
-              name="showSecondaryStructure"
-              label={<ShowSecondaryNeighborsLabel secondaryInfoCategory="structure" />}
-            />
-          </Stack>
-        )}
-        {format === "table" && (
-          <Stack spacing={1}>
-            <Stack direction="row" spacing={1}>
-              <Switch name="showOnlyScored" label="Show only nodes scored" />
-              <Select name="scoredComparer" options={scoredComparers} label="" width="50px" />
-              <Select name="scoreToCompare" options={possibleScores} label="" width="50px" />
+          )}
+          {format === "table" && (
+            <Stack spacing={1}>
+              <Stack direction="row" spacing={1}>
+                <Switch name="showOnlyScored" label="Show only nodes scored" />
+                <Select name="scoredComparer" options={scoredComparers} label="" width="50px" />
+                <Select name="scoreToCompare" options={possibleScores} label="" width="50px" />
+              </Stack>
             </Stack>
-          </Stack>
-        )}
-      </form>
+          )}
+        </form>
+      </FormContext.Provider>
     </FormProvider>
   );
 };
