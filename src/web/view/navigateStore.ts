@@ -259,7 +259,7 @@ export const showNodeAndNeighbors = (nodeId: string, also: boolean) => {
   const node = findNodeOrThrow(nodeId, graph.nodes);
 
   // assume we only care about neighbors of the same category
-  const nodeNeighborsSharingCategory = neighbors(nodeId, graph).filter((neighbor) =>
+  const nodeNeighborsSharingCategory = neighbors(node, graph).filter((neighbor) =>
     areSiblingNodes(node.type, neighbor.type)
   );
 

@@ -288,7 +288,7 @@ export const deleteNode = (nodeId: string) => {
     }
   }
 
-  const nodeEdges = edges(deletedNode.id, state.edges);
+  const nodeEdges = edges(deletedNode, state.edges);
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   // delete this node and edges connected to this node
