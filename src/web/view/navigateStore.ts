@@ -284,6 +284,20 @@ export const stopForcingNodeToShow = (nodeId: string) => {
   });
 };
 
+export const showNode = (nodeId: string) => {
+  const generalFilter = useNavigateStore.getState().generalFilter;
+
+  useNavigateStore.setState({
+    generalFilter: {
+      ...generalFilter,
+      nodesToShow: union(generalFilter.nodesToShow, [nodeId]),
+      nodesToHide: without(generalFilter.nodesToHide, nodeId),
+    },
+  });
+
+  emitter.emit("changedDiagramFilter");
+};
+
 export const hideNode = (nodeId: string) => {
   const generalFilter = useNavigateStore.getState().generalFilter;
 

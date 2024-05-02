@@ -79,7 +79,7 @@ export const useCriterionSolutionEdges = (problemNodeId: string | undefined) => 
   }, shallow);
 };
 
-export const useNeighbors = (nodeId: string, direction: RelationDirection) => {
+export const useNeighborsInDirection = (nodeId: string, direction: RelationDirection) => {
   return useTopicStore((state) => {
     try {
       const node = findNodeOrThrow(nodeId, state.nodes);

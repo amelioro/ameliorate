@@ -86,7 +86,7 @@ const uploadTopic = (event: React.ChangeEvent<HTMLInputElement>, sessionUsername
 
       setTopicData(migratedState, sessionUsername);
     })
-    .catch((error) => {
+    .catch((error: unknown) => {
       throw error;
     });
 };
@@ -120,7 +120,7 @@ const downloadScreenshot = () => {
       a.setAttribute("href", dataUrl);
       a.click();
     })
-    .catch((error) => {
+    .catch((error: unknown) => {
       throw error;
     });
 };

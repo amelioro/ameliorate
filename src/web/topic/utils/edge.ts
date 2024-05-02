@@ -193,7 +193,7 @@ export const addableRelationsFrom = (nodeType: NodeType, addingAs: RelationDirec
   );
 
   const formattedRelations = addableRelations.map((relation) => ({
-    toNodeType: relation[addingAs] as NodeType,
+    toNodeType: relation[addingAs],
     relation,
   }));
 

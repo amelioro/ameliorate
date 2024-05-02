@@ -6,9 +6,11 @@ import {
   useStore,
   useStoreApi,
 } from "reactflow";
+import { shallow } from "zustand/shallow";
 
 import { nodeHeightPx, nodeWidthPx } from "../components/Node/EditableNode.styles";
 import { PositionedNode } from "../utils/diagram";
+import { Node } from "../utils/graph";
 
 const getViewportToIncludeNode = (
   node: PositionedNode,
@@ -118,4 +120,14 @@ export const useFlowZoom = () => {
   } catch {
     return 1;
   }
+};
+
+/**
+ * Used to find nodes that are currently being hidden.
+ */
+export const useHiddenNodes = (nodes: Node[]) => {
+  return useStore((state) => {
+    const displayingNodes = Array.from(state.nodeInternals.values());
+    return nodes.filter((node) => !displayingNodes.some((displaying) => displaying.id === node.id));
+  }, shallow);
 };

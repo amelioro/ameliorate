@@ -85,7 +85,7 @@ const saveDiffs = (storeBefore: TopicStoreState, storeAfter: TopicStoreState) =>
   // TODO: is there a way to compress this data? when uploading a new topic, the payload appears to be 30% larger than the file being uploaded
   trpcClient.topic.setData
     .mutate({ topicId: storeBefore.topic.id, description: newDescription, ...changeLists })
-    .catch((e) => {
+    .catch((e: unknown) => {
       emitter.emit("errored");
       throw e;
     });
