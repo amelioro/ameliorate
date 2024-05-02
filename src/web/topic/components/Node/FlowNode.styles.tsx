@@ -82,6 +82,10 @@ export const StyledEditableNode = styled(EditableNode)`
       }
     `;
   }};
+
+  .react-flow.flashlight-mode & {
+    cursor: copy; // TODO?: use a flashlight for the cursor
+  }
 `;
 
 export const nodeStyles = (node: Node, spotlight: Spotlight) => {
