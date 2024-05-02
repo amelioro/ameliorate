@@ -1,7 +1,7 @@
 import { UserProvider as AuthUserProvider } from "@auth0/nextjs-auth0/client";
 import { Global } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { StyledEngineProvider, ThemeProvider, createTheme } from "@mui/material/styles";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { useEffect } from "react";
@@ -34,15 +34,18 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
 
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
+      {/* https://mui.com/material-ui/integrations/interoperability/#setup */}
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
 
-        <AuthUserProvider>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </AuthUserProvider>
-      </ThemeProvider>
+          <AuthUserProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </AuthUserProvider>
+        </ThemeProvider>
+      </StyledEngineProvider>
 
       <Global styles={globals} />
     </>
