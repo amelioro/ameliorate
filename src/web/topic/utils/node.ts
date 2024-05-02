@@ -19,7 +19,7 @@ import {
 } from "@mui/icons-material";
 
 import { errorWithData } from "../../../common/errorHandling";
-import { NodeType } from "../../../common/node";
+import { NodeType, areSameCategoryNodes } from "../../../common/node";
 import { componentTypes } from "./edge";
 import { Edge, Graph, Node } from "./graph";
 
@@ -117,29 +117,44 @@ export const nodeDecorations: Record<FlowNodeType, NodeDecoration> = {
 };
 
 // TODO: memoize? this could traverse a lot of nodes & edges, seems not performant
-export const parents = (node: Node, topicGraph: Graph) => {
+export const parents = (node: Node, topicGraph: Graph, sameCategoryNodes = true) => {
   const parentEdges = topicGraph.edges.filter((edge) => edge.target === node.id);
 
-  return parentEdges.map((edge) => {
+  const parentNodes = parentEdges.map((edge) => {
     const node = topicGraph.nodes.find((node) => edge.source === node.id);
     if (!node) throw errorWithData(`node ${edge.source} not found`, topicGraph);
 
     return node;
   });
+
+  if (sameCategoryNodes) {
+    return parentNodes.filter((parentNode) => areSameCategoryNodes(node.type, parentNode.type));
+  } else return parentNodes;
 };
 
-export const children = (node: Node, topicGraph: Graph) => {
+// all children references prefer to look for same-category nodes
+export const children = (node: Node, topicGraph: Graph, sameCategoryNodes = true) => {
   const childEdges = topicGraph.edges.filter((edge) => edge.source === node.id);
-  return childEdges.map((edge) => {
+  const childNodes = childEdges.map((edge) => {
     const node = topicGraph.nodes.find((node) => edge.target === node.id);
     if (!node) throw errorWithData(`node ${edge.target} not found`, topicGraph);
 
     return node;
   });
+
+  if (sameCategoryNodes) {
+    return childNodes.filter((childNode) => areSameCategoryNodes(node.type, childNode.type));
+  } else return childNodes;
 };
 
-export const neighbors = (node: Node, topicGraph: Graph) => {
-  return [...parents(node, topicGraph), ...children(node, topicGraph)];
+/**
+ * @param sameCategoryNodes whether or not to only return nodes of the same info category; usually this is desirable.
+ */
+export const neighbors = (node: Node, topicGraph: Graph, sameCategoryNodes = true) => {
+  return [
+    ...parents(node, topicGraph, sameCategoryNodes),
+    ...children(node, topicGraph, sameCategoryNodes),
+  ];
 };
 
 export const components = (node: Node, topicGraph: Graph) => {

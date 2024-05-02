@@ -8,7 +8,7 @@ import { shallow } from "zustand/shallow";
 import { createWithEqualityFn } from "zustand/traditional";
 
 import { Format, InfoCategory } from "../../common/infoCategory";
-import { areSiblingNodes, infoNodeTypes, nodeTypes } from "../../common/node";
+import { infoNodeTypes, nodeTypes } from "../../common/node";
 import { emitter } from "../common/event";
 import { useGraphPart } from "../topic/store/graphPartHooks";
 import { getDefaultNode } from "../topic/store/nodeGetters";
@@ -258,12 +258,7 @@ export const showNodeAndNeighbors = (nodeId: string, also: boolean) => {
   const graph = useTopicStore.getState();
   const node = findNodeOrThrow(nodeId, graph.nodes);
 
-  // assume we only care about neighbors of the same category
-  const nodeNeighborsSharingCategory = neighbors(node, graph).filter((neighbor) =>
-    areSiblingNodes(node.type, neighbor.type)
-  );
-
-  const nodeAndNeighbors = [nodeId, ...nodeNeighborsSharingCategory.map((neighbor) => neighbor.id)];
+  const nodeAndNeighbors = [nodeId, ...neighbors(node, graph).map((neighbor) => neighbor.id)];
 
   useNavigateStore.setState({
     format: "diagram",

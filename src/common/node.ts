@@ -89,13 +89,13 @@ export const getNewTopicProblemNode = (topicId: number, topicTitle: string): Nod
   };
 };
 
-export const getSiblingNodeTypes = (nodeType: NodeType): NodeType[] => {
+export const getSameCategoryNodeTypes = (nodeType: NodeType): NodeType[] => {
   if (structureNodeTypes.includes(nodeType)) return structureNodeTypes;
   else if (researchNodeTypes.includes(nodeType)) return researchNodeTypes;
   else if (justificationNodeTypes.includes(nodeType)) return justificationNodeTypes;
   else return [];
 };
 
-export const areSiblingNodes = (node1Type: NodeType, node2Type: NodeType): boolean => {
-  return getSiblingNodeTypes(node1Type).includes(node2Type);
+export const areSameCategoryNodes = (node1Type: NodeType, node2Type: NodeType): boolean => {
+  return getSameCategoryNodeTypes(node1Type).includes(node2Type);
 };

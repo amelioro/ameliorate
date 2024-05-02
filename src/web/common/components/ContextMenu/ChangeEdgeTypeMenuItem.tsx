@@ -1,7 +1,7 @@
 import lowerCase from "lodash/lowerCase";
 import { NestedMenuItem } from "mui-nested-menu";
 
-import { getSiblingEdgeTypes } from "../../../../common/edge";
+import { getSameCategoryEdgeTypes } from "../../../../common/edge";
 import { changeEdgeType } from "../../../topic/store/actions";
 import { useUserCanEditTopicData } from "../../../topic/store/userHooks";
 import { Edge } from "../../../topic/utils/graph";
@@ -32,7 +32,7 @@ export const ChangeEdgeTypeMenuItem = ({ edge, parentMenuOpen }: Props) => {
           },
         }}
       >
-        {getSiblingEdgeTypes(edge.label).map((type) => (
+        {getSameCategoryEdgeTypes(edge.label).map((type) => (
           <CloseOnClickMenuItem
             key={type}
             onClick={() => {

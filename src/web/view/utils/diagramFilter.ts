@@ -264,7 +264,7 @@ const applyQuestionFilter = (graph: Graph, filters: QuestionOptions) => {
   const centralQuestion = graph.nodes.find((node) => node.id === filters.centralQuestionId);
   if (!centralQuestion) return graph;
 
-  const parentsForContext = parents(centralQuestion, graph);
+  const parentsForContext = parents(centralQuestion, graph, false);
   const researchChildren = descendants(centralQuestion, graph, researchRelationNames);
 
   const nodes = [centralQuestion, ...parentsForContext, ...researchChildren];

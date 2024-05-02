@@ -1,6 +1,6 @@
 import { NestedMenuItem } from "mui-nested-menu";
 
-import { getSiblingNodeTypes } from "../../../../common/node";
+import { getSameCategoryNodeTypes } from "../../../../common/node";
 import { changeNodeType } from "../../../topic/store/actions";
 import { useUserCanEditTopicData } from "../../../topic/store/userHooks";
 import { Node } from "../../../topic/utils/graph";
@@ -32,7 +32,7 @@ export const ChangeNodeTypeMenuItem = ({ node, parentMenuOpen }: Props) => {
           },
         }}
       >
-        {getSiblingNodeTypes(node.type).map((type) => (
+        {getSameCategoryNodeTypes(node.type).map((type) => (
           <CloseOnClickMenuItem
             key={type}
             onClick={() => {
