@@ -20,8 +20,9 @@ export const useNode = (nodeId: string | null) => {
   });
 };
 
-export const useAllNodes = (nodeIds: string[]) => {
+export const useAllNodes = (nodeIds?: string[]) => {
   return useTopicStore((state) => {
+    if (!nodeIds) return state.nodes;
     return state.nodes.filter((node) => nodeIds.includes(node.id));
   }, shallow);
 };
