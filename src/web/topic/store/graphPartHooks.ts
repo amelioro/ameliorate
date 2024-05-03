@@ -2,7 +2,7 @@ import { shallow } from "zustand/shallow";
 
 import { RelationName, justificationRelationNames } from "../../../common/edge";
 import { NodeType, justificationNodeTypes, researchNodeTypes } from "../../../common/node";
-import { deepCompare } from "../../common/store/utils";
+import { deepIsEqual } from "../../common/store/utils";
 import { isClaimEdge } from "../utils/claim";
 import { Node } from "../utils/graph";
 import { TopicStoreState, useTopicStore } from "./store";
@@ -57,7 +57,7 @@ export const useTopLevelClaims = (graphPartId: string) => {
       .filter((node): node is Node => !!node);
 
     return { supports, critiques };
-  }, deepCompare);
+  }, deepIsEqual);
 };
 
 export const useNonTopLevelClaimCount = (graphPartId: string) => {
@@ -92,7 +92,7 @@ export const useResearchNodes = (graphPartId: string) => {
       facts: researchNodes.filter((node) => node.type === "fact"),
       sources: researchNodes.filter((node) => node.type === "source"),
     };
-  }, deepCompare);
+  }, deepIsEqual);
 };
 
 export const useGraphPart = (graphPartId: string | null) => {

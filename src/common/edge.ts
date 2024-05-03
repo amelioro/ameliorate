@@ -74,7 +74,7 @@ export const structureRelationNames = infoRelationNames.structure;
 export const researchRelationNames = infoRelationNames.research;
 export const justificationRelationNames = infoRelationNames.justification;
 
-export const getSiblingEdgeTypes = (edgeType: RelationName): RelationName[] => {
+export const getSameCategoryEdgeTypes = (edgeType: RelationName): RelationName[] => {
   if (structureRelationNames.includes(edgeType)) return structureRelationNames;
   else if (researchRelationNames.includes(edgeType)) return researchRelationNames;
   else if (justificationRelationNames.includes(edgeType)) return justificationRelationNames;

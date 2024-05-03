@@ -188,6 +188,9 @@ const sharedPalette = {
   custom: augmentColor({ color: { main: "#ffffff" } }), // neutral white
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- document won't be defined when rendered server-side
+const rootElement = typeof document !== "undefined" ? document.getElementById("__next") : null;
+
 export const getThemeOptions = (mode: PaletteMode): ThemeOptions => ({
   breakpoints: {
     values: {
@@ -226,6 +229,28 @@ export const getThemeOptions = (mode: PaletteMode): ThemeOptions => ({
         // List item buttons have their own padding, but other list items do not, so those will need
         // to un-disable this. We're defaulting because it seems that most list items are buttons.
         disablePadding: true,
+      },
+    },
+
+    // target root element for Portal-related elements, for tailwind support https://mui.com/material-ui/integrations/interoperability/#setup
+    MuiPopover: {
+      defaultProps: {
+        container: rootElement,
+      },
+    },
+    MuiPopper: {
+      defaultProps: {
+        container: rootElement,
+      },
+    },
+    MuiDialog: {
+      defaultProps: {
+        container: rootElement,
+      },
+    },
+    MuiModal: {
+      defaultProps: {
+        container: rootElement,
       },
     },
   },

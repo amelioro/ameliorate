@@ -187,7 +187,7 @@ export const getNodesComposedBy = (node: Node, topicGraph: Graph) => {
 };
 
 const findNodesRecursivelyFrom = (
-  fromNodeId: string,
+  fromNode: Node,
   toDirection: RelationDirection,
   graph: Graph,
   labels?: RelationName[]
@@ -196,25 +196,25 @@ const findNodesRecursivelyFrom = (
   const to = toDirection === "child" ? "target" : "source";
 
   const foundEdges = graph.edges.filter(
-    (edge) => edge[from] === fromNodeId && (!labels || labels.includes(edge.label))
+    (edge) => edge[from] === fromNode.id && (!labels || labels.includes(edge.label))
   );
   const foundNodes = foundEdges.map((edge) => findNodeOrThrow(edge[to], graph.nodes));
 
   if (foundNodes.length === 0) return [];
 
   const furtherNodes = foundNodes.flatMap((node) =>
-    findNodesRecursivelyFrom(node.id, toDirection, graph, labels)
+    findNodesRecursivelyFrom(node, toDirection, graph, labels)
   );
 
   return uniqBy(foundNodes.concat(furtherNodes), (node) => node.id);
 };
 
-export const ancestors = (fromNodeId: string, graph: Graph, labels?: RelationName[]) => {
-  return findNodesRecursivelyFrom(fromNodeId, "parent", graph, labels);
+export const ancestors = (fromNode: Node, graph: Graph, labels?: RelationName[]) => {
+  return findNodesRecursivelyFrom(fromNode, "parent", graph, labels);
 };
 
-export const descendants = (fromNodeId: string, graph: Graph, labels?: RelationName[]) => {
-  return findNodesRecursivelyFrom(fromNodeId, "child", graph, labels);
+export const descendants = (fromNode: Node, graph: Graph, labels?: RelationName[]) => {
+  return findNodesRecursivelyFrom(fromNode, "child", graph, labels);
 };
 
 export const getRelevantEdges = (nodes: Node[], graph: Graph) => {

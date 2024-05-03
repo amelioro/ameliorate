@@ -8,7 +8,7 @@ import { shallow } from "zustand/shallow";
 import { createWithEqualityFn } from "zustand/traditional";
 
 import { Format, InfoCategory } from "../../common/infoCategory";
-import { areSiblingNodes, infoNodeTypes, nodeTypes } from "../../common/node";
+import { infoNodeTypes, nodeTypes } from "../../common/node";
 import { emitter } from "../common/event";
 import { useGraphPart } from "../topic/store/graphPartHooks";
 import { getDefaultNode } from "../topic/store/nodeGetters";
@@ -136,6 +136,20 @@ export const useTableFilter = (): TableFilter => {
   );
 };
 
+export const useTableFilterWithFallbacks = (): TableFilter => {
+  const tableFilter = useTableFilter();
+
+  const centralProblemId = getDefaultNode("problem")?.id;
+
+  const tableFilterDefaults = {
+    centralProblemId,
+    solutions: [],
+    criteria: [],
+  };
+
+  return { ...tableFilterDefaults, ...tableFilter };
+};
+
 export const useGeneralFilter = () => {
   return useNavigateStore((state) => state.generalFilter);
 };
@@ -236,24 +250,22 @@ export const viewJustification = (arguedDiagramPartId: string) => {
   );
 };
 
-export const showNodeAndNeighbors = (nodeId: string, addNodes: boolean) => {
-  const generalFilter = useNavigateStore.getState().generalFilter;
+/**
+ * @param also true if these nodes should be added to the current filter, false if they should be the only nodes displayed
+ */
+export const showNodeAndNeighbors = (nodeId: string, also: boolean) => {
+  const { categoriesToShow, generalFilter } = useNavigateStore.getState();
   const graph = useTopicStore.getState();
   const node = findNodeOrThrow(nodeId, graph.nodes);
 
-  // assume we only care about neighbors of the same category
-  const nodeNeighborsSharingCategory = neighbors(nodeId, graph).filter((neighbor) =>
-    areSiblingNodes(node.type, neighbor.type)
-  );
-
-  const nodeAndNeighbors = [nodeId, ...nodeNeighborsSharingCategory.map((neighbor) => neighbor.id)];
+  const nodeAndNeighbors = [nodeId, ...neighbors(node, graph).map((neighbor) => neighbor.id)];
 
   useNavigateStore.setState({
     format: "diagram",
-    categoriesToShow: [],
+    categoriesToShow: also ? categoriesToShow : [],
     generalFilter: {
       ...generalFilter,
-      nodesToShow: addNodes ? union(generalFilter.nodesToShow, nodeAndNeighbors) : nodeAndNeighbors,
+      nodesToShow: also ? union(generalFilter.nodesToShow, nodeAndNeighbors) : nodeAndNeighbors,
       nodesToHide: without(generalFilter.nodesToHide, ...nodeAndNeighbors),
     },
   });
@@ -270,6 +282,20 @@ export const stopForcingNodeToShow = (nodeId: string) => {
       nodesToShow: without(generalFilter.nodesToShow, nodeId),
     },
   });
+};
+
+export const showNode = (nodeId: string) => {
+  const generalFilter = useNavigateStore.getState().generalFilter;
+
+  useNavigateStore.setState({
+    generalFilter: {
+      ...generalFilter,
+      nodesToShow: union(generalFilter.nodesToShow, [nodeId]),
+      nodesToHide: without(generalFilter.nodesToHide, nodeId),
+    },
+  });
+
+  emitter.emit("changedDiagramFilter");
 };
 
 export const hideNode = (nodeId: string) => {
@@ -332,16 +358,7 @@ export const loadNavigateStore = async (persistId: string) => {
 };
 
 // helpers
-export const getStandardFilterWithFallbacks = (
-  category: InfoCategory
-): StandardFilterWithFallbacks => {
-  const standardFilter =
-    category === "structure"
-      ? useNavigateStore.getState().structureFilter
-      : category === "research"
-      ? useNavigateStore.getState().researchFilter
-      : useNavigateStore.getState().justificationFilter;
-
+export const getStandardFilterWithFallbacks = (standardFilter: StandardFilter): StandardFilter => {
   const centralProblemId = getDefaultNode("problem")?.id;
   const centralSolutionId = getDefaultNode("solution")?.id;
   const centralQuestionId = getDefaultNode("question")?.id;
@@ -363,18 +380,4 @@ export const getStandardFilterWithFallbacks = (
 
   // override any defaults using the stored filter
   return { ...standardFilterDefaults, ...standardFilter };
-};
-
-export const getTableFilterWithFallbacks = (): TableFilter => {
-  const tableFilter = useNavigateStore.getState().tableFilter;
-
-  const centralProblemId = getDefaultNode("problem")?.id;
-
-  const tableFilterDefaults = {
-    centralProblemId,
-    solutions: [],
-    criteria: [],
-  };
-
-  return { ...tableFilterDefaults, ...tableFilter };
 };

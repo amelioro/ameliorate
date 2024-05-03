@@ -193,7 +193,7 @@ export const addableRelationsFrom = (nodeType: NodeType, addingAs: RelationDirec
   );
 
   const formattedRelations = addableRelations.map((relation) => ({
-    toNodeType: relation[addingAs] as NodeType,
+    toNodeType: relation[addingAs],
     relation,
   }));
 
@@ -270,8 +270,8 @@ export const isEdgeAShortcut = (edge: Edge, topicGraph: Graph) => {
 
     if (!edgeCouldBeAShortcut) return false;
 
-    const childrenOfParent = children(edgeParent.id, topicGraph);
-    const parentsOfChild = parents(edgeChild.id, topicGraph);
+    const childrenOfParent = children(edgeParent, topicGraph);
+    const parentsOfChild = parents(edgeChild, topicGraph);
 
     const detourNodeAsChild = childrenOfParent.find(
       (child) => child.type === shortcutRelation.detourNodeType

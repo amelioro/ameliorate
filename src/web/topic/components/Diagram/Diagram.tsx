@@ -13,6 +13,7 @@ import { Loading } from "../../../common/components/Loading/Loading";
 import { emitter } from "../../../common/event";
 import { useSessionUser } from "../../../common/hooks";
 import { openContextMenu } from "../../../common/store/contextMenuActions";
+import { useFlashlightMode } from "../../../view/actionConfigStore";
 import { setSelected } from "../../../view/navigateStore";
 import { useLayoutedDiagram } from "../../hooks/diagramHooks";
 import { useViewportUpdater } from "../../hooks/flowHooks";
@@ -90,6 +91,8 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
   const { layoutedDiagram, hasNewLayout, setHasNewLayout } = useLayoutedDiagram(diagram);
   const getNodes = useStore((state) => state.getNodes);
 
+  const flashlightMode = useFlashlightMode();
+
   useEffect(() => {
     const unbindAdd = emitter.on("addNode", (node) => setNewNodeId(node.id));
     const unbindLoad = emitter.on("overwroteTopicData", () => setTopicViewUpdated(true));
@@ -126,6 +129,7 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
   return (
     <>
       <StyledReactFlow
+        className={flashlightMode ? " flashlight-mode" : ""}
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}

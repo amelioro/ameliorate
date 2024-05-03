@@ -1,7 +1,9 @@
 import { Autocomplete, TextField } from "@mui/material";
 import { startCase } from "lodash";
-import { useMemo } from "react";
+import { useContext, useMemo } from "react";
 import { useController } from "react-hook-form";
+
+import { FormContext } from "./FormContext";
 
 interface Props {
   name: string;
@@ -25,6 +27,8 @@ export const Select = ({
     field,
     fieldState: { error },
   } = useController({ name });
+  const { submit } = useContext(FormContext);
+
   // if options is array of strings, use the strings as both value and label
   const optionsObjects = useMemo(
     () =>
@@ -74,6 +78,7 @@ export const Select = ({
       disableCloseOnSelect
       onChange={(_event, options) => {
         field.onChange(options.map((option) => option.id));
+        submit();
       }}
       disableClearable={disableClearable}
       renderInput={(params) => (
@@ -98,6 +103,7 @@ export const Select = ({
       onChange={(_event, option) => {
         if (!option) return;
         field.onChange(option.id);
+        submit();
       }}
       disableClearable={disableClearable}
       renderInput={(params) => (

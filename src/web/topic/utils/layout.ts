@@ -57,8 +57,8 @@ const calculatePartition = (node: Node, nodes: Node[], edges: Edge[]) => {
   const topicGraph = { nodes, edges };
 
   if (["effect", "benefit", "detriment"].includes(node.type)) {
-    const nodeAncestors = ancestors(node.id, topicGraph);
-    const nodeDescendants = descendants(node.id, topicGraph);
+    const nodeAncestors = ancestors(node, topicGraph);
+    const nodeDescendants = descendants(node, topicGraph);
 
     const hasProblemAncestor = nodeAncestors.some((ancestor) => ancestor.type === "problem");
     const hasCriterionAncestor = nodeAncestors.some((ancestor) => ancestor.type === "criterion");

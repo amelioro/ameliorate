@@ -30,7 +30,7 @@ const applyHighLevelFilter = (graph: Graph, _filters: HighLevelOptions) => {
   if (problems.length === 0) return graph;
 
   const details = problems.flatMap((problem) =>
-    children(problem.id, graph).filter((child) =>
+    children(problem, graph).filter((child) =>
       ["cause", "effect", "benefit", "detriment", "solution"].includes(child.type)
     )
   );
@@ -76,7 +76,7 @@ const applyProblemFilter = (graph: Graph, filters: ProblemOptions) => {
   if (filters.problemDetails.includes("solutions")) detailEdges.push("addresses");
   /* eslint-enable functional/immutable-data */
 
-  const problemDetails = descendants(centralProblem.id, graph, detailEdges);
+  const problemDetails = descendants(centralProblem, graph, detailEdges);
 
   const solutions = problemDetails.filter((detail) => detail.type === "solution");
   const criteria = problemDetails.filter((detail) => detail.type === "criterion");
@@ -131,7 +131,7 @@ const applyTradeoffsFilter = (graph: Graph, filters: TradeoffsOptions) => {
   const centralProblem = graph.nodes.find((node) => node.id === filters.centralProblemId);
   if (!centralProblem) return graph;
 
-  const problemChildren = children(centralProblem.id, graph);
+  const problemChildren = children(centralProblem, graph);
   const solutions = problemChildren.filter((child) => child.type === "solution");
   const criteria = problemChildren.filter((child) => child.type === "criterion");
 
@@ -143,7 +143,7 @@ const applyTradeoffsFilter = (graph: Graph, filters: TradeoffsOptions) => {
 
   const criteriaParents = selectedCriteria.flatMap((criterion) =>
     // filter problem because we want to separately include the problem regardless of if we're showing criteria, for context
-    parents(criterion.id, graph).filter((parent) => parent.type !== "problem")
+    parents(criterion, graph).filter((parent) => parent.type !== "problem")
   );
 
   const filteredSolutionDetails = getSolutionDetails(
@@ -177,11 +177,11 @@ const getSolutionDetails = (
   if (detailType === "none") return [];
 
   const solutionComponentsEffects = solutions.flatMap((solution) =>
-    ancestors(solution.id, graph, ["has", "creates"])
+    ancestors(solution, graph, ["has", "creates"])
   );
 
   const solutionObstacles = solutions.flatMap((solution) =>
-    descendants(solution.id, graph, ["obstacleOf", "addresses"])
+    descendants(solution, graph, ["obstacleOf", "addresses"])
   );
 
   const criteriaIds = criteria.map((criterion) => criterion.id);
@@ -189,7 +189,7 @@ const getSolutionDetails = (
   return detailType === "all"
     ? [...solutionComponentsEffects, ...solutionObstacles]
     : solutionComponentsEffects.filter((detail) =>
-        ancestors(detail.id, graph).some((ancestor) => criteriaIds.includes(ancestor.id))
+        ancestors(detail, graph).some((ancestor) => criteriaIds.includes(ancestor.id))
       );
 };
 
@@ -236,8 +236,8 @@ const applySolutionFilter = (graph: Graph, filters: SolutionOptions) => {
   const centralSolution = graph.nodes.find((node) => node.id === filters.centralSolutionId);
   if (!centralSolution) return graph;
 
-  const ancestorDetails = ancestors(centralSolution.id, graph, ["has", "creates"]);
-  const descendantDetails = descendants(centralSolution.id, graph, ["obstacleOf", "addresses"]);
+  const ancestorDetails = ancestors(centralSolution, graph, ["has", "creates"]);
+  const descendantDetails = descendants(centralSolution, graph, ["obstacleOf", "addresses"]);
 
   const nodes = [centralSolution, ...ancestorDetails, ...descendantDetails];
   const edges = getRelevantEdges(nodes, graph);
@@ -264,8 +264,8 @@ const applyQuestionFilter = (graph: Graph, filters: QuestionOptions) => {
   const centralQuestion = graph.nodes.find((node) => node.id === filters.centralQuestionId);
   if (!centralQuestion) return graph;
 
-  const parentsForContext = parents(centralQuestion.id, graph);
-  const researchChildren = descendants(centralQuestion.id, graph, researchRelationNames);
+  const parentsForContext = parents(centralQuestion, graph, false);
+  const researchChildren = descendants(centralQuestion, graph, researchRelationNames);
 
   const nodes = [centralQuestion, ...parentsForContext, ...researchChildren];
   const edges = getRelevantEdges(nodes, graph);
@@ -292,7 +292,7 @@ const applySourceFilter = (graph: Graph, filters: SourceOptions) => {
   const centralSource = graph.nodes.find((node) => node.id === filters.centralSourceId);
   if (!centralSource) return graph;
 
-  const details = ancestors(centralSource.id, graph, [
+  const details = ancestors(centralSource, graph, [
     "sourceOf",
     "relevantFor",
     "mentions",
@@ -323,7 +323,7 @@ const applyRootClaimFilter = (graph: Graph, filters: RootClaimOptions) => {
   const centralRootClaim = graph.nodes.find((node) => node.id === filters.centralRootClaimId);
   if (!centralRootClaim) return graph;
 
-  const justification = descendants(centralRootClaim.id, graph, ["supports", "critiques"]);
+  const justification = descendants(centralRootClaim, graph, ["supports", "critiques"]);
 
   const nodes = [centralRootClaim, ...justification];
   const edges = getRelevantEdges(nodes, graph);

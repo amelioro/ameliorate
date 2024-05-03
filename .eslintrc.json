@@ -31,6 +31,17 @@
           "error",
           { "ignoreArrowShorthand": true }
         ],
+        "@typescript-eslint/restrict-template-expressions": [
+          "error",
+          {
+            "allowAny": true,
+            "allowBoolean": true,
+            "allowNullish": true,
+            "allowNumber": true,
+            "allowRegExp": true,
+            "allowNever": true
+          }
+        ],
         // annoying when wanting to overspecify different types that happen to be the same but could become different
         "@typescript-eslint/no-duplicate-type-constituents": "off",
         // annoying to have to dupe this with the js version
