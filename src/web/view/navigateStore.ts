@@ -19,8 +19,6 @@ import { DiagramFilter, StandardFilter, StandardFilterWithFallbacks } from "./ut
 import { GeneralFilter } from "./utils/generalFilter";
 import { TableFilter } from "./utils/tableFilter";
 
-export type View = "topicDiagram" | "researchDiagram" | "criteriaTable" | "claimTree";
-
 interface NavigateStoreState {
   selectedGraphPartId: string | null;
   format: Format;
