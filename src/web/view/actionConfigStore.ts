@@ -18,6 +18,13 @@ const persistedNameBase = "action-config-storage";
 const useActionConfigStore = create<ActionConfigStoreState>()(
   persist(() => initialState, {
     name: persistedNameBase,
+    version: 1,
+    skipHydration: true,
+    // don't merge persisted state with current state when rehydrating - instead, use the initialState to fill in missing values
+    // e.g. so that a new non-null value in initialState is non-null in the persisted state,
+    // removing the need to write a migration for every new field
+    merge: (persistedState, _currentState) =>
+      withDefaults(persistedState as Partial<ActionConfigStoreState>, initialState),
   })
 );
 
@@ -46,14 +53,6 @@ export const loadActionConfig = async (persistId: string) => {
 
   if (useActionConfigStore.persist.getOptions().storage?.getItem(builtPersistedName)) {
     await useActionConfigStore.persist.rehydrate();
-
-    // use initial state to fill missing values in the persisted state
-    // e.g. so that a new non-null value in initialState is non-null in the persisted state,
-    // removing the need to write a migration for every new field
-    const persistedState = useActionConfigStore.getState();
-    const persistedWithDefaults = withDefaults(persistedState, initialState);
-
-    useActionConfigStore.setState(persistedWithDefaults, true);
   } else {
     useActionConfigStore.setState(initialState, true);
   }

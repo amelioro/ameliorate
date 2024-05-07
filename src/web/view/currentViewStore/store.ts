@@ -73,6 +73,11 @@ export const useCurrentViewStore = createWithEqualityFn<CurrentViewStoreState>()
         name: persistedNameBase,
         version: 1,
         skipHydration: true,
+        // don't merge persisted state with current state when rehydrating - instead, use the initialState to fill in missing values
+        // e.g. so that a new non-null value in initialState is non-null in the persisted state,
+        // removing the need to write a migration for every new field
+        merge: (persistedState, _currentState) =>
+          withDefaults(persistedState as Partial<CurrentViewStoreState>, initialState),
       }
     )
   ),
@@ -151,14 +156,6 @@ export const loadView = async (persistId: string) => {
   if (useCurrentViewStore.persist.getOptions().storage?.getItem(builtPersistedName)) {
     // TODO(bug): for some reason, this results in an empty undo action _after_ clear() is run - despite awaiting this promise
     await useCurrentViewStore.persist.rehydrate();
-
-    // use initial state to fill missing values in the persisted state
-    // e.g. so that a new non-null value in initialState is non-null in the persisted state,
-    // removing the need to write a migration for every new field
-    const persistedState = useCurrentViewStore.getState();
-    const persistedWithDefaults = withDefaults(persistedState, initialState);
-
-    useCurrentViewStore.setState(persistedWithDefaults, true, "loadView");
   } else {
     useCurrentViewStore.setState(initialState, true, "loadView");
   }
