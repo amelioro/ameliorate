@@ -33,10 +33,8 @@ import { StorageValue } from "zustand/middleware";
 import { errorWithData } from "../../../../common/errorHandling";
 import { NumberInput } from "../../../common/components/NumberInput/NumberInput";
 import {
-  toggleFillNodesWithColor,
   toggleFlashlightMode,
   toggleUnrestrictedEditing,
-  useFillNodesWithColor,
   useFlashlightMode,
   useUnrestrictedEditing,
 } from "../../../view/actionConfigStore";
@@ -49,6 +47,7 @@ import {
   useLayoutThoroughness,
 } from "../../../view/currentViewStore/layout";
 import { resetView, useFormat } from "../../../view/currentViewStore/store";
+import { toggleFillNodesWithColor, useFillNodesWithColor } from "../../../view/userConfigStore";
 import { migrate } from "../../store/migrate";
 import { TopicStoreState } from "../../store/store";
 import { useOnPlayground } from "../../store/topicHooks";
