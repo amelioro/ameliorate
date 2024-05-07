@@ -1,7 +1,7 @@
 import { AccountTree, AccountTreeOutlined } from "@mui/icons-material";
 import { MouseEventHandler, useCallback } from "react";
 
-import { viewJustification } from "../../../view/currentViewStore/store";
+import { viewJustification } from "../../../view/currentViewStore/filter";
 import {
   useExplicitClaimCount,
   useNonTopLevelClaimCount,

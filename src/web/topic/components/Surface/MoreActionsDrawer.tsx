@@ -41,18 +41,14 @@ import {
   useUnrestrictedEditing,
 } from "../../../view/actionConfigStore";
 import { Perspectives } from "../../../view/components/Perspectives/Perspectives";
+import { toggleShowImpliedEdges, useShowImpliedEdges } from "../../../view/currentViewStore/filter";
 import {
   setLayoutThoroughness,
   toggleForceNodesIntoLayers,
   useForceNodesIntoLayers,
   useLayoutThoroughness,
 } from "../../../view/currentViewStore/layout";
-import {
-  resetView,
-  toggleShowImpliedEdges,
-  useFormat,
-  useShowImpliedEdges,
-} from "../../../view/currentViewStore/store";
+import { resetView, useFormat } from "../../../view/currentViewStore/store";
 import { migrate } from "../../store/migrate";
 import { TopicStoreState } from "../../store/store";
 import { useOnPlayground } from "../../store/topicHooks";

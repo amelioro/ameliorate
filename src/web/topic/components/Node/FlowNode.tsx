@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import { useSessionUser } from "../../../common/hooks";
 import { getFlashlightMode } from "../../../view/actionConfigStore";
-import { showNodeAndNeighbors } from "../../../view/currentViewStore/store";
+import { showNodeAndNeighbors } from "../../../view/currentViewStore/filter";
 import { useIsEdgeSelected, useIsNeighborSelected } from "../../store/nodeHooks";
 import { useUserCanEditTopicData } from "../../store/userHooks";
 import { Node } from "../../utils/graph";

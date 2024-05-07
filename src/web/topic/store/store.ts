@@ -7,7 +7,7 @@ import {
   useDiagramFilter,
   useGeneralFilter,
   useShowImpliedEdges,
-} from "../../view/currentViewStore/store";
+} from "../../view/currentViewStore/filter";
 import { usePerspectives } from "../../view/perspectiveStore";
 import { applyDiagramFilter } from "../../view/utils/diagramFilter";
 import { applyNodeTypeFilter, applyScoreFilter } from "../../view/utils/generalFilter";
