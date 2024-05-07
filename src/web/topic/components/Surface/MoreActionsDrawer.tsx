@@ -174,9 +174,8 @@ export const MoreActionsDrawer = ({
           <ListItemText primary="More Actions" />
         </ListItem>
 
-        <Divider />
+        <Divider>Actions</Divider>
 
-        {/* actions */}
         <ListItem disablePadding={false}>
           <IconButton
             color="inherit"
@@ -230,29 +229,48 @@ export const MoreActionsDrawer = ({
           )}
         </ListItem>
 
-        <Divider />
+        {!isTableActive && (
+          <>
+            <Divider>Action Config</Divider>
 
-        {/* modes */}
-        <ListItem disablePadding={false}>
-          {userCanEditTopicData && (
-            <>
+            <ListItem disablePadding={false}>
+              {userCanEditTopicData && (
+                <>
+                  <ToggleButton
+                    value={unrestrictedEditing}
+                    title="Unrestrict editing"
+                    aria-label="Unrestrict editing"
+                    color="secondary"
+                    size="small"
+                    selected={unrestrictedEditing}
+                    onClick={() => toggleUnrestrictedEditing(!unrestrictedEditing)}
+                    sx={{ borderRadius: "50%", border: "0" }}
+                  >
+                    <Engineering />
+                  </ToggleButton>
+                </>
+              )}
               <ToggleButton
-                value={unrestrictedEditing}
-                title="Unrestrict editing"
-                aria-label="Unrestrict editing"
+                value={flashlightMode}
+                title="Flashlight mode"
+                aria-label="Flashlight mode"
                 color="secondary"
                 size="small"
-                selected={unrestrictedEditing}
-                onClick={() => toggleUnrestrictedEditing(!unrestrictedEditing)}
+                selected={flashlightMode}
+                onClick={() => toggleFlashlightMode(!flashlightMode)}
                 sx={{ borderRadius: "50%", border: "0" }}
               >
-                <Engineering />
+                <Highlight />
               </ToggleButton>
-            </>
-          )}
+            </ListItem>
+          </>
+        )}
 
-          {!isTableActive && (
-            <>
+        {!isTableActive && (
+          <>
+            <Divider>View Config</Divider>
+
+            <ListItem disablePadding={false}>
               <ToggleButton
                 value={showImpliedEdges}
                 title="Show implied edges"
@@ -277,37 +295,8 @@ export const MoreActionsDrawer = ({
               >
                 <Layers />
               </ToggleButton>
-              <ToggleButton
-                value={flashlightMode}
-                title="Flashlight mode"
-                aria-label="Flashlight mode"
-                color="secondary"
-                size="small"
-                selected={flashlightMode}
-                onClick={() => toggleFlashlightMode(!flashlightMode)}
-                sx={{ borderRadius: "50%", border: "0" }}
-              >
-                <Highlight />
-              </ToggleButton>
-            </>
-          )}
+            </ListItem>
 
-          <ToggleButton
-            value={fillNodesWithColor}
-            title="Fill nodes with color"
-            aria-label="Fill nodes with color"
-            color="secondary"
-            size="small"
-            selected={fillNodesWithColor}
-            onClick={() => toggleFillNodesWithColor(!fillNodesWithColor)}
-            sx={{ borderRadius: "50%", border: "0" }}
-          >
-            <FormatColorFill />
-          </ToggleButton>
-        </ListItem>
-
-        {!isTableActive && (
-          <>
             <ListItem disablePadding={false}>
               <Typography variant="body2">Layout Thoroughness</Typography>
               <Tooltip
@@ -342,10 +331,31 @@ export const MoreActionsDrawer = ({
         )}
 
         {!onPlayground && (
-          <ListItem disablePadding={false}>
-            <Perspectives />
-          </ListItem>
+          <>
+            <Divider>Perspectives</Divider>
+
+            <ListItem disablePadding={false}>
+              <Perspectives />
+            </ListItem>
+          </>
         )}
+
+        <Divider>User Config</Divider>
+
+        <ListItem disablePadding={false}>
+          <ToggleButton
+            value={fillNodesWithColor}
+            title="Fill nodes with color"
+            aria-label="Fill nodes with color"
+            color="secondary"
+            size="small"
+            selected={fillNodesWithColor}
+            onClick={() => toggleFillNodesWithColor(!fillNodesWithColor)}
+            sx={{ borderRadius: "50%", border: "0" }}
+          >
+            <FormatColorFill />
+          </ToggleButton>
+        </ListItem>
       </List>
     </Drawer>
   );
