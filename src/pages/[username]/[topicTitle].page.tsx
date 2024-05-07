@@ -9,7 +9,7 @@ import { Loading } from "../../web/common/components/Loading/Loading";
 import { useSessionUser } from "../../web/common/hooks";
 import { trpc } from "../../web/common/trpc";
 import { populateDiagramFromApi } from "../../web/topic/store/loadActions";
-import { loadNavigateStore } from "../../web/view/navigateStore";
+import { loadView } from "../../web/view/currentViewStore/store";
 import { setInitialPerspective } from "../../web/view/perspectiveStore";
 
 // Don't render the workspace server-side.
@@ -59,7 +59,7 @@ const Topic: NextPage = () => {
     const populate = async () => {
       setPopulatedFromApi(false);
       populateDiagramFromApi(diagramData);
-      await loadNavigateStore(`${diagramData.creatorName}/${diagramData.title}`);
+      await loadView(`${diagramData.creatorName}/${diagramData.title}`);
       setPopulatedFromApi(true);
     };
     void populate();

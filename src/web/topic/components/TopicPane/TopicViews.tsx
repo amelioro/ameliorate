@@ -13,7 +13,7 @@ import { useState } from "react";
 import { GeneralFilters } from "../../../view/components/Filter/GeneralFilters";
 import { InformationFilters } from "../../../view/components/Filter/InformationFilters";
 import { TableFilters } from "../../../view/components/Filter/TableFilters";
-import { setFormat, useFormat } from "../../../view/navigateStore";
+import { setFormat, useFormat } from "../../../view/currentViewStore/store";
 
 export const TopicViews = () => {
   const [isFormatSectionOpen, setIsFormatSectionOpen] = useState(true);

@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { Loading } from "../web/common/components/Loading/Loading";
 import { populateDiagramFromLocalStorage } from "../web/topic/store/loadActions";
 import { playgroundUsername } from "../web/topic/store/store";
-import { loadNavigateStore } from "../web/view/navigateStore";
+import { loadView } from "../web/view/currentViewStore/store";
 import { setInitialPerspective } from "../web/view/perspectiveStore";
 
 // Don't render the workspace server-side.
@@ -37,7 +37,7 @@ const Playground: NextPage = () => {
   useEffect(() => {
     const populate = async () => {
       await populateDiagramFromLocalStorage();
-      await loadNavigateStore("playground");
+      await loadView("playground");
       setInitiallyPopulated(true);
     };
     void populate();

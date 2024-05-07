@@ -2,7 +2,7 @@ import { AutoStories, ChevronLeft, KeyboardArrowDown } from "@mui/icons-material
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Tab } from "@mui/material";
 
-import { useSelectedGraphPart } from "../../../view/navigateStore";
+import { useSelectedGraphPart } from "../../../view/currentViewStore/store";
 import { GraphPartDetails } from "./GraphPartDetails";
 import { TopicDetails } from "./TopicDetails";
 import { PositionedDiv, StyledDrawer, TogglePaneButton } from "./TopicPane.styles";

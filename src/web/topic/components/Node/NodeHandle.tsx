@@ -4,7 +4,7 @@ import { ReactNode, memo } from "react";
 import { Position } from "reactflow";
 
 import { nodeTypes } from "../../../../common/node";
-import { showNode } from "../../../view/navigateStore";
+import { showNode } from "../../../view/currentViewStore/store";
 import { useHiddenNodes } from "../../hooks/flowHooks";
 import { useNeighborsInDirection } from "../../store/nodeHooks";
 import { Node, RelationDirection } from "../../utils/graph";

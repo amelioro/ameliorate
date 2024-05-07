@@ -11,7 +11,7 @@ import { Switch } from "../../../common/components/Form/Switch";
 import { deepIsEqual } from "../../../common/store/utils";
 import { useAllNodes } from "../../../topic/store/nodeHooks";
 import { possibleScores } from "../../../topic/utils/graph";
-import { setGeneralFilter, useFormat, useGeneralFilter } from "../../navigateStore";
+import { setGeneralFilter, useFormat, useGeneralFilter } from "../../currentViewStore/store";
 import { GeneralFilter, generalFilterSchema, scoredComparers } from "../../utils/generalFilter";
 import { ShowSecondaryNeighborsLabel } from "./ShowSecondaryNeighborsLabel";
 

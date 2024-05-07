@@ -2,7 +2,7 @@ import { shallow } from "zustand/shallow";
 
 import { errorWithData } from "../../../common/errorHandling";
 import { NodeType } from "../../../common/node";
-import { useIsAnyGraphPartSelected } from "../../view/navigateStore";
+import { useIsAnyGraphPartSelected } from "../../view/currentViewStore/store";
 import { RelationDirection, findNodeOrThrow } from "../utils/graph";
 import { children, edges, neighbors, parents } from "../utils/node";
 import { getDefaultNode } from "./nodeGetters";

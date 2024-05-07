@@ -1,5 +1,5 @@
 import { Node } from "../../../topic/utils/graph";
-import { hideNode } from "../../../view/navigateStore";
+import { hideNode } from "../../../view/currentViewStore/store";
 import { CloseOnClickMenuItem } from "./CloseOnClickMenuItem";
 
 export const HideMenuItem = ({ node }: { node: Node }) => {

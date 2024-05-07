@@ -1,5 +1,5 @@
 import { Node } from "../../../topic/utils/graph";
-import { showNodeAndNeighbors } from "../../../view/navigateStore";
+import { showNodeAndNeighbors } from "../../../view/currentViewStore/store";
 import { CloseOnClickMenuItem } from "./CloseOnClickMenuItem";
 
 export const AlsoShowNodeAndNeighborsMenuItem = ({ node }: { node: Node }) => {

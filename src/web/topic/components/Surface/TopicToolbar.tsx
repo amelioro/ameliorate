@@ -20,7 +20,7 @@ import {
   goForward,
   useCanGoBackForward,
   useSelectedGraphPart,
-} from "../../../view/navigateStore";
+} from "../../../view/currentViewStore/store";
 import {
   comparePerspectives,
   resetPerspectives,

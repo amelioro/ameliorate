@@ -47,7 +47,7 @@ import {
   useUnrestrictedEditing,
 } from "../../../view/actionConfigStore";
 import { Perspectives } from "../../../view/components/Perspectives/Perspectives";
-import { resetNavigation, useFormat } from "../../../view/navigateStore";
+import { resetView, useFormat } from "../../../view/currentViewStore/store";
 import { migrate } from "../../store/migrate";
 import { TopicStoreState } from "../../store/store";
 import { useOnPlayground } from "../../store/topicHooks";
@@ -213,7 +213,7 @@ export const MoreActionsDrawer = ({
             color="inherit"
             title="Reset Filters"
             aria-label="Reset Filters"
-            onClick={() => resetNavigation(true)}
+            onClick={() => resetView(true)}
           >
             <FilterAltOutlined />
           </IconButton>

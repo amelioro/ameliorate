@@ -7,19 +7,19 @@ import { devtools, persist } from "zustand/middleware";
 import { shallow } from "zustand/shallow";
 import { createWithEqualityFn } from "zustand/traditional";
 
-import { Format, InfoCategory } from "../../common/infoCategory";
-import { infoNodeTypes, nodeTypes } from "../../common/node";
-import { emitter } from "../common/event";
-import { useGraphPart } from "../topic/store/graphPartHooks";
-import { getDefaultNode } from "../topic/store/nodeGetters";
-import { useTopicStore } from "../topic/store/store";
-import { findNodeOrThrow } from "../topic/utils/graph";
-import { neighbors } from "../topic/utils/node";
-import { DiagramFilter, StandardFilter, StandardFilterWithFallbacks } from "./utils/diagramFilter";
-import { GeneralFilter } from "./utils/generalFilter";
-import { TableFilter } from "./utils/tableFilter";
+import { Format, InfoCategory } from "../../../common/infoCategory";
+import { infoNodeTypes, nodeTypes } from "../../../common/node";
+import { emitter } from "../../common/event";
+import { useGraphPart } from "../../topic/store/graphPartHooks";
+import { getDefaultNode } from "../../topic/store/nodeGetters";
+import { useTopicStore } from "../../topic/store/store";
+import { findNodeOrThrow } from "../../topic/utils/graph";
+import { neighbors } from "../../topic/utils/node";
+import { DiagramFilter, StandardFilter, StandardFilterWithFallbacks } from "../utils/diagramFilter";
+import { GeneralFilter } from "../utils/generalFilter";
+import { TableFilter } from "../utils/tableFilter";
 
-interface NavigateStoreState {
+interface CurrentViewStoreState {
   selectedGraphPartId: string | null;
   format: Format;
 
@@ -33,7 +33,7 @@ interface NavigateStoreState {
   generalFilter: GeneralFilter;
 }
 
-const initialState: NavigateStoreState = {
+const initialState: CurrentViewStoreState = {
   selectedGraphPartId: null,
   format: "diagram",
 
@@ -60,7 +60,7 @@ const initialState: NavigateStoreState = {
 
 const persistedNameBase = "navigateStore";
 
-const useNavigateStore = createWithEqualityFn<NavigateStoreState>()(
+const useCurrentViewStore = createWithEqualityFn<CurrentViewStoreState>()(
   temporal(
     persist(
       devtools(() => initialState),
@@ -79,39 +79,39 @@ const useNavigateStore = createWithEqualityFn<NavigateStoreState>()(
 );
 
 // temporal store is a vanilla store, we need to wrap it to use it as a hook and be able to react to changes
-const useTemporalStore = () => useStore(useNavigateStore.temporal);
+const useTemporalStore = () => useStore(useCurrentViewStore.temporal);
 
 // hooks
 export const useSelectedGraphPart = () => {
-  const selectedGraphPartId = useNavigateStore((state) => state.selectedGraphPartId);
+  const selectedGraphPartId = useCurrentViewStore((state) => state.selectedGraphPartId);
 
   return useGraphPart(selectedGraphPartId);
 };
 
 export const useIsGraphPartSelected = (graphPartId: string) => {
-  return useNavigateStore((state) => {
+  return useCurrentViewStore((state) => {
     if (!state.selectedGraphPartId) return false;
     return state.selectedGraphPartId === graphPartId;
   });
 };
 
 export const useIsAnyGraphPartSelected = (graphPartIds: string[]) => {
-  return useNavigateStore((state) => {
+  return useCurrentViewStore((state) => {
     if (!state.selectedGraphPartId) return false;
     return graphPartIds.includes(state.selectedGraphPartId);
   });
 };
 
 export const useFormat = () => {
-  return useNavigateStore((state) => state.format);
+  return useCurrentViewStore((state) => state.format);
 };
 
 const useCategoriesToShow = () => {
-  return useNavigateStore((state) => state.categoriesToShow, shallow);
+  return useCurrentViewStore((state) => state.categoriesToShow, shallow);
 };
 
 const useStandardFilter = (category: InfoCategory) => {
-  return useNavigateStore((state) => state[`${category}Filter`], shallow);
+  return useCurrentViewStore((state) => state[`${category}Filter`], shallow);
 };
 
 export const useDiagramFilter = (): DiagramFilter => {
@@ -128,7 +128,7 @@ export const useDiagramFilter = (): DiagramFilter => {
 };
 
 export const useTableFilter = (): TableFilter => {
-  return useNavigateStore(
+  return useCurrentViewStore(
     (state) => state.tableFilter,
     (before, after) => JSON.stringify(before) === JSON.stringify(after)
   );
@@ -149,15 +149,15 @@ export const useTableFilterWithFallbacks = (): TableFilter => {
 };
 
 export const useGeneralFilter = () => {
-  return useNavigateStore((state) => state.generalFilter);
+  return useCurrentViewStore((state) => state.generalFilter);
 };
 
 export const useIsNodeForcedToShow = (nodeId: string) => {
-  return useNavigateStore((state) => state.generalFilter.nodesToShow.includes(nodeId));
+  return useCurrentViewStore((state) => state.generalFilter.nodesToShow.includes(nodeId));
 };
 
 export const usePrimaryNodeTypes = () => {
-  return useNavigateStore((state) => {
+  return useCurrentViewStore((state) => {
     return state.categoriesToShow.flatMap((category) => infoNodeTypes[category]);
   });
 };
@@ -172,15 +172,15 @@ export const useCanGoBackForward = () => {
 
 // actions
 export const setSelected = (graphPartId: string | null) => {
-  useNavigateStore.setState({ selectedGraphPartId: graphPartId }, false, "setSelected");
+  useCurrentViewStore.setState({ selectedGraphPartId: graphPartId }, false, "setSelected");
 };
 
 export const setFormat = (format: Format) => {
-  useNavigateStore.setState({ format }, false, "setFormat");
+  useCurrentViewStore.setState({ format }, false, "setFormat");
 };
 
 export const setShowInformation = (category: InfoCategory, show: boolean) => {
-  const oldCategoriesToShow = useNavigateStore.getState().categoriesToShow;
+  const oldCategoriesToShow = useCurrentViewStore.getState().categoriesToShow;
 
   const newCategoriesToShow =
     show && !oldCategoriesToShow.includes(category)
@@ -190,7 +190,7 @@ export const setShowInformation = (category: InfoCategory, show: boolean) => {
       : null;
 
   if (newCategoriesToShow) {
-    useNavigateStore.setState(
+    useCurrentViewStore.setState(
       { categoriesToShow: newCategoriesToShow },
       false,
       "setShowInformation"
@@ -207,22 +207,22 @@ export const setStandardFilter = (category: InfoCategory, filter: StandardFilter
       ? { researchFilter: filter }
       : { justificationFilter: filter };
 
-  useNavigateStore.setState(newFilter, false, "setStandardFilter");
+  useCurrentViewStore.setState(newFilter, false, "setStandardFilter");
 
   emitter.emit("changedDiagramFilter");
 };
 
 export const setTableFilter = (tableFilter: TableFilter) => {
-  useNavigateStore.setState({ tableFilter }, false, "setTableFilter");
+  useCurrentViewStore.setState({ tableFilter }, false, "setTableFilter");
 };
 
 export const setGeneralFilter = (generalFilter: GeneralFilter) => {
-  useNavigateStore.setState({ generalFilter }, false, "setGeneralFilter");
+  useCurrentViewStore.setState({ generalFilter }, false, "setGeneralFilter");
   emitter.emit("changedDiagramFilter");
 };
 
 export const viewCriteriaTable = (problemNodeId: string) => {
-  useNavigateStore.setState(
+  useCurrentViewStore.setState(
     {
       format: "table",
       tableFilter: {
@@ -237,7 +237,7 @@ export const viewCriteriaTable = (problemNodeId: string) => {
 };
 
 export const viewJustification = (arguedDiagramPartId: string) => {
-  useNavigateStore.setState(
+  useCurrentViewStore.setState(
     {
       format: "diagram",
       categoriesToShow: ["justification"],
@@ -252,13 +252,13 @@ export const viewJustification = (arguedDiagramPartId: string) => {
  * @param also true if these nodes should be added to the current filter, false if they should be the only nodes displayed
  */
 export const showNodeAndNeighbors = (nodeId: string, also: boolean) => {
-  const { categoriesToShow, generalFilter } = useNavigateStore.getState();
+  const { categoriesToShow, generalFilter } = useCurrentViewStore.getState();
   const graph = useTopicStore.getState();
   const node = findNodeOrThrow(nodeId, graph.nodes);
 
   const nodeAndNeighbors = [nodeId, ...neighbors(node, graph).map((neighbor) => neighbor.id)];
 
-  useNavigateStore.setState({
+  useCurrentViewStore.setState({
     format: "diagram",
     categoriesToShow: also ? categoriesToShow : [],
     generalFilter: {
@@ -272,9 +272,9 @@ export const showNodeAndNeighbors = (nodeId: string, also: boolean) => {
 };
 
 export const stopForcingNodeToShow = (nodeId: string) => {
-  const generalFilter = useNavigateStore.getState().generalFilter;
+  const generalFilter = useCurrentViewStore.getState().generalFilter;
 
-  useNavigateStore.setState({
+  useCurrentViewStore.setState({
     generalFilter: {
       ...generalFilter,
       nodesToShow: without(generalFilter.nodesToShow, nodeId),
@@ -283,9 +283,9 @@ export const stopForcingNodeToShow = (nodeId: string) => {
 };
 
 export const showNode = (nodeId: string) => {
-  const generalFilter = useNavigateStore.getState().generalFilter;
+  const generalFilter = useCurrentViewStore.getState().generalFilter;
 
-  useNavigateStore.setState({
+  useCurrentViewStore.setState({
     generalFilter: {
       ...generalFilter,
       nodesToShow: union(generalFilter.nodesToShow, [nodeId]),
@@ -297,9 +297,9 @@ export const showNode = (nodeId: string) => {
 };
 
 export const hideNode = (nodeId: string) => {
-  const generalFilter = useNavigateStore.getState().generalFilter;
+  const generalFilter = useCurrentViewStore.getState().generalFilter;
 
-  useNavigateStore.setState({
+  useCurrentViewStore.setState({
     generalFilter: {
       ...generalFilter,
       nodesToShow: without(generalFilter.nodesToShow, nodeId),
@@ -311,16 +311,16 @@ export const hideNode = (nodeId: string) => {
 };
 
 export const goBack = () => {
-  useNavigateStore.temporal.getState().undo();
+  useCurrentViewStore.temporal.getState().undo();
 };
 
 export const goForward = () => {
-  useNavigateStore.temporal.getState().redo();
+  useCurrentViewStore.temporal.getState().redo();
 };
 
-export const resetNavigation = (keepHistory = false) => {
-  useNavigateStore.setState(initialState, true, "resetNavigation");
-  if (!keepHistory) useNavigateStore.temporal.getState().clear();
+export const resetView = (keepHistory = false) => {
+  useCurrentViewStore.setState(initialState, true, "resetView");
+  if (!keepHistory) useCurrentViewStore.temporal.getState().clear();
 
   emitter.emit("changedDiagramFilter");
 };
@@ -331,28 +331,28 @@ const withDefaults = <T>(value: Partial<T>, defaultValue: T): T => {
   return mergeWith({}, defaultValue, value, (_a, b) => (Array.isArray(b) ? b : undefined));
 };
 
-export const loadNavigateStore = async (persistId: string) => {
+export const loadView = async (persistId: string) => {
   const builtPersistedName = `${persistedNameBase}-${persistId}`;
 
-  useNavigateStore.persist.setOptions({ name: builtPersistedName });
+  useCurrentViewStore.persist.setOptions({ name: builtPersistedName });
 
-  if (useNavigateStore.persist.getOptions().storage?.getItem(builtPersistedName)) {
+  if (useCurrentViewStore.persist.getOptions().storage?.getItem(builtPersistedName)) {
     // TODO(bug): for some reason, this results in an empty undo action _after_ clear() is run - despite awaiting this promise
-    await useNavigateStore.persist.rehydrate();
+    await useCurrentViewStore.persist.rehydrate();
 
     // use initial state to fill missing values in the persisted state
     // e.g. so that a new non-null value in initialState is non-null in the persisted state,
     // removing the need to write a migration for every new field
-    const persistedState = useNavigateStore.getState();
+    const persistedState = useCurrentViewStore.getState();
     const persistedWithDefaults = withDefaults(persistedState, initialState);
 
-    useNavigateStore.setState(persistedWithDefaults, true, "loadNavigateStore");
+    useCurrentViewStore.setState(persistedWithDefaults, true, "loadView");
   } else {
-    useNavigateStore.setState(initialState, true, "loadNavigateStore");
+    useCurrentViewStore.setState(initialState, true, "loadView");
   }
 
   // it doesn't make sense to want to undo a page load
-  useNavigateStore.temporal.getState().clear();
+  useCurrentViewStore.temporal.getState().clear();
 };
 
 // helpers

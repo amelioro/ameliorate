@@ -9,7 +9,7 @@ import { NodeSelect } from "../../../common/components/Form/NodeSelect";
 import { Select } from "../../../common/components/Form/Select";
 import { deepIsEqual } from "../../../common/store/utils";
 import { useCriteria, useNodesOfType, useSolutions } from "../../../topic/store/nodeHooks";
-import { getStandardFilterWithFallbacks, setStandardFilter } from "../../navigateStore";
+import { getStandardFilterWithFallbacks, setStandardFilter } from "../../currentViewStore/store";
 import {
   StandardFilter as StandardFilterData,
   infoStandardFilterTypes,

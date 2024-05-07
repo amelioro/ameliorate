@@ -1,7 +1,7 @@
 import { TableChart, TableChartOutlined } from "@mui/icons-material";
 import { memo, useCallback } from "react";
 
-import { viewCriteriaTable } from "../../../view/navigateStore";
+import { viewCriteriaTable } from "../../../view/currentViewStore/store";
 import { useNode, useNodeChildren } from "../../store/nodeHooks";
 import { Node, ProblemNode } from "../../utils/graph";
 import { Indicator } from "../Indicator/Indicator";
