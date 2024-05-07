@@ -33,21 +33,26 @@ import { StorageValue } from "zustand/middleware";
 import { errorWithData } from "../../../../common/errorHandling";
 import { NumberInput } from "../../../common/components/NumberInput/NumberInput";
 import {
-  setLayoutThoroughness,
   toggleFillNodesWithColor,
   toggleFlashlightMode,
-  toggleForceNodesIntoLayers,
-  toggleShowImpliedEdges,
   toggleUnrestrictedEditing,
   useFillNodesWithColor,
   useFlashlightMode,
-  useForceNodesIntoLayers,
-  useLayoutThoroughness,
-  useShowImpliedEdges,
   useUnrestrictedEditing,
 } from "../../../view/actionConfigStore";
 import { Perspectives } from "../../../view/components/Perspectives/Perspectives";
-import { resetView, useFormat } from "../../../view/currentViewStore/store";
+import {
+  setLayoutThoroughness,
+  toggleForceNodesIntoLayers,
+  useForceNodesIntoLayers,
+  useLayoutThoroughness,
+} from "../../../view/currentViewStore/layout";
+import {
+  resetView,
+  toggleShowImpliedEdges,
+  useFormat,
+  useShowImpliedEdges,
+} from "../../../view/currentViewStore/store";
 import { migrate } from "../../store/migrate";
 import { TopicStoreState } from "../../store/store";
 import { useOnPlayground } from "../../store/topicHooks";

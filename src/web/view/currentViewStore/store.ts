@@ -31,6 +31,13 @@ interface CurrentViewStoreState {
 
   tableFilter: TableFilter;
   generalFilter: GeneralFilter;
+
+  // infrequent options
+  showImpliedEdges: boolean;
+
+  // layout
+  forceNodesIntoLayers: boolean;
+  layoutThoroughness: number;
 }
 
 const initialState: CurrentViewStoreState = {
@@ -56,11 +63,16 @@ const initialState: CurrentViewStoreState = {
     showSecondaryResearch: false,
     showSecondaryStructure: true,
   },
+
+  showImpliedEdges: false,
+
+  forceNodesIntoLayers: true,
+  layoutThoroughness: 1, // by default, prefer keeping node types together over keeping parents close to children
 };
 
 const persistedNameBase = "navigateStore";
 
-const useCurrentViewStore = createWithEqualityFn<CurrentViewStoreState>()(
+export const useCurrentViewStore = createWithEqualityFn<CurrentViewStoreState>()(
   temporal(
     persist(
       devtools(() => initialState),
@@ -160,6 +172,10 @@ export const usePrimaryNodeTypes = () => {
   return useCurrentViewStore((state) => {
     return state.categoriesToShow.flatMap((category) => infoNodeTypes[category]);
   });
+};
+
+export const useShowImpliedEdges = () => {
+  return useCurrentViewStore((state) => state.showImpliedEdges);
 };
 
 export const useCanGoBackForward = () => {
@@ -306,6 +322,12 @@ export const hideNode = (nodeId: string) => {
       nodesToHide: union(generalFilter.nodesToHide, [nodeId]),
     },
   });
+
+  emitter.emit("changedDiagramFilter");
+};
+
+export const toggleShowImpliedEdges = (show: boolean) => {
+  useCurrentViewStore.setState({ showImpliedEdges: show });
 
   emitter.emit("changedDiagramFilter");
 };

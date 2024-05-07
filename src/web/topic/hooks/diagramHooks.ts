@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { useForceNodesIntoLayers, useLayoutThoroughness } from "../../view/actionConfigStore";
+import { useForceNodesIntoLayers, useLayoutThoroughness } from "../../view/currentViewStore/layout";
 import { useSelectedGraphPart } from "../../view/currentViewStore/store";
 import { Diagram, PositionedDiagram, PositionedNode } from "../utils/diagram";
 import { NodePosition, layout } from "../utils/layout";
