@@ -9,6 +9,7 @@ import { Loading } from "../../web/common/components/Loading/Loading";
 import { useSessionUser } from "../../web/common/hooks";
 import { trpc } from "../../web/common/trpc";
 import { populateDiagramFromApi } from "../../web/topic/store/loadActions";
+import { loadActionConfig } from "../../web/view/actionConfigStore";
 import { loadView } from "../../web/view/currentViewStore/store";
 import { setInitialPerspective } from "../../web/view/perspectiveStore";
 
@@ -60,6 +61,7 @@ const Topic: NextPage = () => {
       setPopulatedFromApi(false);
       populateDiagramFromApi(diagramData);
       await loadView(`${diagramData.creatorName}/${diagramData.title}`);
+      await loadActionConfig(`${diagramData.creatorName}/${diagramData.title}`);
       setPopulatedFromApi(true);
     };
     void populate();

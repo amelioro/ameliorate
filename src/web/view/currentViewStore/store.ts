@@ -1,4 +1,3 @@
-import mergeWith from "lodash/mergeWith";
 import { temporal } from "zundo";
 import { useStore } from "zustand";
 import { devtools, persist } from "zustand/middleware";
@@ -6,6 +5,7 @@ import { createWithEqualityFn } from "zustand/traditional";
 
 import { Format, InfoCategory } from "../../../common/infoCategory";
 import { nodeTypes } from "../../../common/node";
+import { withDefaults } from "../../../common/object";
 import { emitter } from "../../common/event";
 import { useGraphPart } from "../../topic/store/graphPartHooks";
 import { StandardFilter } from "../utils/diagramFilter";
@@ -141,12 +141,6 @@ export const resetView = (keepHistory = false) => {
   if (!keepHistory) useCurrentViewStore.temporal.getState().clear();
 
   emitter.emit("changedDiagramFilter");
-};
-
-const withDefaults = <T>(value: Partial<T>, defaultValue: T): T => {
-  // thanks https://stackoverflow.com/a/66247134/8409296
-  // empty object to avoid mutation
-  return mergeWith({}, defaultValue, value, (_a, b) => (Array.isArray(b) ? b : undefined));
 };
 
 export const loadView = async (persistId: string) => {

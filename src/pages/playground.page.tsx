@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Loading } from "../web/common/components/Loading/Loading";
 import { populateDiagramFromLocalStorage } from "../web/topic/store/loadActions";
 import { playgroundUsername } from "../web/topic/store/store";
+import { loadActionConfig } from "../web/view/actionConfigStore";
 import { loadView } from "../web/view/currentViewStore/store";
 import { setInitialPerspective } from "../web/view/perspectiveStore";
 
@@ -38,6 +39,7 @@ const Playground: NextPage = () => {
     const populate = async () => {
       await populateDiagramFromLocalStorage();
       await loadView("playground");
+      await loadActionConfig("playground");
       setInitiallyPopulated(true);
     };
     void populate();

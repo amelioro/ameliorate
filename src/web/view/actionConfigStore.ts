@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+import { withDefaults } from "../../common/object";
+
 interface ActionConfigStoreState {
   unrestrictedEditing: boolean;
   flashlightMode: boolean;
@@ -11,9 +13,11 @@ const initialState: ActionConfigStoreState = {
   flashlightMode: false,
 };
 
+const persistedNameBase = "action-config-storage";
+
 const useActionConfigStore = create<ActionConfigStoreState>()(
   persist(() => initialState, {
-    name: "action-config-storage",
+    name: persistedNameBase,
   })
 );
 
@@ -33,6 +37,26 @@ export const toggleUnrestrictedEditing = (unrestricted: boolean) => {
 
 export const toggleFlashlightMode = (flashlight: boolean) => {
   useActionConfigStore.setState({ flashlightMode: flashlight });
+};
+
+export const loadActionConfig = async (persistId: string) => {
+  const builtPersistedName = `${persistedNameBase}-${persistId}`;
+
+  useActionConfigStore.persist.setOptions({ name: builtPersistedName });
+
+  if (useActionConfigStore.persist.getOptions().storage?.getItem(builtPersistedName)) {
+    await useActionConfigStore.persist.rehydrate();
+
+    // use initial state to fill missing values in the persisted state
+    // e.g. so that a new non-null value in initialState is non-null in the persisted state,
+    // removing the need to write a migration for every new field
+    const persistedState = useActionConfigStore.getState();
+    const persistedWithDefaults = withDefaults(persistedState, initialState);
+
+    useActionConfigStore.setState(persistedWithDefaults, true);
+  } else {
+    useActionConfigStore.setState(initialState, true);
+  }
 };
 
 // utils
