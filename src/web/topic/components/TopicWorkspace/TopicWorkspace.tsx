@@ -2,7 +2,7 @@ import { Global } from "@emotion/react";
 import { Box, useMediaQuery } from "@mui/material";
 
 import { ContextMenu } from "../../../common/components/ContextMenu/ContextMenu";
-import { useFormat } from "../../../view/navigateStore";
+import { useFormat } from "../../../view/currentViewStore/store";
 import { CriteriaTable } from "../CriteriaTable/CriteriaTable";
 import { Diagram } from "../Diagram/Diagram";
 import { TopicToolbar } from "../Surface/TopicToolbar";

@@ -12,7 +12,7 @@ import React, { useState } from "react";
 
 import { errorWithData } from "../../../../common/errorHandling";
 import { useSessionUser } from "../../../common/hooks";
-import { useGeneralFilter, useTableFilter } from "../../../view/navigateStore";
+import { useGeneralFilter, useTableFilter } from "../../../view/currentViewStore/filter";
 import { getSelectedTradeoffNodes } from "../../../view/utils/diagramFilter";
 import { applyScoreFilter } from "../../../view/utils/generalFilter";
 import { useCriterionSolutionEdges, useDefaultNode, useNodeChildren } from "../../store/nodeHooks";

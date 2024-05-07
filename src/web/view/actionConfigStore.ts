@@ -1,78 +1,61 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+import { withDefaults } from "../../common/object";
+
 interface ActionConfigStoreState {
-  showImpliedEdges: boolean;
   unrestrictedEditing: boolean;
-  forceNodesIntoLayers: boolean;
   flashlightMode: boolean;
-  fillNodesWithColor: boolean;
-  layoutThoroughness: number;
 }
 
 const initialState: ActionConfigStoreState = {
-  showImpliedEdges: false,
   unrestrictedEditing: false,
-  forceNodesIntoLayers: true,
   flashlightMode: false,
-  fillNodesWithColor: true,
-  layoutThoroughness: 1,
 };
+
+const persistedNameBase = "action-config-storage";
 
 const useActionConfigStore = create<ActionConfigStoreState>()(
   persist(() => initialState, {
-    name: "action-config-storage",
+    name: persistedNameBase,
+    version: 1,
+    skipHydration: true,
+    // don't merge persisted state with current state when rehydrating - instead, use the initialState to fill in missing values
+    // e.g. so that a new non-null value in initialState is non-null in the persisted state,
+    // removing the need to write a migration for every new field
+    merge: (persistedState, _currentState) =>
+      withDefaults(persistedState as Partial<ActionConfigStoreState>, initialState),
   })
 );
 
 // hooks
-export const useShowImpliedEdges = () => {
-  return useActionConfigStore((state) => state.showImpliedEdges);
-};
-
 export const useUnrestrictedEditing = () => {
   return useActionConfigStore((state) => state.unrestrictedEditing);
-};
-
-export const useForceNodesIntoLayers = () => {
-  return useActionConfigStore((state) => state.forceNodesIntoLayers);
 };
 
 export const useFlashlightMode = () => {
   return useActionConfigStore((state) => state.flashlightMode);
 };
 
-export const useFillNodesWithColor = () => {
-  return useActionConfigStore((state) => state.fillNodesWithColor);
-};
-
-export const useLayoutThoroughness = () => {
-  return useActionConfigStore((state) => state.layoutThoroughness);
-};
-
 // actions
-export const toggleShowImpliedEdges = (show: boolean) => {
-  useActionConfigStore.setState({ showImpliedEdges: show });
-};
-
 export const toggleUnrestrictedEditing = (unrestricted: boolean) => {
   useActionConfigStore.setState({ unrestrictedEditing: unrestricted });
-};
-
-export const toggleForceNodesIntoLayers = (force: boolean) => {
-  useActionConfigStore.setState({ forceNodesIntoLayers: force });
 };
 
 export const toggleFlashlightMode = (flashlight: boolean) => {
   useActionConfigStore.setState({ flashlightMode: flashlight });
 };
 
-export const toggleFillNodesWithColor = (fill: boolean) => {
-  useActionConfigStore.setState({ fillNodesWithColor: fill });
-};
+export const loadActionConfig = async (persistId: string) => {
+  const builtPersistedName = `${persistedNameBase}-${persistId}`;
 
-export const setLayoutThoroughness = (thoroughness: number) => {
-  useActionConfigStore.setState({ layoutThoroughness: thoroughness });
+  useActionConfigStore.persist.setOptions({ name: builtPersistedName });
+
+  if (useActionConfigStore.persist.getOptions().storage?.getItem(builtPersistedName)) {
+    await useActionConfigStore.persist.rehydrate();
+  } else {
+    useActionConfigStore.setState(initialState, true);
+  }
 };
 
 // utils

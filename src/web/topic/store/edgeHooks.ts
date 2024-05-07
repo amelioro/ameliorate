@@ -1,6 +1,6 @@
 import { shallow } from "zustand/shallow";
 
-import { useIsAnyGraphPartSelected } from "../../view/navigateStore";
+import { useIsAnyGraphPartSelected } from "../../view/currentViewStore/store";
 import { nodes } from "../utils/edge";
 import { findEdgeOrThrow } from "../utils/graph";
 import { useTopicStore } from "./store";

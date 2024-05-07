@@ -3,8 +3,9 @@ import { memo, useEffect, useRef } from "react";
 
 import { useSessionUser } from "../../../common/hooks";
 import { openContextMenu } from "../../../common/store/contextMenuActions";
-import { useFillNodesWithColor, useUnrestrictedEditing } from "../../../view/actionConfigStore";
-import { setSelected, useIsGraphPartSelected } from "../../../view/navigateStore";
+import { useUnrestrictedEditing } from "../../../view/actionConfigStore";
+import { setSelected, useIsGraphPartSelected } from "../../../view/currentViewStore/store";
+import { useFillNodesWithColor } from "../../../view/userConfigStore";
 import { finishAddingNode, setCustomNodeType, setNodeLabel } from "../../store/actions";
 import { useUserCanEditTopicData } from "../../store/userHooks";
 import { Node } from "../../utils/graph";

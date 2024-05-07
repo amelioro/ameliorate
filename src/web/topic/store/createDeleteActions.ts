@@ -4,7 +4,7 @@ import { errorWithData } from "../../../common/errorHandling";
 import { structureNodeTypes } from "../../../common/node";
 import { emitter } from "../../common/event";
 import { getUnrestrictedEditing } from "../../view/actionConfigStore";
-import { setSelected } from "../../view/navigateStore";
+import { setSelected } from "../../view/currentViewStore/store";
 import { getImplicitLabel } from "../utils/claim";
 import { Relation, canCreateEdge, getRelation } from "../utils/edge";
 import {

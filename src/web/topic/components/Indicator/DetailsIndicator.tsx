@@ -1,7 +1,7 @@
 import { Article, ArticleOutlined } from "@mui/icons-material";
 import { useCallback } from "react";
 
-import { setSelected } from "../../../view/navigateStore";
+import { setSelected } from "../../../view/currentViewStore/store";
 import { viewDetails } from "../TopicPane/paneStore";
 import { Indicator } from "./Indicator";
 

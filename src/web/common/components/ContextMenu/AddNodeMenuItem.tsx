@@ -3,7 +3,8 @@ import { NestedMenuItem } from "mui-nested-menu";
 import { addNodeWithoutParent } from "../../../topic/store/createDeleteActions";
 import { useUserCanEditTopicData } from "../../../topic/store/userHooks";
 import { nodeDecorations } from "../../../topic/utils/node";
-import { useFormat, usePrimaryNodeTypes } from "../../../view/navigateStore";
+import { usePrimaryNodeTypes } from "../../../view/currentViewStore/filter";
+import { useFormat } from "../../../view/currentViewStore/store";
 import { useSessionUser } from "../../hooks";
 import { CloseOnClickMenuItem } from "./CloseOnClickMenuItem";
 

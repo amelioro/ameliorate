@@ -7,7 +7,7 @@ import { FormContext } from "../../../common/components/Form/FormContext";
 import { NodeSelect } from "../../../common/components/Form/NodeSelect";
 import { deepIsEqual } from "../../../common/store/utils";
 import { useCriteria, useNodesOfType, useSolutions } from "../../../topic/store/nodeHooks";
-import { setTableFilter, useTableFilterWithFallbacks } from "../../navigateStore";
+import { setTableFilter, useTableFilterWithFallbacks } from "../../currentViewStore/filter";
 import { TableFilter, tableFilterSchema } from "../../utils/tableFilter";
 
 export const TableFilters = () => {

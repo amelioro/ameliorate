@@ -14,7 +14,7 @@ import { emitter } from "../../../common/event";
 import { useSessionUser } from "../../../common/hooks";
 import { openContextMenu } from "../../../common/store/contextMenuActions";
 import { useFlashlightMode } from "../../../view/actionConfigStore";
-import { setSelected } from "../../../view/navigateStore";
+import { setSelected } from "../../../view/currentViewStore/store";
 import { useLayoutedDiagram } from "../../hooks/diagramHooks";
 import { useViewportUpdater } from "../../hooks/flowHooks";
 import { connectNodes, reconnectEdge } from "../../store/createDeleteActions";

@@ -3,8 +3,11 @@ import { temporal } from "zundo";
 import { devtools, persist } from "zustand/middleware";
 import { createWithEqualityFn } from "zustand/traditional";
 
-import { useShowImpliedEdges } from "../../view/actionConfigStore";
-import { useDiagramFilter, useGeneralFilter } from "../../view/navigateStore";
+import {
+  useDiagramFilter,
+  useGeneralFilter,
+  useShowImpliedEdges,
+} from "../../view/currentViewStore/filter";
 import { usePerspectives } from "../../view/perspectiveStore";
 import { applyDiagramFilter } from "../../view/utils/diagramFilter";
 import { applyNodeTypeFilter, applyScoreFilter } from "../../view/utils/generalFilter";

@@ -1,7 +1,7 @@
 import { AutoStories, School, ThumbsUpDown } from "@mui/icons-material";
 import { FormControlLabel, Switch as MuiSwitch, Stack, Typography } from "@mui/material";
 
-import { setShowInformation, useDiagramFilter } from "../../navigateStore";
+import { setShowInformation, useDiagramFilter } from "../../currentViewStore/filter";
 import { StandardFilter } from "./StandardFilter";
 
 export const InformationFilters = () => {

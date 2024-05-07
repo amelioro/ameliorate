@@ -7,7 +7,7 @@ import { useSessionUser } from "../../../common/hooks";
 import { openContextMenu } from "../../../common/store/contextMenuActions";
 import { infoColor } from "../../../common/theme";
 import { useUnrestrictedEditing } from "../../../view/actionConfigStore";
-import { setSelected } from "../../../view/navigateStore";
+import { setSelected } from "../../../view/currentViewStore/store";
 import { setCustomEdgeLabel } from "../../store/actions";
 import { useIsNodeSelected } from "../../store/edgeHooks";
 import { useUserCanEditTopicData } from "../../store/userHooks";

@@ -1,7 +1,7 @@
 import { Stack } from "@mui/material";
 import { Position } from "reactflow";
 
-import { useIsGraphPartSelected } from "../../../view/navigateStore";
+import { useIsGraphPartSelected } from "../../../view/currentViewStore/store";
 import { useNode } from "../../store/nodeHooks";
 import { Edge } from "../../utils/graph";
 import { EdgeProps } from "../Diagram/Diagram";

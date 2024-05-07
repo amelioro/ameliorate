@@ -2,7 +2,7 @@ import { Code, InfoOutlined, School } from "@mui/icons-material";
 import { type ButtonProps } from "@mui/material";
 import { useCallback } from "react";
 
-import { setSelected } from "../../../view/navigateStore";
+import { setSelected } from "../../../view/currentViewStore/store";
 import { useResearchNodes } from "../../store/graphPartHooks";
 import { useDisplayScores } from "../../store/scoreHooks";
 import { Score } from "../../utils/graph";
