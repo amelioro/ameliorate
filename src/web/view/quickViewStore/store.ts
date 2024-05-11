@@ -57,21 +57,16 @@ const initialStateWithBasicViews = () => {
 const persistedNameBase = "quickViewStore";
 
 export const useQuickViewStore = createWithEqualityFn<QuickViewStoreState>()(
-  temporal(
-    persist(
-      devtools(() => initialState),
-      {
-        name: persistedNameBase,
-        version: 1,
-        skipHydration: true,
-        // don't merge persisted state with current state when rehydrating - instead, use the initialState to fill in missing values
-        // e.g. so that a new non-null value in initialState is non-null in the persisted state,
-        // removing the need to write a migration for every new field
-        merge: (persistedState, _currentState) =>
-          withDefaults(persistedState as Partial<QuickViewStoreState>, initialState),
-      }
-    )
-  ),
+  persist(temporal(devtools(() => initialState)), {
+    name: persistedNameBase,
+    version: 1,
+    skipHydration: true,
+    // don't merge persisted state with current state when rehydrating - instead, use the initialState to fill in missing values
+    // e.g. so that a new non-null value in initialState is non-null in the persisted state,
+    // removing the need to write a migration for every new field
+    merge: (persistedState, _currentState) =>
+      withDefaults(persistedState as Partial<QuickViewStoreState>, initialState),
+  }),
 
   // Using `createWithEqualityFn` so that we can do a diff in hooks that return new arrays/objects
   // so that we can avoid extra renders
