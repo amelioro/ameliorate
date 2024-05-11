@@ -300,8 +300,10 @@ export const isEdgeImpliedByComposition = (edge: Edge, topicGraph: Graph) => {
   const componentsOfParent = components(edgeParent, topicGraph);
   const impliedThroughParentComponent = componentsOfParent.some((component) => {
     return topicGraph.edges.some(
-      (edge) =>
-        edge.source === component.id && edge.label === edge.label && edge.target === edgeChild.id
+      (otherEdge) =>
+        otherEdge.source === component.id &&
+        otherEdge.label === edge.label &&
+        otherEdge.target === edgeChild.id
     );
   });
 
@@ -311,8 +313,10 @@ export const isEdgeImpliedByComposition = (edge: Edge, topicGraph: Graph) => {
   const componentsOfChild = components(edgeChild, topicGraph);
   const impliedThroughChildComponent = componentsOfChild.some((component) => {
     return topicGraph.edges.some(
-      (edge) =>
-        edge.target === component.id && edge.label === edge.label && edge.source === edgeParent.id
+      (otherEdge) =>
+        otherEdge.target === component.id &&
+        otherEdge.label === edge.label &&
+        otherEdge.source === edgeParent.id
     );
   });
 
