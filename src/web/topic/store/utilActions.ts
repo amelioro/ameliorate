@@ -86,7 +86,7 @@ export const setTopicData = (state: TopicStoreState, sessionUsername?: string) =
 
   ensureUnique(state.nodes, state.edges, userScores);
 
-  useTopicStore.setState({ ...state, topic, userScores }, false, "setState");
+  useTopicStore.setState({ ...state, topic, userScores }, false, "setTopicData");
 
   emitter.emit("overwroteTopicData");
 };
@@ -98,7 +98,7 @@ export const setTopicData = (state: TopicStoreState, sessionUsername?: string) =
 export const resetTopicData = () => {
   // TODO?: allow topic description to be reset, since it's editable from the playground
   const topic = useTopicStore.getState().topic;
-  useTopicStore.setState({ ...initialState, topic }, false, "resetState");
+  useTopicStore.setState({ ...initialState, topic }, false, "resetTopicData");
 
   emitter.emit("overwroteTopicData");
 };
