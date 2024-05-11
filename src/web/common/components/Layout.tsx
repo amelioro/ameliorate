@@ -43,8 +43,13 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
   const usingTinyScreen = useMediaQuery(theme.breakpoints.down("xs"));
   const usingBigScreen = useMediaQuery(theme.breakpoints.up("sm"));
 
+  const [isInitialRender, setIsInitialRender] = useState(true);
   const [isUserDrawerOpen, setIsUserDrawerOpen] = useState(false);
   const [isSiteDrawerOpen, setIsSiteDrawerOpen] = useState(false);
+
+  useEffect(() => {
+    setIsInitialRender(false);
+  }, []);
 
   useEffect(() => {
     // close drawers after navigating
@@ -131,6 +136,8 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
                   href={
                     isAuthed
                       ? "/choose-username"
+                      : isInitialRender // server-client mismatch if we use `returnTo` on initial render because server doesn't have access to asPath
+                      ? "/api/auth/login"
                       : `/api/auth/login?returnTo=${encodeURIComponent(asPath)}`
                   }
                 >

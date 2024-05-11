@@ -1,3 +1,4 @@
+import Router from "next/router";
 import { temporal } from "zundo";
 import { useStore } from "zustand";
 import { devtools, persist } from "zustand/middleware";
@@ -8,11 +9,17 @@ import { nodeTypes } from "../../../common/node";
 import { withDefaults } from "../../../common/object";
 import { emitter } from "../../common/event";
 import { useGraphPart } from "../../topic/store/graphPartHooks";
+import {
+  getDefaultQuickView,
+  getQuickViewByTitle,
+  selectViewFromState,
+} from "../quickViewStore/store";
 import { StandardFilter } from "../utils/diagramFilter";
 import { GeneralFilter } from "../utils/generalFilter";
 import { TableFilter } from "../utils/tableFilter";
+import { triggerEvent } from "./triggerEventMiddleware";
 
-interface CurrentViewStoreState {
+export interface ViewState {
   selectedGraphPartId: string | null;
   format: Format;
 
@@ -33,7 +40,7 @@ interface CurrentViewStoreState {
   layoutThoroughness: number;
 }
 
-const initialState: CurrentViewStoreState = {
+export const initialViewState: ViewState = {
   selectedGraphPartId: null,
   format: "diagram",
 
@@ -65,20 +72,22 @@ const initialState: CurrentViewStoreState = {
 
 const persistedNameBase = "navigateStore";
 
-export const useCurrentViewStore = createWithEqualityFn<CurrentViewStoreState>()(
-  temporal(
-    persist(
-      devtools(() => initialState),
-      {
-        name: persistedNameBase,
-        version: 1,
-        skipHydration: true,
-        // don't merge persisted state with current state when rehydrating - instead, use the initialState to fill in missing values
-        // e.g. so that a new non-null value in initialState is non-null in the persisted state,
-        // removing the need to write a migration for every new field
-        merge: (persistedState, _currentState) =>
-          withDefaults(persistedState as Partial<CurrentViewStoreState>, initialState),
-      }
+export const useCurrentViewStore = createWithEqualityFn<ViewState>()(
+  triggerEvent(
+    temporal(
+      persist(
+        devtools(() => initialViewState),
+        {
+          name: persistedNameBase,
+          version: 1,
+          skipHydration: true,
+          // don't merge persisted state with current state when rehydrating - instead, use the initialState to fill in missing values
+          // e.g. so that a new non-null value in initialState is non-null in the persisted state,
+          // removing the need to write a migration for every new field
+          merge: (persistedState, _currentState) =>
+            withDefaults(persistedState as Partial<ViewState>, initialViewState),
+        }
+      )
     )
   ),
 
@@ -126,11 +135,20 @@ export const useCanGoBackForward = () => {
 
 // actions
 export const setSelected = (graphPartId: string | null) => {
+  const { selectedGraphPartId } = useCurrentViewStore.getState();
+  if (selectedGraphPartId === graphPartId) return;
+
   useCurrentViewStore.setState({ selectedGraphPartId: graphPartId }, false, "setSelected");
 };
 
 export const setFormat = (format: Format) => {
   useCurrentViewStore.setState({ format }, false, "setFormat");
+};
+
+export const setView = (viewState: ViewState) => {
+  useCurrentViewStore.setState(viewState, true, "setView");
+
+  emitter.emit("changedDiagramFilter");
 };
 
 export const goBack = () => {
@@ -142,7 +160,7 @@ export const goForward = () => {
 };
 
 export const resetView = (keepHistory = false) => {
-  useCurrentViewStore.setState(initialState, true, "resetView");
+  useCurrentViewStore.setState(initialViewState, true, "resetView");
   if (!keepHistory) useCurrentViewStore.temporal.getState().clear();
 
   emitter.emit("changedDiagramFilter");
@@ -153,13 +171,36 @@ export const loadView = async (persistId: string) => {
 
   useCurrentViewStore.persist.setOptions({ name: builtPersistedName });
 
-  if (useCurrentViewStore.persist.getOptions().storage?.getItem(builtPersistedName)) {
+  const urlParams = new URLSearchParams(Router.query as Record<string, string>); // seems to be fine when passing ParsedUrlQuery but ts doesn't like the types, so cast it
+  const titleFromParams = urlParams.get("view");
+  const quickViewFromParams = titleFromParams ? getQuickViewByTitle(titleFromParams) : undefined;
+
+  if (quickViewFromParams) {
+    useCurrentViewStore.setState(quickViewFromParams.viewState, true, "loadView");
+  } else if (useCurrentViewStore.persist.getOptions().storage?.getItem(builtPersistedName)) {
     // TODO(bug): for some reason, this results in an empty undo action _after_ clear() is run - despite awaiting this promise
     await useCurrentViewStore.persist.rehydrate();
   } else {
-    useCurrentViewStore.setState(initialState, true, "loadView");
+    const defaultQuickView = getDefaultQuickView();
+    const defaultViewState = defaultQuickView?.viewState ?? initialViewState;
+
+    useCurrentViewStore.setState(defaultViewState, true, "loadView");
   }
+
+  // make sure relevant quick view is selected if there is one
+  const newViewState = useCurrentViewStore.getState();
+  selectViewFromState(newViewState);
 
   // it doesn't make sense to want to undo a page load
   useCurrentViewStore.temporal.getState().clear();
 };
+
+// util actions
+export const getView = () => {
+  return useCurrentViewStore.getState();
+};
+
+// misc
+emitter.on("overwroteTopicData", () => {
+  resetView();
+});
