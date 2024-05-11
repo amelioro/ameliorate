@@ -66,7 +66,7 @@ export const initialViewState: ViewState = {
 
   showImpliedEdges: false,
 
-  forceNodesIntoLayers: true,
+  forceNodesIntoLayers: false,
   layoutThoroughness: 1, // by default, prefer keeping node types together over keeping parents close to children
 };
 
