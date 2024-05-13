@@ -12,20 +12,20 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { quickViewSchema } from "../../../../common/view";
-import { setTitle } from "../../../view/quickViewStore/store";
+import { QuickView, setTitle } from "../../../view/quickViewStore/store";
 
 interface Props {
-  viewIndex: number;
-  viewTitles: string[];
+  currentView: QuickView;
+  quickViews: QuickView[];
   onClose: () => void;
 }
 
-const formSchema = (currentTitle: string, viewTitles: string[]) => {
+const formSchema = (currentView: QuickView, quickViews: QuickView[]) => {
   return z.object({
     title: quickViewSchema.shape.title.refine(
       (title) => {
-        if (title === currentTitle) return true;
-        return !viewTitles.includes(title);
+        if (title === currentView.title) return true;
+        return !quickViews.some((view) => view.title === title);
       },
       (_title) => ({ message: "Title must be unique." })
     ),
@@ -34,10 +34,7 @@ const formSchema = (currentTitle: string, viewTitles: string[]) => {
 
 type FormData = z.infer<ReturnType<typeof formSchema>>;
 
-export const QuickViewForm = ({ viewIndex, viewTitles, onClose }: Props) => {
-  const currentTitle = viewTitles[viewIndex];
-  if (!currentTitle) throw new Error("No title found for view index");
-
+export const QuickViewForm = ({ currentView, quickViews, onClose }: Props) => {
   const {
     handleSubmit,
     register,
@@ -45,9 +42,9 @@ export const QuickViewForm = ({ viewIndex, viewTitles, onClose }: Props) => {
   } = useForm<FormData>({
     mode: "onBlur",
     reValidateMode: "onBlur",
-    resolver: zodResolver(formSchema(currentTitle, viewTitles)),
+    resolver: zodResolver(formSchema(currentView, quickViews)),
     defaultValues: {
-      title: viewTitles[viewIndex],
+      title: currentView.title,
     },
   });
 
@@ -59,7 +56,7 @@ export const QuickViewForm = ({ viewIndex, viewTitles, onClose }: Props) => {
         component: "form",
         onSubmit: (event: FormEvent<HTMLFormElement>) =>
           void handleSubmit((data) => {
-            setTitle(viewIndex, data.title);
+            setTitle(currentView.id, data.title);
             onClose();
           })(event),
       }}

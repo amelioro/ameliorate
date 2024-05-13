@@ -18,7 +18,7 @@ interface QuickViewStoreState {
 }
 
 // TODO: build type from quickViewSchema once view state is extracted to common
-interface QuickView {
+export interface QuickView {
   id: string;
   type: QuickViewType;
   title: string;
@@ -28,7 +28,7 @@ interface QuickView {
 
 const initialState: QuickViewStoreState = {
   views: [],
-  selectedIndex: null,
+  selectedViewId: null,
 };
 
 const generateBasicViews = (): QuickView[] => {
@@ -77,14 +77,14 @@ export const useQuickViewStore = createWithEqualityFn<QuickViewStoreState>()(
 const useTemporalStore = () => useStore(useQuickViewStore.temporal);
 
 // hooks
-export const useQuickViewTitles = () => {
+export const useQuickViews = () => {
   return useQuickViewStore((state) =>
-    state.views.toSorted((view1, view2) => view1.order - view2.order).map((view) => view.title)
+    state.views.toSorted((view1, view2) => view1.order - view2.order)
   );
 };
 
-export const useSelectedIndex = () => {
-  return useQuickViewStore((state) => state.selectedIndex);
+export const useSelectedViewId = () => {
+  return useQuickViewStore((state) => state.selectedViewId);
 };
 
 export const useCanUndoRedo = () => {
@@ -109,11 +109,11 @@ export const createView = () => {
   const state = useQuickViewStore.getState();
   const currentView = getView();
 
-  const id = shortUUID.generate();
+  const newViewId = shortUUID.generate();
   const newTitle = getNewTitle(state.views.map((view) => view.title));
 
   const newQuickView: QuickView = {
-    id: id,
+    id: newViewId,
     type: "quick",
     title: newTitle,
     order: state.views.length,
@@ -123,18 +123,18 @@ export const createView = () => {
   useQuickViewStore.setState(
     (state) => ({
       views: state.views.concat(newQuickView),
-      selectedIndex: state.views.length,
+      selectedViewId: newViewId,
     }),
     false,
     "createView"
   );
 };
 
-export const setTitle = (viewIndex: number, newTitle: string) => {
+export const setTitle = (viewId: string, newTitle: string) => {
   const state = useQuickViewStore.getState();
 
-  const viewToRename = state.views[viewIndex];
-  if (!viewToRename) throw new Error(`No view at index ${viewIndex}`);
+  const viewToRename = state.views.find((view) => view.id === viewId);
+  if (!viewToRename) throw new Error(`No view with id ${viewId}`);
 
   useQuickViewStore.setState(
     {
@@ -149,35 +149,35 @@ export const setTitle = (viewIndex: number, newTitle: string) => {
   updateURLParams(newTitle);
 };
 
-export const saveView = (viewIndex: number) => {
+export const saveView = (viewId: string) => {
   const state = useQuickViewStore.getState();
   const currentView = getView();
 
-  const viewToSave = state.views[viewIndex];
-  if (!viewToSave) throw new Error(`No view at index ${viewIndex}`);
+  const viewToSave = state.views.find((view) => view.id === viewId);
+  if (!viewToSave) throw new Error(`No view with id ${viewId}`);
 
   useQuickViewStore.setState(
     {
       views: state.views.map((view) =>
         view.id === viewToSave.id ? { ...view, viewState: currentView } : view
       ),
-      selectedIndex: state.selectedIndex ?? viewIndex, // after saving, the newly-saved view should match the current view state, so select it if nothing is selected
+      selectedViewId: state.selectedViewId ?? viewId, // after saving, the newly-saved view should match the current view state, so select it if nothing is selected
     },
     false,
     "saveView"
   );
 };
 
-export const deleteView = (viewIndex: number) => {
+export const deleteView = (viewId: string) => {
   const state = useQuickViewStore.getState();
 
-  const viewToDelete = state.views[viewIndex];
-  if (!viewToDelete) throw new Error(`No view at index ${viewIndex}`);
+  const viewToDelete = state.views.find((view) => view.id === viewId);
+  if (!viewToDelete) throw new Error(`No view with id ${viewId}`);
 
   useQuickViewStore.setState(
     {
       views: state.views.filter((view) => view.id !== viewToDelete.id),
-      selectedIndex: state.selectedIndex === viewIndex ? null : state.selectedIndex,
+      selectedViewId: state.selectedViewId === viewId ? null : state.selectedViewId,
     },
     false,
     "deleteView"
@@ -196,19 +196,19 @@ const updateURLParams = (viewTitle: string | null) => {
 };
 
 /**
- * @param viewIndex index of the view to select, or null to deselect
+ * @param viewId id of the view to select, or null to deselect
  */
-export const selectView = (viewIndex: number | null) => {
+export const selectView = (viewId: string | null) => {
   const { views } = useQuickViewStore.getState();
 
-  const newlySelectedView = viewIndex !== null ? views[viewIndex] : null;
+  const newlySelectedView = viewId !== null ? views.find((view) => view.id === viewId) : null;
 
-  if (newlySelectedView === undefined) throw new Error(`No view at index ${viewIndex}`);
+  if (newlySelectedView === undefined) throw new Error(`No view with id ${viewId}`);
 
   // would be annoying to make undo update the currentViewStore too, so just don't impact undo/redo at all when selecting
   // just use the currentViewStore's back to undo something like that.
   useQuickViewStore.temporal.getState().pause();
-  useQuickViewStore.setState({ selectedIndex: viewIndex }, false, "selectView");
+  useQuickViewStore.setState({ selectedViewId: viewId }, false, "selectView");
   useQuickViewStore.temporal.getState().resume();
 
   if (newlySelectedView !== null) setView(newlySelectedView.viewState);
@@ -218,11 +218,11 @@ export const selectView = (viewIndex: number | null) => {
 export const selectViewFromState = (viewState: ViewState) => {
   const { views } = useQuickViewStore.getState();
 
-  const viewIndex = views.findIndex((view) => deepIsEqual(view.viewState, viewState));
-  if (viewIndex === -1) return;
+  const view = views.find((view) => deepIsEqual(view.viewState, viewState));
+  if (view === undefined) return;
 
   useQuickViewStore.temporal.getState().pause();
-  useQuickViewStore.setState({ selectedIndex: viewIndex }, false, "selectViewFromState");
+  useQuickViewStore.setState({ selectedViewId: view.id }, false, "selectViewFromState");
   useQuickViewStore.temporal.getState().resume();
 
   // don't set current view because this is called after loading current view
@@ -273,10 +273,10 @@ export const getDefaultQuickView = () => {
 // if the view changes and a quick view is selected, deselect the quick view
 emitter.on("changedView", (newView) => {
   const state = useQuickViewStore.getState();
-  if (state.selectedIndex === null) return;
+  if (state.selectedViewId === null) return;
 
-  const selectedView = state.views[state.selectedIndex];
-  if (selectedView === undefined) throw new Error(`No view at index ${state.selectedIndex}`);
+  const selectedView = state.views.find((view) => view.id === state.selectedViewId);
+  if (selectedView === undefined) throw new Error(`No view with id ${state.selectedViewId}`);
 
   if (!deepIsEqual(selectedView.viewState, newView)) {
     selectView(null);

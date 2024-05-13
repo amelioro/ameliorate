@@ -12,6 +12,7 @@ import { useState } from "react";
 
 import { useSessionUser } from "../../../common/hooks";
 import {
+  QuickView,
   createView,
   deleteView,
   redo,
@@ -19,8 +20,8 @@ import {
   selectView,
   undo,
   useCanUndoRedo,
-  useQuickViewTitles,
-  useSelectedIndex,
+  useQuickViews,
+  useSelectedViewId,
 } from "../../../view/quickViewStore/store";
 import { useUserCanEditTopicData } from "../../store/userHooks";
 import { QuickViewForm } from "./QuickViewForm";
@@ -29,11 +30,11 @@ export const QuickViewSection = () => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
 
-  const quickViewTitles = useQuickViewTitles();
+  const quickViews = useQuickViews();
   const [canUndo, canRedo] = useCanUndoRedo();
-  const selectedViewIndex = useSelectedIndex();
+  const selectedViewId = useSelectedViewId();
 
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editingView, setEditingView] = useState<QuickView | null>(null);
 
   return (
     <>
@@ -81,7 +82,7 @@ export const QuickViewSection = () => {
       </ListItem>
 
       <List disablePadding>
-        {quickViewTitles.length === 0 && (
+        {quickViews.length === 0 && (
           <ListItem key="1">
             <ListItemButton disabled={true}>
               <ListItemIcon>
@@ -91,18 +92,18 @@ export const QuickViewSection = () => {
             </ListItemButton>
           </ListItem>
         )}
-        {quickViewTitles.map((title, index) => (
-          <ListItem key={title}>
+        {quickViews.map((view) => (
+          <ListItem key={view.id}>
             <ListItemButton
-              selected={selectedViewIndex === index}
-              onClick={() => selectView(index)}
+              selected={selectedViewId === view.id}
+              onClick={() => selectView(view.id)}
               sx={{ paddingY: 0, height: "40px" }} // icon buttons have padding, so this extra padding isn't necessary, and use a consistent height whether or not icon buttons are showing
             >
               <ListItemIcon>
                 <Visibility />
               </ListItemIcon>
 
-              <ListItemText primary={title} />
+              <ListItemText primary={view.title} />
 
               {userCanEditTopicData && (
                 <>
@@ -111,7 +112,7 @@ export const QuickViewSection = () => {
                     title="Edit View"
                     aria-label="Edit View"
                     onClick={(e) => {
-                      setEditingIndex(index);
+                      setEditingView(view);
                       e.stopPropagation(); // don't also trigger row select
                     }}
                   >
@@ -123,9 +124,9 @@ export const QuickViewSection = () => {
                     aria-label="Overwrite View"
                     // Assumes that the selected view is being displayed, so saving wouldn't do anything.
                     // Could be more accurate by checking if this index's view state deep equals the current view state... but that seems overkill performance-wise.
-                    disabled={selectedViewIndex === index}
+                    disabled={selectedViewId === view.id}
                     onClick={(e) => {
-                      saveView(index);
+                      saveView(view.id);
                       e.stopPropagation(); // don't also trigger row select
                     }}
                   >
@@ -136,7 +137,7 @@ export const QuickViewSection = () => {
                     title="Delete View"
                     aria-label="Delete View"
                     onClick={(e) => {
-                      deleteView(index);
+                      deleteView(view.id);
                       e.stopPropagation(); // don't also trigger row select
                     }}
                   >
@@ -149,11 +150,11 @@ export const QuickViewSection = () => {
         ))}
       </List>
 
-      {editingIndex !== null && (
+      {editingView !== null && (
         <QuickViewForm
-          viewIndex={editingIndex}
-          viewTitles={quickViewTitles}
-          onClose={() => setEditingIndex(null)}
+          currentView={editingView}
+          quickViews={quickViews}
+          onClose={() => setEditingView(null)}
         />
       )}
     </>
