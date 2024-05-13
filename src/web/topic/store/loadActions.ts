@@ -28,7 +28,7 @@ export const populateDiagramFromApi = (topicData: TopicData) => {
       edges: topicGraphEdges,
       userScores,
     },
-    false,
+    true,
     "populateFromApi"
   );
 

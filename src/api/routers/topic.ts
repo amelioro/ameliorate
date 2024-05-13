@@ -7,6 +7,7 @@ import { getNewTopicProblemNode, nodeSchema } from "../../common/node";
 import { topicSchema } from "../../common/topic";
 import { userSchema } from "../../common/user";
 import { userScoreSchema } from "../../common/userScore";
+import { quickViewSchema } from "../../common/view";
 import { xprisma } from "../../db/extendedPrisma";
 import { isLoggedIn } from "../auth";
 import { procedure, router } from "../trpc";
@@ -32,7 +33,7 @@ export const topicRouter = router({
     }),
 
   /**
-   * Return a topic with all its nodes and edges, and each user's scores.
+   * Return a topic with all its nodes and edges, each user's scores, and the topic's views.
    *
    * When we want to expose different amounts of topic data, we can rename this to be distinctive.
    */
@@ -56,6 +57,7 @@ export const topicRouter = router({
           nodes: true,
           edges: true,
           userScores: true,
+          views: true,
         },
       });
     }),
@@ -225,26 +227,38 @@ export const topicRouter = router({
   create: procedure
     .use(isLoggedIn)
     .input(
-      topicSchema.pick({
-        title: true,
-        description: true,
-        visibility: true,
-        allowAnyoneToEdit: true,
+      z.object({
+        topic: topicSchema.pick({
+          title: true,
+          description: true,
+          visibility: true,
+          allowAnyoneToEdit: true,
+        }),
+        // TODO: create basic views without passing over API when default view state is decoupled from web types
+        quickViews: quickViewSchema.omit({ topicId: true }).array(), // omit topic because we'll set it on creation here
       })
     )
     .mutation(async (opts) => {
       const newTopic = await xprisma.topic.create({
         data: {
-          title: opts.input.title,
+          title: opts.input.topic.title,
           creatorName: opts.ctx.user.username,
-          description: opts.input.description,
-          visibility: opts.input.visibility,
-          allowAnyoneToEdit: opts.input.allowAnyoneToEdit,
+          description: opts.input.topic.description,
+          visibility: opts.input.topic.visibility,
+          allowAnyoneToEdit: opts.input.topic.allowAnyoneToEdit,
         },
       });
 
       const _baseTopicProblemNode = await xprisma.node.create({
         data: getNewTopicProblemNode(newTopic.id, newTopic.title),
+      });
+
+      // create basic views for topic
+      await xprisma.view.createMany({
+        data: opts.input.quickViews.map((view) => ({
+          ...view,
+          topicId: newTopic.id,
+        })),
       });
 
       return newTopic;

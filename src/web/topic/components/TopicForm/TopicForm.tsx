@@ -25,6 +25,7 @@ import { z } from "zod";
 
 import { topicSchema, visibilityTypes } from "../../../../common/topic";
 import { trpc } from "../../../common/trpc";
+import { generateBasicViews } from "../../../view/quickViewStore/store";
 
 export const CreateTopicForm = ({ user }: { user: User }) => {
   const utils = trpc.useContext();
@@ -32,7 +33,7 @@ export const CreateTopicForm = ({ user }: { user: User }) => {
   const createTopic = trpc.topic.create.useMutation({
     onSuccess: async (newTopic, variables) => {
       utils.topic.findByUsernameAndTitle.setData(
-        { username: user.username, title: variables.title },
+        { username: user.username, title: variables.topic.title },
         newTopic
       );
 
@@ -41,16 +42,20 @@ export const CreateTopicForm = ({ user }: { user: User }) => {
         return oldUser;
       });
 
-      await Router.push(`/${user.username}/${variables.title}`);
+      await Router.push(`/${user.username}/${variables.topic.title}`);
     },
   });
 
   const onSubmit = (data: FormData) => {
     createTopic.mutate({
-      title: data.title,
-      description: data.description,
-      visibility: data.visibility,
-      allowAnyoneToEdit: data.allowAnyoneToEdit,
+      topic: {
+        title: data.title,
+        description: data.description,
+        visibility: data.visibility,
+        allowAnyoneToEdit: data.allowAnyoneToEdit,
+      },
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any -- TODO: move generated quick views to backend
+      quickViews: generateBasicViews() as any,
     });
   };
 

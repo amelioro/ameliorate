@@ -14,6 +14,7 @@ import { GeneralFilters } from "../../../view/components/Filter/GeneralFilters";
 import { InformationFilters } from "../../../view/components/Filter/InformationFilters";
 import { TableFilters } from "../../../view/components/Filter/TableFilters";
 import { setFormat, useFormat } from "../../../view/currentViewStore/store";
+import { QuickViewSection } from "./QuickViewSection";
 
 export const TopicViews = () => {
   const [isFormatSectionOpen, setIsFormatSectionOpen] = useState(true);
@@ -26,6 +27,10 @@ export const TopicViews = () => {
   return (
     <>
       <List>
+        <QuickViewSection />
+
+        <Divider sx={{ marginY: 1 }} />
+
         <ListItem key="1">
           <ListItemButton onClick={() => setIsFormatSectionOpen(!isFormatSectionOpen)}>
             <ListItemText primary="Format" />

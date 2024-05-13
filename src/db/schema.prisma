@@ -41,6 +41,7 @@ model Topic {
   nodes      Node[]
   edges      Edge[]
   userScores UserScore[]
+  views      View[]
 
   @@unique([title, creatorName])
   @@index([creatorName])
@@ -163,4 +164,26 @@ model UserScore {
   @@index([graphPartId])
   @@index([topicId])
   @@map("userScores")
+}
+
+model View {
+  id        String   @id
+  topicId   Int
+  type      ViewType
+  title     String?  @db.VarChar(100) // arbitrary max, same as topic title length
+  order     Int?
+  viewState Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  topic Topic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  @@unique([topicId, title])
+  @@index([topicId])
+  @@map("views")
+}
+
+enum ViewType {
+  shared
+  quick
 }

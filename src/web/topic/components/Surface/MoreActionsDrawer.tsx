@@ -47,6 +47,7 @@ import {
   useLayoutThoroughness,
 } from "../../../view/currentViewStore/layout";
 import { resetView, useFormat } from "../../../view/currentViewStore/store";
+import { resetQuickViews } from "../../../view/quickViewStore/store";
 import { toggleFillNodesWithColor, useFillNodesWithColor } from "../../../view/userConfigStore";
 import { migrate } from "../../store/migrate";
 import { TopicStoreState } from "../../store/store";
@@ -201,7 +202,10 @@ export const MoreActionsDrawer = ({
                 color="inherit"
                 title="Reset Topic"
                 aria-label="Reset Topic"
-                onClick={resetTopicData}
+                onClick={() => {
+                  resetTopicData();
+                  resetQuickViews();
+                }}
               >
                 <AutoStoriesOutlined />
               </IconButton>
