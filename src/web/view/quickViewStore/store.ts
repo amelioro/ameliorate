@@ -8,13 +8,19 @@ import { createWithEqualityFn } from "zustand/traditional";
 import { withDefaults } from "../../../common/object";
 import { emitter } from "../../common/event";
 import { deepIsEqual } from "../../common/store/utils";
+import { StoreTopic, UserTopic } from "../../topic/store/store";
 import { ViewState, getView, initialViewState, setView } from "../currentViewStore/store";
+import { apiSyncer } from "./apiSyncerMiddleware";
 
 type QuickViewType = "quick"; // eventually maybe separate "recommended" vs "personal"
 
-interface QuickViewStoreState {
+export interface QuickViewStoreState {
+  /**
+   * The page's current topic. This is a bit of a hack to give us a way to prevent api-syncing the quick views when the topic changes.
+   */
+  topic: StoreTopic;
   views: QuickView[];
-  selectedIndex: number | null;
+  selectedViewId: string | null;
 }
 
 // TODO: build type from quickViewSchema once view state is extracted to common
@@ -27,11 +33,12 @@ export interface QuickView {
 }
 
 const initialState: QuickViewStoreState = {
+  topic: { id: undefined, description: "" },
   views: [],
   selectedViewId: null,
 };
 
-const generateBasicViews = (): QuickView[] => {
+export const generateBasicViews = (): QuickView[] => {
   return [
     {
       id: shortUUID.generate(), // generate UUIDs that are easier to read (shorter, alphanumeric)
@@ -57,16 +64,18 @@ const initialStateWithBasicViews = () => {
 const persistedNameBase = "quickViewStore";
 
 export const useQuickViewStore = createWithEqualityFn<QuickViewStoreState>()(
-  persist(temporal(devtools(() => initialState, { name: persistedNameBase })), {
-    name: persistedNameBase,
-    version: 1,
-    skipHydration: true,
-    // don't merge persisted state with current state when rehydrating - instead, use the initialState to fill in missing values
-    // e.g. so that a new non-null value in initialState is non-null in the persisted state,
-    // removing the need to write a migration for every new field
-    merge: (persistedState, _currentState) =>
-      withDefaults(persistedState as Partial<QuickViewStoreState>, initialState),
-  }),
+  apiSyncer(
+    persist(temporal(devtools(() => initialState, { name: persistedNameBase })), {
+      name: persistedNameBase,
+      version: 1,
+      skipHydration: true,
+      // don't merge persisted state with current state when rehydrating - instead, use the initialState to fill in missing values
+      // e.g. so that a new non-null value in initialState is non-null in the persisted state,
+      // removing the need to write a migration for every new field
+      merge: (persistedState, _currentState) =>
+        withDefaults(persistedState as Partial<QuickViewStoreState>, initialState),
+    })
+  ),
 
   // Using `createWithEqualityFn` so that we can do a diff in hooks that return new arrays/objects
   // so that we can avoid extra renders
@@ -241,7 +250,32 @@ export const resetQuickViews = () => {
   useQuickViewStore.setState(initialStateWithBasicViews(), true, "reset");
 };
 
-export const loadFromLocalStorage = async () => {
+export const loadQuickViewsFromApi = (topic: UserTopic, views: QuickView[]) => {
+  const builtPersistedName = `${persistedNameBase}-user`;
+
+  useQuickViewStore.persist.setOptions({ name: builtPersistedName });
+
+  useQuickViewStore.setState(
+    {
+      topic,
+      // map views because we don't need to store extra data in the store like createdAt, topicId, etc
+      views: views.map((view) => ({
+        id: view.id,
+        type: view.type,
+        title: view.title,
+        order: view.order,
+        viewState: view.viewState,
+      })),
+    },
+    true,
+    "loadFromApi"
+  );
+
+  // it doesn't make sense to want to undo a page load
+  useQuickViewStore.temporal.getState().clear();
+};
+
+export const loadQuickViewsFromLocalStorage = async () => {
   const builtPersistedName = `${persistedNameBase}-playground`;
 
   useQuickViewStore.persist.setOptions({ name: builtPersistedName });

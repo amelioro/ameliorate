@@ -1,11 +1,14 @@
 import { z } from "zod";
 
+import { topicSchema } from "./topic";
+
 export const savedViewTypes = ["shared", "quick"] as const;
 export const zSavedViewTypes = z.enum(savedViewTypes);
 export type SavedViewType = z.infer<typeof zSavedViewTypes>;
 
 export const savedViewSchema = z.object({
   id: z.string(),
+  topicId: topicSchema.shape.id,
   type: zSavedViewTypes,
   title: z
     .string()

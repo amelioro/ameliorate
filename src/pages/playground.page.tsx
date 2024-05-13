@@ -9,7 +9,7 @@ import { playgroundUsername } from "../web/topic/store/store";
 import { loadActionConfig } from "../web/view/actionConfigStore";
 import { loadView } from "../web/view/currentViewStore/store";
 import { setInitialPerspective } from "../web/view/perspectiveStore";
-import { loadFromLocalStorage as loadQuickViewsFromLocalStorage } from "../web/view/quickViewStore/store";
+import { loadQuickViewsFromLocalStorage } from "../web/view/quickViewStore/store";
 
 // Don't render the workspace server-side.
 // Known reasons:
