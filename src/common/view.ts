@@ -9,6 +9,8 @@ export const savedViewSchema = z.object({
   type: zSavedViewTypes,
   title: z
     .string()
+    .min(1)
+    .max(100)
     .regex(
       /^(?! )(?!.* $)[a-zA-Z0-9 ]+$/,
       "Title may only contain alphanumeric characters or spaces, and cannot begin or end with a space."
