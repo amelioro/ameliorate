@@ -57,7 +57,7 @@ const initialStateWithBasicViews = () => {
 const persistedNameBase = "quickViewStore";
 
 export const useQuickViewStore = createWithEqualityFn<QuickViewStoreState>()(
-  persist(temporal(devtools(() => initialState)), {
+  persist(temporal(devtools(() => initialState, { name: persistedNameBase })), {
     name: persistedNameBase,
     version: 1,
     skipHydration: true,

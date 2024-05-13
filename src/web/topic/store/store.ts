@@ -73,7 +73,7 @@ export const topicStorePlaygroundName = "diagram-storage";
 // this is only exported to allow actions to be extracted to a separate file
 export const useTopicStore = createWithEqualityFn<TopicStoreState>()(
   apiSyncer(
-    persist(temporal(devtools(() => initialState)), {
+    persist(temporal(devtools(() => initialState, { name: topicStorePlaygroundName })), {
       name: topicStorePlaygroundName,
       version: 21,
       migrate: migrate,

@@ -74,7 +74,7 @@ const persistedNameBase = "navigateStore";
 
 export const useCurrentViewStore = createWithEqualityFn<ViewState>()(
   triggerEvent(
-    persist(temporal(devtools(() => initialViewState)), {
+    persist(temporal(devtools(() => initialViewState, { name: persistedNameBase })), {
       name: persistedNameBase,
       version: 1,
       skipHydration: true,
