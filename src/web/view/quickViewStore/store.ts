@@ -266,9 +266,10 @@ export const loadQuickViewsFromApi = (topic: UserTopic, views: QuickView[]) => {
         order: view.order,
         viewState: view.viewState,
       })),
+      selectedViewId: null, // don't remember from previous topic - this will be set after loading current view if it should be
     },
     true,
-    "loadFromApi"
+    "loadQuickViewsFromApi"
   );
 
   // it doesn't make sense to want to undo a page load
