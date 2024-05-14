@@ -1,6 +1,6 @@
 import { shallow } from "zustand/shallow";
 
-import { RelationName, justificationRelationNames } from "../../../common/edge";
+import { justificationRelationNames } from "../../../common/edge";
 import { NodeType, justificationNodeTypes, researchNodeTypes } from "../../../common/node";
 import { deepIsEqual } from "../../common/store/utils";
 import { isClaimEdge } from "../utils/claim";
@@ -73,18 +73,12 @@ export const useNonTopLevelClaimCount = (graphPartId: string) => {
   });
 };
 
-const commonResearchRelations: RelationName[] = ["asksAbout", "relevantFor"];
-
 export const useResearchNodes = (graphPartId: string) => {
   return useTopicStore((state) => {
-    const researchEdges = state.edges.filter(
-      (edge) => edge.source === graphPartId && commonResearchRelations.includes(edge.label)
-    );
-
     const researchNodes = state.nodes.filter(
       (node) =>
         researchNodeTypes.includes(node.type) &&
-        researchEdges.find((edge) => edge.target === node.id)
+        state.edges.find((edge) => edge.source === graphPartId && edge.target === node.id)
     );
 
     return {

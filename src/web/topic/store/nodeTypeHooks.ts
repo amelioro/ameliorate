@@ -83,6 +83,13 @@ export const useSourceDetails = (sourceNodeId: string) => {
       factEdges.some((factEdge) => node.id === factEdge.source)
     );
 
-    return { nodesRelevantFor, edgesRelevantFor, facts };
+    const mentionEdges = state.edges.filter(
+      (edge) => edge.target === sourceNodeId && edge.label === "mentions"
+    );
+    const sources = state.nodes.filter((node) =>
+      mentionEdges.some((mentionEdge) => node.id === mentionEdge.source)
+    );
+
+    return { nodesRelevantFor, edgesRelevantFor, facts, sources };
   });
 };
