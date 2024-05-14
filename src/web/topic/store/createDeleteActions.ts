@@ -1,7 +1,7 @@
 import { createDraft, finishDraft } from "immer";
 
 import { errorWithData } from "../../../common/errorHandling";
-import { structureNodeTypes } from "../../../common/node";
+import { justificationNodeTypes, structureNodeTypes } from "../../../common/node";
 import { emitter } from "../../common/event";
 import { getUnrestrictedEditing } from "../../view/actionConfigStore";
 import { setSelected } from "../../view/currentViewStore/store";
@@ -272,7 +272,7 @@ export const deleteNode = (nodeId: string) => {
   const deletedNode = findNodeOrThrow(nodeId, state.nodes);
 
   const arguedDiagramPartId = deletedNode.data.arguedDiagramPartId;
-  if (arguedDiagramPartId) {
+  if (justificationNodeTypes.includes(deletedNode.type) && arguedDiagramPartId) {
     const remainingArguedClaims = getExplicitClaimCount(state, arguedDiagramPartId);
     // deleted node was the last
     if (remainingArguedClaims <= 1) {
