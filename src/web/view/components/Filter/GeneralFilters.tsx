@@ -43,7 +43,7 @@ export const GeneralFilters = () => {
         <form style={{ padding: "8px" }}>
           {format === "diagram" && (
             <Stack spacing={1}>
-              <Select name="nodeTypes" options={nodeTypes} multiple />
+              <Select name="nodeTypes" options={nodeTypes} multiple disableClearable={false} />
 
               <Stack direction="row" spacing={1}>
                 <Switch name="showOnlyScored" label="Show only nodes scored" />
