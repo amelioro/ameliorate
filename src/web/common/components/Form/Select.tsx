@@ -19,7 +19,7 @@ export const Select = ({
   label,
   options,
   multiple = false,
-  disableClearable = true,
+  disableClearable,
   width,
 }: Props) => {
   // assumes this component is used within a FormProvider
@@ -80,7 +80,7 @@ export const Select = ({
         field.onChange(options.map((option) => option.id));
         submit();
       }}
-      disableClearable={disableClearable}
+      disableClearable={disableClearable ?? false} // seems preferable to default to allow clear for multi-selects, since there could be a lot of entries selected
       renderInput={(params) => (
         <TextField {...params} label={fieldLabel} error={!!error} helperText={error?.message} />
       )}
@@ -105,7 +105,7 @@ export const Select = ({
         field.onChange(option.id);
         submit();
       }}
-      disableClearable={disableClearable}
+      disableClearable={disableClearable ?? true}
       renderInput={(params) => (
         <TextField {...params} label={fieldLabel} error={!!error} helperText={error?.message} />
       )}

@@ -16,7 +16,7 @@ export const NodeSelect = ({
   label,
   useNodeOptions,
   multiple = false,
-  disableClearable = true,
+  disableClearable,
 }: Props) => {
   const nodeOptions = useNodeOptions();
 

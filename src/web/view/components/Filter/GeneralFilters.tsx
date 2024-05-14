@@ -43,7 +43,7 @@ export const GeneralFilters = () => {
         <form style={{ padding: "8px" }}>
           {format === "diagram" && (
             <Stack spacing={1}>
-              <Select name="nodeTypes" options={nodeTypes} multiple disableClearable={false} />
+              <Select name="nodeTypes" options={nodeTypes} multiple />
 
               <Stack direction="row" spacing={1}>
                 <Switch name="showOnlyScored" label="Show only nodes scored" />
@@ -51,18 +51,8 @@ export const GeneralFilters = () => {
                 <Select name="scoreToCompare" options={possibleScores} label="" width="50px" />
               </Stack>
 
-              <NodeSelect
-                name="nodesToShow"
-                useNodeOptions={useAllNodes}
-                multiple
-                disableClearable={false}
-              />
-              <NodeSelect
-                name="nodesToHide"
-                useNodeOptions={useAllNodes}
-                multiple
-                disableClearable={false}
-              />
+              <NodeSelect name="nodesToShow" useNodeOptions={useAllNodes} multiple />
+              <NodeSelect name="nodesToHide" useNodeOptions={useAllNodes} multiple />
 
               <Switch
                 name="showSecondaryResearch"
