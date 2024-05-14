@@ -12,7 +12,8 @@ interface Props {
 }
 
 export const SourceDetails = ({ sourceNode }: Props) => {
-  const { nodesRelevantFor, edgesRelevantFor, facts } = useSourceDetails(sourceNode.id);
+  const { nodesRelevantFor, edgesRelevantFor, facts, sources } = useSourceDetails(sourceNode.id);
+  const mentions = facts.concat(sources);
 
   return (
     <>
@@ -44,7 +45,7 @@ export const SourceDetails = ({ sourceNode }: Props) => {
         <ListItemIcon>
           <Info />
         </ListItemIcon>
-        <ListItemText primary="Facts" />
+        <ListItemText primary="Mentions" />
       </ListItem>
 
       <Stack direction="row" justifyContent="center" alignItems="center" marginBottom="8px">
@@ -59,6 +60,17 @@ export const SourceDetails = ({ sourceNode }: Props) => {
           }}
           selectNewNode={false}
         />
+        <AddNodeButton
+          fromPartId={sourceNode.id}
+          as="parent"
+          toNodeType="source"
+          relation={{
+            child: "source",
+            name: "mentions",
+            parent: "source",
+          }}
+          selectNewNode={false}
+        />
       </Stack>
 
       <Stack
@@ -70,10 +82,12 @@ export const SourceDetails = ({ sourceNode }: Props) => {
         spacing="2px"
         marginBottom="8px"
       >
-        {facts.length > 0 ? (
-          facts.map((source) => <EditableNode key={source.id} node={source} supplemental />)
+        {mentions.length > 0 ? (
+          mentions.map((mentioned) => (
+            <EditableNode key={mentioned.id} node={mentioned} supplemental />
+          ))
         ) : (
-          <Typography>No facts yet!</Typography>
+          <Typography>No mentioned facts or sources yet!</Typography>
         )}
       </Stack>
     </>

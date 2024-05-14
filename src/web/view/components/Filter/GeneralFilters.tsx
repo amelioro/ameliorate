@@ -51,18 +51,8 @@ export const GeneralFilters = () => {
                 <Select name="scoreToCompare" options={possibleScores} label="" width="50px" />
               </Stack>
 
-              <NodeSelect
-                name="nodesToShow"
-                useNodeOptions={useAllNodes}
-                multiple
-                disableClearable={false}
-              />
-              <NodeSelect
-                name="nodesToHide"
-                useNodeOptions={useAllNodes}
-                multiple
-                disableClearable={false}
-              />
+              <NodeSelect name="nodesToShow" useNodeOptions={useAllNodes} multiple />
+              <NodeSelect name="nodesToHide" useNodeOptions={useAllNodes} multiple />
 
               <Switch
                 name="showSecondaryResearch"

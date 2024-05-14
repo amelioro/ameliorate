@@ -22,7 +22,7 @@ export const generalFilterSchema = z.object({
 export type GeneralFilter = z.infer<typeof generalFilterSchema>;
 
 export const applyNodeTypeFilter = (nodes: Node[], nodeTypes: NodeType[]) => {
-  return nodes.filter((node) => nodeTypes.includes(node.type));
+  return nodeTypes.length > 0 ? nodes.filter((node) => nodeTypes.includes(node.type)) : nodes;
 };
 
 export const applyScoreFilter = <T extends GraphPart>(

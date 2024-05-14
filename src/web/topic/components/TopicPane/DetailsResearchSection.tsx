@@ -14,7 +14,9 @@ interface Props {
 export const DetailsResearchSection = ({ node }: Props) => {
   const { questions, facts, sources } = useResearchNodes(node.id);
 
-  const researchNodes = [...questions, ...facts, ...sources];
+  // facts shouldn't show sources because they have a different specific section for sources
+  const researchNodes =
+    node.type !== "fact" ? [...questions, ...facts, ...sources] : [...questions, ...facts];
 
   return (
     <>

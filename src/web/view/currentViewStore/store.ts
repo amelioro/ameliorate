@@ -5,7 +5,6 @@ import { devtools, persist } from "zustand/middleware";
 import { createWithEqualityFn } from "zustand/traditional";
 
 import { Format, InfoCategory } from "../../../common/infoCategory";
-import { nodeTypes } from "../../../common/node";
 import { withDefaults } from "../../../common/object";
 import { emitter } from "../../common/event";
 import { useGraphPart } from "../../topic/store/graphPartHooks";
@@ -54,7 +53,7 @@ export const initialViewState: ViewState = {
     criteria: [],
   },
   generalFilter: {
-    nodeTypes: [...nodeTypes], // spread because this value is otherwise readonly
+    nodeTypes: [],
     showOnlyScored: false,
     scoredComparer: "≥",
     scoreToCompare: "5",
