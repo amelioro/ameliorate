@@ -1,9 +1,9 @@
 import uniqBy from "lodash/uniqBy";
 import { v4 as uuid } from "uuid";
 
-import { RelationName } from "../../../common/edge";
+import { RelationName, justificationRelationNames } from "../../../common/edge";
 import { errorWithData } from "../../../common/errorHandling";
-import { NodeType, infoNodeTypes } from "../../../common/node";
+import { NodeType, infoNodeTypes, justificationNodeTypes } from "../../../common/node";
 import { GeneralFilter } from "../../view/utils/generalFilter";
 import { composedRelations } from "./edge";
 import { FlowNodeType } from "./node";
@@ -55,7 +55,7 @@ export const buildNode = ({
       customType: customType,
       label: label ?? `new node`,
       notes: notes ?? "",
-      arguedDiagramPartId: arguedDiagramPartId,
+      arguedDiagramPartId: justificationNodeTypes.includes(type) ? arguedDiagramPartId : undefined, // don't set arguedDiagramPartId on non-claims because non-claims shouldn't be deleted when the claim tree is deleted
       showing: true,
       newlyAdded: false,
     },
@@ -122,7 +122,9 @@ export const buildEdge = ({
     data: {
       customLabel: customLabel,
       notes: notes ?? "",
-      arguedDiagramPartId: arguedDiagramPartId,
+      arguedDiagramPartId: justificationRelationNames.includes(relation)
+        ? arguedDiagramPartId
+        : undefined, // don't set arguedDiagramPartId on non-claims because non-claims shouldn't be deleted when the claim tree is deleted
     },
     label: relation,
     source: sourceId,
