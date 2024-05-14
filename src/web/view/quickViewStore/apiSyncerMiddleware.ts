@@ -7,7 +7,7 @@ import { emitter } from "../../common/event";
 import { isPlaygroundTopic } from "../../topic/store/utils";
 import { QuickViewStoreState } from "./store";
 
-const getCrudDiffs = <T>(
+const getCrudDiffs = <T extends object>(
   before: T[],
   after: T[],
   identifierFn: (element: T) => string
@@ -16,7 +16,23 @@ const getCrudDiffs = <T>(
   const keyedBefore = Object.fromEntries(before.map((item) => [identifierFn(item), item]));
   const keyedAfter = Object.fromEntries(after.map((item) => [identifierFn(item), item]));
 
-  const diffs = diff(keyedBefore, keyedAfter);
+  // Stringify nested paths because A.B -> A.B.C, A.B.C -> A.B.D, or A.B.C -> A.B should all be
+  // calculated as an update to A, rather than (respectively) a create to A.B, an update to A.B,
+  // or a delete to A.B.C.
+  const stringifiedBefore = Object.fromEntries(
+    Object.entries(keyedBefore).map(([key, value]) => [
+      key,
+      Object.fromEntries(Object.entries(value).map(([k, v]) => [k, JSON.stringify(v)])),
+    ])
+  );
+  const stringifiedAfter = Object.fromEntries(
+    Object.entries(keyedAfter).map(([key, value]) => [
+      key,
+      Object.fromEntries(Object.entries(value).map(([k, v]) => [k, JSON.stringify(v)])),
+    ])
+  );
+
+  const diffs = diff(stringifiedBefore, stringifiedAfter);
 
   /* eslint-disable @typescript-eslint/no-non-null-assertion -- the diff library is supposed to
      output the path to the diff, and we know our objects being diff'd are only one path deep (no
