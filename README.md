@@ -12,7 +12,7 @@ With it, you can:
   <img src="https://github.com/amelioro/ameliorate/assets/13872370/c37b34f2-164a-4619-8e04-0b4366ea1724" width="800"/>
   <img src="https://github.com/amelioro/ameliorate/assets/13872370/1848c1d5-6379-42ac-a9a2-f9d6873cf9a8" width="800"/>
 
-- compare the [tradeoffs](https://ameliorate.app/examples/ORM?view=Tradeoffs+scored+as+important) of each solution
+- compare the [tradeoffs](https://ameliorate.app/examples/ORM?view=Tradeoffs) of each solution
   <img src="https://github.com/amelioro/ameliorate/assets/13872370/a6579feb-a32e-4e00-989b-a5939f80e601" width="800"/>
 
 - clearly [question, justify, and critique](https://ameliorate.app/examples/ORM?view=Tradeoffs+with+node+that+has+aux+info) anything in an off-to-the-side but easy-to-access way
