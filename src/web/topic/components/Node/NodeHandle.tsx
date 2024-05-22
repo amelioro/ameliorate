@@ -1,4 +1,4 @@
-import { VisibilityOff } from "@mui/icons-material";
+import { Visibility } from "@mui/icons-material";
 import { IconButton, Tooltip, Typography } from "@mui/material";
 import { ReactNode, memo } from "react";
 import { Position } from "reactflow";
@@ -64,7 +64,7 @@ const NodeHandleBase = ({ node, direction, orientation }: Props) => {
                 node={neighbor}
                 beforeSlot={
                   <IconButton className="p-0" onClick={() => showNode(neighbor.id)}>
-                    {<VisibilityOff />}
+                    {<Visibility />}
                   </IconButton>
                 }
               />
