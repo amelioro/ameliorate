@@ -28,7 +28,7 @@ export const addCloseOnClick = (closeMenu: () => void, children: React.ReactNode
 };
 
 interface MenuProps {
-  anchorEl: HTMLElement | undefined;
+  anchorEl: HTMLElement | null;
   isOpen: boolean;
   closeMenu: () => void;
   children: React.ReactNode;

@@ -164,6 +164,10 @@ export const MoreActionsDrawer = ({
                 onClick={() => {
                   resetTopicData();
                   resetQuickViews();
+                  // intentionally not resetting comments/drafts, since undoing a reset would be painful if comments were lost,
+                  // and it's annoying to try and put these all on the same undo/redo button.
+                  // if orphaned comments are really a problem, we should be able to manually clean them up.
+                  // if they're routinely a problem, we can consider trying to combining comments/drafts in the same undo/redo stack for this.
                 }}
               >
                 <AutoStoriesOutlined />
