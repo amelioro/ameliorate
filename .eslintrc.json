@@ -68,6 +68,9 @@
     "functional/no-let": "error",
     "functional/no-loop-statements": "error",
     "functional/no-this-expressions": "error",
+    // apparently ts itself checks these https://typescript-eslint.io/troubleshooting/performance-troubleshooting/#eslint-plugin-import
+    "import/named": "off",
+    "import/namespace": "off",
     "import/order": [
       "error",
       {
@@ -109,6 +112,7 @@
     "tailwindcss/no-custom-classname": [
       "error",
       {
+        "cssFiles": [], // don't need this anyway, but the reasonable default causes perf issues https://github.com/francoismassart/eslint-plugin-tailwindcss/issues/276#issuecomment-2076947699
         "whitelist": ["nopan", "react\\-flow.*", "selected", "flashlight-mode", "spotlight\\-"]
       }
     ]
