@@ -7,6 +7,8 @@
  */
 
 import fileDownload from "js-file-download";
+import shortUUID from "short-uuid";
+import { v4 as uuid } from "uuid";
 import { z } from "zod";
 import { StorageValue } from "zustand/middleware";
 
@@ -69,6 +71,45 @@ export const downloadTopic = () => {
   fileDownload(JSON.stringify(downloadJson), `${sanitizedFileName}.json`);
 };
 
+/**
+ * Generate new ids for nodes, edges, and views to avoid conflicts with the topic that this was downloaded
+ * from.
+ *
+ * Also, ensure that related scores, claims, edges, and views are updated accordingly.
+ */
+const ensureUnique = (
+  topicStoreState: TopicStoreState,
+  quickViewStoreState: QuickViewStoreState
+) => {
+  const { nodes, edges } = topicStoreState;
+  const { views } = quickViewStoreState;
+
+  // much easier to ensure all uuids are replaced this way, rather than replacing uuids for each specifically-relevant property
+  // eslint-disable-next-line functional/no-let
+  let stringifiedTopic = JSON.stringify(topicStoreState);
+  // eslint-disable-next-line functional/no-let
+  let stringifiedViews = JSON.stringify(quickViewStoreState);
+
+  [...nodes, ...edges].forEach((graphPart) => {
+    const newId = uuid();
+
+    stringifiedTopic = stringifiedTopic.replace(new RegExp(graphPart.id, "g"), newId);
+    stringifiedViews = stringifiedViews.replace(new RegExp(graphPart.id, "g"), newId);
+  });
+
+  views.forEach((view) => {
+    const newId = shortUUID.generate();
+
+    // topic shouldn't point to any view ids
+    stringifiedViews = stringifiedViews.replace(new RegExp(view.id, "g"), newId);
+  });
+
+  return {
+    uniqueTopic: JSON.parse(stringifiedTopic) as TopicStoreState,
+    uniqueViews: JSON.parse(stringifiedViews) as QuickViewStoreState,
+  };
+};
+
 export const uploadTopic = (
   event: React.ChangeEvent<HTMLInputElement>,
   sessionUsername?: string
@@ -83,6 +124,7 @@ export const uploadTopic = (
     .then((text) => {
       const downloadJson = downloadJsonSchema.parse(JSON.parse(text)) as DownloadJson;
 
+      // migrations
       const topicPersistState = downloadJson.topic;
       if (!topicPersistState.version) {
         throw errorWithData(
@@ -90,14 +132,20 @@ export const uploadTopic = (
           topicPersistState
         );
       }
-      const migratedState = migrate(
+      const migratedTopicState = migrate(
         topicPersistState.state,
         topicPersistState.version
       ) as TopicStoreState;
-      setTopicData(migratedState, sessionUsername);
 
       const viewsPersistState = downloadJson.views;
-      loadQuickViewsFromDownloaded(viewsPersistState.state); // TODO: migrate when quick views have migrations
+      const migratedViewsState = viewsPersistState.state; // TODO: migrate when quick views have migrations
+
+      // avoid conflicts with existing topics
+      const { uniqueTopic, uniqueViews } = ensureUnique(migratedTopicState, migratedViewsState);
+
+      // populate stores
+      setTopicData(uniqueTopic, sessionUsername);
+      loadQuickViewsFromDownloaded(uniqueViews);
     })
     .catch((error: unknown) => {
       throw error;
