@@ -75,27 +75,12 @@ const saveDiffs = (
     (view) => view.id
   );
 
-  // could consider using one endpoint for all changes, but keeping them separate keeps them smaller, and the extra 1-2 requests don't seem costly
-  if (viewsToCreate.length > 0) {
-    trpcClient.view.createMany.mutate({ topicId, views: viewsToCreate }).catch((e: unknown) => {
+  trpcClient.view.handleChangesets
+    .mutate({ topicId, viewsToCreate, viewsToUpdate, viewsToDelete })
+    .catch((e: unknown) => {
       emitter.emit("errored");
       throw e;
     });
-  }
-
-  if (viewsToUpdate.length > 0) {
-    trpcClient.view.updateMany.mutate({ topicId, views: viewsToUpdate }).catch((e: unknown) => {
-      emitter.emit("errored");
-      throw e;
-    });
-  }
-
-  if (viewsToDelete.length > 0) {
-    trpcClient.view.deleteMany.mutate({ topicId, views: viewsToDelete }).catch((e: unknown) => {
-      emitter.emit("errored");
-      throw e;
-    });
-  }
 };
 
 type ApiSyncer = <

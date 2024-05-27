@@ -249,7 +249,8 @@ export const redo = () => {
 };
 
 export const resetQuickViews = () => {
-  useQuickViewStore.setState(initialStateWithBasicViews(), true, "reset");
+  const topic = useQuickViewStore.getState().topic;
+  useQuickViewStore.setState({ ...initialStateWithBasicViews(), topic }, true, "reset");
 };
 
 export const loadQuickViewsFromApi = (topic: UserTopic, views: QuickView[]) => {
@@ -295,7 +296,8 @@ export const loadQuickViewsFromLocalStorage = async () => {
 };
 
 export const loadQuickViewsFromDownloaded = (json: QuickViewStoreState) => {
-  useQuickViewStore.setState(json, true, "loadQuickViewsFromJson");
+  const topic = useQuickViewStore.getState().topic;
+  useQuickViewStore.setState({ ...json, topic }, true, "loadQuickViewsFromJson");
 };
 
 // utils

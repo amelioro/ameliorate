@@ -8,78 +8,45 @@ import { isLoggedIn } from "../auth";
 import { procedure, router } from "../trpc";
 
 export const viewRouter = router({
-  createMany: procedure
+  handleChangesets: procedure
     .use(isLoggedIn)
     .input(
       z.object({
         topicId: topicSchema.shape.id,
-        views: quickViewSchema.array(),
+        viewsToCreate: quickViewSchema.array(),
+        viewsToUpdate: quickViewSchema.array(),
+        viewsToDelete: quickViewSchema.array(),
       })
     )
     .mutation(async (opts) => {
-      const someViews = opts.input.views.length > 0;
+      const { viewsToCreate, viewsToUpdate, viewsToDelete } = opts.input;
+
       const topic = await xprisma.topic.findUniqueOrThrow({ where: { id: opts.input.topicId } });
       const userIsCreator = opts.ctx.user.username === topic.creatorName;
       const userCanEditTopic = userIsCreator || topic.allowAnyoneToEdit;
-      const viewsAllForSameTopic = opts.input.views.every(
+      const viewsAllForSameTopic = [...viewsToCreate, ...viewsToUpdate, ...viewsToDelete].every(
         (view) => view.topicId === opts.input.topicId
       );
 
-      if (!someViews || !userCanEditTopic || !viewsAllForSameTopic)
-        throw new TRPCError({ code: "FORBIDDEN" });
-
-      await xprisma.view.createMany({ data: opts.input.views });
-    }),
-
-  updateMany: procedure
-    .use(isLoggedIn)
-    .input(
-      z.object({
-        topicId: topicSchema.shape.id,
-        views: quickViewSchema.array(),
-      })
-    )
-    .mutation(async (opts) => {
-      const someViews = opts.input.views.length > 0;
-      const topic = await xprisma.topic.findUniqueOrThrow({ where: { id: opts.input.topicId } });
-      const userIsCreator = opts.ctx.user.username === topic.creatorName;
-      const userCanEditTopic = userIsCreator || topic.allowAnyoneToEdit;
-      const viewsAllForSameTopic = opts.input.views.every(
-        (view) => view.topicId === opts.input.topicId
-      );
-
-      if (!someViews || !userCanEditTopic || !viewsAllForSameTopic)
-        throw new TRPCError({ code: "FORBIDDEN" });
+      if (!userCanEditTopic || !viewsAllForSameTopic) throw new TRPCError({ code: "FORBIDDEN" });
 
       await xprisma.$transaction(async (tx) => {
-        /* eslint-disable functional/no-loop-statements -- seems like functional methods don't work with promises nicely https://stackoverflow.com/questions/37576685/using-async-await-with-a-foreach-loop#comment65277758_37576787 */
-        for (const view of opts.input.views)
-          await tx.view.update({ where: { id: view.id }, data: view });
-      });
-    }),
+        // if uploading a set of views that share titles with the current set of views, current set needs to be deleted before new set is created
+        if (opts.input.viewsToDelete.length > 0) {
+          await tx.view.deleteMany({
+            where: { id: { in: opts.input.viewsToDelete.map((view) => view.id) } },
+          });
+        }
 
-  deleteMany: procedure
-    .use(isLoggedIn)
-    .input(
-      z.object({
-        topicId: topicSchema.shape.id,
-        views: quickViewSchema.array(),
-      })
-    )
-    .mutation(async (opts) => {
-      const someViews = opts.input.views.length > 0;
-      const topic = await xprisma.topic.findUniqueOrThrow({ where: { id: opts.input.topicId } });
-      const userIsCreator = opts.ctx.user.username === topic.creatorName;
-      const userCanEditTopic = userIsCreator || topic.allowAnyoneToEdit;
-      const viewsAllForSameTopic = opts.input.views.every(
-        (view) => view.topicId === opts.input.topicId
-      );
+        if (opts.input.viewsToCreate.length > 0) {
+          await tx.view.createMany({ data: opts.input.viewsToCreate });
+        }
 
-      if (!someViews || !userCanEditTopic || !viewsAllForSameTopic)
-        throw new TRPCError({ code: "FORBIDDEN" });
-
-      await xprisma.view.deleteMany({
-        where: { id: { in: opts.input.views.map((view) => view.id) } },
+        if (opts.input.viewsToUpdate.length > 0) {
+          /* eslint-disable functional/no-loop-statements -- seems like functional methods don't work with promises nicely https://stackoverflow.com/questions/37576685/using-async-await-with-a-foreach-loop#comment65277758_37576787 */
+          for (const view of opts.input.viewsToUpdate)
+            await tx.view.update({ where: { id: view.id }, data: view });
+        }
       });
     }),
 });
