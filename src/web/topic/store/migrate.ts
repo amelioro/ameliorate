@@ -27,6 +27,7 @@ export const migrate = (persistedState: any, version: number) => {
     migrate_18_to_19,
     migrate_19_to_20,
     migrate_20_to_21,
+    migrate_21_to_22,
   ];
 
   let state = persistedState;
@@ -484,5 +485,31 @@ interface FromState20 {
 
 const migrate_20_to_21 = (state: FromState20) => {
   delete state.showImpliedEdges;
+  return state;
+};
+
+interface FromState21 {
+  nodes: Record<string, never>[];
+  edges: Record<string, never>[];
+}
+
+interface Node22 {
+  data: {
+    notes: string;
+  };
+}
+
+interface Edge22 {
+  data: {
+    notes: string;
+  };
+}
+
+// don't remember when notes was added, but we never defaulted it via migration, and we really on notes.length,
+// so we're migrating it now
+const migrate_21_to_22 = (state: FromState21) => {
+  state.nodes.forEach((node) => ((node as unknown as Node22).data.notes = ""));
+  state.edges.forEach((edge) => ((edge as unknown as Edge22).data.notes = ""));
+
   return state;
 };
