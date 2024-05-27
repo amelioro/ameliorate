@@ -75,7 +75,7 @@ export const useTopicStore = createWithEqualityFn<TopicStoreState>()(
   apiSyncer(
     persist(temporal(devtools(() => initialState, { name: topicStorePlaygroundName })), {
       name: topicStorePlaygroundName,
-      version: 21,
+      version: 22,
       migrate: migrate,
       skipHydration: true,
     })
