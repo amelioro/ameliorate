@@ -2,9 +2,10 @@ import Router from "next/router";
 import shortUUID from "short-uuid";
 import { temporal } from "zundo";
 import { useStore } from "zustand";
-import { devtools, persist } from "zustand/middleware";
+import { StorageValue, devtools, persist } from "zustand/middleware";
 import { createWithEqualityFn } from "zustand/traditional";
 
+import { errorWithData } from "../../../common/errorHandling";
 import { withDefaults } from "../../../common/object";
 import { emitter } from "../../common/event";
 import { deepIsEqual } from "../../common/store/utils";
@@ -57,17 +58,18 @@ export const generateBasicViews = (): QuickView[] => {
   ];
 };
 
-const initialStateWithBasicViews = () => {
+export const initialStateWithBasicViews = () => {
   return withDefaults({ views: generateBasicViews() }, initialState);
 };
 
 const persistedNameBase = "quickViewStore";
+export const currentVersion = 1;
 
 export const useQuickViewStore = createWithEqualityFn<QuickViewStoreState>()(
   apiSyncer(
     persist(temporal(devtools(() => initialState, { name: persistedNameBase })), {
       name: persistedNameBase,
-      version: 1,
+      version: currentVersion,
       skipHydration: true,
       // don't merge persisted state with current state when rehydrating - instead, use the initialState to fill in missing values
       // e.g. so that a new non-null value in initialState is non-null in the persisted state,
@@ -292,6 +294,10 @@ export const loadQuickViewsFromLocalStorage = async () => {
   useQuickViewStore.temporal.getState().clear();
 };
 
+export const loadQuickViewsFromDownloaded = (json: QuickViewStoreState) => {
+  useQuickViewStore.setState(json, true, "loadQuickViewsFromJson");
+};
+
 // utils
 export const getQuickViewByTitle = (title: string) => {
   const { views } = useQuickViewStore.getState();
@@ -302,6 +308,15 @@ export const getDefaultQuickView = () => {
   const { views } = useQuickViewStore.getState();
   const orderedViews = views.toSorted((view1, view2) => view1.order - view2.order);
   return orderedViews[0];
+};
+
+export const getPersistState = () => {
+  const persistOptions = useQuickViewStore.persist.getOptions();
+  if (!persistOptions.storage || !persistOptions.name) {
+    throw errorWithData("Store persist options missing storage or name", persistOptions);
+  }
+
+  return persistOptions.storage.getItem(persistOptions.name) as StorageValue<QuickViewStoreState>;
 };
 
 // misc

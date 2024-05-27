@@ -26,11 +26,8 @@ import {
   Typography,
 } from "@mui/material";
 import { toPng } from "html-to-image";
-import fileDownload from "js-file-download";
 import { getRectOfNodes, getTransformForBounds } from "reactflow";
-import { StorageValue } from "zustand/middleware";
 
-import { errorWithData } from "../../../../common/errorHandling";
 import { NumberInput } from "../../../common/components/NumberInput/NumberInput";
 import {
   toggleFlashlightMode,
@@ -49,48 +46,10 @@ import {
 import { resetView, useFormat } from "../../../view/currentViewStore/store";
 import { resetQuickViews } from "../../../view/quickViewStore/store";
 import { toggleFillNodesWithColor, useFillNodesWithColor } from "../../../view/userConfigStore";
-import { migrate } from "../../store/migrate";
-import { TopicStoreState } from "../../store/store";
+import { downloadTopic, uploadTopic } from "../../loadStores";
 import { useOnPlayground } from "../../store/topicHooks";
-import { getPersistState, resetTopicData, setTopicData } from "../../store/utilActions";
-import { getTopicTitle } from "../../store/utils";
+import { resetTopicData } from "../../store/utilActions";
 import { getDisplayNodes } from "../Diagram/externalFlowStore";
-
-// TODO: might be useful to have downloaded state be more human editable;
-// for this, probably should prettify the JSON, and remove position values (we can re-layout on import)
-const downloadTopic = () => {
-  const persistState = getPersistState();
-
-  const topicState = persistState.state;
-  const topicTitle = getTopicTitle(topicState);
-  const sanitizedFileName = topicTitle.replace(/[^a-z0-9]/gi, "_").toLowerCase(); // thanks https://stackoverflow.com/a/8485137
-
-  fileDownload(JSON.stringify(persistState), `${sanitizedFileName}.json`);
-};
-
-const uploadTopic = (event: React.ChangeEvent<HTMLInputElement>, sessionUsername?: string) => {
-  if (event.target.files === null) return;
-
-  const file = event.target.files[0];
-  if (!file) return;
-
-  file
-    .text()
-    .then((text) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- TODO: validate that JSON matches interface
-      const persistState = JSON.parse(text) as StorageValue<TopicStoreState>;
-      if (!persistState.version) {
-        throw errorWithData("No version found in file, cannot migrate old state", persistState);
-      }
-
-      const migratedState = migrate(persistState.state, persistState.version) as TopicStoreState;
-
-      setTopicData(migratedState, sessionUsername);
-    })
-    .catch((error: unknown) => {
-      throw error;
-    });
-};
 
 const imageWidth = 2560;
 const imageHeight = 1440;
