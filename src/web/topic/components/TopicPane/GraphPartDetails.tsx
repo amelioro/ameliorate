@@ -98,6 +98,9 @@ export const GraphPartDetails = ({ graphPart }: Props) => {
             helperText={errors.notes?.message}
             multiline
             fullWidth
+            size="small"
+            inputProps={{ className: "text-sm" }}
+            InputLabelProps={{ className: "text-sm" }}
             maxRows={10}
             disabled={!userCanEditTopicData}
           />

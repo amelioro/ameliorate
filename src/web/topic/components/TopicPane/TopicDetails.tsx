@@ -93,6 +93,7 @@ export const TopicDetails = () => {
             fullWidth
             size="small"
             inputProps={{ className: "text-sm" }}
+            InputLabelProps={{ className: "text-sm" }}
             maxRows={10}
             disabled={!userCanEditTopicData}
           />
