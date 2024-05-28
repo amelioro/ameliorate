@@ -10,6 +10,7 @@ import { populateDiagramFromLocalStorage } from "../web/topic/store/loadActions"
 import { playgroundUsername } from "../web/topic/store/store";
 import { loadActionConfig } from "../web/view/actionConfigStore";
 import { loadView } from "../web/view/currentViewStore/store";
+import { loadMiscTopicConfig } from "../web/view/miscTopicConfigStore";
 import { setInitialPerspective } from "../web/view/perspectiveStore";
 import { loadQuickViewsFromLocalStorage } from "../web/view/quickViewStore/store";
 
@@ -44,6 +45,7 @@ const Playground: NextPage = () => {
       await loadQuickViewsFromLocalStorage();
       await loadView("playground");
       await loadActionConfig("playground");
+      await loadMiscTopicConfig("playground");
       await loadCommentsFromLocalStorage();
       await loadDraftsFromLocalStorage();
       setInitiallyPopulated(true);

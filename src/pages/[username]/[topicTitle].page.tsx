@@ -11,6 +11,7 @@ import { trpc } from "../../web/common/trpc";
 import { populateDiagramFromApi } from "../../web/topic/store/loadActions";
 import { loadActionConfig } from "../../web/view/actionConfigStore";
 import { loadView } from "../../web/view/currentViewStore/store";
+import { loadMiscTopicConfig } from "../../web/view/miscTopicConfigStore";
 import { setInitialPerspective } from "../../web/view/perspectiveStore";
 import { QuickView, loadQuickViewsFromApi } from "../../web/view/quickViewStore/store";
 
@@ -64,6 +65,7 @@ const Topic: NextPage = () => {
       loadQuickViewsFromApi(diagramData, diagramData.views as unknown as QuickView[]); // unknown cast is awkward but need until the viewState is shared with backend
       await loadView(`${diagramData.creatorName}/${diagramData.title}`);
       await loadActionConfig(`${diagramData.creatorName}/${diagramData.title}`);
+      await loadMiscTopicConfig(`${diagramData.creatorName}/${diagramData.title}`);
       setPopulatedFromApi(true);
     };
     void populate();

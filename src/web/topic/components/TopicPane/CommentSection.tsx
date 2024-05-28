@@ -8,6 +8,7 @@ import { useRootComments } from "../../../comment/store/commentStore";
 import { useDraft } from "../../../comment/store/draftStore";
 import { Loading } from "../../../common/components/Loading/Loading";
 import { useSessionUser } from "../../../common/hooks";
+import { useShowResolvedComments } from "../../../view/miscTopicConfigStore";
 import { playgroundUsername } from "../../store/store";
 import { useOnPlayground } from "../../store/topicHooks";
 
@@ -21,7 +22,8 @@ export const CommentSection = ({ parentId, parentType }: Props) => {
   const onPlayground = useOnPlayground();
   const myUsername = onPlayground ? playgroundUsername : sessionUser?.username;
 
-  const rootComments = useRootComments(parentId, parentType);
+  const showResolved = useShowResolvedComments();
+  const rootComments = useRootComments(parentId, parentType, showResolved);
   const rootDraft = useDraft(parentId, parentType);
 
   if (!myUsername) return <Loading />;

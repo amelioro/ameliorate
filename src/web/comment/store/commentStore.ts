@@ -46,10 +46,19 @@ const useCommentStore = createWithEqualityFn<CommentStoreState>()(
 );
 
 // hooks
-export const useRootComments = (parentId: string | null, parentType: CommentParentType) => {
+export const useRootComments = (
+  parentId: string | null,
+  parentType: CommentParentType,
+  showResolved: boolean
+) => {
   return useCommentStore((state) =>
     state.comments
-      .filter((comment) => comment.parentId === parentId && comment.parentType === parentType)
+      .filter(
+        (comment) =>
+          comment.parentId === parentId &&
+          comment.parentType === parentType &&
+          (showResolved || !comment.resolved)
+      )
       .toSorted((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
   );
 };
@@ -113,6 +122,18 @@ export const deleteComment = (commentId: string) => {
     }),
     false,
     "deleteComment"
+  );
+};
+
+export const resolveComment = (commentId: string, resolved: boolean) => {
+  useCommentStore.setState(
+    (state) => ({
+      comments: state.comments.map((comment) =>
+        comment.id === commentId ? { ...comment, resolved } : comment
+      ),
+    }),
+    false,
+    "resolveComment"
   );
 };
 

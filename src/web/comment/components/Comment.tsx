@@ -1,12 +1,14 @@
 import styled from "@emotion/styled";
-import { MoreHoriz } from "@mui/icons-material";
+import { Check, MoreHoriz, RemoveDone } from "@mui/icons-material";
 import { Button, IconButton, MenuItem } from "@mui/material";
 import { useState } from "react";
 
-import { isRootComment } from "../../../common/comment";
+import { isRootComment as checkIsRootComment } from "../../../common/comment";
 import { Menu } from "../../common/components/Menu/Menu";
 import { ProfileIcon } from "../../common/components/ProfileIcon/ProfileIcon";
-import { StoreComment, deleteComment } from "../store/commentStore";
+import { useSessionUser } from "../../common/hooks";
+import { useUserCanEditTopicData } from "../../topic/store/userHooks";
+import { StoreComment, deleteComment, resolveComment } from "../store/commentStore";
 import { deleteDraft, useDraft } from "../store/draftStore";
 import { Draft } from "./Draft";
 
@@ -15,12 +17,17 @@ interface Props {
 }
 
 export const Comment = ({ comment }: Props) => {
+  const { sessionUser } = useSessionUser();
+  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
+
   const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [editing, setEditing] = useState(false);
 
   const draft = useDraft(comment.parentId, comment.parentType, comment.id);
 
+  const userCanResolve = userCanEditTopicData || comment.authorName === sessionUser?.username;
+  const isRootComment = checkIsRootComment(comment.parentType);
   const moreMenuOpen = Boolean(moreAnchorEl);
 
   return (
@@ -41,6 +48,27 @@ export const Comment = ({ comment }: Props) => {
         </div>
 
         <div>
+          {isRootComment &&
+            userCanResolve &&
+            (!comment.resolved ? (
+              <IconButton
+                color="inherit"
+                title="Resolve thread"
+                aria-label="Resolve thread"
+                onClick={() => resolveComment(comment.id, true)}
+              >
+                <Check />
+              </IconButton>
+            ) : (
+              <IconButton
+                color="inherit"
+                title="Unresolve thread"
+                aria-label="Unresolve thread"
+                onClick={() => resolveComment(comment.id, false)}
+              >
+                <RemoveDone />
+              </IconButton>
+            ))}
           <IconButton
             color="inherit"
             title="More"
@@ -76,9 +104,7 @@ export const Comment = ({ comment }: Props) => {
       {showConfirmDelete && (
         // jank "-top-2" to override the parent's space-y-2 that adds an equivalent margin
         <div className="absolute -top-2 left-0 flex size-full items-center justify-center bg-gray-100">
-          <span className="m-2">
-            Delete this {isRootComment(comment.parentType) ? "thread" : "comment"}?
-          </span>
+          <span className="m-2">Delete this {isRootComment ? "thread" : "comment"}?</span>
           <Button
             onClick={() => {
               setShowConfirmDelete(false);

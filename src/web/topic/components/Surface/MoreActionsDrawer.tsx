@@ -16,11 +16,13 @@ import {
 import {
   Divider,
   Drawer,
+  FormControlLabel,
   IconButton,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
+  Switch as MuiSwitch,
   ToggleButton,
   Tooltip,
   Typography,
@@ -44,6 +46,10 @@ import {
   useLayoutThoroughness,
 } from "../../../view/currentViewStore/layout";
 import { resetView, useFormat } from "../../../view/currentViewStore/store";
+import {
+  toggleShowResolvedComments,
+  useShowResolvedComments,
+} from "../../../view/miscTopicConfigStore";
 import { resetQuickViews } from "../../../view/quickViewStore/store";
 import { toggleFillNodesWithColor, useFillNodesWithColor } from "../../../view/userConfigStore";
 import { downloadTopic, uploadTopic } from "../../loadStores";
@@ -106,8 +112,9 @@ export const MoreActionsDrawer = ({
   const unrestrictedEditing = useUnrestrictedEditing();
   const forceNodesIntoLayers = useForceNodesIntoLayers();
   const flashlightMode = useFlashlightMode();
-  const fillNodesWithColor = useFillNodesWithColor();
   const layoutThoroughness = useLayoutThoroughness();
+  const showResolvedComments = useShowResolvedComments();
+  const fillNodesWithColor = useFillNodesWithColor();
 
   return (
     <Drawer
@@ -235,7 +242,7 @@ export const MoreActionsDrawer = ({
 
         {!isTableActive && (
           <>
-            <Divider>View Config</Divider>
+            <Divider>Diagram Config</Divider>
 
             <ListItem disablePadding={false}>
               <ToggleButton
@@ -306,6 +313,20 @@ export const MoreActionsDrawer = ({
             </ListItem>
           </>
         )}
+
+        <Divider>Misc Topic Config</Divider>
+
+        <ListItem disablePadding={false}>
+          <FormControlLabel
+            label={"Show resolved comments"}
+            control={
+              <MuiSwitch
+                checked={showResolvedComments}
+                onChange={(_event, checked) => toggleShowResolvedComments(checked)}
+              />
+            }
+          />
+        </ListItem>
 
         <Divider>User Config</Divider>
 
