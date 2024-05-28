@@ -3,6 +3,7 @@
 import set from "lodash/set";
 import camelCase from "lodash/camelCase";
 import { v4 as uuid } from "uuid";
+import { userScoreSchema } from "../../../common/userScore";
 
 export const migrate = (persistedState: any, version: number) => {
   const migrations = [
@@ -28,6 +29,7 @@ export const migrate = (persistedState: any, version: number) => {
     migrate_19_to_20,
     migrate_20_to_21,
     migrate_21_to_22,
+    migrate_22_to_23,
   ];
 
   let state = persistedState;
@@ -510,6 +512,20 @@ interface Edge22 {
 const migrate_21_to_22 = (state: FromState21) => {
   state.nodes.forEach((node) => ((node as unknown as Node22).data.notes = ""));
   state.edges.forEach((edge) => ((edge as unknown as Edge22).data.notes = ""));
+
+  return state;
+};
+
+interface FromState22 {
+  userScores: Record<string, Record<string, string>>; // userScores[:username][:graphPartId]
+}
+
+const migrate_22_to_23 = (state: FromState22) => {
+  // use "playground.user" instead of "me." on the playground
+  if (state.userScores["me."]) {
+    state.userScores["playground.user"] = state.userScores["me."];
+    delete state.userScores["me."];
+  }
 
   return state;
 };
