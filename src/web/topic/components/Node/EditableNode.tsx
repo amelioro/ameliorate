@@ -151,7 +151,11 @@ const EditableNodeBase = ({ node, supplemental = false, className = "" }: Props)
           <>
             {/* TODO?: how to make corner indicators not look bad in the table? they're cut off */}
             <LeftCornerStatusIndicators graphPartId={node.id} color={backgroundColorType} />
-            <RightCornerContentIndicators graphPartId={node.id} color={backgroundColorType} />
+            <RightCornerContentIndicators
+              graphPartId={node.id}
+              graphPartType="node"
+              color={backgroundColorType}
+            />
           </>
         )}
       </YEdgeBox>

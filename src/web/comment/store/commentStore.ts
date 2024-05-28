@@ -71,6 +71,22 @@ export const useThreadChildrenComments = (commentId: string) => {
   );
 };
 
+export const useCommentCount = (
+  parentId: string | null,
+  parentType: CommentParentType,
+  showResolved: boolean
+) => {
+  return useCommentStore(
+    (state) =>
+      state.comments.filter(
+        (comment) =>
+          comment.parentId === parentId &&
+          comment.parentType === parentType &&
+          (showResolved || !comment.resolved)
+      ).length
+  );
+};
+
 // actions
 export const upsertComment = (
   authorName: string,
