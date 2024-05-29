@@ -1,4 +1,4 @@
-import { AccountCircle, AutoStories, Close, Logout } from "@mui/icons-material";
+import { AutoStories, Close, Logout } from "@mui/icons-material";
 import {
   Divider,
   Drawer,
@@ -10,6 +10,8 @@ import {
   ListItemText,
 } from "@mui/material";
 import NextLink from "next/link";
+
+import { ProfileIcon } from "../ProfileIcon/ProfileIcon";
 
 interface Props {
   user: { username: string };
@@ -30,7 +32,7 @@ export const UserDrawer = ({ user, isUserDrawerOpen, setIsUserDrawerOpen }: Prop
           }
         >
           <ListItemIcon>
-            <AccountCircle />
+            <ProfileIcon username={user.username} />
           </ListItemIcon>
           <ListItemText primary={user.username} />
         </ListItem>

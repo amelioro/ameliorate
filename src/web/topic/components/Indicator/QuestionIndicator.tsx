@@ -29,10 +29,8 @@ export const QuestionIndicator = ({ graphPartId, partColor }: Props) => {
   const questionScores = Object.values(scoresByGraphPart).map((score) => getNumericScore(score));
   const highestScore = Math.max(...questionScores);
 
-  const scoreColor =
-    highestScore > 5
-      ? (scoreColors[highestScore.toString() as Score] as ButtonProps["color"])
-      : undefined;
+  // could just color if score is > 5, to avoid bringing attention to unimportant things, but it seems nice to have the visual indication of a low score too
+  const scoreColor = scoreColors[highestScore.toString() as Score] as ButtonProps["color"];
 
   const Icon = QuestionMark;
 

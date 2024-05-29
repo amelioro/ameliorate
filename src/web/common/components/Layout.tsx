@@ -1,4 +1,4 @@
-import { AccountCircle, Menu } from "@mui/icons-material";
+import { Menu } from "@mui/icons-material";
 import {
   AppBar,
   Box,
@@ -19,6 +19,7 @@ import favicon from "../../../../public/favicon.png";
 import { useSessionUser } from "../hooks";
 import { discordInvite, githubRepo } from "../urls";
 import { Link } from "./Link";
+import { ProfileIcon } from "./ProfileIcon/ProfileIcon";
 import { SiteDrawer } from "./SiteDrawer/SiteDrawer";
 import { UserDrawer } from "./UserDrawer/UserDrawer";
 
@@ -157,8 +158,7 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
                         "& svg": { height: "100%", width: "100%" },
                       }}
                     >
-                      {/* annoyingly this svg doesn't stretch to the edge, so it looks smaller than 32px. oh well */}
-                      <AccountCircle />
+                      <ProfileIcon username={sessionUser.username} />
                     </IconButton>
                   </Tooltip>
                   <UserDrawer

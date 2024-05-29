@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AutoStories, Settings } from "@mui/icons-material";
 import {
+  Divider,
   List,
   ListItem,
   ListItemButton,
@@ -19,6 +20,7 @@ import { useSessionUser } from "../../../common/hooks";
 import { setTopicDetails } from "../../store/topicActions";
 import { useTopic } from "../../store/topicHooks";
 import { useUserCanEditTopicData, useUserIsCreator } from "../../store/userHooks";
+import { CommentSection } from "./CommentSection";
 
 const formSchema = () => {
   return z.object({
@@ -81,7 +83,7 @@ export const TopicDetails = () => {
             }
           />
         </ListItem>
-        <ListItem disablePadding={false}>
+        <ListItem disablePadding={false} sx={{ paddingTop: 1 }}>
           <TextField
             {...register("description")}
             label="Description"
@@ -89,6 +91,9 @@ export const TopicDetails = () => {
             helperText={errors.description?.message}
             multiline
             fullWidth
+            size="small"
+            inputProps={{ className: "text-sm" }}
+            InputLabelProps={{ className: "text-sm" }}
             maxRows={10}
             disabled={!userCanEditTopicData}
           />
@@ -107,6 +112,10 @@ export const TopicDetails = () => {
             </ListItemButton>
           </ListItem>
         )}
+
+        <Divider sx={{ my: 1 }} />
+
+        <CommentSection parentId={null} parentType="topic" />
       </List>
     </form>
   );

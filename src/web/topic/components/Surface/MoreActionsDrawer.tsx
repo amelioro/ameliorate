@@ -16,11 +16,13 @@ import {
 import {
   Divider,
   Drawer,
+  FormControlLabel,
   IconButton,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
+  Switch as MuiSwitch,
   ToggleButton,
   Tooltip,
   Typography,
@@ -44,6 +46,10 @@ import {
   useLayoutThoroughness,
 } from "../../../view/currentViewStore/layout";
 import { resetView, useFormat } from "../../../view/currentViewStore/store";
+import {
+  toggleShowResolvedComments,
+  useShowResolvedComments,
+} from "../../../view/miscTopicConfigStore";
 import { resetQuickViews } from "../../../view/quickViewStore/store";
 import { toggleFillNodesWithColor, useFillNodesWithColor } from "../../../view/userConfigStore";
 import { downloadTopic, uploadTopic } from "../../loadStores";
@@ -106,8 +112,9 @@ export const MoreActionsDrawer = ({
   const unrestrictedEditing = useUnrestrictedEditing();
   const forceNodesIntoLayers = useForceNodesIntoLayers();
   const flashlightMode = useFlashlightMode();
-  const fillNodesWithColor = useFillNodesWithColor();
   const layoutThoroughness = useLayoutThoroughness();
+  const showResolvedComments = useShowResolvedComments();
+  const fillNodesWithColor = useFillNodesWithColor();
 
   return (
     <Drawer
@@ -164,6 +171,10 @@ export const MoreActionsDrawer = ({
                 onClick={() => {
                   resetTopicData();
                   resetQuickViews();
+                  // intentionally not resetting comments/drafts, since undoing a reset would be painful if comments were lost,
+                  // and it's annoying to try and put these all on the same undo/redo button.
+                  // if orphaned comments are really a problem, we should be able to manually clean them up.
+                  // if they're routinely a problem, we can consider trying to combining comments/drafts in the same undo/redo stack for this.
                 }}
               >
                 <AutoStoriesOutlined />
@@ -231,7 +242,7 @@ export const MoreActionsDrawer = ({
 
         {!isTableActive && (
           <>
-            <Divider>View Config</Divider>
+            <Divider>Diagram Config</Divider>
 
             <ListItem disablePadding={false}>
               <ToggleButton
@@ -302,6 +313,20 @@ export const MoreActionsDrawer = ({
             </ListItem>
           </>
         )}
+
+        <Divider>Misc Topic Config</Divider>
+
+        <ListItem disablePadding={false}>
+          <FormControlLabel
+            label={"Show resolved comments"}
+            control={
+              <MuiSwitch
+                checked={showResolvedComments}
+                onChange={(_event, checked) => toggleShowResolvedComments(checked)}
+              />
+            }
+          />
+        </ListItem>
 
         <Divider>User Config</Divider>
 

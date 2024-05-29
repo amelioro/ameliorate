@@ -19,8 +19,9 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  topics Topic[]
-  scores UserScore[]
+  topics   Topic[]
+  scores   UserScore[]
+  comments Comment[]
 
   @@index([username])
   @@index([authId])
@@ -42,6 +43,7 @@ model Topic {
   edges      Edge[]
   userScores UserScore[]
   views      View[]
+  comments   Comment[]
 
   @@unique([title, creatorName])
   @@index([creatorName])
@@ -186,4 +188,29 @@ model View {
 enum ViewType {
   shared
   quick
+}
+
+model Comment {
+  id               String            @id
+  authorName       String            @db.VarChar(39) // uses collation to ensure comparisons are case insensitive, not yet supported by prisma schema
+  topicId          Int
+  parentId         String?
+  parentType       CommentParentType
+  content          String            @db.VarChar(10000) // arbitrarily large max length
+  resolved         Boolean?
+  createdAt        DateTime // no default, UI should pass value
+  contentUpdatedAt DateTime // no default, UI should pass value
+
+  author User  @relation(fields: [authorName], references: [username], onDelete: Cascade)
+  topic  Topic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  @@index([topicId])
+  @@map("comments")
+}
+
+enum CommentParentType {
+  topic
+  node
+  edge
+  comment
 }

@@ -75,6 +75,11 @@ const saveDiffs = (
     (view) => view.id
   );
 
+  const anyChanges = [viewsToCreate, viewsToUpdate, viewsToDelete].some(
+    (changes) => changes.length > 0
+  );
+  if (!anyChanges) return;
+
   trpcClient.view.handleChangesets
     .mutate({ topicId, viewsToCreate, viewsToUpdate, viewsToDelete })
     .catch((e: unknown) => {

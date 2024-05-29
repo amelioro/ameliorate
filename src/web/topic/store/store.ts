@@ -50,7 +50,7 @@ export type UserScores = Record<string, Record<string, Score>>; // userScores[:u
  * - indicates that the scores are the creator's
  * - indicates that the user is not a real user, since "." is not a valid username character
  */
-export const playgroundUsername = "me.";
+export const playgroundUsername = "playground.user";
 
 export interface TopicStoreState {
   topic: StoreTopic;
@@ -75,7 +75,7 @@ export const useTopicStore = createWithEqualityFn<TopicStoreState>()(
   apiSyncer(
     persist(temporal(devtools(() => initialState, { name: topicStorePlaygroundName })), {
       name: topicStorePlaygroundName,
-      version: 22,
+      version: 23,
       migrate: migrate,
       skipHydration: true,
     })

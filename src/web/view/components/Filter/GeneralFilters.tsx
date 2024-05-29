@@ -4,11 +4,11 @@ import { useCallback, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 import { nodeTypes } from "../../../../common/node";
+import { deepIsEqual } from "../../../../common/utils";
 import { FormContext } from "../../../common/components/Form/FormContext";
 import { NodeSelect } from "../../../common/components/Form/NodeSelect";
 import { Select } from "../../../common/components/Form/Select";
 import { Switch } from "../../../common/components/Form/Switch";
-import { deepIsEqual } from "../../../common/store/utils";
 import { useAllNodes } from "../../../topic/store/nodeHooks";
 import { possibleScores } from "../../../topic/utils/graph";
 import { setGeneralFilter, useGeneralFilter } from "../../currentViewStore/filter";

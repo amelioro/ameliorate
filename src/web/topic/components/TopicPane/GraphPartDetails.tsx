@@ -15,6 +15,7 @@ import { nodeDecorations } from "../../utils/node";
 import { StandaloneEdge } from "../Edge/StandaloneEdge";
 import { EditableNode } from "../Node/EditableNode";
 import { AnswerDetails } from "./AnswerDetails";
+import { CommentSection } from "./CommentSection";
 import { DetailsClaimsSection } from "./DetailsClaimsSection";
 import { DetailsResearchSection } from "./DetailsResearchSection";
 import { FactDetails } from "./FactDetails";
@@ -77,7 +78,7 @@ export const GraphPartDetails = ({ graphPart }: Props) => {
           <ListItemText primary={headerText} />
         </ListItem>
 
-        <Divider />
+        <Divider className="my-1" />
 
         <ListItem disablePadding={false} sx={{ justifyContent: "center" }}>
           {partIsNode ? (
@@ -87,7 +88,7 @@ export const GraphPartDetails = ({ graphPart }: Props) => {
           )}
         </ListItem>
 
-        <Divider />
+        <Divider className="my-1" />
 
         <ListItem disablePadding={false}>
           <TextField
@@ -97,26 +98,38 @@ export const GraphPartDetails = ({ graphPart }: Props) => {
             helperText={errors.notes?.message}
             multiline
             fullWidth
+            size="small"
+            inputProps={{ className: "text-sm" }}
+            InputLabelProps={{ className: "text-sm" }}
             maxRows={10}
             disabled={!userCanEditTopicData}
           />
         </ListItem>
 
-        {isNode(graphPart) && researchNodeTypes.includes(graphPart.type) && <Divider />}
+        {isNode(graphPart) && researchNodeTypes.includes(graphPart.type) && (
+          <Divider className="my-1" />
+        )}
 
         {isNodeType(graphPart, "question") && <QuestionDetails questionNode={graphPart} />}
         {isNodeType(graphPart, "answer") && <AnswerDetails answerNode={graphPart} />}
         {isNodeType(graphPart, "fact") && <FactDetails factNode={graphPart} />}
         {isNodeType(graphPart, "source") && <SourceDetails sourceNode={graphPart} />}
 
-        <Divider />
+        <Divider className="my-1" />
 
         <DetailsClaimsSection graphPart={graphPart} />
 
-        <Divider />
-
         {/* prevent adding research nodes to edges; not 100% sure that we want to restrict this, but if it continues to seem good, this section can accept node instead of graphPart */}
-        {partIsNode && <DetailsResearchSection node={graphPart} />}
+        {partIsNode && (
+          <>
+            <Divider className="my-1" />
+            <DetailsResearchSection node={graphPart} />
+          </>
+        )}
+
+        <Divider className="my-1" />
+
+        <CommentSection parentId={graphPart.id} parentType={partIsNode ? "node" : "edge"} />
       </List>
     </form>
   );

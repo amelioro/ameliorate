@@ -1,13 +1,13 @@
 import diff from "microdiff";
 import { StateCreator, StoreMutatorIdentifier } from "zustand";
 
+import { Comment } from "../../../common/comment";
 import { trpcClient } from "../../../pages/_app.page";
 import { emitter } from "../../common/event";
-import { convertToApi } from "../utils/apiConversion";
-import { TopicStoreState } from "./store";
-import { isPlaygroundTopic } from "./utils";
+import { isPlaygroundTopic } from "../../topic/store/utils";
+import { CommentStoreState } from "./commentStore";
 
-const getCrudDiffs = <T>(
+const getCrudDiffs = <T extends object>(
   before: T[],
   after: T[],
   identifierFn: (element: T) => string
@@ -16,7 +16,23 @@ const getCrudDiffs = <T>(
   const keyedBefore = Object.fromEntries(before.map((item) => [identifierFn(item), item]));
   const keyedAfter = Object.fromEntries(after.map((item) => [identifierFn(item), item]));
 
-  const diffs = diff(keyedBefore, keyedAfter);
+  // Stringify nested paths because A.B -> A.B.C, A.B.C -> A.B.D, or A.B.C -> A.B should all be
+  // calculated as an update to A, rather than (respectively) a create to A.B, an update to A.B,
+  // or a delete to A.B.C.
+  const stringifiedBefore = Object.fromEntries(
+    Object.entries(keyedBefore).map(([key, value]) => [
+      key,
+      Object.fromEntries(Object.entries(value).map(([k, v]) => [k, JSON.stringify(v)])),
+    ])
+  );
+  const stringifiedAfter = Object.fromEntries(
+    Object.entries(keyedAfter).map(([key, value]) => [
+      key,
+      Object.fromEntries(Object.entries(value).map(([k, v]) => [k, JSON.stringify(v)])),
+    ])
+  );
+
+  const diffs = diff(stringifiedBefore, stringifiedAfter);
 
   /* eslint-disable @typescript-eslint/no-non-null-assertion -- the diff library is supposed to
      output the path to the diff, and we know our objects being diff'd are only one path deep (no
@@ -35,55 +51,36 @@ const getCrudDiffs = <T>(
   return [created, updated, deleted];
 };
 
-const saveDiffs = (storeBefore: TopicStoreState, storeAfter: TopicStoreState) => {
-  if (isPlaygroundTopic(storeBefore.topic)) return;
+const getApiComments = (topicId: number, store: CommentStoreState): Comment[] => {
+  const comments: Comment[] = store.comments.map((comment) => ({
+    ...comment,
+    topicId,
+  }));
 
-  const newDescription =
-    storeAfter.topic.description !== storeBefore.topic.description
-      ? storeAfter.topic.description
-      : undefined;
+  return comments;
+};
 
-  const apiBefore = convertToApi(storeBefore);
-  const apiAfter = convertToApi(storeAfter);
+const saveDiffs = (
+  topicId: number,
+  storeBefore: CommentStoreState,
+  storeAfter: CommentStoreState
+) => {
+  const apiBefore = getApiComments(topicId, storeBefore);
+  const apiAfter = getApiComments(topicId, storeAfter);
 
-  const [nodesToCreate, nodesToUpdate, nodesToDelete] = getCrudDiffs(
-    apiBefore.nodes,
-    apiAfter.nodes,
-    (node) => node.id
+  const [commentsToCreate, commentsToUpdate, commentsToDelete] = getCrudDiffs(
+    apiBefore,
+    apiAfter,
+    (comment) => comment.id
   );
 
-  const [edgesToCreate, edgesToUpdate, edgesToDelete] = getCrudDiffs(
-    apiBefore.edges,
-    apiAfter.edges,
-    (edge) => edge.id
+  const anyChanges = [commentsToCreate, commentsToUpdate, commentsToDelete].some(
+    (changes) => changes.length > 0
   );
-
-  const [scoresToCreate, scoresToUpdate, scoresToDelete] = getCrudDiffs(
-    apiBefore.userScores,
-    apiAfter.userScores,
-    (score) => score.username.toString() + score.graphPartId
-  );
-
-  const changeLists = {
-    nodesToCreate,
-    nodesToUpdate,
-    nodesToDelete,
-    edgesToCreate,
-    edgesToUpdate,
-    edgesToDelete,
-    scoresToCreate,
-    scoresToUpdate,
-    scoresToDelete,
-  };
-
-  const anyChanges =
-    Object.values(changeLists).some((changes) => changes.length > 0) ||
-    newDescription !== undefined;
   if (!anyChanges) return;
 
-  // TODO: is there a way to compress this data? when uploading a new topic, the payload appears to be 30% larger than the file being uploaded
-  trpcClient.topic.setData
-    .mutate({ topicId: storeBefore.topic.id, description: newDescription, ...changeLists })
+  trpcClient.comment.handleChangesets
+    .mutate({ topicId, commentsToCreate, commentsToUpdate, commentsToDelete })
     .catch((e: unknown) => {
       emitter.emit("errored");
       throw e;
@@ -94,10 +91,10 @@ type ApiSyncer = <
   Mps extends [StoreMutatorIdentifier, unknown][] = [],
   Mcs extends [StoreMutatorIdentifier, unknown][] = []
 >(
-  create: StateCreator<TopicStoreState, Mps, Mcs>
-) => StateCreator<TopicStoreState, Mps, Mcs>;
+  create: StateCreator<CommentStoreState, Mps, Mcs>
+) => StateCreator<CommentStoreState, Mps, Mcs>;
 
-type ApiSyncerImpl = (f: StateCreator<TopicStoreState>) => StateCreator<TopicStoreState>;
+type ApiSyncerImpl = (f: StateCreator<CommentStoreState>) => StateCreator<CommentStoreState>;
 
 // types taken from https://github.com/pmndrs/zustand/blob/main/docs/guides/typescript.md#middleware-that-doesnt-change-the-store-type
 const apiSyncerImpl: ApiSyncerImpl = (create) => (set, get, api) => {
@@ -121,7 +118,7 @@ const apiSyncerImpl: ApiSyncerImpl = (create) => (set, get, api) => {
     // any diff API changes should be for the same topic (specifically we don't want to delete previously-viewed topic data)
     if (storeBefore.topic.id !== storeAfter.topic.id) return;
 
-    saveDiffs(storeBefore, storeAfter);
+    saveDiffs(storeAfter.topic.id, storeBefore, storeAfter);
   };
 
   const origSetState = api.setState;
@@ -140,7 +137,7 @@ const apiSyncerImpl: ApiSyncerImpl = (create) => (set, get, api) => {
     // any diff API changes should be for the same topic (specifically we don't want to delete previously-viewed topic data)
     if (storeBefore.topic.id !== storeAfter.topic.id) return;
 
-    saveDiffs(storeBefore, storeAfter);
+    saveDiffs(storeAfter.topic.id, storeBefore, storeAfter);
   };
 
   return create(apiSyncerSet, get, api);
