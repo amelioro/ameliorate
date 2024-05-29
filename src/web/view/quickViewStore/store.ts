@@ -260,8 +260,14 @@ export const loadQuickViewsFromApi = (topic: UserTopic, views: QuickView[]) => {
 
   useQuickViewStore.setState(
     {
-      topic,
-      // map views because we don't need to store extra data in the store like createdAt, topicId, etc
+      // specify each field because we don't need to store extra data like createdAt etc.
+      topic: {
+        id: topic.id,
+        creatorName: topic.creatorName,
+        title: topic.title,
+        description: topic.description,
+      },
+      // specify each field because we don't need to store extra data like createdAt etc.
       views: views.map((view) => ({
         id: view.id,
         type: view.type,

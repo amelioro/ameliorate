@@ -4,6 +4,8 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
+import { loadCommentsFromApi } from "../../web/comment/store/commentStore";
+import { loadDraftsFromLocalStorage } from "../../web/comment/store/draftStore";
 import { NotFoundError, QueryError } from "../../web/common/components/Error/Error";
 import { Loading } from "../../web/common/components/Loading/Loading";
 import { useSessionUser } from "../../web/common/hooks";
@@ -66,6 +68,8 @@ const Topic: NextPage = () => {
       await loadView(`${diagramData.creatorName}/${diagramData.title}`);
       await loadActionConfig(`${diagramData.creatorName}/${diagramData.title}`);
       await loadMiscTopicConfig(`${diagramData.creatorName}/${diagramData.title}`);
+      loadCommentsFromApi(diagramData, diagramData.comments);
+      await loadDraftsFromLocalStorage(`${diagramData.creatorName}/${diagramData.title}`);
       setPopulatedFromApi(true);
     };
     void populate();

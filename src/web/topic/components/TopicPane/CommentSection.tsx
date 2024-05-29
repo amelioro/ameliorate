@@ -6,7 +6,6 @@ import { Draft } from "../../../comment/components/Draft";
 import { Thread } from "../../../comment/components/Thread";
 import { useRootComments } from "../../../comment/store/commentStore";
 import { useDraft } from "../../../comment/store/draftStore";
-import { Loading } from "../../../common/components/Loading/Loading";
 import { useSessionUser } from "../../../common/hooks";
 import { useShowResolvedComments } from "../../../view/miscTopicConfigStore";
 import { playgroundUsername } from "../../store/store";
@@ -26,8 +25,6 @@ export const CommentSection = ({ parentId, parentType }: Props) => {
   const rootComments = useRootComments(parentId, parentType, showResolved);
   const rootDraft = useDraft(parentId, parentType);
 
-  if (!myUsername) return <Loading />;
-
   return (
     <>
       <ListItem disablePadding={false}>
@@ -45,12 +42,14 @@ export const CommentSection = ({ parentId, parentType }: Props) => {
 
           {rootComments.length === 0 && <p className="text-center">No comments yet!</p>}
 
-          <Draft
-            authorName={myUsername}
-            parentId={parentId}
-            parentType={parentType}
-            startingText={rootDraft?.content}
-          />
+          {myUsername && (
+            <Draft
+              authorName={myUsername}
+              parentId={parentId}
+              parentType={parentType}
+              startingText={rootDraft?.content}
+            />
+          )}
         </div>
       </ListItem>
     </>

@@ -34,3 +34,21 @@ export type Comment = z.infer<typeof commentSchema>;
  * "root" means that the comment starts a thread, i.e. is not a reply to another comment
  */
 export const isRootComment = (parentType: CommentParentType) => parentType !== "comment";
+
+export const userCanDeleteComment = (
+  username: string,
+  userCanEditTopic: boolean,
+  commentToDelete: Comment,
+  otherCommentsBeingDeleted: Comment[]
+) => {
+  if (commentToDelete.authorName === username || userCanEditTopic) return true;
+
+  const deletingAsResultOfPermittedThreadDeletion =
+    commentToDelete.parentType === "comment" &&
+    otherCommentsBeingDeleted.some(
+      (otherComment) =>
+        otherComment.id === commentToDelete.parentId && otherComment.authorName === username
+    );
+
+  return deletingAsResultOfPermittedThreadDeletion;
+};

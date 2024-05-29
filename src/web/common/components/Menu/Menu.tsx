@@ -3,12 +3,10 @@
 import { MenuItem, type MenuItemProps, Menu as MuiMenu } from "@mui/material";
 import { Children, isValidElement } from "react";
 
-import { errorWithData } from "../../../../common/errorHandling";
-
 export const addCloseOnClick = (closeMenu: () => void, children: React.ReactNode) => {
   return Children.map(children, (child) => {
     if (!isValidElement(child) || child.type !== MenuItem) {
-      throw errorWithData("Menu children must be MenuItems", child);
+      return child; // don't add on close if not a menu item, but also don't error - could receive fragment or false if conditionally building menu items
     }
 
     const childProps = child.props as MenuItemProps;

@@ -7,6 +7,7 @@ import { isRootComment as checkIsRootComment } from "../../../common/comment";
 import { Menu } from "../../common/components/Menu/Menu";
 import { ProfileIcon } from "../../common/components/ProfileIcon/ProfileIcon";
 import { useSessionUser } from "../../common/hooks";
+import { useOnPlayground } from "../../topic/store/topicHooks";
 import { useUserCanEditTopicData } from "../../topic/store/userHooks";
 import { StoreComment, deleteComment, resolveComment } from "../store/commentStore";
 import { deleteDraft, useDraft } from "../store/draftStore";
@@ -19,6 +20,7 @@ interface Props {
 export const Comment = ({ comment }: Props) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
+  const onPlayground = useOnPlayground();
 
   const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
@@ -26,7 +28,8 @@ export const Comment = ({ comment }: Props) => {
 
   const draft = useDraft(comment.parentId, comment.parentType, comment.id);
 
-  const userCanResolve = userCanEditTopicData || comment.authorName === sessionUser?.username;
+  const userCanEditComment = onPlayground || comment.authorName === sessionUser?.username;
+  const userCanDeleteComment = userCanEditTopicData || comment.authorName === sessionUser?.username;
   const isRootComment = checkIsRootComment(comment.parentType);
   const moreMenuOpen = Boolean(moreAnchorEl);
 
@@ -49,7 +52,7 @@ export const Comment = ({ comment }: Props) => {
 
         <div>
           {isRootComment &&
-            userCanResolve &&
+            userCanDeleteComment &&
             (!comment.resolved ? (
               <IconButton
                 color="inherit"
@@ -82,8 +85,10 @@ export const Comment = ({ comment }: Props) => {
             isOpen={moreMenuOpen}
             closeMenu={() => setMoreAnchorEl(null)}
           >
-            <MenuItem onClick={() => setEditing(true)}>Edit</MenuItem>
-            <MenuItem onClick={() => setShowConfirmDelete(true)}>Delete</MenuItem>
+            {userCanEditComment && <MenuItem onClick={() => setEditing(true)}>Edit</MenuItem>}
+            {userCanDeleteComment && (
+              <MenuItem onClick={() => setShowConfirmDelete(true)}>Delete</MenuItem>
+            )}
           </Menu>
         </div>
       </HeaderDiv>

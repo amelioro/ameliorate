@@ -4,7 +4,7 @@ import { Comment } from "./Comment";
 import { Draft } from "./Draft";
 
 interface Props {
-  myUsername: string;
+  myUsername: string | undefined;
   rootComment: StoreComment;
 }
 
@@ -20,12 +20,14 @@ export const Thread = ({ myUsername, rootComment }: Props) => {
         <Comment key={comment.id} comment={comment} />
       ))}
 
-      <Draft
-        authorName={myUsername}
-        parentId={rootComment.id}
-        parentType="comment"
-        startingText={draft?.content}
-      />
+      {myUsername && (
+        <Draft
+          authorName={myUsername}
+          parentId={rootComment.id}
+          parentType="comment"
+          startingText={draft?.content}
+        />
+      )}
     </div>
   );
 };

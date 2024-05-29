@@ -33,7 +33,7 @@ export const topicRouter = router({
     }),
 
   /**
-   * Return a topic with all its nodes and edges, each user's scores, and the topic's views.
+   * Return a topic with all its nodes, edges, each user's scores and comments, and the topic's views.
    *
    * When we want to expose different amounts of topic data, we can rename this to be distinctive.
    */
@@ -58,6 +58,7 @@ export const topicRouter = router({
           edges: true,
           userScores: true,
           views: true,
+          comments: true,
         },
       });
     }),

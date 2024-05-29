@@ -6,6 +6,7 @@ import { Comment, CommentParentType, isRootComment } from "../../../common/comme
 import { withDefaults } from "../../../common/object";
 import { storageWithDates } from "../../common/store/utils";
 import { StoreTopic, UserTopic } from "../../topic/store/store";
+import { apiSyncer } from "./apiSyncerMiddleware";
 
 export type StoreComment = Omit<Comment, "topicId">;
 
@@ -25,19 +26,21 @@ const initialState: CommentStoreState = {
 const persistedNameBase = "commentStore";
 
 const useCommentStore = createWithEqualityFn<CommentStoreState>()(
-  persist(
-    devtools(() => initialState, { name: persistedNameBase }),
-    {
-      name: persistedNameBase,
-      version: 1,
-      skipHydration: true,
-      // don't merge persisted state with current state when rehydrating - instead, use the initialState to fill in missing values
-      // e.g. so that a new non-null value in initialState is non-null in the persisted state,
-      // removing the need to write a migration for every new field
-      merge: (persistedState, _currentState) =>
-        withDefaults(persistedState as Partial<CommentStoreState>, initialState),
-      storage: storageWithDates,
-    }
+  apiSyncer(
+    persist(
+      devtools(() => initialState, { name: persistedNameBase }),
+      {
+        name: persistedNameBase,
+        version: 1,
+        skipHydration: true,
+        // don't merge persisted state with current state when rehydrating - instead, use the initialState to fill in missing values
+        // e.g. so that a new non-null value in initialState is non-null in the persisted state,
+        // removing the need to write a migration for every new field
+        merge: (persistedState, _currentState) =>
+          withDefaults(persistedState as Partial<CommentStoreState>, initialState),
+        storage: storageWithDates,
+      }
+    )
   ),
 
   // Using `createWithEqualityFn` so that we can do a diff in hooks that return new arrays/objects
@@ -150,6 +153,37 @@ export const resolveComment = (commentId: string, resolved: boolean) => {
     }),
     false,
     "resolveComment"
+  );
+};
+
+export const loadCommentsFromApi = (topic: UserTopic, comments: StoreComment[]) => {
+  const builtPersistedName = `${persistedNameBase}-user`;
+
+  useCommentStore.persist.setOptions({ name: builtPersistedName });
+
+  useCommentStore.setState(
+    {
+      // specify each field because we don't need to store extra data like createdAt etc.
+      topic: {
+        id: topic.id,
+        creatorName: topic.creatorName,
+        title: topic.title,
+        description: topic.description,
+      },
+      // specify each field because we don't need to store extra data like topicId etc.
+      comments: comments.map((comment) => ({
+        id: comment.id,
+        authorName: comment.authorName,
+        parentId: comment.parentId,
+        parentType: comment.parentType,
+        content: comment.content,
+        resolved: comment.resolved,
+        createdAt: comment.createdAt,
+        contentUpdatedAt: comment.contentUpdatedAt,
+      })),
+    },
+    true,
+    "loadCommentsFromApi"
   );
 };
 
