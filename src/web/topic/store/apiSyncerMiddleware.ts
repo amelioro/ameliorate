@@ -79,7 +79,6 @@ const saveDiffs = (storeBefore: TopicStoreState, storeAfter: TopicStoreState) =>
   const anyChanges =
     Object.values(changeLists).some((changes) => changes.length > 0) ||
     newDescription !== undefined;
-
   if (!anyChanges) return;
 
   // TODO: is there a way to compress this data? when uploading a new topic, the payload appears to be 30% larger than the file being uploaded
