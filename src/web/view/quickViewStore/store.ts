@@ -7,8 +7,8 @@ import { createWithEqualityFn } from "zustand/traditional";
 
 import { errorWithData } from "../../../common/errorHandling";
 import { withDefaults } from "../../../common/object";
+import { deepIsEqual } from "../../../common/utils";
 import { emitter } from "../../common/event";
-import { deepIsEqual } from "../../common/store/utils";
 import { StoreTopic, UserTopic } from "../../topic/store/store";
 import { ViewState, getView, initialViewState, setView } from "../currentViewStore/store";
 import { apiSyncer } from "./apiSyncerMiddleware";

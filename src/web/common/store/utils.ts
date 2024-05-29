@@ -1,9 +1,4 @@
-import isEqual from "lodash/isEqual";
 import { createJSONStorage } from "zustand/middleware";
-
-export const deepIsEqual = (a: unknown, b: unknown) => {
-  return isEqual(a, b);
-};
 
 /**
  * Persist middleware doesn't automatically handle persisting dates.

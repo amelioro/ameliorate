@@ -4,10 +4,10 @@ import { useCallback, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 import { InfoCategory } from "../../../../common/infoCategory";
+import { deepIsEqual } from "../../../../common/utils";
 import { FormContext } from "../../../common/components/Form/FormContext";
 import { NodeSelect } from "../../../common/components/Form/NodeSelect";
 import { Select } from "../../../common/components/Form/Select";
-import { deepIsEqual } from "../../../common/store/utils";
 import { useCriteria, useNodesOfType, useSolutions } from "../../../topic/store/nodeHooks";
 import { getStandardFilterWithFallbacks, setStandardFilter } from "../../currentViewStore/filter";
 import {
