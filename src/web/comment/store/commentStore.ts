@@ -98,7 +98,7 @@ export const upsertComment = (
   const state = useCommentStore.getState();
 
   const existingComment = state.comments.find((comment) => comment.id === commentId);
-  const updatedAt = new Date();
+  const contentUpdatedAt = new Date();
 
   const updatedComments = existingComment
     ? state.comments.map((comment) => {
@@ -106,7 +106,7 @@ export const upsertComment = (
           return {
             ...comment,
             content,
-            updatedAt,
+            contentUpdatedAt,
           };
         } else {
           return comment;
@@ -119,8 +119,8 @@ export const upsertComment = (
         parentType,
         content,
         resolved: isRootComment(parentType) ? false : null,
-        createdAt: updatedAt,
-        updatedAt: updatedAt,
+        createdAt: contentUpdatedAt,
+        contentUpdatedAt: contentUpdatedAt,
       });
 
   useCommentStore.setState({ comments: updatedComments }, false, "upsertComment");

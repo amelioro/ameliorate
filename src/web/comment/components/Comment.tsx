@@ -42,7 +42,7 @@ export const Comment = ({ comment }: Props) => {
                 dateStyle: "short",
                 timeStyle: "short",
               })}
-              {comment.updatedAt > comment.createdAt ? " (edited)" : ""}
+              {comment.contentUpdatedAt > comment.createdAt ? " (edited)" : ""}
             </span>
           </div>
         </div>

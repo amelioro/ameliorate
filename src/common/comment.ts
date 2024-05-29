@@ -17,7 +17,7 @@ export const commentSchema = z
     content: z.string().max(10000),
     resolved: z.boolean().nullable(),
     createdAt: z.date(),
-    updatedAt: z.date(),
+    contentUpdatedAt: z.date(),
   })
   .refine((comment) => {
     if (comment.parentType === "topic") return comment.parentId === null;
