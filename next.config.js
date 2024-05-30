@@ -1,4 +1,6 @@
-const withBundleAnalyzer = require("@next/bundle-analyzer")({
+import bundleAnalzyer from "@next/bundle-analyzer";
+
+const withBundleAnalyzer = bundleAnalzyer({
   enabled: process.env.ANALYZE === "true",
 });
 
@@ -22,4 +24,4 @@ const nextConfig = {
 };
 
 // eslint-disable-next-line functional/immutable-data
-module.exports = withBundleAnalyzer(nextConfig);
+export default withBundleAnalyzer(nextConfig);
