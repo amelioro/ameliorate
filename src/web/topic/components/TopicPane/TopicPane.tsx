@@ -2,12 +2,20 @@ import { AutoStories, ChevronLeft, KeyboardArrowDown } from "@mui/icons-material
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Tab } from "@mui/material";
 
-import { useSelectedGraphPart } from "../../../view/currentViewStore/store";
-import { GraphPartDetails } from "./GraphPartDetails";
-import { TopicDetails } from "./TopicDetails";
-import { PositionedDiv, StyledDrawer, TogglePaneButton } from "./TopicPane.styles";
-import { TopicViews } from "./TopicViews";
-import { setIsTopicPaneOpen, setSelectedTab, usePaneStore } from "./paneStore";
+import { GraphPartDetails } from "@/web/topic/components/TopicPane/GraphPartDetails";
+import { TopicDetails } from "@/web/topic/components/TopicPane/TopicDetails";
+import {
+  PositionedDiv,
+  StyledDrawer,
+  TogglePaneButton,
+} from "@/web/topic/components/TopicPane/TopicPane.styles";
+import { TopicViews } from "@/web/topic/components/TopicPane/TopicViews";
+import {
+  setIsTopicPaneOpen,
+  setSelectedTab,
+  usePaneStore,
+} from "@/web/topic/components/TopicPane/paneStore";
+import { useSelectedGraphPart } from "@/web/view/currentViewStore/store";
 
 interface Props {
   isLandscape: boolean;

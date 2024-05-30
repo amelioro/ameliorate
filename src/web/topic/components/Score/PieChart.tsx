@@ -4,7 +4,7 @@ import { useState } from "react";
 import { PieChart as ReactMinimalPieChart } from "react-minimal-pie-chart";
 import { BaseDataEntry, Data } from "react-minimal-pie-chart/types/commonTypes";
 
-import { errorWithData } from "../../../../common/errorHandling";
+import { errorWithData } from "@/common/errorHandling";
 
 export interface CustomDataEntry extends BaseDataEntry {
   hoverColor: string;

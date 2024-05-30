@@ -4,18 +4,18 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-import { loadCommentsFromApi } from "../../web/comment/store/commentStore";
-import { loadDraftsFromLocalStorage } from "../../web/comment/store/draftStore";
-import { NotFoundError, QueryError } from "../../web/common/components/Error/Error";
-import { Loading } from "../../web/common/components/Loading/Loading";
-import { useSessionUser } from "../../web/common/hooks";
-import { trpc } from "../../web/common/trpc";
-import { populateDiagramFromApi } from "../../web/topic/store/loadActions";
-import { loadActionConfig } from "../../web/view/actionConfigStore";
-import { loadView } from "../../web/view/currentViewStore/store";
-import { loadMiscTopicConfig } from "../../web/view/miscTopicConfigStore";
-import { setInitialPerspective } from "../../web/view/perspectiveStore";
-import { QuickView, loadQuickViewsFromApi } from "../../web/view/quickViewStore/store";
+import { loadCommentsFromApi } from "@/web/comment/store/commentStore";
+import { loadDraftsFromLocalStorage } from "@/web/comment/store/draftStore";
+import { NotFoundError, QueryError } from "@/web/common/components/Error/Error";
+import { Loading } from "@/web/common/components/Loading/Loading";
+import { useSessionUser } from "@/web/common/hooks";
+import { trpc } from "@/web/common/trpc";
+import { populateDiagramFromApi } from "@/web/topic/store/loadActions";
+import { loadActionConfig } from "@/web/view/actionConfigStore";
+import { loadView } from "@/web/view/currentViewStore/store";
+import { loadMiscTopicConfig } from "@/web/view/miscTopicConfigStore";
+import { setInitialPerspective } from "@/web/view/perspectiveStore";
+import { QuickView, loadQuickViewsFromApi } from "@/web/view/quickViewStore/store";
 
 // Don't render the workspace server-side.
 // Known reasons:

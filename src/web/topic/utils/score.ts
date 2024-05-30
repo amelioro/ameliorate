@@ -2,7 +2,7 @@ import { type Palette } from "@mui/material";
 import meanBy from "lodash/meanBy";
 import round from "lodash/round";
 
-import { Score } from "../utils/graph";
+import { Score } from "@/web/topic/utils/graph";
 
 export const scoreColors: Record<Score, keyof Palette> = {
   "-": "neutral",

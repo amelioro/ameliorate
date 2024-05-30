@@ -1,6 +1,6 @@
 import { TRPCError } from "@trpc/server";
 
-import { middleware } from "./trpc";
+import { middleware } from "@/api/trpc";
 
 export const isAuthenticated = middleware(async (opts) => {
   const { ctx } = opts;

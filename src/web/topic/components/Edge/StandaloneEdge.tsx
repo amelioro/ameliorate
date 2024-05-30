@@ -1,13 +1,13 @@
 import { Stack } from "@mui/material";
 import { Position } from "reactflow";
 
-import { useIsGraphPartSelected } from "../../../view/currentViewStore/store";
-import { useNode } from "../../store/nodeHooks";
-import { Edge } from "../../utils/graph";
-import { EdgeProps } from "../Diagram/Diagram";
-import { EditableNode } from "../Node/EditableNode";
-import { nodeWidthPx } from "../Node/EditableNode.styles";
-import { ScoreEdge } from "./ScoreEdge";
+import { EdgeProps } from "@/web/topic/components/Diagram/Diagram";
+import { ScoreEdge } from "@/web/topic/components/Edge/ScoreEdge";
+import { EditableNode } from "@/web/topic/components/Node/EditableNode";
+import { nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
+import { useNode } from "@/web/topic/store/nodeHooks";
+import { Edge } from "@/web/topic/utils/graph";
+import { useIsGraphPartSelected } from "@/web/view/currentViewStore/store";
 
 const convertToStandaloneFlowEdge = (edge: Edge, selected: boolean): EdgeProps => {
   return {

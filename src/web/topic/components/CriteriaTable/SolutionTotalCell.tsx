@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 
-import { useSolutionTotal } from "../../store/scoreHooks";
-import { Node } from "../../utils/graph";
+import { useSolutionTotal } from "@/web/topic/store/scoreHooks";
+import { Node } from "@/web/topic/utils/graph";
 
 interface Props {
   solution: Node;

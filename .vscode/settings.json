@@ -8,6 +8,7 @@
   "files.associations": {
     "*.css": "tailwindcss"
   },
+  "typescript.preferences.importModuleSpecifier": "non-relative",
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
   }

@@ -1,10 +1,10 @@
 import { TableChart, TableChartOutlined } from "@mui/icons-material";
 import { memo, useCallback } from "react";
 
-import { viewCriteriaTable } from "../../../view/currentViewStore/filter";
-import { useNode, useNodeChildren } from "../../store/nodeHooks";
-import { Node, ProblemNode } from "../../utils/graph";
-import { Indicator } from "../Indicator/Indicator";
+import { Indicator } from "@/web/topic/components/Indicator/Indicator";
+import { useNode, useNodeChildren } from "@/web/topic/store/nodeHooks";
+import { Node, ProblemNode } from "@/web/topic/utils/graph";
+import { viewCriteriaTable } from "@/web/view/currentViewStore/filter";
 
 const isProblem = (node: Node): node is ProblemNode => node.type === "problem";
 

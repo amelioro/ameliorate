@@ -1,8 +1,8 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
-import { infoColor } from "../../../common/theme";
-import { Spotlight, zIndex } from "../Diagram/Diagram.styles";
+import { infoColor } from "@/web/common/theme";
+import { Spotlight, zIndex } from "@/web/topic/components/Diagram/Diagram.styles";
 
 const highlightedEdgeWidth = "2px";
 export const edgeColor = "#b1b1b7"; // react flow default

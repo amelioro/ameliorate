@@ -1,11 +1,11 @@
 import { shallow } from "zustand/shallow";
 
-import { justificationRelationNames } from "../../../common/edge";
-import { NodeType, justificationNodeTypes, researchNodeTypes } from "../../../common/node";
-import { deepIsEqual } from "../../../common/utils";
-import { isClaimEdge } from "../utils/claim";
-import { Node } from "../utils/graph";
-import { TopicStoreState, useTopicStore } from "./store";
+import { justificationRelationNames } from "@/common/edge";
+import { NodeType, justificationNodeTypes, researchNodeTypes } from "@/common/node";
+import { deepIsEqual } from "@/common/utils";
+import { TopicStoreState, useTopicStore } from "@/web/topic/store/store";
+import { isClaimEdge } from "@/web/topic/utils/claim";
+import { Node } from "@/web/topic/utils/graph";
 
 export const useRootClaim = (graphPartId: string) => {
   return useTopicStore((state) => {

@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-import { nodeWidthPx } from "../Node/EditableNode.styles";
+import { nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
 
 export const StyledDiv = styled.div`
   height: 100%; // expand to fill cell in case other cells are bigger due to nodes having more rows of text

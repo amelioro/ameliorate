@@ -1,7 +1,7 @@
 import { StateCreator, StoreMutatorIdentifier } from "zustand";
 
-import { emitter } from "../../common/event";
-import { ViewState } from "./store";
+import { emitter } from "@/web/common/event";
+import { ViewState } from "@/web/view/currentViewStore/store";
 
 type TriggerEvent = <
   Mps extends [StoreMutatorIdentifier, unknown][] = [],

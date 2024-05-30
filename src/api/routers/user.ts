@@ -1,10 +1,10 @@
 import { TRPCError } from "@trpc/server";
 import _ from "lodash";
 
-import { userSchema } from "../../common/user";
-import { xprisma } from "../../db/extendedPrisma";
-import { isAuthenticated, isEmailVerified } from "../auth";
-import { procedure, router } from "../trpc";
+import { isAuthenticated, isEmailVerified } from "@/api/auth";
+import { procedure, router } from "@/api/trpc";
+import { userSchema } from "@/common/user";
+import { xprisma } from "@/db/extendedPrisma";
 
 export const userRouter = router({
   findByUsername: procedure

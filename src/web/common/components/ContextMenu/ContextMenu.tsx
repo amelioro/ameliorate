@@ -1,16 +1,16 @@
 import { Menu as MuiMenu } from "@mui/material";
 
-import { closeContextMenu } from "../../store/contextMenuActions";
-import { useAnchorPosition, useContextMenuContext } from "../../store/contextMenuStore";
-import { AddNodeMenuItem } from "./AddNodeMenuItem";
-import { AlsoShowNodeAndNeighborsMenuItem } from "./AlsoShowNodeAndNeighborsMenuItem";
-import { ChangeEdgeTypeMenuItem } from "./ChangeEdgeTypeMenuItem";
-import { ChangeNodeTypeMenuItem } from "./ChangeNodeTypeMenuItem";
-import { CloseOnClickMenuItem } from "./CloseOnClickMenuItem";
-import { DeleteEdgeMenuItem } from "./DeleteEdgeMenuItem";
-import { DeleteNodeMenuItem } from "./DeleteNodeMenuItem";
-import { HideMenuItem } from "./HideMenuItem";
-import { OnlyShowNodeAndNeighborsMenuItem } from "./OnlyShowNodeAndNeighborsMenuItem";
+import { AddNodeMenuItem } from "@/web/common/components/ContextMenu/AddNodeMenuItem";
+import { AlsoShowNodeAndNeighborsMenuItem } from "@/web/common/components/ContextMenu/AlsoShowNodeAndNeighborsMenuItem";
+import { ChangeEdgeTypeMenuItem } from "@/web/common/components/ContextMenu/ChangeEdgeTypeMenuItem";
+import { ChangeNodeTypeMenuItem } from "@/web/common/components/ContextMenu/ChangeNodeTypeMenuItem";
+import { CloseOnClickMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
+import { DeleteEdgeMenuItem } from "@/web/common/components/ContextMenu/DeleteEdgeMenuItem";
+import { DeleteNodeMenuItem } from "@/web/common/components/ContextMenu/DeleteNodeMenuItem";
+import { HideMenuItem } from "@/web/common/components/ContextMenu/HideMenuItem";
+import { OnlyShowNodeAndNeighborsMenuItem } from "@/web/common/components/ContextMenu/OnlyShowNodeAndNeighborsMenuItem";
+import { closeContextMenu } from "@/web/common/store/contextMenuActions";
+import { useAnchorPosition, useContextMenuContext } from "@/web/common/store/contextMenuStore";
 
 export const ContextMenu = () => {
   const anchorPosition = useAnchorPosition();

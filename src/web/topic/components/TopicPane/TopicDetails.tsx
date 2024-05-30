@@ -14,13 +14,13 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { topicSchema } from "../../../../common/topic";
-import { Link } from "../../../common/components/Link";
-import { useSessionUser } from "../../../common/hooks";
-import { setTopicDetails } from "../../store/topicActions";
-import { useTopic } from "../../store/topicHooks";
-import { useUserCanEditTopicData, useUserIsCreator } from "../../store/userHooks";
-import { CommentSection } from "./CommentSection";
+import { topicSchema } from "@/common/topic";
+import { Link } from "@/web/common/components/Link";
+import { useSessionUser } from "@/web/common/hooks";
+import { CommentSection } from "@/web/topic/components/TopicPane/CommentSection";
+import { setTopicDetails } from "@/web/topic/store/topicActions";
+import { useTopic } from "@/web/topic/store/topicHooks";
+import { useUserCanEditTopicData, useUserIsCreator } from "@/web/topic/store/userHooks";
 
 const formSchema = () => {
   return z.object({

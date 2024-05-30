@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Context, useContextMenuStore } from "./contextMenuStore";
+import { Context, useContextMenuStore } from "@/web/common/store/contextMenuStore";
 
 export const openContextMenu = (event: React.MouseEvent, context: Context) => {
   event.preventDefault(); // prevent opening default context menu

@@ -1,6 +1,6 @@
 import { createDraft, finishDraft } from "immer";
 
-import { useTopicStore } from "./store";
+import { useTopicStore } from "@/web/topic/store/store";
 
 export const setTopicDetails = (description: string) => {
   const state = createDraft(useTopicStore.getState());

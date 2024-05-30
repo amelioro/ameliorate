@@ -1,9 +1,9 @@
 import ELK, { ElkNode, LayoutOptions } from "elkjs";
 
-import { NodeType, nodeTypes } from "../../../common/node";
-import { nodeHeightPx, nodeWidthPx } from "../components/Node/EditableNode.styles";
-import { Diagram } from "./diagram";
-import { type Edge, type Node, ancestors, descendants } from "./graph";
+import { NodeType, nodeTypes } from "@/common/node";
+import { nodeHeightPx, nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
+import { Diagram } from "@/web/topic/utils/diagram";
+import { type Edge, type Node, ancestors, descendants } from "@/web/topic/utils/graph";
 
 export type Orientation = "DOWN" | "UP" | "RIGHT" | "LEFT";
 export const orientation: Orientation = "DOWN" as Orientation; // not constant to allow potential other orientations in the future, and keeping code that currently exists for handling "LEFT" orientation

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { userSchema } from "./user";
+import { userSchema } from "@/common/user";
 
 export const userScoreSchema = z.object({
   username: userSchema.shape.username,

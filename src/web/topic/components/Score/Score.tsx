@@ -1,16 +1,16 @@
 import { useRef, useState } from "react";
 
-import { htmlDefaultFontSize } from "../../../../pages/_document.page";
-import { useSessionUser } from "../../../common/hooks";
-import { usePerspectives } from "../../../view/perspectiveStore";
-import { useFlowZoom } from "../../hooks/flowHooks";
-import { useUserScores } from "../../store/scoreHooks";
-import { playgroundUsername } from "../../store/store";
-import { useOnPlayground } from "../../store/topicHooks";
-import { BackdropPopper, CircleDiv, ScorePopper } from "./Score.styles";
-import { ScoreButton, buttonDiameterRem } from "./ScoreButton";
-import { ScoreCompare } from "./ScoreCompare";
-import { ScoreSelect } from "./ScoreSelect";
+import { htmlDefaultFontSize } from "@/pages/_document.page";
+import { useSessionUser } from "@/web/common/hooks";
+import { BackdropPopper, CircleDiv, ScorePopper } from "@/web/topic/components/Score/Score.styles";
+import { ScoreButton, buttonDiameterRem } from "@/web/topic/components/Score/ScoreButton";
+import { ScoreCompare } from "@/web/topic/components/Score/ScoreCompare";
+import { ScoreSelect } from "@/web/topic/components/Score/ScoreSelect";
+import { useFlowZoom } from "@/web/topic/hooks/flowHooks";
+import { useUserScores } from "@/web/topic/store/scoreHooks";
+import { playgroundUsername } from "@/web/topic/store/store";
+import { useOnPlayground } from "@/web/topic/store/topicHooks";
+import { usePerspectives } from "@/web/view/perspectiveStore";
 
 const circleDiameter = 6 * buttonDiameterRem; // no collisions for fitting 10 elements
 

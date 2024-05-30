@@ -3,14 +3,14 @@ import { IconButton, Tooltip, Typography } from "@mui/material";
 import { ReactNode, memo } from "react";
 import { Position } from "reactflow";
 
-import { nodeTypes } from "../../../../common/node";
-import { showNode } from "../../../view/currentViewStore/filter";
-import { useHiddenNodes } from "../../hooks/flowHooks";
-import { useNeighborsInDirection } from "../../store/nodeHooks";
-import { Node, RelationDirection } from "../../utils/graph";
-import { Orientation } from "../../utils/layout";
-import { nodeDecorations } from "../../utils/node";
-import { StyledHandle } from "./NodeHandle.styles";
+import { nodeTypes } from "@/common/node";
+import { StyledHandle } from "@/web/topic/components/Node/NodeHandle.styles";
+import { useHiddenNodes } from "@/web/topic/hooks/flowHooks";
+import { useNeighborsInDirection } from "@/web/topic/store/nodeHooks";
+import { Node, RelationDirection } from "@/web/topic/utils/graph";
+import { Orientation } from "@/web/topic/utils/layout";
+import { nodeDecorations } from "@/web/topic/utils/node";
+import { showNode } from "@/web/view/currentViewStore/filter";
 
 const NodeSummary = ({ node, beforeSlot }: { node: Node; beforeSlot?: ReactNode }) => {
   const { NodeIcon, title } = nodeDecorations[node.type];

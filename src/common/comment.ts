@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-import { topicSchema } from "./topic";
-import { userSchema } from "./user";
+import { topicSchema } from "@/common/topic";
+import { userSchema } from "@/common/user";
 
 export const commentParentTypes = ["topic", "node", "edge", "comment"] as const;
 export const zCommentParentTypes = z.enum(commentParentTypes);

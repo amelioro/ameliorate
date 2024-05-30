@@ -1,8 +1,8 @@
-import { router } from "../trpc";
-import { commentRouter } from "./comment";
-import { topicRouter } from "./topic";
-import { userRouter } from "./user";
-import { viewRouter } from "./view";
+import { commentRouter } from "@/api/routers/comment";
+import { topicRouter } from "@/api/routers/topic";
+import { userRouter } from "@/api/routers/user";
+import { viewRouter } from "@/api/routers/view";
+import { router } from "@/api/trpc";
 
 export const appRouter = router({
   topic: topicRouter,

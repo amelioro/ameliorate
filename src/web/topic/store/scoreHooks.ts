@@ -3,13 +3,13 @@ import get from "lodash/get";
 import sum from "lodash/sum";
 import { shallow } from "zustand/shallow";
 
-import { throwError } from "../../../common/errorHandling";
-import { usePerspectives } from "../../view/perspectiveStore";
-import { Node, Score } from "../utils/graph";
-import { children, edges } from "../utils/node";
-import { getNumericScore } from "../utils/score";
-import { getDisplayScoresByGraphPartId } from "./scoreGetters";
-import { useTopicStore } from "./store";
+import { throwError } from "@/common/errorHandling";
+import { getDisplayScoresByGraphPartId } from "@/web/topic/store/scoreGetters";
+import { useTopicStore } from "@/web/topic/store/store";
+import { Node, Score } from "@/web/topic/utils/graph";
+import { children, edges } from "@/web/topic/utils/node";
+import { getNumericScore } from "@/web/topic/utils/score";
+import { usePerspectives } from "@/web/view/perspectiveStore";
 
 export const useDisplayScores = (graphPartIds: string[]): Record<string, Score> => {
   const perspectives = usePerspectives();

@@ -18,10 +18,10 @@ import {
   Widgets,
 } from "@mui/icons-material";
 
-import { errorWithData } from "../../../common/errorHandling";
-import { NodeType, areSameCategoryNodes } from "../../../common/node";
-import { componentTypes } from "./edge";
-import { Edge, Graph, Node } from "./graph";
+import { errorWithData } from "@/common/errorHandling";
+import { NodeType, areSameCategoryNodes } from "@/common/node";
+import { componentTypes } from "@/web/topic/utils/edge";
+import { Edge, Graph, Node } from "@/web/topic/utils/graph";
 
 export const indicatorLengthRem = 1.25; // rem
 

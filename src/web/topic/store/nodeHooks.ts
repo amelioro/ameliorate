@@ -1,12 +1,12 @@
 import { shallow } from "zustand/shallow";
 
-import { errorWithData } from "../../../common/errorHandling";
-import { NodeType } from "../../../common/node";
-import { useIsAnyGraphPartSelected } from "../../view/currentViewStore/store";
-import { RelationDirection, findNodeOrThrow } from "../utils/graph";
-import { children, edges, neighbors, parents } from "../utils/node";
-import { getDefaultNode } from "./nodeGetters";
-import { useTopicStore } from "./store";
+import { errorWithData } from "@/common/errorHandling";
+import { NodeType } from "@/common/node";
+import { getDefaultNode } from "@/web/topic/store/nodeGetters";
+import { useTopicStore } from "@/web/topic/store/store";
+import { RelationDirection, findNodeOrThrow } from "@/web/topic/utils/graph";
+import { children, edges, neighbors, parents } from "@/web/topic/utils/node";
+import { useIsAnyGraphPartSelected } from "@/web/view/currentViewStore/store";
 
 export const useNode = (nodeId: string | null) => {
   return useTopicStore((state) => {

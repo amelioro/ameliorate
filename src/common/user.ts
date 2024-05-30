@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { reservedFirstLevelEndpointNames } from "./reservedEndpointNames";
+import { reservedFirstLevelEndpointNames } from "@/common/reservedEndpointNames";
 
 export const userSchema = z.object({
   id: z.number(),

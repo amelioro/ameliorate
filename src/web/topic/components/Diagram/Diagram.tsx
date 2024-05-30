@@ -9,24 +9,24 @@ import {
   useStore,
 } from "reactflow";
 
-import { Loading } from "../../../common/components/Loading/Loading";
-import { emitter } from "../../../common/event";
-import { useSessionUser } from "../../../common/hooks";
-import { openContextMenu } from "../../../common/store/contextMenuActions";
-import { useFlashlightMode } from "../../../view/actionConfigStore";
-import { setSelected } from "../../../view/currentViewStore/store";
-import { useLayoutedDiagram } from "../../hooks/diagramHooks";
-import { useViewportUpdater } from "../../hooks/flowHooks";
-import { connectNodes, reconnectEdge } from "../../store/createDeleteActions";
-import { useDiagram } from "../../store/store";
-import { useUserCanEditTopicData } from "../../store/userHooks";
-import { Diagram as DiagramData } from "../../utils/diagram";
-import { type Edge, type Node } from "../../utils/graph";
-import { FlowNodeType } from "../../utils/node";
-import { FlowEdge } from "../Edge/FlowEdge";
-import { FlowNode } from "../Node/FlowNode";
-import { StyledReactFlow } from "./Diagram.styles";
-import { setDisplayNodesGetter } from "./externalFlowStore";
+import { Loading } from "@/web/common/components/Loading/Loading";
+import { emitter } from "@/web/common/event";
+import { useSessionUser } from "@/web/common/hooks";
+import { openContextMenu } from "@/web/common/store/contextMenuActions";
+import { StyledReactFlow } from "@/web/topic/components/Diagram/Diagram.styles";
+import { setDisplayNodesGetter } from "@/web/topic/components/Diagram/externalFlowStore";
+import { FlowEdge } from "@/web/topic/components/Edge/FlowEdge";
+import { FlowNode } from "@/web/topic/components/Node/FlowNode";
+import { useLayoutedDiagram } from "@/web/topic/hooks/diagramHooks";
+import { useViewportUpdater } from "@/web/topic/hooks/flowHooks";
+import { connectNodes, reconnectEdge } from "@/web/topic/store/createDeleteActions";
+import { useDiagram } from "@/web/topic/store/store";
+import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
+import { Diagram as DiagramData } from "@/web/topic/utils/diagram";
+import { type Edge, type Node } from "@/web/topic/utils/graph";
+import { FlowNodeType } from "@/web/topic/utils/node";
+import { useFlashlightMode } from "@/web/view/actionConfigStore";
+import { setSelected } from "@/web/view/currentViewStore/store";
 
 const buildNodeComponent = (type: FlowNodeType) => {
   // eslint-disable-next-line react/display-name -- react flow dynamically creates these components without name anyway

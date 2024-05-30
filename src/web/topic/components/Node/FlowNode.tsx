@@ -2,24 +2,24 @@ import { Global } from "@emotion/react";
 import { motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 
-import { useSessionUser } from "../../../common/hooks";
-import { getFlashlightMode } from "../../../view/actionConfigStore";
-import { showNodeAndNeighbors } from "../../../view/currentViewStore/filter";
-import { useIsEdgeSelected, useIsNeighborSelected } from "../../store/nodeHooks";
-import { useUserCanEditTopicData } from "../../store/userHooks";
-import { Node } from "../../utils/graph";
-import { orientation } from "../../utils/layout";
-import { FlowNodeType } from "../../utils/node";
-import { NodeProps } from "../Diagram/Diagram";
-import { Spotlight } from "../Diagram/Diagram.styles";
+import { useSessionUser } from "@/web/common/hooks";
+import { NodeProps } from "@/web/topic/components/Diagram/Diagram";
+import { Spotlight } from "@/web/topic/components/Diagram/Diagram.styles";
 import {
   AddNodeButtonGroupChild,
   AddNodeButtonGroupParent,
   HoverBridgeDiv,
   StyledEditableNode,
   nodeStyles,
-} from "./FlowNode.styles";
-import { NodeHandle } from "./NodeHandle";
+} from "@/web/topic/components/Node/FlowNode.styles";
+import { NodeHandle } from "@/web/topic/components/Node/NodeHandle";
+import { useIsEdgeSelected, useIsNeighborSelected } from "@/web/topic/store/nodeHooks";
+import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
+import { Node } from "@/web/topic/utils/graph";
+import { orientation } from "@/web/topic/utils/layout";
+import { FlowNodeType } from "@/web/topic/utils/node";
+import { getFlashlightMode } from "@/web/view/actionConfigStore";
+import { showNodeAndNeighbors } from "@/web/view/currentViewStore/filter";
 
 const convertToNode = (flowNode: NodeProps): Node => {
   return {

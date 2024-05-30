@@ -5,13 +5,13 @@ import { useStore } from "zustand";
 import { StorageValue, devtools, persist } from "zustand/middleware";
 import { createWithEqualityFn } from "zustand/traditional";
 
-import { errorWithData } from "../../../common/errorHandling";
-import { withDefaults } from "../../../common/object";
-import { deepIsEqual } from "../../../common/utils";
-import { emitter } from "../../common/event";
-import { StoreTopic, UserTopic } from "../../topic/store/store";
-import { ViewState, getView, initialViewState, setView } from "../currentViewStore/store";
-import { apiSyncer } from "./apiSyncerMiddleware";
+import { errorWithData } from "@/common/errorHandling";
+import { withDefaults } from "@/common/object";
+import { deepIsEqual } from "@/common/utils";
+import { emitter } from "@/web/common/event";
+import { StoreTopic, UserTopic } from "@/web/topic/store/store";
+import { ViewState, getView, initialViewState, setView } from "@/web/view/currentViewStore/store";
+import { apiSyncer } from "@/web/view/quickViewStore/apiSyncerMiddleware";
 
 type QuickViewType = "quick"; // eventually maybe separate "recommended" vs "personal"
 

@@ -1,4 +1,4 @@
-import { prisma } from "./basePrisma";
+import { prisma } from "@/db/basePrisma";
 
 // can add extensions like
 // export const xprisma = prisma.$extends(componentExtension).$extends(topicExtension);

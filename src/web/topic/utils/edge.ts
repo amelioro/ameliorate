@@ -1,13 +1,8 @@
-import { RelationName, justificationRelationNames } from "../../../common/edge";
-import {
-  NodeType,
-  justificationNodeTypes,
-  nodeTypes,
-  researchNodeTypes,
-} from "../../../common/node";
-import { hasClaims } from "./claim";
-import { Edge, Graph, Node, RelationDirection, findNodeOrThrow } from "./graph";
-import { children, components, parents } from "./node";
+import { RelationName, justificationRelationNames } from "@/common/edge";
+import { NodeType, justificationNodeTypes, nodeTypes, researchNodeTypes } from "@/common/node";
+import { hasClaims } from "@/web/topic/utils/claim";
+import { Edge, Graph, Node, RelationDirection, findNodeOrThrow } from "@/web/topic/utils/graph";
+import { children, components, parents } from "@/web/topic/utils/node";
 
 const questionRelations: AddableRelation[] = nodeTypes.map((nodeType) => ({
   child: "question",

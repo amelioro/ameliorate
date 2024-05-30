@@ -1,12 +1,12 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { Comment, commentSchema, userCanDeleteComment } from "../../common/comment";
-import { topicSchema } from "../../common/topic";
-import { deepIsEqual } from "../../common/utils";
-import { xprisma } from "../../db/extendedPrisma";
-import { isLoggedIn } from "../auth";
-import { procedure, router } from "../trpc";
+import { isLoggedIn } from "@/api/auth";
+import { procedure, router } from "@/api/trpc";
+import { Comment, commentSchema, userCanDeleteComment } from "@/common/comment";
+import { topicSchema } from "@/common/topic";
+import { deepIsEqual } from "@/common/utils";
+import { xprisma } from "@/db/extendedPrisma";
 
 const isOnlyModifyingResolved = (commentToUpdate: Comment, foundComment: Comment) => {
   return (

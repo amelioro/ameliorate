@@ -1,9 +1,14 @@
 import { StorageValue } from "zustand/middleware";
 
-import { errorWithData } from "../../../common/errorHandling";
-import { emitter } from "../../common/event";
-import { TopicStoreState, initialState, playgroundUsername, useTopicStore } from "./store";
-import { isPlaygroundTopic } from "./utils";
+import { errorWithData } from "@/common/errorHandling";
+import { emitter } from "@/web/common/event";
+import {
+  TopicStoreState,
+  initialState,
+  playgroundUsername,
+  useTopicStore,
+} from "@/web/topic/store/store";
+import { isPlaygroundTopic } from "@/web/topic/store/utils";
 
 export const getPersistState = () => {
   const persistOptions = useTopicStore.persist.getOptions();

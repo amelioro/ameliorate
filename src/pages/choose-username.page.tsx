@@ -6,10 +6,10 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { userSchema } from "../common/user";
-import { Loading } from "../web/common/components/Loading/Loading";
-import { useSessionUser } from "../web/common/hooks";
-import { trpc } from "../web/common/trpc";
+import { userSchema } from "@/common/user";
+import { Loading } from "@/web/common/components/Loading/Loading";
+import { useSessionUser } from "@/web/common/hooks";
+import { trpc } from "@/web/common/trpc";
 
 // not sure if extracting the queries into a method is a good pattern, but it was
 // really annoying to have so much code to read through in the component

@@ -3,15 +3,15 @@ import { Check, MoreHoriz, RemoveDone } from "@mui/icons-material";
 import { Button, IconButton, MenuItem } from "@mui/material";
 import { useState } from "react";
 
-import { isRootComment as checkIsRootComment } from "../../../common/comment";
-import { Menu } from "../../common/components/Menu/Menu";
-import { ProfileIcon } from "../../common/components/ProfileIcon/ProfileIcon";
-import { useSessionUser } from "../../common/hooks";
-import { useOnPlayground } from "../../topic/store/topicHooks";
-import { useUserCanEditTopicData } from "../../topic/store/userHooks";
-import { StoreComment, deleteComment, resolveComment } from "../store/commentStore";
-import { deleteDraft, useDraft } from "../store/draftStore";
-import { Draft } from "./Draft";
+import { isRootComment as checkIsRootComment } from "@/common/comment";
+import { Draft } from "@/web/comment/components/Draft";
+import { StoreComment, deleteComment, resolveComment } from "@/web/comment/store/commentStore";
+import { deleteDraft, useDraft } from "@/web/comment/store/draftStore";
+import { Menu } from "@/web/common/components/Menu/Menu";
+import { ProfileIcon } from "@/web/common/components/ProfileIcon/ProfileIcon";
+import { useSessionUser } from "@/web/common/hooks";
+import { useOnPlayground } from "@/web/topic/store/topicHooks";
+import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 
 interface Props {
   comment: StoreComment;

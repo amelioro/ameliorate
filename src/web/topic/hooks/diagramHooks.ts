@@ -1,9 +1,9 @@
 import { useState } from "react";
 
-import { useForceNodesIntoLayers, useLayoutThoroughness } from "../../view/currentViewStore/layout";
-import { useSelectedGraphPart } from "../../view/currentViewStore/store";
-import { Diagram, PositionedDiagram, PositionedNode } from "../utils/diagram";
-import { NodePosition, layout } from "../utils/layout";
+import { Diagram, PositionedDiagram, PositionedNode } from "@/web/topic/utils/diagram";
+import { NodePosition, layout } from "@/web/topic/utils/layout";
+import { useForceNodesIntoLayers, useLayoutThoroughness } from "@/web/view/currentViewStore/layout";
+import { useSelectedGraphPart } from "@/web/view/currentViewStore/store";
 
 // re-renders when diagram changes, but only re-layouts if graph parts are added or removed
 export const useLayoutedDiagram = (diagram: Diagram) => {

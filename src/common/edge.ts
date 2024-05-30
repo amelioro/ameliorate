@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { InfoCategory } from "./infoCategory";
+import { InfoCategory } from "@/common/infoCategory";
 
 // not sure how to guarantee that this matches the schema enum
 export const relationNames = [

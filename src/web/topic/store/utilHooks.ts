@@ -1,6 +1,6 @@
 import { useStore } from "zustand";
 
-import { useTopicStore } from "./store";
+import { useTopicStore } from "@/web/topic/store/store";
 
 // temporal store is a vanilla store, we need to wrap it to use it as a hook and be able to react to changes
 const useTopicTemporalStore = () => useStore(useTopicStore.temporal);

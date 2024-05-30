@@ -12,18 +12,18 @@ import { v4 as uuid } from "uuid";
 import { z } from "zod";
 import { StorageValue } from "zustand/middleware";
 
-import { errorWithData } from "../../common/errorHandling";
+import { errorWithData } from "@/common/errorHandling";
+import { migrate } from "@/web/topic/store/migrate";
+import { TopicStoreState } from "@/web/topic/store/store";
+import { getPersistState, setTopicData } from "@/web/topic/store/utilActions";
+import { getTopicTitle } from "@/web/topic/store/utils";
 import {
   QuickViewStoreState,
   currentVersion as currentViewsVersion,
   getPersistState as getViewsPersistState,
   initialStateWithBasicViews,
   loadQuickViewsFromDownloaded,
-} from "../view/quickViewStore/store";
-import { migrate } from "./store/migrate";
-import { TopicStoreState } from "./store/store";
-import { getPersistState, setTopicData } from "./store/utilActions";
-import { getTopicTitle } from "./store/utils";
+} from "@/web/view/quickViewStore/store";
 
 const oldDownloadSchema1 = z.object({
   state: z.record(z.any()),

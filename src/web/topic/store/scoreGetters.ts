@@ -1,8 +1,8 @@
 import get from "lodash/get";
 
-import { Score } from "../utils/graph";
-import { getAverageScore } from "../utils/score";
-import { UserScores } from "./store";
+import { UserScores } from "@/web/topic/store/store";
+import { Score } from "@/web/topic/utils/graph";
+import { getAverageScore } from "@/web/topic/utils/score";
 
 export const getDisplayScoresByGraphPartId = (
   graphPartIds: string[],

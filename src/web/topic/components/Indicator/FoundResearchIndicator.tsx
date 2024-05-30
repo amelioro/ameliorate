@@ -2,13 +2,13 @@ import { Code, InfoOutlined, School } from "@mui/icons-material";
 import { type ButtonProps } from "@mui/material";
 import { useCallback } from "react";
 
-import { setSelected } from "../../../view/currentViewStore/store";
-import { useResearchNodes } from "../../store/graphPartHooks";
-import { useDisplayScores } from "../../store/scoreHooks";
-import { Score } from "../../utils/graph";
-import { getNumericScore, scoreColors } from "../../utils/score";
-import { viewDetails } from "../TopicPane/paneStore";
-import { Indicator } from "./Indicator";
+import { Indicator } from "@/web/topic/components/Indicator/Indicator";
+import { viewDetails } from "@/web/topic/components/TopicPane/paneStore";
+import { useResearchNodes } from "@/web/topic/store/graphPartHooks";
+import { useDisplayScores } from "@/web/topic/store/scoreHooks";
+import { Score } from "@/web/topic/utils/graph";
+import { getNumericScore, scoreColors } from "@/web/topic/utils/score";
+import { setSelected } from "@/web/view/currentViewStore/store";
 
 interface Props {
   graphPartId: string;

@@ -1,6 +1,6 @@
-import { Edge } from "../../utils/graph";
-import { CommonIndicators } from "../Indicator/CommonIndicators";
-import { ContentIndicators } from "../Indicator/ContentIndicators";
+import { CommonIndicators } from "@/web/topic/components/Indicator/CommonIndicators";
+import { ContentIndicators } from "@/web/topic/components/Indicator/ContentIndicators";
+import { Edge } from "@/web/topic/utils/graph";
 
 export const EdgeCell = ({ edge }: { edge: Edge }) => {
   return (

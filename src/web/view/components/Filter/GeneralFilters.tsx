@@ -3,18 +3,22 @@ import { Stack } from "@mui/material";
 import { useCallback, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
-import { nodeTypes } from "../../../../common/node";
-import { deepIsEqual } from "../../../../common/utils";
-import { FormContext } from "../../../common/components/Form/FormContext";
-import { NodeSelect } from "../../../common/components/Form/NodeSelect";
-import { Select } from "../../../common/components/Form/Select";
-import { Switch } from "../../../common/components/Form/Switch";
-import { useAllNodes } from "../../../topic/store/nodeHooks";
-import { possibleScores } from "../../../topic/utils/graph";
-import { setGeneralFilter, useGeneralFilter } from "../../currentViewStore/filter";
-import { useFormat } from "../../currentViewStore/store";
-import { GeneralFilter, generalFilterSchema, scoredComparers } from "../../utils/generalFilter";
-import { ShowSecondaryNeighborsLabel } from "./ShowSecondaryNeighborsLabel";
+import { nodeTypes } from "@/common/node";
+import { deepIsEqual } from "@/common/utils";
+import { FormContext } from "@/web/common/components/Form/FormContext";
+import { NodeSelect } from "@/web/common/components/Form/NodeSelect";
+import { Select } from "@/web/common/components/Form/Select";
+import { Switch } from "@/web/common/components/Form/Switch";
+import { useAllNodes } from "@/web/topic/store/nodeHooks";
+import { possibleScores } from "@/web/topic/utils/graph";
+import { ShowSecondaryNeighborsLabel } from "@/web/view/components/Filter/ShowSecondaryNeighborsLabel";
+import { setGeneralFilter, useGeneralFilter } from "@/web/view/currentViewStore/filter";
+import { useFormat } from "@/web/view/currentViewStore/store";
+import {
+  GeneralFilter,
+  generalFilterSchema,
+  scoredComparers,
+} from "@/web/view/utils/generalFilter";
 
 export const GeneralFilters = () => {
   const generalFilter = useGeneralFilter();

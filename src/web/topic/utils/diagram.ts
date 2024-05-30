@@ -1,4 +1,4 @@
-import { Edge, Node } from "./graph";
+import { Edge, Node } from "@/web/topic/utils/graph";
 
 export interface Diagram {
   nodes: Node[];

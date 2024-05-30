@@ -1,11 +1,11 @@
 import styled from "@emotion/styled";
 import { css } from "@mui/material";
 
-import { Node } from "../../utils/graph";
-import { Orientation } from "../../utils/layout";
-import { Spotlight, zIndex } from "../Diagram/Diagram.styles";
-import { AddNodeButtonGroup } from "../Node/AddNodeButtonGroup";
-import { EditableNode } from "./EditableNode";
+import { Spotlight, zIndex } from "@/web/topic/components/Diagram/Diagram.styles";
+import { AddNodeButtonGroup } from "@/web/topic/components/Node/AddNodeButtonGroup";
+import { EditableNode } from "@/web/topic/components/Node/EditableNode";
+import { Node } from "@/web/topic/utils/graph";
+import { Orientation } from "@/web/topic/utils/layout";
 
 const gap = 16;
 

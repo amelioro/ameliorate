@@ -23,9 +23,9 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { topicSchema, visibilityTypes } from "../../../../common/topic";
-import { trpc } from "../../../common/trpc";
-import { generateBasicViews } from "../../../view/quickViewStore/store";
+import { topicSchema, visibilityTypes } from "@/common/topic";
+import { trpc } from "@/web/common/trpc";
+import { generateBasicViews } from "@/web/view/quickViewStore/store";
 
 export const CreateTopicForm = ({ user }: { user: User }) => {
   const utils = trpc.useContext();

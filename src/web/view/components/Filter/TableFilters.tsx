@@ -3,12 +3,12 @@ import { Stack } from "@mui/material";
 import { useCallback, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
-import { deepIsEqual } from "../../../../common/utils";
-import { FormContext } from "../../../common/components/Form/FormContext";
-import { NodeSelect } from "../../../common/components/Form/NodeSelect";
-import { useCriteria, useNodesOfType, useSolutions } from "../../../topic/store/nodeHooks";
-import { setTableFilter, useTableFilterWithFallbacks } from "../../currentViewStore/filter";
-import { TableFilter, tableFilterSchema } from "../../utils/tableFilter";
+import { deepIsEqual } from "@/common/utils";
+import { FormContext } from "@/web/common/components/Form/FormContext";
+import { NodeSelect } from "@/web/common/components/Form/NodeSelect";
+import { useCriteria, useNodesOfType, useSolutions } from "@/web/topic/store/nodeHooks";
+import { setTableFilter, useTableFilterWithFallbacks } from "@/web/view/currentViewStore/filter";
+import { TableFilter, tableFilterSchema } from "@/web/view/utils/tableFilter";
 
 export const TableFilters = () => {
   const tableFilter = useTableFilterWithFallbacks();

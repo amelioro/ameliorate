@@ -2,17 +2,21 @@ import union from "lodash/union";
 import without from "lodash/without";
 import { shallow } from "zustand/shallow";
 
-import { InfoCategory } from "../../../common/infoCategory";
-import { infoNodeTypes } from "../../../common/node";
-import { emitter } from "../../common/event";
-import { getDefaultNode } from "../../topic/store/nodeGetters";
-import { useTopicStore } from "../../topic/store/store";
-import { findNodeOrThrow } from "../../topic/utils/graph";
-import { neighbors } from "../../topic/utils/node";
-import { DiagramFilter, StandardFilter, StandardFilterWithFallbacks } from "../utils/diagramFilter";
-import { GeneralFilter } from "../utils/generalFilter";
-import { TableFilter } from "../utils/tableFilter";
-import { useCurrentViewStore } from "./store";
+import { InfoCategory } from "@/common/infoCategory";
+import { infoNodeTypes } from "@/common/node";
+import { emitter } from "@/web/common/event";
+import { getDefaultNode } from "@/web/topic/store/nodeGetters";
+import { useTopicStore } from "@/web/topic/store/store";
+import { findNodeOrThrow } from "@/web/topic/utils/graph";
+import { neighbors } from "@/web/topic/utils/node";
+import { useCurrentViewStore } from "@/web/view/currentViewStore/store";
+import {
+  DiagramFilter,
+  StandardFilter,
+  StandardFilterWithFallbacks,
+} from "@/web/view/utils/diagramFilter";
+import { GeneralFilter } from "@/web/view/utils/generalFilter";
+import { TableFilter } from "@/web/view/utils/tableFilter";
 
 // hooks
 const useCategoriesToShow = () => {

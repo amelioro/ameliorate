@@ -3,8 +3,8 @@ import { httpBatchLink } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
 import superjson from "superjson";
 
-import type { AppRouter } from "../../api/routers/_app";
-import { getBaseUrl } from "../../common/utils";
+import type { AppRouter } from "@/api/routers/_app";
+import { getBaseUrl } from "@/common/utils";
 
 const queryClient = new QueryClient({
   defaultOptions: {

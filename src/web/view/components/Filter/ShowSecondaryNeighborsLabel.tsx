@@ -1,7 +1,7 @@
 import { Stack, Tooltip } from "@mui/material";
 import startCase from "lodash/startCase";
 
-import { InfoCategory } from "../../../../common/infoCategory";
+import { InfoCategory } from "@/common/infoCategory";
 
 interface Props {
   secondaryInfoCategory: InfoCategory;

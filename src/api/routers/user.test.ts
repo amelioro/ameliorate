@@ -2,8 +2,8 @@
 import { Topic, User } from "@prisma/client";
 import { beforeEach, describe, expect, test } from "vitest";
 
-import { xprisma } from "../../db/extendedPrisma";
-import { appRouter } from "./_app";
+import { appRouter } from "@/api/routers/_app";
+import { xprisma } from "@/db/extendedPrisma";
 
 let userWithTopics: User;
 let publicTopic: Topic;

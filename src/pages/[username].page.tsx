@@ -12,11 +12,11 @@ import Head from "next/head";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 
-import { NotFoundError, QueryError } from "../web/common/components/Error/Error";
-import { Link } from "../web/common/components/Link";
-import { Loading } from "../web/common/components/Loading/Loading";
-import { useSessionUser } from "../web/common/hooks";
-import { trpc } from "../web/common/trpc";
+import { NotFoundError, QueryError } from "@/web/common/components/Error/Error";
+import { Link } from "@/web/common/components/Link";
+import { Loading } from "@/web/common/components/Loading/Loading";
+import { useSessionUser } from "@/web/common/hooks";
+import { trpc } from "@/web/common/trpc";
 
 type RowData = Topic;
 

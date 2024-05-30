@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-import { withDefaults } from "../../common/object";
+import { withDefaults } from "@/common/object";
 
 interface ActionConfigStoreState {
   unrestrictedEditing: boolean;

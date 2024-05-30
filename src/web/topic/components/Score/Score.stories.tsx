@@ -1,6 +1,6 @@
 import { type Meta, type StoryFn } from "@storybook/react";
 
-import { Score } from "./Score";
+import { Score } from "@/web/topic/components/Score/Score";
 
 export default { component: Score } as Meta<typeof Score>;
 

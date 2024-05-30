@@ -1,8 +1,8 @@
 import lowerCase from "lodash/lowerCase";
 
-import { justificationRelationNames } from "../../../common/edge";
-import { errorWithData } from "../../../common/errorHandling";
-import { Edge, Graph, GraphPart, findGraphPartOrThrow, isNode } from "./graph";
+import { justificationRelationNames } from "@/common/edge";
+import { errorWithData } from "@/common/errorHandling";
+import { Edge, Graph, GraphPart, findGraphPartOrThrow, isNode } from "@/web/topic/utils/graph";
 
 // Using claimEdges instead of claimNodes because eventually we'll probably replace Root Claim nodes
 // with direct edges from a claim to diagram part.

@@ -1,14 +1,14 @@
 import { ThumbsUpDown } from "@mui/icons-material";
 import { ListItem, ListItemIcon, ListItemText, Stack, Typography } from "@mui/material";
 
-import { justificationNodeTypes } from "../../../../common/node";
-import { useTopLevelClaims } from "../../store/graphPartHooks";
-import { isClaimEdge } from "../../utils/claim";
-import { GraphPart, isNode } from "../../utils/graph";
-import { ClaimTreeIndicator } from "../Indicator/ClaimTreeIndicator";
-import { AddNodeButton } from "../Node/AddNodeButton";
-import { EditableNode } from "../Node/EditableNode";
-import { nodeWidthPx } from "../Node/EditableNode.styles";
+import { justificationNodeTypes } from "@/common/node";
+import { ClaimTreeIndicator } from "@/web/topic/components/Indicator/ClaimTreeIndicator";
+import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
+import { EditableNode } from "@/web/topic/components/Node/EditableNode";
+import { nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
+import { useTopLevelClaims } from "@/web/topic/store/graphPartHooks";
+import { isClaimEdge } from "@/web/topic/utils/claim";
+import { GraphPart, isNode } from "@/web/topic/utils/graph";
 
 interface Props {
   graphPart: GraphPart;

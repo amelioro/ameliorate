@@ -1,12 +1,12 @@
 import uniqBy from "lodash/uniqBy";
 import { v4 as uuid } from "uuid";
 
-import { RelationName, justificationRelationNames } from "../../../common/edge";
-import { errorWithData } from "../../../common/errorHandling";
-import { NodeType, infoNodeTypes, justificationNodeTypes } from "../../../common/node";
-import { GeneralFilter } from "../../view/utils/generalFilter";
-import { composedRelations } from "./edge";
-import { FlowNodeType } from "./node";
+import { RelationName, justificationRelationNames } from "@/common/edge";
+import { errorWithData } from "@/common/errorHandling";
+import { NodeType, infoNodeTypes, justificationNodeTypes } from "@/common/node";
+import { composedRelations } from "@/web/topic/utils/edge";
+import { FlowNodeType } from "@/web/topic/utils/node";
+import { GeneralFilter } from "@/web/view/utils/generalFilter";
 
 export interface Graph {
   nodes: Node[];

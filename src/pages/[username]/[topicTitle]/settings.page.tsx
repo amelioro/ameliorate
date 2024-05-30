@@ -2,15 +2,11 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-import {
-  NotFoundError,
-  NotLoggedInError,
-  QueryError,
-} from "../../../web/common/components/Error/Error";
-import { Loading } from "../../../web/common/components/Loading/Loading";
-import { useSessionUser } from "../../../web/common/hooks";
-import { trpc } from "../../../web/common/trpc";
-import { EditTopicForm } from "../../../web/topic/components/TopicForm/TopicForm";
+import { NotFoundError, NotLoggedInError, QueryError } from "@/web/common/components/Error/Error";
+import { Loading } from "@/web/common/components/Loading/Loading";
+import { useSessionUser } from "@/web/common/hooks";
+import { trpc } from "@/web/common/trpc";
+import { EditTopicForm } from "@/web/topic/components/TopicForm/TopicForm";
 
 const TopicSettings: NextPage = () => {
   const router = useRouter();

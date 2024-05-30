@@ -1,8 +1,8 @@
 import { AutoStories, School, ThumbsUpDown } from "@mui/icons-material";
 import { FormControlLabel, Switch as MuiSwitch, Stack, Typography } from "@mui/material";
 
-import { setShowInformation, useDiagramFilter } from "../../currentViewStore/filter";
-import { StandardFilter } from "./StandardFilter";
+import { StandardFilter } from "@/web/view/components/Filter/StandardFilter";
+import { setShowInformation, useDiagramFilter } from "@/web/view/currentViewStore/filter";
 
 export const InformationFilters = () => {
   const diagramFilter = useDiagramFilter();
