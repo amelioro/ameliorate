@@ -6,6 +6,7 @@
   ],
   "name": "ameliorate",
   "version": "0.1.0",
+  "type": "module",
   "prisma": {
     "schema": "src/db/schema.prisma",
     "seed": "tsx scripts/seed.ts"
