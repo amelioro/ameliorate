@@ -2,7 +2,7 @@ import lowerCase from "lodash/lowerCase";
 import { v4 as uuid } from "uuid";
 import { z } from "zod";
 
-import { InfoCategory } from "./infoCategory";
+import { InfoCategory } from "@/common/infoCategory";
 
 // Not sure how to guarantee that this matches the schema enum.
 // This order is generally used for sorting, e.g.:

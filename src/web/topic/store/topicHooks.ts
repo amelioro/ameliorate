@@ -1,7 +1,7 @@
 import { shallow } from "zustand/shallow";
 
-import { useTopicStore } from "./store";
-import { isPlaygroundTopic } from "./utils";
+import { useTopicStore } from "@/web/topic/store/store";
+import { isPlaygroundTopic } from "@/web/topic/store/utils";
 
 export const useOnPlayground = () => {
   return useTopicStore((state) => isPlaygroundTopic(state.topic));

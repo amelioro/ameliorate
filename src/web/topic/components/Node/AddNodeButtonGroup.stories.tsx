@@ -1,6 +1,6 @@
 import { type Meta, type StoryFn } from "@storybook/react";
 
-import { AddNodeButtonGroup } from "./AddNodeButtonGroup";
+import { AddNodeButtonGroup } from "@/web/topic/components/Node/AddNodeButtonGroup";
 
 export default { component: AddNodeButtonGroup } as Meta<typeof AddNodeButtonGroup>;
 

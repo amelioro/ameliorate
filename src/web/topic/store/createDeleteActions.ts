@@ -1,12 +1,12 @@
 import { createDraft, finishDraft } from "immer";
 
-import { errorWithData } from "../../../common/errorHandling";
-import { justificationNodeTypes, structureNodeTypes } from "../../../common/node";
-import { emitter } from "../../common/event";
-import { getUnrestrictedEditing } from "../../view/actionConfigStore";
-import { setSelected } from "../../view/currentViewStore/store";
-import { getImplicitLabel } from "../utils/claim";
-import { Relation, canCreateEdge, getRelation } from "../utils/edge";
+import { errorWithData } from "@/common/errorHandling";
+import { justificationNodeTypes, structureNodeTypes } from "@/common/node";
+import { emitter } from "@/web/common/event";
+import { getExplicitClaimCount } from "@/web/topic/store/graphPartHooks";
+import { TopicStoreState, useTopicStore } from "@/web/topic/store/store";
+import { getImplicitLabel } from "@/web/topic/utils/claim";
+import { Relation, canCreateEdge, getRelation } from "@/web/topic/utils/edge";
 import {
   Graph,
   type GraphPart,
@@ -18,10 +18,10 @@ import {
   findNodeOrThrow,
   getNodesComposedBy,
   isNode,
-} from "../utils/graph";
-import { FlowNodeType, edges } from "../utils/node";
-import { getExplicitClaimCount } from "./graphPartHooks";
-import { TopicStoreState, useTopicStore } from "./store";
+} from "@/web/topic/utils/graph";
+import { FlowNodeType, edges } from "@/web/topic/utils/node";
+import { getUnrestrictedEditing } from "@/web/view/actionConfigStore";
+import { setSelected } from "@/web/view/currentViewStore/store";
 
 const createNode = (
   state: TopicStoreState,

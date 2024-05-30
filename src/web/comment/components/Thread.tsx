@@ -1,7 +1,7 @@
-import { StoreComment, useThreadChildrenComments } from "../store/commentStore";
-import { useDraft } from "../store/draftStore";
-import { Comment } from "./Comment";
-import { Draft } from "./Draft";
+import { Comment } from "@/web/comment/components/Comment";
+import { Draft } from "@/web/comment/components/Draft";
+import { StoreComment, useThreadChildrenComments } from "@/web/comment/store/commentStore";
+import { useDraft } from "@/web/comment/store/draftStore";
 
 interface Props {
   myUsername: string | undefined;

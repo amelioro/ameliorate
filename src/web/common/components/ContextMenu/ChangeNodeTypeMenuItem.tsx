@@ -1,12 +1,12 @@
 import { NestedMenuItem } from "mui-nested-menu";
 
-import { getSameCategoryNodeTypes } from "../../../../common/node";
-import { changeNodeType } from "../../../topic/store/actions";
-import { useUserCanEditTopicData } from "../../../topic/store/userHooks";
-import { Node } from "../../../topic/utils/graph";
-import { nodeDecorations } from "../../../topic/utils/node";
-import { useSessionUser } from "../../hooks";
-import { CloseOnClickMenuItem } from "./CloseOnClickMenuItem";
+import { getSameCategoryNodeTypes } from "@/common/node";
+import { CloseOnClickMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
+import { useSessionUser } from "@/web/common/hooks";
+import { changeNodeType } from "@/web/topic/store/actions";
+import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
+import { Node } from "@/web/topic/utils/graph";
+import { nodeDecorations } from "@/web/topic/utils/node";
 
 interface Props {
   node: Node;

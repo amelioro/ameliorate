@@ -1,9 +1,9 @@
 import { Button, TextField } from "@mui/material";
 import { useRef, useState } from "react";
 
-import { CommentParentType } from "../../../common/comment";
-import { upsertComment } from "../store/commentStore";
-import { deleteDraft, setDraft } from "../store/draftStore";
+import { CommentParentType } from "@/common/comment";
+import { upsertComment } from "@/web/comment/store/commentStore";
+import { deleteDraft, setDraft } from "@/web/comment/store/draftStore";
 
 interface Props {
   authorName: string;

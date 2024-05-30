@@ -1,10 +1,10 @@
 import { NextPage } from "next";
 import Head from "next/head";
 
-import { NotLoggedInError } from "../web/common/components/Error/Error";
-import { Loading } from "../web/common/components/Loading/Loading";
-import { useSessionUser } from "../web/common/hooks";
-import { CreateTopicForm } from "../web/topic/components/TopicForm/TopicForm";
+import { NotLoggedInError } from "@/web/common/components/Error/Error";
+import { Loading } from "@/web/common/components/Loading/Loading";
+import { useSessionUser } from "@/web/common/hooks";
+import { CreateTopicForm } from "@/web/topic/components/TopicForm/TopicForm";
 
 const NewTopic: NextPage = () => {
   const { sessionUser, isLoading: sessionUserIsLoading } = useSessionUser();

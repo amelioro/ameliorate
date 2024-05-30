@@ -1,6 +1,6 @@
 import { MenuItem, type MenuItemProps } from "@mui/material";
 
-import { closeContextMenu } from "../../store/contextMenuActions";
+import { closeContextMenu } from "@/web/common/store/contextMenuActions";
 
 /**
  * Context menu items have their own components, which makes it harder to enhance their onClick

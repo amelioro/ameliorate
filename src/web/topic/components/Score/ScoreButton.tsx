@@ -1,11 +1,11 @@
 import { Box, type ButtonProps } from "@mui/material";
 import { MutableRefObject } from "react";
 
-import { type Score as ScoreData } from "../../utils/graph";
-import { indicatorLengthRem } from "../../utils/node";
-import { getAverageScore, scoreColors } from "../../utils/score";
-import { StyledButton } from "./ScoreButton.styles";
-import { ScoreCompare } from "./ScoreCompare";
+import { StyledButton } from "@/web/topic/components/Score/ScoreButton.styles";
+import { ScoreCompare } from "@/web/topic/components/Score/ScoreCompare";
+import { type Score as ScoreData } from "@/web/topic/utils/graph";
+import { indicatorLengthRem } from "@/web/topic/utils/node";
+import { getAverageScore, scoreColors } from "@/web/topic/utils/score";
 
 export const buttonDiameterRem = indicatorLengthRem; //rem
 

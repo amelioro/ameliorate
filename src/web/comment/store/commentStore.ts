@@ -2,11 +2,11 @@ import shortUUID from "short-uuid";
 import { devtools, persist } from "zustand/middleware";
 import { createWithEqualityFn } from "zustand/traditional";
 
-import { Comment, CommentParentType, isRootComment } from "../../../common/comment";
-import { withDefaults } from "../../../common/object";
-import { storageWithDates } from "../../common/store/utils";
-import { StoreTopic, UserTopic } from "../../topic/store/store";
-import { apiSyncer } from "./apiSyncerMiddleware";
+import { Comment, CommentParentType, isRootComment } from "@/common/comment";
+import { withDefaults } from "@/common/object";
+import { apiSyncer } from "@/web/comment/store/apiSyncerMiddleware";
+import { storageWithDates } from "@/web/common/store/utils";
+import { StoreTopic, UserTopic } from "@/web/topic/store/store";
 
 export type StoreComment = Omit<Comment, "topicId">;
 

@@ -1,9 +1,10 @@
 import { createDraft, finishDraft } from "immer";
 import set from "lodash/set";
 
-import { RelationName, edgeSchema } from "../../../common/edge";
-import { errorWithData } from "../../../common/errorHandling";
-import { NodeType, nodeSchema } from "../../../common/node";
+import { RelationName, edgeSchema } from "@/common/edge";
+import { errorWithData } from "@/common/errorHandling";
+import { NodeType, nodeSchema } from "@/common/node";
+import { useTopicStore } from "@/web/topic/store/store";
 import {
   Edge,
   GraphPart,
@@ -12,8 +13,7 @@ import {
   findEdgeOrThrow,
   findGraphPartOrThrow,
   findNodeOrThrow,
-} from "../utils/graph";
-import { useTopicStore } from "./store";
+} from "@/web/topic/utils/graph";
 
 // score setting is way more work than it needs to be because one score can live in multiple places:
 // - on the graphPart

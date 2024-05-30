@@ -1,8 +1,8 @@
 import { inferAsyncReturnType } from "@trpc/server";
 import { CreateNextContextOptions } from "@trpc/server/adapters/next";
 
-import { xprisma } from "../db/extendedPrisma";
-import { auth0 } from "./initAuth0";
+import { auth0 } from "@/api/initAuth0";
+import { xprisma } from "@/db/extendedPrisma";
 
 export const createContext = async ({ req, res }: CreateNextContextOptions) => {
   const session = await auth0.getSession(req, res);

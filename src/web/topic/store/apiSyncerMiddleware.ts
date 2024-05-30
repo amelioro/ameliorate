@@ -1,11 +1,11 @@
 import diff from "microdiff";
 import { StateCreator, StoreMutatorIdentifier } from "zustand";
 
-import { trpcClient } from "../../../pages/_app.page";
-import { emitter } from "../../common/event";
-import { convertToApi } from "../utils/apiConversion";
-import { TopicStoreState } from "./store";
-import { isPlaygroundTopic } from "./utils";
+import { trpcClient } from "@/pages/_app.page";
+import { emitter } from "@/web/common/event";
+import { TopicStoreState } from "@/web/topic/store/store";
+import { isPlaygroundTopic } from "@/web/topic/store/utils";
+import { convertToApi } from "@/web/topic/utils/apiConversion";
 
 const getCrudDiffs = <T>(
   before: T[],

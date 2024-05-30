@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import NextLink from "next/link";
 
-import { ProfileIcon } from "../ProfileIcon/ProfileIcon";
+import { ProfileIcon } from "@/web/common/components/ProfileIcon/ProfileIcon";
 
 interface Props {
   user: { username: string };

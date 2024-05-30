@@ -4,14 +4,15 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 
+import { StyledBox, StyledCarousel } from "@/pages/index.style";
+import { Blog } from "@/web/common/components/Blog.styles";
+import { SubscribeForm } from "@/web/common/components/SubscribeForm/SubscribeForm";
+import { YoutubeEmbed } from "@/web/common/components/YoutubeEmbed/YoutubeEmbed";
+import { youtubeLivestreams } from "@/web/common/urls";
+
 import comparingSolutions from "../../public/Comparing-Solutions.png";
 import justifyingAndCritiquingClaims from "../../public/Justifying-And-Critiquing-Claims.png";
 import mappingSolutionsToProblems from "../../public/Mapping-Solutions-To-Problems.png";
-import { Blog } from "../web/common/components/Blog.styles";
-import { SubscribeForm } from "../web/common/components/SubscribeForm/SubscribeForm";
-import { YoutubeEmbed } from "../web/common/components/YoutubeEmbed/YoutubeEmbed";
-import { youtubeLivestreams } from "../web/common/urls";
-import { StyledBox, StyledCarousel } from "./index.style";
 
 const Home: NextPage = () => {
   return (

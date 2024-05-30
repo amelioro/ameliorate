@@ -5,9 +5,9 @@
 import { devtools, persist } from "zustand/middleware";
 import { createWithEqualityFn } from "zustand/traditional";
 
-import { CommentParentType } from "../../../common/comment";
-import { withDefaults } from "../../../common/object";
-import { storageWithDates } from "../../common/store/utils";
+import { CommentParentType } from "@/common/comment";
+import { withDefaults } from "@/common/object";
+import { storageWithDates } from "@/web/common/store/utils";
 
 interface Draft {
   parentId: string | null;

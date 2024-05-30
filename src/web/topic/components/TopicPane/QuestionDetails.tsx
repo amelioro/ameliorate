@@ -1,11 +1,11 @@
 import { PriorityHigh, Schema } from "@mui/icons-material";
 import { ListItem, ListItemIcon, ListItemText, Stack, Typography } from "@mui/material";
 
-import { useQuestionDetails } from "../../store/nodeTypeHooks";
-import { Node, isNode } from "../../utils/graph";
-import { StandaloneEdge } from "../Edge/StandaloneEdge";
-import { AddNodeButton } from "../Node/AddNodeButton";
-import { EditableNode } from "../Node/EditableNode";
+import { StandaloneEdge } from "@/web/topic/components/Edge/StandaloneEdge";
+import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
+import { EditableNode } from "@/web/topic/components/Node/EditableNode";
+import { useQuestionDetails } from "@/web/topic/store/nodeTypeHooks";
+import { Node, isNode } from "@/web/topic/utils/graph";
 
 interface Props {
   questionNode: Node & { type: "question" };

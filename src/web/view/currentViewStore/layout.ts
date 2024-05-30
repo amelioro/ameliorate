@@ -1,4 +1,4 @@
-import { useCurrentViewStore } from "./store";
+import { useCurrentViewStore } from "@/web/view/currentViewStore/store";
 
 // hooks
 export const useForceNodesIntoLayers = () => {

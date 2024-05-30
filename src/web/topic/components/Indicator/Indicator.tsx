@@ -2,8 +2,8 @@ import { type ButtonProps } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 import { MouseEventHandler } from "react";
 
-import { MuiIcon } from "../../utils/node";
-import { StyledButton } from "./Indicator.styles";
+import { StyledButton } from "@/web/topic/components/Indicator/Indicator.styles";
+import { MuiIcon } from "@/web/topic/utils/node";
 
 interface IndicatorProps {
   Icon: MuiIcon;

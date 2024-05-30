@@ -15,8 +15,9 @@ import {
 import Image from "next/image";
 import NextLink from "next/link";
 
+import { discordInvite, facebookPage, githubRepo } from "@/web/common/urls";
+
 import favicon from "../../../../../public/favicon.png";
-import { discordInvite, facebookPage, githubRepo } from "../../urls";
 
 interface Props {
   isSiteDrawerOpen: boolean;

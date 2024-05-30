@@ -1,10 +1,10 @@
+import { initialState, topicStorePlaygroundName, useTopicStore } from "@/web/topic/store/store";
 import {
   type TopicData,
   convertToStoreEdge,
   convertToStoreNode,
   convertToStoreScores,
-} from "../utils/apiConversion";
-import { initialState, topicStorePlaygroundName, useTopicStore } from "./store";
+} from "@/web/topic/utils/apiConversion";
 
 export const populateDiagramFromApi = (topicData: TopicData) => {
   // Ensure we use distinct persistence for topic page compared to playground.

@@ -30,32 +30,32 @@ import {
 import { toPng } from "html-to-image";
 import { getRectOfNodes, getTransformForBounds } from "reactflow";
 
-import { NumberInput } from "../../../common/components/NumberInput/NumberInput";
+import { NumberInput } from "@/web/common/components/NumberInput/NumberInput";
+import { getDisplayNodes } from "@/web/topic/components/Diagram/externalFlowStore";
+import { downloadTopic, uploadTopic } from "@/web/topic/loadStores";
+import { useOnPlayground } from "@/web/topic/store/topicHooks";
+import { resetTopicData } from "@/web/topic/store/utilActions";
 import {
   toggleFlashlightMode,
   toggleUnrestrictedEditing,
   useFlashlightMode,
   useUnrestrictedEditing,
-} from "../../../view/actionConfigStore";
-import { Perspectives } from "../../../view/components/Perspectives/Perspectives";
-import { toggleShowImpliedEdges, useShowImpliedEdges } from "../../../view/currentViewStore/filter";
+} from "@/web/view/actionConfigStore";
+import { Perspectives } from "@/web/view/components/Perspectives/Perspectives";
+import { toggleShowImpliedEdges, useShowImpliedEdges } from "@/web/view/currentViewStore/filter";
 import {
   setLayoutThoroughness,
   toggleForceNodesIntoLayers,
   useForceNodesIntoLayers,
   useLayoutThoroughness,
-} from "../../../view/currentViewStore/layout";
-import { resetView, useFormat } from "../../../view/currentViewStore/store";
+} from "@/web/view/currentViewStore/layout";
+import { resetView, useFormat } from "@/web/view/currentViewStore/store";
 import {
   toggleShowResolvedComments,
   useShowResolvedComments,
-} from "../../../view/miscTopicConfigStore";
-import { resetQuickViews } from "../../../view/quickViewStore/store";
-import { toggleFillNodesWithColor, useFillNodesWithColor } from "../../../view/userConfigStore";
-import { downloadTopic, uploadTopic } from "../../loadStores";
-import { useOnPlayground } from "../../store/topicHooks";
-import { resetTopicData } from "../../store/utilActions";
-import { getDisplayNodes } from "../Diagram/externalFlowStore";
+} from "@/web/view/miscTopicConfigStore";
+import { resetQuickViews } from "@/web/view/quickViewStore/store";
+import { toggleFillNodesWithColor, useFillNodesWithColor } from "@/web/view/userConfigStore";
 
 const imageWidth = 2560;
 const imageHeight = 1440;

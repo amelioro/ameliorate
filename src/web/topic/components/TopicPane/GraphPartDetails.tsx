@@ -6,21 +6,21 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { nodeSchema, researchNodeTypes } from "../../../../common/node";
-import { useSessionUser } from "../../../common/hooks";
-import { setGraphPartNotes } from "../../store/actions";
-import { useUserCanEditTopicData } from "../../store/userHooks";
-import { GraphPart, isNode, isNodeType } from "../../utils/graph";
-import { nodeDecorations } from "../../utils/node";
-import { StandaloneEdge } from "../Edge/StandaloneEdge";
-import { EditableNode } from "../Node/EditableNode";
-import { AnswerDetails } from "./AnswerDetails";
-import { CommentSection } from "./CommentSection";
-import { DetailsClaimsSection } from "./DetailsClaimsSection";
-import { DetailsResearchSection } from "./DetailsResearchSection";
-import { FactDetails } from "./FactDetails";
-import { QuestionDetails } from "./QuestionDetails";
-import { SourceDetails } from "./SourceDetails";
+import { nodeSchema, researchNodeTypes } from "@/common/node";
+import { useSessionUser } from "@/web/common/hooks";
+import { StandaloneEdge } from "@/web/topic/components/Edge/StandaloneEdge";
+import { EditableNode } from "@/web/topic/components/Node/EditableNode";
+import { AnswerDetails } from "@/web/topic/components/TopicPane/AnswerDetails";
+import { CommentSection } from "@/web/topic/components/TopicPane/CommentSection";
+import { DetailsClaimsSection } from "@/web/topic/components/TopicPane/DetailsClaimsSection";
+import { DetailsResearchSection } from "@/web/topic/components/TopicPane/DetailsResearchSection";
+import { FactDetails } from "@/web/topic/components/TopicPane/FactDetails";
+import { QuestionDetails } from "@/web/topic/components/TopicPane/QuestionDetails";
+import { SourceDetails } from "@/web/topic/components/TopicPane/SourceDetails";
+import { setGraphPartNotes } from "@/web/topic/store/actions";
+import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
+import { GraphPart, isNode, isNodeType } from "@/web/topic/utils/graph";
+import { nodeDecorations } from "@/web/topic/utils/node";
 
 const formSchema = z.object({
   // same restrictions as edge, so we should be fine reusing node's schema

@@ -1,12 +1,12 @@
 import lowerCase from "lodash/lowerCase";
 import { NestedMenuItem } from "mui-nested-menu";
 
-import { getSameCategoryEdgeTypes } from "../../../../common/edge";
-import { changeEdgeType } from "../../../topic/store/actions";
-import { useUserCanEditTopicData } from "../../../topic/store/userHooks";
-import { Edge } from "../../../topic/utils/graph";
-import { useSessionUser } from "../../hooks";
-import { CloseOnClickMenuItem } from "./CloseOnClickMenuItem";
+import { getSameCategoryEdgeTypes } from "@/common/edge";
+import { CloseOnClickMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
+import { useSessionUser } from "@/web/common/hooks";
+import { changeEdgeType } from "@/web/topic/store/actions";
+import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
+import { Edge } from "@/web/topic/utils/graph";
 
 interface Props {
   edge: Edge;

@@ -10,11 +10,11 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
-import { GeneralFilters } from "../../../view/components/Filter/GeneralFilters";
-import { InformationFilters } from "../../../view/components/Filter/InformationFilters";
-import { TableFilters } from "../../../view/components/Filter/TableFilters";
-import { setFormat, useFormat } from "../../../view/currentViewStore/store";
-import { QuickViewSection } from "./QuickViewSection";
+import { QuickViewSection } from "@/web/topic/components/TopicPane/QuickViewSection";
+import { GeneralFilters } from "@/web/view/components/Filter/GeneralFilters";
+import { InformationFilters } from "@/web/view/components/Filter/InformationFilters";
+import { TableFilters } from "@/web/view/components/Filter/TableFilters";
+import { setFormat, useFormat } from "@/web/view/currentViewStore/store";
 
 export const TopicViews = () => {
   const [isFormatSectionOpen, setIsFormatSectionOpen] = useState(true);

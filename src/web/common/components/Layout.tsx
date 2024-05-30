@@ -15,13 +15,14 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { ReactNode, forwardRef, useEffect, useState } from "react";
 
+import { Link } from "@/web/common/components/Link";
+import { ProfileIcon } from "@/web/common/components/ProfileIcon/ProfileIcon";
+import { SiteDrawer } from "@/web/common/components/SiteDrawer/SiteDrawer";
+import { UserDrawer } from "@/web/common/components/UserDrawer/UserDrawer";
+import { useSessionUser } from "@/web/common/hooks";
+import { discordInvite, githubRepo } from "@/web/common/urls";
+
 import favicon from "../../../../public/favicon.png";
-import { useSessionUser } from "../hooks";
-import { discordInvite, githubRepo } from "../urls";
-import { Link } from "./Link";
-import { ProfileIcon } from "./ProfileIcon/ProfileIcon";
-import { SiteDrawer } from "./SiteDrawer/SiteDrawer";
-import { UserDrawer } from "./UserDrawer/UserDrawer";
 
 const NavLink = forwardRef<HTMLAnchorElement, LinkProps>(function NavLink(props, ref) {
   return <Link ref={ref} {...props} underline="hover" />;

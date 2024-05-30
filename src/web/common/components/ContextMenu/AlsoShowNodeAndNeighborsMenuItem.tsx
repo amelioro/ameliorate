@@ -1,6 +1,6 @@
-import { Node } from "../../../topic/utils/graph";
-import { showNodeAndNeighbors } from "../../../view/currentViewStore/filter";
-import { CloseOnClickMenuItem } from "./CloseOnClickMenuItem";
+import { CloseOnClickMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
+import { Node } from "@/web/topic/utils/graph";
+import { showNodeAndNeighbors } from "@/web/view/currentViewStore/filter";
 
 export const AlsoShowNodeAndNeighborsMenuItem = ({ node }: { node: Node }) => {
   return (

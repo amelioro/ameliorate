@@ -1,9 +1,9 @@
 import { Article, ArticleOutlined } from "@mui/icons-material";
 import { useCallback } from "react";
 
-import { setSelected } from "../../../view/currentViewStore/store";
-import { viewDetails } from "../TopicPane/paneStore";
-import { Indicator } from "./Indicator";
+import { Indicator } from "@/web/topic/components/Indicator/Indicator";
+import { viewDetails } from "@/web/topic/components/TopicPane/paneStore";
+import { setSelected } from "@/web/view/currentViewStore/store";
 
 interface Props {
   graphPartId: string;

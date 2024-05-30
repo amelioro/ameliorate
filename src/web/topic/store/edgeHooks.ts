@@ -1,9 +1,9 @@
 import { shallow } from "zustand/shallow";
 
-import { useIsAnyGraphPartSelected } from "../../view/currentViewStore/store";
-import { nodes } from "../utils/edge";
-import { findEdgeOrThrow } from "../utils/graph";
-import { useTopicStore } from "./store";
+import { useTopicStore } from "@/web/topic/store/store";
+import { nodes } from "@/web/topic/utils/edge";
+import { findEdgeOrThrow } from "@/web/topic/utils/graph";
+import { useIsAnyGraphPartSelected } from "@/web/view/currentViewStore/store";
 
 export const useIsNodeSelected = (edgeId: string) => {
   const neighborNodes = useTopicStore((state) => {

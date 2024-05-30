@@ -1,8 +1,8 @@
 import { AfterCallback } from "@auth0/nextjs-auth0";
 import { UserProfile } from "@auth0/nextjs-auth0/client";
 
-import { auth0 } from "../../../api/initAuth0";
-import { xprisma } from "../../../db/extendedPrisma";
+import { auth0 } from "@/api/initAuth0";
+import { xprisma } from "@/db/extendedPrisma";
 
 const afterCallback: AfterCallback = async (_req, res, session, state) => {
   const userClaims = session.user as UserProfile;

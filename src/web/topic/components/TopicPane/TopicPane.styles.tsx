@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { Drawer, IconButton, css } from "@mui/material";
 
-import { nodeWidthRem } from "../Node/EditableNode.styles";
+import { nodeWidthRem } from "@/web/topic/components/Node/EditableNode.styles";
 
 export const PositionedDiv = styled.div`
   display: flex;

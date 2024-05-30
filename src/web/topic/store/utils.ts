@@ -1,5 +1,5 @@
-import { errorWithData } from "../../../common/errorHandling";
-import { PlaygroundTopic, StoreTopic, TopicStoreState } from "./store";
+import { errorWithData } from "@/common/errorHandling";
+import { PlaygroundTopic, StoreTopic, TopicStoreState } from "@/web/topic/store/store";
 
 export const getTopicTitle = (state: TopicStoreState) => {
   const rootNode = state.nodes[0];

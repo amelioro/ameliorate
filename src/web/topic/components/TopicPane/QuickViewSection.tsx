@@ -10,7 +10,9 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
-import { useSessionUser } from "../../../common/hooks";
+import { useSessionUser } from "@/web/common/hooks";
+import { QuickViewForm } from "@/web/topic/components/TopicPane/QuickViewForm";
+import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import {
   QuickView,
   createView,
@@ -22,9 +24,7 @@ import {
   useCanUndoRedo,
   useQuickViews,
   useSelectedViewId,
-} from "../../../view/quickViewStore/store";
-import { useUserCanEditTopicData } from "../../store/userHooks";
-import { QuickViewForm } from "./QuickViewForm";
+} from "@/web/view/quickViewStore/store";
 
 export const QuickViewSection = () => {
   const { sessionUser } = useSessionUser();

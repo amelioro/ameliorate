@@ -2,15 +2,15 @@ import { TRPCError } from "@trpc/server";
 import _ from "lodash";
 import { z } from "zod";
 
-import { edgeSchema } from "../../common/edge";
-import { getNewTopicProblemNode, nodeSchema } from "../../common/node";
-import { topicSchema } from "../../common/topic";
-import { userSchema } from "../../common/user";
-import { userScoreSchema } from "../../common/userScore";
-import { quickViewSchema } from "../../common/view";
-import { xprisma } from "../../db/extendedPrisma";
-import { isLoggedIn } from "../auth";
-import { procedure, router } from "../trpc";
+import { isLoggedIn } from "@/api/auth";
+import { procedure, router } from "@/api/trpc";
+import { edgeSchema } from "@/common/edge";
+import { getNewTopicProblemNode, nodeSchema } from "@/common/node";
+import { topicSchema } from "@/common/topic";
+import { userSchema } from "@/common/user";
+import { userScoreSchema } from "@/common/userScore";
+import { quickViewSchema } from "@/common/view";
+import { xprisma } from "@/db/extendedPrisma";
 
 export const topicRouter = router({
   findByUsernameAndTitle: procedure

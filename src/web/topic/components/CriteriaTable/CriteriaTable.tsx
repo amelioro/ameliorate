@@ -10,22 +10,26 @@ import {
 } from "material-react-table";
 import React, { useState } from "react";
 
-import { errorWithData } from "../../../../common/errorHandling";
-import { useSessionUser } from "../../../common/hooks";
-import { useGeneralFilter, useTableFilter } from "../../../view/currentViewStore/filter";
-import { getSelectedTradeoffNodes } from "../../../view/utils/diagramFilter";
-import { applyScoreFilter } from "../../../view/utils/generalFilter";
-import { useCriterionSolutionEdges, useDefaultNode, useNodeChildren } from "../../store/nodeHooks";
-import { useDisplayScores } from "../../store/scoreHooks";
-import { useUserCanEditTopicData } from "../../store/userHooks";
-import { getConnectingEdge } from "../../utils/edge";
-import { Edge, Node } from "../../utils/graph";
-import { EdgeCell } from "../CriteriaTable/EdgeCell";
-import { NodeCell } from "../CriteriaTable/NodeCell";
-import { AddNodeButton } from "../Node/AddNodeButton";
-import { tableStyles } from "./CriteriaTable.styles";
-import { SolutionTotalCell } from "./SolutionTotalCell";
-import { TotalsHeaderCell } from "./TotalsHeaderCell";
+import { errorWithData } from "@/common/errorHandling";
+import { useSessionUser } from "@/web/common/hooks";
+import { tableStyles } from "@/web/topic/components/CriteriaTable/CriteriaTable.styles";
+import { EdgeCell } from "@/web/topic/components/CriteriaTable/EdgeCell";
+import { NodeCell } from "@/web/topic/components/CriteriaTable/NodeCell";
+import { SolutionTotalCell } from "@/web/topic/components/CriteriaTable/SolutionTotalCell";
+import { TotalsHeaderCell } from "@/web/topic/components/CriteriaTable/TotalsHeaderCell";
+import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
+import {
+  useCriterionSolutionEdges,
+  useDefaultNode,
+  useNodeChildren,
+} from "@/web/topic/store/nodeHooks";
+import { useDisplayScores } from "@/web/topic/store/scoreHooks";
+import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
+import { getConnectingEdge } from "@/web/topic/utils/edge";
+import { Edge, Node } from "@/web/topic/utils/graph";
+import { useGeneralFilter, useTableFilter } from "@/web/view/currentViewStore/filter";
+import { getSelectedTradeoffNodes } from "@/web/view/utils/diagramFilter";
+import { applyScoreFilter } from "@/web/view/utils/generalFilter";
 
 interface RowData {
   rowHeader: HeaderCell;

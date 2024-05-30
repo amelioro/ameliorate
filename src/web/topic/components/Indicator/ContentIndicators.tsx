@@ -1,11 +1,11 @@
 import { type ButtonProps, Stack } from "@mui/material";
 import { memo } from "react";
 
-import { GraphPartType } from "../../utils/graph";
-import { CommentIndicator } from "./CommentIndicator";
-import { FoundResearchIndicator } from "./FoundResearchIndicator";
-import { JustificationIndicator } from "./JustificationIndicator";
-import { QuestionIndicator } from "./QuestionIndicator";
+import { CommentIndicator } from "@/web/topic/components/Indicator/CommentIndicator";
+import { FoundResearchIndicator } from "@/web/topic/components/Indicator/FoundResearchIndicator";
+import { JustificationIndicator } from "@/web/topic/components/Indicator/JustificationIndicator";
+import { QuestionIndicator } from "@/web/topic/components/Indicator/QuestionIndicator";
+import { GraphPartType } from "@/web/topic/utils/graph";
 
 interface Props {
   graphPartId: string;

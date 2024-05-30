@@ -8,9 +8,9 @@ import {
 } from "reactflow";
 import { shallow } from "zustand/shallow";
 
-import { nodeHeightPx, nodeWidthPx } from "../components/Node/EditableNode.styles";
-import { PositionedNode } from "../utils/diagram";
-import { Node } from "../utils/graph";
+import { nodeHeightPx, nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
+import { PositionedNode } from "@/web/topic/utils/diagram";
+import { Node } from "@/web/topic/utils/graph";
 
 const getViewportToIncludeNode = (
   node: PositionedNode,

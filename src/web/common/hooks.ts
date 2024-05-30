@@ -1,8 +1,8 @@
 import { useUser as useAuthUser } from "@auth0/nextjs-auth0/client";
 import { useState } from "react";
 
-import { MenuPosition } from "./store/contextMenuStore";
-import { trpc } from "./trpc";
+import { MenuPosition } from "@/web/common/store/contextMenuStore";
+import { trpc } from "@/web/common/trpc";
 
 /**
  * @example <caption>(since there aren't currently usages of this method)</caption>

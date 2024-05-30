@@ -3,16 +3,11 @@ import { temporal } from "zundo";
 import { devtools, persist } from "zustand/middleware";
 import { createWithEqualityFn } from "zustand/traditional";
 
-import {
-  useDiagramFilter,
-  useGeneralFilter,
-  useShowImpliedEdges,
-} from "../../view/currentViewStore/filter";
-import { usePerspectives } from "../../view/perspectiveStore";
-import { applyDiagramFilter } from "../../view/utils/diagramFilter";
-import { applyNodeTypeFilter, applyScoreFilter } from "../../view/utils/generalFilter";
-import { Diagram } from "../utils/diagram";
-import { hideImpliedEdges } from "../utils/edge";
+import { apiSyncer } from "@/web/topic/store/apiSyncerMiddleware";
+import { migrate } from "@/web/topic/store/migrate";
+import { getDisplayScoresByGraphPartId } from "@/web/topic/store/scoreGetters";
+import { Diagram } from "@/web/topic/utils/diagram";
+import { hideImpliedEdges } from "@/web/topic/utils/edge";
 import {
   Edge,
   Node,
@@ -20,10 +15,15 @@ import {
   buildNode,
   getRelevantEdges,
   getSecondaryNeighbors,
-} from "../utils/graph";
-import { apiSyncer } from "./apiSyncerMiddleware";
-import { migrate } from "./migrate";
-import { getDisplayScoresByGraphPartId } from "./scoreGetters";
+} from "@/web/topic/utils/graph";
+import {
+  useDiagramFilter,
+  useGeneralFilter,
+  useShowImpliedEdges,
+} from "@/web/view/currentViewStore/filter";
+import { usePerspectives } from "@/web/view/perspectiveStore";
+import { applyDiagramFilter } from "@/web/view/utils/diagramFilter";
+import { applyNodeTypeFilter, applyScoreFilter } from "@/web/view/utils/generalFilter";
 
 export interface PlaygroundTopic {
   id: undefined; // so we can check this to see if the store topic is a playground topic

@@ -12,26 +12,26 @@ import {
 import { AppBar, Divider, IconButton, ToggleButton, Toolbar, Tooltip } from "@mui/material";
 import { useEffect, useState } from "react";
 
-import { emitter } from "../../../common/event";
-import { useSessionUser } from "../../../common/hooks";
-import { toggleFlashlightMode, useFlashlightMode } from "../../../view/actionConfigStore";
+import { emitter } from "@/web/common/event";
+import { useSessionUser } from "@/web/common/hooks";
+import { MoreActionsDrawer } from "@/web/topic/components/Surface/MoreActionsDrawer";
+import { deleteGraphPart } from "@/web/topic/store/createDeleteActions";
+import { useOnPlayground } from "@/web/topic/store/topicHooks";
+import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
+import { redo, undo } from "@/web/topic/store/utilActions";
+import { useTemporalHooks } from "@/web/topic/store/utilHooks";
+import { toggleFlashlightMode, useFlashlightMode } from "@/web/view/actionConfigStore";
 import {
   goBack,
   goForward,
   useCanGoBackForward,
   useSelectedGraphPart,
-} from "../../../view/currentViewStore/store";
+} from "@/web/view/currentViewStore/store";
 import {
   comparePerspectives,
   resetPerspectives,
   useIsComparingPerspectives,
-} from "../../../view/perspectiveStore";
-import { deleteGraphPart } from "../../store/createDeleteActions";
-import { useOnPlayground } from "../../store/topicHooks";
-import { useUserCanEditTopicData } from "../../store/userHooks";
-import { redo, undo } from "../../store/utilActions";
-import { useTemporalHooks } from "../../store/utilHooks";
-import { MoreActionsDrawer } from "./MoreActionsDrawer";
+} from "@/web/view/perspectiveStore";
 
 export const TopicToolbar = () => {
   const { sessionUser } = useSessionUser();

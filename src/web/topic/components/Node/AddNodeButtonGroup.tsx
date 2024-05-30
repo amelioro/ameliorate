@@ -1,12 +1,12 @@
 import { ButtonGroup } from "@mui/material";
 import { memo } from "react";
 
-import { NodeType, structureNodeTypes } from "../../../../common/node";
-import { useUnrestrictedEditing } from "../../../view/actionConfigStore";
-import { Relation, addableRelationsFrom } from "../../utils/edge";
-import { type RelationDirection } from "../../utils/graph";
-import { Orientation } from "../../utils/layout";
-import { AddNodeButton } from "../Node/AddNodeButton";
+import { NodeType, structureNodeTypes } from "@/common/node";
+import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
+import { Relation, addableRelationsFrom } from "@/web/topic/utils/edge";
+import { type RelationDirection } from "@/web/topic/utils/graph";
+import { Orientation } from "@/web/topic/utils/layout";
+import { useUnrestrictedEditing } from "@/web/view/actionConfigStore";
 
 interface Props {
   className?: string;

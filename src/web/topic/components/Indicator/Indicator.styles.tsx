@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { Button } from "@mui/material";
 
-import { indicatorLengthRem } from "../../utils/node";
+import { indicatorLengthRem } from "@/web/topic/utils/node";
 
 export const StyledButton = styled(Button)`
   width: ${indicatorLengthRem}rem;

@@ -1,11 +1,11 @@
-import { NodeType } from "../../../../common/node";
-import { useSessionUser } from "../../../common/hooks";
-import { addNode } from "../../store/createDeleteActions";
-import { useUserCanEditTopicData } from "../../store/userHooks";
-import { Relation } from "../../utils/edge";
-import { type RelationDirection } from "../../utils/graph";
-import { nodeDecorations } from "../../utils/node";
-import { StyledButton } from "./AddNodeButton.styles";
+import { NodeType } from "@/common/node";
+import { useSessionUser } from "@/web/common/hooks";
+import { StyledButton } from "@/web/topic/components/Node/AddNodeButton.styles";
+import { addNode } from "@/web/topic/store/createDeleteActions";
+import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
+import { Relation } from "@/web/topic/utils/edge";
+import { type RelationDirection } from "@/web/topic/utils/graph";
+import { nodeDecorations } from "@/web/topic/utils/node";
 
 interface Props {
   fromPartId: string;

@@ -1,7 +1,7 @@
 import { type ButtonProps, Stack } from "@mui/material";
 import { memo } from "react";
 
-import { ForceShownIndicator } from "./ForceShownIndicator";
+import { ForceShownIndicator } from "@/web/topic/components/Indicator/ForceShownIndicator";
 
 interface Props {
   graphPartId: string;

@@ -1,13 +1,13 @@
 import { AccountTree, AccountTreeOutlined } from "@mui/icons-material";
 import { MouseEventHandler, useCallback } from "react";
 
-import { viewJustification } from "../../../view/currentViewStore/filter";
+import { Indicator } from "@/web/topic/components/Indicator/Indicator";
 import {
   useExplicitClaimCount,
   useNonTopLevelClaimCount,
   useRootClaim,
-} from "../../store/graphPartHooks";
-import { Indicator } from "./Indicator";
+} from "@/web/topic/store/graphPartHooks";
+import { viewJustification } from "@/web/view/currentViewStore/filter";
 
 interface Props {
   graphPartId: string;

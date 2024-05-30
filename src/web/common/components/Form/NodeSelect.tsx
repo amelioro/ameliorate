@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 
-import { Node } from "../../../topic/utils/graph";
-import { Select } from "./Select";
+import { Select } from "@/web/common/components/Form/Select";
+import { Node } from "@/web/topic/utils/graph";
 
 interface Props {
   name: string;

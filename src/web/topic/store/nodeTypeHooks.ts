@@ -1,5 +1,5 @@
-import { findGraphPartOrThrow, findNodeOrThrow } from "../utils/graph";
-import { useTopicStore } from "./store";
+import { useTopicStore } from "@/web/topic/store/store";
+import { findGraphPartOrThrow, findNodeOrThrow } from "@/web/topic/utils/graph";
 
 export const useQuestionDetails = (questionNodeId: string) => {
   return useTopicStore((state) => {

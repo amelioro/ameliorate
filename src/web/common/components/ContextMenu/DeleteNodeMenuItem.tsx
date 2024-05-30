@@ -1,8 +1,8 @@
-import { deleteNode } from "../../../topic/store/createDeleteActions";
-import { useUserCanEditTopicData } from "../../../topic/store/userHooks";
-import { Node } from "../../../topic/utils/graph";
-import { useSessionUser } from "../../hooks";
-import { CloseOnClickMenuItem } from "./CloseOnClickMenuItem";
+import { CloseOnClickMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
+import { useSessionUser } from "@/web/common/hooks";
+import { deleteNode } from "@/web/topic/store/createDeleteActions";
+import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
+import { Node } from "@/web/topic/utils/graph";
 
 export const DeleteNodeMenuItem = ({ node }: { node: Node }) => {
   const { sessionUser } = useSessionUser();

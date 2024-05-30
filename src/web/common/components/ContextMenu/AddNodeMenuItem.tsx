@@ -1,12 +1,12 @@
 import { NestedMenuItem } from "mui-nested-menu";
 
-import { addNodeWithoutParent } from "../../../topic/store/createDeleteActions";
-import { useUserCanEditTopicData } from "../../../topic/store/userHooks";
-import { nodeDecorations } from "../../../topic/utils/node";
-import { usePrimaryNodeTypes } from "../../../view/currentViewStore/filter";
-import { useFormat } from "../../../view/currentViewStore/store";
-import { useSessionUser } from "../../hooks";
-import { CloseOnClickMenuItem } from "./CloseOnClickMenuItem";
+import { CloseOnClickMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
+import { useSessionUser } from "@/web/common/hooks";
+import { addNodeWithoutParent } from "@/web/topic/store/createDeleteActions";
+import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
+import { nodeDecorations } from "@/web/topic/utils/node";
+import { usePrimaryNodeTypes } from "@/web/view/currentViewStore/filter";
+import { useFormat } from "@/web/view/currentViewStore/store";
 
 interface Props {
   parentMenuOpen: boolean;

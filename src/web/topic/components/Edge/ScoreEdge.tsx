@@ -2,25 +2,30 @@ import { Box, Typography } from "@mui/material";
 import lowerCase from "lodash/lowerCase";
 import { EdgeLabelRenderer, getBezierPath } from "reactflow";
 
-import { RelationName } from "../../../../common/edge";
-import { useSessionUser } from "../../../common/hooks";
-import { openContextMenu } from "../../../common/store/contextMenuActions";
-import { infoColor } from "../../../common/theme";
-import { useUnrestrictedEditing } from "../../../view/actionConfigStore";
-import { setSelected } from "../../../view/currentViewStore/store";
-import { setCustomEdgeLabel } from "../../store/actions";
-import { useIsNodeSelected } from "../../store/edgeHooks";
-import { useUserCanEditTopicData } from "../../store/userHooks";
-import { Edge } from "../../utils/graph";
-import { EdgeProps } from "../Diagram/Diagram";
-import { Spotlight } from "../Diagram/Diagram.styles";
-import { CommonIndicators } from "../Indicator/CommonIndicators";
+import { RelationName } from "@/common/edge";
+import { useSessionUser } from "@/web/common/hooks";
+import { openContextMenu } from "@/web/common/store/contextMenuActions";
+import { infoColor } from "@/web/common/theme";
+import { EdgeProps } from "@/web/topic/components/Diagram/Diagram";
+import { Spotlight } from "@/web/topic/components/Diagram/Diagram.styles";
+import {
+  StyledDiv,
+  StyledPath,
+  edgeColor,
+  highlightedEdgeColor,
+} from "@/web/topic/components/Edge/ScoreEdge.styles";
+import { CommonIndicators } from "@/web/topic/components/Indicator/CommonIndicators";
 import {
   LeftCornerStatusIndicators,
   RightCornerContentIndicators,
   nodeWidthPx,
-} from "../Node/EditableNode.styles";
-import { StyledDiv, StyledPath, edgeColor, highlightedEdgeColor } from "./ScoreEdge.styles";
+} from "@/web/topic/components/Node/EditableNode.styles";
+import { setCustomEdgeLabel } from "@/web/topic/store/actions";
+import { useIsNodeSelected } from "@/web/topic/store/edgeHooks";
+import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
+import { Edge } from "@/web/topic/utils/graph";
+import { useUnrestrictedEditing } from "@/web/view/actionConfigStore";
+import { setSelected } from "@/web/view/currentViewStore/store";
 
 const flowMarkerId = "flowMarker";
 const nonFlowMarkerId = "nonFlowMarker";

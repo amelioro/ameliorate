@@ -2,10 +2,10 @@ import { useTheme } from "@emotion/react";
 import { type PaletteColor } from "@mui/material";
 import { Data } from "react-minimal-pie-chart/types/commonTypes";
 
-import { setScore } from "../../store/actions";
-import { Score, possibleScores } from "../../utils/graph";
-import { scoreColors } from "../../utils/score";
-import { CustomDataEntry, PieChart } from "./PieChart";
+import { CustomDataEntry, PieChart } from "@/web/topic/components/Score/PieChart";
+import { setScore } from "@/web/topic/store/actions";
+import { Score, possibleScores } from "@/web/topic/utils/graph";
+import { scoreColors } from "@/web/topic/utils/score";
 
 interface Props {
   username: string;

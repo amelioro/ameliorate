@@ -1,9 +1,9 @@
-import { justificationRelationNames } from "../../../../common/edge";
-import { deleteEdge } from "../../../topic/store/createDeleteActions";
-import { useUserCanEditTopicData } from "../../../topic/store/userHooks";
-import { Edge } from "../../../topic/utils/graph";
-import { useSessionUser } from "../../hooks";
-import { CloseOnClickMenuItem } from "./CloseOnClickMenuItem";
+import { justificationRelationNames } from "@/common/edge";
+import { CloseOnClickMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
+import { useSessionUser } from "@/web/common/hooks";
+import { deleteEdge } from "@/web/topic/store/createDeleteActions";
+import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
+import { Edge } from "@/web/topic/utils/graph";
 
 export const DeleteEdgeMenuItem = ({ edge }: { edge: Edge }) => {
   const { sessionUser } = useSessionUser();

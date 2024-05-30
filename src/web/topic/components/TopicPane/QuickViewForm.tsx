@@ -11,8 +11,8 @@ import { FormEvent } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { quickViewSchema } from "../../../../common/view";
-import { QuickView, setTitle } from "../../../view/quickViewStore/store";
+import { quickViewSchema } from "@/common/view";
+import { QuickView, setTitle } from "@/web/view/quickViewStore/store";
 
 interface Props {
   currentView: QuickView;

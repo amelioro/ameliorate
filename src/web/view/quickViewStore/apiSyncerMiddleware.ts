@@ -1,11 +1,11 @@
 import diff from "microdiff";
 import { StateCreator, StoreMutatorIdentifier } from "zustand";
 
-import { QuickView } from "../../../common/view";
-import { trpcClient } from "../../../pages/_app.page";
-import { emitter } from "../../common/event";
-import { isPlaygroundTopic } from "../../topic/store/utils";
-import { QuickViewStoreState } from "./store";
+import { QuickView } from "@/common/view";
+import { trpcClient } from "@/pages/_app.page";
+import { emitter } from "@/web/common/event";
+import { isPlaygroundTopic } from "@/web/topic/store/utils";
+import { QuickViewStoreState } from "@/web/view/quickViewStore/store";
 
 const getCrudDiffs = <T extends object>(
   before: T[],

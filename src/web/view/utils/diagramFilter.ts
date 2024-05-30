@@ -1,11 +1,11 @@
 import uniqBy from "lodash/uniqBy";
 import { z } from "zod";
 
-import { RelationName, researchRelationNames } from "../../../common/edge";
-import { InfoCategory } from "../../../common/infoCategory";
-import { infoNodeTypes, nodeSchema } from "../../../common/node";
-import { Graph, Node, ancestors, descendants, getRelevantEdges } from "../../topic/utils/graph";
-import { children, parents } from "../../topic/utils/node";
+import { RelationName, researchRelationNames } from "@/common/edge";
+import { InfoCategory } from "@/common/infoCategory";
+import { infoNodeTypes, nodeSchema } from "@/common/node";
+import { Graph, Node, ancestors, descendants, getRelevantEdges } from "@/web/topic/utils/graph";
+import { children, parents } from "@/web/topic/utils/node";
 
 // cross-standard-filter options
 const detailTypes = ["all", "connectedToCriteria", "none"] as const;

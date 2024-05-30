@@ -1,11 +1,11 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { topicSchema } from "../../common/topic";
-import { quickViewSchema } from "../../common/view";
-import { xprisma } from "../../db/extendedPrisma";
-import { isLoggedIn } from "../auth";
-import { procedure, router } from "../trpc";
+import { isLoggedIn } from "@/api/auth";
+import { procedure, router } from "@/api/trpc";
+import { topicSchema } from "@/common/topic";
+import { quickViewSchema } from "@/common/view";
+import { xprisma } from "@/db/extendedPrisma";
 
 export const viewRouter = router({
   handleChangesets: procedure

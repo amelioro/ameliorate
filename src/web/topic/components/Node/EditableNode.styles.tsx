@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
 import { Box, TextareaAutosize } from "@mui/material";
 
-import { htmlDefaultFontSize } from "../../../../pages/_document.page";
-import { ContentIndicators } from "../Indicator/ContentIndicators";
-import { StatusIndicators } from "../Indicator/StatusIndicators";
+import { htmlDefaultFontSize } from "@/pages/_document.page";
+import { ContentIndicators } from "@/web/topic/components/Indicator/ContentIndicators";
+import { StatusIndicators } from "@/web/topic/components/Indicator/StatusIndicators";
 
 export const nodeWidthRem = 11;
 

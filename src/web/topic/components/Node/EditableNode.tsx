@@ -1,16 +1,9 @@
 import { type ButtonProps, type SxProps, useTheme } from "@mui/material";
 import { memo, useEffect, useRef } from "react";
 
-import { useSessionUser } from "../../../common/hooks";
-import { openContextMenu } from "../../../common/store/contextMenuActions";
-import { useUnrestrictedEditing } from "../../../view/actionConfigStore";
-import { setSelected, useIsGraphPartSelected } from "../../../view/currentViewStore/store";
-import { useFillNodesWithColor } from "../../../view/userConfigStore";
-import { finishAddingNode, setCustomNodeType, setNodeLabel } from "../../store/actions";
-import { useUserCanEditTopicData } from "../../store/userHooks";
-import { Node } from "../../utils/graph";
-import { nodeDecorations } from "../../utils/node";
-import { CommonIndicators } from "../Indicator/CommonIndicators";
+import { useSessionUser } from "@/web/common/hooks";
+import { openContextMenu } from "@/web/common/store/contextMenuActions";
+import { CommonIndicators } from "@/web/topic/components/Indicator/CommonIndicators";
 import {
   LeftCornerStatusIndicators,
   MiddleDiv,
@@ -20,7 +13,14 @@ import {
   RightCornerContentIndicators,
   StyledTextareaAutosize,
   YEdgeBox,
-} from "./EditableNode.styles";
+} from "@/web/topic/components/Node/EditableNode.styles";
+import { finishAddingNode, setCustomNodeType, setNodeLabel } from "@/web/topic/store/actions";
+import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
+import { Node } from "@/web/topic/utils/graph";
+import { nodeDecorations } from "@/web/topic/utils/node";
+import { useUnrestrictedEditing } from "@/web/view/actionConfigStore";
+import { setSelected, useIsGraphPartSelected } from "@/web/view/currentViewStore/store";
+import { useFillNodesWithColor } from "@/web/view/userConfigStore";
 
 interface Props {
   node: Node;

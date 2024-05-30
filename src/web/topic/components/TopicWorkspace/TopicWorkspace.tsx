@@ -1,12 +1,12 @@
 import { Global } from "@emotion/react";
 import { Box, useMediaQuery } from "@mui/material";
 
-import { ContextMenu } from "../../../common/components/ContextMenu/ContextMenu";
-import { useFormat } from "../../../view/currentViewStore/store";
-import { CriteriaTable } from "../CriteriaTable/CriteriaTable";
-import { Diagram } from "../Diagram/Diagram";
-import { TopicToolbar } from "../Surface/TopicToolbar";
-import { TopicPane } from "../TopicPane/TopicPane";
+import { ContextMenu } from "@/web/common/components/ContextMenu/ContextMenu";
+import { CriteriaTable } from "@/web/topic/components/CriteriaTable/CriteriaTable";
+import { Diagram } from "@/web/topic/components/Diagram/Diagram";
+import { TopicToolbar } from "@/web/topic/components/Surface/TopicToolbar";
+import { TopicPane } from "@/web/topic/components/TopicPane/TopicPane";
+import { useFormat } from "@/web/view/currentViewStore/store";
 
 export const TopicWorkspace = () => {
   const isLandscape = useMediaQuery("(orientation: landscape)");

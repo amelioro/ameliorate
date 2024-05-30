@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { topicSchema } from "./topic";
+import { topicSchema } from "@/common/topic";
 
 export const savedViewTypes = ["shared", "quick"] as const;
 export const zSavedViewTypes = z.enum(savedViewTypes);

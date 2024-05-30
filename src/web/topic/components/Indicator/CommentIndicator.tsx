@@ -2,12 +2,12 @@ import { ChatBubbleOutline } from "@mui/icons-material";
 import { type ButtonProps } from "@mui/material";
 import { useCallback } from "react";
 
-import { useCommentCount } from "../../../comment/store/commentStore";
-import { setSelected } from "../../../view/currentViewStore/store";
-import { useShowResolvedComments } from "../../../view/miscTopicConfigStore";
-import { GraphPartType } from "../../utils/graph";
-import { viewDetails } from "../TopicPane/paneStore";
-import { Indicator } from "./Indicator";
+import { useCommentCount } from "@/web/comment/store/commentStore";
+import { Indicator } from "@/web/topic/components/Indicator/Indicator";
+import { viewDetails } from "@/web/topic/components/TopicPane/paneStore";
+import { GraphPartType } from "@/web/topic/utils/graph";
+import { setSelected } from "@/web/view/currentViewStore/store";
+import { useShowResolvedComments } from "@/web/view/miscTopicConfigStore";
 
 interface Props {
   graphPartId: string;

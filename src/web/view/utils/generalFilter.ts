@@ -1,8 +1,8 @@
 import { z } from "zod";
 
-import { NodeType, zNodeTypes } from "../../../common/node";
-import { GraphPart, Node, Score, possibleScores } from "../../topic/utils/graph";
-import { getNumericScore } from "../../topic/utils/score";
+import { NodeType, zNodeTypes } from "@/common/node";
+import { GraphPart, Node, Score, possibleScores } from "@/web/topic/utils/graph";
+import { getNumericScore } from "@/web/topic/utils/score";
 
 export const scoredComparers = ["≥", ">", "≤", "<", "="] as const;
 const zScoredComparers = z.enum(scoredComparers);

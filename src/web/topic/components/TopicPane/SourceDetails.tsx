@@ -1,11 +1,11 @@
 import { Info, Schema } from "@mui/icons-material";
 import { ListItem, ListItemIcon, ListItemText, Stack, Typography } from "@mui/material";
 
-import { useSourceDetails } from "../../store/nodeTypeHooks";
-import { Node } from "../../utils/graph";
-import { StandaloneEdge } from "../Edge/StandaloneEdge";
-import { AddNodeButton } from "../Node/AddNodeButton";
-import { EditableNode } from "../Node/EditableNode";
+import { StandaloneEdge } from "@/web/topic/components/Edge/StandaloneEdge";
+import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
+import { EditableNode } from "@/web/topic/components/Node/EditableNode";
+import { useSourceDetails } from "@/web/topic/store/nodeTypeHooks";
+import { Node } from "@/web/topic/utils/graph";
 
 interface Props {
   sourceNode: Node & { type: "source" };

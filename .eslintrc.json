@@ -8,7 +8,7 @@
     "plugin:tailwindcss/recommended",
     "prettier"
   ],
-  "plugins": ["functional", "import"],
+  "plugins": ["functional", "import", "no-relative-import-paths"],
   "overrides": [
     // don't use ts checking for js files https://stackoverflow.com/a/64488475
     {
@@ -51,6 +51,14 @@
             "args": "all",
             "argsIgnorePattern": "^_",
             "varsIgnorePattern": "^_"
+          }
+        ],
+        "no-relative-import-paths/no-relative-import-paths": [
+          "error",
+          {
+            "allowSameFolder": false,
+            "rootDir": "src",
+            "prefix": "@"
           }
         ]
       }

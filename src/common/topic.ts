@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-import { reservedSecondLevelEndpointNames } from "./reservedEndpointNames";
-import { userSchema } from "./user";
+import { reservedSecondLevelEndpointNames } from "@/common/reservedEndpointNames";
+import { userSchema } from "@/common/user";
 
 // not sure how to guarantee that this matches the schema enum
 export const visibilityTypes = ["private", "unlisted", "public"] as const;

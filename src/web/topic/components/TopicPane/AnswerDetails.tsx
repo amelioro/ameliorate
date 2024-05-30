@@ -1,9 +1,9 @@
 import { QuestionMark } from "@mui/icons-material";
 import { ListItem, ListItemIcon, ListItemText, Stack, Typography } from "@mui/material";
 
-import { useAnswerDetails } from "../../store/nodeTypeHooks";
-import { Node } from "../../utils/graph";
-import { EditableNode } from "../Node/EditableNode";
+import { EditableNode } from "@/web/topic/components/Node/EditableNode";
+import { useAnswerDetails } from "@/web/topic/store/nodeTypeHooks";
+import { Node } from "@/web/topic/utils/graph";
 
 interface Props {
   answerNode: Node & { type: "answer" };

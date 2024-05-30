@@ -3,9 +3,9 @@ import { Topic, User } from "@prisma/client";
 import shortUUID from "short-uuid";
 import { beforeEach, describe, expect, test } from "vitest";
 
-import { Comment } from "../../common/comment";
-import { xprisma } from "../../db/extendedPrisma";
-import { appRouter } from "./_app";
+import { appRouter } from "@/api/routers/_app";
+import { Comment } from "@/common/comment";
+import { xprisma } from "@/db/extendedPrisma";
 
 let creatorOfTopic: User;
 let notCreatorOfTopic: User;

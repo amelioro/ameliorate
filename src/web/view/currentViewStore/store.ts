@@ -4,19 +4,19 @@ import { useStore } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import { createWithEqualityFn } from "zustand/traditional";
 
-import { Format, InfoCategory } from "../../../common/infoCategory";
-import { withDefaults } from "../../../common/object";
-import { emitter } from "../../common/event";
-import { useGraphPart } from "../../topic/store/graphPartHooks";
+import { Format, InfoCategory } from "@/common/infoCategory";
+import { withDefaults } from "@/common/object";
+import { emitter } from "@/web/common/event";
+import { useGraphPart } from "@/web/topic/store/graphPartHooks";
+import { triggerEvent } from "@/web/view/currentViewStore/triggerEventMiddleware";
 import {
   getDefaultQuickView,
   getQuickViewByTitle,
   selectViewFromState,
-} from "../quickViewStore/store";
-import { StandardFilter } from "../utils/diagramFilter";
-import { GeneralFilter } from "../utils/generalFilter";
-import { TableFilter } from "../utils/tableFilter";
-import { triggerEvent } from "./triggerEventMiddleware";
+} from "@/web/view/quickViewStore/store";
+import { StandardFilter } from "@/web/view/utils/diagramFilter";
+import { GeneralFilter } from "@/web/view/utils/generalFilter";
+import { TableFilter } from "@/web/view/utils/tableFilter";
 
 export interface ViewState {
   selectedGraphPartId: string | null;

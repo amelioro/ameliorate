@@ -1,9 +1,9 @@
 import { Stack } from "@mui/material";
 import { memo } from "react";
 
-import { Score } from "../Score/Score";
-import { CriteriaTableIndicator } from "./CriteriaTableIndicator";
-import { DetailsIndicator } from "./DetailsIndicator";
+import { CriteriaTableIndicator } from "@/web/topic/components/Indicator/CriteriaTableIndicator";
+import { DetailsIndicator } from "@/web/topic/components/Indicator/DetailsIndicator";
+import { Score } from "@/web/topic/components/Score/Score";
 
 interface Props {
   graphPartId: string;

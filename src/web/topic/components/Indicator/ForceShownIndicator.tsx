@@ -2,11 +2,8 @@ import { WbTwilight } from "@mui/icons-material";
 import { type ButtonProps } from "@mui/material";
 import { MouseEventHandler, memo, useCallback } from "react";
 
-import {
-  stopForcingNodeToShow,
-  useIsNodeForcedToShow,
-} from "../../../view/currentViewStore/filter";
-import { Indicator } from "./Indicator";
+import { Indicator } from "@/web/topic/components/Indicator/Indicator";
+import { stopForcingNodeToShow, useIsNodeForcedToShow } from "@/web/view/currentViewStore/filter";
 
 interface Props {
   nodeId: string;

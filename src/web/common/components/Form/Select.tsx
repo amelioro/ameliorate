@@ -3,7 +3,7 @@ import { startCase } from "lodash";
 import { useContext, useMemo } from "react";
 import { useController } from "react-hook-form";
 
-import { FormContext } from "./FormContext";
+import { FormContext } from "@/web/common/components/Form/FormContext";
 
 interface Props {
   name: string;

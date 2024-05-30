@@ -1,8 +1,8 @@
 import { shallow } from "zustand/shallow";
 
-import { trpc } from "../../common/trpc";
-import { UserTopic, useTopicStore } from "./store";
-import { isPlaygroundTopic } from "./utils";
+import { trpc } from "@/web/common/trpc";
+import { UserTopic, useTopicStore } from "@/web/topic/store/store";
+import { isPlaygroundTopic } from "@/web/topic/store/utils";
 
 // TODO: for security, this should probably get the session user rather than assume the username is from the session user
 export const useUserCanEditTopicData = (username?: string) => {

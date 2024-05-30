@@ -1,10 +1,10 @@
 import { School } from "@mui/icons-material";
 import { ListItem, ListItemIcon, ListItemText, Stack, Typography } from "@mui/material";
 
-import { useResearchNodes } from "../../store/graphPartHooks";
-import { Node } from "../../utils/graph";
-import { AddNodeButton } from "../Node/AddNodeButton";
-import { EditableNode } from "../Node/EditableNode";
+import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
+import { EditableNode } from "@/web/topic/components/Node/EditableNode";
+import { useResearchNodes } from "@/web/topic/store/graphPartHooks";
+import { Node } from "@/web/topic/utils/graph";
 
 interface Props {
   node: Node;

@@ -1,4 +1,4 @@
-import { StyledIframe } from "./YoutubeEmbed.styles";
+import { StyledIframe } from "@/web/common/components/YoutubeEmbed/YoutubeEmbed.styles";
 
 // thanks https://dev.to/bravemaster619/simplest-way-to-embed-a-youtube-video-in-your-react-app-3bk2
 export const YoutubeEmbed = ({ embedId }: { embedId: string }) => (

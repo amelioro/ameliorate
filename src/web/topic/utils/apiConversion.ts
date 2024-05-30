@@ -2,13 +2,19 @@ import { inferRouterOutputs } from "@trpc/server";
 import compact from "lodash/compact";
 import set from "lodash/set";
 
-import { AppRouter } from "../../../api/routers/_app";
-import { Edge as ApiEdge, Edge } from "../../../common/edge";
-import { Node as ApiNode, Node } from "../../../common/node";
-import { UserScore as ApiScore } from "../../../common/userScore";
-import { UserScores as StoreScores, TopicStoreState } from "../store/store";
-import { isPlaygroundTopic } from "../store/utils";
-import { Score, Edge as StoreEdge, Node as StoreNode, buildEdge, buildNode } from "./graph";
+import { AppRouter } from "@/api/routers/_app";
+import { Edge as ApiEdge, Edge } from "@/common/edge";
+import { Node as ApiNode, Node } from "@/common/node";
+import { UserScore as ApiScore } from "@/common/userScore";
+import { UserScores as StoreScores, TopicStoreState } from "@/web/topic/store/store";
+import { isPlaygroundTopic } from "@/web/topic/store/utils";
+import {
+  Score,
+  Edge as StoreEdge,
+  Node as StoreNode,
+  buildEdge,
+  buildNode,
+} from "@/web/topic/utils/graph";
 
 export const convertToStoreNode = (apiNode: TopicNode) => {
   return buildNode({
