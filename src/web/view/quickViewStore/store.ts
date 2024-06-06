@@ -199,7 +199,7 @@ export const deleteView = (viewId: string) => {
  * if deselecting, remove the view param, else set the view param to the view's title
  */
 const updateURLParams = (viewTitle: string | null) => {
-  const currentParams = new URLSearchParams(Router.query as Record<string, string>); // seems to be fine when passing ParsedUrlQuery but ts doesn't like the types, so cast it
+  const currentParams = new URLSearchParams(window.location.search);
   if (viewTitle !== null) currentParams.set("view", viewTitle);
   else currentParams.delete("view");
 
@@ -328,7 +328,7 @@ export const getPersistState = () => {
 };
 
 // misc
-// if the view changes and a quick view is selected, deselect the quick view
+// if a quick view is selected and the view changes from that, deselect it
 emitter.on("changedView", (newView) => {
   const state = useQuickViewStore.getState();
   if (state.selectedViewId === null) return;
