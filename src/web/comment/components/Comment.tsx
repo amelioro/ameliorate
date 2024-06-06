@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { Check, MoreHoriz, RemoveDone } from "@mui/icons-material";
 import { Button, IconButton, MenuItem } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { isRootComment as checkIsRootComment } from "@/common/comment";
 import { Draft } from "@/web/comment/components/Draft";
@@ -13,6 +13,15 @@ import { useSessionUser } from "@/web/common/hooks";
 import { useOnPlayground } from "@/web/topic/store/topicHooks";
 import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 
+const getLinkToComment = (comment: StoreComment) => {
+  const { origin, pathname } = window.location;
+
+  const url = new URL(pathname, origin); // assumes we're copying the comment from its topic page
+  url.searchParams.set("comment", comment.id);
+
+  return url.href;
+};
+
 interface Props {
   comment: StoreComment;
 }
@@ -22,6 +31,7 @@ export const Comment = ({ comment }: Props) => {
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const onPlayground = useOnPlayground();
 
+  const commentRef = useRef<HTMLDivElement | null>(null);
   const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -33,8 +43,23 @@ export const Comment = ({ comment }: Props) => {
   const isRootComment = checkIsRootComment(comment.parentType);
   const moreMenuOpen = Boolean(moreAnchorEl);
 
+  useEffect(() => {
+    const commentElement = commentRef.current;
+    if (!commentElement) return;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const commentId = urlParams.get("comment");
+    if (commentId === comment.id) {
+      commentElement.focus();
+    }
+  }, [comment.id]);
+
   return (
-    <BorderDiv className="relative space-y-2 break-words">
+    <BorderDiv
+      ref={commentRef}
+      className="relative space-y-2 break-words rounded focus:border focus:border-black"
+      tabIndex={-1} // no value in tabbing to it besides showing border, so only set for the purpose of on-load highlighting
+    >
       <HeaderDiv className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <ProfileIcon username={comment.authorName} />
@@ -89,6 +114,9 @@ export const Comment = ({ comment }: Props) => {
             {userCanDeleteComment && (
               <MenuItem onClick={() => setShowConfirmDelete(true)}>Delete</MenuItem>
             )}
+            <MenuItem onClick={() => void navigator.clipboard.writeText(getLinkToComment(comment))}>
+              Copy link to comment
+            </MenuItem>
           </Menu>
         </div>
       </HeaderDiv>

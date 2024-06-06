@@ -3,16 +3,10 @@ import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 
-import { loadCommentsFromLocalStorage } from "@/web/comment/store/commentStore";
-import { loadDraftsFromLocalStorage } from "@/web/comment/store/draftStore";
 import { Loading } from "@/web/common/components/Loading/Loading";
-import { populateDiagramFromLocalStorage } from "@/web/topic/store/loadActions";
+import { loadStores } from "@/web/topic/loadStores";
 import { playgroundUsername } from "@/web/topic/store/store";
-import { loadActionConfig } from "@/web/view/actionConfigStore";
-import { loadView } from "@/web/view/currentViewStore/store";
-import { loadMiscTopicConfig } from "@/web/view/miscTopicConfigStore";
 import { setInitialPerspective } from "@/web/view/perspectiveStore";
-import { loadQuickViewsFromLocalStorage } from "@/web/view/quickViewStore/store";
 
 // Don't render the workspace server-side.
 // Known reasons:
@@ -41,13 +35,7 @@ const Playground: NextPage = () => {
   // rendering, there will be a render mismatch between client and server
   useEffect(() => {
     const populate = async () => {
-      await populateDiagramFromLocalStorage();
-      await loadQuickViewsFromLocalStorage();
-      await loadView("playground");
-      await loadActionConfig("playground");
-      await loadMiscTopicConfig("playground");
-      await loadCommentsFromLocalStorage();
-      await loadDraftsFromLocalStorage();
+      await loadStores();
       setInitiallyPopulated(true);
     };
     void populate();
