@@ -16,6 +16,7 @@ import { errorWithData } from "@/common/errorHandling";
 import {
   loadCommentsFromApi,
   loadCommentsFromLocalStorage,
+  viewComment,
 } from "@/web/comment/store/commentStore";
 import { loadDraftsFromLocalStorage } from "@/web/comment/store/draftStore";
 import {
@@ -189,4 +190,9 @@ export const loadStores = async (diagramData?: TopicData) => {
     loadCommentsFromApi(diagramData, diagramData.comments);
     await loadDraftsFromLocalStorage(`${diagramData.creatorName}/${diagramData.title}`);
   }
+
+  // load comment from URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const commentId = urlParams.get("comment");
+  if (commentId) viewComment(commentId);
 };

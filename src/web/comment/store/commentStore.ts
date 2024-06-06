@@ -3,10 +3,13 @@ import { devtools, persist } from "zustand/middleware";
 import { createWithEqualityFn } from "zustand/traditional";
 
 import { Comment, CommentParentType, isRootComment } from "@/common/comment";
+import { errorWithData } from "@/common/errorHandling";
 import { withDefaults } from "@/common/object";
 import { apiSyncer } from "@/web/comment/store/apiSyncerMiddleware";
 import { storageWithDates } from "@/web/common/store/utils";
+import { setIsTopicPaneOpen } from "@/web/topic/components/TopicPane/paneStore";
 import { StoreTopic, UserTopic } from "@/web/topic/store/store";
+import { setSelected } from "@/web/view/currentViewStore/store";
 
 export type StoreComment = Omit<Comment, "topicId">;
 
@@ -198,4 +201,22 @@ export const loadCommentsFromLocalStorage = async () => {
   } else {
     useCommentStore.setState(initialState, true, "loadCommentsFromLocalStorage");
   }
+};
+
+export const viewComment = (commentId: string) => {
+  const state = useCommentStore.getState();
+
+  const comment = state.comments.find((comment) => comment.id === commentId);
+  if (!comment) return;
+
+  const rootComment =
+    comment.parentType === "comment"
+      ? state.comments.find((c) => c.id === comment.parentId)
+      : comment;
+  if (!rootComment)
+    throw errorWithData("couldn't find root comment", comment.parentId, state.comments);
+
+  const commentParentGraphPartId = rootComment.parentType === "topic" ? null : rootComment.parentId;
+  setSelected(commentParentGraphPartId);
+  setIsTopicPaneOpen(true);
 };
