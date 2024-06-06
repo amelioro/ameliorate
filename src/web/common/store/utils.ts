@@ -6,7 +6,7 @@ import { createJSONStorage } from "zustand/middleware";
  * Solution similar to: https://github.com/pmndrs/zustand/blob/main/docs/integrations/persisting-store-data.md#createjsonstorage
  * Context: https://github.com/pmndrs/zustand/discussions/1720
  */
-export const storageWithDates = createJSONStorage(() => sessionStorage, {
+export const storageWithDates = createJSONStorage(() => localStorage, {
   reviver: (_key, value) => {
     if (typeof value === "string" && !isNaN(Date.parse(value))) {
       return new Date(value);
