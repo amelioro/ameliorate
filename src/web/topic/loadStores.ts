@@ -13,16 +13,32 @@ import { z } from "zod";
 import { StorageValue } from "zustand/middleware";
 
 import { errorWithData } from "@/common/errorHandling";
+import {
+  loadCommentsFromApi,
+  loadCommentsFromLocalStorage,
+} from "@/web/comment/store/commentStore";
+import { loadDraftsFromLocalStorage } from "@/web/comment/store/draftStore";
+import {
+  populateDiagramFromApi,
+  populateDiagramFromLocalStorage,
+} from "@/web/topic/store/loadActions";
 import { migrate } from "@/web/topic/store/migrate";
 import { TopicStoreState } from "@/web/topic/store/store";
 import { getPersistState, setTopicData } from "@/web/topic/store/utilActions";
 import { getTopicTitle } from "@/web/topic/store/utils";
+import { TopicData } from "@/web/topic/utils/apiConversion";
+import { loadActionConfig } from "@/web/view/actionConfigStore";
+import { loadView } from "@/web/view/currentViewStore/store";
+import { loadMiscTopicConfig } from "@/web/view/miscTopicConfigStore";
 import {
+  QuickView,
   QuickViewStoreState,
   currentVersion as currentViewsVersion,
   getPersistState as getViewsPersistState,
   initialStateWithBasicViews,
+  loadQuickViewsFromApi,
   loadQuickViewsFromDownloaded,
+  loadQuickViewsFromLocalStorage,
 } from "@/web/view/quickViewStore/store";
 
 const oldDownloadSchema1 = z.object({
@@ -150,4 +166,27 @@ export const uploadTopic = (
     .catch((error: unknown) => {
       throw error;
     });
+};
+
+export const loadStores = async (diagramData?: TopicData) => {
+  const onPlayground = diagramData === undefined;
+
+  // might be cleaner to have one `load` interface per store, that knows to use passed-in data vs storage?
+  if (onPlayground) {
+    await populateDiagramFromLocalStorage();
+    await loadQuickViewsFromLocalStorage();
+    await loadView("playground");
+    await loadActionConfig("playground");
+    await loadMiscTopicConfig("playground");
+    await loadCommentsFromLocalStorage();
+    await loadDraftsFromLocalStorage();
+  } else {
+    populateDiagramFromApi(diagramData);
+    loadQuickViewsFromApi(diagramData, diagramData.views as unknown as QuickView[]); // unknown cast is awkward but need until the viewState is shared with backend
+    await loadView(`${diagramData.creatorName}/${diagramData.title}`);
+    await loadActionConfig(`${diagramData.creatorName}/${diagramData.title}`);
+    await loadMiscTopicConfig(`${diagramData.creatorName}/${diagramData.title}`);
+    loadCommentsFromApi(diagramData, diagramData.comments);
+    await loadDraftsFromLocalStorage(`${diagramData.creatorName}/${diagramData.title}`);
+  }
 };
