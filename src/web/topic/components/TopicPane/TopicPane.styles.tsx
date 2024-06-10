@@ -3,37 +3,31 @@ import { Drawer, IconButton, css } from "@mui/material";
 
 import { nodeWidthRem } from "@/web/topic/components/Node/EditableNode.styles";
 
-export const PositionedDiv = styled.div`
-  display: flex;
-  position: relative;
-`;
-
-interface ButtonProps {
-  isLandscape: boolean;
+interface PositionProps {
+  anchor: "left" | "right" | "bottom";
 }
-
-const buttonOptions = {
-  shouldForwardProp: (prop: string) => !["isLandscape"].includes(prop),
+const positionOptions = {
+  shouldForwardProp: (prop: string) => !["anchor"].includes(prop),
 };
-
-export const TogglePaneButton = styled(IconButton, buttonOptions)<ButtonProps>`
-  position: absolute;
-  z-index: ${({ theme }) => theme.zIndex.appBar - 1};
-
-  ${({ isLandscape }) => {
-    if (isLandscape) {
+export const PositionedDiv = styled("div", positionOptions)<PositionProps>`
+  height: 100%;
+  display: flex;
+  ${({ anchor }) => {
+    if (anchor == "right") {
       return css`
-        right: 0;
-        transform: translateX(100%);
+        flex-direction: row-reverse;
       `;
-    } else {
+    } else if (anchor == "bottom") {
       return css`
-        right: 0;
-        top: 0;
-        transform: translateY(-100%);
+        flex-direction: column-reverse;
       `;
     }
   }}
+`;
+
+export const TogglePaneButton = styled(IconButton)`
+  align-self: flex-start;
+  z-index: ${({ theme }) => theme.zIndex.appBar - 1};
 `;
 
 interface DrawerProps {
