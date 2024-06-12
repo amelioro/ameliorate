@@ -3,8 +3,8 @@ import { PivotTableChart } from "@mui/icons-material";
 import { Box, Button, Tooltip, Typography } from "@mui/material";
 import {
   type MRT_ColumnDef,
-  MRT_FullScreenToggleButton,
   type MRT_TableInstance,
+  MRT_ToggleFullScreenButton,
   MRT_ToggleGlobalFilterButton,
   MaterialReactTable,
 } from "material-react-table";
@@ -261,7 +261,7 @@ export const CriteriaTable = () => {
           </Button>
         </Tooltip>
 
-        <MRT_FullScreenToggleButton table={table} />
+        <MRT_ToggleFullScreenButton table={table} />
       </>
     );
   };
