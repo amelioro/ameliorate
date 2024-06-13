@@ -1,8 +1,9 @@
 /* eslint-disable functional/no-let -- let is needed to reuse `before`-initialized variables across tests */
 import { Topic, User } from "@prisma/client";
 import shortUUID from "short-uuid";
-import { beforeEach, describe, expect, test } from "vitest";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 
+import * as commentCreated from "@/api/notifications/commentCreated";
 import { appRouter } from "@/api/routers/_app";
 import { Comment } from "@/common/comment";
 import { xprisma } from "@/db/extendedPrisma";
@@ -284,6 +285,81 @@ describe("handleChangesets", () => {
             })
         ).rejects.toThrow();
       });
+    });
+  });
+
+  describe("when a comment is created", () => {
+    let watcher: User;
+
+    beforeEach(async () => {
+      watcher = await xprisma.user.create({
+        data: { username: "watcher", authId: "watcher" },
+      });
+      await xprisma.watch.create({
+        data: {
+          topicId: topicWithoutAllowAnyEdit.id,
+          watcherUsername: watcher.username,
+          type: "all",
+        },
+      });
+    });
+
+    // a simple notification test is here as one api-to-end test
+    test("creates notifications", async () => {
+      const trpc = appRouter.createCaller({
+        userAuthId: notCreatorOfTopic.authId,
+        userEmailVerified: true,
+        user: notCreatorOfTopic,
+      });
+
+      const newComment = generateComment(notCreatorOfTopic, topicWithoutAllowAnyEdit);
+
+      await trpc.comment.handleChangesets({
+        topicId: topicWithoutAllowAnyEdit.id,
+        commentsToCreate: [newComment],
+        commentsToUpdate: [],
+        commentsToDelete: [],
+      });
+
+      const notifications = await xprisma.inAppNotification.findMany({
+        where: { notifiedUsername: watcher.username },
+      });
+      expect(notifications).toHaveLength(1);
+      expect(notifications[0]).toMatchObject({
+        notifiedUsername: watcher.username,
+        topicId: newComment.topicId,
+        type: "commentCreated",
+        data: {
+          commentId: newComment.id,
+        },
+        message: notCreatorOfTopic.username + ` commented: "${newComment.content}"`,
+        sourceUrl: `http://localhost:3000/creatorOfTopic/topicWithoutAllowAnyEdit/?comment=${newComment.id}`,
+        reason: "watching",
+      });
+    });
+
+    // assert that handleCommentCreated is invoked so that more comprehensive notification
+    // tests can be extracted to another more-focused file.
+    test("invokes handleCommentCreated", async () => {
+      const handleCommentCreatedSpy = vi.spyOn(commentCreated, "handleCommentCreated");
+
+      const trpc = appRouter.createCaller({
+        userAuthId: notCreatorOfTopic.authId,
+        userEmailVerified: true,
+        user: notCreatorOfTopic,
+      });
+
+      const newComment = generateComment(notCreatorOfTopic, topicWithoutAllowAnyEdit);
+
+      await trpc.comment.handleChangesets({
+        topicId: topicWithoutAllowAnyEdit.id,
+        commentsToCreate: [newComment],
+        commentsToUpdate: [],
+        commentsToDelete: [],
+      });
+
+      expect(handleCommentCreatedSpy).toHaveBeenCalledOnce();
+      expect(handleCommentCreatedSpy).toHaveBeenCalledWith(newComment);
     });
   });
 });

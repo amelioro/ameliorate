@@ -29,3 +29,5 @@ export const topicSchema = z.object({
   visibility: zVisibilityTypes,
   allowAnyoneToEdit: z.boolean(),
 });
+
+export type Topic = z.infer<typeof topicSchema>;

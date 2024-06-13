@@ -1,6 +1,6 @@
 import { AutoStories, Settings } from "@mui/icons-material";
 import { Box, Button, IconButton } from "@mui/material";
-import { Topic } from "@prisma/client";
+import { type Topic } from "@prisma/client";
 import {
   type MRT_ColumnDef,
   MRT_ShowHideColumnsButton,
@@ -50,6 +50,8 @@ const User: NextPage = () => {
       Cell: ({ row }) => (
         <Link href={`/${foundUser.username}/${row.original.title}`}>{row.original.title}</Link>
       ),
+      grow: false,
+      size: 250, // fits 30-40 chars which is probably most titles
     },
     {
       accessorKey: "description",
@@ -61,7 +63,6 @@ const User: NextPage = () => {
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
             overflow: "hidden",
-            maxWidth: "300px", // arbitrary number that fits a decent number of words
           }}
         >
           {row.original.description}
@@ -71,6 +72,7 @@ const User: NextPage = () => {
     {
       accessorKey: "visibility",
       header: "Visibility",
+      grow: false,
     },
     {
       accessorKey: "createdAt",
@@ -80,6 +82,7 @@ const User: NextPage = () => {
           {row.original.createdAt.toLocaleDateString()}
         </span>
       ),
+      grow: false,
     },
     {
       accessorKey: "updatedAt",
@@ -89,6 +92,7 @@ const User: NextPage = () => {
           {row.original.updatedAt.toLocaleDateString()}
         </span>
       ),
+      grow: false,
     },
   ];
 
@@ -106,6 +110,7 @@ const User: NextPage = () => {
       <MaterialReactTable
         columns={columnData}
         data={rowData}
+        layoutMode="grid"
         enableRowActions={hasEditAccess}
         renderRowActions={({ row }) => (
           <IconButton

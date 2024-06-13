@@ -4,7 +4,7 @@ import { ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import { CommentParentType } from "@/common/comment";
 import { Draft } from "@/web/comment/components/Draft";
 import { Thread } from "@/web/comment/components/Thread";
-import { useRootComments } from "@/web/comment/store/commentStore";
+import { useThreadStarterComments } from "@/web/comment/store/commentStore";
 import { useDraft } from "@/web/comment/store/draftStore";
 import { useSessionUser } from "@/web/common/hooks";
 import { playgroundUsername } from "@/web/topic/store/store";
@@ -22,8 +22,8 @@ export const CommentSection = ({ parentId, parentType }: Props) => {
   const myUsername = onPlayground ? playgroundUsername : sessionUser?.username;
 
   const showResolved = useShowResolvedComments();
-  const rootComments = useRootComments(parentId, parentType, showResolved);
-  const rootDraft = useDraft(parentId, parentType);
+  const threadStarterComments = useThreadStarterComments(parentId, parentType, showResolved);
+  const threadStarterDraft = useDraft(parentId, parentType);
 
   return (
     <>
@@ -36,18 +36,18 @@ export const CommentSection = ({ parentId, parentType }: Props) => {
 
       <ListItem disablePadding={false}>
         <div className="w-full space-y-2 text-wrap text-sm">
-          {rootComments.map((comment) => (
-            <Thread key={comment.id} myUsername={myUsername} rootComment={comment} />
+          {threadStarterComments.map((comment) => (
+            <Thread key={comment.id} myUsername={myUsername} threadStarterComment={comment} />
           ))}
 
-          {rootComments.length === 0 && <p className="text-center">No comments yet!</p>}
+          {threadStarterComments.length === 0 && <p className="text-center">No comments yet!</p>}
 
           {myUsername && (
             <Draft
               authorName={myUsername}
               parentId={parentId}
               parentType={parentType}
-              startingText={rootDraft?.content}
+              startingText={threadStarterDraft?.content}
             />
           )}
         </div>

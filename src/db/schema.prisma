@@ -13,15 +13,19 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String   @unique @db.VarChar(39) // uses collation to ensure comparisons are case insensitive, not yet supported by prisma schema https://github.com/prisma/prisma/issues/16781
-  authId    String   @unique @db.VarChar
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                        Int      @id @default(autoincrement())
+  username                  String   @unique @db.VarChar(39) // uses collation to ensure comparisons are case insensitive, not yet supported by prisma schema https://github.com/prisma/prisma/issues/16781
+  authId                    String   @unique @db.VarChar
+  receiveEmailNotifications Boolean  @default(true)
+  createdAt                 DateTime @default(now())
+  updatedAt                 DateTime @updatedAt
 
-  topics   Topic[]
-  scores   UserScore[]
-  comments Comment[]
+  topics        Topic[]
+  scores        UserScore[]
+  comments      Comment[]
+  notifications InAppNotification[]
+  watches       Watch[]
+  subscriptions Subscription[]
 
   @@index([username])
   @@index([authId])
@@ -38,12 +42,14 @@ model Topic {
   createdAt         DateTime       @default(now())
   updatedAt         DateTime       @updatedAt
 
-  creator    User        @relation(fields: [creatorName], references: [username], onDelete: Cascade)
-  nodes      Node[]
-  edges      Edge[]
-  userScores UserScore[]
-  views      View[]
-  comments   Comment[]
+  creator          User                @relation(fields: [creatorName], references: [username], onDelete: Cascade)
+  nodes            Node[]
+  edges            Edge[]
+  userScores       UserScore[]
+  views            View[]
+  comments         Comment[]
+  watches          Watch[]
+  allNotifications InAppNotification[] // this doesn't seem very useful, but there's an error if we don't add this side of the relation
 
   @@unique([title, creatorName])
   @@index([creatorName])
@@ -192,7 +198,7 @@ enum ViewType {
 
 model Comment {
   id               String            @id
-  authorName       String            @db.VarChar(39) // uses collation to ensure comparisons are case insensitive, not yet supported by prisma schema
+  authorName       String            @db.VarChar(39)
   topicId          Int
   parentId         String?
   parentType       CommentParentType
@@ -213,4 +219,70 @@ enum CommentParentType {
   node
   edge
   comment
+}
+
+model InAppNotification {
+  id               Int              @id @default(autoincrement())
+  notifiedUsername String           @db.VarChar(39)
+  type             NotificationType
+  topicId          Int
+  data             Json
+  message          String           @db.VarChar(500) // arbitrary max that would be close to fitting in a row of a table
+  sourceUrl        String           @db.VarChar(1000) // hm how long should a URL reasonably be? likely these will be created by the app, so shouldn't be too long...
+  reason           ReasonType
+  createdAt        DateTime         @default(now())
+
+  notifiedUser User  @relation(fields: [notifiedUsername], references: [username], onDelete: Cascade)
+  topic        Topic @relation(fields: [topicId], references: [id], onDelete: NoAction)
+
+  @@index([notifiedUsername])
+  @@map("inAppNotifications")
+}
+
+enum NotificationType {
+  commentCreated
+}
+
+enum ReasonType {
+  watching
+  subscribed
+}
+
+model Watch {
+  id              Int       @id @default(autoincrement())
+  watcherUsername String    @db.VarChar(39)
+  topicId         Int
+  type            WatchType
+
+  watcher User  @relation(fields: [watcherUsername], references: [username], onDelete: Cascade)
+  topic   Topic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  @@unique([watcherUsername, topicId])
+  @@index([watcherUsername])
+  @@index([topicId])
+  @@map("watches")
+}
+
+enum WatchType {
+  participatingOrMentions
+  all
+  ignore
+}
+
+model Subscription {
+  id                 Int                    @id @default(autoincrement())
+  subscriberUsername String                 @db.VarChar(39)
+  sourceId           String
+  sourceType         SubscriptionSourceType
+
+  subscriber User @relation(fields: [subscriberUsername], references: [username], onDelete: Cascade)
+
+  @@unique([subscriberUsername, sourceId])
+  @@index([subscriberUsername])
+  @@index([sourceId])
+  @@map("subscriptions")
+}
+
+enum SubscriptionSourceType {
+  threadStarterComment
 }

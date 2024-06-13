@@ -262,6 +262,15 @@ export const topicRouter = router({
         })),
       });
 
+      // default creator as a watcher of the topic; no need to check if a watch exists because topic is new
+      await xprisma.watch.create({
+        data: {
+          watcherUsername: opts.ctx.user.username,
+          topicId: newTopic.id,
+          type: "all",
+        },
+      });
+
       return newTopic;
     }),
 
