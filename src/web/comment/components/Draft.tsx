@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { CommentParentType } from "@/common/comment";
 import { upsertComment } from "@/web/comment/store/commentStore";
 import { deleteDraft, setDraft } from "@/web/comment/store/draftStore";
+import { trpc } from "@/web/common/trpc";
 
 interface Props {
   authorName: string;
@@ -25,6 +26,8 @@ export const Draft = ({
   commentId,
   onDone,
 }: Props) => {
+  const utils = trpc.useContext();
+
   const [draftHasText, setDraftHasText] = useState(startingText && startingText.length > 0);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -70,6 +73,15 @@ export const Draft = ({
             onClick={() => {
               if (!inputRef.current?.value) throw new Error("tried sending comment without text");
               upsertComment(authorName, parentId, parentType, inputRef.current.value, commentId);
+              // TODO?: super-jank/unreliable to use a timeout, but comment store's
+              // apiSyncerMiddleware is what makes the comment creation query, and it's outside of
+              // the react tree. usually we rely on the tree's trpc.useContext() to invalidate
+              // queries, so we'd have to figure out how to invalidate outside of the tree.
+              setTimeout(() => {
+                if (parentType === "comment" && parentId) {
+                  void utils.subscriptions.find.invalidate({ sourceId: parentId });
+                }
+              }, 1000);
               completeAction();
             }}
             variant="contained"

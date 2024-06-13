@@ -1,13 +1,16 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AutoStories, Settings } from "@mui/icons-material";
+import { AutoStories, Info, Settings, Visibility } from "@mui/icons-material";
 import {
   Divider,
+  IconButton,
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  MenuItem,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import NextLink from "next/link";
 import { useEffect } from "react";
@@ -15,8 +18,10 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { topicSchema } from "@/common/topic";
+import { WatchType, watchTypes } from "@/common/watch";
 import { Link } from "@/web/common/components/Link";
 import { useSessionUser } from "@/web/common/hooks";
+import { trpc } from "@/web/common/trpc";
 import { CommentSection } from "@/web/topic/components/TopicPane/CommentSection";
 import { setTopicDetails } from "@/web/topic/store/topicActions";
 import { useTopic } from "@/web/topic/store/topicHooks";
@@ -36,6 +41,17 @@ export const TopicDetails = () => {
 
   const topic = useTopic();
   const isPlaygroundTopic = topic.id === undefined;
+
+  const willShowWatch = !isPlaygroundTopic && !!sessionUser;
+  const findWatch = trpc.watch.find.useQuery(
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- non-playground topics will have an id
+    { topicId: topic.id! },
+    { enabled: willShowWatch, staleTime: Infinity }
+  );
+  const setWatch = trpc.watch.setWatch.useMutation({
+    onSuccess: () => findWatch.refetch(),
+  });
+  const showWatch = willShowWatch && findWatch.isSuccess;
 
   const {
     register,
@@ -83,6 +99,64 @@ export const TopicDetails = () => {
             }
           />
         </ListItem>
+
+        {showWatch && (
+          <ListItem disablePadding={false} sx={{ paddingTop: 1 }}>
+            <ListItemIcon>
+              <Visibility />
+            </ListItemIcon>
+            <TextField
+              select
+              label="Watch"
+              value={findWatch.data?.type ?? "participatingOrMentions"}
+              fullWidth
+              size="small"
+              onChange={(event) => {
+                setWatch.mutate({ topicId: topic.id, type: event.target.value as WatchType });
+              }}
+            >
+              {watchTypes.map((type) => (
+                <MenuItem key={type} value={type}>
+                  {type}
+                </MenuItem>
+              ))}
+            </TextField>
+            <Tooltip
+              title={
+                <span>
+                  Your watch determines when you'll receive notifications for comments this topic.
+                  <br />
+                  <br />
+                  "participatingOrMentions" will notify you when comments are added to a thread that
+                  you're participating in (the mentions half is not implemented yet).
+                  <br />
+                  <br />
+                  "all" will notify you when anyone comments.
+                  <br />
+                  <br />
+                  "ignore" will not notify you for anything."
+                </span>
+              }
+              enterTouchDelay={0} // allow touch to immediately trigger
+              leaveTouchDelay={Infinity} // touch-away to close on mobile, since message is long
+            >
+              <IconButton
+                color="info"
+                aria-label="Watch info"
+                sx={{
+                  // Don't make it look like clicking will do something, since it won't.
+                  // Using a button here is an attempt to make it accessible, since the tooltip will show
+                  // on focus.
+                  cursor: "default",
+                  alignSelf: "center",
+                }}
+              >
+                <Info />
+              </IconButton>
+            </Tooltip>
+          </ListItem>
+        )}
+
         <ListItem disablePadding={false} sx={{ paddingTop: 1 }}>
           <TextField
             {...register("description")}

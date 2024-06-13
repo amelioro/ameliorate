@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Check, MoreHoriz, RemoveDone } from "@mui/icons-material";
+import { Check, MoreHoriz, Notifications, NotificationsOff, RemoveDone } from "@mui/icons-material";
 import { Button, IconButton, MenuItem } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 
@@ -10,6 +10,7 @@ import { deleteDraft, useDraft } from "@/web/comment/store/draftStore";
 import { Menu } from "@/web/common/components/Menu/Menu";
 import { ProfileIcon } from "@/web/common/components/ProfileIcon/ProfileIcon";
 import { useSessionUser } from "@/web/common/hooks";
+import { trpc } from "@/web/common/trpc";
 import { useOnPlayground } from "@/web/topic/store/topicHooks";
 import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 
@@ -31,6 +32,22 @@ export const Comment = ({ comment }: Props) => {
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const onPlayground = useOnPlayground();
 
+  const isThreadStarterComment = checkIsThreadStarterComment(comment.parentType);
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- if it's not a thread starter, the parent id is one
+  const threadStarterCommentId = isThreadStarterComment ? comment.id : comment.parentId!;
+  const willShowSubscribeBell = !onPlayground && !!sessionUser && isThreadStarterComment;
+
+  const findSubscription = trpc.subscriptions.find.useQuery(
+    { sourceId: threadStarterCommentId },
+    { enabled: willShowSubscribeBell, staleTime: Infinity } // don't requery if we've already pulled the subscription, until we invalidate
+  );
+  const subscribe = trpc.subscriptions.create.useMutation({
+    onSuccess: () => findSubscription.refetch(),
+  });
+  const unsubscribe = trpc.subscriptions.delete.useMutation({
+    onSuccess: () => findSubscription.refetch(),
+  });
+
   const commentRef = useRef<HTMLDivElement | null>(null);
   const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
@@ -40,7 +57,7 @@ export const Comment = ({ comment }: Props) => {
 
   const userCanEditComment = onPlayground || comment.authorName === sessionUser?.username;
   const userCanDeleteComment = userCanEditTopicData || comment.authorName === sessionUser?.username;
-  const isThreadStarterComment = checkIsThreadStarterComment(comment.parentType);
+  const showSubscribeBell = willShowSubscribeBell && findSubscription.isSuccess;
   const moreMenuOpen = Boolean(moreAnchorEl);
 
   useEffect(() => {
@@ -97,6 +114,20 @@ export const Comment = ({ comment }: Props) => {
                 <RemoveDone />
               </IconButton>
             ))}
+          {showSubscribeBell && (
+            <IconButton
+              color="inherit"
+              title={findSubscription.data === null ? "Subscribe" : "Unsubscribe"}
+              aria-label={findSubscription.data === null ? "Subscribe" : "Unsubscribe"}
+              onClick={
+                findSubscription.data === null
+                  ? () => subscribe.mutate({ sourceId: threadStarterCommentId })
+                  : () => unsubscribe.mutate({ sourceId: threadStarterCommentId })
+              }
+            >
+              {findSubscription.data === null ? <Notifications /> : <NotificationsOff />}
+            </IconButton>
+          )}
           <IconButton
             color="inherit"
             title="More"
