@@ -234,3 +234,34 @@ describe("setData", () => {
     });
   });
 });
+
+describe("create", () => {
+  test("creates a watch on the topic for the creator", async () => {
+    const trpc = appRouter.createCaller({
+      userAuthId: userWithTopics.authId,
+      userEmailVerified: true,
+      user: userWithTopics,
+    });
+
+    const topic = await trpc.topic.create({
+      topic: {
+        title: "newTopic",
+        description: "",
+        visibility: "public",
+        allowAnyoneToEdit: false,
+      },
+      quickViews: [],
+    });
+
+    const watches = await xprisma.watch.findMany({
+      where: { watcherUsername: userWithTopics.username, topicId: topic.id },
+    });
+
+    expect(watches).toHaveLength(1);
+    expect(watches[0]).toMatchObject({
+      watcherUsername: userWithTopics.username,
+      topicId: topic.id,
+      type: "all",
+    });
+  });
+});

@@ -2,6 +2,7 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { isLoggedIn } from "@/api/auth";
+import { handleCommentCreated } from "@/api/notifications/commentCreated";
 import { procedure, router } from "@/api/trpc";
 import { Comment, commentSchema, userCanDeleteComment } from "@/common/comment";
 import { topicSchema } from "@/common/topic";
@@ -93,5 +94,14 @@ export const commentRouter = router({
           });
         }
       });
+
+      /* eslint-disable functional/no-loop-statements -- seems like functional methods don't work with promises nicely https://stackoverflow.com/questions/37576685/using-async-await-with-a-foreach-loop#comment65277758_37576787 */
+      for (const comment of opts.input.commentsToCreate) {
+        // Create/send notifications
+        // Future?: if performance is a concern, or we want to handle notification errors independent of the comment requests,
+        // we can consider triggering an event to start a separate process for this.
+        // Would probably need to look into different infrastructure for that though, which sounds like work that isn't worth it right now.
+        await handleCommentCreated(comment);
+      }
     }),
 });

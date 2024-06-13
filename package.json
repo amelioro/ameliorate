@@ -123,7 +123,7 @@
     "postcss": "8.4.38",
     "prettier": "2.7.1",
     "prisma": "5.1.0",
-    "prismock": "1.21.1",
+    "prismock": "1.31.1",
     "storybook": "7.0.0-alpha.47",
     "storybook-addon-next": "1.6.10",
     "tailwindcss": "3.4.3",
