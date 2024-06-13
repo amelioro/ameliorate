@@ -63,6 +63,7 @@ export const reservedFirstLevelEndpointNames = [
   "media",
   "new",
   "news",
+  "notifications",
   "now",
   "org",
   "organizations",
