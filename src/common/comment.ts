@@ -24,16 +24,16 @@ export const commentSchema = z
     return comment.parentId !== null;
   }, "only non-topic comments should have a parentId - topic comments will rely on topicId.")
   .refine((comment) => {
-    if (!isRootComment(comment.parentType)) return comment.resolved === null;
+    if (!isThreadStarterComment(comment.parentType)) return comment.resolved === null;
     return typeof comment.resolved === "boolean";
-  }, "only root comments can be resolved or unresolved.");
+  }, "only thread-starter comments can be resolved or unresolved.");
 
 export type Comment = z.infer<typeof commentSchema>;
 
 /**
- * "root" means that the comment starts a thread, i.e. is not a reply to another comment
+ * "thread-starter" means that the comment starts a thread, i.e. is not a reply to another comment
  */
-export const isRootComment = (parentType: CommentParentType) => parentType !== "comment";
+export const isThreadStarterComment = (parentType: CommentParentType) => parentType !== "comment";
 
 export const userCanDeleteComment = (
   username: string,

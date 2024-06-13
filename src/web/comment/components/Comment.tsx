@@ -3,7 +3,7 @@ import { Check, MoreHoriz, RemoveDone } from "@mui/icons-material";
 import { Button, IconButton, MenuItem } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 
-import { isRootComment as checkIsRootComment } from "@/common/comment";
+import { isThreadStarterComment as checkIsThreadStarterComment } from "@/common/comment";
 import { Draft } from "@/web/comment/components/Draft";
 import { StoreComment, deleteComment, resolveComment } from "@/web/comment/store/commentStore";
 import { deleteDraft, useDraft } from "@/web/comment/store/draftStore";
@@ -40,7 +40,7 @@ export const Comment = ({ comment }: Props) => {
 
   const userCanEditComment = onPlayground || comment.authorName === sessionUser?.username;
   const userCanDeleteComment = userCanEditTopicData || comment.authorName === sessionUser?.username;
-  const isRootComment = checkIsRootComment(comment.parentType);
+  const isThreadStarterComment = checkIsThreadStarterComment(comment.parentType);
   const moreMenuOpen = Boolean(moreAnchorEl);
 
   useEffect(() => {
@@ -76,7 +76,7 @@ export const Comment = ({ comment }: Props) => {
         </div>
 
         <div>
-          {isRootComment &&
+          {isThreadStarterComment &&
             userCanDeleteComment &&
             (!comment.resolved ? (
               <IconButton
@@ -137,7 +137,7 @@ export const Comment = ({ comment }: Props) => {
       {showConfirmDelete && (
         // jank "-top-2" to override the parent's space-y-2 that adds an equivalent margin
         <div className="absolute -top-2 left-0 flex size-full items-center justify-center bg-gray-100">
-          <span className="m-2">Delete this {isRootComment ? "thread" : "comment"}?</span>
+          <span className="m-2">Delete this {isThreadStarterComment ? "thread" : "comment"}?</span>
           <Button
             onClick={() => {
               setShowConfirmDelete(false);

@@ -5,16 +5,16 @@ import { useDraft } from "@/web/comment/store/draftStore";
 
 interface Props {
   myUsername: string | undefined;
-  rootComment: StoreComment;
+  threadStarterComment: StoreComment;
 }
 
-export const Thread = ({ myUsername, rootComment }: Props) => {
-  const threadChildrenComments = useThreadChildrenComments(rootComment.id);
-  const draft = useDraft(rootComment.id, "comment");
+export const Thread = ({ myUsername, threadStarterComment }: Props) => {
+  const threadChildrenComments = useThreadChildrenComments(threadStarterComment.id);
+  const draft = useDraft(threadStarterComment.id, "comment");
 
   return (
     <div className="space-y-3 rounded border p-3 shadow">
-      <Comment comment={rootComment} />
+      <Comment comment={threadStarterComment} />
 
       {threadChildrenComments.map((comment) => (
         <Comment key={comment.id} comment={comment} />
@@ -23,7 +23,7 @@ export const Thread = ({ myUsername, rootComment }: Props) => {
       {myUsername && (
         <Draft
           authorName={myUsername}
-          parentId={rootComment.id}
+          parentId={threadStarterComment.id}
           parentType="comment"
           startingText={draft?.content}
         />

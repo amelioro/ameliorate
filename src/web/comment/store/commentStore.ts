@@ -2,7 +2,7 @@ import shortUUID from "short-uuid";
 import { devtools, persist } from "zustand/middleware";
 import { createWithEqualityFn } from "zustand/traditional";
 
-import { Comment, CommentParentType, isRootComment } from "@/common/comment";
+import { Comment, CommentParentType, isThreadStarterComment } from "@/common/comment";
 import { errorWithData } from "@/common/errorHandling";
 import { withDefaults } from "@/common/object";
 import { apiSyncer } from "@/web/comment/store/apiSyncerMiddleware";
@@ -52,7 +52,7 @@ const useCommentStore = createWithEqualityFn<CommentStoreState>()(
 );
 
 // hooks
-export const useRootComments = (
+export const useThreadStarterComments = (
   parentId: string | null,
   parentType: CommentParentType,
   showResolved: boolean
@@ -124,7 +124,7 @@ export const upsertComment = (
         parentId,
         parentType,
         content,
-        resolved: isRootComment(parentType) ? false : null,
+        resolved: isThreadStarterComment(parentType) ? false : null,
         createdAt: contentUpdatedAt,
         contentUpdatedAt: contentUpdatedAt,
       });
@@ -138,7 +138,7 @@ export const deleteComment = (commentId: string) => {
       comments: state.comments.filter(
         (comment) =>
           comment.id !== commentId &&
-          // delete children, if this is a root commnt
+          // delete children, if this is a thread-starter comment
           !(comment.parentId === commentId && comment.parentType === "comment")
       ),
     }),
@@ -209,14 +209,16 @@ export const viewComment = (commentId: string) => {
   const comment = state.comments.find((comment) => comment.id === commentId);
   if (!comment) return;
 
-  const rootComment =
+  const threadStarterComment =
     comment.parentType === "comment"
       ? state.comments.find((c) => c.id === comment.parentId)
       : comment;
-  if (!rootComment)
-    throw errorWithData("couldn't find root comment", comment.parentId, state.comments);
+  if (!threadStarterComment)
+    throw errorWithData("couldn't find thread-starter comment", comment.parentId, state.comments);
 
-  const commentParentGraphPartId = rootComment.parentType === "topic" ? null : rootComment.parentId;
+  const commentParentGraphPartId =
+    threadStarterComment.parentType === "topic" ? null : threadStarterComment.parentId;
+
   setSelected(commentParentGraphPartId);
   setIsTopicPaneOpen(true);
 };
