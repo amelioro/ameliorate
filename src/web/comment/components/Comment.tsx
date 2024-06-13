@@ -39,7 +39,7 @@ export const Comment = ({ comment }: Props) => {
 
   const findSubscription = trpc.subscriptions.find.useQuery(
     { sourceId: threadStarterCommentId },
-    { enabled: willShowSubscribeBell, staleTime: Infinity } // don't requery if we've already pulled the subscription, until we invalidate
+    { enabled: willShowSubscribeBell }
   );
   const subscribe = trpc.subscriptions.create.useMutation({
     onSuccess: () => findSubscription.refetch(),

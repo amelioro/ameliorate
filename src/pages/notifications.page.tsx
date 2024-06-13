@@ -17,10 +17,7 @@ type RowData = InAppNotification & { topic: Topic };
 const Notifications: NextPage = () => {
   const utils = trpc.useContext();
 
-  const findNotifications = trpc.notification.findAll.useQuery(
-    undefined,
-    { staleTime: Infinity } // no need to make this update without a page refresh
-  );
+  const findNotifications = trpc.notification.findAll.useQuery(undefined);
 
   const deleteNotification = trpc.notification.delete.useMutation({
     onMutate: (variables) => {
