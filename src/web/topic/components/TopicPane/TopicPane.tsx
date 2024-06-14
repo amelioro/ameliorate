@@ -1,7 +1,8 @@
 import { AutoStories, ChevronLeft, ChevronRight, KeyboardArrowDown } from "@mui/icons-material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { Tab, Box, useMediaQuery } from "@mui/material";
+import { Box, Tab, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import React, { ReactNode } from "react";
 
 import { GraphPartDetails } from "@/web/topic/components/TopicPane/GraphPartDetails";
 import { TopicDetails } from "@/web/topic/components/TopicPane/TopicDetails";
@@ -12,15 +13,14 @@ import {
 } from "@/web/topic/components/TopicPane/TopicPane.styles";
 import { TopicViews } from "@/web/topic/components/TopicPane/TopicViews";
 import {
-  setIsTopicPaneOpen,
   setIsDetailsOpen,
+  setIsTopicPaneOpen,
   setIsViewsOpen,
   setSelectedTab,
   usePaneStore,
   useViewportWidth,
 } from "@/web/topic/components/TopicPane/paneStore";
 import { useSelectedGraphPart } from "@/web/view/currentViewStore/store";
-import React, { ReactNode } from "react";
 
 const IconAnchorMap = {
   left: {

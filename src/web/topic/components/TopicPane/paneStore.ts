@@ -1,5 +1,5 @@
-import { create } from "zustand";
 import React from "react";
+import { create } from "zustand";
 
 interface PaneStoreState {
   isTopicPaneOpen: boolean;
@@ -53,16 +53,15 @@ export const viewDetails = () => {
 export const useViewportWidth = (): number => {
   const [value, setValue] = React.useState<number>(window.innerWidth);
 
-  const resizeEvent = () => {
-    setValue(window.innerWidth);
-  };
-
   React.useEffect(() => {
+    const resizeEvent = () => {
+      setValue(window.innerWidth);
+    };
     addEventListener("resize", resizeEvent);
     return () => {
       removeEventListener("resize", resizeEvent);
     };
-  }, [resizeEvent]);
+  }, []);
 
   return value;
 };
