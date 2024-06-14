@@ -1,5 +1,5 @@
 import { Global } from "@emotion/react";
-import { Box, useMediaQuery } from "@mui/material";
+import { Box } from "@mui/material";
 
 import { ContextMenu } from "@/web/common/components/ContextMenu/ContextMenu";
 import { CriteriaTable } from "@/web/topic/components/CriteriaTable/CriteriaTable";
@@ -9,8 +9,6 @@ import { TopicPane } from "@/web/topic/components/TopicPane/TopicPane";
 import { useFormat } from "@/web/view/currentViewStore/store";
 
 export const TopicWorkspace = () => {
-  const isLandscape = useMediaQuery("(orientation: landscape)");
-
   const format = useFormat();
 
   return (
@@ -19,15 +17,13 @@ export const TopicWorkspace = () => {
 
       <Box
         sx={{
+          position: "relative",
           width: "100%",
           height: "100%",
-          display: "flex",
-          position: "relative",
           overflow: "auto",
-          flexDirection: isLandscape ? "row" : "column-reverse",
         }}
       >
-        <TopicPane isLandscape={isLandscape} />
+        <TopicPane />
 
         <Box height="100%" flex="1" overflow="auto">
           {format === "table" && <CriteriaTable />}
