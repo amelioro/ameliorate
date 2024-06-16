@@ -36,6 +36,7 @@ import { getDisplayNodes } from "@/web/topic/components/Diagram/externalFlowStor
 import { downloadTopic, uploadTopic } from "@/web/topic/loadStores";
 import { useOnPlayground } from "@/web/topic/store/topicHooks";
 import { resetTopicData } from "@/web/topic/store/utilActions";
+import { hotkeys } from "@/web/topic/utils/hotkeys";
 import {
   toggleFlashlightMode,
   toggleReadonlyMode,
@@ -244,12 +245,12 @@ export const MoreActionsDrawer = ({
                 <>
                   <ToggleButton
                     value={readonlyMode}
-                    title="Read-only mode"
-                    aria-label="Read-only mode"
+                    title={`Read-only mode (${hotkeys.readonlyMode})`}
+                    aria-label={`Read-only mode (${hotkeys.readonlyMode})`}
                     color="secondary"
                     size="small"
                     selected={readonlyMode}
-                    onClick={() => toggleReadonlyMode(!readonlyMode)}
+                    onClick={() => toggleReadonlyMode()}
                     sx={{ borderRadius: "50%", border: "0" }}
                   >
                     <EditOff />

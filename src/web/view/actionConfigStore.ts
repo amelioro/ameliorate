@@ -27,7 +27,7 @@ const useActionConfigStore = create<ActionConfigStoreState>()(
     // removing the need to write a migration for every new field
     merge: (persistedState, _currentState) =>
       withDefaults(persistedState as Partial<ActionConfigStoreState>, initialState),
-  })
+  }),
 );
 
 // hooks
@@ -52,8 +52,9 @@ export const toggleFlashlightMode = (flashlight: boolean) => {
   useActionConfigStore.setState({ flashlightMode: flashlight });
 };
 
-export const toggleReadonlyMode = (readonly: boolean) => {
-  useActionConfigStore.setState({ readonlyMode: readonly });
+export const toggleReadonlyMode = () => {
+  const readonly = useActionConfigStore.getState().readonlyMode;
+  useActionConfigStore.setState({ readonlyMode: !readonly });
 };
 
 export const loadActionConfig = async (persistId: string) => {
