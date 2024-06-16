@@ -38,6 +38,7 @@ export const DetailsResearchSection = ({ node }: Props) => {
             name: "asksAbout",
             parent: node.type,
           }}
+          context="details"
           selectNewNode={false}
         />
 
@@ -53,6 +54,7 @@ export const DetailsResearchSection = ({ node }: Props) => {
                 name: "relevantFor",
                 parent: node.type,
               }}
+              context="details"
               selectNewNode={false}
             />
             <AddNodeButton
@@ -64,6 +66,7 @@ export const DetailsResearchSection = ({ node }: Props) => {
                 name: "relevantFor",
                 parent: node.type,
               }}
+              context="details"
               selectNewNode={false}
             />
           </>
@@ -80,7 +83,7 @@ export const DetailsResearchSection = ({ node }: Props) => {
       >
         {researchNodes.length > 0 ? (
           researchNodes.map((researchNode) => (
-            <EditableNode key={researchNode.id} node={researchNode} supplemental />
+            <EditableNode key={researchNode.id} node={researchNode} context="details" />
           ))
         ) : (
           <Typography>No research nodes yet!</Typography>

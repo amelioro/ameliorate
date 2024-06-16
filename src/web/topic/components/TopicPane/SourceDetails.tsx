@@ -36,7 +36,9 @@ export const SourceDetails = ({ sourceNode }: Props) => {
           <Typography>No relevant parts yet!</Typography>
         )}
         {nodesRelevantFor.length > 0 &&
-          nodesRelevantFor.map((node) => <EditableNode key={node.id} node={node} supplemental />)}
+          nodesRelevantFor.map((node) => (
+            <EditableNode key={node.id} node={node} context="details" />
+          ))}
         {edgesRelevantFor.length > 0 &&
           edgesRelevantFor.map((edge) => <StandaloneEdge key={edge.id} edge={edge} />)}
       </Stack>
@@ -58,6 +60,7 @@ export const SourceDetails = ({ sourceNode }: Props) => {
             name: "sourceOf",
             parent: "fact",
           }}
+          context="details"
           selectNewNode={false}
         />
         <AddNodeButton
@@ -69,6 +72,7 @@ export const SourceDetails = ({ sourceNode }: Props) => {
             name: "mentions",
             parent: "source",
           }}
+          context="details"
           selectNewNode={false}
         />
       </Stack>
@@ -84,7 +88,7 @@ export const SourceDetails = ({ sourceNode }: Props) => {
       >
         {mentions.length > 0 ? (
           mentions.map((mentioned) => (
-            <EditableNode key={mentioned.id} node={mentioned} supplemental />
+            <EditableNode key={mentioned.id} node={mentioned} context="details" />
           ))
         ) : (
           <Typography>No mentioned facts or sources yet!</Typography>

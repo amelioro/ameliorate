@@ -3,6 +3,11 @@ import { memo, useEffect, useRef } from "react";
 
 import { useSessionUser } from "@/web/common/hooks";
 import { openContextMenu } from "@/web/common/store/contextMenuActions";
+import {
+  NodeContext,
+  clearNewlyAddedNode,
+  isNodeNewlyAdded,
+} from "@/web/common/store/ephemeralStore";
 import { CommonIndicators } from "@/web/topic/components/Indicator/CommonIndicators";
 import {
   LeftCornerStatusIndicators,
@@ -14,7 +19,7 @@ import {
   StyledTextareaAutosize,
   YEdgeBox,
 } from "@/web/topic/components/Node/EditableNode.styles";
-import { finishAddingNode, setCustomNodeType, setNodeLabel } from "@/web/topic/store/actions";
+import { setCustomNodeType, setNodeLabel } from "@/web/topic/store/actions";
 import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { Node } from "@/web/topic/utils/graph";
 import { nodeDecorations } from "@/web/topic/utils/node";
@@ -24,19 +29,11 @@ import { useFillNodesWithColor } from "@/web/view/userConfigStore";
 
 interface Props {
   node: Node;
-  /**
-   * If a node is supplemental, clicking it won't select it. This is useful for nodes in the details
-   * pane, where you may want to edit text or score without selecting it (and thus displaying a new
-   * node's detail pane).
-   *
-   * Potentially  this could be avoided by turning off "click to select" and requiring clicking on
-   * the details button to select, but selecting with a click seems intuitive.
-   */
-  supplemental?: boolean;
+  context: NodeContext;
   className?: string;
 }
 
-const EditableNodeBase = ({ node, supplemental = false, className = "" }: Props) => {
+const EditableNodeBase = ({ node, context, className = "" }: Props) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const unrestrictedEditing = useUnrestrictedEditing();
@@ -46,8 +43,9 @@ const EditableNodeBase = ({ node, supplemental = false, className = "" }: Props)
   const theme = useTheme();
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
   useEffect(() => {
-    if (!node.data.newlyAdded || !textAreaRef.current) return;
-    finishAddingNode(node.id);
+    if (!isNodeNewlyAdded(node.id, context) || !textAreaRef.current) return;
+
+    clearNewlyAddedNode();
     const textArea = textAreaRef.current;
 
     // No idea why timeout is needed here, but without it, and in the flow, focus is not moved to
@@ -74,8 +72,8 @@ const EditableNodeBase = ({ node, supplemental = false, className = "" }: Props)
 
   // Require selecting a node before editing it, because oftentimes you'll want to select a node to
   // view more details, and the editing will be distracting. Only edit after clicking when selected.
-  // Supplemental nodes are always editable, because clicking does not select them.
-  const editable = userCanEditTopicData && (supplemental || selected);
+  // Details nodes are always editable, because clicking does not select them.
+  const editable = userCanEditTopicData && (context === "details" || selected);
 
   const customizable = userCanEditTopicData && (unrestrictedEditing || node.type === "custom");
 
@@ -111,7 +109,9 @@ const EditableNodeBase = ({ node, supplemental = false, className = "" }: Props)
   return (
     <NodeBox
       className={className + (selected ? " selected" : "")}
-      onClick={() => !supplemental && setSelected(node.id)}
+      onClick={() => {
+        if (context != "details") setSelected(node.id);
+      }}
       onContextMenu={(event) => openContextMenu(event, { node })}
       sx={nodeStyles}
     >

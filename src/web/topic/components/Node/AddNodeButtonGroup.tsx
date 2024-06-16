@@ -51,11 +51,12 @@ const AddNodeButtonGroup = memo(
             as={as}
             toNodeType={toNodeType}
             relation={relation}
+            context="diagram"
           />
         ))}
       </ButtonGroup>
     );
-  }
+  },
 );
 
 // eslint-disable-next-line functional/immutable-data

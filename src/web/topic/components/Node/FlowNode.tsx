@@ -95,7 +95,7 @@ export const FlowNode = (flowNode: NodeProps) => {
         }}
       >
         <NodeHandle node={node} direction="parent" orientation={orientation} />
-        <StyledEditableNode node={node} className={`spotlight-${spotlight}`} />
+        <StyledEditableNode node={node} context="diagram" className={`spotlight-${spotlight}`} />
         <NodeHandle node={node} direction="child" orientation={orientation} />
       </motion.div>
 

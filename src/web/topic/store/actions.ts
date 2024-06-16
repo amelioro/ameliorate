@@ -41,7 +41,7 @@ export const setScore = (username: string, graphPartId: string, score: Score) =>
 
   // update implicit child claim's score if it exists
   const implicitRootClaim = state.nodes.find(
-    (node) => node.data.arguedDiagramPartId === graphPartId
+    (node) => node.data.arguedDiagramPartId === graphPartId,
   );
   if (implicitRootClaim) {
     /* eslint-disable functional/immutable-data, no-param-reassign */
@@ -130,18 +130,4 @@ export const setGraphPartNotes = (graphPart: GraphPart, value: string) => {
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   useTopicStore.setState(finishDraft(state), false, "setGraphPartNotes");
-};
-
-export const finishAddingNode = (nodeId: string) => {
-  const state = createDraft(useTopicStore.getState());
-
-  const node = findNodeOrThrow(nodeId, state.nodes);
-
-  /* eslint-disable functional/immutable-data, no-param-reassign */
-  node.data.newlyAdded = false;
-  /* eslint-enable functional/immutable-data, no-param-reassign */
-
-  useTopicStore.temporal.getState().pause();
-  useTopicStore.setState(finishDraft(state), false, "finishAddingNode");
-  useTopicStore.temporal.getState().resume();
 };

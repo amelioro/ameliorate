@@ -27,7 +27,7 @@ export const QuestionDetails = ({ questionNode }: Props) => {
 
           <Stack direction="row" justifyContent="center" alignItems="center">
             {isNode(partAskingAbout) ? (
-              <EditableNode node={partAskingAbout} supplemental />
+              <EditableNode node={partAskingAbout} context="details" />
             ) : (
               <StandaloneEdge edge={partAskingAbout} />
             )}
@@ -54,6 +54,7 @@ export const QuestionDetails = ({ questionNode }: Props) => {
             name: "potentialAnswerTo",
             parent: "question",
           }}
+          context="details"
           selectNewNode={false}
         />
       </Stack>
@@ -68,7 +69,7 @@ export const QuestionDetails = ({ questionNode }: Props) => {
         marginBottom="8px"
       >
         {answers.length > 0 ? (
-          answers.map((answer) => <EditableNode key={answer.id} node={answer} supplemental />)
+          answers.map((answer) => <EditableNode key={answer.id} node={answer} context="details" />)
         ) : (
           <Typography>No answers yet!</Typography>
         )}

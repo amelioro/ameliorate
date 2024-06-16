@@ -90,11 +90,11 @@ const buildTableCells = (
   problemNode: Node,
   solutions: Node[],
   criteria: Node[],
-  edges: Edge[]
+  edges: Edge[],
 ): [[HeaderCell, ...HeaderCell[]], ...[HeaderCell, ...Cell[]][]] => {
   const headerRow = [problemNode, ...solutions].map((node) => buildNodeHeader(node)) as [
     HeaderCell,
-    ...HeaderCell[]
+    ...HeaderCell[],
   ];
 
   const bodyRows = criteria.map(
@@ -109,7 +109,7 @@ const buildTableCells = (
 
           return buildEdgeCell(edge);
         }),
-      ] as [HeaderCell, ...Cell[]]
+      ] as [HeaderCell, ...Cell[]],
   );
 
   const totalsRow = [
@@ -124,7 +124,7 @@ const buildTableCells = (
 
 const buildTableDefs = (
   tableData: [[HeaderCell, ...HeaderCell[]], ...[HeaderCell, ...Cell[]][]],
-  useSolutionsForColumns: boolean
+  useSolutionsForColumns: boolean,
 ): { rowData: RowData[]; columnData: MRT_ColumnDef<RowData>[] } => {
   const [headerRow, ...bodyRows] = tableData;
 
@@ -209,7 +209,7 @@ export const CriteriaTable = () => {
   const { selectedSolutions, selectedCriteria } = getSelectedTradeoffNodes(
     solutions,
     criteria,
-    tableFilter
+    tableFilter,
   );
 
   const filteredSolutions = applyScoreFilter(selectedSolutions, generalFilter, scores);
@@ -222,7 +222,7 @@ export const CriteriaTable = () => {
     ? tableData
     : (headerRow.map((_, columnIndex) =>
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- assume that every row has same number of cells as header row
-        tableData.map((row) => row[columnIndex]!)
+        tableData.map((row) => row[columnIndex]!),
       ) as typeof tableData);
 
   const { rowData, columnData } = buildTableDefs(transposedTableData, useSolutionsForColumns);
@@ -239,6 +239,7 @@ export const CriteriaTable = () => {
               as="child"
               toNodeType="solution"
               relation={{ child: "solution", name: "addresses", parent: "problem" }}
+              context="table"
             />
 
             <AddNodeButton
@@ -246,6 +247,7 @@ export const CriteriaTable = () => {
               as="child"
               toNodeType="criterion"
               relation={{ child: "criterion", name: "criterionFor", parent: "problem" }}
+              context="table"
             />
           </>
         )}
