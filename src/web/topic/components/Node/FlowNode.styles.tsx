@@ -2,75 +2,23 @@ import styled from "@emotion/styled";
 import { css } from "@mui/material";
 
 import { Spotlight, zIndex } from "@/web/topic/components/Diagram/Diagram.styles";
-import { AddNodeButtonGroup } from "@/web/topic/components/Node/AddNodeButtonGroup";
 import { EditableNode } from "@/web/topic/components/Node/EditableNode";
 import { Node } from "@/web/topic/utils/graph";
-import { Orientation } from "@/web/topic/utils/layout";
 
-const gap = 16;
+const nodeBridgeGap = 16;
 
 // enables ability to use hover to add a node by bridging the gap between the node and the add buttons
 export const HoverBridgeDiv = styled.div`
   position: absolute;
-  height: calc(100% + ${2 * gap}px);
-  width: calc(100% + ${2 * gap}px);
-  transform: translateX(-${gap}px) translateY(-${gap}px);
+  height: calc(100% + ${2 * nodeBridgeGap}px);
+  width: calc(100% + ${2 * nodeBridgeGap}px);
+  transform: translateX(-${nodeBridgeGap}px) translateY(-${nodeBridgeGap}px);
   z-index: -1; // behind node
   display: none;
 
   .react-flow__node:hover > & {
     display: inherit;
   }
-`;
-
-const StyledAddNodeButtonGroup = styled(AddNodeButtonGroup)`
-  position: absolute;
-  display: none;
-
-  .react-flow__node:hover > &,
-  .react-flow__node.selected > & {
-    display: flex;
-  }
-`;
-
-export const AddNodeButtonGroupParent = styled(StyledAddNodeButtonGroup)<{
-  orientation: Orientation;
-}>`
-  ${({ orientation }) => {
-    if (orientation === "DOWN") {
-      return css`
-        left: 50%;
-        top: 0;
-        transform: translateX(-50%) translateY(-100%) translateY(-${gap}px);
-      `;
-    } else {
-      return css`
-        top: 50%;
-        left: 0;
-        transform: translateY(-50%) translateX(-100%) translateX(-${gap}px);
-      `;
-    }
-  }}
-`;
-
-export const AddNodeButtonGroupChild = styled(StyledAddNodeButtonGroup)<{
-  orientation: Orientation;
-}>`
-  ${({ orientation }) => {
-    if (orientation === "DOWN") {
-      return css`
-        left: 50%;
-        bottom: 0;
-        transform: translateX(-50%) translateY(100%) translateY(${gap}px);
-      `;
-    } else {
-      return css`
-        top: 50%;
-        right: 0;
-        transform: translateY(-50%) translateX(100%) translateX(${gap}px);
-      `;
-    }
-  }}
 `;
 
 export const StyledEditableNode = styled(EditableNode)`
@@ -95,8 +43,8 @@ export const nodeStyles = (node: Node, spotlight: Spotlight) => {
       z-index: ${spotlight === "primary"
         ? zIndex.primary
         : spotlight === "secondary"
-        ? zIndex.secondary
-        : 0} !important; // !important to override because reactflow sets z-index via style attribute
+          ? zIndex.secondary
+          : 0} !important; // !important to override because reactflow sets z-index via style attribute
     }
   `;
 };

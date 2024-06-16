@@ -3,6 +3,7 @@ import {
   Build,
   Close,
   Download,
+  EditOff,
   Engineering,
   FilterAltOutlined,
   FormatColorFill,
@@ -37,8 +38,10 @@ import { useOnPlayground } from "@/web/topic/store/topicHooks";
 import { resetTopicData } from "@/web/topic/store/utilActions";
 import {
   toggleFlashlightMode,
+  toggleReadonlyMode,
   toggleUnrestrictedEditing,
   useFlashlightMode,
+  useReadonlyMode,
   useUnrestrictedEditing,
 } from "@/web/view/actionConfigStore";
 import { Perspectives } from "@/web/view/components/Perspectives/Perspectives";
@@ -112,6 +115,7 @@ export const MoreActionsDrawer = ({
   const unrestrictedEditing = useUnrestrictedEditing();
   const forceNodesIntoLayers = useForceNodesIntoLayers();
   const flashlightMode = useFlashlightMode();
+  const readonlyMode = useReadonlyMode();
   const layoutThoroughness = useLayoutThoroughness();
   const showResolvedComments = useShowResolvedComments();
   const fillNodesWithColor = useFillNodesWithColor();
@@ -236,6 +240,22 @@ export const MoreActionsDrawer = ({
               >
                 <Highlight />
               </ToggleButton>
+              {userCanEditTopicData && (
+                <>
+                  <ToggleButton
+                    value={readonlyMode}
+                    title="Read-only mode"
+                    aria-label="Read-only mode"
+                    color="secondary"
+                    size="small"
+                    selected={readonlyMode}
+                    onClick={() => toggleReadonlyMode(!readonlyMode)}
+                    sx={{ borderRadius: "50%", border: "0" }}
+                  >
+                    <EditOff />
+                  </ToggleButton>
+                </>
+              )}
             </ListItem>
           </>
         )}

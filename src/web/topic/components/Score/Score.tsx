@@ -10,6 +10,7 @@ import { useFlowZoom } from "@/web/topic/hooks/flowHooks";
 import { useUserScores } from "@/web/topic/store/scoreHooks";
 import { playgroundUsername } from "@/web/topic/store/store";
 import { useOnPlayground } from "@/web/topic/store/topicHooks";
+import { useReadonlyMode } from "@/web/view/actionConfigStore";
 import { usePerspectives } from "@/web/view/perspectiveStore";
 
 const circleDiameter = 6 * buttonDiameterRem; // no collisions for fitting 10 elements
@@ -24,10 +25,15 @@ interface ScoreProps {
 export const Score = ({ graphPartId }: ScoreProps) => {
   const { sessionUser } = useSessionUser();
   const onPlayground = useOnPlayground();
+  const readonlyMode = useReadonlyMode();
+
   const myUsername = onPlayground ? playgroundUsername : sessionUser?.username;
   const perspectives = usePerspectives();
   const canEdit =
-    perspectives.length === 1 && myUsername !== undefined && perspectives[0] === myUsername;
+    !readonlyMode &&
+    perspectives.length === 1 &&
+    myUsername !== undefined &&
+    perspectives[0] === myUsername;
 
   const [selected, setSelected] = useState(false);
   const [hovering, setHovering] = useState(false);
