@@ -42,21 +42,24 @@ const EditableNodeBase = ({ node, context, className = "" }: Props) => {
 
   const theme = useTheme();
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
+  const textAreaId = `${node.id}-${context}-textarea`;
+
   useEffect(() => {
-    if (!isNodeNewlyAdded(node.id, context) || !textAreaRef.current) return;
+    if (!isNodeNewlyAdded(node.id, context)) return;
 
     clearNewlyAddedNode();
-    const textArea = textAreaRef.current;
 
-    // No idea why timeout is needed here, but without it, and in the flow, focus is not moved to
-    // the text area. It seems specific to react-flow - making a simple button and list of item
-    // components, with each item having a useEffect that focuses it, focus is set properly after a
-    // new item is rendered.
+    // Focus newly added node's text.
+    // Using timeout because textarea doesn't pull focus via `.focus()` without it. textarea is in DOM at this point, so I'm not sure why.
     setTimeout(() => {
-      textArea.focus();
-      textArea.setSelectionRange(0, textArea.value.length);
-    }, 0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- if we select the node after initial render, we don't care about re-focusing. we mainly care about focusing on node add. focusing on node click is annoying because our cursor jumps to the end of the input.
+      // Using getElementById instead of ref because ref.current is null after the timeout runs, unless timeout = 0 ms.
+      // But when timeout = 0 ms, while focus is successfully pulled to the textarea, focus is pulled back to document body afterwards for some reason.
+      // Think that's something to do with how we're rendering the diagram - it doesn't happen for details/table nodes.
+      const textAreaEl = document.getElementById(textAreaId) as HTMLTextAreaElement | null;
+      textAreaEl?.focus();
+      textAreaEl?.setSelectionRange(0, textAreaEl.value.length);
+    }, 10);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- we don't care about re-focusing after initial render
   }, []);
 
   // prefer this over binding value={node.data.label} because this allows us to update node.data.label onBlur instead of onChange, creating significantly fewer unnecessary re-renders
@@ -135,6 +138,7 @@ const EditableNodeBase = ({ node, context, className = "" }: Props) => {
       </YEdgeBox>
       <MiddleDiv>
         <StyledTextareaAutosize
+          id={textAreaId}
           ref={textAreaRef}
           placeholder="Enter text..."
           defaultValue={node.data.label}
