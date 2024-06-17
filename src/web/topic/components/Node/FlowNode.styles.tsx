@@ -43,8 +43,8 @@ export const nodeStyles = (node: Node, spotlight: Spotlight) => {
       z-index: ${spotlight === "primary"
         ? zIndex.primary
         : spotlight === "secondary"
-          ? zIndex.secondary
-          : 0} !important; // !important to override because reactflow sets z-index via style attribute
+        ? zIndex.secondary
+        : 0} !important; // !important to override because reactflow sets z-index via style attribute
     }
   `;
 };

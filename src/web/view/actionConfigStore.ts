@@ -27,7 +27,7 @@ const useActionConfigStore = create<ActionConfigStoreState>()(
     // removing the need to write a migration for every new field
     merge: (persistedState, _currentState) =>
       withDefaults(persistedState as Partial<ActionConfigStoreState>, initialState),
-  }),
+  })
 );
 
 // hooks

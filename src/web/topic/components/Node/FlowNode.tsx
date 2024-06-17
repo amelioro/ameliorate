@@ -44,8 +44,8 @@ export const FlowNode = (flowNode: NodeProps) => {
   const spotlight: Spotlight = flowNode.selected
     ? "primary"
     : isNeighborSelected || isEdgeSelected
-      ? "secondary"
-      : "normal";
+    ? "secondary"
+    : "normal";
 
   useEffect(() => {
     // hack to avoid animation on first render; for some reason nodes were animating from position 0

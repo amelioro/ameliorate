@@ -41,7 +41,7 @@ export const setScore = (username: string, graphPartId: string, score: Score) =>
 
   // update implicit child claim's score if it exists
   const implicitRootClaim = state.nodes.find(
-    (node) => node.data.arguedDiagramPartId === graphPartId,
+    (node) => node.data.arguedDiagramPartId === graphPartId
   );
   if (implicitRootClaim) {
     /* eslint-disable functional/immutable-data, no-param-reassign */

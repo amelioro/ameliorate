@@ -28,7 +28,7 @@ const createNode = (
   state: TopicStoreState,
   toNodeType: FlowNodeType,
   arguedDiagramPartId?: string,
-  selectNewNode = true,
+  selectNewNode = true
 ) => {
   const newNode = buildNode({ type: toNodeType, arguedDiagramPartId });
 
@@ -56,7 +56,7 @@ const connectCriteriaToSolutions = (state: TopicStoreState, newNode: Node, probl
       (edge) =>
         edge.source === problemNode.id &&
         edge.label === targetRelation.name &&
-        findNodeOrThrow(edge.target, state.nodes).type === targetRelation.child,
+        findNodeOrThrow(edge.target, state.nodes).type === targetRelation.child
     )
     .map((edge) => {
       const sourceId = newNode.type === "criterion" ? newNode.id : edge.target;
@@ -108,7 +108,7 @@ export const addNode = ({
     !topicGraph.nodes.find(
       (node) =>
         node.type === "rootClaim" &&
-        (node.data.arguedDiagramPartId === fromPartId || node.id === fromPartId),
+        (node.data.arguedDiagramPartId === fromPartId || node.id === fromPartId)
     )
   ) {
     const label = getImplicitLabel(fromPartId, topicGraph);
@@ -121,7 +121,7 @@ export const addNode = ({
       ? topicGraph.nodes.find(
           (node) =>
             node.type === "rootClaim" &&
-            (node.data.arguedDiagramPartId === fromPartId || node.id === fromPartId),
+            (node.data.arguedDiagramPartId === fromPartId || node.id === fromPartId)
         )
       : undefined;
   const fromPart =
@@ -169,7 +169,7 @@ const createEdgesImpliedByComposition = (
   topicGraph: Graph,
   parent: Node,
   child: Node,
-  relation: Relation,
+  relation: Relation
 ) => {
   const nodesComposedByParent = getNodesComposedBy(parent, topicGraph);
   nodesComposedByParent
@@ -197,7 +197,7 @@ const createEdgeAndImpliedEdges = (
   topicGraph: Graph,
   parent: GraphPart,
   child: GraphPart,
-  relation: Relation,
+  relation: Relation
 ) => {
   // We aren't yet fully supporting edges pointing to other edges.
   // It's not clear at this time whether completely adding or removing support for edges to edges is better,
@@ -259,7 +259,7 @@ export const connectNodes = (parentId: string | null, childId: string | null) =>
 export const reconnectEdge = (
   oldEdge: { id: string; source: string; target: string },
   newParentId: string | null,
-  newChildId: string | null,
+  newChildId: string | null
 ) => {
   if (oldEdge.source === newParentId && oldEdge.target === newChildId) return;
 
@@ -289,10 +289,10 @@ export const deleteNode = (nodeId: string) => {
       /* eslint-disable functional/immutable-data, no-param-reassign */
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete -- consider using a map instead of an object?
       state.nodes = state.nodes.filter(
-        (node) => node.data.arguedDiagramPartId !== deletedNode.data.arguedDiagramPartId,
+        (node) => node.data.arguedDiagramPartId !== deletedNode.data.arguedDiagramPartId
       );
       state.edges = state.edges.filter(
-        (edge) => edge.data.arguedDiagramPartId !== deletedNode.data.arguedDiagramPartId,
+        (edge) => edge.data.arguedDiagramPartId !== deletedNode.data.arguedDiagramPartId
       );
       /* eslint-enable functional/immutable-data, no-param-reassign */
     }
@@ -331,12 +331,12 @@ const deleteInvalidClaims = (state: TopicStoreState) => {
   state.nodes = state.nodes.filter(
     (node) =>
       node.data.arguedDiagramPartId === undefined ||
-      graphPartIds.includes(node.data.arguedDiagramPartId),
+      graphPartIds.includes(node.data.arguedDiagramPartId)
   );
   state.edges = state.edges.filter(
     (edge) =>
       edge.data.arguedDiagramPartId === undefined ||
-      graphPartIds.includes(edge.data.arguedDiagramPartId),
+      graphPartIds.includes(edge.data.arguedDiagramPartId)
   );
   /* eslint-enable functional/immutable-data, no-param-reassign */
 };
