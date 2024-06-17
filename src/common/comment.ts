@@ -43,7 +43,7 @@ export const userCanDeleteComment = (
   username: string,
   userCanEditTopic: boolean,
   commentToDelete: Comment,
-  otherCommentsBeingDeleted: Comment[]
+  otherCommentsBeingDeleted: Comment[],
 ) => {
   if (commentToDelete.authorName === username || userCanEditTopic) return true;
 
@@ -51,7 +51,7 @@ export const userCanDeleteComment = (
     commentToDelete.parentType === "comment" &&
     otherCommentsBeingDeleted.some(
       (otherComment) =>
-        otherComment.id === commentToDelete.parentId && otherComment.authorName === username
+        otherComment.id === commentToDelete.parentId && otherComment.authorName === username,
     );
 
   return deletingAsResultOfPermittedThreadDeletion;

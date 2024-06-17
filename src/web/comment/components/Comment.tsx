@@ -39,7 +39,7 @@ export const Comment = ({ comment }: Props) => {
 
   const findSubscription = trpc.subscriptions.find.useQuery(
     { sourceId: threadStarterCommentId },
-    { enabled: willShowSubscribeBell }
+    { enabled: willShowSubscribeBell },
   );
   const subscribe = trpc.subscriptions.create.useMutation({
     onSuccess: () => findSubscription.refetch(),

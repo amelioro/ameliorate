@@ -31,7 +31,7 @@ const generateComment = (
   topic: Topic,
   parent: CommentParent,
   parentType: CommentParentType,
-  content?: string
+  content?: string,
 ): Comment => {
   const time = new Date();
   const isChildComment = parent !== null;
@@ -161,7 +161,7 @@ beforeEach(async () => {
       authorWatcherSubscriber,
       topicWithoutAllowAnyEdit,
       commentWithTopicParent,
-      "comment"
+      "comment",
     ),
   });
 });
@@ -175,7 +175,7 @@ describe("getInAppNotificationMessage", () => {
           topicWithoutAllowAnyEdit,
           commentWithTopicParent,
           "comment",
-          "hey blah there!"
+          "hey blah there!",
         ),
       });
 
@@ -193,7 +193,7 @@ describe("getInAppNotificationMessage", () => {
           topicWithoutAllowAnyEdit,
           null,
           "topic",
-          "hey blah there!"
+          "hey blah there!",
         ),
       });
 
@@ -211,14 +211,14 @@ describe("getInAppNotificationMessage", () => {
           topicWithoutAllowAnyEdit,
           null,
           "topic",
-          "This sentence is 100 characters loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong.This sentence is 100 characters loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong.This sentence is 100 characters loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong.This sentence is 100 characters loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong.This sentence is 100 characters loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong."
+          "This sentence is 100 characters loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong.This sentence is 100 characters loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong.This sentence is 100 characters loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong.This sentence is 100 characters loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong.This sentence is 100 characters loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong.",
         ),
       });
 
       const message = getInAppNotificationMessage(comment);
 
       expect(message).toBe(
-        'authorWatcherSubscriber commented: "This sentence is 100 characters loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong.This sentence is 100 characters loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong.This sentence is 100 characters loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong.This sentence is 100 characters loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong.This sentence is 100 characters looooooooooooooooooooooooooo..."'
+        'authorWatcherSubscriber commented: "This sentence is 100 characters loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong.This sentence is 100 characters loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong.This sentence is 100 characters loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong.This sentence is 100 characters loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong.This sentence is 100 characters looooooooooooooooooooooooooo..."',
       );
     });
   });
@@ -229,7 +229,7 @@ const expectNotification = (
   receiver: User,
   comment: Comment,
   reason: ReasonType,
-  message?: string
+  message?: string,
 ) => {
   if (received.length > 1) throw new Error("received more than one notification");
   const oneReceived = received[0];
@@ -283,7 +283,7 @@ describe("handleCommentCreated", () => {
           ignorerNotSubscriber,
           topicWithoutAllowAnyEdit,
           null,
-          "topic"
+          "topic",
         );
         await xprisma.comment.create({ data: comment });
 
@@ -302,7 +302,7 @@ describe("handleCommentCreated", () => {
           notWatcherNotSubscriber,
           topicWithoutAllowAnyEdit,
           null,
-          "topic"
+          "topic",
         );
         await xprisma.comment.create({ data: comment });
 
@@ -376,13 +376,13 @@ describe("handleCommentCreated", () => {
         watcherSubNotifications,
         watcherSubscriber,
         commentWithCommentParent,
-        "subscribed"
+        "subscribed",
       );
       expectNotification(
         notWatcherSubNotifications,
         notWatcherIsSubscriber,
         commentWithCommentParent,
-        "subscribed"
+        "subscribed",
       );
     });
 
@@ -397,7 +397,7 @@ describe("handleCommentCreated", () => {
         watcherNotSubNotifications,
         watcherNotSubscriber,
         commentWithCommentParent,
-        "watching"
+        "watching",
       );
     });
   });

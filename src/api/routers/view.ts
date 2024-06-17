@@ -16,7 +16,7 @@ export const viewRouter = router({
         viewsToCreate: quickViewSchema.array(),
         viewsToUpdate: quickViewSchema.array(),
         viewsToDelete: quickViewSchema.array(),
-      })
+      }),
     )
     .mutation(async (opts) => {
       const { viewsToCreate, viewsToUpdate, viewsToDelete } = opts.input;
@@ -25,7 +25,7 @@ export const viewRouter = router({
       const userIsCreator = opts.ctx.user.username === topic.creatorName;
       const userCanEditTopic = userIsCreator || topic.allowAnyoneToEdit;
       const viewsAllForSameTopic = [...viewsToCreate, ...viewsToUpdate, ...viewsToDelete].every(
-        (view) => view.topicId === opts.input.topicId
+        (view) => view.topicId === opts.input.topicId,
       );
 
       if (!userCanEditTopic || !viewsAllForSameTopic) throw new TRPCError({ code: "FORBIDDEN" });

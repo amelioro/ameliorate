@@ -144,8 +144,8 @@ export const useSolutions = (problemId?: string) => {
     const problemSolutions = solutions.filter((solution) =>
       state.edges.find(
         (edge) =>
-          edge.source === problemId && edge.label === "addresses" && edge.target === solution.id
-      )
+          edge.source === problemId && edge.label === "addresses" && edge.target === solution.id,
+      ),
     );
 
     return problemSolutions;
@@ -160,8 +160,10 @@ export const useCriteria = (problemId?: string) => {
     const problemCriteria = criteria.filter((criterion) =>
       state.edges.find(
         (edge) =>
-          edge.source === problemId && edge.label === "criterionFor" && edge.target === criterion.id
-      )
+          edge.source === problemId &&
+          edge.label === "criterionFor" &&
+          edge.target === criterion.id,
+      ),
     );
 
     return problemCriteria;

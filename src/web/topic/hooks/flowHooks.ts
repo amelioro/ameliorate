@@ -16,7 +16,7 @@ const getViewportToIncludeNode = (
   node: PositionedNode,
   viewport: Viewport,
   viewportHeight: number,
-  viewportWidth: number
+  viewportWidth: number,
 ): Viewport => {
   const distanceToKeepNodeInViewport = 100; //pixels
 
@@ -34,8 +34,8 @@ const getViewportToIncludeNode = (
     viewport.x < viewportXForNodeWithinLeftBounds
       ? viewportXForNodeWithinLeftBounds
       : viewport.x > viewportXForNodeWithinRightBounds
-      ? viewportXForNodeWithinRightBounds
-      : viewport.x;
+        ? viewportXForNodeWithinRightBounds
+        : viewport.x;
 
   const viewportYForNodeWithinTopBounds = scaledDistanceToKeepNodeInViewport - scaledNodeY;
   const viewportYForNodeWithinBottomBounds =
@@ -45,8 +45,8 @@ const getViewportToIncludeNode = (
     viewport.y < viewportYForNodeWithinTopBounds
       ? viewportYForNodeWithinTopBounds
       : viewport.y > viewportYForNodeWithinBottomBounds
-      ? viewportYForNodeWithinBottomBounds
-      : viewport.y;
+        ? viewportYForNodeWithinBottomBounds
+        : viewport.y;
 
   return { x: newViewportX, y: newViewportY, zoom: viewport.zoom };
 };
@@ -94,7 +94,7 @@ export const useViewportUpdater = () => {
       viewportWidth,
       viewportHeight,
       minZoom,
-      1
+      1,
     );
 
     const viewport = { x: transform[0], y: transform[1], zoom: transform[2] };

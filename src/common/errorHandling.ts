@@ -6,7 +6,7 @@
 // eslint-disable-next-line functional/functional-parameters, @typescript-eslint/no-explicit-any
 export const errorWithData = (message: string, ...data: any[]) => {
   return new Error(
-    data.length > 0 ? message + "\n\nrelated data:\n" + JSON.stringify(data) : message
+    data.length > 0 ? message + "\n\nrelated data:\n" + JSON.stringify(data) : message,
   );
 };
 

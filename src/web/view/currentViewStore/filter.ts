@@ -43,7 +43,7 @@ export const useDiagramFilter = (): DiagramFilter => {
 export const useTableFilter = (): TableFilter => {
   return useCurrentViewStore(
     (state) => state.tableFilter,
-    (before, after) => JSON.stringify(before) === JSON.stringify(after)
+    (before, after) => JSON.stringify(before) === JSON.stringify(after),
   );
 };
 
@@ -87,14 +87,14 @@ export const setShowInformation = (category: InfoCategory, show: boolean) => {
     show && !oldCategoriesToShow.includes(category)
       ? [...oldCategoriesToShow, category]
       : !show && oldCategoriesToShow.includes(category)
-      ? oldCategoriesToShow.filter((c) => c !== category)
-      : null;
+        ? oldCategoriesToShow.filter((c) => c !== category)
+        : null;
 
   if (newCategoriesToShow) {
     useCurrentViewStore.setState(
       { categoriesToShow: newCategoriesToShow },
       false,
-      "setShowInformation"
+      "setShowInformation",
     );
     emitter.emit("changedDiagramFilter");
   }
@@ -105,8 +105,8 @@ export const setStandardFilter = (category: InfoCategory, filter: StandardFilter
     category === "structure"
       ? { structureFilter: filter }
       : category === "research"
-      ? { researchFilter: filter }
-      : { justificationFilter: filter };
+        ? { researchFilter: filter }
+        : { justificationFilter: filter };
 
   useCurrentViewStore.setState(newFilter, false, "setStandardFilter");
 
@@ -133,7 +133,7 @@ export const viewCriteriaTable = (problemNodeId: string) => {
       },
     },
     false,
-    "viewCriteriaTable"
+    "viewCriteriaTable",
   );
 };
 
@@ -145,7 +145,7 @@ export const viewJustification = (arguedDiagramPartId: string) => {
       justificationFilter: { type: "rootClaim", centralRootClaimId: arguedDiagramPartId },
     },
     false,
-    "viewJustification"
+    "viewJustification",
   );
 };
 

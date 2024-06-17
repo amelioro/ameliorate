@@ -14,7 +14,7 @@ export const getImplicitLabel = (arguedDiagramPartId: string, topicGraph: Graph)
   const arguedDiagramPart = findGraphPartOrThrow(
     arguedDiagramPartId,
     topicGraph.nodes,
-    topicGraph.edges
+    topicGraph.edges,
   );
   if (isNode(arguedDiagramPart)) {
     return `"${arguedDiagramPart.data.label}" is important`;

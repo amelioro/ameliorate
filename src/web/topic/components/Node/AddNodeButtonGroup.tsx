@@ -56,7 +56,7 @@ const AddNodeButtonGroup = memo(
         ))}
       </ButtonGroup>
     );
-  }
+  },
 );
 
 // eslint-disable-next-line functional/immutable-data

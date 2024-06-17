@@ -7,16 +7,16 @@ import { getAverageScore } from "@/web/topic/utils/score";
 export const getDisplayScoresByGraphPartId = (
   graphPartIds: string[],
   perspectives: string[],
-  userScores: UserScores
+  userScores: UserScores,
 ): Record<string, Score> => {
   const perspectiveScoresByGraphPart = getPerspectiveScoresByGraphPart(
     graphPartIds,
     perspectives,
-    userScores
+    userScores,
   );
 
   const averagedScoreWithGraphPart = Object.entries(perspectiveScoresByGraphPart).map(
-    ([graphPartId, scores]) => [graphPartId, getAverageScore(scores)] as [string, Score]
+    ([graphPartId, scores]) => [graphPartId, getAverageScore(scores)] as [string, Score],
   );
   return Object.fromEntries(averagedScoreWithGraphPart);
 };
@@ -24,7 +24,7 @@ export const getDisplayScoresByGraphPartId = (
 const getPerspectiveScoresByGraphPart = (
   graphPartIds: string[],
   perspectives: string[],
-  userScores: UserScores
+  userScores: UserScores,
 ) => {
   const scoresWithGraphPart: [string, Score[]][] = graphPartIds.map((graphPartId) => {
     const perspectiveScores = perspectives.map((perspective) => {

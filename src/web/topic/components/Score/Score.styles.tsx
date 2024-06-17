@@ -5,10 +5,9 @@ export const ScorePopper = styled(Popper)`
   display: flex;
   position: absolute;
   border-radius: 50%;
-  ${({ theme }) =>
-    css`
-      z-index: ${theme.zIndex.tooltip};
-    `}
+  ${({ theme }) => css`
+    z-index: ${theme.zIndex.tooltip};
+  `}
 `;
 
 interface BackdropProps {

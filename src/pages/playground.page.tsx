@@ -18,12 +18,12 @@ const DynamicTopicWorkspace = dynamic<Record<string, never>>(
   // const DynamicTopicWorkspace = dynamic(
   () =>
     import("../web/topic/components/TopicWorkspace/TopicWorkspace").then(
-      (module) => module.TopicWorkspace
+      (module) => module.TopicWorkspace,
     ),
   {
     ssr: false,
     loading: () => <Loading />,
-  }
+  },
 );
 
 const Playground: NextPage = () => {

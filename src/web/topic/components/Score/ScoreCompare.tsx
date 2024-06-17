@@ -23,7 +23,7 @@ export const ScoreCompare = ({ userScores, type = "regular" }: Props) => {
       const usernamesForScore = get(result, score, []);
       return set(result, score, [...usernamesForScore, username]);
     },
-    {} as Partial<Record<Score, string[]>>
+    {} as Partial<Record<Score, string[]>>,
   );
 
   const data: Data<CustomDataEntry> = Object.entries(scoreUsers).map(([score, usernames]) => {

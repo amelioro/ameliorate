@@ -46,7 +46,7 @@ export const TopicDetails = () => {
   const findWatch = trpc.watch.find.useQuery(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- non-playground topics will have an id
     { topicId: topic.id! },
-    { enabled: willShowWatch }
+    { enabled: willShowWatch },
   );
   const setWatch = trpc.watch.setWatch.useMutation({
     onSuccess: () => findWatch.refetch(),

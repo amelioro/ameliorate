@@ -82,13 +82,13 @@ export const useCurrentViewStore = createWithEqualityFn<ViewState>()(
       // removing the need to write a migration for every new field
       merge: (persistedState, _currentState) =>
         withDefaults(persistedState as Partial<ViewState>, initialViewState),
-    })
+    }),
   ),
 
   // Using `createWithEqualityFn` so that we can do a diff in hooks that return new arrays/objects
   // so that we can avoid extra renders
   // e.g. when we return URLSearchParams
-  Object.is
+  Object.is,
 );
 
 // temporal store is a vanilla store, we need to wrap it to use it as a hook and be able to react to changes

@@ -12,7 +12,7 @@ const initialState: UserConfigStoreState = {
 const useUserConfigStore = create<UserConfigStoreState>()(
   persist(() => initialState, {
     name: "user-config-storage",
-  })
+  }),
 );
 
 // hooks

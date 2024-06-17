@@ -26,7 +26,7 @@ export const ClaimTreeIndicator = ({ graphPartId }: Props) => {
       if (!rootClaim) return;
       viewJustification(rootClaim.id);
     },
-    [rootClaim]
+    [rootClaim],
   );
 
   const Icon = explicitClaimCount > 0 ? AccountTree : AccountTreeOutlined;

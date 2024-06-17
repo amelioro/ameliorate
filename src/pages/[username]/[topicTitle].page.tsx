@@ -20,12 +20,12 @@ import { setInitialPerspective } from "@/web/view/perspectiveStore";
 const DynamicTopicWorkspace = dynamic<Record<string, never>>(
   () =>
     import("../../web/topic/components/TopicWorkspace/TopicWorkspace").then(
-      (module) => module.TopicWorkspace
+      (module) => module.TopicWorkspace,
     ),
   {
     ssr: false,
     loading: () => <Loading />,
-  }
+  },
 );
 
 const Topic: NextPage = () => {
@@ -41,7 +41,7 @@ const Topic: NextPage = () => {
     // Not using stale time because client-side navigation back to this page fires the useEffect again,
     // repopulating the store with old data (if the client changed data before navigating away & back).
     // So we'll just re-fire on page mount, should be fine.
-    { enabled: !!username && !!topicTitle }
+    { enabled: !!username && !!topicTitle },
   );
 
   const { sessionUser } = useSessionUser();

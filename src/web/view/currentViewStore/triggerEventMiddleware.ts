@@ -5,9 +5,9 @@ import { ViewState } from "@/web/view/currentViewStore/store";
 
 type TriggerEvent = <
   Mps extends [StoreMutatorIdentifier, unknown][] = [],
-  Mcs extends [StoreMutatorIdentifier, unknown][] = []
+  Mcs extends [StoreMutatorIdentifier, unknown][] = [],
 >(
-  create: StateCreator<ViewState, Mps, Mcs>
+  create: StateCreator<ViewState, Mps, Mcs>,
 ) => StateCreator<ViewState, Mps, Mcs>;
 
 type TriggerEventImpl = (f: StateCreator<ViewState>) => StateCreator<ViewState>;

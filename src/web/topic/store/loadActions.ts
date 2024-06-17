@@ -29,7 +29,7 @@ export const populateDiagramFromApi = (topicData: TopicData) => {
       userScores,
     },
     true,
-    "populateFromApi"
+    "populateFromApi",
   );
 
   // it doesn't make sense to want to undo a page load

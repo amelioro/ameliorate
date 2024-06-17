@@ -139,8 +139,8 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
                     isAuthed
                       ? "/choose-username"
                       : isInitialRender // server-client mismatch if we use `returnTo` on initial render because server doesn't have access to asPath
-                      ? "/api/auth/login"
-                      : `/api/auth/login?returnTo=${encodeURIComponent(asPath)}`
+                        ? "/api/auth/login"
+                        : `/api/auth/login?returnTo=${encodeURIComponent(asPath)}`
                   }
                 >
                   {isAuthed ? "Username" : "Log in"}

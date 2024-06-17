@@ -76,12 +76,12 @@ export const useQuickViewStore = createWithEqualityFn<QuickViewStoreState>()(
       // removing the need to write a migration for every new field
       merge: (persistedState, _currentState) =>
         withDefaults(persistedState as Partial<QuickViewStoreState>, initialState),
-    })
+    }),
   ),
 
   // Using `createWithEqualityFn` so that we can do a diff in hooks that return new arrays/objects
   // so that we can avoid extra renders
-  Object.is
+  Object.is,
 );
 
 // temporal store is a vanilla store, we need to wrap it to use it as a hook and be able to react to changes
@@ -90,7 +90,7 @@ const useTemporalStore = () => useStore(useQuickViewStore.temporal);
 // hooks
 export const useQuickViews = () => {
   return useQuickViewStore((state) =>
-    state.views.toSorted((view1, view2) => view1.order - view2.order)
+    state.views.toSorted((view1, view2) => view1.order - view2.order),
   );
 };
 
@@ -137,7 +137,7 @@ export const createView = () => {
       selectedViewId: newViewId,
     }),
     false,
-    "createView"
+    "createView",
   );
 };
 
@@ -150,11 +150,11 @@ export const setTitle = (viewId: string, newTitle: string) => {
   useQuickViewStore.setState(
     {
       views: state.views.map((view) =>
-        view.id === viewToRename.id ? { ...view, title: newTitle } : view
+        view.id === viewToRename.id ? { ...view, title: newTitle } : view,
       ),
     },
     false,
-    "setTitle"
+    "setTitle",
   );
 
   updateURLParams(newTitle);
@@ -170,12 +170,12 @@ export const saveView = (viewId: string) => {
   useQuickViewStore.setState(
     {
       views: state.views.map((view) =>
-        view.id === viewToSave.id ? { ...view, viewState: currentView } : view
+        view.id === viewToSave.id ? { ...view, viewState: currentView } : view,
       ),
       selectedViewId: state.selectedViewId ?? viewId, // after saving, the newly-saved view should match the current view state, so select it if nothing is selected
     },
     false,
-    "saveView"
+    "saveView",
   );
 };
 
@@ -191,7 +191,7 @@ export const deleteView = (viewId: string) => {
       selectedViewId: state.selectedViewId === viewId ? null : state.selectedViewId,
     },
     false,
-    "deleteView"
+    "deleteView",
   );
 };
 
@@ -278,7 +278,7 @@ export const loadQuickViewsFromApi = (topic: UserTopic, views: QuickView[]) => {
       selectedViewId: null, // don't remember from previous topic - this will be set after loading current view if it should be
     },
     true,
-    "loadQuickViewsFromApi"
+    "loadQuickViewsFromApi",
   );
 
   // it doesn't make sense to want to undo a page load

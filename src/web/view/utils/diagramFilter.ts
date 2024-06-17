@@ -31,8 +31,8 @@ const applyHighLevelFilter = (graph: Graph, _filters: HighLevelOptions) => {
 
   const details = problems.flatMap((problem) =>
     children(problem, graph).filter((child) =>
-      ["cause", "effect", "benefit", "detriment", "solution"].includes(child.type)
-    )
+      ["cause", "effect", "benefit", "detriment", "solution"].includes(child.type),
+    ),
   );
 
   const nodes = [...problems, ...details];
@@ -84,7 +84,7 @@ const applyProblemFilter = (graph: Graph, filters: ProblemOptions) => {
     solutions,
     criteria,
     filters.solutionDetail,
-    graph
+    graph,
   );
 
   const nodes = [centralProblem, ...problemDetails, ...filteredSolutionDetails];
@@ -138,19 +138,19 @@ const applyTradeoffsFilter = (graph: Graph, filters: TradeoffsOptions) => {
   const { selectedSolutions, selectedCriteria } = getSelectedTradeoffNodes(
     solutions,
     criteria,
-    filters
+    filters,
   );
 
   const criteriaParents = selectedCriteria.flatMap((criterion) =>
     // filter problem because we want to separately include the problem regardless of if we're showing criteria, for context
-    parents(criterion, graph).filter((parent) => parent.type !== "problem")
+    parents(criterion, graph).filter((parent) => parent.type !== "problem"),
   );
 
   const filteredSolutionDetails = getSolutionDetails(
     selectedSolutions,
     selectedCriteria,
     filters.solutionDetail,
-    graph
+    graph,
   );
 
   const nodes = uniqBy(
@@ -161,7 +161,7 @@ const applyTradeoffsFilter = (graph: Graph, filters: TradeoffsOptions) => {
       ...criteriaParents,
       ...filteredSolutionDetails,
     ],
-    (node) => node.id
+    (node) => node.id,
   );
   const edges = getRelevantEdges(nodes, graph);
 
@@ -172,16 +172,16 @@ const getSolutionDetails = (
   solutions: Node[],
   criteria: Node[],
   detailType: DetailType,
-  graph: Graph
+  graph: Graph,
 ) => {
   if (detailType === "none") return [];
 
   const solutionComponentsEffects = solutions.flatMap((solution) =>
-    ancestors(solution, graph, ["has", "creates"])
+    ancestors(solution, graph, ["has", "creates"]),
   );
 
   const solutionObstacles = solutions.flatMap((solution) =>
-    descendants(solution, graph, ["obstacleOf", "addresses"])
+    descendants(solution, graph, ["obstacleOf", "addresses"]),
   );
 
   const criteriaIds = criteria.map((criterion) => criterion.id);
@@ -189,7 +189,7 @@ const getSolutionDetails = (
   return detailType === "all"
     ? [...solutionComponentsEffects, ...solutionObstacles]
     : solutionComponentsEffects.filter((detail) =>
-        ancestors(detail, graph).some((ancestor) => criteriaIds.includes(ancestor.id))
+        ancestors(detail, graph).some((ancestor) => criteriaIds.includes(ancestor.id)),
       );
 };
 
@@ -200,13 +200,13 @@ const getSolutionDetails = (
 export const getSelectedTradeoffNodes = (
   problemSolutions: Node[],
   problemCriteria: Node[],
-  filters: { solutions: string[]; criteria: string[] }
+  filters: { solutions: string[]; criteria: string[] },
 ) => {
   const selectedSolutions = problemSolutions.filter((solution) =>
-    filters.solutions.includes(solution.id)
+    filters.solutions.includes(solution.id),
   );
   const selectedCriteria = problemCriteria.filter((criterion) =>
-    filters.criteria.includes(criterion.id)
+    filters.criteria.includes(criterion.id),
   );
 
   return {
@@ -380,7 +380,7 @@ export const applyDiagramFilter = (graph: Graph, diagramFilter: DiagramFilter) =
     .filter(([_, filter]) => filter.show)
     .flatMap(([category, filter]) => {
       const categoryNodes = graph.nodes.filter((node) =>
-        infoNodeTypes[category as InfoCategory].includes(node.type)
+        infoNodeTypes[category as InfoCategory].includes(node.type),
       );
 
       if (filter.type === "none") return categoryNodes;
@@ -392,7 +392,7 @@ export const applyDiagramFilter = (graph: Graph, diagramFilter: DiagramFilter) =
       // return all nodes of the category if no filtered nodes are returned.
       const filteredCategoryNodes = applyStandardFilter(
         { nodes: categoryNodes, edges: categoryEdges },
-        filter
+        filter,
       ).nodes;
 
       return filteredCategoryNodes;

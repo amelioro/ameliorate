@@ -10,7 +10,7 @@ import { QuickViewStoreState } from "@/web/view/quickViewStore/store";
 const getCrudDiffs = <T extends object>(
   before: T[],
   after: T[],
-  identifierFn: (element: T) => string
+  identifierFn: (element: T) => string,
 ): [T[], T[], T[]] => {
   // use keyed objects instead of array of objects because array diffs vary based on element ordering
   const keyedBefore = Object.fromEntries(before.map((item) => [identifierFn(item), item]));
@@ -23,13 +23,13 @@ const getCrudDiffs = <T extends object>(
     Object.entries(keyedBefore).map(([key, value]) => [
       key,
       Object.fromEntries(Object.entries(value).map(([k, v]) => [k, JSON.stringify(v)])),
-    ])
+    ]),
   );
   const stringifiedAfter = Object.fromEntries(
     Object.entries(keyedAfter).map(([key, value]) => [
       key,
       Object.fromEntries(Object.entries(value).map(([k, v]) => [k, JSON.stringify(v)])),
-    ])
+    ]),
   );
 
   const diffs = diff(stringifiedBefore, stringifiedAfter);
@@ -64,7 +64,7 @@ const getApiViews = (topicId: number, store: QuickViewStoreState): QuickView[] =
 const saveDiffs = (
   topicId: number,
   storeBefore: QuickViewStoreState,
-  storeAfter: QuickViewStoreState
+  storeAfter: QuickViewStoreState,
 ) => {
   const apiBefore = getApiViews(topicId, storeBefore);
   const apiAfter = getApiViews(topicId, storeAfter);
@@ -72,11 +72,11 @@ const saveDiffs = (
   const [viewsToCreate, viewsToUpdate, viewsToDelete] = getCrudDiffs(
     apiBefore,
     apiAfter,
-    (view) => view.id
+    (view) => view.id,
   );
 
   const anyChanges = [viewsToCreate, viewsToUpdate, viewsToDelete].some(
-    (changes) => changes.length > 0
+    (changes) => changes.length > 0,
   );
   if (!anyChanges) return;
 
@@ -90,9 +90,9 @@ const saveDiffs = (
 
 type ApiSyncer = <
   Mps extends [StoreMutatorIdentifier, unknown][] = [],
-  Mcs extends [StoreMutatorIdentifier, unknown][] = []
+  Mcs extends [StoreMutatorIdentifier, unknown][] = [],
 >(
-  create: StateCreator<QuickViewStoreState, Mps, Mcs>
+  create: StateCreator<QuickViewStoreState, Mps, Mcs>,
 ) => StateCreator<QuickViewStoreState, Mps, Mcs>;
 
 type ApiSyncerImpl = (f: StateCreator<QuickViewStoreState>) => StateCreator<QuickViewStoreState>;

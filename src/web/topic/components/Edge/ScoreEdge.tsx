@@ -38,8 +38,8 @@ const svgMarkerDef = (inReactFlow: boolean, spotlight: Spotlight) => {
     spotlight === "primary"
       ? highlightedEdgeColor
       : spotlight === "secondary"
-      ? infoColor
-      : edgeColor;
+        ? infoColor
+        : edgeColor;
 
   return (
     <defs>
@@ -102,8 +102,8 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
   const spotlight: Spotlight = flowEdge.selected
     ? "primary"
     : isNodeSelected
-    ? "secondary"
-    : "normal";
+      ? "secondary"
+      : "normal";
 
   const [edgePath, labelX, labelY] = getBezierPath({
     sourceX: flowEdge.sourceX,

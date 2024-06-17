@@ -11,7 +11,7 @@ export const useUserCanEditTopicData = (username?: string) => {
   const findTopic = trpc.topic.findByUsernameAndTitle.useQuery(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- `enabled` guarantees non-null id, and if there's an id, it's a UserTopic
     { username: (storeTopic as UserTopic).creatorName, title: (storeTopic as UserTopic).title },
-    { enabled: storeTopic.id !== undefined }
+    { enabled: storeTopic.id !== undefined },
   );
 
   if (isPlaygroundTopic(storeTopic)) return true;

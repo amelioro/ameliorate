@@ -16,7 +16,7 @@ export const useDisplayScores = (graphPartIds: string[]): Record<string, Score> 
 
   return useTopicStore(
     (state) => getDisplayScoresByGraphPartId(graphPartIds, perspectives, state.userScores),
-    shallow
+    shallow,
   );
 };
 
@@ -41,12 +41,12 @@ export const useSolutionTotal = (solution: Node, problem: Node) => {
   const criteriaSolutionEdges = useTopicStore((state) => {
     const topicGraph = { nodes: state.nodes, edges: state.edges };
     const criteriaForProblem = children(problem, topicGraph).filter(
-      (node) => node.type === "criterion"
+      (node) => node.type === "criterion",
     );
     const criteriaSolutionEdges = compact(
       criteriaForProblem.map((criterion) =>
-        edges(criterion, state.edges).find((edge) => edge.target === solution.id)
-      )
+        edges(criterion, state.edges).find((edge) => edge.target === solution.id),
+      ),
     );
 
     return criteriaSolutionEdges;
@@ -64,6 +64,6 @@ export const useSolutionTotal = (solution: Node, problem: Node) => {
       // use a (-4,4) range for the edge because low means doesn't embody, high means does
       // use a (0,8) range for the criterion because it's just importance, and should therefore just increase/decrease emphasis of the edge score
       return (getNumericScore(edgeScore) - 5) * (getNumericScore(criterionScore) - 1);
-    })
+    }),
   );
 };

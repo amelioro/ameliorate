@@ -181,7 +181,7 @@ describe("setData", () => {
             userEmailVerified: true,
             user: loggedInUser,
           }
-        : {}
+        : {},
     );
 
     await trpc.topic.setData({

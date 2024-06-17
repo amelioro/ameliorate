@@ -42,20 +42,20 @@ const useCommentStore = createWithEqualityFn<CommentStoreState>()(
         merge: (persistedState, _currentState) =>
           withDefaults(persistedState as Partial<CommentStoreState>, initialState),
         storage: storageWithDates,
-      }
-    )
+      },
+    ),
   ),
 
   // Using `createWithEqualityFn` so that we can do a diff in hooks that return new arrays/objects
   // so that we can avoid extra renders
-  Object.is
+  Object.is,
 );
 
 // hooks
 export const useThreadStarterComments = (
   parentId: string | null,
   parentType: CommentParentType,
-  showResolved: boolean
+  showResolved: boolean,
 ) => {
   return useCommentStore((state) =>
     state.comments
@@ -63,9 +63,9 @@ export const useThreadStarterComments = (
         (comment) =>
           comment.parentId === parentId &&
           comment.parentType === parentType &&
-          (showResolved || !comment.resolved)
+          (showResolved || !comment.resolved),
       )
-      .toSorted((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
+      .toSorted((a, b) => a.createdAt.getTime() - b.createdAt.getTime()),
   );
 };
 
@@ -73,14 +73,14 @@ export const useThreadChildrenComments = (commentId: string) => {
   return useCommentStore((state) =>
     state.comments
       .filter((comment) => comment.parentId === commentId && comment.parentType === "comment")
-      .toSorted((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
+      .toSorted((a, b) => a.createdAt.getTime() - b.createdAt.getTime()),
   );
 };
 
 export const useCommentCount = (
   parentId: string | null,
   parentType: CommentParentType,
-  showResolved: boolean
+  showResolved: boolean,
 ) => {
   return useCommentStore(
     (state) =>
@@ -88,8 +88,8 @@ export const useCommentCount = (
         (comment) =>
           comment.parentId === parentId &&
           comment.parentType === parentType &&
-          (showResolved || !comment.resolved)
-      ).length
+          (showResolved || !comment.resolved),
+      ).length,
   );
 };
 
@@ -99,7 +99,7 @@ export const upsertComment = (
   parentId: string | null,
   parentType: CommentParentType,
   content: string,
-  commentId?: string
+  commentId?: string,
 ) => {
   const state = useCommentStore.getState();
 
@@ -139,11 +139,11 @@ export const deleteComment = (commentId: string) => {
         (comment) =>
           comment.id !== commentId &&
           // delete children, if this is a thread-starter comment
-          !(comment.parentId === commentId && comment.parentType === "comment")
+          !(comment.parentId === commentId && comment.parentType === "comment"),
       ),
     }),
     false,
-    "deleteComment"
+    "deleteComment",
   );
 };
 
@@ -151,11 +151,11 @@ export const resolveComment = (commentId: string, resolved: boolean) => {
   useCommentStore.setState(
     (state) => ({
       comments: state.comments.map((comment) =>
-        comment.id === commentId ? { ...comment, resolved } : comment
+        comment.id === commentId ? { ...comment, resolved } : comment,
       ),
     }),
     false,
-    "resolveComment"
+    "resolveComment",
   );
 };
 
@@ -186,7 +186,7 @@ export const loadCommentsFromApi = (topic: UserTopic, comments: StoreComment[]) 
       })),
     },
     true,
-    "loadCommentsFromApi"
+    "loadCommentsFromApi",
   );
 };
 

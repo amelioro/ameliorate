@@ -65,7 +65,7 @@ const downloadJsonSchema = z.preprocess(
       state: z.record(z.any()),
       version: z.number(),
     }),
-  })
+  }),
 );
 
 interface DownloadJson {
@@ -96,7 +96,7 @@ export const downloadTopic = () => {
  */
 const ensureUnique = (
   topicStoreState: TopicStoreState,
-  quickViewStoreState: QuickViewStoreState
+  quickViewStoreState: QuickViewStoreState,
 ) => {
   const { nodes, edges } = topicStoreState;
   const { views } = quickViewStoreState;
@@ -129,7 +129,7 @@ const ensureUnique = (
 
 export const uploadTopic = (
   event: React.ChangeEvent<HTMLInputElement>,
-  sessionUsername?: string
+  sessionUsername?: string,
 ) => {
   if (event.target.files === null) return;
 
@@ -146,12 +146,12 @@ export const uploadTopic = (
       if (!topicPersistState.version) {
         throw errorWithData(
           "No version found in file, cannot migrate old state",
-          topicPersistState
+          topicPersistState,
         );
       }
       const migratedTopicState = migrate(
         topicPersistState.state,
-        topicPersistState.version
+        topicPersistState.version,
       ) as TopicStoreState;
 
       const viewsPersistState = downloadJson.views;

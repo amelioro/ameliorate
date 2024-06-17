@@ -27,8 +27,8 @@ export const getAverageScore = (userScores: Score[]): Score => {
   const roundedAverage = round(
     meanBy(
       userScores.filter((score) => score !== "-"),
-      (score) => Number(score)
-    )
+      (score) => Number(score),
+    ),
   );
 
   return roundedAverage.toString() as Score; // average should still result in a Score

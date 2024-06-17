@@ -25,7 +25,7 @@ export const commentRouter = router({
         commentsToCreate: commentSchema.array(),
         commentsToUpdate: commentSchema.array(),
         commentsToDelete: commentSchema.array(),
-      })
+      }),
     )
     .mutation(async (opts) => {
       const { commentsToCreate, commentsToUpdate, commentsToDelete } = opts.input;
@@ -42,7 +42,7 @@ export const commentRouter = router({
         return isOnlyModifyingResolved(comment, foundComment);
       });
       const commentsToModifyOtherThanResolved = commentsToUpdate.filter(
-        (comment) => !commentsToOnlyModifyResolved.some((c) => c.id === comment.id)
+        (comment) => !commentsToOnlyModifyResolved.some((c) => c.id === comment.id),
       );
 
       // ensure has permissions
@@ -61,10 +61,10 @@ export const commentRouter = router({
       ].every((comment) => comment.authorName === opts.ctx.user.username);
 
       const userCanResolveTheComments = commentsToOnlyModifyResolved.every(
-        (comment) => userCanEditTopic || comment.authorName === opts.ctx.user.username
+        (comment) => userCanEditTopic || comment.authorName === opts.ctx.user.username,
       );
       const userCanDeleteTheComments = commentsToDelete.every((comment) =>
-        userCanDeleteComment(opts.ctx.user.username, userCanEditTopic, comment, commentsToDelete)
+        userCanDeleteComment(opts.ctx.user.username, userCanEditTopic, comment, commentsToDelete),
       );
 
       if (

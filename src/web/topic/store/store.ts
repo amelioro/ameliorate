@@ -78,9 +78,9 @@ export const useTopicStore = createWithEqualityFn<TopicStoreState>()(
       version: 23,
       migrate: migrate,
       skipHydration: true,
-    })
+    }),
   ),
-  Object.is // using `createWithEqualityFn` so that we can do shallow or deep diffs in hooks that return new arrays/objects so that we can avoid extra renders
+  Object.is, // using `createWithEqualityFn` so that we can do shallow or deep diffs in hooks that return new arrays/objects so that we can avoid extra renders
 );
 
 export const useDiagram = (): Diagram => {
@@ -97,7 +97,7 @@ export const useDiagram = (): Diagram => {
 
     const nodesAfterTypeFilter = applyNodeTypeFilter(
       nodesAfterDiagramFilter,
-      generalFilter.nodeTypes
+      generalFilter.nodeTypes,
     );
 
     // don't filter edges because hard to prevent awkwardness when edge doesn't pass filter and suddenly nodes are scattered
@@ -112,7 +112,7 @@ export const useDiagram = (): Diagram => {
 
     const nodesBeforeHide = nodesAfterToShow.concat(secondaryNeighbors);
     const nodesAfterHide = nodesBeforeHide.filter(
-      (node) => !generalFilter.nodesToHide.includes(node.id)
+      (node) => !generalFilter.nodesToHide.includes(node.id),
     );
 
     const nodes = uniqBy(nodesAfterHide, "id");

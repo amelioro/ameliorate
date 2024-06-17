@@ -10,7 +10,7 @@ import { Node } from "@/web/topic/utils/graph";
 export const useRootClaim = (graphPartId: string) => {
   return useTopicStore((state) => {
     return state.nodes.find(
-      (node) => node.type === "rootClaim" && node.data.arguedDiagramPartId === graphPartId
+      (node) => node.type === "rootClaim" && node.data.arguedDiagramPartId === graphPartId,
     );
   }, shallow);
 };
@@ -20,7 +20,7 @@ export const getExplicitClaimCount = (state: TopicStoreState, graphPartId: strin
     (node) =>
       justificationNodeTypes.includes(node.type) &&
       node.type !== "rootClaim" &&
-      node.data.arguedDiagramPartId === graphPartId
+      node.data.arguedDiagramPartId === graphPartId,
   ).length;
 };
 
@@ -37,13 +37,13 @@ export const useTopLevelClaims = (graphPartId: string) => {
     const nodeToCheckForClaims = justificationNodeTypes.includes(graphPart.type as NodeType)
       ? graphPart
       : state.nodes.find(
-          (node) => node.type === "rootClaim" && node.data.arguedDiagramPartId === graphPartId
+          (node) => node.type === "rootClaim" && node.data.arguedDiagramPartId === graphPartId,
         );
     if (!nodeToCheckForClaims) return { supports: [], critiques: [] };
 
     const topLevelClaimEdges = state.edges.filter(
       (edge) =>
-        justificationRelationNames.includes(edge.label) && edge.source === nodeToCheckForClaims.id
+        justificationRelationNames.includes(edge.label) && edge.source === nodeToCheckForClaims.id,
     );
 
     const supports = topLevelClaimEdges
@@ -52,7 +52,7 @@ export const useTopLevelClaims = (graphPartId: string) => {
 
     const critiques = topLevelClaimEdges
       .map((edge) =>
-        state.nodes.find((node) => node.id === edge.target && node.type === "critique")
+        state.nodes.find((node) => node.id === edge.target && node.type === "critique"),
       )
       .filter((node): node is Node => !!node);
 
@@ -63,12 +63,12 @@ export const useTopLevelClaims = (graphPartId: string) => {
 export const useNonTopLevelClaimCount = (graphPartId: string) => {
   return useTopicStore((state) => {
     const rootClaim = state.nodes.find(
-      (node) => node.type === "rootClaim" && node.data.arguedDiagramPartId === graphPartId
+      (node) => node.type === "rootClaim" && node.data.arguedDiagramPartId === graphPartId,
     );
     if (!rootClaim) return 0;
 
     return state.edges.filter(
-      (edge) => edge.data.arguedDiagramPartId === graphPartId && edge.source !== rootClaim.id
+      (edge) => edge.data.arguedDiagramPartId === graphPartId && edge.source !== rootClaim.id,
     ).length;
   });
 };
@@ -78,7 +78,7 @@ export const useResearchNodes = (graphPartId: string) => {
     const researchNodes = state.nodes.filter(
       (node) =>
         researchNodeTypes.includes(node.type) &&
-        state.edges.find((edge) => edge.source === graphPartId && edge.target === node.id)
+        state.edges.find((edge) => edge.source === graphPartId && edge.target === node.id),
     );
 
     return {
