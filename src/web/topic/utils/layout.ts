@@ -63,10 +63,10 @@ const calculatePartition = (node: Node, nodes: Node[], edges: Edge[]) => {
     const hasProblemAncestor = nodeAncestors.some((ancestor) => ancestor.type === "problem");
     const hasCriterionAncestor = nodeAncestors.some((ancestor) => ancestor.type === "criterion");
     const hasSolutionDescendant = nodeDescendants.some(
-      (descendant) => descendant.type === "solution"
+      (descendant) => descendant.type === "solution",
     );
     const hasCriterionDescendant = nodeDescendants.some(
-      (descendant) => descendant.type === "criterion"
+      (descendant) => descendant.type === "criterion",
     );
 
     // this implementation seems solid but if it becomes unperformant, it might be good enough to
@@ -92,7 +92,7 @@ export interface NodePosition {
 export const layout = async (
   diagram: Diagram,
   partition: boolean,
-  thoroughness: number
+  thoroughness: number,
 ): Promise<NodePosition[]> => {
   const { nodes, edges } = diagram;
 

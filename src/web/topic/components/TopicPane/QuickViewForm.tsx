@@ -27,7 +27,7 @@ const formSchema = (currentView: QuickView, quickViews: QuickView[]) => {
         if (title === currentView.title) return true;
         return !quickViews.some((view) => view.title === title);
       },
-      (_title) => ({ message: "Title must be unique." })
+      (_title) => ({ message: "Title must be unique." }),
     ),
   });
 };

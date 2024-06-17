@@ -40,7 +40,7 @@ const formSchema = (utils: ReturnType<typeof trpc.useContext>) => {
         const user = await utils.user.findByUsername.fetch({ username });
         return !user;
       },
-      (username) => ({ message: `Username ${username} is not available.` })
+      (username) => ({ message: `Username ${username} is not available.` }),
     ),
   });
 };

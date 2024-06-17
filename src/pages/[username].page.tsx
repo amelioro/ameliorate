@@ -32,7 +32,7 @@ const User: NextPage = () => {
   const findUser = trpc.user.findByUsername.useQuery(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- `enabled` guarantees non-null before query is run
     { username: username! },
-    { enabled: !!username }
+    { enabled: !!username },
   );
 
   // TODO: use suspense to better handle loading & error

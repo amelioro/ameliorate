@@ -19,7 +19,7 @@ const TopicSettings: NextPage = () => {
   const findTopic = trpc.topic.findByUsernameAndTitle.useQuery(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- `enabled` guarantees non-null before query is run
     { username: username!, title: topicTitle! },
-    { enabled: !!username && !!topicTitle }
+    { enabled: !!username && !!topicTitle },
   );
 
   // TODO: use suspense to better handle loading & error

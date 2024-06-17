@@ -49,7 +49,7 @@ const seed = async () => {
   const nodeCarsGoingTooFastRootClaim = await createNode(
     "rootClaim",
     '"cars going too fast in neighborhood" is important',
-    nodeCarsGoingTooFast
+    nodeCarsGoingTooFast,
   );
   const nodeInexpensive = await createNode("criterion", "inexpensive");
   const nodeConveysReasoning = await createNode("criterion", "conveys reasoning to slow down");
@@ -60,33 +60,33 @@ const seed = async () => {
   const nodeSpeedBumpRootClaim = await createNode(
     "rootClaim",
     '"speed bump" is important',
-    nodeSpeedBump
+    nodeSpeedBump,
   );
   const nodeKidsAtPlaySign = await createNode("solution", "kids at play sign");
   const nodeLittleKidsLive = await createNode(
     "support",
     "little kids live here and can be hit",
-    nodeCarsGoingTooFast
+    nodeCarsGoingTooFast,
   );
   const nodeMeasuredTraffic = await createNode(
     "critique",
     "we measured traffic years ago, and it wasn't a problem",
-    nodeCarsGoingTooFast
+    nodeCarsGoingTooFast,
   );
   const nodeGentrification = await createNode(
     "critique",
     "recent gentrification beyond bottom of hill giving reason to zoom",
-    nodeCarsGoingTooFast
+    nodeCarsGoingTooFast,
   );
   const nodeCarsZipping = await createNode(
     "support",
     "visually see cars zipping by all the time",
-    nodeCarsGoingTooFast
+    nodeCarsGoingTooFast,
   );
   const nodeThoroughfare = await createNode(
     "critique",
     "thoroughfare for emergency vehicles",
-    nodeSpeedBump
+    nodeSpeedBump,
   );
 
   // edges
@@ -108,12 +108,12 @@ const seed = async () => {
   const edgeFastInexpensive = await createEdge(
     "criterionFor",
     nodeCarsGoingTooFast,
-    nodeInexpensive
+    nodeInexpensive,
   );
   const edgeFastConveys = await createEdge(
     "criterionFor",
     nodeCarsGoingTooFast,
-    nodeConveysReasoning
+    nodeConveysReasoning,
   );
   const edgeFastSlow = await createEdge("criterionFor", nodeCarsGoingTooFast, nodeGetsCarsToSlow);
   const edgeFastStoplight = await createEdge("addresses", nodeCarsGoingTooFast, nodeStoplight);
@@ -135,43 +135,43 @@ const seed = async () => {
   const edgeFastRootClaimLittle = await createEdge(
     "supports",
     nodeCarsGoingTooFastRootClaim,
-    nodeLittleKidsLive
+    nodeLittleKidsLive,
   );
   const edgeFastImportantMeasured = await createEdge(
     "critiques",
     nodeCarsGoingTooFastRootClaim,
-    nodeMeasuredTraffic
+    nodeMeasuredTraffic,
   );
   const edgeMeasuredGentrification = await createEdge(
     "critiques",
     nodeMeasuredTraffic,
-    nodeGentrification
+    nodeGentrification,
   );
   const edgeFastImportantZipping = await createEdge(
     "supports",
     nodeCarsGoingTooFastRootClaim,
-    nodeCarsZipping
+    nodeCarsZipping,
   );
   const edgeBumpRootClaimThoroughfare = await createEdge(
     "critiques",
     nodeSpeedBumpRootClaim,
-    nodeThoroughfare
+    nodeThoroughfare,
   );
 
   const nodeInexpensiveLightRootClaim = await createNode(
     "rootClaim",
     '"stoplight" embodies "inexpensive"',
-    edgeInexpensiveLight
+    edgeInexpensiveLight,
   );
   const nodeInexpensiveLightWeek = await createNode(
     "critique",
     "one week of construction costs",
-    edgeInexpensiveLight
+    edgeInexpensiveLight,
   );
   const edgeInexpensiveLightWeek = await createEdge(
     "critiques",
     nodeInexpensiveLightRootClaim,
-    nodeInexpensiveLightWeek
+    nodeInexpensiveLightWeek,
   );
 
   // user scores

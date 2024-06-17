@@ -135,7 +135,7 @@ export type GraphPart = Node | Edge;
 export type GraphPartType = "node" | "edge";
 
 export const possibleScores = ["-", "1", "2", "3", "4", "5", "6", "7", "8", "9"] as const;
-export type Score = typeof possibleScores[number];
+export type Score = (typeof possibleScores)[number];
 
 export const findNodeOrThrow = (nodeId: string, nodes: Node[]) => {
   const node = nodes.find((node) => node.id === nodeId);
@@ -165,7 +165,7 @@ export const isNode = (graphPart: GraphPart): graphPart is Node => {
 
 export const isNodeType = <T extends NodeType>(
   graphPart: GraphPart,
-  type: T
+  type: T,
 ): graphPart is Node & { type: T } => {
   return isNode(graphPart) && graphPart.type === type;
 };
@@ -177,7 +177,7 @@ export const getNodesComposedBy = (node: Node, topicGraph: Graph) => {
     });
 
     const potentialComposedNodes = composingEdges.map((edge) =>
-      findNodeOrThrow(edge.target, topicGraph.nodes)
+      findNodeOrThrow(edge.target, topicGraph.nodes),
     );
 
     return potentialComposedNodes
@@ -190,20 +190,20 @@ const findNodesRecursivelyFrom = (
   fromNode: Node,
   toDirection: RelationDirection,
   graph: Graph,
-  labels?: RelationName[]
+  labels?: RelationName[],
 ): Node[] => {
   const from = toDirection === "child" ? "source" : "target";
   const to = toDirection === "child" ? "target" : "source";
 
   const foundEdges = graph.edges.filter(
-    (edge) => edge[from] === fromNode.id && (!labels || labels.includes(edge.label))
+    (edge) => edge[from] === fromNode.id && (!labels || labels.includes(edge.label)),
   );
   const foundNodes = foundEdges.map((edge) => findNodeOrThrow(edge[to], graph.nodes));
 
   if (foundNodes.length === 0) return [];
 
   const furtherNodes = foundNodes.flatMap((node) =>
-    findNodesRecursivelyFrom(node, toDirection, graph, labels)
+    findNodesRecursivelyFrom(node, toDirection, graph, labels),
   );
 
   return uniqBy(foundNodes.concat(furtherNodes), (node) => node.id);
@@ -221,7 +221,7 @@ export const getRelevantEdges = (nodes: Node[], graph: Graph) => {
   const nodeIds = nodes.map((node) => node.id);
 
   return graph.edges.filter(
-    (edge) => nodeIds.includes(edge.target) && nodeIds.includes(edge.source)
+    (edge) => nodeIds.includes(edge.target) && nodeIds.includes(edge.source),
   );
 };
 
@@ -234,7 +234,7 @@ export const getRelevantEdges = (nodes: Node[], graph: Graph) => {
 export const getSecondaryNeighbors = (
   primaryNodes: Node[],
   graph: Graph,
-  generalFilter: GeneralFilter
+  generalFilter: GeneralFilter,
 ) => {
   const primaryNodeIds = primaryNodes.map((node) => node.id);
 
@@ -252,8 +252,8 @@ export const getSecondaryNeighbors = (
         graph.edges.some(
           (edge) =>
             (edge.source === node.id && primaryNonResearchIds.includes(edge.target)) ||
-            (edge.target === node.id && primaryNonResearchIds.includes(edge.source))
-        )
+            (edge.target === node.id && primaryNonResearchIds.includes(edge.source)),
+        ),
     );
 
     // eslint-disable-next-line functional/immutable-data
@@ -272,8 +272,8 @@ export const getSecondaryNeighbors = (
         graph.edges.some(
           (edge) =>
             (edge.source === node.id && primaryNonStructureIds.includes(edge.target)) ||
-            (edge.target === node.id && primaryNonStructureIds.includes(edge.source))
-        )
+            (edge.target === node.id && primaryNonStructureIds.includes(edge.source)),
+        ),
     );
 
     // eslint-disable-next-line functional/immutable-data

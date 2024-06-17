@@ -140,7 +140,7 @@ describe("handleChangesets", () => {
             viewsToCreate: [newView1, newView2],
             viewsToUpdate: [],
             viewsToDelete: [],
-          })
+          }),
       ).rejects.toThrow();
     });
   });
@@ -164,7 +164,7 @@ describe("handleChangesets", () => {
             viewsToCreate: [newView],
             viewsToUpdate: [],
             viewsToDelete: [],
-          })
+          }),
       ).rejects.toThrow();
 
       await expect(
@@ -174,7 +174,7 @@ describe("handleChangesets", () => {
             viewsToCreate: [],
             viewsToUpdate: [updatedView],
             viewsToDelete: [],
-          })
+          }),
       ).rejects.toThrow();
 
       await expect(
@@ -184,7 +184,7 @@ describe("handleChangesets", () => {
             viewsToCreate: [],
             viewsToUpdate: [],
             viewsToDelete: [deletedView],
-          })
+          }),
       ).rejects.toThrow();
     });
   });

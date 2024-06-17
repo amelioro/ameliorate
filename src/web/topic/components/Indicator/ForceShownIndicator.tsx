@@ -19,7 +19,7 @@ const ForceShownIndicatorBase = ({ nodeId, partColor }: Props) => {
       stopForcingNodeToShow(nodeId);
       event.stopPropagation(); // prevent selecting the node and awkwardly re-showing if flashlight mode is on
     },
-    [nodeId]
+    [nodeId],
   );
 
   if (!nodeIsForcedToShow) return <></>;

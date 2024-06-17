@@ -153,7 +153,7 @@ describe("handleChangesets", () => {
             commentsToCreate: [newComment, newOtherComment],
             commentsToUpdate: [],
             commentsToDelete: [],
-          })
+          }),
       ).rejects.toThrow();
     });
   });
@@ -217,7 +217,7 @@ describe("handleChangesets", () => {
               commentsToCreate: [newComment],
               commentsToUpdate: [],
               commentsToDelete: [],
-            })
+            }),
         ).rejects.toThrow();
 
         await expect(
@@ -227,7 +227,7 @@ describe("handleChangesets", () => {
               commentsToCreate: [],
               commentsToUpdate: [updatedComment],
               commentsToDelete: [],
-            })
+            }),
         ).rejects.toThrow();
       });
     });
@@ -252,7 +252,7 @@ describe("handleChangesets", () => {
               commentsToCreate: [newComment],
               commentsToUpdate: [],
               commentsToDelete: [],
-            })
+            }),
         ).rejects.toThrow();
 
         await expect(
@@ -262,7 +262,7 @@ describe("handleChangesets", () => {
               commentsToCreate: [],
               commentsToUpdate: [updatedComment],
               commentsToDelete: [],
-            })
+            }),
         ).rejects.toThrow();
 
         await expect(
@@ -272,7 +272,7 @@ describe("handleChangesets", () => {
               commentsToCreate: [],
               commentsToUpdate: [resolvedComment],
               commentsToDelete: [],
-            })
+            }),
         ).rejects.toThrow();
 
         await expect(
@@ -282,7 +282,7 @@ describe("handleChangesets", () => {
               commentsToCreate: [],
               commentsToUpdate: [],
               commentsToDelete: [deletedComment],
-            })
+            }),
         ).rejects.toThrow();
       });
     });

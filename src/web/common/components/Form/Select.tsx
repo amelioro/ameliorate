@@ -35,7 +35,7 @@ export const Select = ({
       options.map((option) => {
         return typeof option === "object" ? option : { id: option, label: option };
       }),
-    [options]
+    [options],
   );
 
   // Use object for the value so that a label can differ from the value (particularly if the value is an id),

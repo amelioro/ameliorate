@@ -10,7 +10,7 @@ import { convertToApi } from "@/web/topic/utils/apiConversion";
 const getCrudDiffs = <T>(
   before: T[],
   after: T[],
-  identifierFn: (element: T) => string
+  identifierFn: (element: T) => string,
 ): [T[], T[], T[]] => {
   // use keyed objects instead of array of objects because array diffs vary based on element ordering
   const keyedBefore = Object.fromEntries(before.map((item) => [identifierFn(item), item]));
@@ -49,19 +49,19 @@ const saveDiffs = (storeBefore: TopicStoreState, storeAfter: TopicStoreState) =>
   const [nodesToCreate, nodesToUpdate, nodesToDelete] = getCrudDiffs(
     apiBefore.nodes,
     apiAfter.nodes,
-    (node) => node.id
+    (node) => node.id,
   );
 
   const [edgesToCreate, edgesToUpdate, edgesToDelete] = getCrudDiffs(
     apiBefore.edges,
     apiAfter.edges,
-    (edge) => edge.id
+    (edge) => edge.id,
   );
 
   const [scoresToCreate, scoresToUpdate, scoresToDelete] = getCrudDiffs(
     apiBefore.userScores,
     apiAfter.userScores,
-    (score) => score.username.toString() + score.graphPartId
+    (score) => score.username.toString() + score.graphPartId,
   );
 
   const changeLists = {
@@ -92,9 +92,9 @@ const saveDiffs = (storeBefore: TopicStoreState, storeAfter: TopicStoreState) =>
 
 type ApiSyncer = <
   Mps extends [StoreMutatorIdentifier, unknown][] = [],
-  Mcs extends [StoreMutatorIdentifier, unknown][] = []
+  Mcs extends [StoreMutatorIdentifier, unknown][] = [],
 >(
-  create: StateCreator<TopicStoreState, Mps, Mcs>
+  create: StateCreator<TopicStoreState, Mps, Mcs>,
 ) => StateCreator<TopicStoreState, Mps, Mcs>;
 
 type ApiSyncerImpl = (f: StateCreator<TopicStoreState>) => StateCreator<TopicStoreState>;

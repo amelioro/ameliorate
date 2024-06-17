@@ -39,7 +39,7 @@ export const useContextMenu = () => {
     event.preventDefault(); // prevent opening default context menu
 
     setAnchorPosition(
-      anchorPosition === undefined ? { top: event.clientY, left: event.clientX } : undefined
+      anchorPosition === undefined ? { top: event.clientY, left: event.clientX } : undefined,
     );
   };
 
@@ -54,7 +54,7 @@ export const useSessionUser = () => {
   const findUserByAuthId = trpc.user.findByAuthId.useQuery(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain -- enabled will ensure it only runs when not null
     { authId: authUser?.sub! },
-    { enabled: !!authUser?.sub, staleTime: Infinity }
+    { enabled: !!authUser?.sub, staleTime: Infinity },
   );
 
   // ensure we return null if the user is not authenticated (i.e. after logout, don't continue using the cached user)

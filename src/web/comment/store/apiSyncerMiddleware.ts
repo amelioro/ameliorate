@@ -10,7 +10,7 @@ import { isPlaygroundTopic } from "@/web/topic/store/utils";
 const getCrudDiffs = <T extends object>(
   before: T[],
   after: T[],
-  identifierFn: (element: T) => string
+  identifierFn: (element: T) => string,
 ): [T[], T[], T[]] => {
   // use keyed objects instead of array of objects because array diffs vary based on element ordering
   const keyedBefore = Object.fromEntries(before.map((item) => [identifierFn(item), item]));
@@ -23,13 +23,13 @@ const getCrudDiffs = <T extends object>(
     Object.entries(keyedBefore).map(([key, value]) => [
       key,
       Object.fromEntries(Object.entries(value).map(([k, v]) => [k, JSON.stringify(v)])),
-    ])
+    ]),
   );
   const stringifiedAfter = Object.fromEntries(
     Object.entries(keyedAfter).map(([key, value]) => [
       key,
       Object.fromEntries(Object.entries(value).map(([k, v]) => [k, JSON.stringify(v)])),
-    ])
+    ]),
   );
 
   const diffs = diff(stringifiedBefore, stringifiedAfter);
@@ -63,7 +63,7 @@ const getApiComments = (topicId: number, store: CommentStoreState): Comment[] =>
 const saveDiffs = (
   topicId: number,
   storeBefore: CommentStoreState,
-  storeAfter: CommentStoreState
+  storeAfter: CommentStoreState,
 ) => {
   const apiBefore = getApiComments(topicId, storeBefore);
   const apiAfter = getApiComments(topicId, storeAfter);
@@ -71,11 +71,11 @@ const saveDiffs = (
   const [commentsToCreate, commentsToUpdate, commentsToDelete] = getCrudDiffs(
     apiBefore,
     apiAfter,
-    (comment) => comment.id
+    (comment) => comment.id,
   );
 
   const anyChanges = [commentsToCreate, commentsToUpdate, commentsToDelete].some(
-    (changes) => changes.length > 0
+    (changes) => changes.length > 0,
   );
   if (!anyChanges) return;
 
@@ -89,9 +89,9 @@ const saveDiffs = (
 
 type ApiSyncer = <
   Mps extends [StoreMutatorIdentifier, unknown][] = [],
-  Mcs extends [StoreMutatorIdentifier, unknown][] = []
+  Mcs extends [StoreMutatorIdentifier, unknown][] = [],
 >(
-  create: StateCreator<CommentStoreState, Mps, Mcs>
+  create: StateCreator<CommentStoreState, Mps, Mcs>,
 ) => StateCreator<CommentStoreState, Mps, Mcs>;
 
 type ApiSyncerImpl = (f: StateCreator<CommentStoreState>) => StateCreator<CommentStoreState>;

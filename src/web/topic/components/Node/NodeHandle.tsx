@@ -50,8 +50,8 @@ const NodeHandleBase = ({ node, direction, orientation }: Props) => {
         ? Position.Top
         : Position.Left
       : orientation === "DOWN"
-      ? Position.Bottom
-      : Position.Right;
+        ? Position.Bottom
+        : Position.Right;
 
   return (
     <Tooltip

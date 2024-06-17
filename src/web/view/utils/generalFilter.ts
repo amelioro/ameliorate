@@ -28,7 +28,7 @@ export const applyNodeTypeFilter = (nodes: Node[], nodeTypes: NodeType[]) => {
 export const applyScoreFilter = <T extends GraphPart>(
   graphParts: T[],
   filter: GeneralFilter,
-  scores: Record<string, Score>
+  scores: Record<string, Score>,
 ) => {
   const { showOnlyScored, scoredComparer, scoreToCompare } = filter;
   if (!showOnlyScored) return graphParts;

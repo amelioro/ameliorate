@@ -38,7 +38,7 @@ const getUsersToNotify = async (comment: Comment, threadStarterCommentId: string
   });
   const subscribersToNotify = subscribers.map((subscriber) => {
     const subscription = subscriber.subscriptions.find(
-      (subscription) => subscription.sourceId === threadStarterCommentId
+      (subscription) => subscription.sourceId === threadStarterCommentId,
     );
     if (!subscription) throw errorWithData("couldn't find subscription", { subscriber, comment });
     const user: UserToNotify = {
@@ -95,7 +95,7 @@ export const getInAppNotificationMessage = (comment: Comment) => {
 const createInAppNotifications = async (
   comment: Comment,
   commentTopic: Topic,
-  usersToNotify: UserToNotify[]
+  usersToNotify: UserToNotify[],
 ) => {
   const sourceUrl = new URL(`/${commentTopic.creatorName}/${commentTopic.title}/`, getBaseUrl());
   sourceUrl.searchParams.set("comment", comment.id);
@@ -127,11 +127,11 @@ const subscribeAuthor = async (comment: Comment, threadStarterCommentId: string)
   });
 
   const authorIsIgnoringTopic = author.watches.some(
-    (watch) => watch.topicId === comment.topicId && watch.type === "ignore"
+    (watch) => watch.topicId === comment.topicId && watch.type === "ignore",
   );
 
   const authorAlreadyHasSubscription = author.subscriptions.some(
-    (subscription) => subscription.sourceId === threadStarterCommentId
+    (subscription) => subscription.sourceId === threadStarterCommentId,
   );
 
   if (authorIsIgnoringTopic || authorAlreadyHasSubscription) return;

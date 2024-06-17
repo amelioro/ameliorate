@@ -34,7 +34,7 @@ export const CreateTopicForm = ({ user }: { user: User }) => {
     onSuccess: async (newTopic, variables) => {
       utils.topic.findByUsernameAndTitle.setData(
         { username: user.username, title: variables.topic.title },
-        newTopic
+        newTopic,
       );
 
       utils.user.findByUsername.setData({ username: user.username }, (oldUser) => {
@@ -87,13 +87,13 @@ export const EditTopicForm = ({ topic, user }: { topic: Topic; user: User }) => 
       // update old title query
       utils.topic.findByUsernameAndTitle.setData(
         { username: user.username, title: topic.title },
-        null
+        null,
       );
 
       // update new title query
       utils.topic.findByUsernameAndTitle.setData(
         { username: user.username, title: updatedTopic.title },
-        updatedTopic
+        updatedTopic,
       );
     },
   });
@@ -115,7 +115,7 @@ export const EditTopicForm = ({ topic, user }: { topic: Topic; user: User }) => 
 
       utils.topic.findByUsernameAndTitle.setData(
         { username: user.username, title: topic.title },
-        null
+        null,
       );
     },
   });
@@ -190,7 +190,7 @@ const formSchema = (utils: ReturnType<typeof trpc.useContext>, user: User, topic
         });
         return !existingTopic;
       },
-      (title) => ({ message: `Title ${title} is not available.` })
+      (title) => ({ message: `Title ${title} is not available.` }),
     ),
     description: topicSchema.shape.description,
     visibility: topicSchema.shape.visibility,

@@ -15,7 +15,7 @@ import * as React from "react";
  */
 export const NumberInput = React.forwardRef(function NumberInput(
   props: NumberInputProps,
-  ref: React.ForwardedRef<HTMLDivElement>
+  ref: React.ForwardedRef<HTMLDivElement>,
 ) {
   return (
     <BaseNumberInput
@@ -92,7 +92,7 @@ const StyledInputRoot = styled("div")(
   &:focus-visible {
     outline: 0;
   }
-`
+`,
 );
 
 const StyledInputElement = styled("input")(
@@ -110,7 +110,7 @@ const StyledInputElement = styled("input")(
   padding: 8px 12px;
   outline: 0;
   width: 50px;
-`
+`,
 );
 
 const StyledButton = styled("button")(
@@ -184,5 +184,5 @@ const StyledButton = styled("button")(
   & .arrow {
     transform: translateY(-1px);
   }
-`
+`,
 );

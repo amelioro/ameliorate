@@ -18,7 +18,7 @@ export const topicRouter = router({
       z.object({
         username: userSchema.shape.username,
         title: topicSchema.shape.title,
-      })
+      }),
     )
     .query(async (opts) => {
       const isCreator = opts.input.username === opts.ctx.user?.username;
@@ -42,7 +42,7 @@ export const topicRouter = router({
       z.object({
         username: userSchema.shape.username,
         title: topicSchema.shape.title,
-      })
+      }),
     )
     .query(async (opts) => {
       const isCreator = opts.input.username === opts.ctx.user?.username;
@@ -97,9 +97,9 @@ export const topicRouter = router({
         scoresToCreate: z.array(userScoreSchema),
         scoresToUpdate: z.array(userScoreSchema),
         scoresToDelete: z.array(
-          userScoreSchema.pick({ username: true, graphPartId: true, topicId: true })
+          userScoreSchema.pick({ username: true, graphPartId: true, topicId: true }),
         ),
-      })
+      }),
     )
     .mutation(async (opts) => {
       // authorize
@@ -132,7 +132,7 @@ export const topicRouter = router({
 
       // ensure requests don't try changing nodes/edges/scores from other topics
       const onlyChangingObjectsFromThisTopic = topicObjectLists.every((topicObjects) =>
-        topicObjects.every((topicObject) => topicObject.topicId === topic.id)
+        topicObjects.every((topicObject) => topicObject.topicId === topic.id),
       );
 
       if (nonCreatorMadeRestrictedChanges || !onlyChangingObjectsFromThisTopic) {
@@ -237,7 +237,7 @@ export const topicRouter = router({
         }),
         // TODO: create basic views without passing over API when default view state is decoupled from web types
         quickViews: quickViewSchema.omit({ topicId: true }).array(), // omit topic because we'll set it on creation here
-      })
+      }),
     )
     .mutation(async (opts) => {
       const newTopic = await xprisma.topic.create({
@@ -283,7 +283,7 @@ export const topicRouter = router({
         description: true,
         visibility: true,
         allowAnyoneToEdit: true,
-      })
+      }),
     )
     .mutation(async (opts) => {
       const topic = await xprisma.topic.findUniqueOrThrow({ where: { id: opts.input.id } });

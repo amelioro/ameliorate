@@ -41,7 +41,7 @@ const researchRelations: AddableRelation[] = questionRelations.concat(
     { child: "fact", name: "relatesTo", parent: "fact", addableFrom: "child" }, // allow chaining facts, which feels natural
     { child: "source", name: "sourceOf", parent: "fact", addableFrom: "both" },
     { child: "source", name: "mentions", parent: "source", addableFrom: "child" },
-  ]
+  ],
 );
 
 // Assumes that we're always pointing from child to parent.
@@ -134,12 +134,12 @@ interface AddableRelation extends Relation {
 export const getRelation = (
   parent: NodeType,
   child: NodeType,
-  relationName?: RelationName
+  relationName?: RelationName,
 ): Relation | undefined => {
   const relation = relationName
     ? relations.find(
         (relation) =>
-          relation.parent === parent && relation.child === child && relation.name === relationName
+          relation.parent === parent && relation.child === child && relation.name === relationName,
       )
     : relations.find((relation) => relation.parent === parent && relation.child === child);
 
@@ -184,7 +184,8 @@ export const addableRelationsFrom = (nodeType: NodeType, addingAs: RelationDirec
 
   const addableRelations = relations.filter(
     (relation) =>
-      relation[fromDirection] === nodeType && ["both", fromDirection].includes(relation.addableFrom)
+      relation[fromDirection] === nodeType &&
+      ["both", fromDirection].includes(relation.addableFrom),
   );
 
   const formattedRelations = addableRelations.map((relation) => ({
@@ -247,7 +248,7 @@ export const getConnectingEdge = (graphPartId1: string, graphPartId2: string, ed
   const edge = edges.find(
     (edge) =>
       (edge.source === graphPartId1 && edge.target === graphPartId2) ||
-      (edge.source === graphPartId2 && edge.target === graphPartId1)
+      (edge.source === graphPartId2 && edge.target === graphPartId1),
   );
 
   return edge;
@@ -269,10 +270,10 @@ export const isEdgeAShortcut = (edge: Edge, topicGraph: Graph) => {
     const parentsOfChild = parents(edgeChild, topicGraph);
 
     const detourNodeAsChild = childrenOfParent.find(
-      (child) => child.type === shortcutRelation.detourNodeType
+      (child) => child.type === shortcutRelation.detourNodeType,
     );
     const detourNodeAsParent = parentsOfChild.find(
-      (parent) => parent.type === shortcutRelation.detourNodeType
+      (parent) => parent.type === shortcutRelation.detourNodeType,
     );
 
     // note: does not check if detour node is showing - this is so that hidden shortcut edges
@@ -298,7 +299,7 @@ export const isEdgeImpliedByComposition = (edge: Edge, topicGraph: Graph) => {
       (otherEdge) =>
         otherEdge.source === component.id &&
         otherEdge.label === edge.label &&
-        otherEdge.target === edgeChild.id
+        otherEdge.target === edgeChild.id,
     );
   });
 
@@ -311,7 +312,7 @@ export const isEdgeImpliedByComposition = (edge: Edge, topicGraph: Graph) => {
       (otherEdge) =>
         otherEdge.target === component.id &&
         otherEdge.label === edge.label &&
-        otherEdge.source === edgeParent.id
+        otherEdge.source === edgeParent.id,
     );
   });
 
@@ -335,7 +336,7 @@ const isEdgeImplied = (edge: Edge, graph: Graph, claimEdges: Edge[]) => {
 
 export const hideImpliedEdges = (edges: Edge[], displayGraph: Graph, topicGraph: Graph) => {
   const claimEdges = topicGraph.edges.filter((edge) =>
-    justificationRelationNames.includes(edge.label)
+    justificationRelationNames.includes(edge.label),
   );
 
   return edges.filter((edge) => !isEdgeImplied(edge, displayGraph, claimEdges));

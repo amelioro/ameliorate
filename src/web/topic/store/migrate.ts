@@ -71,7 +71,7 @@ const migrate_0_to_1 = (state: any) => {
       const sourceNodeType = diagram.nodes.find((node: any) => node.id === edge.source)?.type;
       const targetNodeType = diagram.nodes.find((node: any) => node.id === edge.target)?.type;
       const relation = relations.find(
-        (relation) => relation.Parent === sourceNodeType && relation.Child === targetNodeType
+        (relation) => relation.Parent === sourceNodeType && relation.Child === targetNodeType,
       );
       edge.label = relation?.name;
     });
@@ -441,11 +441,11 @@ const migrate_17_to_18 = (state: FromState17) => {
   // - delete diagrams
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   (state as unknown as ToState18).nodes = Object.values(state.diagrams!).flatMap(
-    (diagram) => diagram.nodes as GraphPart18[]
+    (diagram) => diagram.nodes as GraphPart18[],
   );
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   (state as unknown as ToState18).edges = Object.values(state.diagrams!).flatMap(
-    (diagram) => diagram.edges as GraphPart18[]
+    (diagram) => diagram.edges as GraphPart18[],
   );
   delete state.diagrams;
 

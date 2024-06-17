@@ -39,27 +39,27 @@ const useDraftStore = createWithEqualityFn<DraftStoreState>()(
       merge: (persistedState, _currentState) =>
         withDefaults(persistedState as Partial<DraftStoreState>, initialState),
       storage: storageWithDates,
-    }
+    },
   ),
 
   // Using `createWithEqualityFn` so that we can do a diff in hooks that return new arrays/objects
   // so that we can avoid extra renders
-  Object.is
+  Object.is,
 );
 
 // hooks
 export const useDraft = (
   parentId: string | null,
   parentType: CommentParentType,
-  commentId?: string
+  commentId?: string,
 ) => {
   return useDraftStore((state) =>
     state.drafts.find(
       (draft) =>
         draft.parentId === parentId &&
         draft.parentType === parentType &&
-        draft.commentId === commentId
-    )
+        draft.commentId === commentId,
+    ),
   );
 };
 
@@ -68,7 +68,7 @@ export const setDraft = (
   parentId: string | null,
   parentType: CommentParentType,
   content: string,
-  commentId?: string
+  commentId?: string,
 ) => {
   useDraftStore.setState(
     (state) => ({
@@ -79,19 +79,19 @@ export const setDraft = (
               draft.parentId === parentId &&
               draft.parentType === parentType &&
               draft.commentId === commentId
-            )
+            ),
         )
         .concat({ parentId, parentType, content, commentId }),
     }),
     true,
-    "setDraft"
+    "setDraft",
   );
 };
 
 export const deleteDraft = (
   parentId: string | null,
   parentType: CommentParentType,
-  commentId?: string
+  commentId?: string,
 ) => {
   useDraftStore.setState(
     (state) => ({
@@ -101,11 +101,11 @@ export const deleteDraft = (
             draft.parentId === parentId &&
             draft.parentType === parentType &&
             draft.commentId === commentId
-          )
+          ),
       ),
     }),
     true,
-    "deleteDraft"
+    "deleteDraft",
   );
 };
 
