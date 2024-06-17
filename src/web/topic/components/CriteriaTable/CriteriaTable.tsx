@@ -239,6 +239,7 @@ export const CriteriaTable = () => {
               as="child"
               toNodeType="solution"
               relation={{ child: "solution", name: "addresses", parent: "problem" }}
+              context="table"
             />
 
             <AddNodeButton
@@ -246,6 +247,7 @@ export const CriteriaTable = () => {
               as="child"
               toNodeType="criterion"
               relation={{ child: "criterion", name: "criterionFor", parent: "problem" }}
+              context="table"
             />
           </>
         )}

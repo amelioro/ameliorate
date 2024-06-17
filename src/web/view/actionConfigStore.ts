@@ -6,11 +6,13 @@ import { withDefaults } from "@/common/object";
 interface ActionConfigStoreState {
   unrestrictedEditing: boolean;
   flashlightMode: boolean;
+  readonlyMode: boolean;
 }
 
 const initialState: ActionConfigStoreState = {
   unrestrictedEditing: false,
   flashlightMode: false,
+  readonlyMode: false,
 };
 
 const persistedNameBase = "action-config-storage";
@@ -37,6 +39,10 @@ export const useFlashlightMode = () => {
   return useActionConfigStore((state) => state.flashlightMode);
 };
 
+export const useReadonlyMode = () => {
+  return useActionConfigStore((state) => state.readonlyMode);
+};
+
 // actions
 export const toggleUnrestrictedEditing = (unrestricted: boolean) => {
   useActionConfigStore.setState({ unrestrictedEditing: unrestricted });
@@ -44,6 +50,11 @@ export const toggleUnrestrictedEditing = (unrestricted: boolean) => {
 
 export const toggleFlashlightMode = (flashlight: boolean) => {
   useActionConfigStore.setState({ flashlightMode: flashlight });
+};
+
+export const toggleReadonlyMode = () => {
+  const readonly = useActionConfigStore.getState().readonlyMode;
+  useActionConfigStore.setState({ readonlyMode: !readonly });
 };
 
 export const loadActionConfig = async (persistId: string) => {

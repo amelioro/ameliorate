@@ -1,5 +1,6 @@
 import { NodeType } from "@/common/node";
 import { useSessionUser } from "@/web/common/hooks";
+import { NodeContext } from "@/web/common/store/ephemeralStore";
 import { StyledButton } from "@/web/topic/components/Node/AddNodeButton.styles";
 import { addNode } from "@/web/topic/store/createDeleteActions";
 import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
@@ -12,6 +13,7 @@ interface Props {
   as: RelationDirection;
   toNodeType: NodeType;
   relation: Relation;
+  context: NodeContext;
   /**
    * Generally want to select the new node to highlight it in the view, but some cases we want to
    * avoid changing selection so that the view isn't impacted as much (e.g. from the details pane)
@@ -25,6 +27,7 @@ export const AddNodeButton = ({
   as,
   toNodeType,
   relation,
+  context,
   selectNewNode,
   className,
 }: Props) => {
@@ -43,7 +46,7 @@ export const AddNodeButton = ({
       variant="contained"
       onClick={(event) => {
         event.stopPropagation(); // don't trigger selection of node
-        addNode({ fromPartId, as, toNodeType, relation, selectNewNode });
+        addNode({ fromPartId, as, toNodeType, relation, context, selectNewNode });
       }}
       // Not using MUI Tooltip because it throws anchorEl missing error when the button is hidden
       // after hovering it. Think we'd have to pass `show` into this component in order to hide

@@ -24,7 +24,6 @@ export interface Node {
     notes: string;
     arguedDiagramPartId?: string;
     showing: boolean;
-    newlyAdded: boolean; // jank to allow focusing nodes after adding them
   };
   type: FlowNodeType;
 }
@@ -57,7 +56,6 @@ export const buildNode = ({
       notes: notes ?? "",
       arguedDiagramPartId: justificationNodeTypes.includes(type) ? arguedDiagramPartId : undefined, // don't set arguedDiagramPartId on non-claims because non-claims shouldn't be deleted when the claim tree is deleted
       showing: true,
-      newlyAdded: false,
     },
     type: type,
   };

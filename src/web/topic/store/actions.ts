@@ -131,17 +131,3 @@ export const setGraphPartNotes = (graphPart: GraphPart, value: string) => {
 
   useTopicStore.setState(finishDraft(state), false, "setGraphPartNotes");
 };
-
-export const finishAddingNode = (nodeId: string) => {
-  const state = createDraft(useTopicStore.getState());
-
-  const node = findNodeOrThrow(nodeId, state.nodes);
-
-  /* eslint-disable functional/immutable-data, no-param-reassign */
-  node.data.newlyAdded = false;
-  /* eslint-enable functional/immutable-data, no-param-reassign */
-
-  useTopicStore.temporal.getState().pause();
-  useTopicStore.setState(finishDraft(state), false, "finishAddingNode");
-  useTopicStore.temporal.getState().resume();
-};

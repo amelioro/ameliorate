@@ -3,6 +3,7 @@ import {
   Build,
   Close,
   Download,
+  EditOff,
   Engineering,
   FilterAltOutlined,
   FormatColorFill,
@@ -35,10 +36,13 @@ import { getDisplayNodes } from "@/web/topic/components/Diagram/externalFlowStor
 import { downloadTopic, uploadTopic } from "@/web/topic/loadStores";
 import { useOnPlayground } from "@/web/topic/store/topicHooks";
 import { resetTopicData } from "@/web/topic/store/utilActions";
+import { hotkeys } from "@/web/topic/utils/hotkeys";
 import {
   toggleFlashlightMode,
+  toggleReadonlyMode,
   toggleUnrestrictedEditing,
   useFlashlightMode,
+  useReadonlyMode,
   useUnrestrictedEditing,
 } from "@/web/view/actionConfigStore";
 import { Perspectives } from "@/web/view/components/Perspectives/Perspectives";
@@ -112,6 +116,7 @@ export const MoreActionsDrawer = ({
   const unrestrictedEditing = useUnrestrictedEditing();
   const forceNodesIntoLayers = useForceNodesIntoLayers();
   const flashlightMode = useFlashlightMode();
+  const readonlyMode = useReadonlyMode();
   const layoutThoroughness = useLayoutThoroughness();
   const showResolvedComments = useShowResolvedComments();
   const fillNodesWithColor = useFillNodesWithColor();
@@ -236,6 +241,22 @@ export const MoreActionsDrawer = ({
               >
                 <Highlight />
               </ToggleButton>
+              {userCanEditTopicData && (
+                <>
+                  <ToggleButton
+                    value={readonlyMode}
+                    title={`Read-only mode (${hotkeys.readonlyMode})`}
+                    aria-label={`Read-only mode (${hotkeys.readonlyMode})`}
+                    color="secondary"
+                    size="small"
+                    selected={readonlyMode}
+                    onClick={() => toggleReadonlyMode()}
+                    sx={{ borderRadius: "50%", border: "0" }}
+                  >
+                    <EditOff />
+                  </ToggleButton>
+                </>
+              )}
             </ListItem>
           </>
         )}

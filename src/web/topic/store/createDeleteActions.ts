@@ -3,6 +3,7 @@ import { createDraft, finishDraft } from "immer";
 import { errorWithData } from "@/common/errorHandling";
 import { justificationNodeTypes, structureNodeTypes } from "@/common/node";
 import { emitter } from "@/web/common/event";
+import { NodeContext, setNewlyAddedNode } from "@/web/common/store/ephemeralStore";
 import { getExplicitClaimCount } from "@/web/topic/store/graphPartHooks";
 import { TopicStoreState, useTopicStore } from "@/web/topic/store/store";
 import { getImplicitLabel } from "@/web/topic/utils/claim";
@@ -33,7 +34,6 @@ const createNode = (
 
   /* eslint-disable functional/immutable-data */
   state.nodes.push(newNode);
-  newNode.data.newlyAdded = true;
   /* eslint-enable functional/immutable-data */
 
   // TODO?: add node to nodesToShow if we're adding from the diagram so that we never awkwardly add a node and can't see it.
@@ -79,10 +79,18 @@ interface AddNodeProps {
   as: RelationDirection;
   toNodeType: FlowNodeType;
   relation: Relation;
+  context: NodeContext;
   selectNewNode?: boolean;
 }
 
-export const addNode = ({ fromPartId, as, toNodeType, relation, selectNewNode }: AddNodeProps) => {
+export const addNode = ({
+  fromPartId,
+  as,
+  toNodeType,
+  relation,
+  context,
+  selectNewNode,
+}: AddNodeProps) => {
   if (!getUnrestrictedEditing() && !getRelation(relation.parent, relation.child, relation.name))
     throw errorWithData("invalid relation to add", relation);
 
@@ -134,6 +142,8 @@ export const addNode = ({ fromPartId, as, toNodeType, relation, selectNewNode }:
   ) {
     connectCriteriaToSolutions(state, newNode, fromPart);
   }
+
+  setNewlyAddedNode(newNode.id, context);
 
   // trigger event so viewport can be updated.
   // seems like there should be a cleaner way to do this - perhaps custom zustand middleware to emit for any action

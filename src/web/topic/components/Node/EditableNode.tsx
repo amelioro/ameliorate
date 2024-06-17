@@ -3,6 +3,11 @@ import { memo, useEffect, useRef } from "react";
 
 import { useSessionUser } from "@/web/common/hooks";
 import { openContextMenu } from "@/web/common/store/contextMenuActions";
+import {
+  NodeContext,
+  clearNewlyAddedNode,
+  isNodeNewlyAdded,
+} from "@/web/common/store/ephemeralStore";
 import { CommonIndicators } from "@/web/topic/components/Indicator/CommonIndicators";
 import {
   LeftCornerStatusIndicators,
@@ -14,7 +19,7 @@ import {
   StyledTextareaAutosize,
   YEdgeBox,
 } from "@/web/topic/components/Node/EditableNode.styles";
-import { finishAddingNode, setCustomNodeType, setNodeLabel } from "@/web/topic/store/actions";
+import { setCustomNodeType, setNodeLabel } from "@/web/topic/store/actions";
 import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { Node } from "@/web/topic/utils/graph";
 import { nodeDecorations } from "@/web/topic/utils/node";
@@ -24,19 +29,11 @@ import { useFillNodesWithColor } from "@/web/view/userConfigStore";
 
 interface Props {
   node: Node;
-  /**
-   * If a node is supplemental, clicking it won't select it. This is useful for nodes in the details
-   * pane, where you may want to edit text or score without selecting it (and thus displaying a new
-   * node's detail pane).
-   *
-   * Potentially  this could be avoided by turning off "click to select" and requiring clicking on
-   * the details button to select, but selecting with a click seems intuitive.
-   */
-  supplemental?: boolean;
+  context: NodeContext;
   className?: string;
 }
 
-const EditableNodeBase = ({ node, supplemental = false, className = "" }: Props) => {
+const EditableNodeBase = ({ node, context, className = "" }: Props) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const unrestrictedEditing = useUnrestrictedEditing();
@@ -45,20 +42,24 @@ const EditableNodeBase = ({ node, supplemental = false, className = "" }: Props)
 
   const theme = useTheme();
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
-  useEffect(() => {
-    if (!node.data.newlyAdded || !textAreaRef.current) return;
-    finishAddingNode(node.id);
-    const textArea = textAreaRef.current;
+  const textAreaId = `${node.id}-${context}-textarea`;
 
-    // No idea why timeout is needed here, but without it, and in the flow, focus is not moved to
-    // the text area. It seems specific to react-flow - making a simple button and list of item
-    // components, with each item having a useEffect that focuses it, focus is set properly after a
-    // new item is rendered.
+  useEffect(() => {
+    if (!isNodeNewlyAdded(node.id, context)) return;
+
+    clearNewlyAddedNode();
+
+    // Focus newly added node's text.
+    // Using timeout because textarea doesn't pull focus via `.focus()` without it. textarea is in DOM at this point, so I'm not sure why.
     setTimeout(() => {
-      textArea.focus();
-      textArea.setSelectionRange(0, textArea.value.length);
-    }, 0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- if we select the node after initial render, we don't care about re-focusing. we mainly care about focusing on node add. focusing on node click is annoying because our cursor jumps to the end of the input.
+      // Using getElementById instead of ref because ref.current is null after the timeout runs, unless timeout = 0 ms.
+      // But when timeout = 0 ms, while focus is successfully pulled to the textarea, focus is pulled back to document body afterwards for some reason.
+      // Think that's something to do with how we're rendering the diagram - it doesn't happen for details/table nodes.
+      const textAreaEl = document.getElementById(textAreaId) as HTMLTextAreaElement | null;
+      textAreaEl?.focus();
+      textAreaEl?.setSelectionRange(0, textAreaEl.value.length);
+    }, 10);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- we don't care about re-focusing after initial render
   }, []);
 
   // prefer this over binding value={node.data.label} because this allows us to update node.data.label onBlur instead of onChange, creating significantly fewer unnecessary re-renders
@@ -74,8 +75,8 @@ const EditableNodeBase = ({ node, supplemental = false, className = "" }: Props)
 
   // Require selecting a node before editing it, because oftentimes you'll want to select a node to
   // view more details, and the editing will be distracting. Only edit after clicking when selected.
-  // Supplemental nodes are always editable, because clicking does not select them.
-  const editable = userCanEditTopicData && (supplemental || selected);
+  // Details nodes are always editable, because clicking does not select them.
+  const editable = userCanEditTopicData && (context === "details" || selected);
 
   const customizable = userCanEditTopicData && (unrestrictedEditing || node.type === "custom");
 
@@ -111,7 +112,9 @@ const EditableNodeBase = ({ node, supplemental = false, className = "" }: Props)
   return (
     <NodeBox
       className={className + (selected ? " selected" : "")}
-      onClick={() => !supplemental && setSelected(node.id)}
+      onClick={() => {
+        if (context != "details") setSelected(node.id);
+      }}
       onContextMenu={(event) => openContextMenu(event, { node })}
       sx={nodeStyles}
     >
@@ -135,6 +138,7 @@ const EditableNodeBase = ({ node, supplemental = false, className = "" }: Props)
       </YEdgeBox>
       <MiddleDiv>
         <StyledTextareaAutosize
+          id={textAreaId}
           ref={textAreaRef}
           placeholder="Enter text..."
           defaultValue={node.data.label}

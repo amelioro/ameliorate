@@ -5,9 +5,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useSessionUser } from "@/web/common/hooks";
 import { NodeProps } from "@/web/topic/components/Diagram/Diagram";
 import { Spotlight } from "@/web/topic/components/Diagram/Diagram.styles";
+import { AddNodeButtonGroup } from "@/web/topic/components/Node/AddNodeButtonGroup";
 import {
-  AddNodeButtonGroupChild,
-  AddNodeButtonGroupParent,
   HoverBridgeDiv,
   StyledEditableNode,
   nodeStyles,
@@ -18,7 +17,7 @@ import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { Node } from "@/web/topic/utils/graph";
 import { orientation } from "@/web/topic/utils/layout";
 import { FlowNodeType } from "@/web/topic/utils/node";
-import { getFlashlightMode } from "@/web/view/actionConfigStore";
+import { getFlashlightMode, useReadonlyMode } from "@/web/view/actionConfigStore";
 import { showNodeAndNeighbors } from "@/web/view/currentViewStore/filter";
 
 const convertToNode = (flowNode: NodeProps): Node => {
@@ -36,6 +35,7 @@ export const FlowNode = (flowNode: NodeProps) => {
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const isNeighborSelected = useIsNeighborSelected(flowNode.id);
   const isEdgeSelected = useIsEdgeSelected(flowNode.id);
+  const readonlyMode = useReadonlyMode();
 
   const node = useMemo(() => {
     return convertToNode(flowNode);
@@ -53,6 +53,21 @@ export const FlowNode = (flowNode: NodeProps) => {
     setAnimated(true);
   }, []);
 
+  const conditionallyShowAddButtons = readonlyMode
+    ? ""
+    : "[.selectable:hover_>_&]:flex [.selected_>_&]:flex";
+  const positionParentButtons =
+    orientation === "DOWN"
+      ? // have to use [arbitrary] tw values because can't apply two translate-x-* class names
+        // `left-1/2 top-0 -translate-x-1/2 translate-y-[calc(-100%-${nodeBridgeGap}px)]`
+        // also can't use `${nodeBridgeGap}` because tw classes are detected based on full class names being present in the source file https://tailwindcss.com/docs/content-configuration#dynamic-class-names
+        `left-1/2 top-0 -translate-x-1/2 translate-y-[calc(-100%-16px)]`
+      : `top-1/2 left-0 -translate-y-1/2 translate-x-[calc(-100%-16px)]`;
+  const positionChildButtons =
+    orientation === "DOWN"
+      ? `left-1/2 bottom-0 -translate-x-1/2 translate-y-[calc(100%+16px)]`
+      : `top-1/2 right-0 -translate-y-1/2 translate-x-[calc(100%+16px)]`;
+
   return (
     <>
       <Global styles={nodeStyles(node, spotlight)} />
@@ -61,11 +76,12 @@ export const FlowNode = (flowNode: NodeProps) => {
 
       {/* should this use react-flow's NodeToolbar? seems like it'd automatically handle positioning */}
       {userCanEditTopicData && (
-        <AddNodeButtonGroupParent
+        <AddNodeButtonGroup
           fromNodeId={flowNode.id}
           fromNodeType={node.type}
           as="parent"
           orientation={orientation}
+          className={`absolute hidden ${conditionallyShowAddButtons} ${positionParentButtons}`}
         />
       )}
 
@@ -79,16 +95,17 @@ export const FlowNode = (flowNode: NodeProps) => {
         }}
       >
         <NodeHandle node={node} direction="parent" orientation={orientation} />
-        <StyledEditableNode node={node} className={`spotlight-${spotlight}`} />
+        <StyledEditableNode node={node} context="diagram" className={`spotlight-${spotlight}`} />
         <NodeHandle node={node} direction="child" orientation={orientation} />
       </motion.div>
 
       {userCanEditTopicData && (
-        <AddNodeButtonGroupChild
+        <AddNodeButtonGroup
           fromNodeId={flowNode.id}
           fromNodeType={node.type}
           as="child"
           orientation={orientation}
+          className={`absolute hidden ${conditionallyShowAddButtons} ${positionChildButtons}`}
         />
       )}
     </>

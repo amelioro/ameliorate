@@ -48,6 +48,7 @@ export const DetailsClaimsSection = ({ graphPart }: Props) => {
             name: "supports",
             parent: isClaimNode ? graphPart.type : "rootClaim",
           }}
+          context="details"
           selectNewNode={false}
         />
         <ClaimTreeIndicator graphPartId={graphPart.data.arguedDiagramPartId ?? graphPart.id} />
@@ -61,6 +62,7 @@ export const DetailsClaimsSection = ({ graphPart }: Props) => {
             name: "critiques",
             parent: isClaimNode ? graphPart.type : "rootClaim",
           }}
+          context="details"
           selectNewNode={false}
         />
       </Stack>
@@ -74,7 +76,9 @@ export const DetailsClaimsSection = ({ graphPart }: Props) => {
       >
         <Stack width={nodeWidthPx} alignItems="center" spacing="2px">
           {supports.length > 0 ? (
-            supports.map((support) => <EditableNode key={support.id} node={support} supplemental />)
+            supports.map((support) => (
+              <EditableNode key={support.id} node={support} context="details" />
+            ))
           ) : (
             <Typography>No supports yet!</Typography>
           )}
@@ -83,7 +87,7 @@ export const DetailsClaimsSection = ({ graphPart }: Props) => {
         <Stack width={nodeWidthPx} alignItems="center" spacing="2px">
           {critiques.length > 0 ? (
             critiques.map((critique) => (
-              <EditableNode key={critique.id} node={critique} supplemental />
+              <EditableNode key={critique.id} node={critique} context="details" />
             ))
           ) : (
             <Typography>No critiques yet!</Typography>
