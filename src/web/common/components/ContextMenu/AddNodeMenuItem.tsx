@@ -36,7 +36,7 @@ export const AddNodeMenuItem = ({ parentMenuOpen }: Props) => {
         }}
       >
         {shownNodeTypes.map((type) => (
-          <CloseOnClickMenuItem key={type} onClick={() => addNodeWithoutParent(type)}>
+          <CloseOnClickMenuItem key={type} onClick={() => addNodeWithoutParent(type, "diagram")}>
             {nodeDecorations[type].title}
           </CloseOnClickMenuItem>
         ))}
