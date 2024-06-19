@@ -3,7 +3,8 @@ import ELK, { ElkNode, LayoutOptions } from "elkjs";
 import { NodeType, nodeTypes } from "@/common/node";
 import { nodeHeightPx, nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
 import { Diagram } from "@/web/topic/utils/diagram";
-import { type Edge, type Node, ancestors, descendants } from "@/web/topic/utils/graph";
+import { type Edge, type Node } from "@/web/topic/utils/graph";
+import { edges as nodeEdges } from "@/web/topic/utils/node";
 
 export type Orientation = "DOWN" | "UP" | "RIGHT" | "LEFT";
 export const orientation: Orientation = "DOWN" as Orientation; // not constant to allow potential other orientations in the future, and keeping code that currently exists for handling "LEFT" orientation
@@ -53,26 +54,18 @@ const partitionOrders: { [type in NodeType]: string } = {
   custom: "null",
 };
 
-const calculatePartition = (node: Node, nodes: Node[], edges: Edge[]) => {
-  const topicGraph = { nodes, edges };
-
+const calculatePartition = (node: Node, edges: Edge[]) => {
   if (["effect", "benefit", "detriment"].includes(node.type)) {
-    const nodeAncestors = ancestors(node, topicGraph);
-    const nodeDescendants = descendants(node, topicGraph);
-
-    const hasProblemAncestor = nodeAncestors.some((ancestor) => ancestor.type === "problem");
-    const hasCriterionAncestor = nodeAncestors.some((ancestor) => ancestor.type === "criterion");
-    const hasSolutionDescendant = nodeDescendants.some(
-      (descendant) => descendant.type === "solution",
+    const edgesOfNode = nodeEdges(node, edges);
+    const hasParentCreatedBy = edgesOfNode.some(
+      (edge) => edge.label === "createdBy" && edge.target === node.id,
     );
-    const hasCriterionDescendant = nodeDescendants.some(
-      (descendant) => descendant.type === "criterion",
+    const hasChildCreates = edgesOfNode.some(
+      (edge) => edge.label === "creates" && edge.source === node.id,
     );
 
-    // this implementation seems solid but if it becomes unperformant, it might be good enough to
-    // just check if this node has a "created by" vs "creates" relation
-    const shouldBeAboveCriteria = hasProblemAncestor && !hasCriterionAncestor; // problem is _not_ through criterion
-    const shouldBeBelowCriteria = hasSolutionDescendant && !hasCriterionDescendant; // solution is _not_ through criterion
+    const shouldBeAboveCriteria = hasParentCreatedBy; // effect createdBy problem
+    const shouldBeBelowCriteria = hasChildCreates; // solution creates effect
 
     if (shouldBeAboveCriteria && shouldBeBelowCriteria) return "null";
     else if (shouldBeAboveCriteria) return "0";
@@ -140,7 +133,7 @@ export const layout = async (
             // solutions, components, effects; we might be able to improve that situation by modeling
             // each problem within a nested node. Or maybe we could just do partitioning within
             // a special "problem context view" rather than in the main topic diagram view.
-            "elk.partitioning.partition": calculatePartition(node, nodes, edges),
+            "elk.partitioning.partition": calculatePartition(node, edges),
           },
         };
       }),
