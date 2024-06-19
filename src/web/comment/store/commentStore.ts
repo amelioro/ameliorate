@@ -106,19 +106,9 @@ export const upsertComment = (
   const existingComment = state.comments.find((comment) => comment.id === commentId);
   const contentUpdatedAt = new Date();
 
-  const updatedComments = existingComment
-    ? state.comments.map((comment) => {
-        if (comment.id === existingComment.id) {
-          return {
-            ...comment,
-            content,
-            contentUpdatedAt,
-          };
-        } else {
-          return comment;
-        }
-      })
-    : state.comments.concat({
+  const upsertedComment = existingComment
+    ? { ...existingComment, content, contentUpdatedAt }
+    : {
         id: shortUUID.generate(),
         authorName,
         parentId,
@@ -126,10 +116,22 @@ export const upsertComment = (
         content,
         resolved: isThreadStarterComment(parentType) ? false : null,
         createdAt: contentUpdatedAt,
-        contentUpdatedAt: contentUpdatedAt,
-      });
+        contentUpdatedAt,
+      };
+
+  const updatedComments = existingComment
+    ? state.comments.map((comment) => {
+        if (comment.id === existingComment.id) {
+          return upsertedComment;
+        } else {
+          return comment;
+        }
+      })
+    : state.comments.concat(upsertedComment);
 
   useCommentStore.setState({ comments: updatedComments }, false, "upsertComment");
+
+  return upsertedComment;
 };
 
 export const deleteComment = (commentId: string) => {
