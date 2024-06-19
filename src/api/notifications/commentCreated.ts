@@ -1,32 +1,21 @@
 import { Topic, User } from "@prisma/client";
 import truncate from "lodash/truncate";
 
-import { Comment } from "@/common/comment";
+import { Comment, isThreadStarterComment } from "@/common/comment";
 import { errorWithData } from "@/common/errorHandling";
 import { InAppNotification, maxMessageLength } from "@/common/inAppNotification";
 import { getBaseUrl } from "@/common/utils";
 import { xprisma } from "@/db/extendedPrisma";
 
-type UserToNotify = User & { reasonSource: { id: number; type: "watch" | "subscription" } };
-
 /**
  * user should receive an in-app notification if:
  * - they aren't the comment's author AND
- * - they aren't ignoring the topic AND
- * - either
- *   - they are subscribed to the thread starter comment OR
- *   - they are watching the topic
+ * - they are subscribed to the thread starter comment
  */
 const getUsersToNotify = async (comment: Comment, threadStarterCommentId: string) => {
-  const subscribers = await xprisma.user.findMany({
+  return await xprisma.user.findMany({
     where: {
       NOT: { username: comment.authorName },
-      watches: {
-        none: {
-          topicId: comment.topicId,
-          type: "ignore",
-        },
-      },
       subscriptions: {
         some: {
           sourceId: threadStarterCommentId,
@@ -34,43 +23,7 @@ const getUsersToNotify = async (comment: Comment, threadStarterCommentId: string
         },
       },
     },
-    include: { subscriptions: true },
   });
-  const subscribersToNotify = subscribers.map((subscriber) => {
-    const subscription = subscriber.subscriptions.find(
-      (subscription) => subscription.sourceId === threadStarterCommentId,
-    );
-    if (!subscription) throw errorWithData("couldn't find subscription", { subscriber, comment });
-    const user: UserToNotify = {
-      ...subscriber,
-      reasonSource: { id: subscription.id, type: "subscription" },
-    };
-    return user;
-  });
-
-  const subscriberIds = subscribers.map((subscriber) => subscriber.id);
-
-  const watchers = await xprisma.user.findMany({
-    where: {
-      NOT: { OR: [{ username: comment.authorName }, { id: { in: subscriberIds } }] },
-      watches: {
-        some: {
-          topicId: comment.topicId,
-          type: "all",
-        },
-      },
-    },
-    include: { watches: true },
-  });
-  const watchersToNotify = watchers.map((watcher) => {
-    const watch = watcher.watches.find((watch) => watch.topicId === comment.topicId);
-    if (!watch) throw errorWithData("couldn't find watch", { watcher, comment });
-
-    const user: UserToNotify = { ...watcher, reasonSource: { id: watch.id, type: "watch" } };
-    return user;
-  });
-
-  return [...subscribersToNotify, ...watchersToNotify];
 };
 
 /**
@@ -95,7 +48,7 @@ export const getInAppNotificationMessage = (comment: Comment) => {
 const createInAppNotifications = async (
   comment: Comment,
   commentTopic: Topic,
-  usersToNotify: UserToNotify[],
+  usersToNotify: User[],
 ) => {
   const sourceUrl = new URL(`/${commentTopic.creatorName}/${commentTopic.title}/`, getBaseUrl());
   sourceUrl.searchParams.set("comment", comment.id);
@@ -112,7 +65,6 @@ const createInAppNotifications = async (
       },
       message,
       sourceUrl: sourceUrl.href,
-      reason: userToNotify.reasonSource.type === "subscription" ? "subscribed" : "watching",
     };
     return notification;
   });
@@ -120,36 +72,73 @@ const createInAppNotifications = async (
   await xprisma.inAppNotification.createMany({ data: inAppNotifications });
 };
 
-const subscribeAuthor = async (comment: Comment, threadStarterCommentId: string) => {
-  const author = await xprisma.user.findUniqueOrThrow({
-    where: { username: comment.authorName },
-    include: { watches: true, subscriptions: true },
-  });
+/**
+ * users should become subscribed if:
+ * - if comment is thread-starter:
+ *   - either
+ *     - user is author and is not ignoring the topic
+ *     - user has a watch `all` for the topic
+ * - if comment is reply:
+ *   - user doesn't already have a subscription AND
+ *   - they authored the comment and have no `ignore` watch for the topic (ideally would just check `participatingOrMentions`, but that's assumed default if they don't have any watch)
+ */
+const createSubscriptions = async (comment: Comment, threadStarterCommentId: string) => {
+  const usersToSubscribe = isThreadStarterComment(comment.parentType)
+    ? await xprisma.user.findMany({
+        where: {
+          OR: [
+            {
+              username: comment.authorName,
+              watches: {
+                none: {
+                  topicId: comment.topicId,
+                  type: "ignore",
+                },
+              },
+            },
+            {
+              watches: {
+                some: {
+                  topicId: comment.topicId,
+                  type: "all",
+                },
+              },
+            },
+          ],
+        },
+      })
+    : await xprisma.user.findMany({
+        where: {
+          subscriptions: {
+            none: {
+              sourceId: threadStarterCommentId,
+              sourceType: "threadStarterComment",
+            },
+          },
+          username: comment.authorName,
+          watches: {
+            none: {
+              topicId: comment.topicId,
+              type: "ignore",
+            },
+          },
+        },
+      });
 
-  const authorIsIgnoringTopic = author.watches.some(
-    (watch) => watch.topicId === comment.topicId && watch.type === "ignore",
-  );
+  const subscriptionsToCreate = usersToSubscribe.map((user) => ({
+    subscriberUsername: user.username,
+    sourceId: threadStarterCommentId,
+    sourceType: "threadStarterComment" as const,
+  }));
 
-  const authorAlreadyHasSubscription = author.subscriptions.some(
-    (subscription) => subscription.sourceId === threadStarterCommentId,
-  );
-
-  if (authorIsIgnoringTopic || authorAlreadyHasSubscription) return;
-
-  await xprisma.subscription.create({
-    data: {
-      subscriberUsername: author.username,
-      sourceId: threadStarterCommentId,
-      sourceType: "threadStarterComment",
-    },
-  });
+  await xprisma.subscription.createMany({ data: subscriptionsToCreate });
 };
 
 export const handleCommentCreated = async (comment: Comment) => {
   const threadStarterCommentId = comment.parentType === "comment" ? comment.parentId : comment.id;
   if (!threadStarterCommentId) throw errorWithData("couldn't find thread starter comment", comment);
 
-  await subscribeAuthor(comment, threadStarterCommentId);
+  await createSubscriptions(comment, threadStarterCommentId);
 
   const commentTopic = await xprisma.topic.findUniqueOrThrow({ where: { id: comment.topicId } });
   const usersToNotify = await getUsersToNotify(comment, threadStarterCommentId);

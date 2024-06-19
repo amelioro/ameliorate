@@ -64,11 +64,6 @@ const Notifications: NextPage = () => {
       grow: false,
     },
     {
-      accessorKey: "reason",
-      header: "Reason",
-      grow: false,
-    },
-    {
       accessorKey: "createdAt",
       header: "Created",
       Cell: ({ row }) => (

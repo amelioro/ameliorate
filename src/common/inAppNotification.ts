@@ -13,10 +13,6 @@ export const notificationDataSchema = z.object({
   commentId: baseCommentSchema.shape.id,
 });
 
-export const reasonTypes = ["watching", "subscribed"] as const;
-export const zReasonTypes = z.enum(reasonTypes);
-export type ReasonType = z.infer<typeof zReasonTypes>;
-
 export const maxMessageLength = 500;
 
 export const inAppNotificationSchema = z.object({
@@ -27,7 +23,6 @@ export const inAppNotificationSchema = z.object({
   data: notificationDataSchema,
   message: z.string().max(maxMessageLength),
   sourceUrl: z.string().max(1000),
-  reason: zReasonTypes,
   createdAt: z.date(),
 });
 

@@ -305,7 +305,7 @@ describe("handleChangesets", () => {
     });
 
     // a simple notification test is here as one api-to-end test
-    test("creates notifications", async () => {
+    test("creates subscriptions and notifications", async () => {
       const trpc = appRouter.createCaller({
         userAuthId: notCreatorOfTopic.authId,
         userEmailVerified: true,
@@ -321,6 +321,16 @@ describe("handleChangesets", () => {
         commentsToDelete: [],
       });
 
+      const subscriptions = await xprisma.subscription.findMany({
+        where: { subscriberUsername: watcher.username, sourceId: newComment.id },
+      });
+      expect(subscriptions).toHaveLength(1);
+      expect(subscriptions[0]).toMatchObject({
+        subscriberUsername: watcher.username,
+        sourceId: newComment.id,
+        sourceType: "threadStarterComment",
+      });
+
       const notifications = await xprisma.inAppNotification.findMany({
         where: { notifiedUsername: watcher.username },
       });
@@ -334,7 +344,6 @@ describe("handleChangesets", () => {
         },
         message: notCreatorOfTopic.username + ` commented: "${newComment.content}"`,
         sourceUrl: `http://localhost:3000/creatorOfTopic/topicWithoutAllowAnyEdit/?comment=${newComment.id}`,
-        reason: "watching",
       });
     });
 
