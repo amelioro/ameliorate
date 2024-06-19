@@ -157,7 +157,8 @@ export const setTitle = (viewId: string, newTitle: string) => {
     "setTitle",
   );
 
-  updateURLParams(newTitle);
+  const updatedSelectedView = state.selectedViewId === viewId;
+  if (updatedSelectedView) updateURLParams(newTitle);
 };
 
 export const saveView = (viewId: string) => {
@@ -199,11 +200,13 @@ export const deleteView = (viewId: string) => {
  * if deselecting, remove the view param, else set the view param to the view's title
  */
 const updateURLParams = (viewTitle: string | null) => {
-  const currentParams = new URLSearchParams(window.location.search);
+  const { search, pathname } = window.location;
+
+  const currentParams = new URLSearchParams(search);
   if (viewTitle !== null) currentParams.set("view", viewTitle);
   else currentParams.delete("view");
 
-  void Router.replace({ query: currentParams.toString() }, undefined, { shallow: true });
+  void Router.replace({ pathname, query: currentParams.toString() }, undefined, { shallow: true });
 };
 
 /**

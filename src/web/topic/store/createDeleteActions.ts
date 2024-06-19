@@ -153,10 +153,16 @@ export const addNode = ({
   useTopicStore.setState(finishDraft(state), false, "addNode");
 };
 
-export const addNodeWithoutParent = (nodeType: FlowNodeType, selectNewNode = true) => {
+export const addNodeWithoutParent = (
+  nodeType: FlowNodeType,
+  context: NodeContext,
+  selectNewNode = true,
+) => {
   const state = createDraft(useTopicStore.getState());
 
   const newNode = createNode(state, nodeType, undefined, selectNewNode);
+
+  setNewlyAddedNode(newNode.id, context);
 
   // trigger event so viewport can be updated.
   // seems like there should be a cleaner way to do this - perhaps custom zustand middleware to emit for any action

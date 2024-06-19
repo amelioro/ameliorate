@@ -7,6 +7,11 @@
   "name": "ameliorate",
   "version": "0.1.0",
   "type": "module",
+  "engines": {
+    "//": "run `nvm install` to use the right versions; these are enforced via .npmrc's engine-strict when npm is used",
+    "node": "20.12.2",
+    "npm": "10.5.0"
+  },
   "prisma": {
     "schema": "src/db/schema.prisma",
     "seed": "tsx scripts/seed.ts"

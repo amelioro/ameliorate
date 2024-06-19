@@ -42,13 +42,16 @@ Note: be particularly wary of [issues with a "needs [x]" label](https://github.c
 
 ## Running the project
 
-Make sure you have [git](https://git-scm.com/downloads), [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm), and [docker](https://docs.docker.com/get-docker/) installed. If you're on Windows, you may also need to install [WSL](https://learn.microsoft.com/en-us/windows/wsl/install#install-wsl-command) to run the bash setup scripts.
+Make sure you have [git](https://git-scm.com/downloads), [nvm](https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating) (or your preferred node version manager), and [docker](https://docs.docker.com/get-docker/) installed. If you're on Windows, you may also need to install [WSL](https://learn.microsoft.com/en-us/windows/wsl/install#install-wsl-command) to run the bash setup scripts.
 
 Setup:
 
 ```bash
 git clone https://github.com/amelioro/ameliorate.git
 cd ameliorate
+
+# install node version (and npm) specified in .nvmrc
+nvm install
 
 # install dependencies, commit hooks, env variables, seed db, build mock-auth server image
 # see https://github.com/amelioro/ameliorate/blob/main/scripts/setupLocal.sh
