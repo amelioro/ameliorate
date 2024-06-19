@@ -157,7 +157,8 @@ export const setTitle = (viewId: string, newTitle: string) => {
     "setTitle",
   );
 
-  updateURLParams(newTitle);
+  const updatedSelectedView = state.selectedViewId === viewId;
+  if (updatedSelectedView) updateURLParams(newTitle);
 };
 
 export const saveView = (viewId: string) => {
