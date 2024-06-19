@@ -17,13 +17,11 @@ import {
 import {
   Divider,
   Drawer,
-  FormControlLabel,
   IconButton,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
-  Switch as MuiSwitch,
   ToggleButton,
   Tooltip,
   Typography,
@@ -54,10 +52,6 @@ import {
   useLayoutThoroughness,
 } from "@/web/view/currentViewStore/layout";
 import { resetView, useFormat } from "@/web/view/currentViewStore/store";
-import {
-  toggleShowResolvedComments,
-  useShowResolvedComments,
-} from "@/web/view/miscTopicConfigStore";
 import { resetQuickViews } from "@/web/view/quickViewStore/store";
 import { toggleFillNodesWithColor, useFillNodesWithColor } from "@/web/view/userConfigStore";
 
@@ -118,7 +112,6 @@ export const MoreActionsDrawer = ({
   const flashlightMode = useFlashlightMode();
   const readonlyMode = useReadonlyMode();
   const layoutThoroughness = useLayoutThoroughness();
-  const showResolvedComments = useShowResolvedComments();
   const fillNodesWithColor = useFillNodesWithColor();
 
   return (
@@ -334,20 +327,6 @@ export const MoreActionsDrawer = ({
             </ListItem>
           </>
         )}
-
-        <Divider>Misc Topic Config</Divider>
-
-        <ListItem disablePadding={false}>
-          <FormControlLabel
-            label={"Show resolved comments"}
-            control={
-              <MuiSwitch
-                checked={showResolvedComments}
-                onChange={(_event, checked) => toggleShowResolvedComments(checked)}
-              />
-            }
-          />
-        </ListItem>
 
         <Divider>User Config</Divider>
 

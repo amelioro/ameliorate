@@ -1,5 +1,5 @@
 import { ChatBubble } from "@mui/icons-material";
-import { ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import { Link, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 
 import { CommentParentType } from "@/common/comment";
 import { Draft } from "@/web/comment/components/Draft";
@@ -9,7 +9,10 @@ import { useDraft } from "@/web/comment/store/draftStore";
 import { useSessionUser } from "@/web/common/hooks";
 import { playgroundUsername } from "@/web/topic/store/store";
 import { useOnPlayground } from "@/web/topic/store/topicHooks";
-import { useShowResolvedComments } from "@/web/view/miscTopicConfigStore";
+import {
+  toggleShowResolvedComments,
+  useShowResolvedComments,
+} from "@/web/view/miscTopicConfigStore";
 
 interface Props {
   parentId: string | null;
@@ -32,6 +35,16 @@ export const CommentSection = ({ parentId, parentType }: Props) => {
           <ChatBubble />
         </ListItemIcon>
         <ListItemText primary="Comments" />
+        <Link
+          component="button"
+          variant="body2"
+          onClick={(e) => {
+            toggleShowResolvedComments(!showResolved);
+            e.preventDefault(); // without this, page refreshes - not sure why, since component is as button, not an anchor
+          }}
+        >
+          {showResolved ? "Hide resolved" : "Show resolved"}
+        </Link>
       </ListItem>
 
       <ListItem disablePadding={false}>
