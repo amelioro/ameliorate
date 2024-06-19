@@ -229,7 +229,6 @@ model InAppNotification {
   data             Json
   message          String           @db.VarChar(500) // arbitrary max that would be close to fitting in a row of a table
   sourceUrl        String           @db.VarChar(1000) // hm how long should a URL reasonably be? likely these will be created by the app, so shouldn't be too long...
-  reason           ReasonType
   createdAt        DateTime         @default(now())
 
   notifiedUser User  @relation(fields: [notifiedUsername], references: [username], onDelete: Cascade)
@@ -241,11 +240,6 @@ model InAppNotification {
 
 enum NotificationType {
   commentCreated
-}
-
-enum ReasonType {
-  watching
-  subscribed
 }
 
 model Watch {

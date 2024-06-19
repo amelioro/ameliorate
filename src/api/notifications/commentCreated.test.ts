@@ -8,22 +8,15 @@ import {
   handleCommentCreated,
 } from "@/api/notifications/commentCreated";
 import { Comment, CommentParent, CommentParentType } from "@/common/comment";
-import { ReasonType } from "@/common/inAppNotification";
 import { xprisma } from "@/db/extendedPrisma";
 
 let creatorOfTopic: User;
 let topicWithoutAllowAnyEdit: Topic;
 
-let authorWatcherSubscriber: User;
+let author: User;
+let notAuthor: User;
+
 let commentWithTopicParent: Comment;
-
-let watcherSubscriber: User;
-let watcherNotSubscriber: User;
-let notWatcherNotSubscriber: User;
-let notWatcherIsSubscriber: User;
-let ignorerSubscriber: User;
-let ignorerNotSubscriber: User;
-
 let commentWithCommentParent: Comment;
 
 const generateComment = (
@@ -62,107 +55,18 @@ beforeEach(async () => {
     },
   });
 
-  authorWatcherSubscriber = await xprisma.user.create({
-    data: { username: "authorWatcherSubscriber", authId: "authorWatcherSubscriber" },
+  author = await xprisma.user.create({
+    data: { username: "author", authId: "author" },
   });
+  notAuthor = await xprisma.user.create({
+    data: { username: "notAuthor", authId: "notAuthor" },
+  });
+
   commentWithTopicParent = await xprisma.comment.create({
-    data: generateComment(authorWatcherSubscriber, topicWithoutAllowAnyEdit, null, "topic"),
+    data: generateComment(author, topicWithoutAllowAnyEdit, null, "topic"),
   });
-  await xprisma.watch.create({
-    data: {
-      topicId: topicWithoutAllowAnyEdit.id,
-      watcherUsername: authorWatcherSubscriber.username,
-      type: "all",
-    },
-  });
-  await xprisma.subscription.create({
-    data: {
-      sourceId: commentWithTopicParent.id,
-      sourceType: "threadStarterComment",
-      subscriberUsername: authorWatcherSubscriber.username,
-    },
-  });
-
-  watcherSubscriber = await xprisma.user.create({
-    data: { username: "watcherSubscriber", authId: "watcherSubscriber" },
-  });
-  await xprisma.watch.create({
-    data: {
-      topicId: topicWithoutAllowAnyEdit.id,
-      watcherUsername: watcherSubscriber.username,
-      type: "all",
-    },
-  });
-  await xprisma.subscription.create({
-    data: {
-      sourceId: commentWithTopicParent.id,
-      sourceType: "threadStarterComment",
-      subscriberUsername: watcherSubscriber.username,
-    },
-  });
-
-  watcherNotSubscriber = await xprisma.user.create({
-    data: { username: "watcherNotSubscriber", authId: "watcherNotSubscriber" },
-  });
-  await xprisma.watch.create({
-    data: {
-      topicId: topicWithoutAllowAnyEdit.id,
-      watcherUsername: watcherNotSubscriber.username,
-      type: "all",
-    },
-  });
-
-  notWatcherNotSubscriber = await xprisma.user.create({
-    data: { username: "notWatcherNotSubscriber", authId: "notWatcherNotSubscriber" },
-  });
-
-  notWatcherIsSubscriber = await xprisma.user.create({
-    data: { username: "notWatcherIsSubscriber", authId: "notWatcherIsSubscriber" },
-  });
-  await xprisma.subscription.create({
-    data: {
-      sourceId: commentWithTopicParent.id,
-      sourceType: "threadStarterComment",
-      subscriberUsername: notWatcherIsSubscriber.username,
-    },
-  });
-
-  ignorerSubscriber = await xprisma.user.create({
-    data: { username: "ignorerSubscriber", authId: "ignorerSubscriber" },
-  });
-  await xprisma.watch.create({
-    data: {
-      topicId: topicWithoutAllowAnyEdit.id,
-      watcherUsername: ignorerSubscriber.username,
-      type: "ignore",
-    },
-  });
-  await xprisma.subscription.create({
-    data: {
-      sourceId: commentWithTopicParent.id,
-      sourceType: "threadStarterComment",
-      subscriberUsername: ignorerSubscriber.username,
-    },
-  });
-
-  ignorerNotSubscriber = await xprisma.user.create({
-    data: { username: "ignorerNotSubscriber", authId: "ignorerNotSubscriber" },
-  });
-  await xprisma.watch.create({
-    data: {
-      topicId: topicWithoutAllowAnyEdit.id,
-      watcherUsername: ignorerNotSubscriber.username,
-      type: "ignore",
-    },
-  });
-
   commentWithCommentParent = await xprisma.comment.create({
-    data: generateComment(
-      authorWatcherSubscriber,
-      topicWithoutAllowAnyEdit,
-      commentWithTopicParent,
-      "comment",
-    ),
+    data: generateComment(author, topicWithoutAllowAnyEdit, commentWithTopicParent, "comment"),
   });
 });
 
@@ -171,7 +75,7 @@ describe("getInAppNotificationMessage", () => {
     test("uses 'replied' verbiage", async () => {
       const comment = await xprisma.comment.create({
         data: generateComment(
-          authorWatcherSubscriber,
+          author,
           topicWithoutAllowAnyEdit,
           commentWithTopicParent,
           "comment",
@@ -181,25 +85,19 @@ describe("getInAppNotificationMessage", () => {
 
       const message = getInAppNotificationMessage(comment);
 
-      expect(message).toBe('authorWatcherSubscriber replied: "hey blah there!"');
+      expect(message).toBe('author replied: "hey blah there!"');
     });
   });
 
   describe("when comment parent is not comment", () => {
     test("uses 'commented' verbiage", async () => {
       const comment = await xprisma.comment.create({
-        data: generateComment(
-          authorWatcherSubscriber,
-          topicWithoutAllowAnyEdit,
-          null,
-          "topic",
-          "hey blah there!",
-        ),
+        data: generateComment(author, topicWithoutAllowAnyEdit, null, "topic", "hey blah there!"),
       });
 
       const message = getInAppNotificationMessage(comment);
 
-      expect(message).toBe('authorWatcherSubscriber commented: "hey blah there!"');
+      expect(message).toBe('author commented: "hey blah there!"');
     });
   });
 
@@ -207,7 +105,7 @@ describe("getInAppNotificationMessage", () => {
     test("return message with truncated text included", async () => {
       const comment = await xprisma.comment.create({
         data: generateComment(
-          authorWatcherSubscriber,
+          author,
           topicWithoutAllowAnyEdit,
           null,
           "topic",
@@ -218,7 +116,7 @@ describe("getInAppNotificationMessage", () => {
       const message = getInAppNotificationMessage(comment);
 
       expect(message).toBe(
-        'authorWatcherSubscriber commented: "This sentence is 100 characters loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong.This sentence is 100 characters loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong.This sentence is 100 characters loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong.This sentence is 100 characters loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong.This sentence is 100 characters looooooooooooooooooooooooooo..."',
+        'author commented: "This sentence is 100 characters loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong.This sentence is 100 characters loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong.This sentence is 100 characters loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong.This sentence is 100 characters loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong.This sentence is 100 characters loooooooooooooooooooooooooooooooooooooooooooo..."',
       );
     });
   });
@@ -228,7 +126,6 @@ const expectNotification = (
   received: InAppNotification[],
   receiver: User,
   comment: Comment,
-  reason: ReasonType,
   message?: string,
 ) => {
   if (received.length > 1) throw new Error("received more than one notification");
@@ -238,7 +135,7 @@ const expectNotification = (
   // allow this to be explicit when the test specifically cares to check it, otherwise calculate it
   const expectedMessage =
     message ??
-    "authorWatcherSubscriber " +
+    "author " +
       (comment.parentType === "comment" ? "replied: " : "commented: ") +
       `"${comment.content}"`;
 
@@ -251,7 +148,6 @@ const expectNotification = (
     },
     message: expectedMessage,
     sourceUrl: `http://localhost:3000/creatorOfTopic/topicWithoutAllowAnyEdit/?comment=${comment.id}`,
-    reason: reason,
   };
 
   const { id: _i, createdAt: _c, ...receivedWithoutGeneratedFields } = oneReceived;
@@ -260,145 +156,213 @@ const expectNotification = (
 };
 
 describe("handleCommentCreated", () => {
-  describe("subscribing the author", () => {
-    describe("when author is already subscribed", () => {
-      test("does not create a new subscription", async () => {
-        const subscriptionsBefore = await xprisma.subscription.findMany({
-          where: { subscriberUsername: authorWatcherSubscriber.username },
-        });
-        expect(subscriptionsBefore.length).toBe(1);
+  describe("subscription creation", () => {
+    describe("when comment is thread-starter", () => {
+      describe("when user is not author and is not watching for all notifications for the topic", () => {
+        test("does not create a new subscription for the user", async () => {
+          await handleCommentCreated(commentWithTopicParent);
 
-        await handleCommentCreated(commentWithTopicParent);
-
-        const subscriptionsAfter = await xprisma.subscription.findMany({
-          where: { subscriberUsername: authorWatcherSubscriber.username },
+          const subscriptionsAfter = await xprisma.subscription.findMany({
+            where: { subscriberUsername: notAuthor.username },
+          });
+          expect(subscriptionsAfter.length).toBe(0);
         });
-        expect(subscriptionsAfter.length).toBe(1);
+      });
+
+      describe("when user is not author but is watching for all notifications for the topic", () => {
+        test("creates a new subscription for the user", async () => {
+          await xprisma.watch.create({
+            data: {
+              watcherUsername: notAuthor.username,
+              topicId: commentWithTopicParent.topicId,
+              type: "all",
+            },
+          });
+
+          await handleCommentCreated(commentWithTopicParent);
+
+          const subscriptionsAfter = await xprisma.subscription.findMany({
+            where: { subscriberUsername: notAuthor.username },
+          });
+          expect(subscriptionsAfter.length).toBe(1);
+        });
+      });
+
+      describe("when user is author but is ignoring the topic", () => {
+        test("does not create a new subscription for the user", async () => {
+          await xprisma.watch.create({
+            data: {
+              watcherUsername: author.username,
+              topicId: commentWithTopicParent.topicId,
+              type: "ignore",
+            },
+          });
+
+          await handleCommentCreated(commentWithTopicParent);
+
+          const subscriptionsAfter = await xprisma.subscription.findMany({
+            where: { subscriberUsername: author.username },
+          });
+          expect(subscriptionsAfter.length).toBe(0);
+        });
+      });
+
+      describe("when user is author and is not ignoring the topic", () => {
+        test("creates a new subscription for the user", async () => {
+          await handleCommentCreated(commentWithTopicParent);
+
+          const subscriptionsAfter = await xprisma.subscription.findMany({
+            where: { subscriberUsername: author.username },
+          });
+          expect(subscriptionsAfter.length).toBe(1);
+        });
       });
     });
 
-    describe("when author is ignoring the topic", () => {
-      test("does not create a new subscription", async () => {
-        const comment = generateComment(
-          ignorerNotSubscriber,
-          topicWithoutAllowAnyEdit,
-          null,
-          "topic",
-        );
-        await xprisma.comment.create({ data: comment });
+    describe("when comment is a reply", () => {
+      describe("when user is already subscribed", () => {
+        test("does not create a new subscription for the user", async () => {
+          await xprisma.subscription.create({
+            data: {
+              subscriberUsername: author.username,
+              sourceId: commentWithTopicParent.id,
+              sourceType: "threadStarterComment",
+            },
+          });
 
-        await handleCommentCreated(comment);
+          await handleCommentCreated(commentWithCommentParent);
 
-        const subscriptions = await xprisma.subscription.findMany({
-          where: { subscriberUsername: ignorerNotSubscriber.username },
+          const subscriptionsAfter = await xprisma.subscription.findMany({
+            where: { subscriberUsername: author.username },
+          });
+          expect(subscriptionsAfter.length).toBe(1);
         });
-        expect(subscriptions).toEqual([]);
       });
-    });
 
-    describe("when author is not yet subscribed, nor ignoring topic", () => {
-      test("subscribes the author to the thread", async () => {
-        const comment = generateComment(
-          notWatcherNotSubscriber,
-          topicWithoutAllowAnyEdit,
-          null,
-          "topic",
-        );
-        await xprisma.comment.create({ data: comment });
+      describe("when user is ignoring the topic", () => {
+        test("does not create a new subscription for the user", async () => {
+          await xprisma.watch.create({
+            data: {
+              watcherUsername: author.username,
+              topicId: commentWithCommentParent.topicId,
+              type: "ignore",
+            },
+          });
 
-        await handleCommentCreated(comment);
+          await handleCommentCreated(commentWithCommentParent);
 
-        const subscriptions = await xprisma.subscription.findMany({
-          where: { subscriberUsername: notWatcherNotSubscriber.username },
+          const subscriptionsAfter = await xprisma.subscription.findMany({
+            where: { subscriberUsername: author.username },
+          });
+          expect(subscriptionsAfter.length).toBe(0);
         });
-        expect(subscriptions.length).toBe(1);
+      });
 
-        const subscription = subscriptions[0];
-        if (!subscription) throw new Error("no subscription found");
-        const { id: _, ...subscriptionWithoutGeneratedFields } = subscription;
+      describe("when user is not the author", () => {
+        test("does not create a new subscription for the user, even if watching the topic", async () => {
+          await xprisma.watch.create({
+            data: {
+              watcherUsername: notAuthor.username,
+              topicId: commentWithCommentParent.topicId,
+              type: "all",
+            },
+          });
 
-        expect(subscriptionWithoutGeneratedFields).toEqual({
-          subscriberUsername: notWatcherNotSubscriber.username,
-          sourceId: comment.id,
-          sourceType: "threadStarterComment",
+          await handleCommentCreated(commentWithCommentParent);
+
+          const subscriptionsAfter = await xprisma.subscription.findMany({
+            where: { subscriberUsername: notAuthor.username },
+          });
+          expect(subscriptionsAfter.length).toBe(0);
+        });
+      });
+
+      describe("when user is not subscribed, is not ignoring, and is the author", () => {
+        test("creates a new subscription for the user", async () => {
+          await handleCommentCreated(commentWithCommentParent);
+
+          const subscriptionsAfter = await xprisma.subscription.findMany({
+            where: { subscriberUsername: author.username },
+          });
+          expect(subscriptionsAfter.length).toBe(1);
+
+          const subscription = subscriptionsAfter[0];
+          if (!subscription) throw new Error("no subscription found");
+          const { id: _, ...subscriptionWithoutGeneratedFields } = subscription;
+
+          expect(subscriptionWithoutGeneratedFields).toEqual({
+            subscriberUsername: author.username,
+            sourceId: commentWithCommentParent.parentId,
+            sourceType: "threadStarterComment",
+          });
         });
       });
     });
   });
 
   describe("in-app notifications", () => {
-    test("does not notify author", async () => {
-      await handleCommentCreated(commentWithCommentParent);
-
-      const notifications = await xprisma.inAppNotification.findMany({
-        where: { notifiedUsername: authorWatcherSubscriber.username },
-      });
-
-      expect(notifications).toEqual([]);
-    });
-
-    test("does not notify ignorers", async () => {
-      await handleCommentCreated(commentWithCommentParent);
-
-      const notifications = await xprisma.inAppNotification.findMany({
-        where: {
-          OR: [
-            { notifiedUsername: ignorerSubscriber.username },
-            { notifiedUsername: ignorerNotSubscriber.username },
-          ],
+    test("does not notify the author, even if subscribed", async () => {
+      await xprisma.subscription.create({
+        data: {
+          subscriberUsername: author.username,
+          sourceId: commentWithTopicParent.id,
+          sourceType: "threadStarterComment",
         },
       });
 
-      expect(notifications).toEqual([]);
-    });
-
-    test("does not notify people who aren't watching or subscribed", async () => {
       await handleCommentCreated(commentWithCommentParent);
 
       const notifications = await xprisma.inAppNotification.findMany({
-        where: { notifiedUsername: notWatcherNotSubscriber.username },
+        where: { notifiedUsername: author.username },
       });
 
       expect(notifications).toEqual([]);
     });
 
-    test("notifies non-author, non-ignorer thread subscribers", async () => {
+    test("does not notify users that were not already subscribed, and are not subscribed by the comment's creation", async () => {
       await handleCommentCreated(commentWithCommentParent);
 
-      const watcherSubNotifications = await xprisma.inAppNotification.findMany({
-        where: { notifiedUsername: watcherSubscriber.username },
-      });
-      const notWatcherSubNotifications = await xprisma.inAppNotification.findMany({
-        where: { notifiedUsername: notWatcherIsSubscriber.username },
+      const notifications = await xprisma.inAppNotification.findMany({
+        where: { notifiedUsername: notAuthor.username },
       });
 
-      expectNotification(
-        watcherSubNotifications,
-        watcherSubscriber,
-        commentWithCommentParent,
-        "subscribed",
-      );
-      expectNotification(
-        notWatcherSubNotifications,
-        notWatcherIsSubscriber,
-        commentWithCommentParent,
-        "subscribed",
-      );
+      expect(notifications).toEqual([]);
     });
 
-    test("notifies non-author, non-ignorer, non-subscriber topic watchers", async () => {
-      await handleCommentCreated(commentWithCommentParent);
-
-      const watcherNotSubNotifications = await xprisma.inAppNotification.findMany({
-        where: { notifiedUsername: watcherNotSubscriber.username },
+    test("notifies users that were already subscribed", async () => {
+      await xprisma.subscription.create({
+        data: {
+          subscriberUsername: notAuthor.username,
+          sourceId: commentWithTopicParent.id,
+          sourceType: "threadStarterComment",
+        },
       });
 
-      expectNotification(
-        watcherNotSubNotifications,
-        watcherNotSubscriber,
-        commentWithCommentParent,
-        "watching",
-      );
+      await handleCommentCreated(commentWithCommentParent);
+
+      const notifications = await xprisma.inAppNotification.findMany({
+        where: { notifiedUsername: notAuthor.username },
+      });
+
+      expectNotification(notifications, notAuthor, commentWithCommentParent);
+    });
+
+    test("notifies users that are subscribed by the comment's creation", async () => {
+      await xprisma.watch.create({
+        data: {
+          watcherUsername: notAuthor.username,
+          topicId: commentWithTopicParent.topicId,
+          type: "all",
+        },
+      });
+
+      await handleCommentCreated(commentWithTopicParent);
+
+      const notifications = await xprisma.inAppNotification.findMany({
+        where: { notifiedUsername: notAuthor.username },
+      });
+
+      expectNotification(notifications, notAuthor, commentWithTopicParent);
     });
   });
 });

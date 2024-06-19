@@ -179,7 +179,9 @@ export const Comment = ({ comment }: Props) => {
           >
             Delete
           </Button>
-          <Button onClick={() => setShowConfirmDelete(false)}>Cancel</Button>
+          <Button color="inherit" onClick={() => setShowConfirmDelete(false)}>
+            Cancel
+          </Button>
         </div>
       )}
     </BorderDiv>

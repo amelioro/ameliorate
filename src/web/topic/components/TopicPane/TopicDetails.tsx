@@ -124,17 +124,21 @@ export const TopicDetails = () => {
             <Tooltip
               title={
                 <span>
-                  Your watch determines when you'll receive notifications for comments this topic.
+                  You will receive notifications if you're subscribed to a thread.
                   <br />
                   <br />
-                  "participatingOrMentions" will notify you when comments are added to a thread that
-                  you're participating in (the mentions half is not implemented yet).
+                  Your watch determines in which cases you automatically become subscribed to a
+                  thread.
                   <br />
                   <br />
-                  "all" will notify you when anyone comments.
+                  "participatingOrMentions" will subscribe you when you participate (comment) in a
+                  thread (the "mentions" half is not implemented yet).
                   <br />
                   <br />
-                  "ignore" will not notify you for anything."
+                  "all" will subscribe you to all new threads.
+                  <br />
+                  <br />
+                  "ignore" will not subscribe you to any new threads.
                 </span>
               }
               enterTouchDelay={0} // allow touch to immediately trigger
