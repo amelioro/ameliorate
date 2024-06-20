@@ -125,10 +125,9 @@ export const topicRouter = router({
       ];
 
       const graphPartsChanged = graphPartLists.some((graphParts) => graphParts.length > 0);
+      const isEditor = topic.allowAnyoneToEdit || isCreator;
       const nonCreatorMadeRestrictedChanges =
-        !topic.allowAnyoneToEdit &&
-        !isCreator &&
-        (graphPartsChanged || opts.input.description !== undefined);
+        !isEditor && (graphPartsChanged || opts.input.description !== undefined);
 
       // ensure requests don't try changing nodes/edges/scores from other topics
       const onlyChangingObjectsFromThisTopic = topicObjectLists.every((topicObjects) =>
@@ -139,6 +138,17 @@ export const topicRouter = router({
         throw new TRPCError({ code: "FORBIDDEN" });
       }
 
+      const graphPartIdsOfScoresToDelete = opts.input.scoresToDelete.map(
+        (score) => score.graphPartId,
+      );
+      const nodesOfScoresToDelete = await xprisma.node.findMany({
+        where: { id: { in: graphPartIdsOfScoresToDelete } },
+      });
+      const edgesOfScoresToDelete = await xprisma.edge.findMany({
+        where: { id: { in: graphPartIdsOfScoresToDelete } },
+      });
+      const dbGraphPartsOfScoresToDelete = [...nodesOfScoresToDelete, ...edgesOfScoresToDelete];
+
       const authorizedToDeleteScore =
         opts.input.scoresToDelete.every((score) => score.username === opts.ctx.user.username) ||
         // creator can delete another user's score indirectly, by deleting the score's graphPart
@@ -148,7 +158,12 @@ export const topicRouter = router({
             ...opts.input.edgesToDelete,
           ].some((graphPart) => graphPart.id === score.graphPartId);
 
-          return isCreator && scoreIsForGraphPartBeingDeleted;
+          // allow cleaning up orphaned scores from previously-deleted graph parts
+          const scoreIsForAlreadyDeletedGraphPart = !dbGraphPartsOfScoresToDelete.some(
+            (graphPart) => graphPart.id === score.graphPartId,
+          );
+
+          return isEditor && (scoreIsForGraphPartBeingDeleted || scoreIsForAlreadyDeletedGraphPart);
         });
       const authorizedToUpsertScore = [
         ...opts.input.scoresToCreate,
@@ -198,7 +213,7 @@ export const topicRouter = router({
         }
         /* eslint-enable functional/no-loop-statements */
 
-        // deleting a graph part in the UI will send over deletions for other user's scores
+        // deleting a graph part in the UI will send over deletions for other user's scores;
         // this should be allowed, and that is why we loop over scores here - deleteMany wouldn't
         // be able to `where` for multiple user x graph part combinations
         // eslint-disable-next-line functional/no-loop-statements
@@ -212,14 +227,27 @@ export const topicRouter = router({
             },
           });
         }
-        if (opts.input.edgesToDelete.length > 0) {
+        const edgeIdsToDelete = opts.input.edgesToDelete.map((edge) => edge.id);
+        if (edgeIdsToDelete.length > 0) {
           await tx.edge.deleteMany({
-            where: { id: { in: opts.input.edgesToDelete.map((edge) => edge.id) } },
+            where: { id: { in: edgeIdsToDelete } },
           });
         }
-        if (opts.input.nodesToDelete.length > 0) {
+        const nodeIdsToDelete = opts.input.nodesToDelete.map((node) => node.id);
+        if (nodeIdsToDelete.length > 0) {
           await tx.node.deleteMany({
-            where: { id: { in: opts.input.nodesToDelete.map((node) => node.id) } },
+            where: { id: { in: nodeIdsToDelete } },
+          });
+        }
+        // We handle deleting scores passed into this route, in case we ever need to actually delete them separate from graph part deletion,
+        // but here we'll also distrust the front-end and ensure all associated scores of deleted graph parts are deleted.
+        // This is because of the scenario where the deleter of a part has not refreshed their page, and someone else has scored the part,
+        // making the part-deletion api call not be able to include the other person's score in the delete parameters.
+        // This scenario caused forbidden errors for future deletions that attempt to clean up the orphaned scores.
+        const graphPartIdsToDelete = edgeIdsToDelete.concat(nodeIdsToDelete);
+        if (graphPartIdsToDelete.length > 0) {
+          await tx.userScore.deleteMany({
+            where: { graphPartId: { in: graphPartIdsToDelete } },
           });
         }
       });
