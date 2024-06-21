@@ -49,6 +49,7 @@ type FormData = z.infer<ReturnType<typeof formSchema>>;
 const CreateUserPage = () => {
   const { authUser, sessionUser, checkSession, isLoading } = useSessionUser();
   const authId = authUser?.sub;
+  const email = authUser?.email;
 
   const utils = trpc.useContext();
   const { createUser } = useQueries();
@@ -74,7 +75,7 @@ const CreateUserPage = () => {
 
   if (isLoading) return <Loading />;
 
-  if (!authUser || !authId) {
+  if (!authUser || !authId || !email) {
     void Router.push("/api/auth/login");
     return <Loading />;
   }
@@ -97,8 +98,9 @@ const CreateUserPage = () => {
 
   const onSubmit = (data: FormData) => {
     createUser.mutate({
-      authId: authId,
       username: data.username,
+      authId,
+      email,
     });
   };
 

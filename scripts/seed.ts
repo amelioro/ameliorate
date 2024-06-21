@@ -14,6 +14,7 @@ const seed = async () => {
     create: {
       username: "examples",
       authId: "oauth-test-user",
+      email: "oauth-test-user@test.test",
     },
   });
 
@@ -211,5 +212,5 @@ const seed = async () => {
 // not sure how to use top-level await without messing with project config
 seed()
   .then(() => console.log("done running seed script"))
-  .catch((error) => console.log("issues running seed script, error: \n", error))
+  .catch((error: unknown) => console.log("issues running seed script, error: \n", error))
   .finally(() => void xprisma.$disconnect());

@@ -48,4 +48,4 @@ const rollbackMigration = async () => {
 // not sure how to use top-level await without messing with project config
 rollbackMigration()
   .then(() => console.log("done running rollback script"))
-  .catch((error) => console.log("issues running rollback script, error: \n", error));
+  .catch((error: unknown) => console.log("issues running rollback script, error: \n", error));
