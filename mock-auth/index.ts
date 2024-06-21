@@ -30,7 +30,7 @@ const config: Configuration = {
       accountId: sub,
       claims: () => ({
         sub, // oidc-provider's devInteractions sets this to login name you use; match this with the authId in your db to log in as that user
-        email: `${sub}@gmail.com`, // any unique email I guess, in case we decide to use depend on one later
+        email: `${sub}@test.test`, // any unique email I guess, in case we decide to use depend on one later
         email_verified: true, // bypass email verification
       }),
     };

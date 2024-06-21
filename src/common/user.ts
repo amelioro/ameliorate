@@ -17,5 +17,6 @@ export const userSchema = z.object({
       (username) => ({ message: `${username} is a reserved username.` }),
     ),
   authId: z.string(),
+  email: z.string().email(),
   receiveEmailNotifications: z.boolean(),
 });

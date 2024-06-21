@@ -6,6 +6,8 @@ import { beforeEach, describe, expect, test } from "vitest";
 import { appRouter } from "@/api/routers/_app";
 import { xprisma } from "@/db/extendedPrisma";
 
+import { testEmail } from "../../../scripts/setupTests";
+
 let userWithTopics: User;
 let otherUser: User;
 let publicTopic: Topic;
@@ -16,10 +18,10 @@ let topicWithAllowAnyEdit: Topic;
 
 beforeEach(async () => {
   userWithTopics = await xprisma.user.create({
-    data: { username: "hasTopicsName", authId: "hasTopicsAuth" },
+    data: { username: "hasTopicsName", authId: "hasTopicsAuth", email: testEmail },
   });
   otherUser = await xprisma.user.create({
-    data: { username: "otherUser", authId: "otherUser" },
+    data: { username: "otherUser", authId: "otherUser", email: testEmail },
   });
   publicTopic = await xprisma.topic.create({
     data: {

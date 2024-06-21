@@ -7,6 +7,8 @@ import { appRouter } from "@/api/routers/_app";
 import { QuickView } from "@/common/view";
 import { xprisma } from "@/db/extendedPrisma";
 
+import { testEmail } from "../../../scripts/setupTests";
+
 let creatorOfTopic: User;
 let notCreatorOfTopic: User;
 let topicWithoutAllowAnyEdit: Topic;
@@ -27,10 +29,10 @@ const generateView = (title: string, order: number, topic: Topic): QuickView => 
 
 beforeEach(async () => {
   creatorOfTopic = await xprisma.user.create({
-    data: { username: "creatorOfTopic", authId: "creatorOfTopic" },
+    data: { username: "creatorOfTopic", authId: "creatorOfTopic", email: testEmail },
   });
   notCreatorOfTopic = await xprisma.user.create({
-    data: { username: "notCreatorOfTopic", authId: "notCreatorOfTopic" },
+    data: { username: "notCreatorOfTopic", authId: "notCreatorOfTopic", email: testEmail },
   });
 
   topicWithoutAllowAnyEdit = await xprisma.topic.create({

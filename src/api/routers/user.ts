@@ -42,7 +42,7 @@ export const userRouter = router({
 
   create: procedure
     .use(isEmailVerified)
-    .input(userSchema.pick({ username: true, authId: true }))
+    .input(userSchema.pick({ username: true, authId: true, email: true }))
     .mutation(async (opts) => {
       if (opts.ctx.userAuthId !== opts.input.authId) throw new TRPCError({ code: "FORBIDDEN" });
 
@@ -50,6 +50,7 @@ export const userRouter = router({
         data: {
           username: opts.input.username,
           authId: opts.input.authId,
+          email: opts.input.email,
         },
       });
     }),

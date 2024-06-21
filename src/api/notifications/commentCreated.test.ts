@@ -10,6 +10,8 @@ import {
 import { Comment, CommentParent, CommentParentType } from "@/common/comment";
 import { xprisma } from "@/db/extendedPrisma";
 
+import { testEmail } from "../../../scripts/setupTests";
+
 let creatorOfTopic: User;
 let topicWithoutAllowAnyEdit: Topic;
 
@@ -44,7 +46,7 @@ const generateComment = (
 
 beforeEach(async () => {
   creatorOfTopic = await xprisma.user.create({
-    data: { username: "creatorOfTopic", authId: "creatorOfTopic" },
+    data: { username: "creatorOfTopic", authId: "creatorOfTopic", email: testEmail },
   });
   topicWithoutAllowAnyEdit = await xprisma.topic.create({
     data: {
@@ -56,10 +58,10 @@ beforeEach(async () => {
   });
 
   author = await xprisma.user.create({
-    data: { username: "author", authId: "author" },
+    data: { username: "author", authId: "author", email: testEmail },
   });
   notAuthor = await xprisma.user.create({
-    data: { username: "notAuthor", authId: "notAuthor" },
+    data: { username: "notAuthor", authId: "notAuthor", email: testEmail },
   });
 
   commentWithTopicParent = await xprisma.comment.create({

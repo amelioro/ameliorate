@@ -8,6 +8,8 @@ import { appRouter } from "@/api/routers/_app";
 import { Comment } from "@/common/comment";
 import { xprisma } from "@/db/extendedPrisma";
 
+import { testEmail } from "../../../scripts/setupTests";
+
 let creatorOfTopic: User;
 let notCreatorOfTopic: User;
 let notCreatorOrAuthor: User;
@@ -37,13 +39,13 @@ const generateComment = (author: User, topic: Topic, rootComment?: Comment): Com
 
 beforeEach(async () => {
   creatorOfTopic = await xprisma.user.create({
-    data: { username: "creatorOfTopic", authId: "creatorOfTopic" },
+    data: { username: "creatorOfTopic", authId: "creatorOfTopic", email: testEmail },
   });
   notCreatorOfTopic = await xprisma.user.create({
-    data: { username: "notCreatorOfTopic", authId: "notCreatorOfTopic" },
+    data: { username: "notCreatorOfTopic", authId: "notCreatorOfTopic", email: testEmail },
   });
   notCreatorOrAuthor = await xprisma.user.create({
-    data: { username: "notCreatorOrAuthor", authId: "notCreatorOrAuthor" },
+    data: { username: "notCreatorOrAuthor", authId: "notCreatorOrAuthor", email: testEmail },
   });
 
   topicWithoutAllowAnyEdit = await xprisma.topic.create({
@@ -293,7 +295,7 @@ describe("handleChangesets", () => {
 
     beforeEach(async () => {
       watcher = await xprisma.user.create({
-        data: { username: "watcher", authId: "watcher" },
+        data: { username: "watcher", authId: "watcher", email: testEmail },
       });
       await xprisma.watch.create({
         data: {
