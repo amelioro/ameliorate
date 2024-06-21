@@ -16,6 +16,7 @@ model User {
   id                        Int      @id @default(autoincrement())
   username                  String   @unique @db.VarChar(39) // uses collation to ensure comparisons are case insensitive, not yet supported by prisma schema https://github.com/prisma/prisma/issues/16781
   authId                    String   @unique @db.VarChar
+  email                     String   @db.VarChar(254) // max email length, see https://stackoverflow.com/a/574698/1136329
   receiveEmailNotifications Boolean  @default(true)
   createdAt                 DateTime @default(now())
   updatedAt                 DateTime @updatedAt
