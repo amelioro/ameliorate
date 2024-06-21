@@ -1,8 +1,7 @@
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Delete } from "@mui/icons-material";
-import { IconButton, Typography } from "@mui/material";
+import { FormControlLabel, IconButton, Switch as MuiSwitch, Typography } from "@mui/material";
 import { type MRT_ColumnDef, MaterialReactTable } from "material-react-table";
-import { NextPage } from "next";
 import Head from "next/head";
 
 import { InAppNotification } from "@/common/inAppNotification";
@@ -10,12 +9,19 @@ import { Topic } from "@/common/topic";
 import { QueryError } from "@/web/common/components/Error/Error";
 import { Link } from "@/web/common/components/Link";
 import { Loading } from "@/web/common/components/Loading/Loading";
+import { useSessionUser } from "@/web/common/hooks";
 import { trpc } from "@/web/common/trpc";
 
 type RowData = InAppNotification & { topic: Topic };
 
-const Notifications: NextPage = () => {
+export default withPageAuthRequired(({ user }) => {
   const utils = trpc.useContext();
+
+  // `user` gives us guaranteed authId, but we need our session user to get at Ameliorate-specific user fields
+  const { sessionUser } = useSessionUser();
+
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const authId = user.sub!;
 
   const findNotifications = trpc.notification.findAll.useQuery(undefined);
 
@@ -34,7 +40,24 @@ const Notifications: NextPage = () => {
     },
   });
 
-  if (findNotifications.isLoading) return <Loading />;
+  const setReceiveEmails = trpc.user.setReceiveEmails.useMutation({
+    onMutate: (variables) => {
+      const previousUser = utils.user.findByAuthId.getData({ authId });
+      if (!previousUser) throw new Error("should've loaded a user before setting email preference");
+
+      utils.user.findByAuthId.setData(
+        { authId },
+        { ...previousUser, receiveEmailNotifications: variables.receiveEmailNotifications },
+      );
+
+      return previousUser;
+    },
+    onError: (_err, _variables, previousUser) => {
+      utils.user.findByAuthId.setData({ authId }, previousUser);
+    },
+  });
+
+  if (!sessionUser || findNotifications.isLoading) return <Loading />;
   if (findNotifications.error) return <QueryError error={findNotifications.error} />;
 
   const notifications = findNotifications.data;
@@ -89,6 +112,19 @@ const Notifications: NextPage = () => {
         Notifications
       </Typography>
 
+      <FormControlLabel
+        label={<Typography>Receive Email Notifications</Typography>}
+        control={
+          <MuiSwitch
+            checked={sessionUser.receiveEmailNotifications}
+            onChange={(_event, checked) =>
+              setReceiveEmails.mutate({ receiveEmailNotifications: checked })
+            }
+          />
+        }
+        className="mb-2 ml-2"
+      />
+
       <MaterialReactTable
         columns={columnData}
         data={rowData}
@@ -108,6 +144,4 @@ const Notifications: NextPage = () => {
       />
     </>
   );
-};
-
-export default withPageAuthRequired(Notifications);
+});

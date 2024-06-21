@@ -345,7 +345,7 @@ describe("handleChangesets", () => {
           commentId: newComment.id,
         },
         message: notCreatorOfTopic.username + ` commented: "${newComment.content}"`,
-        sourceUrl: `http://localhost:3000/creatorOfTopic/topicWithoutAllowAnyEdit/?comment=${newComment.id}`,
+        sourceUrl: `http://localhost:3000/creatorOfTopic/topicWithoutAllowAnyEdit?comment=${newComment.id}`,
       });
     });
 

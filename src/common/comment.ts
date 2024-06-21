@@ -2,8 +2,9 @@ import { z } from "zod";
 
 import { Edge } from "@/common/edge";
 import { Node } from "@/common/node";
-import { topicSchema } from "@/common/topic";
+import { Topic, topicSchema } from "@/common/topic";
 import { userSchema } from "@/common/user";
+import { getBaseUrl } from "@/common/utils";
 
 export const commentParentTypes = ["topic", "node", "edge", "comment"] as const;
 export const zCommentParentTypes = z.enum(commentParentTypes);
@@ -55,4 +56,11 @@ export const userCanDeleteComment = (
     );
 
   return deletingAsResultOfPermittedThreadDeletion;
+};
+
+export const getLinkToComment = (comment: Comment, commentTopic: Topic) => {
+  const sourceUrl = new URL(`/${commentTopic.creatorName}/${commentTopic.title}`, getBaseUrl());
+  sourceUrl.searchParams.set("comment", comment.id);
+
+  return sourceUrl.href;
 };

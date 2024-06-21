@@ -1,10 +1,11 @@
 import { Topic, User } from "@prisma/client";
+import { encode } from "he";
 import truncate from "lodash/truncate";
 
-import { Comment, isThreadStarterComment } from "@/common/comment";
+import { Email, canSendEmails, sendAllEmails } from "@/api/email";
+import { Comment, getLinkToComment, isThreadStarterComment } from "@/common/comment";
 import { errorWithData } from "@/common/errorHandling";
 import { InAppNotification, maxMessageLength } from "@/common/inAppNotification";
-import { getBaseUrl } from "@/common/utils";
 import { xprisma } from "@/db/extendedPrisma";
 
 /**
@@ -50,9 +51,6 @@ const createInAppNotifications = async (
   commentTopic: Topic,
   usersToNotify: User[],
 ) => {
-  const sourceUrl = new URL(`/${commentTopic.creatorName}/${commentTopic.title}/`, getBaseUrl());
-  sourceUrl.searchParams.set("comment", comment.id);
-
   const message = getInAppNotificationMessage(comment);
 
   const inAppNotifications = usersToNotify.map((userToNotify) => {
@@ -64,7 +62,7 @@ const createInAppNotifications = async (
         commentId: comment.id,
       },
       message,
-      sourceUrl: sourceUrl.href,
+      sourceUrl: getLinkToComment(comment, commentTopic),
     };
     return notification;
   });
@@ -134,6 +132,27 @@ const createSubscriptions = async (comment: Comment, threadStarterCommentId: str
   await xprisma.subscription.createMany({ data: subscriptionsToCreate });
 };
 
+const buildEmails = (comment: Comment, commentTopic: Topic, usersToEmail: User[]): Email[] => {
+  const linkToComment = getLinkToComment(comment, commentTopic);
+
+  return usersToEmail.map((user) => {
+    const email: Email = {
+      fromName: comment.authorName,
+      to: user.email,
+      subject: `Re: ${commentTopic.creatorName}/${commentTopic.title}`,
+      // white-space styling because otherwise white-space is collapsed
+      // encode comment content because otherwise users could use HTML injection, but their comments should be rendered as-is
+      html: `<div style="white-space: pre;">${encode(comment.content)}
+—
+<a href="${linkToComment}">View comment on Ameliorate</a>.
+<a>Unsubscribe from thread</a> | <a>Unsubscribe from all Ameliorate notification emails</a>.
+</div>`,
+    };
+
+    return email;
+  });
+};
+
 export const handleCommentCreated = async (comment: Comment) => {
   const threadStarterCommentId = comment.parentType === "comment" ? comment.parentId : comment.id;
   if (!threadStarterCommentId) throw errorWithData("couldn't find thread starter comment", comment);
@@ -145,11 +164,9 @@ export const handleCommentCreated = async (comment: Comment) => {
 
   await createInAppNotifications(comment, commentTopic, usersToNotify);
 
-  // email subject:
-  // - Re: reasonableUsername/reasonable-length-topic-title
-  // if (env.sendgrid_key) {
-  // const emailNotificationDatas = notificationDatas.filter((data) => data.notifiedUser.receiveNotificationEmails);
-  // const emails = buildEmails(emailNotificationDatas);
-  // await sendEmails(emails);
-  // }
+  if (canSendEmails()) {
+    const usersToEmail = usersToNotify.filter((user) => user.receiveEmailNotifications);
+    const emails = buildEmails(comment, commentTopic, usersToEmail);
+    await sendAllEmails(emails);
+  }
 };

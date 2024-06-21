@@ -54,4 +54,14 @@ export const userRouter = router({
         },
       });
     }),
+
+  setReceiveEmails: procedure
+    .use(isAuthenticated)
+    .input(userSchema.pick({ receiveEmailNotifications: true }))
+    .mutation(async (opts) => {
+      return await xprisma.user.update({
+        where: { authId: opts.ctx.userAuthId },
+        data: { receiveEmailNotifications: opts.input.receiveEmailNotifications },
+      });
+    }),
 });
