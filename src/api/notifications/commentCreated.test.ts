@@ -453,6 +453,22 @@ describe("handleCommentCreated", () => {
 
         await handleCommentCreated(commentWithCommentParent);
 
+        const unsubscribeThreadCode = await xprisma.unsubscribeCode.findFirstOrThrow({
+          where: {
+            subscriberUsername: notAuthor.username,
+            subscriptionSourceId: commentWithTopicParent.id,
+            subscriptionSourceType: "threadStarterComment",
+          },
+        });
+
+        const unsubscribeAllCode = await xprisma.unsubscribeCode.findFirstOrThrow({
+          where: {
+            subscriberUsername: notAuthor.username,
+            subscriptionSourceId: null,
+            subscriptionSourceType: null,
+          },
+        });
+
         expect(sendAllEmailsSpy).toHaveBeenCalledWith([
           {
             fromName: "author",
@@ -461,7 +477,7 @@ describe("handleCommentCreated", () => {
             html: `<div style="white-space: pre;">${commentWithCommentParent.content}
 —
 <a href="http://localhost:3000/creatorOfTopic/topicWithoutAllowAnyEdit?comment=${commentWithCommentParent.id}">View comment on Ameliorate</a>.
-<a>Unsubscribe from thread</a> | <a>Unsubscribe from all Ameliorate notification emails</a>.
+<a href="http://localhost:3000/unsubscribe/${unsubscribeThreadCode.code}">Unsubscribe from thread</a> | <a href="http://localhost:3000/unsubscribe/${unsubscribeAllCode.code}">Unsubscribe from all Ameliorate notification emails</a>.
 </div>`,
           },
         ]);
@@ -478,6 +494,22 @@ describe("handleCommentCreated", () => {
 
         await handleCommentCreated(commentWithTopicParent);
 
+        const unsubscribeThreadCode = await xprisma.unsubscribeCode.findFirstOrThrow({
+          where: {
+            subscriberUsername: notAuthor.username,
+            subscriptionSourceId: commentWithTopicParent.id,
+            subscriptionSourceType: "threadStarterComment",
+          },
+        });
+
+        const unsubscribeAllCode = await xprisma.unsubscribeCode.findFirstOrThrow({
+          where: {
+            subscriberUsername: notAuthor.username,
+            subscriptionSourceId: null,
+            subscriptionSourceType: null,
+          },
+        });
+
         expect(sendAllEmailsSpy).toHaveBeenCalledWith([
           {
             fromName: "author",
@@ -486,7 +518,7 @@ describe("handleCommentCreated", () => {
             html: `<div style="white-space: pre;">${commentWithTopicParent.content}
 —
 <a href="http://localhost:3000/creatorOfTopic/topicWithoutAllowAnyEdit?comment=${commentWithTopicParent.id}">View comment on Ameliorate</a>.
-<a>Unsubscribe from thread</a> | <a>Unsubscribe from all Ameliorate notification emails</a>.
+<a href="http://localhost:3000/unsubscribe/${unsubscribeThreadCode.code}">Unsubscribe from thread</a> | <a href="http://localhost:3000/unsubscribe/${unsubscribeAllCode.code}">Unsubscribe from all Ameliorate notification emails</a>.
 </div>`,
           },
         ]);

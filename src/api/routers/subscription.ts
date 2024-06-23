@@ -10,9 +10,10 @@ export const subscriptionRouter = router({
     .query(async (opts) => {
       return await xprisma.subscription.findUnique({
         where: {
-          subscriberUsername_sourceId: {
+          subscriberUsername_sourceId_sourceType: {
             subscriberUsername: opts.ctx.user.username,
             sourceId: opts.input.sourceId,
+            sourceType: "threadStarterComment",
           },
         },
       });
@@ -37,9 +38,10 @@ export const subscriptionRouter = router({
     .mutation(async (opts) => {
       await xprisma.subscription.delete({
         where: {
-          subscriberUsername_sourceId: {
+          subscriberUsername_sourceId_sourceType: {
             subscriberUsername: opts.ctx.user.username,
             sourceId: opts.input.sourceId,
+            sourceType: "threadStarterComment",
           },
         },
       });

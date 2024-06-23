@@ -1,4 +1,4 @@
-import { Topic, User } from "@prisma/client";
+import { Topic, UnsubscribeCode, User } from "@prisma/client";
 import { encode } from "he";
 import truncate from "lodash/truncate";
 
@@ -6,6 +6,7 @@ import { Email, canSendEmails, sendAllEmails } from "@/api/email";
 import { Comment, getLinkToComment, isThreadStarterComment } from "@/common/comment";
 import { errorWithData } from "@/common/errorHandling";
 import { InAppNotification, maxMessageLength } from "@/common/inAppNotification";
+import { getBaseUrl } from "@/common/utils";
 import { xprisma } from "@/db/extendedPrisma";
 
 /**
@@ -132,10 +133,61 @@ const createSubscriptions = async (comment: Comment, threadStarterCommentId: str
   await xprisma.subscription.createMany({ data: subscriptionsToCreate });
 };
 
-const buildEmails = (comment: Comment, commentTopic: Topic, usersToEmail: User[]): Email[] => {
+type UserWithUnsubscribeCodes = User & {
+  unsubscribeThreadCode: Omit<UnsubscribeCode, "createdAt">;
+  unsubscribeAllCode: Omit<UnsubscribeCode, "createdAt">;
+};
+
+const createUnsubscribeCodesForUsers = async (users: User[], threadStarterCommentId: string) => {
+  const unsubscribeThreadCodes: Omit<UnsubscribeCode, "createdAt">[] = users.map((user) => {
+    const code: Omit<UnsubscribeCode, "createdAt"> = {
+      code: crypto.randomUUID(), // guarantee that we're using a securely-random code, apparently not all v4 UUIDs are guaranteed to be securely random https://security.stackexchange.com/questions/157270/using-v4-uuid-for-authentication
+      subscriberUsername: user.username,
+      subscriptionSourceId: threadStarterCommentId,
+      subscriptionSourceType: "threadStarterComment",
+    };
+    return code;
+  });
+
+  const unsubscribeAllCodes: Omit<UnsubscribeCode, "createdAt">[] = users.map((user) => {
+    const code: Omit<UnsubscribeCode, "createdAt"> = {
+      code: crypto.randomUUID(),
+      subscriberUsername: user.username,
+      subscriptionSourceId: null,
+      subscriptionSourceType: null,
+    };
+    return code;
+  });
+
+  await xprisma.unsubscribeCode.createMany({
+    data: unsubscribeThreadCodes.concat(unsubscribeAllCodes),
+  });
+
+  return users.map((user) => {
+    const unsubscribeThreadCode = unsubscribeThreadCodes.find(
+      (code) => code.subscriberUsername === user.username,
+    );
+    const unsubscribeAllCode = unsubscribeAllCodes.find(
+      (code) => code.subscriberUsername === user.username,
+    );
+    if (!unsubscribeThreadCode || !unsubscribeAllCode)
+      throw errorWithData("couldn't find unsubscribe code for user", { user });
+
+    return { ...user, unsubscribeThreadCode, unsubscribeAllCode };
+  });
+};
+
+const buildEmails = (
+  comment: Comment,
+  commentTopic: Topic,
+  usersToEmail: UserWithUnsubscribeCodes[],
+): Email[] => {
   const linkToComment = getLinkToComment(comment, commentTopic);
 
   return usersToEmail.map((user) => {
+    const linkToUnsubscribeThread = `${getBaseUrl()}/unsubscribe/${user.unsubscribeThreadCode.code}`;
+    const linkToUnsubscribeAll = `${getBaseUrl()}/unsubscribe/${user.unsubscribeAllCode.code}`;
+
     const email: Email = {
       fromName: comment.authorName,
       to: user.email,
@@ -145,7 +197,7 @@ const buildEmails = (comment: Comment, commentTopic: Topic, usersToEmail: User[]
       html: `<div style="white-space: pre;">${encode(comment.content)}
 —
 <a href="${linkToComment}">View comment on Ameliorate</a>.
-<a>Unsubscribe from thread</a> | <a>Unsubscribe from all Ameliorate notification emails</a>.
+<a href="${linkToUnsubscribeThread}">Unsubscribe from thread</a> | <a href="${linkToUnsubscribeAll}">Unsubscribe from all Ameliorate notification emails</a>.
 </div>`,
     };
 
@@ -166,7 +218,11 @@ export const handleCommentCreated = async (comment: Comment) => {
 
   if (canSendEmails()) {
     const usersToEmail = usersToNotify.filter((user) => user.receiveEmailNotifications);
-    const emails = buildEmails(comment, commentTopic, usersToEmail);
+    const usersToEmailWithUnsubscribeCodes = await createUnsubscribeCodesForUsers(
+      usersToEmail,
+      threadStarterCommentId,
+    );
+    const emails = buildEmails(comment, commentTopic, usersToEmailWithUnsubscribeCodes);
     await sendAllEmails(emails);
   }
 };
