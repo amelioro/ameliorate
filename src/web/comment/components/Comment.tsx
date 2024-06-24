@@ -153,7 +153,7 @@ export const Comment = ({ comment }: Props) => {
       </HeaderDiv>
 
       {!editing ? (
-        <p className="whitespace-pre">{comment.content}</p>
+        <p className="whitespace-pre text-wrap">{comment.content}</p>
       ) : (
         <Draft
           authorName={comment.authorName}
