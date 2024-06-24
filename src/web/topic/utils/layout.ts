@@ -107,7 +107,8 @@ export const layout = async (
     // allow nodes to be partitioned into layers by type
     "elk.partitioning.activate": partition ? "true" : "false",
     // ensure node islands don't overlap (needed for when node has 3 rows of text)
-    "elk.spacing.componentComponent": "30", // default is 20
+    // also keep node islands ("components") significantly spaced out, so they can be easily seen as separate
+    "elk.spacing.componentComponent": "150", // default is 20
     // prioritize shorter edges e.g. if a problem has multiple direct causes, prioritize putting
     // them in the same layer over using space efficiently
     "elk.layered.priority.shortness": "10",
