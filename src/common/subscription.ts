@@ -3,7 +3,7 @@ import { z } from "zod";
 import { userSchema } from "@/common/user";
 
 const sourceTypes = ["threadStarterComment"] as const;
-const zSourceTypes = z.enum(sourceTypes);
+export const zSourceTypes = z.enum(sourceTypes);
 
 export const subscriptionSchema = z.object({
   id: z.number(),

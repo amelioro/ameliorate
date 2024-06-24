@@ -21,12 +21,13 @@ model User {
   createdAt                 DateTime @default(now())
   updatedAt                 DateTime @updatedAt
 
-  topics        Topic[]
-  scores        UserScore[]
-  comments      Comment[]
-  notifications InAppNotification[]
-  watches       Watch[]
-  subscriptions Subscription[]
+  topics           Topic[]
+  scores           UserScore[]
+  comments         Comment[]
+  notifications    InAppNotification[]
+  watches          Watch[]
+  subscriptions    Subscription[]
+  unsubscribeCodes UnsubscribeCode[]
 
   @@index([username])
   @@index([authId])
@@ -272,7 +273,7 @@ model Subscription {
 
   subscriber User @relation(fields: [subscriberUsername], references: [username], onDelete: Cascade)
 
-  @@unique([subscriberUsername, sourceId])
+  @@unique([subscriberUsername, sourceId, sourceType])
   @@index([subscriberUsername])
   @@index([sourceId])
   @@map("subscriptions")
@@ -280,4 +281,18 @@ model Subscription {
 
 enum SubscriptionSourceType {
   threadStarterComment
+}
+
+model UnsubscribeCode {
+  code                   String                  @id
+  subscriberUsername     String
+  subscriptionSourceId   String?
+  subscriptionSourceType SubscriptionSourceType?
+  createdAt              DateTime                @default(now())
+
+  subscriber User @relation(fields: [subscriberUsername], references: [username], onDelete: Cascade)
+  // no FK relation for `subscription` because it seems nice to allow deleting subscription without deleting this code, so the code can be re-used
+
+  @@index([createdAt])
+  @@map("unsubscribeCodes")
 }

@@ -1,8 +1,9 @@
 /* eslint-disable functional/no-let -- let is needed to reuse `before`-initialized variables across tests */
 import { InAppNotification, Topic, User } from "@prisma/client";
 import shortUUID from "short-uuid";
-import { beforeEach, describe, expect, test } from "vitest";
+import { SpyInstance, beforeEach, describe, expect, test, vi } from "vitest";
 
+import * as email from "@/api/email";
 import {
   getInAppNotificationMessage,
   handleCommentCreated,
@@ -17,6 +18,7 @@ let topicWithoutAllowAnyEdit: Topic;
 
 let author: User;
 let notAuthor: User;
+let notAuthorNoEmails: User;
 
 let commentWithTopicParent: Comment;
 let commentWithCommentParent: Comment;
@@ -62,6 +64,14 @@ beforeEach(async () => {
   });
   notAuthor = await xprisma.user.create({
     data: { username: "notAuthor", authId: "notAuthor", email: testEmail },
+  });
+  notAuthorNoEmails = await xprisma.user.create({
+    data: {
+      username: "notAuthorNoEmails",
+      authId: "notAuthorNoEmails",
+      email: testEmail,
+      receiveEmailNotifications: false,
+    },
   });
 
   commentWithTopicParent = await xprisma.comment.create({
@@ -149,7 +159,7 @@ const expectNotification = (
       commentId: comment.id,
     },
     message: expectedMessage,
-    sourceUrl: `http://localhost:3000/creatorOfTopic/topicWithoutAllowAnyEdit/?comment=${comment.id}`,
+    sourceUrl: `http://localhost:3000/creatorOfTopic/topicWithoutAllowAnyEdit?comment=${comment.id}`,
   };
 
   const { id: _i, createdAt: _c, ...receivedWithoutGeneratedFields } = oneReceived;
@@ -365,6 +375,154 @@ describe("handleCommentCreated", () => {
       });
 
       expectNotification(notifications, notAuthor, commentWithTopicParent);
+    });
+  });
+
+  describe("email notifications", () => {
+    let sendAllEmailsSpy: SpyInstance;
+
+    beforeEach(() => {
+      sendAllEmailsSpy = vi.spyOn(email, "sendAllEmails");
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      sendAllEmailsSpy.mockImplementation(() => {});
+    });
+
+    describe("when sendgrid isn't set up to send emails", () => {
+      beforeEach(() => {
+        // eslint-disable-next-line functional/immutable-data
+        const canSendEmailsSpy = vi.spyOn(email, "canSendEmails");
+        canSendEmailsSpy.mockImplementation(() => false);
+      });
+
+      test("does not send emails", async () => {
+        await handleCommentCreated(commentWithCommentParent);
+
+        expect(sendAllEmailsSpy).not.toHaveBeenCalled();
+      });
+    });
+
+    describe("when sendgrid is set up to send emails", () => {
+      beforeEach(() => {
+        // eslint-disable-next-line functional/immutable-data
+        const canSendEmailsSpy = vi.spyOn(email, "canSendEmails");
+        canSendEmailsSpy.mockImplementation(() => true);
+      });
+
+      test("does not send emails to users that have emails turned off, even if they're subscribed", async () => {
+        await xprisma.subscription.create({
+          data: {
+            subscriberUsername: notAuthorNoEmails.username,
+            sourceId: commentWithTopicParent.id,
+            sourceType: "threadStarterComment",
+          },
+        });
+
+        await handleCommentCreated(commentWithCommentParent);
+
+        expect(sendAllEmailsSpy).toHaveBeenCalledWith([]);
+      });
+
+      test("does not send emails to author, even if they're subscribed", async () => {
+        await xprisma.subscription.create({
+          data: {
+            subscriberUsername: author.username,
+            sourceId: commentWithTopicParent.id,
+            sourceType: "threadStarterComment",
+          },
+        });
+
+        await handleCommentCreated(commentWithCommentParent);
+
+        expect(sendAllEmailsSpy).toHaveBeenCalledWith([]);
+      });
+
+      test("does not send emails to users that are not already subscribed, and are not subscribed by the comment's creation", async () => {
+        await handleCommentCreated(commentWithCommentParent);
+
+        expect(sendAllEmailsSpy).toHaveBeenCalledWith([]);
+      });
+
+      test("sends emails to users that were already subscribed", async () => {
+        await xprisma.subscription.create({
+          data: {
+            subscriberUsername: notAuthor.username,
+            sourceId: commentWithTopicParent.id,
+            sourceType: "threadStarterComment",
+          },
+        });
+
+        await handleCommentCreated(commentWithCommentParent);
+
+        const unsubscribeThreadCode = await xprisma.unsubscribeCode.findFirstOrThrow({
+          where: {
+            subscriberUsername: notAuthor.username,
+            subscriptionSourceId: commentWithTopicParent.id,
+            subscriptionSourceType: "threadStarterComment",
+          },
+        });
+
+        const unsubscribeAllCode = await xprisma.unsubscribeCode.findFirstOrThrow({
+          where: {
+            subscriberUsername: notAuthor.username,
+            subscriptionSourceId: null,
+            subscriptionSourceType: null,
+          },
+        });
+
+        expect(sendAllEmailsSpy).toHaveBeenCalledWith([
+          {
+            fromName: "author",
+            to: notAuthor.email,
+            subject: "Re: creatorOfTopic/topicWithoutAllowAnyEdit",
+            html: `<div style="white-space: pre;">${commentWithCommentParent.content}
+—
+<a href="http://localhost:3000/creatorOfTopic/topicWithoutAllowAnyEdit?comment=${commentWithCommentParent.id}">View comment on Ameliorate</a>.
+<a href="http://localhost:3000/unsubscribe/${unsubscribeThreadCode.code}">Unsubscribe from thread</a> | <a href="http://localhost:3000/unsubscribe/${unsubscribeAllCode.code}">Unsubscribe from all Ameliorate notification emails</a>.
+</div>`,
+          },
+        ]);
+      });
+
+      test("sends emails to users that are subscribed by the comment's creation", async () => {
+        await xprisma.watch.create({
+          data: {
+            watcherUsername: notAuthor.username,
+            topicId: commentWithTopicParent.topicId,
+            type: "all",
+          },
+        });
+
+        await handleCommentCreated(commentWithTopicParent);
+
+        const unsubscribeThreadCode = await xprisma.unsubscribeCode.findFirstOrThrow({
+          where: {
+            subscriberUsername: notAuthor.username,
+            subscriptionSourceId: commentWithTopicParent.id,
+            subscriptionSourceType: "threadStarterComment",
+          },
+        });
+
+        const unsubscribeAllCode = await xprisma.unsubscribeCode.findFirstOrThrow({
+          where: {
+            subscriberUsername: notAuthor.username,
+            subscriptionSourceId: null,
+            subscriptionSourceType: null,
+          },
+        });
+
+        expect(sendAllEmailsSpy).toHaveBeenCalledWith([
+          {
+            fromName: "author",
+            to: notAuthor.email,
+            subject: "Re: creatorOfTopic/topicWithoutAllowAnyEdit",
+            html: `<div style="white-space: pre;">${commentWithTopicParent.content}
+—
+<a href="http://localhost:3000/creatorOfTopic/topicWithoutAllowAnyEdit?comment=${commentWithTopicParent.id}">View comment on Ameliorate</a>.
+<a href="http://localhost:3000/unsubscribe/${unsubscribeThreadCode.code}">Unsubscribe from thread</a> | <a href="http://localhost:3000/unsubscribe/${unsubscribeAllCode.code}">Unsubscribe from all Ameliorate notification emails</a>.
+</div>`,
+          },
+        ]);
+      });
     });
   });
 });

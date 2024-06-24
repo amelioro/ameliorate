@@ -92,7 +92,7 @@ export const Comment = ({ comment }: Props) => {
           </div>
         </div>
 
-        <div>
+        <div className="shrink-0">
           {isThreadStarterComment &&
             userCanDeleteComment &&
             (!comment.resolved ? (
@@ -153,7 +153,7 @@ export const Comment = ({ comment }: Props) => {
       </HeaderDiv>
 
       {!editing ? (
-        <p>{comment.content}</p>
+        <p className="whitespace-pre text-wrap">{comment.content}</p>
       ) : (
         <Draft
           authorName={comment.authorName}

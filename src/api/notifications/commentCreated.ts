@@ -1,7 +1,9 @@
-import { Topic, User } from "@prisma/client";
+import { Topic, UnsubscribeCode, User } from "@prisma/client";
+import { encode } from "he";
 import truncate from "lodash/truncate";
 
-import { Comment, isThreadStarterComment } from "@/common/comment";
+import { Email, canSendEmails, sendAllEmails } from "@/api/email";
+import { Comment, getLinkToComment, isThreadStarterComment } from "@/common/comment";
 import { errorWithData } from "@/common/errorHandling";
 import { InAppNotification, maxMessageLength } from "@/common/inAppNotification";
 import { getBaseUrl } from "@/common/utils";
@@ -50,9 +52,6 @@ const createInAppNotifications = async (
   commentTopic: Topic,
   usersToNotify: User[],
 ) => {
-  const sourceUrl = new URL(`/${commentTopic.creatorName}/${commentTopic.title}/`, getBaseUrl());
-  sourceUrl.searchParams.set("comment", comment.id);
-
   const message = getInAppNotificationMessage(comment);
 
   const inAppNotifications = usersToNotify.map((userToNotify) => {
@@ -64,7 +63,7 @@ const createInAppNotifications = async (
         commentId: comment.id,
       },
       message,
-      sourceUrl: sourceUrl.href,
+      sourceUrl: getLinkToComment(comment, commentTopic),
     };
     return notification;
   });
@@ -134,6 +133,78 @@ const createSubscriptions = async (comment: Comment, threadStarterCommentId: str
   await xprisma.subscription.createMany({ data: subscriptionsToCreate });
 };
 
+type UserWithUnsubscribeCodes = User & {
+  unsubscribeThreadCode: Omit<UnsubscribeCode, "createdAt">;
+  unsubscribeAllCode: Omit<UnsubscribeCode, "createdAt">;
+};
+
+const createUnsubscribeCodesForUsers = async (users: User[], threadStarterCommentId: string) => {
+  const unsubscribeThreadCodes: Omit<UnsubscribeCode, "createdAt">[] = users.map((user) => {
+    const code: Omit<UnsubscribeCode, "createdAt"> = {
+      code: crypto.randomUUID(), // guarantee that we're using a securely-random code, apparently not all v4 UUIDs are guaranteed to be securely random https://security.stackexchange.com/questions/157270/using-v4-uuid-for-authentication
+      subscriberUsername: user.username,
+      subscriptionSourceId: threadStarterCommentId,
+      subscriptionSourceType: "threadStarterComment",
+    };
+    return code;
+  });
+
+  const unsubscribeAllCodes: Omit<UnsubscribeCode, "createdAt">[] = users.map((user) => {
+    const code: Omit<UnsubscribeCode, "createdAt"> = {
+      code: crypto.randomUUID(),
+      subscriberUsername: user.username,
+      subscriptionSourceId: null,
+      subscriptionSourceType: null,
+    };
+    return code;
+  });
+
+  await xprisma.unsubscribeCode.createMany({
+    data: unsubscribeThreadCodes.concat(unsubscribeAllCodes),
+  });
+
+  return users.map((user) => {
+    const unsubscribeThreadCode = unsubscribeThreadCodes.find(
+      (code) => code.subscriberUsername === user.username,
+    );
+    const unsubscribeAllCode = unsubscribeAllCodes.find(
+      (code) => code.subscriberUsername === user.username,
+    );
+    if (!unsubscribeThreadCode || !unsubscribeAllCode)
+      throw errorWithData("couldn't find unsubscribe code for user", { user });
+
+    return { ...user, unsubscribeThreadCode, unsubscribeAllCode };
+  });
+};
+
+const buildEmails = (
+  comment: Comment,
+  commentTopic: Topic,
+  usersToEmail: UserWithUnsubscribeCodes[],
+): Email[] => {
+  const linkToComment = getLinkToComment(comment, commentTopic);
+
+  return usersToEmail.map((user) => {
+    const linkToUnsubscribeThread = `${getBaseUrl()}/unsubscribe/${user.unsubscribeThreadCode.code}`;
+    const linkToUnsubscribeAll = `${getBaseUrl()}/unsubscribe/${user.unsubscribeAllCode.code}`;
+
+    const email: Email = {
+      fromName: comment.authorName,
+      to: user.email,
+      subject: `Re: ${commentTopic.creatorName}/${commentTopic.title}`,
+      // white-space styling because otherwise white-space is collapsed
+      // encode comment content because otherwise users could use HTML injection, but their comments should be rendered as-is
+      html: `<div style="white-space: pre;">${encode(comment.content)}
+—
+<a href="${linkToComment}">View comment on Ameliorate</a>.
+<a href="${linkToUnsubscribeThread}">Unsubscribe from thread</a> | <a href="${linkToUnsubscribeAll}">Unsubscribe from all Ameliorate notification emails</a>.
+</div>`,
+    };
+
+    return email;
+  });
+};
+
 export const handleCommentCreated = async (comment: Comment) => {
   const threadStarterCommentId = comment.parentType === "comment" ? comment.parentId : comment.id;
   if (!threadStarterCommentId) throw errorWithData("couldn't find thread starter comment", comment);
@@ -145,11 +216,13 @@ export const handleCommentCreated = async (comment: Comment) => {
 
   await createInAppNotifications(comment, commentTopic, usersToNotify);
 
-  // email subject:
-  // - Re: reasonableUsername/reasonable-length-topic-title
-  // if (env.sendgrid_key) {
-  // const emailNotificationDatas = notificationDatas.filter((data) => data.notifiedUser.receiveNotificationEmails);
-  // const emails = buildEmails(emailNotificationDatas);
-  // await sendEmails(emails);
-  // }
+  if (canSendEmails()) {
+    const usersToEmail = usersToNotify.filter((user) => user.receiveEmailNotifications);
+    const usersToEmailWithUnsubscribeCodes = await createUnsubscribeCodesForUsers(
+      usersToEmail,
+      threadStarterCommentId,
+    );
+    const emails = buildEmails(comment, commentTopic, usersToEmailWithUnsubscribeCodes);
+    await sendAllEmails(emails);
+  }
 };
