@@ -92,7 +92,7 @@ export const Comment = ({ comment }: Props) => {
           </div>
         </div>
 
-        <div>
+        <div className="shrink-0">
           {isThreadStarterComment &&
             userCanDeleteComment &&
             (!comment.resolved ? (
