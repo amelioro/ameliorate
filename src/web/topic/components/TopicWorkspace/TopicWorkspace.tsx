@@ -27,7 +27,7 @@ export const TopicWorkspace = () => {
           flexDirection: isLandscape ? "row" : "column-reverse",
         }}
       >
-        <TopicPane isLandscape={isLandscape} />
+        <TopicPane anchor={isLandscape ? "left" : "bottom"} />
 
         <Box height="100%" flex="1" overflow="auto">
           {format === "table" && <CriteriaTable />}
