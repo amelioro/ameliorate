@@ -38,8 +38,7 @@ export const TopicWorkspace = () => {
           flexDirection: isLandscape ? "row" : "column-reverse",
         }}
       >
-        <TopicPane anchor={isLandscape ? "left" : "bottom"} />
-
+        <TopicPane anchor={isLandscape ? "left" : "bottom"} tabs={["Details", "Views"]} />
         <Box height="100%" flex="1" overflow="auto">
           {format === "table" && <CriteriaTable />}
           {format === "diagram" && <Diagram />}

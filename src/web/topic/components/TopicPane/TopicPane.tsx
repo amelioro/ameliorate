@@ -31,11 +31,13 @@ const ANCHOR_ICON_MAP = {
   right: ChevronRight,
 } as const;
 
+type TopicTab = "Details" | "Views";
 interface Props {
   anchor: Anchor;
+  tabs: [TopicTab, ...TopicTab[]];
 }
 
-export const TopicPane = ({ anchor }: Props) => {
+export const TopicPane = ({ anchor, tabs }: Props) => {
   const { isTopicPaneOpen, selectedTab } = usePaneStore();
   const selectedGraphPart = useSelectedGraphPart();
 
@@ -47,7 +49,21 @@ export const TopicPane = ({ anchor }: Props) => {
     }
   };
 
+  const handleTabChange = (_: React.SyntheticEvent, value: TopicTab) => {
+    setSelectedTab(value);
+  };
+
   const ToggleIcon = isTopicPaneOpen ? ANCHOR_ICON_MAP[anchor] : AutoStories;
+
+  const TabPanelContent = {
+    Details:
+      selectedGraphPart !== null ? (
+        <GraphPartDetails graphPart={selectedGraphPart} key={selectedGraphPart.id} />
+      ) : (
+        <TopicDetails />
+      ),
+    Views: <TopicViews />,
+  };
 
   return (
     <PositionedDiv>
@@ -56,23 +72,16 @@ export const TopicPane = ({ anchor }: Props) => {
       </TogglePaneButton>
       <StyledDrawer variant="permanent" open={isTopicPaneOpen} anchor={anchor}>
         <TabContext value={selectedTab}>
-          <TabList
-            onChange={(_, newValue: "Details" | "Views") => setSelectedTab(newValue)}
-            centered
-          >
-            <Tab label="Details" value="Details" />
-            <Tab label="Views" value="Views" />
+          <TabList onChange={handleTabChange} centered>
+            {tabs.map((tab, idx) => (
+              <Tab key={`${tab}_${idx}`} label={tab} value={tab} />
+            ))}
           </TabList>
-          <TabPanel value="Details">
-            {selectedGraphPart !== null ? (
-              <GraphPartDetails graphPart={selectedGraphPart} key={selectedGraphPart.id} />
-            ) : (
-              <TopicDetails />
-            )}
-          </TabPanel>
-          <TabPanel value="Views">
-            <TopicViews />
-          </TabPanel>
+          {tabs.map((tab, idx) => (
+            <TabPanel key={`${tab}_${idx}`} value={tab}>
+              {TabPanelContent[tab]}
+            </TabPanel>
+          ))}
         </TabContext>
       </StyledDrawer>
     </PositionedDiv>
