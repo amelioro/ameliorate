@@ -13,6 +13,7 @@ import {
   Layers,
   Route,
   Upload,
+  WbTwilight,
 } from "@mui/icons-material";
 import {
   Divider,
@@ -53,7 +54,12 @@ import {
 } from "@/web/view/currentViewStore/layout";
 import { resetView, useFormat } from "@/web/view/currentViewStore/store";
 import { resetQuickViews } from "@/web/view/quickViewStore/store";
-import { toggleFillNodesWithColor, useFillNodesWithColor } from "@/web/view/userConfigStore";
+import {
+  toggleFillNodesWithColor,
+  toggleIndicateWhenNodeForcedToShow,
+  useFillNodesWithColor,
+  useIndicateWhenNodeForcedToShow,
+} from "@/web/view/userConfigStore";
 
 const imageWidth = 2560;
 const imageHeight = 1440;
@@ -113,6 +119,7 @@ export const MoreActionsDrawer = ({
   const readonlyMode = useReadonlyMode();
   const layoutThoroughness = useLayoutThoroughness();
   const fillNodesWithColor = useFillNodesWithColor();
+  const indicateWhenNodeForcedToShow = useIndicateWhenNodeForcedToShow();
 
   return (
     <Drawer
@@ -342,6 +349,18 @@ export const MoreActionsDrawer = ({
             sx={{ borderRadius: "50%", border: "0" }}
           >
             <FormatColorFill />
+          </ToggleButton>
+          <ToggleButton
+            value={indicateWhenNodeForcedToShow}
+            title="Indicate when node forced to show"
+            aria-label="Indicate when node forced to show"
+            color="secondary"
+            size="small"
+            selected={indicateWhenNodeForcedToShow}
+            onClick={() => toggleIndicateWhenNodeForcedToShow(!indicateWhenNodeForcedToShow)}
+            sx={{ borderRadius: "50%", border: "0" }}
+          >
+            <WbTwilight />
           </ToggleButton>
         </ListItem>
       </List>

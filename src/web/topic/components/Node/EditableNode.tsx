@@ -19,6 +19,7 @@ import {
   StyledTextareaAutosize,
   YEdgeBox,
 } from "@/web/topic/components/Node/EditableNode.styles";
+import { setSelectedTab } from "@/web/topic/components/TopicPane/paneStore";
 import { setCustomNodeType, setNodeLabel } from "@/web/topic/store/actions";
 import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { Node } from "@/web/topic/utils/graph";
@@ -113,7 +114,10 @@ const EditableNodeBase = ({ node, context, className = "" }: Props) => {
     <NodeBox
       className={className + (selected ? " selected" : "")}
       onClick={() => {
-        if (context != "details") setSelected(node.id);
+        if (context != "details") {
+          setSelected(node.id);
+          setSelectedTab("Details"); // convenient to show details when clicking a node, but don't open the pane if it's not open, because that can be jarring
+        }
       }}
       onContextMenu={(event) => openContextMenu(event, { node })}
       sx={nodeStyles}
