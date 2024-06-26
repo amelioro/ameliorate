@@ -7,7 +7,9 @@ import {
 } from "@mui/icons-material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Tab } from "@mui/material";
+import { useEffect, useState } from "react";
 
+import { emitter } from "@/web/common/event";
 import { GraphPartDetails } from "@/web/topic/components/TopicPane/GraphPartDetails";
 import { TopicDetails } from "@/web/topic/components/TopicPane/TopicDetails";
 import {
@@ -17,11 +19,6 @@ import {
   TogglePaneButton,
 } from "@/web/topic/components/TopicPane/TopicPane.styles";
 import { TopicViews } from "@/web/topic/components/TopicPane/TopicViews";
-import {
-  setIsTopicPaneOpen,
-  setSelectedTab,
-  usePaneStore,
-} from "@/web/topic/components/TopicPane/paneStore";
 import { useSelectedGraphPart } from "@/web/view/currentViewStore/store";
 
 const ANCHOR_ICON_MAP = {
@@ -38,22 +35,37 @@ interface Props {
 }
 
 export const TopicPane = ({ anchor, tabs }: Props) => {
-  const { isTopicPaneOpen, selectedTab } = usePaneStore();
+  const [isOpen, setIsOpen] = useState(true);
+  const [selectedTab, setSelectedTab] = useState(tabs[0]);
   const selectedGraphPart = useSelectedGraphPart();
 
+  useEffect(() => {
+    if (!tabs.includes("Details")) return;
+
+    const unbindView = emitter.on("viewTopicDetails", () => {
+      setSelectedTab("Details");
+      setIsOpen(true);
+    });
+
+    const unbindSelected = emitter.on("nodeSelected", () => {
+      setSelectedTab("Details"); // convenient to show details when clicking a node, but don't open the pane if it's not open, because that can be jarring
+    });
+
+    return () => {
+      unbindView();
+      unbindSelected();
+    };
+  }, [tabs]);
+
   const handlePaneToggle = () => {
-    if (isTopicPaneOpen) {
-      setIsTopicPaneOpen(false);
-    } else {
-      setIsTopicPaneOpen(true);
-    }
+    setIsOpen(!isOpen);
   };
 
   const handleTabChange = (_: React.SyntheticEvent, value: TopicTab) => {
     setSelectedTab(value);
   };
 
-  const ToggleIcon = isTopicPaneOpen ? ANCHOR_ICON_MAP[anchor] : AutoStories;
+  const ToggleIcon = isOpen ? ANCHOR_ICON_MAP[anchor] : AutoStories;
 
   const TabPanelContent = {
     Details:
@@ -70,7 +82,7 @@ export const TopicPane = ({ anchor, tabs }: Props) => {
       <TogglePaneButton onClick={handlePaneToggle} color="primary" anchor={anchor}>
         <ToggleIcon />
       </TogglePaneButton>
-      <StyledDrawer variant="permanent" open={isTopicPaneOpen} anchor={anchor}>
+      <StyledDrawer variant="permanent" open={isOpen} anchor={anchor}>
         <TabContext value={selectedTab}>
           <TabList onChange={handleTabChange} centered>
             {tabs.map((tab, idx) => (

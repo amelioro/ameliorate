@@ -3,8 +3,8 @@ import { type ButtonProps } from "@mui/material";
 import { useCallback } from "react";
 
 import { useCommentCount } from "@/web/comment/store/commentStore";
+import { emitter } from "@/web/common/event";
 import { Indicator } from "@/web/topic/components/Indicator/Indicator";
-import { viewDetails } from "@/web/topic/components/TopicPane/paneStore";
 import { GraphPartType } from "@/web/topic/utils/graph";
 import { setSelected } from "@/web/view/currentViewStore/store";
 import { useShowResolvedComments } from "@/web/view/miscTopicConfigStore";
@@ -21,7 +21,7 @@ export const CommentIndicator = ({ graphPartId, graphPartType, partColor }: Prop
 
   const onClick = useCallback(() => {
     setSelected(graphPartId);
-    viewDetails();
+    emitter.emit("viewTopicDetails");
   }, [graphPartId]);
 
   if (commentCount === 0) return <></>;

@@ -2,8 +2,8 @@ import { ThumbDownOutlined, ThumbUpOutlined, ThumbsUpDownOutlined } from "@mui/i
 import { type ButtonProps } from "@mui/material";
 import { useCallback } from "react";
 
+import { emitter } from "@/web/common/event";
 import { Indicator } from "@/web/topic/components/Indicator/Indicator";
-import { viewDetails } from "@/web/topic/components/TopicPane/paneStore";
 import { useTopLevelClaims } from "@/web/topic/store/graphPartHooks";
 import { useDisplayScores } from "@/web/topic/store/scoreHooks";
 import { Score } from "@/web/topic/utils/graph";
@@ -22,7 +22,7 @@ export const JustificationIndicator = ({ graphPartId, partColor }: Props) => {
 
   const onClick = useCallback(() => {
     setSelected(graphPartId);
-    viewDetails();
+    emitter.emit("viewTopicDetails");
   }, [graphPartId]);
 
   if (justificationNodes.length === 0) return <></>;

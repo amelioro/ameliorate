@@ -6,8 +6,8 @@ import { Comment, CommentParentType, isThreadStarterComment } from "@/common/com
 import { errorWithData } from "@/common/errorHandling";
 import { withDefaults } from "@/common/object";
 import { apiSyncer } from "@/web/comment/store/apiSyncerMiddleware";
+import { emitter } from "@/web/common/event";
 import { storageWithDates } from "@/web/common/store/utils";
-import { setIsTopicPaneOpen } from "@/web/topic/components/TopicPane/paneStore";
 import { StoreTopic, UserTopic } from "@/web/topic/store/store";
 import { setSelected } from "@/web/view/currentViewStore/store";
 
@@ -222,5 +222,5 @@ export const viewComment = (commentId: string) => {
     threadStarterComment.parentType === "topic" ? null : threadStarterComment.parentId;
 
   setSelected(commentParentGraphPartId);
-  setIsTopicPaneOpen(true);
+  emitter.emit("viewTopicDetails");
 };
