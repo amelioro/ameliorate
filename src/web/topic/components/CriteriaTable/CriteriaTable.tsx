@@ -229,7 +229,7 @@ export const CriteriaTable = () => {
 
   const ToolBarActions = (table: MRT_TableInstance<RowData>) => {
     return (
-      <>
+      <div className="pr-12">
         <MRT_ToggleGlobalFilterButton table={table} />
 
         {userCanEditTopicData && (
@@ -262,7 +262,7 @@ export const CriteriaTable = () => {
         </Tooltip>
 
         <MRT_FullScreenToggleButton table={table} />
-      </>
+      </div>
     );
   };
 
