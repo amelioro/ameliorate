@@ -1,4 +1,4 @@
-import { Global } from "@emotion/react";
+import { Global, useTheme } from "@emotion/react";
 import { Box, useMediaQuery } from "@mui/material";
 
 import { ContextMenu } from "@/web/common/components/ContextMenu/ContextMenu";
@@ -9,9 +9,11 @@ import { TopicPane } from "@/web/topic/components/TopicPane/TopicPane";
 import { useFormat } from "@/web/view/currentViewStore/store";
 
 export const TopicWorkspace = () => {
-  const isLandscape = useMediaQuery("(orientation: landscape)");
-
   const format = useFormat();
+  const theme = useTheme();
+  const isLandscape = useMediaQuery("(orientation: landscape)");
+  const usingBigScreen = useMediaQuery(theme.breakpoints.up("xl"));
+  const useSplitPanes = isLandscape && usingBigScreen;
 
   return (
     <>
@@ -27,12 +29,15 @@ export const TopicWorkspace = () => {
           flexDirection: isLandscape ? "row" : "column-reverse",
         }}
       >
-        <TopicPane anchor={isLandscape ? "left" : "bottom"} tabs={["Details", "Views"]} />
+        <TopicPane
+          anchor={isLandscape ? "left" : "bottom"}
+          tabs={useSplitPanes ? ["Views"] : ["Details", "Views"]}
+        />
         <Box height="100%" flex="1" overflow="auto">
           {format === "table" && <CriteriaTable />}
           {format === "diagram" && <Diagram />}
         </Box>
-
+        {useSplitPanes && <TopicPane anchor="right" tabs={["Details"]} />}
         {/* prevents body scrolling when workspace is rendered*/}
         <Global styles={{ body: { overflow: "hidden" } }} />
       </Box>
