@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import { inferAsyncReturnType } from "@trpc/server";
 import { CreateNextContextOptions } from "@trpc/server/adapters/next";
 
@@ -12,6 +13,8 @@ export const createContext = async ({ req, res }: CreateNextContextOptions) => {
   if (!userAuthId) return {};
 
   const user = await xprisma.user.findFirst({ where: { authId: userAuthId } });
+
+  if (user) Sentry.setUser({ username: user.username });
 
   return { userAuthId, userEmailVerified, user };
 };
