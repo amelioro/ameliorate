@@ -5,6 +5,8 @@ export function register() {
   // The config here will be used whenever the server handles a request.
   // Sentry config is directly in this file instead of previously-suggested `sentry.[runtime].config.ts` because of https://github.com/getsentry/sentry-javascript/issues/12044#issuecomment-2112697663
   if (process.env.NEXT_RUNTIME === "nodejs") {
+    console.log("registering instrumentation, env vars:", process.env);
+
     Sentry.init({
       dsn: "https://8e46da4107214efd1ec756ec89d406bf@o4507510480764928.ingest.us.sentry.io/4507510485876736",
 
