@@ -199,8 +199,10 @@ export const topicRouter = router({
           await tx.userScore.createMany({ data: opts.input.scoresToCreate });
 
         /* eslint-disable functional/no-loop-statements -- seems like functional methods don't work with promises nicely https://stackoverflow.com/questions/37576685/using-async-await-with-a-foreach-loop#comment65277758_37576787 */
-        for (const node of opts.input.nodesToUpdate)
+        for (const node of opts.input.nodesToUpdate) {
           await tx.node.update({ where: { id: node.id }, data: node });
+          throw new Error("test set data error oh no!");
+        }
         for (const edge of opts.input.edgesToUpdate)
           await tx.edge.update({ where: { id: edge.id }, data: edge });
         for (const score of opts.input.scoresToUpdate) {
