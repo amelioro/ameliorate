@@ -1,4 +1,5 @@
 import { useUser as useAuthUser } from "@auth0/nextjs-auth0/client";
+import * as Sentry from "@sentry/nextjs";
 import { useState } from "react";
 
 import { MenuPosition } from "@/web/common/store/contextMenuStore";
@@ -54,7 +55,12 @@ export const useSessionUser = () => {
   const findUserByAuthId = trpc.user.findByAuthId.useQuery(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain -- enabled will ensure it only runs when not null
     { authId: authUser?.sub! },
-    { enabled: !!authUser?.sub, staleTime: Infinity },
+    {
+      enabled: !!authUser?.sub,
+      onSuccess: (user) => {
+        if (user) Sentry.setUser({ username: user.username, ip_address: undefined }); // don't log username with their ip
+      },
+    },
   );
 
   // ensure we return null if the user is not authenticated (i.e. after logout, don't continue using the cached user)
