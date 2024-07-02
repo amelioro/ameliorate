@@ -4,6 +4,8 @@
 
 import * as Sentry from "@sentry/nextjs";
 
+console.log("registering client instrumentation, env vars:", process.env);
+
 Sentry.init({
   dsn: "https://8e46da4107214efd1ec756ec89d406bf@o4507510480764928.ingest.us.sentry.io/4507510485876736",
 
