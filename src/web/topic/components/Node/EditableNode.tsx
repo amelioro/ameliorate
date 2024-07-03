@@ -1,6 +1,7 @@
 import { type ButtonProps, type SxProps, useTheme } from "@mui/material";
 import { memo, useEffect, useRef } from "react";
 
+import { emitter } from "@/web/common/event";
 import { useSessionUser } from "@/web/common/hooks";
 import { openContextMenu } from "@/web/common/store/contextMenuActions";
 import {
@@ -19,7 +20,6 @@ import {
   StyledTextareaAutosize,
   YEdgeBox,
 } from "@/web/topic/components/Node/EditableNode.styles";
-import { setSelectedTab } from "@/web/topic/components/TopicPane/paneStore";
 import { setCustomNodeType, setNodeLabel } from "@/web/topic/store/actions";
 import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { Node } from "@/web/topic/utils/graph";
@@ -116,7 +116,7 @@ const EditableNodeBase = ({ node, context, className = "" }: Props) => {
       onClick={() => {
         if (context != "details") {
           setSelected(node.id);
-          setSelectedTab("Details"); // convenient to show details when clicking a node, but don't open the pane if it's not open, because that can be jarring
+          emitter.emit("nodeSelected");
         }
       }}
       onContextMenu={(event) => openContextMenu(event, { node })}

@@ -9,6 +9,8 @@ interface Events {
   overwroteTopicData: () => void;
   changedDiagramFilter: () => void;
   changedView: (newView: ViewState) => void;
+  viewTopicDetails: () => void;
+  nodeSelected: () => void;
 }
 
 export const emitter = createNanoEvents<Events>();

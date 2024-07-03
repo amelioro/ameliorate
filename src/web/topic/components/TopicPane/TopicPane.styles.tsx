@@ -3,47 +3,53 @@ import { Drawer, IconButton, css } from "@mui/material";
 
 import { nodeWidthRem } from "@/web/topic/components/Node/EditableNode.styles";
 
+export type Anchor = "top" | "left" | "bottom" | "right";
 export const PositionedDiv = styled.div`
-  display: flex;
   position: relative;
 `;
 
 interface ButtonProps {
-  isLandscape: boolean;
+  anchor: Anchor;
 }
 
 const buttonOptions = {
-  shouldForwardProp: (prop: string) => !["isLandscape"].includes(prop),
+  shouldForwardProp: (prop: string) => !["anchor"].includes(prop),
 };
 
 export const TogglePaneButton = styled(IconButton, buttonOptions)<ButtonProps>`
   position: absolute;
   z-index: ${({ theme }) => theme.zIndex.appBar - 1};
 
-  ${({ isLandscape }) => {
-    if (isLandscape) {
-      return css`
-        right: 0;
-        transform: translateX(100%);
-      `;
-    } else {
-      return css`
-        right: 0;
-        top: 0;
-        transform: translateY(-100%);
-      `;
+  ${({ anchor }) => {
+    switch (anchor) {
+      case "left":
+        return css`
+          right: 0;
+          transform: translateX(100%);
+        `;
+      case "right":
+        return css`
+          left: 0;
+          transform: translateX(-100%);
+        `;
+      default:
+        return css`
+          right: 0;
+          top: 0;
+          transform: translateY(-100%);
+        `;
     }
   }}
 `;
 
 interface DrawerProps {
   open: boolean;
-  isLandscape: boolean;
+  anchor: Anchor;
 }
 
 const options = {
   // `open` adds different transitions if passed to Material component
-  shouldForwardProp: (prop: string) => !["open", "isLandscape"].includes(prop),
+  shouldForwardProp: (prop: string) => !["open"].includes(prop),
 };
 
 const drawerPaddingRem = 0.5;
@@ -55,30 +61,26 @@ const drawerMinWidthRem = nodeWidthRem * 2 + drawerPaddingRem + drawerScrollbarW
 // So there's a parent div non-fixed position in order to allow affecting surrounding elements (e.g. menu button),
 // and this needs to match transition and size of Paper; this is why there's css on both elements.
 export const StyledDrawer = styled(Drawer, options)<DrawerProps>`
-  ${({ open, isLandscape }) => {
+  ${({ open, anchor }) => {
+    const isLandscape = anchor !== "bottom";
     const lengthIfOpen = isLandscape
       ? `${drawerMinWidthRem}rem`
       : `min(30vh, ${drawerMinWidthRem}rem)`;
     const length = open ? lengthIfOpen : "0";
-    if (isLandscape) {
-      return css`
-        width: ${length};
+    const width = isLandscape ? length : "100%";
+    const height = isLandscape ? "100%" : length;
+    const borderStyle = open ? "" : "border: none;"; // drawer is given a 1px border which takes up more space than the 0 width
 
-        & .MuiDrawer-paper {
-          width: ${length};
-        }
-      `;
-    } else {
-      return css`
-        height: ${length};
-        width: 100%;
+    return css`
+      width: ${width};
+      height: ${height};
 
-        & .MuiDrawer-paper {
-          height: ${length};
-          width: 100%;
-        }
-      `;
-    }
+      & .MuiDrawer-paper {
+        width: ${width};
+        height: ${height};
+        ${borderStyle};
+      }
+    `;
   }};
 
   // paper uses 'transform' for transition by default, but I wasn't sure how to match that in the parent Drawer div,
