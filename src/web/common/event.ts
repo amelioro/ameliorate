@@ -10,7 +10,7 @@ interface Events {
   changedDiagramFilter: () => void;
   changedView: (newView: ViewState) => void;
   viewTopicDetails: () => void;
-  nodeSelected: () => void;
+  partSelected: (partId: string | null) => void;
 }
 
 export const emitter = createNanoEvents<Events>();

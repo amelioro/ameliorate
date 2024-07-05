@@ -47,8 +47,8 @@ export const TopicPane = ({ anchor, tabs }: Props) => {
       setIsOpen(true);
     });
 
-    const unbindSelected = emitter.on("nodeSelected", () => {
-      setSelectedTab("Details"); // convenient to show details when clicking a node, but don't open the pane if it's not open, because that can be jarring
+    const unbindSelected = emitter.on("partSelected", (partId) => {
+      if (partId) setSelectedTab("Details"); // convenient to show details when clicking a node, but don't open the pane if it's not open, because that can be jarring
     });
 
     return () => {
