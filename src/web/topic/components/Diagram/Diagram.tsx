@@ -1,4 +1,5 @@
 import { ComponentType, useEffect, useState } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
 import {
   Background,
   BackgroundVariant,
@@ -18,12 +19,13 @@ import { setDisplayNodesGetter } from "@/web/topic/components/Diagram/externalFl
 import { FlowEdge } from "@/web/topic/components/Edge/FlowEdge";
 import { FlowNode } from "@/web/topic/components/Node/FlowNode";
 import { useLayoutedDiagram } from "@/web/topic/hooks/diagramHooks";
-import { useViewportUpdater } from "@/web/topic/hooks/flowHooks";
+import { PanDirection, panDirections, useViewportUpdater } from "@/web/topic/hooks/flowHooks";
 import { connectNodes, reconnectEdge } from "@/web/topic/store/createDeleteActions";
 import { useDiagram } from "@/web/topic/store/store";
 import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { Diagram as DiagramData } from "@/web/topic/utils/diagram";
 import { type Edge, type Node } from "@/web/topic/utils/graph";
+import { hotkeys } from "@/web/topic/utils/hotkeys";
 import { FlowNodeType } from "@/web/topic/utils/node";
 import { useFlashlightMode } from "@/web/view/actionConfigStore";
 import { setSelected } from "@/web/view/currentViewStore/store";
@@ -87,11 +89,26 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
 
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
-  const { fitViewForNodes, moveViewportToIncludeNode } = useViewportUpdater();
+  const { fitViewForNodes, moveViewportToIncludeNode, pan, zoomIn, zoomOut } = useViewportUpdater();
   const { layoutedDiagram, hasNewLayout, setHasNewLayout } = useLayoutedDiagram(diagram);
   const getNodes = useStore((state) => state.getNodes);
 
   const flashlightMode = useFlashlightMode();
+
+  useHotkeys(hotkeys.zoomIn, (e) => {
+    e.preventDefault(); // don't use browser's zoom
+    zoomIn();
+  });
+  useHotkeys(hotkeys.zoomOut, (e) => {
+    e.preventDefault(); // don't use browser's zoom
+    zoomOut();
+  });
+  useHotkeys(hotkeys.pan, (_e, hotkeyEvent) => {
+    if (!hotkeyEvent.keys) return;
+    const [direction] = hotkeyEvent.keys;
+    if (!direction || !panDirections.some((d) => direction === d)) return;
+    pan(direction as PanDirection);
+  });
 
   useEffect(() => {
     const unbindAdd = emitter.on("addNode", (node) => setNewNodeId(node.id));

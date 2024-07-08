@@ -51,6 +51,9 @@ const getViewportToIncludeNode = (
   return { x: newViewportX, y: newViewportY, zoom: viewport.zoom };
 };
 
+export const panDirections = ["up", "down", "left", "right"] as const;
+export type PanDirection = (typeof panDirections)[number];
+
 /**
  * Returns methods to update the viewport of the flow diagram.
  *
@@ -58,19 +61,10 @@ const getViewportToIncludeNode = (
  * that the state can come from the nearest react flow provider.
  */
 export const useViewportUpdater = () => {
-  const { getViewport, setViewport } = useReactFlow();
+  const { getViewport, setViewport, zoomIn, zoomOut } = useReactFlow();
   const viewportHeight = useStore((state) => state.height);
   const viewportWidth = useStore((state) => state.width);
   const minZoom = useStore((state) => state.minZoom);
-
-  const moveViewportToIncludeNode = (node: PositionedNode) => {
-    // This is intentionally not-reactive. Using a hook that fires whenever the viewport changes is
-    // very slow.
-    const viewport = getViewport();
-    const newViewport = getViewportToIncludeNode(node, viewport, viewportHeight, viewportWidth);
-
-    setViewport(newViewport, { duration: 500 });
-  };
 
   /**
    * Can't just use reactflow's `fitView` because that uses nodes that are already rendered in
@@ -101,7 +95,37 @@ export const useViewportUpdater = () => {
     setViewport(viewport);
   };
 
-  return { fitViewForNodes, moveViewportToIncludeNode };
+  const moveViewportToIncludeNode = (node: PositionedNode) => {
+    // This is intentionally not-reactive. Using a hook that fires whenever the viewport changes is very slow.
+    const viewport = getViewport();
+    const newViewport = getViewportToIncludeNode(node, viewport, viewportHeight, viewportWidth);
+
+    setViewport(newViewport, { duration: 500 });
+  };
+
+  const pan = (direction: PanDirection) => {
+    // This is intentionally not-reactive. Using a hook that fires whenever the viewport changes is very slow.
+    const viewport = getViewport();
+    const panAmount = 20; // pixels - arbitrary amount that seems to work well
+    const newViewport = {
+      ...viewport,
+      x:
+        direction === "left"
+          ? viewport.x + panAmount
+          : direction === "right"
+            ? viewport.x - panAmount
+            : viewport.x,
+      y:
+        direction === "up"
+          ? viewport.y + panAmount
+          : direction === "down"
+            ? viewport.y - panAmount
+            : viewport.y,
+    };
+    setViewport(newViewport);
+  };
+
+  return { fitViewForNodes, moveViewportToIncludeNode, pan, zoomIn, zoomOut };
 };
 
 /**
