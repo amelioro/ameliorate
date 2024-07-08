@@ -12,10 +12,8 @@ import { toggleReadonlyMode } from "@/web/view/actionConfigStore";
 import { setSelected, useFormat } from "@/web/view/currentViewStore/store";
 
 const useWorkspaceHotkeys = () => {
-  // using `alt` because `ctrl` is used for a lot of browser shortcuts
-  // might eventually need to re-evaluate these
-  useHotkeys([hotkeys.readonlyMode], () => toggleReadonlyMode());
   useHotkeys([hotkeys.deselectPart], () => setSelected(null));
+  useHotkeys([hotkeys.readonlyMode], () => toggleReadonlyMode());
 };
 
 export const TopicWorkspace = () => {
