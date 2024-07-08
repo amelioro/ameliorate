@@ -133,6 +133,8 @@ export const setSelected = (graphPartId: string | null) => {
   if (selectedGraphPartId === graphPartId) return;
 
   useCurrentViewStore.setState({ selectedGraphPartId: graphPartId }, false, "setSelected");
+
+  emitter.emit("partSelected", graphPartId);
 };
 
 export const setFormat = (format: Format) => {

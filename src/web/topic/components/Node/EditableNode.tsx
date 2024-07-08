@@ -1,7 +1,6 @@
 import { type ButtonProps, type SxProps, useTheme } from "@mui/material";
 import { memo, useEffect, useRef } from "react";
 
-import { emitter } from "@/web/common/event";
 import { useSessionUser } from "@/web/common/hooks";
 import { openContextMenu } from "@/web/common/store/contextMenuActions";
 import {
@@ -114,10 +113,7 @@ const EditableNodeBase = ({ node, context, className = "" }: Props) => {
     <NodeBox
       className={className + (selected ? " selected" : "")}
       onClick={() => {
-        if (context != "details") {
-          setSelected(node.id);
-          emitter.emit("nodeSelected");
-        }
+        if (context != "details") setSelected(node.id);
       }}
       onContextMenu={(event) => openContextMenu(event, { node })}
       sx={nodeStyles}

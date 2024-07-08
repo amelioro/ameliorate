@@ -9,11 +9,10 @@ import { TopicToolbar } from "@/web/topic/components/Surface/TopicToolbar";
 import { TopicPane } from "@/web/topic/components/TopicPane/TopicPane";
 import { hotkeys } from "@/web/topic/utils/hotkeys";
 import { toggleReadonlyMode } from "@/web/view/actionConfigStore";
-import { useFormat } from "@/web/view/currentViewStore/store";
+import { setSelected, useFormat } from "@/web/view/currentViewStore/store";
 
 const useWorkspaceHotkeys = () => {
-  // using `alt` because `ctrl` is used for a lot of browser shortcuts
-  // might eventually need to re-evaluate these
+  useHotkeys([hotkeys.deselectPart], () => setSelected(null));
   useHotkeys([hotkeys.readonlyMode], () => toggleReadonlyMode());
 };
 

@@ -55,7 +55,7 @@ export const FlowNode = (flowNode: NodeProps) => {
 
   const conditionallyShowAddButtons = readonlyMode
     ? ""
-    : "[.selectable:hover_>_&]:flex [.selected_>_&]:flex";
+    : "[.selectable:hover_>_&]:flex [.selectable:has(>_div_>_.selected)_>_&]:flex";
   const positionParentButtons =
     orientation === "DOWN"
       ? // have to use [arbitrary] tw values because can't apply two translate-x-* class names
