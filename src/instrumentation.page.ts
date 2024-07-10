@@ -14,6 +14,9 @@ export function register() {
       // Setting this option to true will print useful information to the console while you're setting up Sentry.
       debug: false,
 
+      // development has a lot of noise, don't really care that much here
+      enabled: process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT !== "development",
+
       // Uncomment the line below to enable Spotlight (https://spotlightjs.com)
       // spotlight: process.env.NODE_ENV === 'development',
 
@@ -30,6 +33,9 @@ export function register() {
 
       // Setting this option to true will print useful information to the console while you're setting up Sentry.
       debug: false,
+
+      // development has a lot of noise, don't really care that much here
+      enabled: process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT !== "development",
     });
   }
 }
