@@ -21,8 +21,7 @@ import { SiteDrawer } from "@/web/common/components/SiteDrawer/SiteDrawer";
 import { UserDrawer } from "@/web/common/components/UserDrawer/UserDrawer";
 import { useSessionUser } from "@/web/common/hooks";
 import { discordInvite, githubRepo } from "@/web/common/urls";
-
-import favicon from "../../../../public/favicon.png";
+import favicon from "~/public/favicon.png";
 
 const NavLink = forwardRef<HTMLAnchorElement, LinkProps>(function NavLink(props, ref) {
   return <Link ref={ref} {...props} underline="hover" />;
