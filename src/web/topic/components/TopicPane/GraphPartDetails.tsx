@@ -71,40 +71,36 @@ export const GraphPartDetails = ({ graphPart }: Props) => {
       }}
     >
       <List>
-        <ListItem disablePadding={false}>
-          <ListItemIcon>
-            <GraphPartIcon />
-          </ListItemIcon>
-          <ListItemText primary={headerText} />
-        </ListItem>
+        <div className="flex flex-col items-center">
+          <ListItem disablePadding={false}>
+            <ListItemIcon>
+              <GraphPartIcon />
+            </ListItemIcon>
+            <ListItemText primary={headerText} />
+          </ListItem>
 
-        <Divider className="my-1" />
-
-        <ListItem disablePadding={false} sx={{ justifyContent: "center" }}>
           {partIsNode ? (
             <EditableNode node={graphPart} context="details" />
           ) : (
             <StandaloneEdge edge={graphPart} />
           )}
-        </ListItem>
 
-        <Divider className="my-1" />
-
-        <ListItem disablePadding={false}>
-          <TextField
-            {...register("notes")}
-            label="Notes"
-            error={!!errors.notes}
-            helperText={errors.notes?.message}
-            multiline
-            fullWidth
-            size="small"
-            inputProps={{ className: "text-sm" }}
-            InputLabelProps={{ className: "text-sm" }}
-            maxRows={10}
-            disabled={!userCanEditTopicData}
-          />
-        </ListItem>
+          <ListItem disablePadding={false} className="pt-3">
+            <TextField
+              {...register("notes")}
+              label="Notes"
+              error={!!errors.notes}
+              helperText={errors.notes?.message}
+              multiline
+              fullWidth
+              size="small"
+              inputProps={{ className: "text-sm" }}
+              InputLabelProps={{ className: "text-sm" }}
+              maxRows={10}
+              disabled={!userCanEditTopicData}
+            />
+          </ListItem>
+        </div>
 
         {isNode(graphPart) && researchNodeTypes.includes(graphPart.type) && (
           <Divider className="my-1" />
