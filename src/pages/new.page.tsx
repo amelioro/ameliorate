@@ -1,3 +1,4 @@
+import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { NextPage } from "next";
 import Head from "next/head";
 
@@ -6,7 +7,7 @@ import { Loading } from "@/web/common/components/Loading/Loading";
 import { useSessionUser } from "@/web/common/hooks";
 import { CreateTopicForm } from "@/web/topic/components/TopicForm/TopicForm";
 
-const NewTopic: NextPage = () => {
+const NewTopic: NextPage = withPageAuthRequired(() => {
   const { sessionUser, isLoading: sessionUserIsLoading } = useSessionUser();
 
   if (sessionUserIsLoading) return <Loading />;
@@ -22,6 +23,6 @@ const NewTopic: NextPage = () => {
       <CreateTopicForm user={sessionUser} />
     </>
   );
-};
+});
 
 export default NewTopic;

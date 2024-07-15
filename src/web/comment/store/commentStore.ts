@@ -93,6 +93,16 @@ export const useCommentCount = (
   );
 };
 
+export const useResolvedCount = (parentId: string | null, parentType: CommentParentType) => {
+  return useCommentStore(
+    (state) =>
+      state.comments.filter(
+        (comment) =>
+          comment.parentId === parentId && comment.parentType === parentType && comment.resolved,
+      ).length,
+  );
+};
+
 // actions
 export const upsertComment = (
   authorName: string,

@@ -13,6 +13,9 @@ Sentry.init({
   // Setting this option to true will print useful information to the console while you're setting up Sentry.
   debug: false,
 
+  // development has a lot of noise, don't really care that much here
+  enabled: process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT !== "development",
+
   // for some reason netlify sentry plugin doesn't do this as it says it does https://github.com/getsentry/sentry-netlify-build-plugin?tab=readme-ov-file#options
   // so we need to set sentry's environment manually
   environment: process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT,

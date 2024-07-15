@@ -1,9 +1,36 @@
+import createPalette from "@mui/material/styles/createPalette";
+
+import { getThemeOptions } from "./src/web/common/theme";
+
+const muiExplicitPalette = getThemeOptions("light").palette;
+const muiGeneratedPalette = createPalette(muiExplicitPalette);
+
+// Add mui palette to tailwind.
+// we want all the colors from the mui palette, but we explicitly specify some of the generated
+// colors because the generated palette includes a bunch of functions that aren't just colors.
+const muiColorsToExtend = {
+  ...muiExplicitPalette,
+  primary: muiGeneratedPalette.primary,
+  secondary: muiGeneratedPalette.secondary,
+  error: muiGeneratedPalette.error,
+  warning: muiGeneratedPalette.warning,
+  info: muiGeneratedPalette.info,
+  success: muiGeneratedPalette.success,
+  text: muiGeneratedPalette.text,
+  background: muiGeneratedPalette.background,
+  paper: muiGeneratedPalette.paper,
+};
+
 /** @type {import('tailwindcss').Config} */
 const config = {
   content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   important: "#__next",
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        ...muiColorsToExtend,
+      },
+    },
   },
   plugins: [],
   corePlugins: {

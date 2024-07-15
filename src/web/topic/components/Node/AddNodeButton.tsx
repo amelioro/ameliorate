@@ -7,6 +7,7 @@ import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { Relation } from "@/web/topic/utils/edge";
 import { type RelationDirection } from "@/web/topic/utils/graph";
 import { nodeDecorations } from "@/web/topic/utils/node";
+import { useReadonlyMode } from "@/web/view/actionConfigStore";
 
 interface Props {
   fromPartId: string;
@@ -33,8 +34,9 @@ export const AddNodeButton = ({
 }: Props) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
+  const readonlyMode = useReadonlyMode();
 
-  if (!userCanEditTopicData) return <></>;
+  if (!userCanEditTopicData || readonlyMode) return <></>;
 
   const decoration = nodeDecorations[toNodeType];
 
