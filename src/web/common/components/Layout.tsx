@@ -11,6 +11,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { NextPage } from "next";
+import { Roboto } from "next/font/google";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { ReactNode, forwardRef, useEffect, useState } from "react";
@@ -22,6 +23,11 @@ import { UserDrawer } from "@/web/common/components/UserDrawer/UserDrawer";
 import { useSessionUser } from "@/web/common/hooks";
 import { discordInvite, githubRepo } from "@/web/common/urls";
 import favicon from "~/public/favicon.png";
+
+const roboto = Roboto({
+  weight: ["300", "400", "500", "700"],
+  subsets: ["latin"],
+});
 
 const NavLink = forwardRef<HTMLAnchorElement, LinkProps>(function NavLink(props, ref) {
   return <Link ref={ref} {...props} underline="hover" />;
@@ -173,7 +179,8 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
         </Toolbar>
       </AppBar>
 
-      <main>{children}</main>
+      {/* self-host font to prevent layout shift from fallback fonts loading first, see https://nextjs.org/docs/pages/building-your-application/optimizing/fonts */}
+      <main className={roboto.className}>{children}</main>
     </>
   );
 };
