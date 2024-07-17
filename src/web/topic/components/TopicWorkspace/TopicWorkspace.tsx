@@ -22,7 +22,7 @@ export const TopicWorkspace = () => {
   const format = useFormat();
   const theme = useTheme();
   const isLandscape = useMediaQuery("(orientation: landscape)");
-  const usingBigScreen = useMediaQuery(theme.breakpoints.up("xl"));
+  const usingBigScreen = useMediaQuery(theme.breakpoints.up("2xl"));
   const useSplitPanes = isLandscape && usingBigScreen;
 
   return (
