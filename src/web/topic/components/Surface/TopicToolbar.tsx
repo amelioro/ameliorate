@@ -58,7 +58,7 @@ export const TopicToolbar = () => {
   }, []);
 
   return (
-    <AppBar position="sticky">
+    <AppBar position="sticky" className="border-b bg-gray-50 shadow-none">
       <Toolbar variant="dense">
         <IconButton
           color="inherit"
@@ -129,7 +129,7 @@ export const TopicToolbar = () => {
               value={isComparingPerspectives}
               title="Compare perspectives"
               aria-label="Compare perspectives"
-              color="secondary"
+              color="primary"
               size="small"
               selected={isComparingPerspectives}
               onClick={() =>
@@ -151,7 +151,7 @@ export const TopicToolbar = () => {
             value={flashlightMode}
             title="Flashlight mode"
             aria-label="Flashlight mode"
-            color="secondary"
+            color="primary"
             size="small"
             selected={flashlightMode}
             onClick={() => toggleFlashlightMode(!flashlightMode)}

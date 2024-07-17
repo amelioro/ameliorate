@@ -65,7 +65,7 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
 
   return (
     <>
-      <AppBar position="sticky">
+      <AppBar position="sticky" className="border-b bg-gray-50 shadow-none">
         <Toolbar variant="dense">
           <Box flex="1" display="flex" justifyContent="space-between" alignItems="center">
             <Box display="flex" gap={2} alignItems="center">
