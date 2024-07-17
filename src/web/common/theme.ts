@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { grey, orange, yellow } from "@mui/material/colors";
 
-import { FlowNodeType } from "@/web/topic/utils/node";
+import { type FlowNodeType } from "@/web/topic/utils/node";
 
 // adding colors to theme documented at https://mui.com/material-ui/customization/palette/#adding-new-colors
 
