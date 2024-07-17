@@ -20,7 +20,7 @@ const Home: NextPage = () => {
         />
       </Head>
 
-      <div className="flex w-full flex-col divide-y ">
+      <div className="flex w-full flex-col divide-y">
         {/* overflow-hidden to keep the background image from going into other sections */}
         <div className="flex justify-center overflow-hidden odd:bg-paper-main even:bg-gray-50">
           <div className="w-full max-w-6xl px-4 py-8 sm:p-8">

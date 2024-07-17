@@ -26,7 +26,8 @@ export const TopicWorkspace = () => {
   const useSplitPanes = isLandscape && usingBigScreen;
 
   return (
-    <>
+    // hardcode workspace to take up full height of screen minus the navbar
+    <div className="flex h-[calc(100svh-49px)] flex-col">
       <TopicToolbar />
 
       <Box
@@ -53,6 +54,6 @@ export const TopicWorkspace = () => {
       </Box>
 
       <ContextMenu />
-    </>
+    </div>
   );
 };

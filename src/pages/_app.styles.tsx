@@ -6,10 +6,8 @@ export const globals = css`
   }
 
   #__next {
-    // vh runs into issue where bottom of page is cut off by mobile navbar, see https://developer.mozilla.org/en-US/docs/Web/CSS/length#relative_length_units_based_on_viewport
-    // so use svh if it's supported.
-    height: 100vh;
-    height: 100svh;
+    // allow loading icon to be centered in viewport while page is loading
+    min-height: calc(100svh - 49px); // subtract height of navbar
     display: flex;
     flex-direction: column;
   }
