@@ -3,7 +3,6 @@ import {
   AppBar,
   Box,
   IconButton,
-  type LinkProps,
   Link as MuiLink,
   Toolbar,
   Tooltip,
@@ -14,9 +13,10 @@ import { NextPage } from "next";
 import { Roboto } from "next/font/google";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { ReactNode, forwardRef, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 import { Link } from "@/web/common/components/Link";
+import { NavLink } from "@/web/common/components/NavLink";
 import { ProfileIcon } from "@/web/common/components/ProfileIcon/ProfileIcon";
 import { SiteDrawer } from "@/web/common/components/SiteDrawer/SiteDrawer";
 import { UserDrawer } from "@/web/common/components/UserDrawer/UserDrawer";
@@ -27,10 +27,6 @@ import favicon from "~/public/favicon.png";
 const roboto = Roboto({
   weight: ["300", "400", "500", "700"],
   subsets: ["latin"],
-});
-
-const NavLink = forwardRef<HTMLAnchorElement, LinkProps>(function NavLink(props, ref) {
-  return <Link ref={ref} {...props} underline="hover" />;
 });
 
 interface LayoutProps {
@@ -69,13 +65,7 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
 
   return (
     <>
-      <AppBar
-        position="sticky"
-        sx={{
-          // navigability of links is implied by being in the navbar, so decoration isn't necessary
-          "& .MuiLink-root": { color: theme.palette.text.primary, textDecoration: "none" },
-        }}
-      >
+      <AppBar position="sticky">
         <Toolbar variant="dense">
           <Box flex="1" display="flex" justifyContent="space-between" alignItems="center">
             <Box display="flex" gap={2} alignItems="center">
@@ -95,12 +85,7 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
                   href="https://ameliorate.app/docs/release-status"
                   variant="caption"
                   underline="hover"
-                  sx={{
-                    position: "absolute",
-                    top: "-2px",
-                    right: "-8px",
-                    transform: "rotate(30deg)",
-                  }}
+                  className="absolute -right-2 -top-0.5 rotate-[30deg] text-text-primary"
                 >
                   Alpha
                 </MuiLink>
