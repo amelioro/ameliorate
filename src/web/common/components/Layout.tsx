@@ -1,7 +1,6 @@
 import { Menu } from "@mui/icons-material";
 import {
   AppBar,
-  Box,
   IconButton,
   Link as MuiLink,
   Toolbar,
@@ -43,7 +42,6 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
   const { sessionUser, authUser } = useSessionUser();
   const { asPath } = useRouter();
 
-  const usingTinyScreen = useMediaQuery(theme.breakpoints.down("xs"));
   const usingBigScreen = useMediaQuery(theme.breakpoints.up("sm"));
 
   const [isInitialRender, setIsInitialRender] = useState(true);
@@ -67,43 +65,48 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
     <>
       <AppBar position="sticky" className="border-b bg-gray-50 shadow-none">
         <Toolbar variant="dense">
-          <Box flex="1" display="flex" justifyContent="space-between" alignItems="center">
-            <Box display="flex" gap={2} alignItems="center">
-              <IconButton onClick={() => setIsSiteDrawerOpen(true)} sx={{ padding: "0" }}>
-                <Menu />
-              </IconButton>
+          <div className="flex flex-1 items-center justify-between">
+            <div className="flex items-center gap-4">
+              {!usingBigScreen && (
+                <IconButton onClick={() => setIsSiteDrawerOpen(true)} sx={{ padding: "0" }}>
+                  <Menu />
+                </IconButton>
+              )}
               <SiteDrawer
+                username={sessionUser?.username}
                 isSiteDrawerOpen={isSiteDrawerOpen}
                 setIsSiteDrawerOpen={setIsSiteDrawerOpen}
               />
 
-              <Box display="flex" position="relative">
-                <Link href="/" display="flex">
+              <div className="relative flex">
+                <Link href="/" className="flex items-center gap-2" underline="none">
                   <Image src={favicon} height={32} width={32} alt="home" />
+                  <span className="text-xl font-medium text-black">Ameliorate</span>
                 </Link>
                 <MuiLink
                   href="https://ameliorate.app/docs/release-status"
                   variant="caption"
                   underline="hover"
-                  className="absolute -right-2 -top-0.5 rotate-[30deg] text-text-primary"
+                  className="absolute -top-0.5 left-1 rotate-12 text-text-primary"
                 >
                   Alpha
                 </MuiLink>
-              </Box>
-              {!usingTinyScreen && (
-                <>
-                  <NavLink href="/playground">Playground</NavLink>
-                  <NavLink href="/examples">Examples</NavLink>
-                </>
-              )}
-            </Box>
-
-            <Box display="flex" gap={2} alignItems="center">
+              </div>
               {usingBigScreen && (
                 <>
-                  <NavLink href="https://ameliorate.app/docs" target="_blank">
-                    Documentation
-                  </NavLink>
+                  <NavLink href="/playground">Playground</NavLink>
+                  {sessionUser && <NavLink href={`/${sessionUser.username}`}>My Topics</NavLink>}
+                </>
+              )}
+            </div>
+
+            <div className="flex items-center gap-4">
+              <NavLink href="https://ameliorate.app/docs" target="_blank">
+                Docs
+              </NavLink>
+
+              {usingBigScreen && (
+                <>
                   <Link href={discordInvite} target="_blank" display="flex">
                     <Image
                       src={`/${theme.palette.mode}/Discord-Mark.png`}
@@ -140,27 +143,19 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
               {isLoggedIn && (
                 <>
                   <Tooltip title="My Profile">
-                    <IconButton
-                      onClick={() => setIsUserDrawerOpen(true)}
-                      sx={{
-                        height: "32px",
-                        width: "32px",
-                        padding: "0",
-                        "& svg": { height: "100%", width: "100%" },
-                      }}
-                    >
+                    <IconButton onClick={() => setIsUserDrawerOpen(true)} className="size-8 p-0">
                       <ProfileIcon username={sessionUser.username} />
                     </IconButton>
                   </Tooltip>
                   <UserDrawer
-                    user={sessionUser}
+                    username={sessionUser.username}
                     isUserDrawerOpen={isUserDrawerOpen}
                     setIsUserDrawerOpen={setIsUserDrawerOpen}
                   />
                 </>
               )}
-            </Box>
-          </Box>
+            </div>
+          </div>
         </Toolbar>
       </AppBar>
 
