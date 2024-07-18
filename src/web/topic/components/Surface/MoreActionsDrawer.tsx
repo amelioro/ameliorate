@@ -219,7 +219,7 @@ export const MoreActionsDrawer = ({
                     value={unrestrictedEditing}
                     title="Unrestrict editing"
                     aria-label="Unrestrict editing"
-                    color="secondary"
+                    color="primary"
                     size="small"
                     selected={unrestrictedEditing}
                     onClick={() => toggleUnrestrictedEditing(!unrestrictedEditing)}
@@ -233,7 +233,7 @@ export const MoreActionsDrawer = ({
                 value={flashlightMode}
                 title="Flashlight mode"
                 aria-label="Flashlight mode"
-                color="secondary"
+                color="primary"
                 size="small"
                 selected={flashlightMode}
                 onClick={() => toggleFlashlightMode(!flashlightMode)}
@@ -247,7 +247,7 @@ export const MoreActionsDrawer = ({
                     value={readonlyMode}
                     title={`Read-only mode (${hotkeys.readonlyMode})`}
                     aria-label={`Read-only mode (${hotkeys.readonlyMode})`}
-                    color="secondary"
+                    color="primary"
                     size="small"
                     selected={readonlyMode}
                     onClick={() => toggleReadonlyMode()}
@@ -270,7 +270,7 @@ export const MoreActionsDrawer = ({
                 value={showImpliedEdges}
                 title="Show implied edges"
                 aria-label="Show implied edges"
-                color="secondary"
+                color="primary"
                 size="small"
                 selected={showImpliedEdges}
                 onClick={() => toggleShowImpliedEdges(!showImpliedEdges)}
@@ -282,7 +282,7 @@ export const MoreActionsDrawer = ({
                 value={forceNodesIntoLayers}
                 title="Force nodes into layers"
                 aria-label="Force nodes into layers"
-                color="secondary"
+                color="primary"
                 size="small"
                 selected={forceNodesIntoLayers}
                 onClick={() => toggleForceNodesIntoLayers(!forceNodesIntoLayers)}
@@ -342,7 +342,7 @@ export const MoreActionsDrawer = ({
             value={fillNodesWithColor}
             title="Fill nodes with color"
             aria-label="Fill nodes with color"
-            color="secondary"
+            color="primary"
             size="small"
             selected={fillNodesWithColor}
             onClick={() => toggleFillNodesWithColor(!fillNodesWithColor)}
@@ -354,7 +354,7 @@ export const MoreActionsDrawer = ({
             value={indicateWhenNodeForcedToShow}
             title="Indicate when node forced to show"
             aria-label="Indicate when node forced to show"
-            color="secondary"
+            color="primary"
             size="small"
             selected={indicateWhenNodeForcedToShow}
             onClick={() => toggleIndicateWhenNodeForcedToShow(!indicateWhenNodeForcedToShow)}

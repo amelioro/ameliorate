@@ -19,6 +19,16 @@ const nextConfig = {
     AUTH0_BASE_URL: baseUrl,
     BASE_URL: baseUrl,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "github.com",
+        port: "",
+        pathname: "/user-attachments/assets/**",
+      },
+    ],
+  },
   pageExtensions: ["page.tsx", "page.ts", "page.jsx", "page.js"],
   reactStrictMode: true,
   swcMinify: true,

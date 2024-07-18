@@ -1,21 +1,13 @@
 import { Menu } from "@mui/icons-material";
-import {
-  AppBar,
-  Box,
-  IconButton,
-  type LinkProps,
-  Link as MuiLink,
-  Toolbar,
-  Tooltip,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { AppBar, IconButton, Link as MuiLink, Toolbar, Tooltip, useTheme } from "@mui/material";
 import { NextPage } from "next";
+import { Roboto } from "next/font/google";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { ReactNode, forwardRef, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 import { Link } from "@/web/common/components/Link";
+import { NavLink } from "@/web/common/components/NavLink";
 import { ProfileIcon } from "@/web/common/components/ProfileIcon/ProfileIcon";
 import { SiteDrawer } from "@/web/common/components/SiteDrawer/SiteDrawer";
 import { UserDrawer } from "@/web/common/components/UserDrawer/UserDrawer";
@@ -23,8 +15,9 @@ import { useSessionUser } from "@/web/common/hooks";
 import { discordInvite, githubRepo } from "@/web/common/urls";
 import favicon from "~/public/favicon.png";
 
-const NavLink = forwardRef<HTMLAnchorElement, LinkProps>(function NavLink(props, ref) {
-  return <Link ref={ref} {...props} underline="hover" />;
+const roboto = Roboto({
+  weight: ["300", "400", "500", "700"],
+  subsets: ["latin"],
 });
 
 interface LayoutProps {
@@ -40,9 +33,6 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
   // remove automatic usage of static pages https://nextjs.org/docs/pages/api-reference/functions/get-initial-props
   const { sessionUser, authUser } = useSessionUser();
   const { asPath } = useRouter();
-
-  const usingTinyScreen = useMediaQuery(theme.breakpoints.down("xs"));
-  const usingBigScreen = useMediaQuery(theme.breakpoints.up("sm"));
 
   const [isInitialRender, setIsInitialRender] = useState(true);
   const [isUserDrawerOpen, setIsUserDrawerOpen] = useState(false);
@@ -63,74 +53,64 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
 
   return (
     <>
-      <AppBar
-        position="sticky"
-        sx={{
-          // navigability of links is implied by being in the navbar, so decoration isn't necessary
-          "& .MuiLink-root": { color: theme.palette.text.primary, textDecoration: "none" },
-        }}
-      >
+      <AppBar position="sticky" className="border-b bg-gray-50 shadow-none">
         <Toolbar variant="dense">
-          <Box flex="1" display="flex" justifyContent="space-between" alignItems="center">
-            <Box display="flex" gap={2} alignItems="center">
-              <IconButton onClick={() => setIsSiteDrawerOpen(true)} sx={{ padding: "0" }}>
+          <div className="flex flex-1 items-center justify-between">
+            <div className="flex items-center gap-4">
+              <IconButton onClick={() => setIsSiteDrawerOpen(true)} className="block p-0 sm:hidden">
                 <Menu />
               </IconButton>
               <SiteDrawer
+                username={sessionUser?.username}
                 isSiteDrawerOpen={isSiteDrawerOpen}
                 setIsSiteDrawerOpen={setIsSiteDrawerOpen}
               />
 
-              <Box display="flex" position="relative">
-                <Link href="/" display="flex">
+              <div className="relative flex">
+                <Link href="/" className="flex items-center gap-2" underline="none">
                   <Image src={favicon} height={32} width={32} alt="home" />
+                  <span className="text-xl font-medium text-black">Ameliorate</span>
                 </Link>
                 <MuiLink
                   href="https://ameliorate.app/docs/release-status"
                   variant="caption"
                   underline="hover"
-                  sx={{
-                    position: "absolute",
-                    top: "-2px",
-                    right: "-8px",
-                    transform: "rotate(30deg)",
-                  }}
+                  className="absolute -top-0.5 left-1 rotate-12 text-text-primary"
                 >
                   Alpha
                 </MuiLink>
-              </Box>
-              {!usingTinyScreen && (
-                <>
-                  <NavLink href="/playground">Playground</NavLink>
-                  <NavLink href="/examples">Examples</NavLink>
-                </>
-              )}
-            </Box>
+              </div>
 
-            <Box display="flex" gap={2} alignItems="center">
-              {usingBigScreen && (
-                <>
-                  <NavLink href="https://ameliorate.app/docs" target="_blank">
-                    Documentation
-                  </NavLink>
-                  <Link href={discordInvite} target="_blank" display="flex">
-                    <Image
-                      src={`/${theme.palette.mode}/Discord-Mark.png`}
-                      height={24}
-                      width={32}
-                      alt="discord link"
-                    />
-                  </Link>
-                  <Link href={githubRepo} target="_blank" display="flex">
-                    <Image
-                      src={`/${theme.palette.mode}/GitHub-Mark.png`}
-                      height={32}
-                      width={32}
-                      alt="github link"
-                    />
-                  </Link>
-                </>
+              <NavLink href="/playground" className="hidden sm:block">
+                Playground
+              </NavLink>
+              {sessionUser && (
+                <NavLink href={`/${sessionUser.username}`} className="hidden sm:block">
+                  My Topics
+                </NavLink>
               )}
+            </div>
+
+            <div className="flex items-center gap-4">
+              <NavLink href="https://ameliorate.app/docs" target="_blank" data-tour="docs">
+                Docs
+              </NavLink>
+              <Link href={discordInvite} target="_blank" className="hidden sm:flex">
+                <Image
+                  src={`/${theme.palette.mode}/Discord-Mark.png`}
+                  height={24}
+                  width={32}
+                  alt="discord link"
+                />
+              </Link>
+              <Link href={githubRepo} target="_blank" className="hidden sm:flex">
+                <Image
+                  src={`/${theme.palette.mode}/GitHub-Mark.png`}
+                  height={32}
+                  width={32}
+                  alt="github link"
+                />
+              </Link>
 
               {!isLoggedIn && (
                 <NavLink
@@ -149,31 +129,24 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
               {isLoggedIn && (
                 <>
                   <Tooltip title="My Profile">
-                    <IconButton
-                      onClick={() => setIsUserDrawerOpen(true)}
-                      sx={{
-                        height: "32px",
-                        width: "32px",
-                        padding: "0",
-                        "& svg": { height: "100%", width: "100%" },
-                      }}
-                    >
+                    <IconButton onClick={() => setIsUserDrawerOpen(true)} className="size-8 p-0">
                       <ProfileIcon username={sessionUser.username} />
                     </IconButton>
                   </Tooltip>
                   <UserDrawer
-                    user={sessionUser}
+                    username={sessionUser.username}
                     isUserDrawerOpen={isUserDrawerOpen}
                     setIsUserDrawerOpen={setIsUserDrawerOpen}
                   />
                 </>
               )}
-            </Box>
-          </Box>
+            </div>
+          </div>
         </Toolbar>
       </AppBar>
 
-      <main>{children}</main>
+      {/* self-host font to prevent layout shift from fallback fonts loading first, see https://nextjs.org/docs/pages/building-your-application/optimizing/fonts */}
+      <main className={roboto.className}>{children}</main>
     </>
   );
 };

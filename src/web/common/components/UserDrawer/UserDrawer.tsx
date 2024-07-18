@@ -1,4 +1,4 @@
-import { AutoStories, Close, Logout, Notifications } from "@mui/icons-material";
+import { Close, Logout, Notifications } from "@mui/icons-material";
 import {
   Divider,
   Drawer,
@@ -14,12 +14,12 @@ import NextLink from "next/link";
 import { ProfileIcon } from "@/web/common/components/ProfileIcon/ProfileIcon";
 
 interface Props {
-  user: { username: string };
+  username: string;
   isUserDrawerOpen: boolean;
   setIsUserDrawerOpen: (isOpen: boolean) => void;
 }
 
-export const UserDrawer = ({ user, isUserDrawerOpen, setIsUserDrawerOpen }: Props) => {
+export const UserDrawer = ({ username, isUserDrawerOpen, setIsUserDrawerOpen }: Props) => {
   return (
     <Drawer anchor="right" open={isUserDrawerOpen} onClose={() => setIsUserDrawerOpen(false)}>
       <List>
@@ -32,21 +32,13 @@ export const UserDrawer = ({ user, isUserDrawerOpen, setIsUserDrawerOpen }: Prop
           }
         >
           <ListItemIcon>
-            <ProfileIcon username={user.username} />
+            <ProfileIcon username={username} />
           </ListItemIcon>
-          <ListItemText primary={user.username} />
+          <ListItemText primary={username} />
         </ListItem>
 
         <Divider />
 
-        <ListItem>
-          <ListItemButton LinkComponent={NextLink} href={`/${user.username}`}>
-            <ListItemIcon>
-              <AutoStories />
-            </ListItemIcon>
-            <ListItemText primary="My Topics" />
-          </ListItemButton>
-        </ListItem>
         <ListItem>
           <ListItemButton LinkComponent={NextLink} href={"/notifications"}>
             <ListItemIcon>

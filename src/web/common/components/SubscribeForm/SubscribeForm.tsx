@@ -14,10 +14,9 @@ export const SubscribeForm = ({ header, headerAnchor, action, buttonText }: Prop
   const [submitted, setSubmitted] = useState(false);
 
   return (
-    <Box display="flex" flexDirection="column" margin={2} marginTop={0}>
+    <div className="flex flex-col justify-center space-y-2 p-4 pt-2 text-center">
       <Typography variant="body1">
-        {header}
-        {headerAnchor}
+        {header} {headerAnchor}
       </Typography>
 
       <iframe name="hidden_iframe" title="hidden_iframe" style={{ display: "none" }} />
@@ -66,6 +65,6 @@ export const SubscribeForm = ({ header, headerAnchor, action, buttonText }: Prop
           An email was sent to verify your email address.
         </Typography>
       )}
-    </Box>
+    </div>
   );
 };

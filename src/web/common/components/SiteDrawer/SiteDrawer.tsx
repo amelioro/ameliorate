@@ -1,4 +1,4 @@
-import { Abc, AutoStories, Close, Info } from "@mui/icons-material";
+import { AutoStories, Close, Fort } from "@mui/icons-material";
 import {
   Divider,
   Drawer,
@@ -15,16 +15,16 @@ import {
 import Image from "next/image";
 import NextLink from "next/link";
 
-import { discordInvite, facebookPage, githubRepo } from "@/web/common/urls";
-
-import favicon from "../../../../../public/favicon.png";
+import { discordInvite, githubRepo } from "@/web/common/urls";
+import favicon from "~/public/favicon.png";
 
 interface Props {
+  username?: string;
   isSiteDrawerOpen: boolean;
   setIsSiteDrawerOpen: (isOpen: boolean) => void;
 }
 
-export const SiteDrawer = ({ isSiteDrawerOpen, setIsSiteDrawerOpen }: Props) => {
+export const SiteDrawer = ({ username, isSiteDrawerOpen, setIsSiteDrawerOpen }: Props) => {
   const theme = useTheme();
 
   return (
@@ -49,43 +49,26 @@ export const SiteDrawer = ({ isSiteDrawerOpen, setIsSiteDrawerOpen }: Props) => 
         <ListItem>
           <ListItemButton LinkComponent={NextLink} href="/playground">
             <ListItemIcon>
-              <AutoStories />
+              <Fort />
             </ListItemIcon>
             <ListItemText primary="Playground" />
           </ListItemButton>
         </ListItem>
-        <ListItem>
-          <ListItemButton LinkComponent={NextLink} href="/examples">
-            <ListItemIcon>
-              <Abc />
-            </ListItemIcon>
-            <ListItemText primary="Examples" />
-          </ListItemButton>
-        </ListItem>
-
-        <Divider />
-
-        <ListItem>
-          <ListItemButton LinkComponent={NextLink} href="https://ameliorate.app/docs">
-            <ListItemIcon>
-              <Info />
-            </ListItemIcon>
-            <ListItemText primary="Documentation" />
-          </ListItemButton>
-        </ListItem>
+        {username && (
+          <ListItem>
+            <ListItemButton LinkComponent={NextLink} href={`/${username}`}>
+              <ListItemIcon>
+                <AutoStories />
+              </ListItemIcon>
+              <ListItemText primary="My Topics" />
+            </ListItemButton>
+          </ListItem>
+        )}
 
         <Divider />
 
         <ListItem>
           <Stack direction="row" alignItems="center" spacing={2} padding={2}>
-            <Link href={facebookPage} target="_blank" display="flex">
-              <Image
-                src={`/${theme.palette.mode}/Facebook-Icon.png`}
-                height={32}
-                width={32}
-                alt="facebook link"
-              />
-            </Link>
             <Link href={discordInvite} target="_blank" display="flex">
               <Image
                 src={`/${theme.palette.mode}/Discord-Mark.png`}

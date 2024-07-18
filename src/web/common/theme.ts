@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { grey, orange, yellow } from "@mui/material/colors";
 
-import { FlowNodeType } from "@/web/topic/utils/node";
+import { type FlowNodeType } from "@/web/topic/utils/node";
 
 // adding colors to theme documented at https://mui.com/material-ui/customization/palette/#adding-new-colors
 
@@ -53,6 +53,11 @@ declare module "@mui/material/styles" {
     critique2: PaletteOptions["primary"];
     critique3: PaletteOptions["primary"];
     critique4: PaletteOptions["primary"];
+  }
+
+  interface BreakpointOverrides {
+    xs: false;
+    "2xl": true;
   }
 }
 
@@ -194,15 +199,12 @@ const rootElement = typeof document !== "undefined" ? document.getElementById("_
 export const getThemeOptions = (mode: PaletteMode): ThemeOptions => ({
   breakpoints: {
     values: {
-      // Most design for mobile should be the same, but most mobile devices (97%? https://worship.agency/mobile-screen-sizes-for-2022-based-on-data-from-2021)
-      // are above 360px wide, so if we need to squeeze out space, we can target 360px+ and have just an ok design for below 360px
-      xs: 360,
-
-      // these are mui defaults
-      sm: 600,
-      md: 900,
-      lg: 1200,
-      xl: 1536,
+      // match tailwind defaults https://tailwindcss.com/docs/screens
+      sm: 640,
+      md: 768,
+      lg: 1024,
+      xl: 1280,
+      "2xl": 1536,
     },
   },
   palette: {

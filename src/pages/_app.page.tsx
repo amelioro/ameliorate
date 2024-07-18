@@ -2,6 +2,7 @@ import { UserProvider as AuthUserProvider } from "@auth0/nextjs-auth0/client";
 import { Global } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { StyledEngineProvider, ThemeProvider, createTheme } from "@mui/material/styles";
+import { TourProvider } from "@reactour/tour";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { useEffect } from "react";
@@ -9,6 +10,7 @@ import { useEffect } from "react";
 import { globals } from "@/pages/_app.styles";
 import Layout from "@/web/common/components/Layout";
 import { getThemeOptions } from "@/web/common/theme";
+import { steps } from "@/web/common/tour";
 import { trpc } from "@/web/common/trpc";
 import "@/web/common/globals.css";
 
@@ -39,11 +41,13 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         <ThemeProvider theme={theme}>
           <CssBaseline />
 
-          <AuthUserProvider>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </AuthUserProvider>
+          <TourProvider steps={steps} showNavigation={false} showBadge={false}>
+            <AuthUserProvider>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </AuthUserProvider>
+          </TourProvider>
         </ThemeProvider>
       </StyledEngineProvider>
 
