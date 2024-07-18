@@ -8,7 +8,7 @@
 
 ## Introduction
 
-Documentation for sharing UX/UI guidelines for the ameliorate project.
+Documentation for sharing UX/UI guidelines for the ameliorate project. Generally, using [tailwind](https://tailwindcss.com/docs)'s utility classes for spacing and styling makes it easier to follow these guidelines.
 
 ## 8pt grid system
 
@@ -33,7 +33,7 @@ These blog posts "[Everything you should know about 8 point grid system in UX de
 
 Using `rem` scales sizes with the user's default browser font size. The blog post "[The Surprising Truth About Pixels and Accessibility](https://www.joshwcomeau.com/css/surprising-truth-about-pixels-and-accessibility/)" describes different use cases for using `rem` units and `px` units for web components. This is an overview of said post.
 
-## How to use it
+### How to use it
 
 - Generally: use `px` for aesthetics, use `rem` for visual clarity or functionality.
 - There is no cookie cutter method to "correctly" pick between them, just try your best.
