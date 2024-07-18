@@ -23,15 +23,15 @@ export const Headline = () => {
           cars-going-too-fast
         </Link>
       </Typography>
-      <div className="relative my-32 flex max-w-lg flex-col gap-4 rounded-3xl bg-paper-main text-center sm:border sm:border-primary-main sm:p-8 sm:text-left sm:shadow-xl">
+      <div className="relative my-24 flex max-w-lg flex-col gap-4 rounded-3xl bg-paper-main text-center sm:my-32 sm:border sm:border-primary-main sm:p-8 sm:text-left sm:shadow-xl">
         <Typography variant="h3" fontWeight="bold" className="text-4xl sm:text-5xl">
           <span className="text-primary-main">Mutually understand</span> tough problems.
         </Typography>
         <Typography variant="body1">
           <span className="font-bold text-primary-main">Ameliorate</span> provides a{" "}
-          <b>structure</b> for representing how you understand problems and solutions, as well as
-          features for <b>organizing</b>, <b>navigating</b>, and <b>discussing</b> that information,
-          so that you can convey the nuance of your thoughts with accuracy and with ease.
+          <b>structure</b> for representing how you understand a problem, as well as features for{" "}
+          <b>organizing</b>, <b>navigating</b>, and <b>discussing</b> that information, so that you
+          can utilize each other's perspectives and ultimately make better decisions.
         </Typography>
         <div className="flex justify-center gap-2 sm:justify-normal">
           <Button variant="contained" LinkComponent={Link} href="/new">
