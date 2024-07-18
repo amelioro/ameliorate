@@ -26,6 +26,16 @@ Check out the [GitHub Project](https://github.com/orgs/amelioro/projects/2/views
 
 ## Built with
 
+Full-stack:
+
+- [typescript](https://www.typescriptlang.org/)
+- [nextjs](https://nextjs.org/) - web framework
+- [zod](https://github.com/colinhacks/zod) - runtime json schema validation
+- [netlify](https://netlify.com/) - deploying web & api server
+- [auth0](https://auth0.com/) - user authentication
+- [sentry](https://sentry.io/) - monitoring, observability
+- [vitest](https://vitest.dev/) - api & unit testing
+
 Backend:
 
 - [prisma](https://www.prisma.io/) - database querying & schema management
@@ -37,18 +47,10 @@ Frontend:
 - [react](https://reactjs.org/) - building components
 - [react flow](https://reactflow.dev/) - diagram component
 - [zustand](https://github.com/pmndrs/zustand) - component state management
-- [emotion](https://emotion.sh/docs/introduction) - styling components
+- [tailwind](https://tailwindcss.com/) - styling (deprecating [emotion](https://emotion.sh/docs/introduction))
 - [material ui](https://mui.com/) - theming, component library
 - [react query](https://react-query.tanstack.com/) - querying api
 - [react hook form](https://react-hook-form.com/) - form validation
-
-Both:
-
-- [typescript](https://www.typescriptlang.org/)
-- [nextjs](https://nextjs.org/) - web framework (front & back)
-- [zod](https://github.com/colinhacks/zod) - runtime json schema validation
-- [netlify](https://netlify.com/) - deploying web & api server
-- [auth0](https://auth0.com/) - user authentication
 
 ## Contributing
 
