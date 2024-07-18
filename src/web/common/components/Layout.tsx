@@ -1,13 +1,5 @@
 import { Menu } from "@mui/icons-material";
-import {
-  AppBar,
-  IconButton,
-  Link as MuiLink,
-  Toolbar,
-  Tooltip,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { AppBar, IconButton, Link as MuiLink, Toolbar, Tooltip, useTheme } from "@mui/material";
 import { NextPage } from "next";
 import { Roboto } from "next/font/google";
 import Image from "next/image";
@@ -42,8 +34,6 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
   const { sessionUser, authUser } = useSessionUser();
   const { asPath } = useRouter();
 
-  const usingBigScreen = useMediaQuery(theme.breakpoints.up("sm"));
-
   const [isInitialRender, setIsInitialRender] = useState(true);
   const [isUserDrawerOpen, setIsUserDrawerOpen] = useState(false);
   const [isSiteDrawerOpen, setIsSiteDrawerOpen] = useState(false);
@@ -67,11 +57,9 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
         <Toolbar variant="dense">
           <div className="flex flex-1 items-center justify-between">
             <div className="flex items-center gap-4">
-              {!usingBigScreen && (
-                <IconButton onClick={() => setIsSiteDrawerOpen(true)} sx={{ padding: "0" }}>
-                  <Menu />
-                </IconButton>
-              )}
+              <IconButton onClick={() => setIsSiteDrawerOpen(true)} className="block p-0 sm:hidden">
+                <Menu />
+              </IconButton>
               <SiteDrawer
                 username={sessionUser?.username}
                 isSiteDrawerOpen={isSiteDrawerOpen}
@@ -92,11 +80,14 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
                   Alpha
                 </MuiLink>
               </div>
-              {usingBigScreen && (
-                <>
-                  <NavLink href="/playground">Playground</NavLink>
-                  {sessionUser && <NavLink href={`/${sessionUser.username}`}>My Topics</NavLink>}
-                </>
+
+              <NavLink href="/playground" className="hidden sm:block">
+                Playground
+              </NavLink>
+              {sessionUser && (
+                <NavLink href={`/${sessionUser.username}`} className="hidden sm:block">
+                  My Topics
+                </NavLink>
               )}
             </div>
 
@@ -104,27 +95,22 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
               <NavLink href="https://ameliorate.app/docs" target="_blank" data-tour="docs">
                 Docs
               </NavLink>
-
-              {usingBigScreen && (
-                <>
-                  <Link href={discordInvite} target="_blank" display="flex">
-                    <Image
-                      src={`/${theme.palette.mode}/Discord-Mark.png`}
-                      height={24}
-                      width={32}
-                      alt="discord link"
-                    />
-                  </Link>
-                  <Link href={githubRepo} target="_blank" display="flex">
-                    <Image
-                      src={`/${theme.palette.mode}/GitHub-Mark.png`}
-                      height={32}
-                      width={32}
-                      alt="github link"
-                    />
-                  </Link>
-                </>
-              )}
+              <Link href={discordInvite} target="_blank" className="hidden sm:flex">
+                <Image
+                  src={`/${theme.palette.mode}/Discord-Mark.png`}
+                  height={24}
+                  width={32}
+                  alt="discord link"
+                />
+              </Link>
+              <Link href={githubRepo} target="_blank" className="hidden sm:flex">
+                <Image
+                  src={`/${theme.palette.mode}/GitHub-Mark.png`}
+                  height={32}
+                  width={32}
+                  alt="github link"
+                />
+              </Link>
 
               {!isLoggedIn && (
                 <NavLink
