@@ -8,3 +8,4 @@ export const discordInvite = "https://discord.gg/3KhdyJkTWT";
 export const githubRepo = "https://github.com/amelioro/ameliorate";
 export const blogPage = "https://amelioro.substack.com/";
 export const discourseSessionsPage = "https://ameliorate.app/docs/discourse-sessions";
+export const gettingStartedPage = "https://ameliorate.app/docs/getting-started";

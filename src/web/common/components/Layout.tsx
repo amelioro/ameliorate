@@ -101,7 +101,7 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
             </div>
 
             <div className="flex items-center gap-4">
-              <NavLink href="https://ameliorate.app/docs" target="_blank">
+              <NavLink href="https://ameliorate.app/docs" target="_blank" data-tour="docs">
                 Docs
               </NavLink>
 
