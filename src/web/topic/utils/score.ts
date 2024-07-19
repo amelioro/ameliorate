@@ -37,3 +37,18 @@ export const getAverageScore = (userScores: Score[]): Score => {
 export const getNumericScore = (score: Score): number => {
   return score === "-" ? 5 : Number(score);
 };
+
+// hard to say if this is worth extracting, but at least it guarantees some commonality between
+// checking editability for the hotkey implementation and the implementation in the Score component
+export const userCanEditScores = (
+  username: string | undefined,
+  perspectives: string[],
+  readonlyMode: boolean,
+): username is string => {
+  return (
+    !readonlyMode &&
+    perspectives.length === 1 &&
+    username !== undefined &&
+    perspectives[0] === username
+  );
+};

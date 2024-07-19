@@ -196,6 +196,10 @@ export const getView = () => {
   return useCurrentViewStore.getState();
 };
 
+export const getSelectedGraphPartId = () => {
+  return useCurrentViewStore.getState().selectedGraphPartId;
+};
+
 // misc
 emitter.on("overwroteTopicData", () => {
   resetView();

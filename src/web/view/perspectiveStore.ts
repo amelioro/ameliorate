@@ -46,3 +46,8 @@ export const comparePerspectives = () => {
   const scoringUsernames = getScoringUsernames();
   usePerspectiveStore.setState({ perspectives: scoringUsernames });
 };
+
+// utils
+export const getPerspectives = () => {
+  return usePerspectiveStore.getState().perspectives;
+};

@@ -24,6 +24,10 @@ export const getScoringUsernames = () => {
   return Object.keys(userScores);
 };
 
+export const isOnPlayground = () => {
+  return isPlaygroundTopic(useTopicStore.getState().topic);
+};
+
 export const setTopicData = (state: TopicStoreState, sessionUsername?: string) => {
   // Don't override topic - this way, topic data from playground can be downloaded and uploaded as
   // a means of saving playground data to the db.
