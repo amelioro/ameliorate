@@ -16,6 +16,7 @@ export const Card = ({ title, description, onClick, selected = false }: CardProp
           : "border-primary-main"
       } ${selected ? "selected" : ""}`}
       onClick={onClick}
+      role={onClick ? "button" : undefined}
     >
       <Typography variant="h5">{title}</Typography>
       {description && <Typography variant="body2">{description}</Typography>}

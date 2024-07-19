@@ -154,6 +154,7 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
         fitView
         fitViewOptions={{ maxZoom: 1 }}
         minZoom={0.25}
+        nodesFocusable={false}
         onConnect={
           userCanEditTopicData ? ({ source, target }) => connectNodes(source, target) : undefined
         }
