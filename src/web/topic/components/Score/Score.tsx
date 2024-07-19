@@ -10,6 +10,7 @@ import { useFlowZoom } from "@/web/topic/hooks/flowHooks";
 import { useUserScores } from "@/web/topic/store/scoreHooks";
 import { playgroundUsername } from "@/web/topic/store/store";
 import { useOnPlayground } from "@/web/topic/store/topicHooks";
+import { userCanEditScores } from "@/web/topic/utils/score";
 import { useReadonlyMode } from "@/web/view/actionConfigStore";
 import { usePerspectives } from "@/web/view/perspectiveStore";
 
@@ -29,11 +30,7 @@ export const Score = ({ graphPartId }: ScoreProps) => {
 
   const myUsername = onPlayground ? playgroundUsername : sessionUser?.username;
   const perspectives = usePerspectives();
-  const canEdit =
-    !readonlyMode &&
-    perspectives.length === 1 &&
-    myUsername !== undefined &&
-    perspectives[0] === myUsername;
+  const canEdit = userCanEditScores(myUsername, perspectives, readonlyMode);
 
   const [selected, setSelected] = useState(false);
   const [hovering, setHovering] = useState(false);

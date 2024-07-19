@@ -5,22 +5,43 @@ import { useEffect } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import { ContextMenu } from "@/web/common/components/ContextMenu/ContextMenu";
+import { useSessionUser } from "@/web/common/hooks";
 import { CriteriaTable } from "@/web/topic/components/CriteriaTable/CriteriaTable";
 import { Diagram } from "@/web/topic/components/Diagram/Diagram";
 import { TopicToolbar } from "@/web/topic/components/Surface/TopicToolbar";
 import { TopicPane } from "@/web/topic/components/TopicPane/TopicPane";
+import { setScore } from "@/web/topic/store/actions";
+import { playgroundUsername } from "@/web/topic/store/store";
+import { isOnPlayground } from "@/web/topic/store/utilActions";
+import { Score, possibleScores } from "@/web/topic/utils/graph";
 import { hotkeys } from "@/web/topic/utils/hotkeys";
-import { toggleReadonlyMode } from "@/web/view/actionConfigStore";
-import { setSelected, useFormat } from "@/web/view/currentViewStore/store";
+import { userCanEditScores } from "@/web/topic/utils/score";
+import { getReadonlyMode, toggleReadonlyMode } from "@/web/view/actionConfigStore";
+import { getSelectedGraphPartId, setSelected, useFormat } from "@/web/view/currentViewStore/store";
+import { getPerspectives } from "@/web/view/perspectiveStore";
 import { setHasVisitedWorkspace, useHasVisitedWorkspace } from "@/web/view/userConfigStore";
 
-const useWorkspaceHotkeys = () => {
+const useWorkspaceHotkeys = (user: { username: string } | null | undefined) => {
   useHotkeys([hotkeys.deselectPart], () => setSelected(null));
   useHotkeys([hotkeys.readonlyMode], () => toggleReadonlyMode());
+
+  useHotkeys([hotkeys.score], (_, hotkeysEvent) => {
+    const selectedPartId = getSelectedGraphPartId();
+    if (!selectedPartId || !hotkeysEvent.keys) return;
+    const [score] = hotkeysEvent.keys;
+    if (!score || !possibleScores.some((s) => score === s)) return;
+
+    // seems slightly awkward that there's logic here not reused with the Score component, but hard to reuse that in a clean way
+    const myUsername = isOnPlayground() ? playgroundUsername : user?.username;
+    if (!userCanEditScores(myUsername, getPerspectives(), getReadonlyMode())) return;
+    setScore(myUsername, selectedPartId, score as Score);
+  });
 };
 
 export const TopicWorkspace = () => {
-  useWorkspaceHotkeys();
+  const { sessionUser } = useSessionUser();
+
+  useWorkspaceHotkeys(sessionUser);
 
   const format = useFormat();
   const theme = useTheme();

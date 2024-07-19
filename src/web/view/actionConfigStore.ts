@@ -77,3 +77,7 @@ export const getUnrestrictedEditing = () => {
 export const getFlashlightMode = () => {
   return useActionConfigStore.getState().flashlightMode;
 };
+
+export const getReadonlyMode = () => {
+  return useActionConfigStore.getState().readonlyMode;
+};
