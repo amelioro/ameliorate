@@ -1,5 +1,5 @@
 import { Global, useTheme } from "@emotion/react";
-import { Box, useMediaQuery } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
 import { useTour } from "@reactour/tour";
 import { useEffect } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
@@ -65,28 +65,21 @@ export const TopicWorkspace = () => {
     <div className="flex h-[calc(100svh-49px)] flex-col">
       <TopicToolbar />
 
-      <Box
-        sx={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          position: "relative",
-          overflow: "auto",
-          flexDirection: isLandscape ? "row" : "column-reverse",
-        }}
+      <div
+        className={`relative flex size-full overflow-auto ${isLandscape ? "flex-row" : "flex-col-reverse"}`}
       >
         <TopicPane
           anchor={isLandscape ? "left" : "bottom"}
           tabs={useSplitPanes ? ["Views"] : ["Details", "Views"]}
         />
-        <Box height="100%" flex="1" overflow="auto">
+        <div className="flex h-full flex-1 overflow-auto">
           {format === "table" && <CriteriaTable />}
           {format === "diagram" && <Diagram />}
-        </Box>
+        </div>
         {useSplitPanes && <TopicPane anchor="right" tabs={["Details"]} />}
         {/* prevents body scrolling when workspace is rendered*/}
         <Global styles={{ body: { overflow: "hidden" } }} />
-      </Box>
+      </div>
 
       <ContextMenu />
     </div>

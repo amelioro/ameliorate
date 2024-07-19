@@ -10,6 +10,7 @@ export const tableStyles = css`
   // note: need two selectors to have higher precedence than MUI styles
   .criteria-table-paper {
     height: 100%;
+    width: 100%;
 
     .MuiTableContainer-root {
       max-height: min(
