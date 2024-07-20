@@ -75,7 +75,7 @@ const Layout: NextPage<LayoutProps> = ({ children }) => {
                   href="https://ameliorate.app/docs/release-status"
                   variant="caption"
                   underline="hover"
-                  className="absolute -top-0.5 left-1 rotate-12 text-text-primary"
+                  className="absolute -top-0.5 left-0.5 rotate-12 text-text-primary"
                 >
                   Alpha
                 </MuiLink>
