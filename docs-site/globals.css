@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* allow banner to overflow with text for smaller screens, being scrollable */
+.nextra-banner-container > div {
+  overflow-x: auto;
+  text-overflow: unset;
+}
