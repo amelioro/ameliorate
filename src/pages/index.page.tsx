@@ -9,6 +9,14 @@ import { Headline } from "@/web/home/Headline";
 import { ImprovingSection } from "@/web/home/ImprovingSection";
 import { UseCasesSection } from "@/web/home/UseCasesSection";
 
+// influence Google Search to display search results with the name "Ameliorate" instead of ameliorate.app https://developers.google.com/search/docs/appearance/site-names#how-site-names-in-google-search-are-created
+const siteNameJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Ameliorate",
+  url: "https://ameliorate.app/",
+};
+
 const Home: NextPage = () => {
   return (
     <>
@@ -18,6 +26,7 @@ const Home: NextPage = () => {
           name="description"
           content="Ameliorate is a tool for mutually understanding tough problems."
         />
+        <script type="application/ld+json">{JSON.stringify(siteNameJsonLd)}</script>
       </Head>
 
       <div className="flex w-full flex-col divide-y">
