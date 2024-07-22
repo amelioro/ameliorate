@@ -31,7 +31,7 @@ const config = {
         <Link
           href="/release-status"
           // not sure why this isn't applied to banner, but just took these classes from a link generated from an mdx file
-          className="nx-text-primary-600 nx-underline nx-decoration-from-font [text-underline-position:from-font]"
+          className="nx-text-primary-600 underline nx-decoration-from-font [text-underline-position:from-font]"
         >
           Alpha
         </Link>
@@ -40,7 +40,7 @@ const config = {
           href="https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md#providing-feedback"
           target="_blank"
           // not sure why this isn't applied to banner, but just took these classes from a link generated from an mdx file
-          className="nx-text-primary-600 nx-underline nx-decoration-from-font [text-underline-position:from-font]"
+          className="nx-text-primary-600 underline nx-decoration-from-font [text-underline-position:from-font]"
         >
           mention
         </Link>{" "}
