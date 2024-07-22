@@ -34,6 +34,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 
         {/* https://mui.com/material-ui/getting-started/usage/#responsive-meta-tag */}
         <meta name="viewport" content="initial-scale=1, width=device-width" />
+
+        {/* influence Google Search to display search results with the name "Ameliorate" instead of ameliorate.app https://developers.google.com/search/docs/appearance/site-names#how-site-names-in-google-search-are-created */}
+        <meta property="og:site_name" content="Ameliorate" />
       </Head>
 
       {/* https://mui.com/material-ui/integrations/interoperability/#setup */}
