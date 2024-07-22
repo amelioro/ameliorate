@@ -20,8 +20,7 @@
       "plugins": ["@typescript-eslint"],
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
-        "tsconfigRootDir": "./docs-site",
-        "project": ["./tsconfig.json"]
+        "project": true
       },
       "rules": {
         "@typescript-eslint/member-ordering": "error",
