@@ -3,7 +3,6 @@ import without from "lodash/without";
 import { shallow } from "zustand/shallow";
 
 import { InfoCategory } from "@/common/infoCategory";
-import { infoNodeTypes } from "@/common/node";
 import { emitter } from "@/web/common/event";
 import { getDefaultNode } from "@/web/topic/store/nodeGetters";
 import { useTopicStore } from "@/web/topic/store/store";
@@ -67,12 +66,6 @@ export const useGeneralFilter = () => {
 
 export const useIsNodeForcedToShow = (nodeId: string) => {
   return useCurrentViewStore((state) => state.generalFilter.nodesToShow.includes(nodeId));
-};
-
-export const usePrimaryNodeTypes = () => {
-  return useCurrentViewStore((state) => {
-    return state.categoriesToShow.flatMap((category) => infoNodeTypes[category]);
-  });
 };
 
 export const useShowImpliedEdges = () => {
