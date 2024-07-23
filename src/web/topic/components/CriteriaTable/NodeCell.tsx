@@ -5,7 +5,7 @@ import { Node } from "@/web/topic/utils/graph";
 export const NodeCell = ({ node }: { node: Node }) => {
   return (
     <StyledDiv>
-      <EditableNode node={node} context="table" />
+      <EditableNode node={node} />
     </StyledDiv>
   );
 };

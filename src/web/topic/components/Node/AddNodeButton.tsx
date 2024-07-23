@@ -1,7 +1,9 @@
+import { useContext } from "react";
+
 import { NodeType } from "@/common/node";
 import { useSessionUser } from "@/web/common/hooks";
-import { NodeContext } from "@/web/common/store/ephemeralStore";
 import { StyledButton } from "@/web/topic/components/Node/AddNodeButton.styles";
+import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { addNode } from "@/web/topic/store/createDeleteActions";
 import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { Relation } from "@/web/topic/utils/edge";
@@ -14,7 +16,6 @@ interface Props {
   as: RelationDirection;
   toNodeType: NodeType;
   relation: Relation;
-  context: NodeContext;
   /**
    * Generally want to select the new node to highlight it in the view, but some cases we want to
    * avoid changing selection so that the view isn't impacted as much (e.g. from the details pane)
@@ -28,13 +29,13 @@ export const AddNodeButton = ({
   as,
   toNodeType,
   relation,
-  context,
   selectNewNode,
   className,
 }: Props) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const readonlyMode = useReadonlyMode();
+  const context = useContext(WorkspaceContext);
 
   if (!userCanEditTopicData || readonlyMode) return <></>;
 

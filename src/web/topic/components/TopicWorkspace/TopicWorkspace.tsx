@@ -10,6 +10,7 @@ import { CriteriaTable } from "@/web/topic/components/CriteriaTable/CriteriaTabl
 import { Diagram } from "@/web/topic/components/Diagram/Diagram";
 import { TopicToolbar } from "@/web/topic/components/Surface/TopicToolbar";
 import { TopicPane } from "@/web/topic/components/TopicPane/TopicPane";
+import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { setScore } from "@/web/topic/store/actions";
 import { playgroundUsername } from "@/web/topic/store/store";
 import { isOnPlayground } from "@/web/topic/store/utilActions";
@@ -68,15 +69,33 @@ export const TopicWorkspace = () => {
       <div
         className={`relative flex size-full overflow-auto ${isLandscape ? "flex-row" : "flex-col-reverse"}`}
       >
-        <TopicPane
-          anchor={isLandscape ? "left" : "bottom"}
-          tabs={useSplitPanes ? ["Views"] : ["Details", "Views"]}
-        />
+        <WorkspaceContext.Provider value="details">
+          <TopicPane
+            anchor={isLandscape ? "left" : "bottom"}
+            tabs={useSplitPanes ? ["Views"] : ["Details", "Views"]}
+          />
+        </WorkspaceContext.Provider>
+
         <div className="flex h-full flex-1 overflow-auto">
-          {format === "table" && <CriteriaTable />}
-          {format === "diagram" && <Diagram />}
+          {format === "table" && (
+            <WorkspaceContext.Provider value="table">
+              <CriteriaTable />
+            </WorkspaceContext.Provider>
+          )}
+
+          {format === "diagram" && (
+            <WorkspaceContext.Provider value="diagram">
+              <Diagram />
+            </WorkspaceContext.Provider>
+          )}
         </div>
-        {useSplitPanes && <TopicPane anchor="right" tabs={["Details"]} />}
+
+        {useSplitPanes && (
+          <WorkspaceContext.Provider value="details">
+            <TopicPane anchor="right" tabs={["Details"]} />
+          </WorkspaceContext.Provider>
+        )}
+
         {/* prevents body scrolling when workspace is rendered*/}
         <Global styles={{ body: { overflow: "hidden" } }} />
       </div>
