@@ -51,7 +51,6 @@ const AddNodeButtonGroup = memo(
             as={as}
             toNodeType={toNodeType}
             relation={relation}
-            context="diagram"
           />
         ))}
       </ButtonGroup>

@@ -3,7 +3,8 @@ import { createDraft, finishDraft } from "immer";
 import { errorWithData } from "@/common/errorHandling";
 import { justificationNodeTypes, structureNodeTypes } from "@/common/node";
 import { emitter } from "@/web/common/event";
-import { NodeContext, setNewlyAddedNode } from "@/web/common/store/ephemeralStore";
+import { setNewlyAddedNode } from "@/web/common/store/ephemeralStore";
+import { WorkspaceContextType } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { getExplicitClaimCount } from "@/web/topic/store/graphPartHooks";
 import { TopicStoreState, useTopicStore } from "@/web/topic/store/store";
 import { getImplicitLabel } from "@/web/topic/utils/claim";
@@ -79,7 +80,7 @@ interface AddNodeProps {
   as: RelationDirection;
   toNodeType: FlowNodeType;
   relation: Relation;
-  context: NodeContext;
+  context: WorkspaceContextType;
   selectNewNode?: boolean;
 }
 
@@ -155,7 +156,7 @@ export const addNode = ({
 
 export const addNodeWithoutParent = (
   nodeType: FlowNodeType,
-  context: NodeContext,
+  context: WorkspaceContextType,
   selectNewNode = true,
 ) => {
   const state = createDraft(useTopicStore.getState());

@@ -79,11 +79,7 @@ export const GraphPartDetails = ({ graphPart }: Props) => {
             <ListItemText primary={headerText} />
           </ListItem>
 
-          {partIsNode ? (
-            <EditableNode node={graphPart} context="details" />
-          ) : (
-            <StandaloneEdge edge={graphPart} />
-          )}
+          {partIsNode ? <EditableNode node={graphPart} /> : <StandaloneEdge edge={graphPart} />}
 
           <ListItem disablePadding={false} className="pt-3">
             <TextField

@@ -7,20 +7,12 @@
 
 import { create } from "zustand";
 
-/**
- * Where the node is being rendered. One use case is e.g. knowing that a node was added from the diagram
- * so that only the node being rendered in the diagram is focused after add (as opposed to focusing
- * the node in the details pane).
- *
- * In hindsight, probably could just create a NodeContextProvider so that various components everywhere don't
- * have to pass this, but this works for now.
- */
-export type NodeContext = "diagram" | "table" | "details";
+import { WorkspaceContextType } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 
 interface EphemeralStoreState {
   newlyAddedNode: {
     nodeId: string;
-    context: NodeContext;
+    context: WorkspaceContextType;
   } | null;
 }
 
@@ -31,7 +23,7 @@ const initialState: EphemeralStoreState = {
 const useEphemeralStore = create<EphemeralStoreState>()(() => initialState);
 
 // actions
-export const setNewlyAddedNode = (nodeId: string, context: NodeContext) => {
+export const setNewlyAddedNode = (nodeId: string, context: WorkspaceContextType) => {
   useEphemeralStore.setState({ newlyAddedNode: { nodeId, context } });
 };
 
@@ -40,7 +32,7 @@ export const clearNewlyAddedNode = () => {
 };
 
 // utils
-export const isNodeNewlyAdded = (nodeId: string, context: NodeContext) => {
+export const isNodeNewlyAdded = (nodeId: string, context: WorkspaceContextType) => {
   const { newlyAddedNode } = useEphemeralStore.getState();
   if (!newlyAddedNode) return false;
 

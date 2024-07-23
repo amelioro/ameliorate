@@ -17,6 +17,7 @@ import { EdgeCell } from "@/web/topic/components/CriteriaTable/EdgeCell";
 import { NodeCell } from "@/web/topic/components/CriteriaTable/NodeCell";
 import { SolutionTotalCell } from "@/web/topic/components/CriteriaTable/SolutionTotalCell";
 import { TotalsHeaderCell } from "@/web/topic/components/CriteriaTable/TotalsHeaderCell";
+import { tableZoomClasses } from "@/web/topic/components/CriteriaTable/tableZoom";
 import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
 import {
   useCriterionSolutionEdges,
@@ -239,7 +240,6 @@ export const CriteriaTable = () => {
               as="child"
               toNodeType="solution"
               relation={{ child: "solution", name: "addresses", parent: "problem" }}
-              context="table"
             />
 
             <AddNodeButton
@@ -247,7 +247,6 @@ export const CriteriaTable = () => {
               as="child"
               toNodeType="criterion"
               relation={{ child: "criterion", name: "criterionFor", parent: "problem" }}
-              context="table"
             />
           </>
         )}
@@ -285,6 +284,9 @@ export const CriteriaTable = () => {
         positionToolbarDropZone="none"
         muiTablePaperProps={{
           className: "criteria-table-paper",
+        }}
+        muiTableProps={{
+          className: tableZoomClasses,
         }}
         initialState={{
           // this won't work if the last row's header is just "totals" as a string

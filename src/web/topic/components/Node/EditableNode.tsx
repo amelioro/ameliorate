@@ -1,13 +1,9 @@
 import { type ButtonProps, type SxProps, useTheme } from "@mui/material";
-import { memo, useEffect, useRef } from "react";
+import { memo, useContext, useEffect, useRef } from "react";
 
 import { useSessionUser } from "@/web/common/hooks";
 import { openContextMenu } from "@/web/common/store/contextMenuActions";
-import {
-  NodeContext,
-  clearNewlyAddedNode,
-  isNodeNewlyAdded,
-} from "@/web/common/store/ephemeralStore";
+import { clearNewlyAddedNode, isNodeNewlyAdded } from "@/web/common/store/ephemeralStore";
 import { CommonIndicators } from "@/web/topic/components/Indicator/CommonIndicators";
 import {
   LeftCornerStatusIndicators,
@@ -19,6 +15,7 @@ import {
   StyledTextareaAutosize,
   YEdgeBox,
 } from "@/web/topic/components/Node/EditableNode.styles";
+import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { setCustomNodeType, setNodeLabel } from "@/web/topic/store/actions";
 import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { Node } from "@/web/topic/utils/graph";
@@ -29,16 +26,16 @@ import { useFillNodesWithColor } from "@/web/view/userConfigStore";
 
 interface Props {
   node: Node;
-  context: NodeContext;
   className?: string;
 }
 
-const EditableNodeBase = ({ node, context, className = "" }: Props) => {
+const EditableNodeBase = ({ node, className = "" }: Props) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const unrestrictedEditing = useUnrestrictedEditing();
   const fillNodesWithColor = useFillNodesWithColor();
   const selected = useIsGraphPartSelected(node.id);
+  const context = useContext(WorkspaceContext);
 
   const theme = useTheme();
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);

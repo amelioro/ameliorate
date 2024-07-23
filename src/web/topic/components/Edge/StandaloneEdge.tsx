@@ -44,9 +44,9 @@ export const StandaloneEdge = ({ edge }: Props) => {
 
   return (
     <Stack>
-      <EditableNode node={sourceNode} context="details" />
+      <EditableNode node={sourceNode} />
       <ScoreEdge inReactFlow={false} {...flowEdge} />
-      <EditableNode node={targetNode} context="details" />
+      <EditableNode node={targetNode} />
     </Stack>
   );
 };

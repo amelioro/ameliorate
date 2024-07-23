@@ -35,9 +35,7 @@ export const FactDetails = ({ factNode }: Props) => {
           <Typography>No relevant parts yet!</Typography>
         )}
         {nodesRelevantFor.length > 0 &&
-          nodesRelevantFor.map((node) => (
-            <EditableNode key={node.id} node={node} context="details" />
-          ))}
+          nodesRelevantFor.map((node) => <EditableNode key={node.id} node={node} />)}
         {edgesRelevantFor.length > 0 &&
           edgesRelevantFor.map((edge) => <StandaloneEdge key={edge.id} edge={edge} />)}
       </Stack>
@@ -59,7 +57,6 @@ export const FactDetails = ({ factNode }: Props) => {
             name: "sourceOf",
             parent: "fact",
           }}
-          context="details"
           selectNewNode={false}
         />
       </Stack>
@@ -74,7 +71,7 @@ export const FactDetails = ({ factNode }: Props) => {
         marginBottom="8px"
       >
         {sources.length > 0 ? (
-          sources.map((source) => <EditableNode key={source.id} node={source} context="details" />)
+          sources.map((source) => <EditableNode key={source.id} node={source} />)
         ) : (
           <Typography>No sources yet!</Typography>
         )}

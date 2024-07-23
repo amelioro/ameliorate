@@ -23,7 +23,7 @@ export const AnswerDetails = ({ answerNode }: Props) => {
 
       <Stack direction="row" justifyContent="center" alignItems="center" marginBottom="8px">
         {question ? (
-          <EditableNode node={question} context="details" />
+          <EditableNode node={question} />
         ) : (
           <Typography>No question to answer!</Typography>
         )}
