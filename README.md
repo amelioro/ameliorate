@@ -2,9 +2,9 @@
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/amelioro/ameliorate/blob/main/LICENSE) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blueviolet.svg)](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md) [![All Contributors](https://img.shields.io/github/all-contributors/amelioro/ameliorate?color=ee8449&style=flat-square)](#contributors-) [![Chat](https://img.shields.io/discord/1057707973482401892?label=chat&logo=discord)](https://discord.gg/3KhdyJkTWT)
 
-[Ameliorate](https://www.ameliorate.app/) is a tool for discussing and mutually understanding tough problems.
+[Ameliorate](https://www.ameliorate.app/) is a tool for visualizing how you understand a problem.
 
-It provides a [standard](https://ameliorate.app/docs/getting-started/core-ideas), precise way of representing all information relevant to solving a problem, along with efficient ways to understand, discuss, and improve that information.
+It provides a structure to help you break down a problem, along with features for organizing, navigating, and discussing that information, so that it's easier to grasp, align with others, and ultimately make better decisions.
 
 With it, you can:
 
@@ -15,7 +15,7 @@ With it, you can:
 - compare the [tradeoffs](https://ameliorate.app/examples/ORM?view=Tradeoffs) of each solution
   <img src="https://github.com/amelioro/ameliorate/assets/13872370/a6579feb-a32e-4e00-989b-a5939f80e601" width="800"/>
 
-- clearly [question, justify, and critique](https://ameliorate.app/examples/ORM?view=Tradeoffs+with+node+that+has+aux+info) anything in an off-to-the-side but easy-to-access way
+- clearly [question, justify, and critique](https://ameliorate.app/examples/ORM?view=Tradeoffs+with+node+that+has+info) anything in an off-to-the-side but easy-to-access way
   <img src="https://github.com/amelioro/ameliorate/assets/13872370/20f9af78-785f-4a91-88ef-3ef64da5c90a" width="800"/>
 
 See the [docs](https://www.ameliorate.app/docs) for more details about the app.

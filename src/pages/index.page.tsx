@@ -24,7 +24,7 @@ const Home: NextPage = () => {
         <title>Home | Ameliorate</title>
         <meta
           name="description"
-          content="Ameliorate is a tool for mutually understanding tough problems."
+          content="Ameliorate is a tool for visualizing how you understand a problem."
         />
         <script type="application/ld+json">{JSON.stringify(siteNameJsonLd)}</script>
       </Head>
