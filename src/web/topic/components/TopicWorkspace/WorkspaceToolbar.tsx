@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 
 import { emitter } from "@/web/common/event";
 import { useSessionUser } from "@/web/common/hooks";
-import { MoreActionsDrawer } from "@/web/topic/components/Surface/MoreActionsDrawer";
+import { MoreActionsDrawer } from "@/web/topic/components/TopicWorkspace/MoreActionsDrawer";
 import { deleteGraphPart } from "@/web/topic/store/createDeleteActions";
 import { useOnPlayground } from "@/web/topic/store/topicHooks";
 import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
@@ -33,7 +33,7 @@ import {
   useIsComparingPerspectives,
 } from "@/web/view/perspectiveStore";
 
-export const TopicToolbar = () => {
+export const WorkspaceToolbar = () => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const onPlayground = useOnPlayground();

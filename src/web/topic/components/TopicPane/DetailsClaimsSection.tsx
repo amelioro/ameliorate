@@ -27,7 +27,7 @@ export const DetailsClaimsSection = ({ graphPart }: Props) => {
         <ListItemIcon>
           <ThumbsUpDown />
         </ListItemIcon>
-        <ListItemText primary="Claims" />
+        <ListItemText primary="Justification" />
       </ListItem>
 
       {/* spacing is the amount that centers the add buttons above the columns */}

@@ -8,9 +8,9 @@ import { ContextMenu } from "@/web/common/components/ContextMenu/ContextMenu";
 import { useSessionUser } from "@/web/common/hooks";
 import { CriteriaTable } from "@/web/topic/components/CriteriaTable/CriteriaTable";
 import { Diagram } from "@/web/topic/components/Diagram/Diagram";
-import { TopicToolbar } from "@/web/topic/components/Surface/TopicToolbar";
 import { TopicPane } from "@/web/topic/components/TopicPane/TopicPane";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
+import { WorkspaceToolbar } from "@/web/topic/components/TopicWorkspace/WorkspaceToolbar";
 import { setScore } from "@/web/topic/store/actions";
 import { playgroundUsername } from "@/web/topic/store/store";
 import { isOnPlayground } from "@/web/topic/store/utilActions";
@@ -64,7 +64,7 @@ export const TopicWorkspace = () => {
   return (
     // hardcode workspace to take up full height of screen minus the navbar
     <div className="flex h-[calc(100svh-49px)] flex-col">
-      <TopicToolbar />
+      <WorkspaceToolbar />
 
       <div
         className={`relative flex size-full overflow-auto ${isLandscape ? "flex-row" : "flex-col-reverse"}`}
