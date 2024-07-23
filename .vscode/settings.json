@@ -8,6 +8,12 @@
   "files.associations": {
     "*.css": "tailwindcss"
   },
+  "//classRegex": "allow variables to use tailwind intellisense https://stackoverflow.com/a/73655079",
+  "tailwindCSS.experimental.classRegex": [
+    ["Classes \\=([^;]*);", "'([^']*)'"],
+    ["Classes \\=([^;]*);", "\"([^\"]*)\""],
+    ["Classes \\=([^;]*);", "\\`([^\\`]*)\\`"]
+  ],
   "typescript.preferences.importModuleSpecifier": "non-relative",
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
