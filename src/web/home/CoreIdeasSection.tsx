@@ -18,7 +18,7 @@ export const CoreIdeasSection = () => {
       />
       <Card
         title="Add nuance"
-        description="For any specific part of the diagram, add opinion, justification, questions, relevant facts and sources, or even just open up discussion about it."
+        description="For any individual part of the diagram, add things like how important you think it is and why, or questions that would be good to answer."
         onClick={() => setSelectedCard("details")}
         selected={selectedCard === "details"}
       />
@@ -76,7 +76,7 @@ export const CoreIdeasSection = () => {
 
   return (
     <div className="flex flex-col text-center">
-      <Typography variant="h4">Represent your understanding</Typography>
+      <Typography variant="h4">Break things down</Typography>
       <Typography variant="body1">
         Check out{" "}
         <Link href="https://ameliorate.app/docs/getting-started" target="_blank">
