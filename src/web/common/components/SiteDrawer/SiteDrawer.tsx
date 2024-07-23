@@ -39,7 +39,9 @@ export const SiteDrawer = ({ username, isSiteDrawerOpen, setIsSiteDrawerOpen }: 
           }
         >
           <ListItemIcon>
-            <Image src={favicon} height={32} width={32} alt="home" />
+            {/* use styling to set width and height instead of Image props because otherwise this throws a warning about only having height or width set */}
+            {/* no idea why specifically this favicon throws this warning, and other Image-links in Header don't. */}
+            <Image src={favicon} alt="home" className="size-8" />
           </ListItemIcon>
           <ListItemText primary="Ameliorate" />
         </ListItem>
