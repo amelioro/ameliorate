@@ -295,7 +295,7 @@ export const MoreActionsDrawer = ({
             <ListItem disablePadding={false}>
               <Typography variant="body2">Layout Thoroughness</Typography>
               <Tooltip
-                title="Determines how much effort the layout algorithm puts into making the diagram look good. 1 = lowest effort, 100 = highest effort."
+                title="Determines how much effort the layout algorithm puts into laying out nodes such that they efficiently use space. 1 = lowest effort, 100 = highest effort."
                 enterTouchDelay={0} // allow touch to immediately trigger
                 leaveTouchDelay={Infinity} // touch-away to close on mobile, since message is long
               >
