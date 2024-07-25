@@ -30,7 +30,8 @@ export const ShowSecondaryNeighborsLabel = ({ secondaryInfoCategory }: Props) =>
           Secondary
         </span>
       </Tooltip>
-      {startCase(secondaryInfoCategory)}
+      {/* temporary jank until we know we want to rename structure to breakdown */}
+      {secondaryInfoCategory === "structure" ? "Breakdown" : startCase(secondaryInfoCategory)}
     </Stack>
   );
 };

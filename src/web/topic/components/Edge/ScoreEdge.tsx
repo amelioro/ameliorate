@@ -127,7 +127,9 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
     />
   );
 
-  const labelText = edge.data.customLabel ?? lowerCase(edge.label);
+  const labelText =
+    // temporary jank to display embodies edges as "fulfills" until we know for sure we want to rename
+    edge.data.customLabel ?? edge.label === "embodies" ? "fulfills" : lowerCase(edge.label);
 
   const label = (
     <StyledDiv

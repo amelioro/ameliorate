@@ -1,11 +1,11 @@
 import { NestedMenuItem } from "mui-nested-menu";
 
+import { researchNodeTypes, structureNodeTypes } from "@/common/node";
 import { CloseOnClickMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
 import { useSessionUser } from "@/web/common/hooks";
 import { addNodeWithoutParent } from "@/web/topic/store/createDeleteActions";
 import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { nodeDecorations } from "@/web/topic/utils/node";
-import { usePrimaryNodeTypes } from "@/web/view/currentViewStore/filter";
 import { useFormat } from "@/web/view/currentViewStore/store";
 
 interface Props {
@@ -17,7 +17,10 @@ export const AddNodeMenuItem = ({ parentMenuOpen }: Props) => {
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
 
   const format = useFormat();
-  const shownNodeTypes = usePrimaryNodeTypes();
+
+  // could try just using primary node types, but that's awkward when all info categories are hidden.
+  // always showing structure + research nodes seems reasonable. justification nodes never need to be added on their own.
+  const shownNodeTypes = structureNodeTypes.concat(researchNodeTypes);
 
   // shouldn't be able to view this menu item if we're in the table view
   if (!userCanEditTopicData || format == "table") return <></>;

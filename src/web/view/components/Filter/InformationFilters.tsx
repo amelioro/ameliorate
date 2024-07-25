@@ -13,7 +13,7 @@ export const InformationFilters = () => {
       <FormControlLabel
         label={
           <Stack direction="row" spacing={0.5}>
-            <Typography>Structure</Typography>
+            <Typography>Breakdown</Typography>
             <AutoStories />
           </Stack>
         }
