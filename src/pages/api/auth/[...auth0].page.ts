@@ -27,7 +27,9 @@ const afterCallback: AfterCallback = async (_req, res, session, state) => {
     ? returnTo
       ? new URL(returnTo).search || "?login-success"
       : "?login-success"
-    : "?login-success";
+    : returnTo
+      ? `?returnTo=${new URL(returnTo).pathname}` // carry `returnTo` forward if we're temporarily overriding it with a reroute to `choose-username`
+      : "?login-success";
 
   const location = `${path}${params}`;
   res.setHeader("Location", location);
