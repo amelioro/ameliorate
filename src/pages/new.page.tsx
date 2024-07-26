@@ -1,17 +1,20 @@
-import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { NextPage } from "next";
 import Head from "next/head";
+import Router from "next/router";
 
-import { NotLoggedInError } from "@/web/common/components/Error/Error";
 import { Loading } from "@/web/common/components/Loading/Loading";
 import { useSessionUser } from "@/web/common/hooks";
 import { CreateTopicForm } from "@/web/topic/components/TopicForm/TopicForm";
 
-const NewTopic: NextPage = withPageAuthRequired(() => {
+const NewTopic: NextPage = () => {
   const { sessionUser, isLoading: sessionUserIsLoading } = useSessionUser();
 
   if (sessionUserIsLoading) return <Loading />;
-  if (!sessionUser) return <NotLoggedInError />;
+
+  if (!sessionUser) {
+    void Router.push(`/api/auth/login?returnTo=${encodeURIComponent("/new")}`);
+    return <Loading />;
+  }
 
   return (
     <>
@@ -23,6 +26,6 @@ const NewTopic: NextPage = withPageAuthRequired(() => {
       <CreateTopicForm user={sessionUser} />
     </>
   );
-});
+};
 
 export default NewTopic;

@@ -90,9 +90,13 @@ const CreateUserPage = () => {
     );
   }
 
+  // redirect away because user already exists
   if (sessionUser) {
-    // redirect away because user already exists
-    void Router.push(`/${sessionUser.username}`);
+    const returnTo = new URLSearchParams(window.location.search).get("returnTo");
+    // if we came from home page, redirect to user's profile page, because that's probably more desirable
+    const redirect = returnTo && returnTo !== "/" ? returnTo : `/${sessionUser.username}`;
+    void Router.push(redirect);
+
     return <Loading />;
   }
 
