@@ -8,9 +8,9 @@ import {
   FilterAltOutlined,
   FormatColorFill,
   Highlight,
-  Image as ImageIcon,
   Info,
   Layers,
+  PhotoCamera,
   Route,
   Upload,
   WbTwilight,
@@ -199,11 +199,11 @@ export const MoreActionsDrawer = ({
           {!isTableActive && (
             <IconButton
               color="inherit"
-              title="Take Screenshot of Diagram"
-              aria-label="Take Screenshot of Diagram"
+              title="Download Screenshot of Diagram"
+              aria-label="Download Screenshot of Diagram"
               onClick={() => downloadScreenshot()}
             >
-              <ImageIcon />
+              <PhotoCamera />
             </IconButton>
           )}
         </ListItem>
