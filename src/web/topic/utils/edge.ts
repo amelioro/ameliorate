@@ -103,6 +103,7 @@ export const relations: AddableRelation[] = researchRelations.concat([
   { child: "solution", name: "addresses", parent: "detriment", addableFrom: "parent" },
 
   { child: "solution", name: "has", parent: "solutionComponent", addableFrom: "child" },
+  { child: "solutionComponent", name: "has", parent: "solutionComponent", addableFrom: "child" },
   { child: "obstacle", name: "obstacleOf", parent: "solutionComponent", addableFrom: "parent" },
 
   { child: "solution", name: "accomplishes", parent: "solution", addableFrom: "parent" },
@@ -289,10 +290,15 @@ export const isEdgeAShortcut = (edge: Edge, topicGraph: Graph) => {
  * can still be shown when a component node is hidden
  */
 export const isEdgeImpliedByComposition = (edge: Edge, topicGraph: Graph) => {
+  // hiding nodes composed by composed nodes is really complex, let's not bother
+  // TODO?: this complexity makes me think it's not worth trying to hide composed edges at all, and
+  // that #434 is a better solution to the issue of showing connections when nodes are hidden
+  if (edge.label === "has") return false;
+
   const edgeParent = parentNode(edge, topicGraph.nodes);
   const edgeChild = childNode(edge, topicGraph.nodes);
 
-  // check implied through parent
+  // check implied through parent, i.e. child -[X]-> component, child -[X]-> parent, and parent -has-> component
   const componentsOfParent = components(edgeParent, topicGraph);
   const impliedThroughParentComponent = componentsOfParent.some((component) => {
     return topicGraph.edges.some(
@@ -305,7 +311,7 @@ export const isEdgeImpliedByComposition = (edge: Edge, topicGraph: Graph) => {
 
   if (impliedThroughParentComponent) return true;
 
-  // check implied through child
+  // check implied through child, i.e. child -has-> component, component -[X]-> parent, child -[X]-> parent
   const componentsOfChild = components(edgeChild, topicGraph);
   const impliedThroughChildComponent = componentsOfChild.some((component) => {
     return topicGraph.edges.some(

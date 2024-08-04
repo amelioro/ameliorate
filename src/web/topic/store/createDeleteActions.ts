@@ -178,6 +178,11 @@ const createEdgesImpliedByComposition = (
   child: Node,
   relation: Relation,
 ) => {
+  // creating nodes that are composed of other nodes is complex, and doesn't seem worth trying to manage (i.e. hide)
+  // TODO?: this complexity makes me think it's not worth trying to create composed edges at all, and
+  // that #434 is a better solution to the issue of showing connections when nodes are hidden
+  if (relation.name === "has") return;
+
   const nodesComposedByParent = getNodesComposedBy(parent, topicGraph);
   nodesComposedByParent
     .filter((composedNode) => composedNode.id != child.id)
