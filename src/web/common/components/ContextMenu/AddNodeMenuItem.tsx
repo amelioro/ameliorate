@@ -1,7 +1,7 @@
 import { NestedMenuItem } from "mui-nested-menu";
 
 import { researchNodeTypes, structureNodeTypes } from "@/common/node";
-import { CloseOnClickMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
+import { ContextMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
 import { useSessionUser } from "@/web/common/hooks";
 import { addNodeWithoutParent } from "@/web/topic/store/createDeleteActions";
 import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
@@ -39,9 +39,9 @@ export const AddNodeMenuItem = ({ parentMenuOpen }: Props) => {
         }}
       >
         {shownNodeTypes.map((type) => (
-          <CloseOnClickMenuItem key={type} onClick={() => addNodeWithoutParent(type, "diagram")}>
+          <ContextMenuItem key={type} onClick={() => addNodeWithoutParent(type, "diagram")}>
             {nodeDecorations[type].title}
-          </CloseOnClickMenuItem>
+          </ContextMenuItem>
         ))}
       </NestedMenuItem>
     </>
