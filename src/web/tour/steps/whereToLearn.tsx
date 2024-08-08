@@ -37,6 +37,7 @@ export const whereToLearnSteps = (userCanEditTopicData: boolean): StepType[] => 
               </Button>
             ) : undefined
           }
+          heightClass="" // TODO: we're overriding default to let height be based on content size here, but this is jank and we really want to avoid having to hardcode height at all
         />
       ),
       stepInteraction: false, // don't let users click the help button when it's highlighted, because the popover would awkwardly cover the opened menu

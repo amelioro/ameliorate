@@ -28,6 +28,10 @@ export const TourHelper = () => {
     if (!hasSeenAnyTour) startFirstTour(userCanEditTopicData);
   }, [hasSeenAnyTour, memoTourProps, userCanEditTopicData]);
 
-  // default anchor for tour popover; without -bottom-2, popover would be a bit far from bottom of screen, since it is placed above this div
-  return <div className={`${tourDefaultAnchorClass} invisible absolute -bottom-2 right-0`} />;
+  // Default anchor for tour popover - ideally want this closer to bottom so that it doesn't stand
+  // on top of details pane for big screens (-bottom-2 seems right), but popover currently is
+  // positioned incorrectly when steps change popover size. Hoping to have this resolved with [ticket].
+  // return <div className={`${tourDefaultAnchorClass} invisible absolute -bottom-2 right-0`} />;
+  // return <div className={`${tourDefaultAnchorClass} invisible absolute bottom-8 right-0`} />;
+  return <div className={`${tourDefaultAnchorClass} invisible absolute -right-2 top-20`} />;
 };

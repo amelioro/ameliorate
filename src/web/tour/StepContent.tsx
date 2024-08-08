@@ -6,12 +6,23 @@ interface Props {
   text: ReactNode;
   imageSlot?: ReactNode;
   actionSlot?: ReactNode;
-  className?: string;
+  /**
+   * Ideally we'd align the popover to the bottom of page, so that height can change without moving the nav buttons,
+   * but reactour does not properly re-locate the popover when its size changes.
+   * So we're hardcoding the height.
+   */
+  heightClass?: string;
 }
 
-export const StepContent = ({ stepTitle, text, imageSlot, actionSlot }: Props) => {
+export const StepContent = ({
+  stepTitle,
+  text,
+  imageSlot,
+  actionSlot,
+  heightClass = "h-[428px]",
+}: Props) => {
   return (
-    <div className="flex flex-col gap-2">
+    <div className={`${heightClass} flex flex-col gap-2`}>
       <Typography variant="h5">{stepTitle}</Typography>
       <Typography variant="body2" className="whitespace-pre-wrap">
         {text}

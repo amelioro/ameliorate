@@ -50,7 +50,7 @@ export const TopicWorkspace = () => {
 
   return (
     // hardcode workspace to take up full height of screen minus the navbar
-    <div className="flex h-[calc(100svh-49px)] flex-col">
+    <div className="relative flex h-[calc(100svh-49px)] flex-col">
       <WorkspaceToolbar />
 
       <div
