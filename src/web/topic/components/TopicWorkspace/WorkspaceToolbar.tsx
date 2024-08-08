@@ -103,7 +103,7 @@ export const WorkspaceToolbar = () => {
               <Redo />
             </IconButton>
 
-            <Divider orientation="vertical" flexItem />
+            <Divider orientation="vertical" flexItem className="hidden sm:block" />
 
             <IconButton
               color="inherit"
@@ -115,6 +115,7 @@ export const WorkspaceToolbar = () => {
                 }
               }}
               disabled={!selectedGraphPart}
+              className="hidden sm:flex"
             >
               <Delete />
             </IconButton>
