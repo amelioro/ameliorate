@@ -29,5 +29,6 @@ export const TourHelper = () => {
   }, [hasSeenAnyTour, memoTourProps, userCanEditTopicData]);
 
   // default anchor for tour popover; without -bottom-2, popover would be a bit far from bottom of screen, since it is placed above this div
-  return <div className={`${tourDefaultAnchorClass} invisible absolute -bottom-2 right-0`} />;
+  // return <div className={`${tourDefaultAnchorClass} invisible absolute -bottom-2 right-0`} />;
+  return <div className={`${tourDefaultAnchorClass} invisible absolute right-0 top-10`} />;
 };
