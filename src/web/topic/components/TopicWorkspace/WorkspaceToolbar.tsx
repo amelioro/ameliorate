@@ -6,6 +6,7 @@ import {
   Error,
   Group,
   Highlight,
+  QuestionMark,
   Redo,
   Undo,
 } from "@mui/icons-material";
@@ -14,6 +15,7 @@ import { useEffect, useState } from "react";
 
 import { emitter } from "@/web/common/event";
 import { useSessionUser } from "@/web/common/hooks";
+import { HelpMenu } from "@/web/topic/components/TopicWorkspace/HelpMenu";
 import { MoreActionsDrawer } from "@/web/topic/components/TopicWorkspace/MoreActionsDrawer";
 import { deleteGraphPart } from "@/web/topic/store/createDeleteActions";
 import { useOnPlayground } from "@/web/topic/store/topicHooks";
@@ -46,6 +48,7 @@ export const WorkspaceToolbar = () => {
   const selectedGraphPart = useSelectedGraphPart();
 
   const [isMoreActionsDrawerOpen, setIsMoreActionsDrawerOpen] = useState(false);
+  const [helpAnchorEl, setHelpAnchorEl] = useState<null | HTMLElement>(null);
 
   useEffect(() => {
     const unbindErrored = emitter.on("errored", () => {
@@ -170,13 +173,22 @@ export const WorkspaceToolbar = () => {
         >
           <Build />
         </IconButton>
-
         <MoreActionsDrawer
           isMoreActionsDrawerOpen={isMoreActionsDrawerOpen}
           setIsMoreActionsDrawerOpen={setIsMoreActionsDrawerOpen}
           sessionUser={sessionUser}
           userCanEditTopicData={userCanEditTopicData}
         />
+
+        <IconButton
+          color="inherit"
+          title="Help"
+          aria-label="Help"
+          onClick={(event) => setHelpAnchorEl(event.currentTarget)}
+        >
+          <QuestionMark />
+        </IconButton>
+        <HelpMenu helpAnchorEl={helpAnchorEl} setHelpAnchorEl={setHelpAnchorEl} />
 
         {hasErrored && (
           <Tooltip
