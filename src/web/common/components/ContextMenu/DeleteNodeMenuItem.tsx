@@ -1,4 +1,4 @@
-import { CloseOnClickMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
+import { ContextMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
 import { useSessionUser } from "@/web/common/hooks";
 import { deleteNode } from "@/web/topic/store/createDeleteActions";
 import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
@@ -10,7 +10,5 @@ export const DeleteNodeMenuItem = ({ node }: { node: Node }) => {
 
   if (!userCanEditTopicData) return <></>;
 
-  return (
-    <CloseOnClickMenuItem onClick={() => deleteNode(node.id)}>Delete node</CloseOnClickMenuItem>
-  );
+  return <ContextMenuItem onClick={() => deleteNode(node.id)}>Delete node</ContextMenuItem>;
 };

@@ -2,7 +2,7 @@ import lowerCase from "lodash/lowerCase";
 import { NestedMenuItem } from "mui-nested-menu";
 
 import { getSameCategoryEdgeTypes } from "@/common/edge";
-import { CloseOnClickMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
+import { ContextMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
 import { useSessionUser } from "@/web/common/hooks";
 import { changeEdgeType } from "@/web/topic/store/actions";
 import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
@@ -33,14 +33,14 @@ export const ChangeEdgeTypeMenuItem = ({ edge, parentMenuOpen }: Props) => {
         }}
       >
         {getSameCategoryEdgeTypes(edge.label).map((type) => (
-          <CloseOnClickMenuItem
+          <ContextMenuItem
             key={type}
             onClick={() => {
               changeEdgeType(edge, type);
             }}
           >
             {lowerCase(type)}
-          </CloseOnClickMenuItem>
+          </ContextMenuItem>
         ))}
       </NestedMenuItem>
     </>
