@@ -31,8 +31,8 @@ export const ClaimTreeIndicator = ({ graphPartId }: Props) => {
 
   const Icon = explicitClaimCount > 0 ? AccountTree : AccountTreeOutlined;
   const title =
-    "View claim tree" +
-    (nonTopLevelClaimCount > 0 ? ` (${nonTopLevelClaimCount} claims not shown here)` : "");
+    "View justification tree" +
+    (nonTopLevelClaimCount > 0 ? ` (${nonTopLevelClaimCount} justifications not shown here)` : "");
 
   return (
     <Indicator

@@ -4,7 +4,7 @@ import { AddNodeMenuItem } from "@/web/common/components/ContextMenu/AddNodeMenu
 import { AlsoShowNodeAndNeighborsMenuItem } from "@/web/common/components/ContextMenu/AlsoShowNodeAndNeighborsMenuItem";
 import { ChangeEdgeTypeMenuItem } from "@/web/common/components/ContextMenu/ChangeEdgeTypeMenuItem";
 import { ChangeNodeTypeMenuItem } from "@/web/common/components/ContextMenu/ChangeNodeTypeMenuItem";
-import { CloseOnClickMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
+import { ContextMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
 import { DeleteEdgeMenuItem } from "@/web/common/components/ContextMenu/DeleteEdgeMenuItem";
 import { DeleteNodeMenuItem } from "@/web/common/components/ContextMenu/DeleteNodeMenuItem";
 import { HideMenuItem } from "@/web/common/components/ContextMenu/HideMenuItem";
@@ -22,6 +22,7 @@ export const ContextMenu = () => {
 
   // create these based on what's set in the context
   const menuItems = [
+    // CRUD actions
     !contextMenuContext.node && !contextMenuContext.edge && (
       <AddNodeMenuItem parentMenuOpen={isOpen} key={9} />
     ),
@@ -31,6 +32,10 @@ export const ContextMenu = () => {
     contextMenuContext.edge && (
       <ChangeEdgeTypeMenuItem edge={contextMenuContext.edge} parentMenuOpen={isOpen} key={8} />
     ),
+    contextMenuContext.node && <DeleteNodeMenuItem node={contextMenuContext.node} key={5} />,
+    contextMenuContext.edge && <DeleteEdgeMenuItem edge={contextMenuContext.edge} key={6} />,
+
+    // show/hide actions
     contextMenuContext.node && (
       <AlsoShowNodeAndNeighborsMenuItem node={contextMenuContext.node} key={11} />
     ),
@@ -38,11 +43,9 @@ export const ContextMenu = () => {
       <OnlyShowNodeAndNeighborsMenuItem node={contextMenuContext.node} key={12} />
     ),
     contextMenuContext.node && <HideMenuItem node={contextMenuContext.node} key={13} />,
-    contextMenuContext.node && <DeleteNodeMenuItem node={contextMenuContext.node} key={5} />,
-    contextMenuContext.edge && <DeleteEdgeMenuItem edge={contextMenuContext.edge} key={6} />,
 
     // ensure there's never an empty context menu; that shows an empty bubble and feels awkward
-    <CloseOnClickMenuItem key={10}>Cancel</CloseOnClickMenuItem>,
+    <ContextMenuItem key={10}>Cancel</ContextMenuItem>,
   ].filter((item): item is JSX.Element => !!item);
 
   return (

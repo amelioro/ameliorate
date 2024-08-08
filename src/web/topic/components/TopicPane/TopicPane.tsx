@@ -7,8 +7,9 @@ import {
 } from "@mui/icons-material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Tab } from "@mui/material";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
+import { deepIsEqual } from "@/common/utils";
 import { emitter } from "@/web/common/event";
 import { GraphPartDetails } from "@/web/topic/components/TopicPane/GraphPartDetails";
 import { TopicDetails } from "@/web/topic/components/TopicPane/TopicDetails";
@@ -34,7 +35,7 @@ interface Props {
   tabs: [TopicTab, ...TopicTab[]];
 }
 
-export const TopicPane = ({ anchor, tabs }: Props) => {
+const TopicPaneBase = ({ anchor, tabs }: Props) => {
   const [isOpen, setIsOpen] = useState(true);
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
   const selectedGraphPart = useSelectedGraphPart();
@@ -42,18 +43,18 @@ export const TopicPane = ({ anchor, tabs }: Props) => {
   useEffect(() => {
     if (!tabs.includes("Details")) return;
 
-    const unbindView = emitter.on("viewTopicDetails", () => {
+    const unbindSelectDetails = emitter.on("viewTopicDetails", () => {
       setSelectedTab("Details");
       setIsOpen(true);
     });
 
-    const unbindSelected = emitter.on("partSelected", (partId) => {
+    const unbindSelectedPart = emitter.on("partSelected", (partId) => {
       if (partId) setSelectedTab("Details"); // convenient to show details when clicking a node, but don't open the pane if it's not open, because that can be jarring
     });
 
     return () => {
-      unbindView();
-      unbindSelected();
+      unbindSelectDetails();
+      unbindSelectedPart();
     };
   }, [tabs]);
 
@@ -85,12 +86,12 @@ export const TopicPane = ({ anchor, tabs }: Props) => {
       <StyledDrawer variant="permanent" open={isOpen} anchor={anchor}>
         <TabContext value={selectedTab}>
           <TabList onChange={handleTabChange} centered>
-            {tabs.map((tab, idx) => (
-              <Tab key={`${tab}_${idx}`} label={tab} value={tab} />
+            {tabs.map((tab) => (
+              <Tab key={tab} label={tab} value={tab} />
             ))}
           </TabList>
-          {tabs.map((tab, idx) => (
-            <TabPanel key={`${tab}_${idx}`} value={tab}>
+          {tabs.map((tab) => (
+            <TabPanel key={tab} value={tab}>
               {TabPanelContent[tab]}
             </TabPanel>
           ))}
@@ -99,3 +100,7 @@ export const TopicPane = ({ anchor, tabs }: Props) => {
     </PositionedDiv>
   );
 };
+
+export const TopicPane = memo(TopicPaneBase, (prevProps, nextProps) =>
+  deepIsEqual(prevProps, nextProps),
+);

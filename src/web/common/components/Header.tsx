@@ -82,7 +82,7 @@ export const Header = () => {
           </div>
 
           <div className="flex items-center gap-4">
-            <NavLink href="https://ameliorate.app/docs" target="_blank" data-tour="docs">
+            <NavLink href="https://ameliorate.app/docs" target="_blank">
               Docs
             </NavLink>
             <Link href={discordInvite} target="_blank" className="hidden sm:flex">
