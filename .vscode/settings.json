@@ -12,7 +12,10 @@
   "tailwindCSS.experimental.classRegex": [
     ["Classes \\=([^;]*);", "'([^']*)'"],
     ["Classes \\=([^;]*);", "\"([^\"]*)\""],
-    ["Classes \\=([^;]*);", "\\`([^\\`]*)\\`"]
+    ["Classes \\=([^;]*);", "\\`([^\\`]*)\\`"],
+    ["Class \\=([^;]*);", "'([^']*)'"],
+    ["Class \\=([^;]*);", "\"([^\"]*)\""],
+    ["Class \\=([^;]*);", "\\`([^\\`]*)\\`"]
   ],
   "typescript.preferences.importModuleSpecifier": "non-relative",
   "[prisma]": {

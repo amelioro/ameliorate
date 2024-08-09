@@ -30,13 +30,19 @@ interface MenuProps {
   isOpen: boolean;
   closeMenu: () => void;
   children: React.ReactNode;
+  className?: string;
 }
 
-export const Menu = ({ anchorEl, isOpen, closeMenu, children }: MenuProps) => {
+export const Menu = ({ anchorEl, isOpen, closeMenu, children, className }: MenuProps) => {
   const menuItemsWithCloseOnClick = addCloseOnClick(closeMenu, children);
 
   return (
-    <MuiMenu anchorEl={anchorEl} open={isOpen} onClose={closeMenu}>
+    <MuiMenu
+      PopoverClasses={{ paper: className }}
+      anchorEl={anchorEl}
+      open={isOpen}
+      onClose={closeMenu}
+    >
       {menuItemsWithCloseOnClick}
     </MuiMenu>
   );

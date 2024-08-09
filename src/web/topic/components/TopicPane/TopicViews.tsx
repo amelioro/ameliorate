@@ -10,22 +10,16 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
-import { useSessionUser } from "@/web/common/hooks";
 import { QuickViewSection } from "@/web/topic/components/TopicPane/QuickViewSection";
-import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { GeneralFilters } from "@/web/view/components/Filter/GeneralFilters";
 import { InformationFilters } from "@/web/view/components/Filter/InformationFilters";
 import { TableFilters } from "@/web/view/components/Filter/TableFilters";
 import { setFormat, useFormat } from "@/web/view/currentViewStore/store";
 
 export const TopicViews = () => {
-  const { sessionUser } = useSessionUser();
-  const userCanEditTopic = useUserCanEditTopicData(sessionUser?.username);
-
-  const [isFormatSectionOpen, setIsFormatSectionOpen] = useState(userCanEditTopic);
-  const [isTableFiltersSectionOpen, setIsTableFiltersSectionOpen] = useState(userCanEditTopic);
-  const [isInformationFiltersSectionOpen, setIsInformationFiltersSectionOpen] =
-    useState(userCanEditTopic);
+  const [isFormatSectionOpen, setIsFormatSectionOpen] = useState(false);
+  const [isTableFiltersSectionOpen, setIsTableFiltersSectionOpen] = useState(false);
+  const [isInformationFiltersSectionOpen, setIsInformationFiltersSectionOpen] = useState(false);
   const [isGeneralFiltersSectionOpen, setIsGeneralFiltersSectionOpen] = useState(false);
 
   const format = useFormat();

@@ -27,6 +27,7 @@ import { Diagram as DiagramData } from "@/web/topic/utils/diagram";
 import { type Edge, type Node } from "@/web/topic/utils/graph";
 import { hotkeys } from "@/web/topic/utils/hotkeys";
 import { FlowNodeType } from "@/web/topic/utils/node";
+import { tourIsOpen } from "@/web/tour/tour";
 import { useFlashlightMode } from "@/web/view/actionConfigStore";
 import { setSelected } from "@/web/view/currentViewStore/store";
 
@@ -107,6 +108,7 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
     if (!hotkeyEvent.keys) return;
     const [direction] = hotkeyEvent.keys;
     if (!direction || !panDirections.some((d) => direction === d)) return;
+    if (tourIsOpen()) return; // prevent moving between tour steps and panning at the same time. ideally maybe move tour if that's focused, pan otherwise? not sure
     pan(direction as PanDirection);
   });
 

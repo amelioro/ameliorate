@@ -1,7 +1,7 @@
 import { NestedMenuItem } from "mui-nested-menu";
 
 import { getSameCategoryNodeTypes } from "@/common/node";
-import { CloseOnClickMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
+import { ContextMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
 import { useSessionUser } from "@/web/common/hooks";
 import { changeNodeType } from "@/web/topic/store/actions";
 import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
@@ -33,14 +33,14 @@ export const ChangeNodeTypeMenuItem = ({ node, parentMenuOpen }: Props) => {
         }}
       >
         {getSameCategoryNodeTypes(node.type).map((type) => (
-          <CloseOnClickMenuItem
+          <ContextMenuItem
             key={type}
             onClick={() => {
               changeNodeType(node, type);
             }}
           >
             {nodeDecorations[type].title}
-          </CloseOnClickMenuItem>
+          </ContextMenuItem>
         ))}
       </NestedMenuItem>
     </>

@@ -10,7 +10,6 @@ import { useEffect } from "react";
 import { globals } from "@/pages/_app.styles";
 import Layout from "@/web/common/components/Layout";
 import { getThemeOptions } from "@/web/common/theme";
-import { steps } from "@/web/common/tour";
 import { trpc } from "@/web/common/trpc";
 import "@/web/common/globals.css";
 
@@ -44,7 +43,13 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         <ThemeProvider theme={theme}>
           <CssBaseline />
 
-          <TourProvider steps={steps} showNavigation={false} showBadge={false}>
+          <TourProvider
+            steps={[]}
+            showBadge={false}
+            styles={{ maskWrapper: () => ({ display: "none" }) }}
+            // super jank & brittle way to hide nav when there's only one step, because there's no exposed way for reactour do this...
+            className="rounded-2xl border !shadow-lg [&_>_div:nth-child(3):has(div_>_button:only-child)]:!hidden"
+          >
             <AuthUserProvider>
               <Layout>
                 <Component {...pageProps} />

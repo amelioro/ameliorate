@@ -1,7 +1,5 @@
 import { Global, useTheme } from "@emotion/react";
 import { useMediaQuery } from "@mui/material";
-import { useTour } from "@reactour/tour";
-import { useEffect } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import { ContextMenu } from "@/web/common/components/ContextMenu/ContextMenu";
@@ -9,6 +7,7 @@ import { useSessionUser } from "@/web/common/hooks";
 import { CriteriaTable } from "@/web/topic/components/CriteriaTable/CriteriaTable";
 import { Diagram } from "@/web/topic/components/Diagram/Diagram";
 import { TopicPane } from "@/web/topic/components/TopicPane/TopicPane";
+import { TourHelper } from "@/web/topic/components/TopicWorkspace/TourHelper";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { WorkspaceToolbar } from "@/web/topic/components/TopicWorkspace/WorkspaceToolbar";
 import { setScore } from "@/web/topic/store/actions";
@@ -20,7 +19,6 @@ import { userCanEditScores } from "@/web/topic/utils/score";
 import { getReadonlyMode, toggleReadonlyMode } from "@/web/view/actionConfigStore";
 import { getSelectedGraphPartId, setSelected, useFormat } from "@/web/view/currentViewStore/store";
 import { getPerspectives } from "@/web/view/perspectiveStore";
-import { setHasVisitedWorkspace, useHasVisitedWorkspace } from "@/web/view/userConfigStore";
 
 const useWorkspaceHotkeys = (user: { username: string } | null | undefined) => {
   useHotkeys([hotkeys.deselectPart], () => setSelected(null));
@@ -50,20 +48,9 @@ export const TopicWorkspace = () => {
   const usingBigScreen = useMediaQuery(theme.breakpoints.up("2xl"));
   const useSplitPanes = isLandscape && usingBigScreen;
 
-  const hasVisitedWorkspace = useHasVisitedWorkspace();
-  const { setIsOpen: openTour } = useTour();
-
-  useEffect(() => {
-    if (!hasVisitedWorkspace) {
-      openTour(true);
-      setHasVisitedWorkspace();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- no need to check this beyond initial render; either open the tour or don't
-  }, []);
-
   return (
     // hardcode workspace to take up full height of screen minus the navbar
-    <div className="flex h-[calc(100svh-49px)] flex-col">
+    <div className="relative flex h-[calc(100svh-49px)] flex-col">
       <WorkspaceToolbar />
 
       <div
@@ -101,6 +88,7 @@ export const TopicWorkspace = () => {
       </div>
 
       <ContextMenu />
+      <TourHelper />
     </div>
   );
 };
