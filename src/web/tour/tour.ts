@@ -25,3 +25,9 @@ export const startTour = (tour: Tour) => {
   reactour.setCurrentStep(0);
   reactour.setIsOpen(true);
 };
+
+export const tourIsOpen = () => {
+  if (!reactour) throw new Error("Tour props not set");
+
+  return reactour.isOpen;
+};
