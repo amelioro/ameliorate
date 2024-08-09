@@ -20,6 +20,7 @@ Below is a problem node, which suggests that "cars going too fast in my neighbor
             alt="problem node - cars going too fast"
             width={305}
             height={159}
+            key="https://github.com/user-attachments/assets/989d5310-6193-421c-9dac-aaaa55ba7ef6"
           />
         }
       />
@@ -39,6 +40,7 @@ Note that editing is only possible if you created the topic or if you were given
             alt="editing node text"
             width={322}
             height={205}
+            key="https://github.com/user-attachments/assets/ca5049a6-cb74-479a-a386-0fe22d2034e1"
           />
         }
       />
@@ -56,6 +58,7 @@ Note that editing is only possible if you created the topic or if you were given
             alt="adding a node"
             width={527}
             height={387}
+            key="https://github.com/user-attachments/assets/380f2603-33c9-46d7-997f-532831196ff4"
           />
         }
       />
@@ -75,6 +78,7 @@ Advanced actions and configuration can be found by clicking on the More Actions 
             alt="Other actions"
             width={413}
             height={476}
+            key="https://github.com/user-attachments/assets/61b07a44-bd48-49ef-b9ee-780b4c2a676c"
           />
         }
       />
@@ -92,6 +96,7 @@ Advanced actions and configuration can be found by clicking on the More Actions 
             alt="Edges"
             width={273}
             height={324}
+            key="https://github.com/user-attachments/assets/14892d89-d970-407d-bb41-64dd6ae4ac6b"
           />
         }
       />
@@ -104,7 +109,13 @@ Advanced actions and configuration can be found by clicking on the More Actions 
         stepTitle='Completed "Diagram Basics"! 🎉'
         text="Yay! Now you're ready to build your own diagrams."
         imageSlot={
-          <Image src={celebrateGif} alt="Celebrate completed tutorial!" width={256} height={143} />
+          <Image
+            src={celebrateGif}
+            alt="Celebrate completed tutorial!"
+            width={256}
+            height={143}
+            key={celebrateGif}
+          />
         }
       />
     ),
