@@ -70,7 +70,7 @@ export const QuestionDetails = ({ questionNode }: Props) => {
         {answers.length > 0 ? (
           answers.map((answer) => <EditableNode key={answer.id} node={answer} />)
         ) : (
-          <Typography>No answers yet!</Typography>
+          <Typography variant="body2">No answers yet!</Typography>
         )}
       </Stack>
     </>

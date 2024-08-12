@@ -33,7 +33,7 @@ export const SourceDetails = ({ sourceNode }: Props) => {
         spacing="2px"
       >
         {nodesRelevantFor.length === 0 && edgesRelevantFor.length === 0 && (
-          <Typography>No relevant parts yet!</Typography>
+          <Typography variant="body2">No relevant parts yet!</Typography>
         )}
         {nodesRelevantFor.length > 0 &&
           nodesRelevantFor.map((node) => <EditableNode key={node.id} node={node} />)}
@@ -85,7 +85,7 @@ export const SourceDetails = ({ sourceNode }: Props) => {
         {mentions.length > 0 ? (
           mentions.map((mentioned) => <EditableNode key={mentioned.id} node={mentioned} />)
         ) : (
-          <Typography>No mentioned facts or sources yet!</Typography>
+          <Typography variant="body2">No mentioned facts or sources yet!</Typography>
         )}
       </Stack>
     </>

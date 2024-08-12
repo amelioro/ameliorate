@@ -76,7 +76,7 @@ export const DetailsClaimsSection = ({ graphPart }: Props) => {
           {supports.length > 0 ? (
             supports.map((support) => <EditableNode key={support.id} node={support} />)
           ) : (
-            <Typography>No supports yet!</Typography>
+            <Typography variant="body2">No supports yet!</Typography>
           )}
         </Stack>
 
@@ -84,7 +84,7 @@ export const DetailsClaimsSection = ({ graphPart }: Props) => {
           {critiques.length > 0 ? (
             critiques.map((critique) => <EditableNode key={critique.id} node={critique} />)
           ) : (
-            <Typography>No critiques yet!</Typography>
+            <Typography variant="body2">No critiques yet!</Typography>
           )}
         </Stack>
       </Stack>

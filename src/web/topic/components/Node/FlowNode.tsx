@@ -17,7 +17,7 @@ import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { Node } from "@/web/topic/utils/graph";
 import { orientation } from "@/web/topic/utils/layout";
 import { FlowNodeType } from "@/web/topic/utils/node";
-import { getFlashlightMode, useReadonlyMode } from "@/web/view/actionConfigStore";
+import { getFlashlightMode } from "@/web/view/actionConfigStore";
 import { showNodeAndNeighbors } from "@/web/view/currentViewStore/filter";
 
 const convertToNode = (flowNode: NodeProps): Node => {
@@ -35,7 +35,6 @@ export const FlowNode = (flowNode: NodeProps) => {
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const isNeighborSelected = useIsNeighborSelected(flowNode.id);
   const isEdgeSelected = useIsEdgeSelected(flowNode.id);
-  const readonlyMode = useReadonlyMode();
 
   const node = useMemo(() => {
     return convertToNode(flowNode);
@@ -53,9 +52,9 @@ export const FlowNode = (flowNode: NodeProps) => {
     setAnimated(true);
   }, []);
 
-  const conditionallyShowAddButtons = readonlyMode
-    ? ""
-    : "[.selectable:hover_>_&]:flex [.selectable:has(>_div_>_.selected)_>_&]:flex";
+  const hoverShowAddButtons =
+    "[.selectable:hover_>_&]:flex [.selectable:has(>_div_>_.selected)_>_&]:flex";
+
   const positionParentButtons =
     orientation === "DOWN"
       ? // have to use [arbitrary] tw values because can't apply two translate-x-* class names
@@ -81,7 +80,7 @@ export const FlowNode = (flowNode: NodeProps) => {
           fromNodeType={node.type}
           as="parent"
           orientation={orientation}
-          className={`absolute hidden ${conditionallyShowAddButtons} ${positionParentButtons}`}
+          className={`absolute hidden ${hoverShowAddButtons} ${positionParentButtons}`}
         />
       )}
 
@@ -105,7 +104,7 @@ export const FlowNode = (flowNode: NodeProps) => {
           fromNodeType={node.type}
           as="child"
           orientation={orientation}
-          className={`absolute hidden ${conditionallyShowAddButtons} ${positionChildButtons}`}
+          className={`absolute hidden ${hoverShowAddButtons} ${positionChildButtons}`}
         />
       )}
     </>

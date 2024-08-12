@@ -83,7 +83,7 @@ export const DetailsResearchSection = ({ node }: Props) => {
             <EditableNode key={researchNode.id} node={researchNode} />
           ))
         ) : (
-          <Typography>No research nodes yet!</Typography>
+          <Typography variant="body2">No research nodes yet!</Typography>
         )}
       </Stack>
     </>

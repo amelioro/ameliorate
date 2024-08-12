@@ -32,7 +32,7 @@ export const FactDetails = ({ factNode }: Props) => {
         spacing="2px"
       >
         {nodesRelevantFor.length === 0 && edgesRelevantFor.length === 0 && (
-          <Typography>No relevant parts yet!</Typography>
+          <Typography variant="body2">No relevant parts yet!</Typography>
         )}
         {nodesRelevantFor.length > 0 &&
           nodesRelevantFor.map((node) => <EditableNode key={node.id} node={node} />)}
@@ -73,7 +73,7 @@ export const FactDetails = ({ factNode }: Props) => {
         {sources.length > 0 ? (
           sources.map((source) => <EditableNode key={source.id} node={source} />)
         ) : (
-          <Typography>No sources yet!</Typography>
+          <Typography variant="body2">No sources yet!</Typography>
         )}
       </Stack>
     </>
