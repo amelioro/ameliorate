@@ -3,6 +3,7 @@ import {
   ArrowForward,
   Build,
   Delete,
+  EditOff,
   Error,
   Group,
   Highlight,
@@ -22,7 +23,11 @@ import { useOnPlayground } from "@/web/topic/store/topicHooks";
 import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { redo, undo } from "@/web/topic/store/utilActions";
 import { useTemporalHooks } from "@/web/topic/store/utilHooks";
-import { toggleFlashlightMode, useFlashlightMode } from "@/web/view/actionConfigStore";
+import {
+  toggleFlashlightMode,
+  useFlashlightMode,
+  useReadonlyMode,
+} from "@/web/view/actionConfigStore";
 import {
   goBack,
   goForward,
@@ -43,6 +48,7 @@ export const WorkspaceToolbar = () => {
   const [canGoBack, canGoForward] = useCanGoBackForward();
   const isComparingPerspectives = useIsComparingPerspectives();
   const flashlightMode = useFlashlightMode();
+  const readonlyMode = useReadonlyMode();
   const [hasErrored, setHasErrored] = useState(false);
 
   const selectedGraphPart = useSelectedGraphPart();
@@ -162,6 +168,21 @@ export const WorkspaceToolbar = () => {
             sx={{ borderRadius: "50%", border: "0" }}
           >
             <Highlight />
+          </ToggleButton>
+        )}
+
+        {readonlyMode && (
+          <ToggleButton
+            value={readonlyMode}
+            title="Read-only mode"
+            aria-label="Read-only mode"
+            color="primary"
+            size="small"
+            selected={readonlyMode}
+            onClick={() => toggleFlashlightMode(!readonlyMode)}
+            sx={{ borderRadius: "50%", border: "0" }}
+          >
+            <EditOff />
           </ToggleButton>
         )}
 
