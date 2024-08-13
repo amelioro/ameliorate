@@ -155,7 +155,11 @@ export const EditTopicForm = ({ topic, user }: { topic: Topic; user: User }) => 
           <DialogContentText>This action cannot be undone.</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button disabled={deleteTopic.isLoading} onClick={() => setDeleteDialogOpen(false)}>
+          <Button
+            color="inherit"
+            disabled={deleteTopic.isLoading}
+            onClick={() => setDeleteDialogOpen(false)}
+          >
             Cancel
           </Button>
           <Button
