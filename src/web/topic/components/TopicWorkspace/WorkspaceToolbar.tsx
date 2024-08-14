@@ -25,6 +25,7 @@ import { redo, undo } from "@/web/topic/store/utilActions";
 import { useTemporalHooks } from "@/web/topic/store/utilHooks";
 import {
   toggleFlashlightMode,
+  toggleReadonlyMode,
   useFlashlightMode,
   useReadonlyMode,
 } from "@/web/view/actionConfigStore";
@@ -179,7 +180,7 @@ export const WorkspaceToolbar = () => {
             color="primary"
             size="small"
             selected={readonlyMode}
-            onClick={() => toggleFlashlightMode(!readonlyMode)}
+            onClick={() => toggleReadonlyMode()}
             sx={{ borderRadius: "50%", border: "0" }}
           >
             <EditOff />
