@@ -44,7 +44,7 @@ export const generateBasicViews = (): QuickView[] => {
     {
       id: shortUUID.generate(), // generate UUIDs that are easier to read (shorter, alphanumeric)
       type: "quick",
-      title: "All Structure",
+      title: "All Breakdown",
       order: 0,
       viewState: initialViewState,
     },
