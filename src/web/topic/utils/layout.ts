@@ -27,8 +27,8 @@ const compareNodes = (node1: Node, node2: Node) => {
  */
 const partitionOrders: { [type in NodeType]: string } = {
   // topic
-  problem: "null",
-  cause: "null",
+  problem: "0",
+  cause: "0",
   criterion: "1",
   effect: "calculated",
   benefit: "calculated",
