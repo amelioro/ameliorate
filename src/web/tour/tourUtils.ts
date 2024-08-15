@@ -3,3 +3,21 @@
  * avoid circular dependencies.
  */
 export const tourDefaultAnchorClass = "tour-anchor";
+
+export type Tour =
+  | "whereToLearn"
+
+  // builders
+  | "diagramBasics"
+  | "breakdown"
+  | "addingNuance"
+  | "criteriaTable"
+  | "buildingViews"
+
+  // viewers
+  | "readingDiagram"
+  | "navigatingTopic"
+
+  // experts
+  | "moreActions"
+  | "advancedFiltering";

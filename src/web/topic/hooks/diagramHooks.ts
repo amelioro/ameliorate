@@ -2,17 +2,22 @@ import { useState } from "react";
 
 import { Diagram, PositionedDiagram, PositionedNode } from "@/web/topic/utils/diagram";
 import { NodePosition, layout } from "@/web/topic/utils/layout";
-import { useForceNodesIntoLayers, useLayoutThoroughness } from "@/web/view/currentViewStore/layout";
+import {
+  useForceNodesIntoLayers,
+  useLayerNodeIslandsTogether,
+  useLayoutThoroughness,
+} from "@/web/view/currentViewStore/layout";
 import { useSelectedGraphPart } from "@/web/view/currentViewStore/store";
 
 // re-renders when diagram changes, but only re-layouts if graph parts are added or removed
 export const useLayoutedDiagram = (diagram: Diagram) => {
   const forceNodesIntoLayers = useForceNodesIntoLayers();
+  const layerNodeIslandsTogether = useLayerNodeIslandsTogether();
   const thoroughness = useLayoutThoroughness();
 
   const diagramHash = [...diagram.nodes, ...diagram.edges]
     .map((graphPart) => graphPart.id)
-    .concat(String(forceNodesIntoLayers), String(thoroughness)) // re-layout if this changes
+    .concat(String(forceNodesIntoLayers), String(layerNodeIslandsTogether), String(thoroughness)) // re-layout if this changes
     .join();
   const [prevDiagramHash, setPrevDiagramHash] = useState<string | null>(null);
 
@@ -25,7 +30,12 @@ export const useLayoutedDiagram = (diagram: Diagram) => {
     setPrevDiagramHash(diagramHash);
 
     const layoutDiagram = async () => {
-      const newLayoutedNodes = await layout(diagram, forceNodesIntoLayers, thoroughness);
+      const newLayoutedNodes = await layout(
+        diagram,
+        forceNodesIntoLayers,
+        layerNodeIslandsTogether,
+        thoroughness,
+      );
       setLayoutedNodes(newLayoutedNodes);
       setHasNewLayout(true);
     };

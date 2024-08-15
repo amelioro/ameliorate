@@ -27,8 +27,8 @@ const compareNodes = (node1: Node, node2: Node) => {
  */
 const partitionOrders: { [type in NodeType]: string } = {
   // topic
-  problem: "null",
-  cause: "null",
+  problem: "0",
+  cause: "0",
   criterion: "1",
   effect: "calculated",
   benefit: "calculated",
@@ -85,6 +85,7 @@ export interface NodePosition {
 export const layout = async (
   diagram: Diagram,
   partition: boolean,
+  layerNodeIslandsTogether: boolean,
   thoroughness: number,
 ): Promise<NodePosition[]> => {
   const { nodes, edges } = diagram;
@@ -109,6 +110,9 @@ export const layout = async (
     // ensure node islands don't overlap (needed for when node has 3 rows of text)
     // also keep node islands ("components") significantly spaced out, so they can be easily seen as separate
     "elk.spacing.componentComponent": "150", // default is 20
+    // e.g. if no problem ties solutions together, still put those solutions into the same partition (if partitions are on)
+    // want this off for cases when islands are truly unrelated, but on for when we're just hiding edges
+    "elk.separateConnectedComponents": layerNodeIslandsTogether ? "false" : "true",
     // prioritize shorter edges e.g. if a problem has multiple direct causes, prioritize putting
     // them in the same layer over using space efficiently
     "elk.layered.priority.shortness": "10",
