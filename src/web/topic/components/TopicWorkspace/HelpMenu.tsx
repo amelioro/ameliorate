@@ -15,6 +15,8 @@ import { CloseOnClickMenuItem } from "@/web/common/components/ContextMenu/CloseO
 import { Menu } from "@/web/common/components/Menu/Menu";
 import { docsPage, examplesPage, feedbackPage } from "@/web/common/urls";
 import { startTour } from "@/web/tour/tour";
+import { useTourProgress } from "@/web/tour/tourStore";
+import { Tour } from "@/web/tour/tourUtils";
 
 type TutorialTab = "Builders" | "Viewers" | "Experts";
 
@@ -24,12 +26,25 @@ interface Props {
 }
 
 export const HelpMenu = ({ helpAnchorEl, setHelpAnchorEl }: Props) => {
+  const { startedTours, completedTours } = useTourProgress();
+
   const [selectedTab, setSelectedTab] = useState<TutorialTab>("Builders");
 
   const helpMenuOpen = Boolean(helpAnchorEl);
+  if (!helpMenuOpen) return;
 
   const TutorialMenuItem = (props: MenuItemProps) => {
     return <CloseOnClickMenuItem {...props} closeMenu={() => setHelpAnchorEl(null)} />;
+  };
+
+  const getProgressIcon = (tour: Tour) => {
+    if (completedTours.includes(tour)) {
+      return " ✅";
+    } else if (startedTours.includes(tour)) {
+      return " 🟠";
+    }
+
+    return "";
   };
 
   return (
@@ -69,10 +84,10 @@ export const HelpMenu = ({ helpAnchorEl, setHelpAnchorEl }: Props) => {
 
         <TabPanel value="Builders" className="p-2">
           <TutorialMenuItem onClick={() => startTour("diagramBasics")}>
-            1. Diagram basics
+            1. Diagram basics{getProgressIcon("diagramBasics")}
           </TutorialMenuItem>
           <TutorialMenuItem onClick={() => startTour("breakdown")}>
-            2. Breaking down a problem
+            2. Breaking down a problem{getProgressIcon("breakdown")}
           </TutorialMenuItem>
           <TutorialMenuItem disabled>3. Adding nuance (coming soon)</TutorialMenuItem>
           <TutorialMenuItem disabled>4. Using a criteria table (coming soon)</TutorialMenuItem>

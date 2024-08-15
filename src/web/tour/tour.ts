@@ -1,26 +1,24 @@
+import { StepType } from "@reactour/tour";
+
 import { reactour } from "@/web/tour/reactourWrapper";
 import { breakdownSteps } from "@/web/tour/steps/breakdown";
 import { diagramBasicsSteps } from "@/web/tour/steps/diagramBasics";
 import { welcomeSteps } from "@/web/tour/steps/welcome";
-import { setHasSeenAnyTour } from "@/web/tour/tourStore";
+import { setHasSeenAnyTour, setTourHasCompleted, setTourHasStarted } from "@/web/tour/tourStore";
+import { Tour } from "@/web/tour/tourUtils";
 
-export type Tour =
-  | "whereToLearn"
+const markTourCompletedOnLastStep = (tour: Tour, steps: StepType[]) => {
+  const lastStep = steps[steps.length - 1];
+  if (!lastStep) throw new Error("No steps found for tour: " + tour);
 
-  // builders
-  | "diagramBasics"
-  | "breakdown"
-  | "addingNuance"
-  | "criteriaTable"
-  | "buildingViews"
+  const lastStepAction = lastStep.action;
 
-  // viewers
-  | "readingDiagram"
-  | "navigatingTopic"
-
-  // experts
-  | "moreActions"
-  | "advancedFiltering";
+  // eslint-disable-next-line functional/immutable-data
+  lastStep.action = (elem) => {
+    if (lastStepAction) lastStepAction(elem);
+    setTourHasCompleted(tour);
+  };
+};
 
 export const startFirstTour = (userCanEditTopicData: boolean) => {
   if (!reactour || !reactour.setSteps) throw new Error("Tour props not set");
@@ -35,13 +33,14 @@ export const startFirstTour = (userCanEditTopicData: boolean) => {
 export const startTour = (tour: Tour) => {
   if (!reactour || !reactour.setSteps) throw new Error("Tour props not set");
 
-  if (tour === "diagramBasics") {
-    reactour.setSteps(diagramBasicsSteps);
-  } else if (tour === "breakdown") {
-    reactour.setSteps(breakdownSteps);
-  }
+  const steps =
+    tour === "diagramBasics" ? diagramBasicsSteps : tour === "breakdown" ? breakdownSteps : [];
+  if (steps.length === 0) throw new Error("No steps found for tour: " + tour);
 
+  markTourCompletedOnLastStep(tour, steps);
+  reactour.setSteps(steps);
   reactour.setCurrentStep(0);
+  setTourHasStarted(tour);
 
   // Previously had issue where the first step of the new tour was being sized the same as the
   // previously-seen tour step, causing it to be positioned incorrectly.
