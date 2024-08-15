@@ -1,14 +1,31 @@
 import { reactour } from "@/web/tour/reactourWrapper";
+import { breakdownSteps } from "@/web/tour/steps/breakdown";
 import { diagramBasicsSteps } from "@/web/tour/steps/diagramBasics";
-import { whereToLearnSteps } from "@/web/tour/steps/whereToLearn";
+import { welcomeSteps } from "@/web/tour/steps/welcome";
 import { setHasSeenAnyTour } from "@/web/tour/tourStore";
 
-export type Tour = "whereToLearn" | "diagramBasics";
+export type Tour =
+  | "whereToLearn"
+
+  // builders
+  | "diagramBasics"
+  | "breakdown"
+  | "addingNuance"
+  | "criteriaTable"
+  | "buildingViews"
+
+  // viewers
+  | "readingDiagram"
+  | "navigatingTopic"
+
+  // experts
+  | "moreActions"
+  | "advancedFiltering";
 
 export const startFirstTour = (userCanEditTopicData: boolean) => {
   if (!reactour || !reactour.setSteps) throw new Error("Tour props not set");
 
-  const steps = whereToLearnSteps(userCanEditTopicData);
+  const steps = welcomeSteps(userCanEditTopicData);
   reactour.setSteps(steps);
   setHasSeenAnyTour();
 
@@ -20,6 +37,8 @@ export const startTour = (tour: Tour) => {
 
   if (tour === "diagramBasics") {
     reactour.setSteps(diagramBasicsSteps);
+  } else if (tour === "breakdown") {
+    reactour.setSteps(breakdownSteps);
   }
 
   reactour.setCurrentStep(0);

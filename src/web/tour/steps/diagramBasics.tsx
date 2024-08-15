@@ -1,8 +1,10 @@
+import { Button } from "@mui/material";
 import { StepType } from "@reactour/tour";
 import Image from "next/image";
 
 import { celebrateGif } from "@/web/common/urls";
 import { StepContent } from "@/web/tour/StepContent";
+import { startTour } from "@/web/tour/tour";
 import { tourDefaultAnchorClass } from "@/web/tour/tourUtils";
 
 export const diagramBasicsSteps: StepType[] = [
@@ -107,7 +109,12 @@ Advanced actions and configuration can be found by clicking on the More Actions 
     content: (
       <StepContent
         stepTitle='Completed "Diagram Basics"! 🎉'
-        text="Yay! Now you're ready to build your own diagrams."
+        text="Yay! Next, learn how to break down a problem."
+        actionSlot={
+          <Button variant="contained" onClick={() => startTour("breakdown")}>
+            Next: Breakdown
+          </Button>
+        }
         imageSlot={
           <Image
             src={celebrateGif}
