@@ -71,19 +71,23 @@ export const HelpMenu = ({ helpAnchorEl, setHelpAnchorEl }: Props) => {
           <TutorialMenuItem onClick={() => startTour("diagramBasics")}>
             1. Diagram basics
           </TutorialMenuItem>
-          <TutorialMenuItem disabled>2. Breaking down a problem (coming soon)</TutorialMenuItem>
+          <TutorialMenuItem onClick={() => startTour("breakdown")}>
+            2. Breaking down a problem
+          </TutorialMenuItem>
           <TutorialMenuItem disabled>3. Adding nuance (coming soon)</TutorialMenuItem>
-          <TutorialMenuItem disabled>4. Navigating a topic (coming soon)</TutorialMenuItem>
+          <TutorialMenuItem disabled>4. Using a criteria table (coming soon)</TutorialMenuItem>
+          <TutorialMenuItem disabled>5. Building views (coming soon)</TutorialMenuItem>
         </TabPanel>
 
         <TabPanel value="Viewers" className="p-2">
-          <TutorialMenuItem disabled>1. Reading a diagram (coming soon)</TutorialMenuItem>
+          <TutorialMenuItem disabled>1a. Reading a diagram (coming soon)</TutorialMenuItem>
+          <TutorialMenuItem disabled>1b. Using a criteria table (coming soon)</TutorialMenuItem>
           <TutorialMenuItem disabled>2. Navigating a topic (coming soon)</TutorialMenuItem>
         </TabPanel>
 
         <TabPanel value="Experts" className="p-2">
           <TutorialMenuItem disabled>More actions (coming soon)</TutorialMenuItem>
-          <TutorialMenuItem disabled>Building views (coming soon)</TutorialMenuItem>
+          <TutorialMenuItem disabled>Advanced filtering (coming soon)</TutorialMenuItem>
         </TabPanel>
       </TabContext>
     </Menu>

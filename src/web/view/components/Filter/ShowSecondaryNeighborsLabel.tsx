@@ -19,7 +19,7 @@ export const ShowSecondaryNeighborsLabel = ({ secondaryInfoCategory }: Props) =>
             <br />
             <br />
             For example, question and fact nodes are secondary if Research nodes are not being
-            displayed, but they're relevant for a problem node (and Structure nodes are being
+            displayed, but they're relevant for a problem node (and Breakdown nodes are being
             displayed).
           </span>
         }

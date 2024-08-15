@@ -27,14 +27,13 @@ export const StepContent = ({
       <Typography variant="body2" className="whitespace-pre-wrap">
         {text}
       </Typography>
-      {/* why does differing content sizes result in popover not aligning to bottom of page? */}
+      {actionSlot && <div className="flex pt-2">{actionSlot}</div>}
       {imageSlot && (
         // allow image to grow to fill height & width space while maintaining aspect ratio
-        <div className="flex min-h-0 flex-1 items-center justify-center *:max-h-full *:max-w-full *:object-contain">
+        <div className="flex min-h-0 flex-1 flex-col items-center justify-center pt-2 [&_>_img]:max-h-full [&_>_img]:max-w-full [&_>_img]:object-contain">
           {imageSlot}
         </div>
       )}
-      {actionSlot && <div className="flex pt-2">{actionSlot}</div>}
     </div>
   );
 };
