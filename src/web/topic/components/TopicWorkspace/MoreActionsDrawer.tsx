@@ -11,6 +11,7 @@ import {
   Info,
   Layers,
   PhotoCamera,
+  PowerInput,
   Route,
   Upload,
   WbTwilight,
@@ -49,7 +50,9 @@ import { toggleShowImpliedEdges, useShowImpliedEdges } from "@/web/view/currentV
 import {
   setLayoutThoroughness,
   toggleForceNodesIntoLayers,
+  toggleLayerNodeIslandsTogether,
   useForceNodesIntoLayers,
+  useLayerNodeIslandsTogether,
   useLayoutThoroughness,
 } from "@/web/view/currentViewStore/layout";
 import { resetView, useFormat } from "@/web/view/currentViewStore/store";
@@ -115,6 +118,7 @@ export const MoreActionsDrawer = ({
   const showImpliedEdges = useShowImpliedEdges();
   const unrestrictedEditing = useUnrestrictedEditing();
   const forceNodesIntoLayers = useForceNodesIntoLayers();
+  const layerNodeIslandsTogether = useLayerNodeIslandsTogether();
   const flashlightMode = useFlashlightMode();
   const readonlyMode = useReadonlyMode();
   const layoutThoroughness = useLayoutThoroughness();
@@ -289,6 +293,18 @@ export const MoreActionsDrawer = ({
                 sx={{ borderRadius: "50%", border: "0" }}
               >
                 <Layers />
+              </ToggleButton>
+              <ToggleButton
+                value={layerNodeIslandsTogether}
+                title="Layer node islands together"
+                aria-label="Layer node islands together"
+                color="primary"
+                size="small"
+                selected={layerNodeIslandsTogether}
+                onClick={() => toggleLayerNodeIslandsTogether(!layerNodeIslandsTogether)}
+                sx={{ borderRadius: "50%", border: "0" }}
+              >
+                <PowerInput />
               </ToggleButton>
             </ListItem>
 
