@@ -89,7 +89,9 @@ export const HelpMenu = ({ helpAnchorEl, setHelpAnchorEl }: Props) => {
           <TutorialMenuItem onClick={() => startTour("breakdown")}>
             2. Breaking down a problem{getProgressIcon("breakdown")}
           </TutorialMenuItem>
-          <TutorialMenuItem disabled>3. Adding nuance (coming soon)</TutorialMenuItem>
+          <TutorialMenuItem onClick={() => startTour("addingNuance")}>
+            3. Adding nuance{getProgressIcon("addingNuance")}
+          </TutorialMenuItem>
           <TutorialMenuItem disabled>4. Using a criteria table (coming soon)</TutorialMenuItem>
           <TutorialMenuItem disabled>5. Building views (coming soon)</TutorialMenuItem>
         </TabPanel>

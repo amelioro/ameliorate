@@ -17,7 +17,7 @@ export const breakdownSteps: StepType[] = [
         stepTitle="Laying things out"
         text={
           <span>
-            <NodeTypeText type="problem" /> details are laid at the top,{" "}
+            <NodeTypeText type="problem" /> details are laid at the top, with{" "}
             <NodeTypeText type="solution" /> details at the bottom across from those, and solution
             tradeoffs in between.
             <br />
@@ -206,8 +206,8 @@ export const breakdownSteps: StepType[] = [
         stepTitle='Completed "Breaking down a problem"! 🎉'
         text="Woohoo! Next, learn how to add nuance to your topic."
         actionSlot={
-          <Button disabled variant="contained" onClick={() => startTour("addingNuance")}>
-            Next: Nuance (coming soon)
+          <Button variant="contained" onClick={() => startTour("addingNuance")}>
+            Next: Nuance
           </Button>
         }
         imageSlot={

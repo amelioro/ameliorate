@@ -1,11 +1,18 @@
 import { StepType } from "@reactour/tour";
 
 import { reactour } from "@/web/tour/reactourWrapper";
+import { addingNuanceSteps } from "@/web/tour/steps/addingNuance";
 import { breakdownSteps } from "@/web/tour/steps/breakdown";
 import { diagramBasicsSteps } from "@/web/tour/steps/diagramBasics";
 import { welcomeSteps } from "@/web/tour/steps/welcome";
 import { setHasSeenAnyTour, setTourHasCompleted, setTourHasStarted } from "@/web/tour/tourStore";
 import { Tour } from "@/web/tour/tourUtils";
+
+const tours: Partial<Record<Tour, StepType[]>> = {
+  diagramBasics: diagramBasicsSteps,
+  breakdown: breakdownSteps,
+  addingNuance: addingNuanceSteps,
+};
 
 const markTourCompletedOnLastStep = (tour: Tour, steps: StepType[]) => {
   const lastStep = steps[steps.length - 1];
@@ -33,9 +40,8 @@ export const startFirstTour = (userCanEditTopicData: boolean) => {
 export const startTour = (tour: Tour) => {
   if (!reactour || !reactour.setSteps) throw new Error("Tour props not set");
 
-  const steps =
-    tour === "diagramBasics" ? diagramBasicsSteps : tour === "breakdown" ? breakdownSteps : [];
-  if (steps.length === 0) throw new Error("No steps found for tour: " + tour);
+  const steps = tours[tour];
+  if (!steps || steps.length === 0) throw new Error("No steps found for tour: " + tour);
 
   markTourCompletedOnLastStep(tour, steps);
   reactour.setSteps(steps);

@@ -4,6 +4,8 @@
  */
 export const tourDefaultAnchorClass = "tour-anchor";
 
+export const detailsPaneSelector = `.MuiDrawer-root:has(div[id$="-Details"])`;
+
 export type Tour =
   | "whereToLearn"
 
