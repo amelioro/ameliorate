@@ -17,7 +17,7 @@ export const breakdownSteps: StepType[] = [
         stepTitle="Laying things out"
         text={
           <span>
-            <NodeTypeText type="problem" /> details are laid at the top,{" "}
+            <NodeTypeText type="problem" /> details are laid at the top, with{" "}
             <NodeTypeText type="solution" /> details at the bottom across from those, and solution
             tradeoffs in between.
             <br />
