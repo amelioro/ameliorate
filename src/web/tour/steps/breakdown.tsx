@@ -206,8 +206,8 @@ export const breakdownSteps: StepType[] = [
         stepTitle='Completed "Breaking down a problem"! 🎉'
         text="Woohoo! Next, learn how to add nuance to your topic."
         actionSlot={
-          <Button disabled variant="contained" onClick={() => startTour("addingNuance")}>
-            Next: Nuance (coming soon)
+          <Button variant="contained" onClick={() => startTour("addingNuance")}>
+            Next: Nuance
           </Button>
         }
         imageSlot={
