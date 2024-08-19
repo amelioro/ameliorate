@@ -92,13 +92,15 @@ export const HelpMenu = ({ helpAnchorEl, setHelpAnchorEl }: Props) => {
           <TutorialMenuItem onClick={() => startTour("addingNuance")}>
             3. Adding nuance{getProgressIcon("addingNuance")}
           </TutorialMenuItem>
-          <TutorialMenuItem disabled>4. Using a criteria table (coming soon)</TutorialMenuItem>
+          <TutorialMenuItem onClick={() => startTour("evaluatingTradeoffs")}>
+            4. Evaluating tradeoffs{getProgressIcon("evaluatingTradeoffs")}
+          </TutorialMenuItem>
           <TutorialMenuItem disabled>5. Building views (coming soon)</TutorialMenuItem>
         </TabPanel>
 
         <TabPanel value="Viewers" className="p-2">
           <TutorialMenuItem disabled>1a. Reading a diagram (coming soon)</TutorialMenuItem>
-          <TutorialMenuItem disabled>1b. Using a criteria table (coming soon)</TutorialMenuItem>
+          <TutorialMenuItem disabled>1b. Evaluating tradeoffs (coming soon)</TutorialMenuItem>
           <TutorialMenuItem disabled>2. Navigating a topic (coming soon)</TutorialMenuItem>
         </TabPanel>
 
