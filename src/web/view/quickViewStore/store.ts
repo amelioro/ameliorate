@@ -209,6 +209,9 @@ const updateURLParams = (viewTitle: string | null) => {
   void Router.replace({ pathname, query: currentParams.toString() }, undefined, { shallow: true });
 };
 
+// eslint-disable-next-line functional/no-let -- hack to avoid deselecting the view immediately after selecting it
+let selectingView = false;
+
 /**
  * @param viewId id of the view to select, or null to deselect
  */
@@ -219,6 +222,8 @@ export const selectView = (viewId: string | null) => {
 
   if (newlySelectedView === undefined) throw new Error(`No view with id ${viewId}`);
 
+  selectingView = true;
+
   // would be annoying to make undo update the currentViewStore too, so just don't impact undo/redo at all when selecting
   // just use the currentViewStore's back to undo something like that.
   useQuickViewStore.temporal.getState().pause();
@@ -227,6 +232,8 @@ export const selectView = (viewId: string | null) => {
 
   if (newlySelectedView !== null) setView(newlySelectedView.viewState);
   updateURLParams(newlySelectedView?.title ?? null);
+
+  selectingView = false;
 };
 
 export const selectViewFromState = (viewState: ViewState) => {
@@ -332,14 +339,11 @@ export const getPersistState = () => {
 
 // misc
 // if a quick view is selected and the view changes from that, deselect it
-emitter.on("changedView", (newView) => {
+emitter.on("changedView", (_newView) => {
+  if (selectingView) return; // don't deselect the view if this event was triggered by selection
+
   const state = useQuickViewStore.getState();
   if (state.selectedViewId === null) return;
 
-  const selectedView = state.views.find((view) => view.id === state.selectedViewId);
-  if (selectedView === undefined) throw new Error(`No view with id ${state.selectedViewId}`);
-
-  if (!deepIsEqual(selectedView.viewState, newView)) {
-    selectView(null);
-  }
+  selectView(null);
 });
