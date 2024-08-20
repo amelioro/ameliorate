@@ -13,7 +13,7 @@ export type Tour =
   | "diagramBasics"
   | "breakdown"
   | "addingNuance"
-  | "criteriaTable"
+  | "evaluatingTradeoffs"
   | "buildingViews"
 
   // viewers

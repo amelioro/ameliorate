@@ -1,3 +1,4 @@
+import { emitter } from "@/web/common/event";
 import { useCurrentViewStore } from "@/web/view/currentViewStore/store";
 
 // hooks
@@ -16,12 +17,18 @@ export const useLayoutThoroughness = () => {
 // actions
 export const toggleForceNodesIntoLayers = (force: boolean) => {
   useCurrentViewStore.setState({ forceNodesIntoLayers: force });
+
+  emitter.emit("changedLayoutConfig");
 };
 
 export const toggleLayerNodeIslandsTogether = (layer: boolean) => {
   useCurrentViewStore.setState({ layerNodeIslandsTogether: layer });
+
+  emitter.emit("changedLayoutConfig");
 };
 
 export const setLayoutThoroughness = (thoroughness: number) => {
   useCurrentViewStore.setState({ layoutThoroughness: thoroughness });
+
+  emitter.emit("changedLayoutConfig");
 };

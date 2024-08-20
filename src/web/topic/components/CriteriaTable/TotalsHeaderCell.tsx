@@ -18,11 +18,14 @@ export const TotalsHeaderCell = () => {
           >
             <span>
               A Solution's Total is an estimate of good the solution is. The total is positive if
-              scores indicate that it embodies the criteria, and negative if it doesn't. The
+              scores indicate that it fulfills the criteria, and negative if it doesn't. The
               importance scores of each criteria emphasize how positive or negative the total is.
               <br />
               <br />
-              <button onClick={() => setShowExactDetails(!showExactDetails)}>
+              <button
+                className="rounded border bg-gray-600 p-1 hover:bg-gray-700"
+                onClick={() => setShowExactDetails(!showExactDetails)}
+              >
                 {!showExactDetails ? "Show exact details" : "Hide exact details"}
               </button>
               <br />
@@ -32,44 +35,46 @@ export const TotalsHeaderCell = () => {
             {showExactDetails && (
               <>
                 <span>
-                  To represent that embodying is a good or bad thing, the embody scores are shifted
-                  from the range 1 to 9, to the range -4 to 4.
+                  To represent that fulfilling is a good or bad thing, the fulfill scores are
+                  shifted from the range 1 to 9, to the range -4 to 4.
                   <br />
-                  To have the importance emphasize these embody scores, the importance is multiplied
-                  by the embody score.
+                  To have the importance emphasize these fulfill scores, the importance is
+                  multiplied by the fulfill score.
                   <br />
-                  To represent that lowest importance should make embody scores irrelevant,
+                  To represent that lowest importance should make fulfill scores irrelevant,
                   importance scores are shifted from the range 1 to 9, to the range 0 to 8.
                   <br />
                   <br />
                   The Solution Total is therefore calculated by multiplying the adjusted score of
-                  how well the solution embodies each criterion, times the adjusted score of how
+                  how well the solution fulfills each criterion, times the adjusted score of how
                   important each criterion is, and summing these results.
                   <br />
                   <br />
                   For example, in the following table:
                 </span>
                 <table>
-                  <tr>
-                    <td>problem: cars going too fast in neighborhood</td>
-                    <td>solution: stop sign</td>
-                    <td>solution: kids at play sign</td>
-                  </tr>
-                  <tr>
-                    <td>criterion: conveys reasoning to slow down (6)</td>
-                    <td>1</td>
-                    <td>9</td>
-                  </tr>
-                  <tr>
-                    <td>criterion: actually gets cars to slow down (8)</td>
-                    <td>8</td>
-                    <td>1</td>
-                  </tr>
-                  <tr>
-                    <td>Solution Score</td>
-                    <td>1</td>
-                    <td>-8</td>
-                  </tr>
+                  <tbody>
+                    <tr>
+                      <td>problem: cars going too fast in neighborhood</td>
+                      <td>solution: stop sign</td>
+                      <td>solution: kids at play sign</td>
+                    </tr>
+                    <tr>
+                      <td>criterion: conveys reasoning to slow down (6)</td>
+                      <td>1</td>
+                      <td>9</td>
+                    </tr>
+                    <tr>
+                      <td>criterion: actually gets cars to slow down (8)</td>
+                      <td>8</td>
+                      <td>1</td>
+                    </tr>
+                    <tr>
+                      <td>Solution Score</td>
+                      <td>1</td>
+                      <td>-8</td>
+                    </tr>
+                  </tbody>
                 </table>
                 <br />
                 <span>

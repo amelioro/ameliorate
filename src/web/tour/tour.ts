@@ -4,6 +4,7 @@ import { reactour } from "@/web/tour/reactourWrapper";
 import { addingNuanceSteps } from "@/web/tour/steps/addingNuance";
 import { breakdownSteps } from "@/web/tour/steps/breakdown";
 import { diagramBasicsSteps } from "@/web/tour/steps/diagramBasics";
+import { evaluatingTradeoffsSteps } from "@/web/tour/steps/evaluatingTradeoffs";
 import { welcomeSteps } from "@/web/tour/steps/welcome";
 import { setHasSeenAnyTour, setTourHasCompleted, setTourHasStarted } from "@/web/tour/tourStore";
 import { Tour } from "@/web/tour/tourUtils";
@@ -12,6 +13,7 @@ const tours: Partial<Record<Tour, StepType[]>> = {
   diagramBasics: diagramBasicsSteps,
   breakdown: breakdownSteps,
   addingNuance: addingNuanceSteps,
+  evaluatingTradeoffs: evaluatingTradeoffsSteps,
 };
 
 const markTourCompletedOnLastStep = (tour: Tour, steps: StepType[]) => {
