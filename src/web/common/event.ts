@@ -8,6 +8,7 @@ interface Events {
   errored: () => void;
   overwroteTopicData: () => void;
   changedDiagramFilter: () => void;
+  changedLayoutConfig: () => void;
   changedView: (newView: ViewState) => void;
   viewTopicDetails: () => void;
   partSelected: (partId: string | null) => void;

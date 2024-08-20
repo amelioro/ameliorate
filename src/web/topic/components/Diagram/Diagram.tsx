@@ -116,11 +116,13 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
     const unbindAdd = emitter.on("addNode", (node) => setNewNodeId(node.id));
     const unbindLoad = emitter.on("overwroteTopicData", () => setTopicViewUpdated(true));
     const unbindFilter = emitter.on("changedDiagramFilter", () => setTopicViewUpdated(true));
+    const unbindLayoutConfig = emitter.on("changedLayoutConfig", () => setTopicViewUpdated(true));
 
     return () => {
       unbindAdd();
       unbindLoad();
       unbindFilter();
+      unbindLayoutConfig();
     };
   }, []);
 
