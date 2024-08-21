@@ -5,8 +5,9 @@ import { Link } from "@/web/common/components/Link";
 import { discordInvite } from "@/web/common/urls";
 import { StepContent } from "@/web/tour/StepContent";
 import { startTour } from "@/web/tour/tour";
+import { Tour } from "@/web/tour/tourUtils";
 
-export const welcomeSteps = (userCanEditTopicData: boolean): StepType[] => {
+export const welcomeSteps = (nextTour: Tour): StepType[] => {
   return [
     {
       selector: 'button[title="Help"] > svg',
@@ -30,11 +31,19 @@ export const welcomeSteps = (userCanEditTopicData: boolean): StepType[] => {
             </>
           }
           actionSlot={
-            userCanEditTopicData ? (
+            nextTour === "diagramBasics" ? (
               <Button variant="contained" onClick={() => startTour("diagramBasics")}>
                 Start: Diagram Basics
               </Button>
-            ) : undefined
+            ) : nextTour === "readingDiagram" ? (
+              <Button variant="contained" onClick={() => startTour("readingDiagram")}>
+                Start: Reading Diagrams
+              </Button>
+            ) : (
+              <Button variant="contained" onClick={() => startTour("evaluatingTradeoffs")}>
+                Start: Evaluating Tradeoffs
+              </Button>
+            )
           }
           heightClass="" // override default to let height be based on content size here - we don't care about matching height of other steps because this tutorial only has one step
         />

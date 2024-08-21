@@ -9,13 +9,16 @@ import { useEffect, useMemo } from "react";
 import { useSessionUser } from "@/web/common/hooks";
 import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { setReactTourProps } from "@/web/tour/reactourWrapper";
-import { startFirstTour } from "@/web/tour/tour";
+import { startWelcomeTour } from "@/web/tour/tour";
 import { useHasSeenAnyTour } from "@/web/tour/tourStore";
-import { tourDefaultAnchorClass } from "@/web/tour/tourUtils";
+import { Tour, tourDefaultAnchorClass } from "@/web/tour/tourUtils";
+import { useFormat } from "@/web/view/currentViewStore/store";
 
 export const TourHelper = () => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
+
+  const format = useFormat();
 
   const hasSeenAnyTour = useHasSeenAnyTour();
   const tourProps = useTour();
@@ -25,8 +28,16 @@ export const TourHelper = () => {
   useEffect(() => {
     setReactTourProps(memoTourProps); // keep tour props up-to-date in a global variable for easy access
 
-    if (!hasSeenAnyTour) startFirstTour(userCanEditTopicData);
-  }, [hasSeenAnyTour, memoTourProps, userCanEditTopicData]);
+    if (!hasSeenAnyTour) {
+      const nextTour: Tour = userCanEditTopicData
+        ? "diagramBasics"
+        : format === "diagram"
+          ? "readingDiagram"
+          : "evaluatingTradeoffs";
+
+      startWelcomeTour(nextTour);
+    }
+  }, [hasSeenAnyTour, memoTourProps, userCanEditTopicData, format]);
 
   // Seems like there's no way to position the tour without an anchor, so here's one for when we
   // don't have a particular element we care to point out.

@@ -39,10 +39,10 @@ const markTourCompletedOnLastStep = (tour: Tour, steps: StepType[]) => {
   };
 };
 
-export const startFirstTour = (userCanEditTopicData: boolean) => {
+export const startWelcomeTour = (nextTour: Tour) => {
   if (!reactour || !reactour.setSteps) throw new Error("Tour props not set");
 
-  const steps = welcomeSteps(userCanEditTopicData);
+  const steps = welcomeSteps(nextTour);
   reactour.setSteps(steps);
   setHasSeenAnyTour();
 
