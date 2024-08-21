@@ -99,7 +99,7 @@ export const HelpMenu = ({ helpAnchorEl, setHelpAnchorEl }: Props) => {
           <TutorialMenuItem onClick={() => startTour("addingNuance")}>
             3. Adding nuance{getProgressIcon("addingNuance")}
           </TutorialMenuItem>
-          <TutorialMenuItem onClick={() => startTour("evaluatingTradeoffs")}>
+          <TutorialMenuItem onClick={() => startTour("evaluatingTradeoffs", "buildingViews")}>
             4. Evaluating tradeoffs{getProgressIcon("evaluatingTradeoffs")}
           </TutorialMenuItem>
           <TutorialMenuItem onClick={() => startTour("buildingViews")}>
@@ -111,7 +111,7 @@ export const HelpMenu = ({ helpAnchorEl, setHelpAnchorEl }: Props) => {
           <TutorialMenuItem onClick={() => startTour("readingDiagram")}>
             1a. Reading a diagram{getProgressIcon("readingDiagram")}
           </TutorialMenuItem>
-          <TutorialMenuItem onClick={() => startTour("evaluatingTradeoffs")}>
+          <TutorialMenuItem onClick={() => startTour("evaluatingTradeoffs", "navigatingTopic")}>
             1b. Evaluating tradeoffs{getProgressIcon("evaluatingTradeoffs")}
           </TutorialMenuItem>
           <TutorialMenuItem onClick={() => startTour("navigatingTopic")}>

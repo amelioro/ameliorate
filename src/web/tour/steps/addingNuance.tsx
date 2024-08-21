@@ -180,7 +180,10 @@ export const addingNuanceSteps: StepType[] = [
         stepTitle='Completed "Adding nuance"! 🎉'
         text="Let's goooo! Next, learn how to use the Criteria Table to compare tradeoffs."
         actionSlot={
-          <Button variant="contained" onClick={() => startTour("evaluatingTradeoffs")}>
+          <Button
+            variant="contained"
+            onClick={() => startTour("evaluatingTradeoffs", "buildingViews")}
+          >
             Next: Evaluating tradeoffs
           </Button>
         }

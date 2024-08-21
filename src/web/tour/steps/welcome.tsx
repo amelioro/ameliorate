@@ -40,7 +40,10 @@ export const welcomeSteps = (nextTour: Tour): StepType[] => {
                 Start: Reading Diagrams
               </Button>
             ) : (
-              <Button variant="contained" onClick={() => startTour("evaluatingTradeoffs")}>
+              <Button
+                variant="contained"
+                onClick={() => startTour("evaluatingTradeoffs", "navigatingTopic")}
+              >
                 Start: Evaluating Tradeoffs
               </Button>
             )

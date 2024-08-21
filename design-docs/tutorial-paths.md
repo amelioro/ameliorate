@@ -7,7 +7,6 @@ flowchart TD
     welcome
     only-start-manually
     auto-start
-    auto-start-2[auto-start]
     done
 
     %% builders
@@ -21,14 +20,12 @@ flowchart TD
     1a-reading-diagram
     1b-criteria-table
     2-navigating-topic
-    3a-criteria-table[1b-criteria-table]
-    3b-reading-diagram[1a-reading-diagram]
 
     %% experts
     more-actions
     advanced-filtering
 
-    auto-start-2 -- opened workspace + <br/> hasn't seen this --> welcome
+    auto-start -- opened workspace + <br/> hasn't seen this --> welcome
 
     welcome -- has edit access --> 1-diagram-basics
     welcome -- no edit access + viewing diagram --> 1a-reading-diagram
@@ -37,23 +34,19 @@ flowchart TD
     1-diagram-basics --> 2-breakdown
     2-breakdown --> 3-adding-nuance
     3-adding-nuance --> 4-criteria-table
-    4-criteria-table --> 5-building-views
+    4-criteria-table -- if in builders path --> 5-building-views
     5-building-views --> done
 
     1a-reading-diagram -- hasn't seen this --> 2-navigating-topic
-    1b-criteria-table -- hasn't seen this --> 2-navigating-topic
+    1a-reading-diagram -- has seen navigating --> done
+    1b-criteria-table -- in viewers path + <br/> hasn't seen this --> 2-navigating-topic
+    1b-criteria-table -- in viewers path + <br/> has seen navigating --> done
 
-    2-navigating-topic -- didn't click other format --> done
+    2-navigating-topic --> done
 
-    2-navigating-topic -- clicked table format + <br/> hasn't seen this --> 3a-criteria-table
-    3a-criteria-table --> done
-
-    2-navigating-topic -- clicked diagram format + <br/> hasn't seen this --> 3b-reading-diagram
-    3b-reading-diagram --> done
-
-    auto-start -- clicked table format + <br/> hasn't seen this + <br/> tour not open --> 3a-criteria-table
-    auto-start -- clicked diagram format + <br/> hasn't seen this + <br/> tour not open --> 3b-reading-diagram
-    auto-start-2 -- opened workspace + <br/> has seen welcome + <br/> hasn't seen this + <br/> has edit access --> 1-diagram-basics
+    auto-start -- viewed table format + <br/> has seen welcome + <br/> has no edit access + <br/> hasn't seen this + <br/> tour not open --> 1b-criteria-table
+    auto-start -- viewed diagram format + <br/> has seen welcome + <br/> has no edit access + <br/> hasn't seen this + <br/> tour not open --> 1a-reading-diagram
+    auto-start -- opened workspace + <br/> has seen welcome + <br/> has edit access + <br/> hasn't seen this --> 1-diagram-basics
 
     only-start-manually --> more-actions
     more-actions --> done
@@ -63,6 +56,5 @@ flowchart TD
 
     style only-start-manually stroke:green
     style auto-start stroke:green
-    style auto-start-2 stroke:green
     style done stroke:red
 ```
