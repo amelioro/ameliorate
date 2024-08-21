@@ -6,6 +6,7 @@ import { breakdownSteps } from "@/web/tour/steps/breakdown";
 import { buildingViewsSteps } from "@/web/tour/steps/buildingViews";
 import { diagramBasicsSteps } from "@/web/tour/steps/diagramBasics";
 import { evaluatingTradeoffsSteps } from "@/web/tour/steps/evaluatingTradeoffs";
+import { navigatingTopicSteps } from "@/web/tour/steps/navigatingTopic";
 import { readingDiagramSteps } from "@/web/tour/steps/readingDiagram";
 import { welcomeSteps } from "@/web/tour/steps/welcome";
 import { setHasSeenAnyTour, setTourHasCompleted, setTourHasStarted } from "@/web/tour/tourStore";
@@ -21,6 +22,8 @@ const tours: Partial<Record<Tour, StepType[]>> = {
 
   // viewers
   readingDiagram: readingDiagramSteps,
+  // 1b. evaluatingTradeoffs is reused from builders path
+  navigatingTopic: navigatingTopicSteps,
 };
 
 const markTourCompletedOnLastStep = (tour: Tour, steps: StepType[]) => {

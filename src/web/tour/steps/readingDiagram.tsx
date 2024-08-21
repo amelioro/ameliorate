@@ -113,7 +113,7 @@ export const readingDiagramSteps: StepType[] = [
         stepTitle='Completed "Reading a diagram"! 🎉'
         text="Woot woot! Next, learn how to navigate all the information in a topic."
         actionSlot={
-          <Button disabled variant="contained" onClick={() => startTour("navigatingTopic")}>
+          <Button variant="contained" onClick={() => startTour("navigatingTopic")}>
             Next: Navigating
           </Button>
         }
