@@ -9,7 +9,7 @@ import { getEvaluatingTradeoffsSteps } from "@/web/tour/steps/evaluatingTradeoff
 import { navigatingTopicSteps } from "@/web/tour/steps/navigatingTopic";
 import { readingDiagramSteps } from "@/web/tour/steps/readingDiagram";
 import { welcomeSteps } from "@/web/tour/steps/welcome";
-import { setHasSeenAnyTour, setTourHasCompleted, setTourHasStarted } from "@/web/tour/tourStore";
+import { setTourHasCompleted, setTourHasStarted } from "@/web/tour/tourStore";
 import { Tour } from "@/web/tour/tourUtils";
 
 /**
@@ -58,7 +58,7 @@ export const startWelcomeTour = (nextTour: Tour) => {
 
   const steps = welcomeSteps(nextTour);
   reactour.setSteps(steps);
-  setHasSeenAnyTour();
+  setTourHasCompleted("welcome");
 
   reactour.setIsOpen(true);
 };

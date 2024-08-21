@@ -10,7 +10,7 @@ import { useSessionUser } from "@/web/common/hooks";
 import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { setReactTourProps } from "@/web/tour/reactourWrapper";
 import { startWelcomeTour } from "@/web/tour/tour";
-import { useHasSeenAnyTour } from "@/web/tour/tourStore";
+import { getTourHasCompleted } from "@/web/tour/tourStore";
 import { Tour, tourDefaultAnchorClass } from "@/web/tour/tourUtils";
 import { useFormat } from "@/web/view/currentViewStore/store";
 
@@ -20,7 +20,6 @@ export const TourHelper = () => {
 
   const format = useFormat();
 
-  const hasSeenAnyTour = useHasSeenAnyTour();
   const tourProps = useTour();
   // eslint-disable-next-line react-hooks/exhaustive-deps -- hack to only update when values in tourProps change
   const memoTourProps = useMemo(() => tourProps, [JSON.stringify(tourProps)]);
@@ -28,7 +27,7 @@ export const TourHelper = () => {
   useEffect(() => {
     setReactTourProps(memoTourProps); // keep tour props up-to-date in a global variable for easy access
 
-    if (!hasSeenAnyTour) {
+    if (!getTourHasCompleted("welcome")) {
       const nextTour: Tour = userCanEditTopicData
         ? "diagramBasics"
         : format === "diagram"
@@ -37,7 +36,7 @@ export const TourHelper = () => {
 
       startWelcomeTour(nextTour);
     }
-  }, [hasSeenAnyTour, memoTourProps, userCanEditTopicData, format]);
+  }, [memoTourProps, userCanEditTopicData, format]);
 
   // Seems like there's no way to position the tour without an anchor, so here's one for when we
   // don't have a particular element we care to point out.

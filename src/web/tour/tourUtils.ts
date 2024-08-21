@@ -8,7 +8,7 @@ export const detailsPaneSelector = `.MuiDrawer-root:has(div[id$="-Details"])`;
 export const viewsPaneSelector = `.MuiDrawer-root:has(div[id$="-Views"])`;
 
 export type Tour =
-  | "whereToLearn"
+  | "welcome"
 
   // builders
   | "diagramBasics"

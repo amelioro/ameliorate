@@ -4,13 +4,11 @@ import { persist } from "zustand/middleware";
 import { Tour } from "@/web/tour/tourUtils";
 
 interface TourStoreState {
-  hasSeenAnyTour: boolean;
   startedTours: Tour[];
   completedTours: Tour[];
 }
 
 const initialState: TourStoreState = {
-  hasSeenAnyTour: false,
   startedTours: [],
   completedTours: [],
 };
@@ -22,10 +20,6 @@ const useTourStore = create<TourStoreState>()(
 );
 
 // hooks
-export const useHasSeenAnyTour = () => {
-  return useTourStore((state) => state.hasSeenAnyTour);
-};
-
 export const useTourProgress = () => {
   return useTourStore((state) => ({
     startedTours: state.startedTours,
@@ -34,10 +28,6 @@ export const useTourProgress = () => {
 };
 
 // actions
-export const setHasSeenAnyTour = () => {
-  useTourStore.setState({ hasSeenAnyTour: true });
-};
-
 export const setTourHasStarted = (tour: Tour) => {
   const startedTours = useTourStore.getState().startedTours;
 
@@ -56,4 +46,9 @@ export const setTourHasCompleted = (tour: Tour) => {
   useTourStore.setState({
     completedTours: [...completedTours, tour],
   });
+};
+
+// utils
+export const getTourHasCompleted = (tour: Tour) => {
+  return useTourStore.getState().completedTours.includes(tour);
 };
