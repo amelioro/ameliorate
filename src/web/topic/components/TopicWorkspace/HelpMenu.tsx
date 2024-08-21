@@ -95,7 +95,9 @@ export const HelpMenu = ({ helpAnchorEl, setHelpAnchorEl }: Props) => {
           <TutorialMenuItem onClick={() => startTour("evaluatingTradeoffs")}>
             4. Evaluating tradeoffs{getProgressIcon("evaluatingTradeoffs")}
           </TutorialMenuItem>
-          <TutorialMenuItem disabled>5. Building views (coming soon)</TutorialMenuItem>
+          <TutorialMenuItem onClick={() => startTour("buildingViews")}>
+            5. Building views{getProgressIcon("buildingViews")}
+          </TutorialMenuItem>
         </TabPanel>
 
         <TabPanel value="Viewers" className="p-2">
@@ -105,8 +107,8 @@ export const HelpMenu = ({ helpAnchorEl, setHelpAnchorEl }: Props) => {
         </TabPanel>
 
         <TabPanel value="Experts" className="p-2">
-          <TutorialMenuItem disabled>More actions (coming soon)</TutorialMenuItem>
-          <TutorialMenuItem disabled>Advanced filtering (coming soon)</TutorialMenuItem>
+          <TutorialMenuItem disabled>More actions (coming later)</TutorialMenuItem>
+          <TutorialMenuItem disabled>Advanced filtering (coming later)</TutorialMenuItem>
         </TabPanel>
       </TabContext>
     </Menu>

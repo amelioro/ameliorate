@@ -119,8 +119,8 @@ export const evaluatingTradeoffsSteps: StepType[] = [
         stepTitle='Completed "Evaluating tradeoffs"! 🎉'
         text="Woot woot! Next and finally, learn how to build views to quickly look at different aspects of your topic."
         actionSlot={
-          <Button disabled variant="contained" onClick={() => startTour("buildingViews")}>
-            Next: Building Views (coming soon)
+          <Button variant="contained" onClick={() => startTour("buildingViews")}>
+            Next: Building Views
           </Button>
         }
         imageSlot={
