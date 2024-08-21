@@ -101,7 +101,9 @@ export const HelpMenu = ({ helpAnchorEl, setHelpAnchorEl }: Props) => {
         </TabPanel>
 
         <TabPanel value="Viewers" className="p-2">
-          <TutorialMenuItem disabled>1a. Reading a diagram (coming soon)</TutorialMenuItem>
+          <TutorialMenuItem onClick={() => startTour("readingDiagram")}>
+            1a. Reading a diagram{getProgressIcon("readingDiagram")}
+          </TutorialMenuItem>
           <TutorialMenuItem disabled>1b. Evaluating tradeoffs (coming soon)</TutorialMenuItem>
           <TutorialMenuItem disabled>2. Navigating a topic (coming soon)</TutorialMenuItem>
         </TabPanel>

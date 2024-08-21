@@ -6,16 +6,21 @@ import { breakdownSteps } from "@/web/tour/steps/breakdown";
 import { buildingViewsSteps } from "@/web/tour/steps/buildingViews";
 import { diagramBasicsSteps } from "@/web/tour/steps/diagramBasics";
 import { evaluatingTradeoffsSteps } from "@/web/tour/steps/evaluatingTradeoffs";
+import { readingDiagramSteps } from "@/web/tour/steps/readingDiagram";
 import { welcomeSteps } from "@/web/tour/steps/welcome";
 import { setHasSeenAnyTour, setTourHasCompleted, setTourHasStarted } from "@/web/tour/tourStore";
 import { Tour } from "@/web/tour/tourUtils";
 
 const tours: Partial<Record<Tour, StepType[]>> = {
+  // builders
   diagramBasics: diagramBasicsSteps,
   breakdown: breakdownSteps,
   addingNuance: addingNuanceSteps,
   evaluatingTradeoffs: evaluatingTradeoffsSteps,
   buildingViews: buildingViewsSteps,
+
+  // viewers
+  readingDiagram: readingDiagramSteps,
 };
 
 const markTourCompletedOnLastStep = (tour: Tour, steps: StepType[]) => {
