@@ -7,9 +7,9 @@ import { celebrateGif } from "@/web/common/urls";
 import { NodeTypeText } from "@/web/topic/components/NodeTypeText/NodeTypeText";
 import { StepContent } from "@/web/tour/StepContent";
 import { startTour } from "@/web/tour/tour";
-import { tourDefaultAnchorClass } from "@/web/tour/tourUtils";
+import { Tour, tourDefaultAnchorClass } from "@/web/tour/tourUtils";
 
-export const readingDiagramSteps: StepType[] = [
+export const getReadingDiagramSteps = (nextTour?: Tour | null): StepType[] => [
   {
     selector: `.${tourDefaultAnchorClass}`,
     content: (
@@ -106,27 +106,46 @@ export const readingDiagramSteps: StepType[] = [
       />
     ),
   },
-  {
-    selector: `.${tourDefaultAnchorClass}`,
-    content: (
-      <StepContent
-        stepTitle='Completed "Reading a diagram"! 🎉'
-        text="Woot woot! Next, learn how to navigate all the information in a topic."
-        actionSlot={
-          <Button variant="contained" onClick={() => startTour("navigatingTopic")}>
-            Next: Navigating
-          </Button>
-        }
-        imageSlot={
-          <Image
-            src={celebrateGif}
-            alt="Celebrate completed tutorial!"
-            width={256}
-            height={143}
-            key={celebrateGif}
+  nextTour === undefined
+    ? {
+        selector: `.${tourDefaultAnchorClass}`,
+        content: (
+          <StepContent
+            stepTitle='Completed "Reading a diagram"! 🎉'
+            text="Woot woot! Next, learn how to navigate all the information in a topic."
+            actionSlot={
+              <Button variant="contained" onClick={() => startTour("navigatingTopic")}>
+                Next: Navigating
+              </Button>
+            }
+            imageSlot={
+              <Image
+                src={celebrateGif}
+                alt="Celebrate completed tutorial!"
+                width={256}
+                height={143}
+                key={celebrateGif}
+              />
+            }
           />
-        }
-      />
-    ),
-  },
+        ),
+      }
+    : {
+        selector: `.${tourDefaultAnchorClass}`,
+        content: (
+          <StepContent
+            stepTitle='Completed "Reading a diagram"! 🎉'
+            text="Woot woot! Now you're ready to understand other people's diagrams in Ameliorate 🔥."
+            imageSlot={
+              <Image
+                src={celebrateGif}
+                alt="Celebrate completed tutorial!"
+                width={256}
+                height={143}
+                key={celebrateGif}
+              />
+            }
+          />
+        ),
+      },
 ];

@@ -7,7 +7,9 @@ import { useSessionUser } from "@/web/common/hooks";
 import { CriteriaTable } from "@/web/topic/components/CriteriaTable/CriteriaTable";
 import { Diagram } from "@/web/topic/components/Diagram/Diagram";
 import { TopicPane } from "@/web/topic/components/TopicPane/TopicPane";
-import { TourHelper } from "@/web/topic/components/TopicWorkspace/TourHelper";
+import { TourAnchor } from "@/web/topic/components/TopicWorkspace/TourAnchor";
+import { TourController } from "@/web/topic/components/TopicWorkspace/TourController";
+import { TourSetter } from "@/web/topic/components/TopicWorkspace/TourSetter";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { WorkspaceToolbar } from "@/web/topic/components/TopicWorkspace/WorkspaceToolbar";
 import { setScore } from "@/web/topic/store/actions";
@@ -88,7 +90,10 @@ export const TopicWorkspace = () => {
       </div>
 
       <ContextMenu />
-      <TourHelper />
+
+      <TourSetter />
+      <TourAnchor />
+      <TourController />
     </div>
   );
 };

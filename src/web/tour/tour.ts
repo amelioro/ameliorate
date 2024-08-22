@@ -7,7 +7,7 @@ import { buildingViewsSteps } from "@/web/tour/steps/buildingViews";
 import { diagramBasicsSteps } from "@/web/tour/steps/diagramBasics";
 import { getEvaluatingTradeoffsSteps } from "@/web/tour/steps/evaluatingTradeoffs";
 import { navigatingTopicSteps } from "@/web/tour/steps/navigatingTopic";
-import { readingDiagramSteps } from "@/web/tour/steps/readingDiagram";
+import { getReadingDiagramSteps } from "@/web/tour/steps/readingDiagram";
 import { welcomeSteps } from "@/web/tour/steps/welcome";
 import { setTourHasCompleted, setTourHasStarted } from "@/web/tour/tourStore";
 import { Tour } from "@/web/tour/tourUtils";
@@ -31,7 +31,7 @@ const getTourSteps = (tour: Tour, nextTour?: Tour | null) => {
 
     // viewers
     case "readingDiagram":
-      return readingDiagramSteps;
+      return getReadingDiagramSteps(nextTour);
     // 1b. evaluatingTradeoffs is reused from builders path
     case "navigatingTopic":
       return navigatingTopicSteps;
