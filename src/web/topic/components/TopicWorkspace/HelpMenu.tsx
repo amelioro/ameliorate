@@ -13,7 +13,9 @@ import { Dispatch, SetStateAction, useState } from "react";
 
 import { CloseOnClickMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
 import { Menu } from "@/web/common/components/Menu/Menu";
+import { useSessionUser } from "@/web/common/hooks";
 import { docsPage, examplesPage, feedbackPage } from "@/web/common/urls";
+import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { startTour } from "@/web/tour/tour";
 import { useTourProgress } from "@/web/tour/tourStore";
 import { Tour } from "@/web/tour/tourUtils";
@@ -26,9 +28,14 @@ interface Props {
 }
 
 export const HelpMenu = ({ helpAnchorEl, setHelpAnchorEl }: Props) => {
+  const { sessionUser } = useSessionUser();
+  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
+
   const { startedTours, completedTours } = useTourProgress();
 
-  const [selectedTab, setSelectedTab] = useState<TutorialTab>("Builders");
+  const [selectedTab, setSelectedTab] = useState<TutorialTab>(
+    userCanEditTopicData ? "Builders" : "Viewers",
+  );
 
   const helpMenuOpen = Boolean(helpAnchorEl);
   if (!helpMenuOpen) return;
@@ -92,7 +99,7 @@ export const HelpMenu = ({ helpAnchorEl, setHelpAnchorEl }: Props) => {
           <TutorialMenuItem onClick={() => startTour("addingNuance")}>
             3. Adding nuance{getProgressIcon("addingNuance")}
           </TutorialMenuItem>
-          <TutorialMenuItem onClick={() => startTour("evaluatingTradeoffs")}>
+          <TutorialMenuItem onClick={() => startTour("evaluatingTradeoffs", "buildingViews")}>
             4. Evaluating tradeoffs{getProgressIcon("evaluatingTradeoffs")}
           </TutorialMenuItem>
           <TutorialMenuItem onClick={() => startTour("buildingViews")}>
@@ -101,9 +108,15 @@ export const HelpMenu = ({ helpAnchorEl, setHelpAnchorEl }: Props) => {
         </TabPanel>
 
         <TabPanel value="Viewers" className="p-2">
-          <TutorialMenuItem disabled>1a. Reading a diagram (coming soon)</TutorialMenuItem>
-          <TutorialMenuItem disabled>1b. Evaluating tradeoffs (coming soon)</TutorialMenuItem>
-          <TutorialMenuItem disabled>2. Navigating a topic (coming soon)</TutorialMenuItem>
+          <TutorialMenuItem onClick={() => startTour("readingDiagram")}>
+            1a. Reading a diagram{getProgressIcon("readingDiagram")}
+          </TutorialMenuItem>
+          <TutorialMenuItem onClick={() => startTour("evaluatingTradeoffs", "navigatingTopic")}>
+            1b. Evaluating tradeoffs{getProgressIcon("evaluatingTradeoffs")}
+          </TutorialMenuItem>
+          <TutorialMenuItem onClick={() => startTour("navigatingTopic")}>
+            2. Navigating a topic{getProgressIcon("navigatingTopic")}
+          </TutorialMenuItem>
         </TabPanel>
 
         <TabPanel value="Experts" className="p-2">

@@ -5,17 +5,39 @@ import { addingNuanceSteps } from "@/web/tour/steps/addingNuance";
 import { breakdownSteps } from "@/web/tour/steps/breakdown";
 import { buildingViewsSteps } from "@/web/tour/steps/buildingViews";
 import { diagramBasicsSteps } from "@/web/tour/steps/diagramBasics";
-import { evaluatingTradeoffsSteps } from "@/web/tour/steps/evaluatingTradeoffs";
+import { getEvaluatingTradeoffsSteps } from "@/web/tour/steps/evaluatingTradeoffs";
+import { navigatingTopicSteps } from "@/web/tour/steps/navigatingTopic";
+import { readingDiagramSteps } from "@/web/tour/steps/readingDiagram";
 import { welcomeSteps } from "@/web/tour/steps/welcome";
-import { setHasSeenAnyTour, setTourHasCompleted, setTourHasStarted } from "@/web/tour/tourStore";
+import { setTourHasCompleted, setTourHasStarted } from "@/web/tour/tourStore";
 import { Tour } from "@/web/tour/tourUtils";
 
-const tours: Partial<Record<Tour, StepType[]>> = {
-  diagramBasics: diagramBasicsSteps,
-  breakdown: breakdownSteps,
-  addingNuance: addingNuanceSteps,
-  evaluatingTradeoffs: evaluatingTradeoffsSteps,
-  buildingViews: buildingViewsSteps,
+/**
+ * @param nextTour null if there should be no next tour, undefined to use the tour's default
+ */
+const getTourSteps = (tour: Tour, nextTour?: Tour | null) => {
+  switch (tour) {
+    // builders
+    case "diagramBasics":
+      return diagramBasicsSteps;
+    case "breakdown":
+      return breakdownSteps;
+    case "addingNuance":
+      return addingNuanceSteps;
+    case "evaluatingTradeoffs":
+      return getEvaluatingTradeoffsSteps(nextTour);
+    case "buildingViews":
+      return buildingViewsSteps;
+
+    // viewers
+    case "readingDiagram":
+      return readingDiagramSteps;
+    // 1b. evaluatingTradeoffs is reused from builders path
+    case "navigatingTopic":
+      return navigatingTopicSteps;
+    default:
+      throw new Error("No steps found for tour: " + tour);
+  }
 };
 
 const markTourCompletedOnLastStep = (tour: Tour, steps: StepType[]) => {
@@ -31,21 +53,21 @@ const markTourCompletedOnLastStep = (tour: Tour, steps: StepType[]) => {
   };
 };
 
-export const startFirstTour = (userCanEditTopicData: boolean) => {
+export const startWelcomeTour = (nextTour: Tour) => {
   if (!reactour || !reactour.setSteps) throw new Error("Tour props not set");
 
-  const steps = welcomeSteps(userCanEditTopicData);
+  const steps = welcomeSteps(nextTour);
   reactour.setSteps(steps);
-  setHasSeenAnyTour();
+  setTourHasCompleted("welcome");
 
   reactour.setIsOpen(true);
 };
 
-export const startTour = (tour: Tour) => {
+export const startTour = (tour: Tour, nextTour?: Tour | null) => {
   if (!reactour || !reactour.setSteps) throw new Error("Tour props not set");
 
-  const steps = tours[tour];
-  if (!steps || steps.length === 0) throw new Error("No steps found for tour: " + tour);
+  const steps = getTourSteps(tour, nextTour);
+  if (steps.length === 0) throw new Error("No steps found for tour: " + tour);
 
   markTourCompletedOnLastStep(tour, steps);
   reactour.setSteps(steps);

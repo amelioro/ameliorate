@@ -6,9 +6,9 @@ import { Link } from "@/web/common/components/Link";
 import { celebrateGif } from "@/web/common/urls";
 import { StepContent } from "@/web/tour/StepContent";
 import { startTour } from "@/web/tour/tour";
-import { tourDefaultAnchorClass } from "@/web/tour/tourUtils";
+import { Tour, tourDefaultAnchorClass } from "@/web/tour/tourUtils";
 
-export const evaluatingTradeoffsSteps: StepType[] = [
+export const getEvaluatingTradeoffsSteps = (nextTour?: Tour | null): StepType[] => [
   {
     selector: `.${tourDefaultAnchorClass}`,
     content: (
@@ -112,27 +112,70 @@ export const evaluatingTradeoffsSteps: StepType[] = [
       />
     ),
   },
-  {
-    selector: `.${tourDefaultAnchorClass}`,
-    content: (
-      <StepContent
-        stepTitle='Completed "Evaluating tradeoffs"! 🎉'
-        text="Woot woot! Next and finally, learn how to build views to quickly look at different aspects of your topic."
-        actionSlot={
-          <Button variant="contained" onClick={() => startTour("buildingViews")}>
-            Next: Building Views
-          </Button>
-        }
-        imageSlot={
-          <Image
-            src={celebrateGif}
-            alt="Celebrate completed tutorial!"
-            width={256}
-            height={143}
-            key={celebrateGif}
+  nextTour === "buildingViews"
+    ? {
+        selector: `.${tourDefaultAnchorClass}`,
+        content: (
+          <StepContent
+            stepTitle='Completed "Evaluating tradeoffs"! 🎉'
+            text="Woot woot! Next and finally, learn how to build views to quickly look at different aspects of your topic."
+            actionSlot={
+              <Button variant="contained" onClick={() => startTour("buildingViews")}>
+                Next: Building Views
+              </Button>
+            }
+            imageSlot={
+              <Image
+                src={celebrateGif}
+                alt="Celebrate completed tutorial!"
+                width={256}
+                height={143}
+                key={celebrateGif}
+              />
+            }
           />
+        ),
+      }
+    : nextTour === "navigatingTopic"
+      ? {
+          selector: `.${tourDefaultAnchorClass}`,
+          content: (
+            <StepContent
+              stepTitle='Completed "Evaluating tradeoffs"! 🎉'
+              text="Woot woot! Next and finally, learn how to navigate all the information that's in a topic."
+              actionSlot={
+                <Button variant="contained" onClick={() => startTour("navigatingTopic")}>
+                  Next: Navigating
+                </Button>
+              }
+              imageSlot={
+                <Image
+                  src={celebrateGif}
+                  alt="Celebrate completed tutorial!"
+                  width={256}
+                  height={143}
+                  key={celebrateGif}
+                />
+              }
+            />
+          ),
         }
-      />
-    ),
-  },
+      : {
+          selector: `.${tourDefaultAnchorClass}`,
+          content: (
+            <StepContent
+              stepTitle='Completed "Evaluating tradeoffs"! 🎉'
+              text="Woot woot! Now you're ready to compare solutions in Ameliorate 🔥."
+              imageSlot={
+                <Image
+                  src={celebrateGif}
+                  alt="Celebrate completed tutorial!"
+                  width={256}
+                  height={143}
+                  key={celebrateGif}
+                />
+              }
+            />
+          ),
+        },
 ];
