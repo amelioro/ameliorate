@@ -55,22 +55,20 @@ export const TutorialController = () => {
   // tutorials to auto start when format changes
   if (formatChanged) {
     if (
-      !userCanEditTopicData &&
       format === "diagram" &&
+      !userCanEditTopicData &&
       !getTutorialHasStarted("readingDiagram") &&
       !getTutorialHasStarted("diagramBasics") // don't start Viewers tutorial if already did Builders because Builders is more comprehensive than Viewers
     ) {
       // timeout to prevent error rendering TourProvider within TutorialController (startTutorial results in such a render)
       setTimeout(() => startTutorial("readingDiagram", null));
       setTutorialIsOpening(true);
-      return;
     }
 
     if (format === "table" && !getTutorialHasStarted("evaluatingTradeoffs")) {
       // timeout to prevent error rendering TourProvider within TutorialController (startTutorial results in such a render)
       setTimeout(() => startTutorial("evaluatingTradeoffs", null));
       setTutorialIsOpening(true);
-      return;
     }
   }
 
