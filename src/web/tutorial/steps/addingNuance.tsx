@@ -4,13 +4,13 @@ import Image from "next/image";
 
 import { celebrateGif } from "@/web/common/urls";
 import { NodeTypeText } from "@/web/topic/components/NodeTypeText/NodeTypeText";
-import { StepContent } from "@/web/tour/StepContent";
-import { startTour } from "@/web/tour/tour";
-import { detailsPaneSelector, tourDefaultAnchorClass } from "@/web/tour/tourUtils";
+import { StepContent } from "@/web/tutorial/StepContent";
+import { startTutorial } from "@/web/tutorial/tutorial";
+import { detailsPaneSelector, tutorialDefaultAnchorClass } from "@/web/tutorial/tutorialUtils";
 
 export const addingNuanceSteps: StepType[] = [
   {
-    selector: `.${tourDefaultAnchorClass}`,
+    selector: `.${tutorialDefaultAnchorClass}`,
     content: (
       <StepContent
         stepTitle="Scoring"
@@ -36,7 +36,7 @@ export const addingNuanceSteps: StepType[] = [
     ),
   },
   {
-    selector: `.${tourDefaultAnchorClass}`,
+    selector: `.${tutorialDefaultAnchorClass}`,
     content: (
       <StepContent
         stepTitle="Perspectives"
@@ -151,7 +151,7 @@ export const addingNuanceSteps: StepType[] = [
     ),
   },
   {
-    selector: `.${tourDefaultAnchorClass}`,
+    selector: `.${tutorialDefaultAnchorClass}`,
     content: (
       <StepContent
         stepTitle="Indicators"
@@ -174,7 +174,7 @@ export const addingNuanceSteps: StepType[] = [
     ),
   },
   {
-    selector: `.${tourDefaultAnchorClass}`,
+    selector: `.${tutorialDefaultAnchorClass}`,
     content: (
       <StepContent
         stepTitle='Completed "Adding nuance"! 🎉'
@@ -182,7 +182,7 @@ export const addingNuanceSteps: StepType[] = [
         actionSlot={
           <Button
             variant="contained"
-            onClick={() => startTour("evaluatingTradeoffs", "buildingViews")}
+            onClick={() => startTutorial("evaluatingTradeoffs", "buildingViews")}
           >
             Next: Evaluating tradeoffs
           </Button>

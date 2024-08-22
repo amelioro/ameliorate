@@ -5,8 +5,8 @@ import Image from "next/image";
 import { Link } from "@/web/common/components/Link";
 import { celebrateGif } from "@/web/common/urls";
 import { NodeTypeText } from "@/web/topic/components/NodeTypeText/NodeTypeText";
-import { StepContent } from "@/web/tour/StepContent";
-import { tourDefaultAnchorClass, viewsPaneSelector } from "@/web/tour/tourUtils";
+import { StepContent } from "@/web/tutorial/StepContent";
+import { tutorialDefaultAnchorClass, viewsPaneSelector } from "@/web/tutorial/tutorialUtils";
 
 export const buildingViewsSteps: StepType[] = [
   {
@@ -297,7 +297,7 @@ export const buildingViewsSteps: StepType[] = [
     ),
   },
   {
-    selector: `.${tourDefaultAnchorClass}`,
+    selector: `.${tutorialDefaultAnchorClass}`,
     content: (
       <StepContent
         stepTitle='Completed "Building views"! 🎉'

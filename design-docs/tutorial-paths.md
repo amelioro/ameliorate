@@ -20,6 +20,8 @@ flowchart TD
     1a-reading-diagram
     1b-criteria-table
     2-navigating-topic
+    3a-reading-diagram[1a-reading-diagram]
+    3b-criteria-table[1b-criteria-table]
 
     %% experts
     more-actions
@@ -37,16 +39,17 @@ flowchart TD
     4-criteria-table -- if in builders path --> 5-building-views
     5-building-views --> done
 
-    1a-reading-diagram -- hasn't seen this --> 2-navigating-topic
-    1a-reading-diagram -- has seen navigating --> done
-    1b-criteria-table -- in viewers path + <br/> hasn't seen this --> 2-navigating-topic
-    1b-criteria-table -- in viewers path + <br/> has seen navigating --> done
+    1a-reading-diagram --> 2-navigating-topic
+    1b-criteria-table -- if in viewers path --> 2-navigating-topic
 
     2-navigating-topic --> done
 
-    auto-start -- viewed table format + <br/> has seen welcome + <br/> has no edit access + <br/> hasn't seen this + <br/> tour not open --> 1b-criteria-table
-    auto-start -- viewed diagram format + <br/> has seen welcome + <br/> has no edit access + <br/> hasn't seen this + <br/> tour not open --> 1a-reading-diagram
+    auto-start -- viewed table format + <br/> has seen welcome + <br/> hasn't seen this --> 3b-criteria-table
+    auto-start -- viewed diagram format + <br/> has seen welcome + <br/> has no edit access + <br/> hasn't seen this + <br/> hasn't seen Builders path --> 3a-reading-diagram
     auto-start -- opened workspace + <br/> has seen welcome + <br/> has edit access + <br/> hasn't seen this --> 1-diagram-basics
+
+    3a-reading-diagram --> done
+    3b-criteria-table --> done
 
     only-start-manually --> more-actions
     more-actions --> done

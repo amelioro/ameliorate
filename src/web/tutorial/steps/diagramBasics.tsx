@@ -3,13 +3,13 @@ import { StepType } from "@reactour/tour";
 import Image from "next/image";
 
 import { celebrateGif } from "@/web/common/urls";
-import { StepContent } from "@/web/tour/StepContent";
-import { startTour } from "@/web/tour/tour";
-import { tourDefaultAnchorClass } from "@/web/tour/tourUtils";
+import { StepContent } from "@/web/tutorial/StepContent";
+import { startTutorial } from "@/web/tutorial/tutorial";
+import { tutorialDefaultAnchorClass } from "@/web/tutorial/tutorialUtils";
 
 export const diagramBasicsSteps: StepType[] = [
   {
-    selector: `.${tourDefaultAnchorClass}`,
+    selector: `.${tutorialDefaultAnchorClass}`,
     content: (
       <StepContent
         stepTitle="Nodes"
@@ -29,7 +29,7 @@ Below is a problem node, which suggests that "cars going too fast in my neighbor
     ),
   },
   {
-    selector: `.${tourDefaultAnchorClass}`,
+    selector: `.${tutorialDefaultAnchorClass}`,
     content: (
       <StepContent
         stepTitle="Editing node text"
@@ -49,7 +49,7 @@ Note that editing is only possible if you created the topic or if you were given
     ),
   },
   {
-    selector: `.${tourDefaultAnchorClass}`,
+    selector: `.${tutorialDefaultAnchorClass}`,
     content: (
       <StepContent
         stepTitle="Adding a node"
@@ -67,7 +67,7 @@ Note that editing is only possible if you created the topic or if you were given
     ),
   },
   {
-    selector: `.${tourDefaultAnchorClass}`,
+    selector: `.${tutorialDefaultAnchorClass}`,
     content: (
       <StepContent
         stepTitle="Other actions"
@@ -87,7 +87,7 @@ Advanced actions and configuration can be found by clicking on the More Actions 
     ),
   },
   {
-    selector: `.${tourDefaultAnchorClass}`,
+    selector: `.${tutorialDefaultAnchorClass}`,
     content: (
       <StepContent
         stepTitle="Edges"
@@ -105,13 +105,13 @@ Advanced actions and configuration can be found by clicking on the More Actions 
     ),
   },
   {
-    selector: `.${tourDefaultAnchorClass}`,
+    selector: `.${tutorialDefaultAnchorClass}`,
     content: (
       <StepContent
         stepTitle='Completed "Diagram Basics"! 🎉'
         text="Yay! Next, learn how to break down a problem."
         actionSlot={
-          <Button variant="contained" onClick={() => startTour("breakdown")}>
+          <Button variant="contained" onClick={() => startTutorial("breakdown")}>
             Next: Breakdown
           </Button>
         }
