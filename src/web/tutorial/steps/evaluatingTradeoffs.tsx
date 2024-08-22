@@ -4,13 +4,13 @@ import Image from "next/image";
 
 import { Link } from "@/web/common/components/Link";
 import { celebrateGif } from "@/web/common/urls";
-import { StepContent } from "@/web/tour/StepContent";
-import { startTour } from "@/web/tour/tour";
-import { Tour, tourDefaultAnchorClass } from "@/web/tour/tourUtils";
+import { StepContent } from "@/web/tutorial/StepContent";
+import { startTutorial } from "@/web/tutorial/tutorial";
+import { Tutorial, tutorialDefaultAnchorClass } from "@/web/tutorial/tutorialUtils";
 
-export const getEvaluatingTradeoffsSteps = (nextTour?: Tour | null): StepType[] => [
+export const getEvaluatingTradeoffsSteps = (nextTutorial?: Tutorial | null): StepType[] => [
   {
-    selector: `.${tourDefaultAnchorClass}`,
+    selector: `.${tutorialDefaultAnchorClass}`,
     content: (
       <StepContent
         stepTitle="Viewing the table"
@@ -36,7 +36,7 @@ export const getEvaluatingTradeoffsSteps = (nextTour?: Tour | null): StepType[] 
     ),
   },
   {
-    selector: `.${tourDefaultAnchorClass}`,
+    selector: `.${tutorialDefaultAnchorClass}`,
     content: (
       <StepContent
         stepTitle="Scores"
@@ -75,7 +75,7 @@ export const getEvaluatingTradeoffsSteps = (nextTour?: Tour | null): StepType[] 
     ),
   },
   {
-    selector: `.${tourDefaultAnchorClass}`,
+    selector: `.${tutorialDefaultAnchorClass}`,
     content: (
       <StepContent
         stepTitle="Solution totals"
@@ -112,15 +112,15 @@ export const getEvaluatingTradeoffsSteps = (nextTour?: Tour | null): StepType[] 
       />
     ),
   },
-  nextTour === "buildingViews"
+  nextTutorial === "buildingViews"
     ? {
-        selector: `.${tourDefaultAnchorClass}`,
+        selector: `.${tutorialDefaultAnchorClass}`,
         content: (
           <StepContent
             stepTitle='Completed "Evaluating tradeoffs"! 🎉'
             text="Woot woot! Next and finally, learn how to build views to quickly look at different aspects of your topic."
             actionSlot={
-              <Button variant="contained" onClick={() => startTour("buildingViews")}>
+              <Button variant="contained" onClick={() => startTutorial("buildingViews")}>
                 Next: Building Views
               </Button>
             }
@@ -136,15 +136,15 @@ export const getEvaluatingTradeoffsSteps = (nextTour?: Tour | null): StepType[] 
           />
         ),
       }
-    : nextTour === "navigatingTopic"
+    : nextTutorial === "navigatingTopic"
       ? {
-          selector: `.${tourDefaultAnchorClass}`,
+          selector: `.${tutorialDefaultAnchorClass}`,
           content: (
             <StepContent
               stepTitle='Completed "Evaluating tradeoffs"! 🎉'
               text="Woot woot! Next and finally, learn how to navigate all the information that's in a topic."
               actionSlot={
-                <Button variant="contained" onClick={() => startTour("navigatingTopic")}>
+                <Button variant="contained" onClick={() => startTutorial("navigatingTopic")}>
                   Next: Navigating
                 </Button>
               }
@@ -161,7 +161,7 @@ export const getEvaluatingTradeoffsSteps = (nextTour?: Tour | null): StepType[] 
           ),
         }
       : {
-          selector: `.${tourDefaultAnchorClass}`,
+          selector: `.${tutorialDefaultAnchorClass}`,
           content: (
             <StepContent
               stepTitle='Completed "Evaluating tradeoffs"! 🎉'

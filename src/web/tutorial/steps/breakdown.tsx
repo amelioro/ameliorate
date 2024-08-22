@@ -5,13 +5,13 @@ import Image from "next/image";
 import { Link } from "@/web/common/components/Link";
 import { celebrateGif } from "@/web/common/urls";
 import { NodeTypeText } from "@/web/topic/components/NodeTypeText/NodeTypeText";
-import { StepContent } from "@/web/tour/StepContent";
-import { startTour } from "@/web/tour/tour";
-import { tourDefaultAnchorClass } from "@/web/tour/tourUtils";
+import { StepContent } from "@/web/tutorial/StepContent";
+import { startTutorial } from "@/web/tutorial/tutorial";
+import { tutorialDefaultAnchorClass } from "@/web/tutorial/tutorialUtils";
 
 export const breakdownSteps: StepType[] = [
   {
-    selector: `.${tourDefaultAnchorClass}`,
+    selector: `.${tutorialDefaultAnchorClass}`,
     content: (
       <StepContent
         stepTitle="Laying things out"
@@ -53,7 +53,7 @@ export const breakdownSteps: StepType[] = [
     ),
   },
   {
-    selector: `.${tourDefaultAnchorClass}`,
+    selector: `.${tutorialDefaultAnchorClass}`,
     content: (
       <StepContent
         stepTitle="Problem details"
@@ -93,7 +93,7 @@ export const breakdownSteps: StepType[] = [
     ),
   },
   {
-    selector: `.${tourDefaultAnchorClass}`,
+    selector: `.${tutorialDefaultAnchorClass}`,
     content: (
       <StepContent
         stepTitle="Solution details"
@@ -128,7 +128,7 @@ export const breakdownSteps: StepType[] = [
     ),
   },
   {
-    selector: `.${tourDefaultAnchorClass}`,
+    selector: `.${tutorialDefaultAnchorClass}`,
     content: (
       <StepContent
         stepTitle="How solutions address problems"
@@ -162,7 +162,7 @@ export const breakdownSteps: StepType[] = [
     ),
   },
   {
-    selector: `.${tourDefaultAnchorClass}`,
+    selector: `.${tutorialDefaultAnchorClass}`,
     content: (
       <StepContent
         stepTitle="Criteria"
@@ -200,13 +200,13 @@ export const breakdownSteps: StepType[] = [
     ),
   },
   {
-    selector: `.${tourDefaultAnchorClass}`,
+    selector: `.${tutorialDefaultAnchorClass}`,
     content: (
       <StepContent
         stepTitle='Completed "Breaking down a problem"! 🎉'
         text="Woohoo! Next, learn how to add nuance to your topic."
         actionSlot={
-          <Button variant="contained" onClick={() => startTour("addingNuance")}>
+          <Button variant="contained" onClick={() => startTutorial("addingNuance")}>
             Next: Nuance
           </Button>
         }

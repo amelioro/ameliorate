@@ -3,11 +3,11 @@ import { StepType } from "@reactour/tour";
 
 import { Link } from "@/web/common/components/Link";
 import { discordInvite } from "@/web/common/urls";
-import { StepContent } from "@/web/tour/StepContent";
-import { startTour } from "@/web/tour/tour";
-import { Tour } from "@/web/tour/tourUtils";
+import { StepContent } from "@/web/tutorial/StepContent";
+import { startTutorial } from "@/web/tutorial/tutorial";
+import { Tutorial } from "@/web/tutorial/tutorialUtils";
 
-export const welcomeSteps = (nextTour: Tour): StepType[] => {
+export const welcomeSteps = (nextTutorial: Tutorial): StepType[] => {
   return [
     {
       selector: 'button[title="Help"] > svg',
@@ -31,18 +31,18 @@ export const welcomeSteps = (nextTour: Tour): StepType[] => {
             </>
           }
           actionSlot={
-            nextTour === "diagramBasics" ? (
-              <Button variant="contained" onClick={() => startTour("diagramBasics")}>
+            nextTutorial === "diagramBasics" ? (
+              <Button variant="contained" onClick={() => startTutorial("diagramBasics")}>
                 Start: Diagram Basics
               </Button>
-            ) : nextTour === "readingDiagram" ? (
-              <Button variant="contained" onClick={() => startTour("readingDiagram")}>
+            ) : nextTutorial === "readingDiagram" ? (
+              <Button variant="contained" onClick={() => startTutorial("readingDiagram")}>
                 Start: Reading Diagrams
               </Button>
             ) : (
               <Button
                 variant="contained"
-                onClick={() => startTour("evaluatingTradeoffs", "navigatingTopic")}
+                onClick={() => startTutorial("evaluatingTradeoffs", "navigatingTopic")}
               >
                 Start: Evaluating Tradeoffs
               </Button>

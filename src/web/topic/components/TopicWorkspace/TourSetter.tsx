@@ -6,7 +6,7 @@
 import { useTour } from "@reactour/tour";
 import { useEffect, useMemo } from "react";
 
-import { setReactTourProps } from "@/web/tour/reactourWrapper";
+import { setReactTourProps } from "@/web/tutorial/reactourWrapper";
 
 export const TourSetter = () => {
   const tourProps = useTour();

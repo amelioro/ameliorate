@@ -4,8 +4,8 @@ import Image from "next/image";
 
 import { Link } from "@/web/common/components/Link";
 import { celebrateGif } from "@/web/common/urls";
-import { StepContent } from "@/web/tour/StepContent";
-import { tourDefaultAnchorClass, viewsPaneSelector } from "@/web/tour/tourUtils";
+import { StepContent } from "@/web/tutorial/StepContent";
+import { tutorialDefaultAnchorClass, viewsPaneSelector } from "@/web/tutorial/tutorialUtils";
 
 export const navigatingTopicSteps: StepType[] = [
   {
@@ -46,7 +46,7 @@ export const navigatingTopicSteps: StepType[] = [
     ),
   },
   {
-    selector: `.${tourDefaultAnchorClass}`,
+    selector: `.${tutorialDefaultAnchorClass}`,
     content: (
       <StepContent
         stepTitle="More details"
@@ -73,7 +73,7 @@ export const navigatingTopicSteps: StepType[] = [
     ),
   },
   {
-    selector: `.${tourDefaultAnchorClass}`,
+    selector: `.${tutorialDefaultAnchorClass}`,
     content: (
       <StepContent
         stepTitle="Perspectives"
@@ -100,7 +100,7 @@ export const navigatingTopicSteps: StepType[] = [
     ),
   },
   {
-    selector: `.${tourDefaultAnchorClass}`,
+    selector: `.${tutorialDefaultAnchorClass}`,
     content: (
       <StepContent
         stepTitle='Completed "Navigating a topic"! 🎉'
