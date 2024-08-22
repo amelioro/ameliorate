@@ -90,6 +90,10 @@ const Topic: NextPage = () => {
           name="description"
           content={`${username}/${topicTitle} - understand your topic better.`}
         />
+
+        {/* prevent google mis-indexing - somehow "https://ameliorate.app/keyserj/mta-congestion-pricing?view=Good+about+Solution" was not being indexed because google thought "https://ameliorate.app/examples" was canonical */}
+        {/* found solution via https://support.google.com/webmasters/answer/7440203 "Duplicate without user-selected canonical" section */}
+        <link rel="canonical" href={`https://ameliorate.app/${username}/${topicTitle}`} />
       </Head>
 
       <DynamicTopicWorkspace />
