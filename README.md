@@ -2,9 +2,9 @@
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/amelioro/ameliorate/blob/main/LICENSE) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blueviolet.svg)](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md) [![All Contributors](https://img.shields.io/github/all-contributors/amelioro/ameliorate?color=ee8449&style=flat-square)](#contributors-) [![Chat](https://img.shields.io/discord/1057707973482401892?label=chat&logo=discord)](https://discord.gg/3KhdyJkTWT)
 
-[Ameliorate](https://www.ameliorate.app/) is a tool for visualizing how you understand a problem.
+[Ameliorate](https://www.ameliorate.app/) is a tool for analyzing problems efficiently, precisely, and open-mindedly.
 
-It provides a structure to help you break down a problem, along with features for organizing, navigating, and discussing that information, so that it's easier to grasp, align with others, and ultimately make better decisions.
+It provides a structure to help you visualize all details and perspectives relevant to a problem, so that it's easier to **grasp the problem**, **understand each other**, and ultimately **make better decisions**.
 
 With it, you can:
 
