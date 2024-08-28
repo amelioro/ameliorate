@@ -7,10 +7,10 @@ export const Headline = () => {
   return (
     <div className="relative flex w-full justify-center sm:justify-normal">
       <Image
-        src="https://github.com/user-attachments/assets/5ccacace-fb45-4ac6-b8df-bf7acfbd3b19"
+        src="https://github.com/user-attachments/assets/e02563a9-c3f2-4d07-89c1-f174f6eeff53"
         alt="cars-going-too-fast topic"
-        width={1904}
-        height={2009}
+        width={1746}
+        height={1846}
         priority={true}
         className="absolute hidden opacity-30 sm:block"
       />
