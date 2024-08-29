@@ -1,7 +1,42 @@
 import { Button, Typography } from "@mui/material";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 import { Link } from "@/web/common/components/Link";
+
+const RotatingDescriptors = () => {
+  const [indexToShow, setIndexToShow] = useState(0);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setIndexToShow((prevIndex) => (prevIndex + 1) % 3);
+      // slightly less than the 3s animation duration because it seems like sometimes the animation
+      // finishes and starts over before the word changes, flicking the word after its animation finishes
+    }, 2800);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  return (
+    <>
+      <span
+        className={`inline-block animate-[shake_3s_1] text-primary-main ${indexToShow !== 0 ? "hidden" : ""}`}
+      >
+        efficiently
+      </span>
+      <span
+        className={`inline-block animate-[shake_3s_1] text-primary-main ${indexToShow !== 1 ? "hidden" : ""}`}
+      >
+        precisely
+      </span>
+      <span
+        className={`inline-block animate-[shake_3s_1] text-primary-main ${indexToShow !== 2 ? "hidden" : ""}`}
+      >
+        open-mindedly
+      </span>
+    </>
+  );
+};
 
 export const Headline = () => {
   return (
@@ -27,7 +62,7 @@ export const Headline = () => {
         <Typography variant="h1" fontWeight="bold" className="text-4xl sm:text-5xl">
           Analyze problems
           <br />
-          <span className="text-primary-main">efficiently</span>
+          <RotatingDescriptors />
         </Typography>
 
         <Typography variant="body1">
