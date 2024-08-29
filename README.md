@@ -6,19 +6,10 @@
 
 It provides a structure to help you visualize all details and perspectives relevant to a problem, so that it's easier to **grasp the problem**, **understand each other**, and ultimately **make better decisions**.
 
-With it, you can:
-
-- detail [problems](https://ameliorate.app/examples/climate-change) and [solutions](https://ameliorate.app/examples/marxist-revolution-debate)
-  <img src="https://github.com/amelioro/ameliorate/assets/13872370/c37b34f2-164a-4619-8e04-0b4366ea1724" width="800"/>
-  <img src="https://github.com/amelioro/ameliorate/assets/13872370/1848c1d5-6379-42ac-a9a2-f9d6873cf9a8" width="800"/>
-
-- compare the [tradeoffs](https://ameliorate.app/examples/ORM?view=Tradeoffs) of each solution
-  <img src="https://github.com/amelioro/ameliorate/assets/13872370/a6579feb-a32e-4e00-989b-a5939f80e601" width="800"/>
-
-- clearly [question, justify, and critique](https://ameliorate.app/examples/ORM?view=Tradeoffs+with+node+that+has+info) anything in an off-to-the-side but easy-to-access way
-  <img src="https://github.com/amelioro/ameliorate/assets/13872370/20f9af78-785f-4a91-88ef-3ef64da5c90a" width="800"/>
-
-See the [docs](https://www.ameliorate.app/docs) for more details about the app.
+Check out:
+- the [homepage](https://www.ameliorate.app/), which showcases what the app does and some cool features
+- the in-app tutorials (go to the app via [Start Building](https://ameliorate.app/new) or [Play Around](https://ameliorate.app/playground)), which show you how to use the tool
+- the [docs](https://www.ameliorate.app/docs) for further details about the app (most likely to be slightly out-of-date)
 
 ## Roadmap
 
