@@ -19,8 +19,8 @@ export const welcomeSteps = (nextTutorial: Tutorial): StepType[] => {
               If you're ever unsure how to do something, click this question mark.
               <br />
               <br />
-              You can start and see your progress on the tutorials here, and it has links to docs
-              and examples.
+              You can start tutorials and track your progress here, and it has links to docs and
+              examples.
               <br />
               <br />
               Feel free to also ask for help in the{" "}
