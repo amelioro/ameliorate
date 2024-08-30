@@ -31,11 +31,17 @@ const config = {
         ...muiColorsToExtend,
       },
       keyframes: {
-        shake: {
+        slideInOut: {
           "0%": { transform: "translateX(16px)", opacity: 0 },
           "10%": { transform: "translateX(0)", opacity: 1 },
           "90%": { transform: "translateX(0)", opacity: 1 },
           "100%": { transform: "translateX(16px)", opacity: 0 },
+        },
+        hideThird: {
+          "0%": { visibility: "visible" },
+          "33.33%": { visibility: "visible" },
+          "33.34%": { visibility: "hidden" },
+          "100%": { visibility: "hidden" },
         },
       },
     },

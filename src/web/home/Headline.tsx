@@ -1,38 +1,25 @@
 import { Button, Typography } from "@mui/material";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 
 import { Link } from "@/web/common/components/Link";
 
 const RotatingDescriptors = () => {
-  const [indexToShow, setIndexToShow] = useState(0);
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setIndexToShow((prevIndex) => (prevIndex + 1) % 3);
-      // slightly less than the 3s animation duration because it seems like sometimes the animation
-      // finishes and starts over before the word changes, flicking the word after its animation finishes
-    }, 2800);
-
-    return () => clearInterval(intervalId);
-  }, []);
-
   return (
     <>
-      <span
-        className={`inline-block animate-[shake_3s_1] text-primary-main ${indexToShow !== 0 ? "hidden" : ""}`}
-      >
+      {/* use `hideThird` with a delay to show only one of the 3 texts for each 3s interval of the 9s */}
+      <span className="invisible absolute animate-[slideInOut_3s_infinite,_hideThird_9s_0s_infinite] text-primary-main">
         effectively
       </span>
-      <span
-        className={`inline-block animate-[shake_3s_1] text-primary-main ${indexToShow !== 1 ? "hidden" : ""}`}
-      >
+      <span className="invisible absolute animate-[slideInOut_3s_infinite,_hideThird_9s_3s_infinite] text-primary-main">
         collaboratively
       </span>
-      <span
-        className={`inline-block animate-[shake_3s_1] text-primary-main ${indexToShow !== 2 ? "hidden" : ""}`}
-      >
+      <span className="invisible absolute animate-[slideInOut_3s_infinite,_hideThird_9s_6s_infinite] text-primary-main">
         with an open mind
+      </span>
+
+      {/* size the text space correctly, while allowing the rotating words to be absolute and appear in the same spot as each other */}
+      <span aria-hidden="true" className="invisible">
+        size
       </span>
     </>
   );
