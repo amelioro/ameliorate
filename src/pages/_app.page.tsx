@@ -49,7 +49,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
             styles={{ maskWrapper: () => ({ display: "none" }) }}
             // super jank & brittle way to hide nav when there's only one step, because there's no exposed way for reactour do this...
             // also add padding to nav buttons so they're easier to click
-            className="rounded-2xl border !shadow-lg [&_>_div:nth-child(3):has(div_>_button:only-child)]:!hidden [&_>_div:nth-child(3)_button]:!p-1"
+            className="rounded-2xl border border-black !shadow-lg !shadow-black [&_>_div:nth-child(3):has(div_>_button:only-child)]:!hidden [&_>_div:nth-child(3)_button]:!p-1"
           >
             <AuthUserProvider>
               <Layout>
