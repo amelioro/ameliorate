@@ -2,11 +2,12 @@
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/amelioro/ameliorate/blob/main/LICENSE) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blueviolet.svg)](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md) [![All Contributors](https://img.shields.io/github/all-contributors/amelioro/ameliorate?color=ee8449&style=flat-square)](#contributors-) [![Chat](https://img.shields.io/discord/1057707973482401892?label=chat&logo=discord)](https://discord.gg/3KhdyJkTWT)
 
-[Ameliorate](https://www.ameliorate.app/) is a tool for analyzing problems efficiently, precisely, and open-mindedly.
+[Ameliorate](https://www.ameliorate.app/) is a tool for analyzing problems effectively, collaboratively, and with an open mind.
 
 It provides a structure to help you visualize all details and perspectives relevant to a problem, so that it's easier to **grasp the problem**, **understand each other**, and ultimately **make better decisions**.
 
 Check out:
+
 - the [homepage](https://www.ameliorate.app/), which showcases what the app does and some cool features
 - the in-app tutorials (go to the app via [Start Building](https://ameliorate.app/new) or [Play Around](https://ameliorate.app/playground)), which show you how to use the tool
 - the [docs](https://www.ameliorate.app/docs) for further details about the app (most likely to be slightly out-of-date)

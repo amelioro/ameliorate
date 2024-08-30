@@ -22,17 +22,17 @@ const RotatingDescriptors = () => {
       <span
         className={`inline-block animate-[shake_3s_1] text-primary-main ${indexToShow !== 0 ? "hidden" : ""}`}
       >
-        efficiently
+        effectively
       </span>
       <span
         className={`inline-block animate-[shake_3s_1] text-primary-main ${indexToShow !== 1 ? "hidden" : ""}`}
       >
-        precisely
+        collaboratively
       </span>
       <span
         className={`inline-block animate-[shake_3s_1] text-primary-main ${indexToShow !== 2 ? "hidden" : ""}`}
       >
-        open-mindedly
+        with an open mind
       </span>
     </>
   );
