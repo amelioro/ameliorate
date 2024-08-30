@@ -44,16 +44,16 @@ export const getReadingDiagramSteps = (nextTutorial?: Tutorial | null): StepType
         stepTitle="Diagram layout"
         text={
           <span>
-            Generally, <NodeTypeText type="problem" /> details are laid at the top, with{" "}
-            <NodeTypeText type="solution" /> details at the bottom across from those, and solution
-            tradeoffs (<NodeTypeText type="criterion" />) in between.
+            Generally, <NodeTypeText type="problem" /> details are placed at the top, with{" "}
+            <NodeTypeText type="solution" /> details across from them at the bottom. Solution
+            tradeoffs (<NodeTypeText type="criterion" />) are in between.
             <br />
             <br />
             You can check out{" "}
             <Link href="https://ameliorate.app/examples/ontology" target="_blank">
               ontology
             </Link>{" "}
-            if you want to see all possible types of nodes, with examples of each.
+            if you want to see every type of node, with examples of each.
           </span>
         }
         imageSlot={

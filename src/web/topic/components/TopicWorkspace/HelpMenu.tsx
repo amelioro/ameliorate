@@ -46,12 +46,12 @@ export const HelpMenu = ({ helpAnchorEl, setHelpAnchorEl }: Props) => {
 
   const getProgressIcon = (tutorial: Tutorial) => {
     if (completedTutorials.includes(tutorial)) {
-      return " ✅";
+      return "✅";
     } else if (startedTutorials.includes(tutorial)) {
-      return " 🟠";
+      return "🟧";
     }
 
-    return "";
+    return "⬜";
   };
 
   return (
@@ -91,31 +91,31 @@ export const HelpMenu = ({ helpAnchorEl, setHelpAnchorEl }: Props) => {
 
         <TabPanel value="Builders" className="p-2">
           <TutorialMenuItem onClick={() => startTutorial("diagramBasics")}>
-            1. Diagram basics{getProgressIcon("diagramBasics")}
+            {getProgressIcon("diagramBasics")} 1. Diagram basics
           </TutorialMenuItem>
           <TutorialMenuItem onClick={() => startTutorial("breakdown")}>
-            2. Breaking down a problem{getProgressIcon("breakdown")}
+            {getProgressIcon("breakdown")} 2. Breaking down a problem
           </TutorialMenuItem>
           <TutorialMenuItem onClick={() => startTutorial("addingNuance")}>
-            3. Adding nuance{getProgressIcon("addingNuance")}
+            {getProgressIcon("addingNuance")} 3. Adding nuance
           </TutorialMenuItem>
           <TutorialMenuItem onClick={() => startTutorial("evaluatingTradeoffs", "buildingViews")}>
-            4. Evaluating tradeoffs{getProgressIcon("evaluatingTradeoffs")}
+            {getProgressIcon("evaluatingTradeoffs")} 4. Evaluating tradeoffs
           </TutorialMenuItem>
           <TutorialMenuItem onClick={() => startTutorial("buildingViews")}>
-            5. Building views{getProgressIcon("buildingViews")}
+            {getProgressIcon("buildingViews")} 5. Building views
           </TutorialMenuItem>
         </TabPanel>
 
         <TabPanel value="Viewers" className="p-2">
           <TutorialMenuItem onClick={() => startTutorial("readingDiagram")}>
-            1a. Reading a diagram{getProgressIcon("readingDiagram")}
+            {getProgressIcon("readingDiagram")} 1a. Reading a diagram
           </TutorialMenuItem>
           <TutorialMenuItem onClick={() => startTutorial("evaluatingTradeoffs", "navigatingTopic")}>
-            1b. Evaluating tradeoffs{getProgressIcon("evaluatingTradeoffs")}
+            {getProgressIcon("evaluatingTradeoffs")} 1b. Evaluating tradeoffs
           </TutorialMenuItem>
           <TutorialMenuItem onClick={() => startTutorial("navigatingTopic")}>
-            2. Navigating a topic{getProgressIcon("navigatingTopic")}
+            {getProgressIcon("navigatingTopic")} 2. Navigating a topic
           </TutorialMenuItem>
         </TabPanel>
 
