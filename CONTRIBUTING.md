@@ -10,13 +10,16 @@ If you're new to open source, you'll probably find [this open source guide](http
 
 This project adheres to the Contributor Covenant [code of conduct](https://github.com/amelioro/ameliorate/blob/main/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
 
+## Reaching out
+
+If you'd like to reach out for any reason, here are a couple possible ways of doing so:
+
+- [Discord](https://discord.gg/3KhdyJkTWT) - this is a casual way to mention something & have easy back-and-forth
+- Email ameliorate.app@gmail.com - easy to use if you’re unfamiliar with Discord
+
 ## Providing feedback
 
-There's plenty of room for improvement in this project, and any ideas, suggestions, concerns, etc, are greatly appreciated! Reach out any way you know how, but here are a few mediums you can use:
-
-- [Discord](https://discord.gg/3KhdyJkTWT) - this is a casual way to mention something & have easy back-and-forth; there’s also specifically a channel for #ideas-and-feedback
-- [GitHub Issues](https://github.com/amelioro/ameliorate/issues) - slightly more formal than Discord, but this is the system used for managing the project’s work, so if you create an issue, you can track its status
-- Email ameliorate.app@gmail.com - easy to use if you’re unfamiliar with Discord/GitHub
+There's plenty of room for improvement in this project, and any ideas, suggestions, concerns, etc, are greatly appreciated! You can reach out through [the mediums above](#reaching-out) or [create a GitHub Issue](https://github.com/amelioro/ameliorate/issues) (which is slightly more formal, but this is the system used for managing the project’s work, so if you create an issue, you can track its status).
 
 And here are some things that come to mind that’d be particularly useful for to share about:
 
