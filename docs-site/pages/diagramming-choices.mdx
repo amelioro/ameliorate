@@ -2,7 +2,31 @@ import { Callout } from "nextra/components";
 
 # Diagramming Choices
 
-<Callout type="warning">Docs under construction.</Callout>
+Ameliorate's structure hopefully makes it easier to diagram many situations, but sometimes there are situations where it isn't straightforward how to diagram them. Sometimes you have multiple ways of representing the same information, and it's not easy to tell which way is best. This page describes some of these situations, and possible ways to go about them.
+
+Some situations may also be hard to represent because Ameliorate's [ontology](https://ameliorate.app/keyserj/ameliorate-ontology) does not have the node types to represent the information.
+
+If you have any ideas on potentially-better ways to represent these situations, or you have a situation that you're not sure how to represent, please [reach out](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md#reaching-out)!
+
+## Known tough-to-diagram situations
+
+### Multiple variations for one solution
+
+Sometimes a solution can be implemented in different ways, and representing that can be challenging. For example, in the [failing-trade-route](https://ameliorate.app/keyserj/failing-trade-route?view=Bandits) topic, one way to deal with bandits is to Bait & Ambush them, but such a thing can be done many ways! Perhaps this could be accomplished using a local militia, or by hiring guards, or by training villagers to help, or some combination of these. We could even discuss hiring 20 guards vs hiring 40 guards vs hiring another number of guards - when you can make variations by just changing numbers, there are an infinite number of possibilities!
+
+If it seems reasonable to discuss these possibilities without going into detailed tradeoffs, the simplest thing is to just represent each variable as a solution component, like [this](https://ameliorate.app/keyserj/failing-trade-route?view=Decoy+and+Ambush). The solution might not actually use all of these components, but they at least exist in the diagram for discussion.
+
+If there are multiple variables that can be adjusted for a solution, and you want to consider multiple variations across each of those variables, then you can create a problem for each variable, with a solution for each variation. For example, a problem "ambushing bandits with whom" could have solutions that each convey a different set of people to use for the ambush. See [this example](https://ameliorate.app/keyserj/failing-trade-route-after?view=Variants+-+problem+per+variable).
+
+If you don't care to consider each variable individually, but you still want to discuss the best variation, then you can make a problem like "best way to ambush bandits", with solutions for each set of ways to do the ambush - see [this example](https://ameliorate.app/keyserj/failing-trade-route-after?view=Variants+-+problem+to+choose+variant).
+
+If there are only a couple variations you care to consider, you could treat each as a distinct solution to the original problem. See [this example](https://ameliorate.app/keyserj/failing-trade-route-after?view=Variants+-+solution+for+each+variant).
+
+<Callout type="info">
+  Some ideas for changing Ameliorate's structure to improve this, but that haven't been thoroughly
+  considered: add an Option node type; allow any node type to be an option for another related node;
+  add variables with discrete possible values as a new kind of information that any node can have.
+</Callout>
 
 ## Refactoring tools
 
