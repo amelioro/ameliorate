@@ -25,11 +25,12 @@ export const getEvaluatingTradeoffsSteps = (nextTutorial?: Tutorial | null): Ste
         }
         imageSlot={
           <Image
+            key="https://github.com/user-attachments/assets/baf22aab-cea0-4e6d-b295-2edb34dd7b44"
             src="https://github.com/user-attachments/assets/baf22aab-cea0-4e6d-b295-2edb34dd7b44"
             alt="viewing criteria table"
             width={600}
             height={460}
-            key="https://github.com/user-attachments/assets/baf22aab-cea0-4e6d-b295-2edb34dd7b44"
+            unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
           />
         }
       />
@@ -54,11 +55,11 @@ export const getEvaluatingTradeoffsSteps = (nextTutorial?: Tutorial | null): Ste
         imageSlot={
           <>
             <Image
+              key="https://github.com/user-attachments/assets/1dd98e5e-198a-41ff-967a-099c7cbe430b"
               src="https://github.com/user-attachments/assets/1dd98e5e-198a-41ff-967a-099c7cbe430b"
               alt="criteria table scores"
               width={540}
               height={325}
-              key="https://github.com/user-attachments/assets/1dd98e5e-198a-41ff-967a-099c7cbe430b"
             />
             <Typography variant="caption">
               From:{" "}
@@ -92,11 +93,11 @@ export const getEvaluatingTradeoffsSteps = (nextTutorial?: Tutorial | null): Ste
         imageSlot={
           <>
             <Image
+              key="https://github.com/user-attachments/assets/f71c1dd1-0f60-4151-9b1d-ea207911ce60"
               src="https://github.com/user-attachments/assets/f71c1dd1-0f60-4151-9b1d-ea207911ce60"
               alt="solution totals"
               width={543}
               height={108}
-              key="https://github.com/user-attachments/assets/f71c1dd1-0f60-4151-9b1d-ea207911ce60"
             />
             <Typography variant="caption">
               From:{" "}
@@ -126,11 +127,11 @@ export const getEvaluatingTradeoffsSteps = (nextTutorial?: Tutorial | null): Ste
             }
             imageSlot={
               <Image
+                key={celebrateGif}
                 src={celebrateGif}
                 alt="Celebrate completed tutorial!"
                 width={256}
                 height={143}
-                key={celebrateGif}
               />
             }
           />
@@ -150,11 +151,12 @@ export const getEvaluatingTradeoffsSteps = (nextTutorial?: Tutorial | null): Ste
               }
               imageSlot={
                 <Image
+                  key={celebrateGif}
                   src={celebrateGif}
                   alt="Celebrate completed tutorial!"
                   width={256}
                   height={143}
-                  key={celebrateGif}
+                  unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
                 />
               }
             />
@@ -168,11 +170,12 @@ export const getEvaluatingTradeoffsSteps = (nextTutorial?: Tutorial | null): Ste
               text="Woot woot! Now you're ready to compare solutions in Ameliorate 🔥."
               imageSlot={
                 <Image
+                  key={celebrateGif}
                   src={celebrateGif}
                   alt="Celebrate completed tutorial!"
                   width={256}
                   height={143}
-                  key={celebrateGif}
+                  unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
                 />
               }
             />

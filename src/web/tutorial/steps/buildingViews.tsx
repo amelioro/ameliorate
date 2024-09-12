@@ -26,11 +26,12 @@ export const buildingViewsSteps: StepType[] = [
         imageSlot={
           <>
             <Image
+              key="https://github.com/user-attachments/assets/17014abe-f9c5-4ca2-b95d-9683e2b1034b"
               src="https://github.com/user-attachments/assets/17014abe-f9c5-4ca2-b95d-9683e2b1034b"
               alt="clicking between views in cars-going-too-fast topic"
               width={666}
               height={448}
-              key="https://github.com/user-attachments/assets/17014abe-f9c5-4ca2-b95d-9683e2b1034b"
+              unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
             />
             <Typography variant="caption">
               From:{" "}
@@ -63,11 +64,12 @@ export const buildingViewsSteps: StepType[] = [
         imageSlot={
           <>
             <Image
+              key="https://github.com/user-attachments/assets/ebdaefb6-26fb-4eef-b710-34fa303f7ad4"
               src="https://github.com/user-attachments/assets/ebdaefb6-26fb-4eef-b710-34fa303f7ad4"
               alt="showing the kinds of filters"
               width={450}
               height={434}
-              key="https://github.com/user-attachments/assets/ebdaefb6-26fb-4eef-b710-34fa303f7ad4"
+              unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
             />
           </>
         }
@@ -97,11 +99,12 @@ export const buildingViewsSteps: StepType[] = [
         imageSlot={
           <>
             <Image
+              key="https://github.com/user-attachments/assets/edbc5e18-447e-4ae7-a0ae-00aa9f72e8c8"
               src="https://github.com/user-attachments/assets/edbc5e18-447e-4ae7-a0ae-00aa9f72e8c8"
               alt="toggling on and off some Information Filters"
               width={659}
               height={412}
-              key="https://github.com/user-attachments/assets/edbc5e18-447e-4ae7-a0ae-00aa9f72e8c8"
+              unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
             />
             <Typography variant="caption">
               From:{" "}
@@ -135,11 +138,12 @@ export const buildingViewsSteps: StepType[] = [
         imageSlot={
           <>
             <Image
+              key="https://github.com/user-attachments/assets/533529a7-0de0-4c22-94cf-d9b00943399f"
               src="https://github.com/user-attachments/assets/533529a7-0de0-4c22-94cf-d9b00943399f"
               alt="changing some General Filters"
               width={659}
               height={369}
-              key="https://github.com/user-attachments/assets/533529a7-0de0-4c22-94cf-d9b00943399f"
+              unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
             />
             <Typography variant="caption">
               From:{" "}
@@ -173,11 +177,12 @@ export const buildingViewsSteps: StepType[] = [
         imageSlot={
           <>
             <Image
+              key="https://github.com/user-attachments/assets/2ceccd62-e5ff-46ad-81cb-e0c564ed4269"
               src="https://github.com/user-attachments/assets/2ceccd62-e5ff-46ad-81cb-e0c564ed4269"
               alt="showing neighbor indicator"
               width={600}
               height={445}
-              key="https://github.com/user-attachments/assets/2ceccd62-e5ff-46ad-81cb-e0c564ed4269"
+              unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
             />
             <Typography variant="caption">
               From:{" "}
@@ -210,11 +215,12 @@ export const buildingViewsSteps: StepType[] = [
         imageSlot={
           <>
             <Image
+              key="https://github.com/user-attachments/assets/0a2563db-5795-44ac-b0bd-e97292b4d18f"
               src="https://github.com/user-attachments/assets/0a2563db-5795-44ac-b0bd-e97292b4d18f"
               alt="showing and hiding neighbors"
               width={596}
               height={475}
-              key="https://github.com/user-attachments/assets/0a2563db-5795-44ac-b0bd-e97292b4d18f"
+              unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
             />
             <Typography variant="caption">
               From:{" "}
@@ -248,11 +254,12 @@ export const buildingViewsSteps: StepType[] = [
         imageSlot={
           <>
             <Image
+              key="https://github.com/user-attachments/assets/0ca650fe-9497-4837-825c-1b980b4cae97"
               src="https://github.com/user-attachments/assets/0ca650fe-9497-4837-825c-1b980b4cae97"
               alt="forcing nodes into layers"
               width={591}
               height={516}
-              key="https://github.com/user-attachments/assets/0ca650fe-9497-4837-825c-1b980b4cae97"
+              unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
             />
             <Typography variant="caption">
               From:{" "}
@@ -285,11 +292,12 @@ export const buildingViewsSteps: StepType[] = [
         imageSlot={
           <>
             <Image
+              key="https://github.com/user-attachments/assets/74c43ce1-ede5-4623-9563-17c3963a0e12"
               src="https://github.com/user-attachments/assets/74c43ce1-ede5-4623-9563-17c3963a0e12"
               alt="saving a Quick View"
               width={788}
               height={475}
-              key="https://github.com/user-attachments/assets/74c43ce1-ede5-4623-9563-17c3963a0e12"
+              unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
             />
           </>
         }
@@ -304,11 +312,12 @@ export const buildingViewsSteps: StepType[] = [
         text="All right! You've finished learning all the basics for using Ameliorate. Now you can reap the fruits of your labor and start building some diagrams! 🔥"
         imageSlot={
           <Image
+            key={celebrateGif}
             src={celebrateGif}
             alt="Celebrate completed tutorial!"
             width={256}
             height={143}
-            key={celebrateGif}
+            unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
           />
         }
       />

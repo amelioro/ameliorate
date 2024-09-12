@@ -25,11 +25,12 @@ export const addingNuanceSteps: StepType[] = [
         }
         imageSlot={
           <Image
+            key="https://github.com/user-attachments/assets/47b18abe-cf40-47cf-9b18-f376dfbe7723"
             src="https://github.com/user-attachments/assets/47b18abe-cf40-47cf-9b18-f376dfbe7723"
             alt="scoring a node"
             width={434}
             height={328}
-            key="https://github.com/user-attachments/assets/47b18abe-cf40-47cf-9b18-f376dfbe7723"
+            unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
           />
         }
       />
@@ -51,11 +52,12 @@ export const addingNuanceSteps: StepType[] = [
         }
         imageSlot={
           <Image
+            key="https://github.com/user-attachments/assets/bdf7fd16-d44a-4a74-8e5e-24cd577dc647"
             src="https://github.com/user-attachments/assets/bdf7fd16-d44a-4a74-8e5e-24cd577dc647"
             alt="viewing other perspectives"
             width={492}
             height={411}
-            key="https://github.com/user-attachments/assets/bdf7fd16-d44a-4a74-8e5e-24cd577dc647"
+            unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
           />
         }
       />
@@ -79,11 +81,12 @@ export const addingNuanceSteps: StepType[] = [
         }
         imageSlot={
           <Image
+            key="https://github.com/user-attachments/assets/4b3f2bcb-9890-4e02-aa33-fea8e8721ea9"
             src="https://github.com/user-attachments/assets/4b3f2bcb-9890-4e02-aa33-fea8e8721ea9"
             alt="justifying sentiments"
             width={600}
             height={353}
-            key="https://github.com/user-attachments/assets/4b3f2bcb-9890-4e02-aa33-fea8e8721ea9"
+            unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
           />
         }
       />
@@ -106,11 +109,12 @@ export const addingNuanceSteps: StepType[] = [
         }
         imageSlot={
           <Image
+            key="https://github.com/user-attachments/assets/9e12369a-c41f-47c9-ba40-ab95f60985d3"
             src="https://github.com/user-attachments/assets/9e12369a-c41f-47c9-ba40-ab95f60985d3"
             alt="adding research"
             width={579}
             height={379}
-            key="https://github.com/user-attachments/assets/9e12369a-c41f-47c9-ba40-ab95f60985d3"
+            unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
           />
         }
       />
@@ -130,19 +134,19 @@ export const addingNuanceSteps: StepType[] = [
         imageSlot={
           <>
             <Image
+              key="https://github.com/user-attachments/assets/a1e9b490-2dad-4662-81f2-121524708140"
               src="https://github.com/user-attachments/assets/a1e9b490-2dad-4662-81f2-121524708140"
               alt="note"
               width={377}
               height={140}
-              key="https://github.com/user-attachments/assets/a1e9b490-2dad-4662-81f2-121524708140"
               className="mr-3 shadow-lg"
             />
             <Image
+              key="https://github.com/user-attachments/assets/e7a9c06c-71f4-4f41-9fc5-d89bf81d60ad"
               src="https://github.com/user-attachments/assets/e7a9c06c-71f4-4f41-9fc5-d89bf81d60ad"
               alt="comment"
               width={382}
               height={224}
-              key="https://github.com/user-attachments/assets/e7a9c06c-71f4-4f41-9fc5-d89bf81d60ad"
               className="ml-3 pt-3 shadow-lg"
             />
           </>
@@ -163,11 +167,12 @@ export const addingNuanceSteps: StepType[] = [
         }
         imageSlot={
           <Image
+            key="https://github.com/user-attachments/assets/5f363814-a2d5-469e-b033-63d7fc0b6cf5"
             src="https://github.com/user-attachments/assets/5f363814-a2d5-469e-b033-63d7fc0b6cf5"
             alt="indicators"
             width={507}
             height={360}
-            key="https://github.com/user-attachments/assets/5f363814-a2d5-469e-b033-63d7fc0b6cf5"
+            unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
           />
         }
       />
@@ -189,11 +194,12 @@ export const addingNuanceSteps: StepType[] = [
         }
         imageSlot={
           <Image
+            key={celebrateGif}
             src={celebrateGif}
             alt="Celebrate completed tutorial!"
             width={256}
             height={143}
-            key={celebrateGif}
+            unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
           />
         }
       />

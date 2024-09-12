@@ -32,11 +32,11 @@ export const breakdownSteps: StepType[] = [
         imageSlot={
           <>
             <Image
+              key="https://github.com/user-attachments/assets/dc5029a6-51c5-4b03-92c8-ed67ab9eb500"
               src="https://github.com/user-attachments/assets/dc5029a6-51c5-4b03-92c8-ed67ab9eb500"
               alt="layout of details via cars-going-too-fast"
               width={1237}
               height={911}
-              key="https://github.com/user-attachments/assets/dc5029a6-51c5-4b03-92c8-ed67ab9eb500"
             />
             <Typography variant="caption">
               From:{" "}
@@ -72,11 +72,11 @@ export const breakdownSteps: StepType[] = [
         imageSlot={
           <>
             <Image
+              key="https://github.com/user-attachments/assets/7d6769ba-a20d-419e-b72f-280a25fc4a79"
               src="https://github.com/user-attachments/assets/7d6769ba-a20d-419e-b72f-280a25fc4a79"
               alt="problem details of climate-change"
               width={711}
               height={572}
-              key="https://github.com/user-attachments/assets/7d6769ba-a20d-419e-b72f-280a25fc4a79"
             />
             <Typography variant="caption">
               From:{" "}
@@ -110,11 +110,11 @@ export const breakdownSteps: StepType[] = [
         imageSlot={
           <>
             <Image
+              key="https://github.com/user-attachments/assets/a1121e7a-0845-4a92-937e-2f168e34a871"
               src="https://github.com/user-attachments/assets/a1121e7a-0845-4a92-937e-2f168e34a871"
               alt="solution details of mta-congestion-pricing"
               width={653}
               height={545}
-              key="https://github.com/user-attachments/assets/a1121e7a-0845-4a92-937e-2f168e34a871"
             />
             <Typography variant="caption">
               From:{" "}
@@ -141,11 +141,12 @@ export const breakdownSteps: StepType[] = [
         imageSlot={
           <>
             <Image
+              key="https://github.com/user-attachments/assets/03dc8f21-b7da-46db-bbee-ebacd490d016"
               src="https://github.com/user-attachments/assets/03dc8f21-b7da-46db-bbee-ebacd490d016"
               alt="showing that a benefit addresses a cause"
               width={738}
               height={636}
-              key="https://github.com/user-attachments/assets/03dc8f21-b7da-46db-bbee-ebacd490d016"
+              unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
             />
             <Typography variant="caption">
               From:{" "}
@@ -179,11 +180,11 @@ export const breakdownSteps: StepType[] = [
         imageSlot={
           <>
             <Image
+              key="https://github.com/user-attachments/assets/d3467cd8-f805-46cf-a5e5-84a031ad98cc"
               src="https://github.com/user-attachments/assets/d3467cd8-f805-46cf-a5e5-84a031ad98cc"
               alt="showing a benefit fulfilling a criterion"
               width={627}
               height={547}
-              key="https://github.com/user-attachments/assets/d3467cd8-f805-46cf-a5e5-84a031ad98cc"
             />
             <Typography variant="caption">
               From:{" "}
@@ -212,11 +213,12 @@ export const breakdownSteps: StepType[] = [
         }
         imageSlot={
           <Image
+            key={celebrateGif}
             src={celebrateGif}
             alt="Celebrate completed tutorial!"
             width={256}
             height={143}
-            key={celebrateGif}
+            unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
           />
         }
       />

@@ -27,11 +27,11 @@ export const getReadingDiagramSteps = (nextTutorial?: Tutorial | null): StepType
         }
         imageSlot={
           <Image
+            key="https://github.com/user-attachments/assets/14892d89-d970-407d-bb41-64dd6ae4ac6b"
             src="https://github.com/user-attachments/assets/14892d89-d970-407d-bb41-64dd6ae4ac6b"
             alt="Edges"
             width={273}
             height={324}
-            key="https://github.com/user-attachments/assets/14892d89-d970-407d-bb41-64dd6ae4ac6b"
           />
         }
       />
@@ -59,11 +59,11 @@ export const getReadingDiagramSteps = (nextTutorial?: Tutorial | null): StepType
         imageSlot={
           <>
             <Image
+              key="https://github.com/user-attachments/assets/dc5029a6-51c5-4b03-92c8-ed67ab9eb500"
               src="https://github.com/user-attachments/assets/dc5029a6-51c5-4b03-92c8-ed67ab9eb500"
               alt="layout of details via cars-going-too-fast"
               width={1237}
               height={911}
-              key="https://github.com/user-attachments/assets/dc5029a6-51c5-4b03-92c8-ed67ab9eb500"
             />
             <Typography variant="caption">
               From:{" "}
@@ -96,11 +96,12 @@ export const getReadingDiagramSteps = (nextTutorial?: Tutorial | null): StepType
         }
         imageSlot={
           <Image
+            key="https://github.com/user-attachments/assets/47b18abe-cf40-47cf-9b18-f376dfbe7723"
             src="https://github.com/user-attachments/assets/47b18abe-cf40-47cf-9b18-f376dfbe7723"
             alt="scoring a node"
             width={434}
             height={328}
-            key="https://github.com/user-attachments/assets/47b18abe-cf40-47cf-9b18-f376dfbe7723"
+            unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
           />
         }
       />
@@ -120,11 +121,12 @@ export const getReadingDiagramSteps = (nextTutorial?: Tutorial | null): StepType
             }
             imageSlot={
               <Image
+                key={celebrateGif}
                 src={celebrateGif}
                 alt="Celebrate completed tutorial!"
                 width={256}
                 height={143}
-                key={celebrateGif}
+                unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
               />
             }
           />
@@ -138,11 +140,12 @@ export const getReadingDiagramSteps = (nextTutorial?: Tutorial | null): StepType
             text="Woot woot! Now you're ready to understand other people's diagrams in Ameliorate 🔥."
             imageSlot={
               <Image
+                key={celebrateGif}
                 src={celebrateGif}
                 alt="Celebrate completed tutorial!"
                 width={256}
                 height={143}
-                key={celebrateGif}
+                unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
               />
             }
           />
