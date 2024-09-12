@@ -127,7 +127,7 @@ export const createView = () => {
     id: newViewId,
     type: "quick",
     title: newTitle,
-    order: state.views.length,
+    order: Math.max(...state.views.map((view) => view.order)) + 1,
     viewState: currentView,
   };
 

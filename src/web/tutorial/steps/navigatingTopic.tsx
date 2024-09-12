@@ -25,11 +25,12 @@ export const navigatingTopicSteps: StepType[] = [
         imageSlot={
           <>
             <Image
+              key="https://github.com/user-attachments/assets/17014abe-f9c5-4ca2-b95d-9683e2b1034b"
               src="https://github.com/user-attachments/assets/17014abe-f9c5-4ca2-b95d-9683e2b1034b"
               alt="clicking between views in cars-going-too-fast topic"
               width={666}
               height={448}
-              key="https://github.com/user-attachments/assets/17014abe-f9c5-4ca2-b95d-9683e2b1034b"
+              unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
             />
             <Typography variant="caption">
               From:{" "}
@@ -61,11 +62,12 @@ export const navigatingTopicSteps: StepType[] = [
         imageSlot={
           <>
             <Image
+              key="https://github.com/user-attachments/assets/bc02d4e2-5507-49d6-bd10-a32ea0ebd841"
               src="https://github.com/user-attachments/assets/bc02d4e2-5507-49d6-bd10-a32ea0ebd841"
               alt="indicators"
               width={600}
               height={467}
-              key="https://github.com/user-attachments/assets/bc02d4e2-5507-49d6-bd10-a32ea0ebd841"
+              unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
             />
           </>
         }
@@ -89,11 +91,12 @@ export const navigatingTopicSteps: StepType[] = [
         }
         imageSlot={
           <Image
+            key="https://github.com/user-attachments/assets/bdf7fd16-d44a-4a74-8e5e-24cd577dc647"
             src="https://github.com/user-attachments/assets/bdf7fd16-d44a-4a74-8e5e-24cd577dc647"
             alt="viewing other perspectives"
             width={492}
             height={411}
-            key="https://github.com/user-attachments/assets/bdf7fd16-d44a-4a74-8e5e-24cd577dc647"
+            unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
           />
         }
       />
@@ -107,11 +110,12 @@ export const navigatingTopicSteps: StepType[] = [
         text="Yay! You've learned the basics for viewing in Ameliorate. Now you can go forth and understand other people's topics! 🔥"
         imageSlot={
           <Image
+            key={celebrateGif}
             src={celebrateGif}
             alt="Celebrate completed tutorial!"
             width={256}
             height={143}
-            key={celebrateGif}
+            unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
           />
         }
       />

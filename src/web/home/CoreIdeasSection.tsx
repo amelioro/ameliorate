@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 import { Link } from "@/web/common/components/Link";
+import { gettingStartedPage } from "@/web/common/urls";
 import { Card } from "@/web/home/Card";
 
 export const CoreIdeasSection = () => {
@@ -79,7 +80,7 @@ export const CoreIdeasSection = () => {
       <Typography variant="h4">Break things down</Typography>
       <Typography variant="body1">
         Check out{" "}
-        <Link href="https://ameliorate.app/docs/getting-started" target="_blank">
+        <Link href={gettingStartedPage} target="_blank">
           Getting Started
         </Link>{" "}
         for a more detailed explanation of the core ideas.

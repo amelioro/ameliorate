@@ -6,8 +6,10 @@ import {
   contributingPage,
   discordInvite,
   discourseSessionsPage,
+  docsPage,
   facebookPage,
   feedbackPage,
+  gettingStartedPage,
   githubRepo,
   youtubeChannel,
 } from "@/web/common/urls";
@@ -17,10 +19,10 @@ export const Footer = () => {
     <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 [&_a]:text-sm">
       <div className="flex flex-col">
         <Typography variant="h6">Ameliorate</Typography>
-        <NavLink href="https://ameliorate.app/docs" target="_blank">
+        <NavLink href={docsPage} target="_blank">
           Docs
         </NavLink>
-        <NavLink href="https://ameliorate.app/docs/getting-started" target="_blank">
+        <NavLink href={gettingStartedPage} target="_blank">
           Getting Started
         </NavLink>
         <NavLink href="/examples" target="_blank">

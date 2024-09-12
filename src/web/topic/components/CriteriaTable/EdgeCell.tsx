@@ -4,7 +4,7 @@ import { Edge } from "@/web/topic/utils/graph";
 
 export const EdgeCell = ({ edge }: { edge: Edge }) => {
   return (
-    <div className="flex h-full items-center justify-center">
+    <div className="flex h-full flex-col items-center justify-center">
       <CommonIndicators graphPartId={edge.id} notes={edge.data.notes} />
       <ContentIndicators
         className="ml-0"
