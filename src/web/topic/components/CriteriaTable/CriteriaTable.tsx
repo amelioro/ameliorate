@@ -288,6 +288,11 @@ export const CriteriaTable = () => {
         muiTableProps={{
           className: tableZoomClasses,
         }}
+        state={{
+          // have to set columnOrder because otherwise new columns are appended to the end, instead of before the last cell in the case of Solution Totals when table is transposed
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- all columns should have an id or accessorKey set
+          columnOrder: columnData.map((col) => col.id ?? col.accessorKey!),
+        }}
         initialState={{
           // this won't work if the last row's header is just "totals" as a string
           columnPinning: { left: ["rowHeaderLabel"] },
