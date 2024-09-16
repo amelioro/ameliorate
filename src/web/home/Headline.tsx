@@ -52,7 +52,7 @@ export const Headline = () => {
         </Typography>
 
         <Typography variant="body1">
-          Thinking through problems doesn't have to be so hard.
+          Problems can be tough, especially when they're debatable.
         </Typography>
 
         <Typography variant="body1" className="-mt-1">
