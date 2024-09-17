@@ -9,24 +9,14 @@ import { Headline } from "@/web/home/Headline";
 import { ImprovingSection } from "@/web/home/ImprovingSection";
 import { UseCasesSection } from "@/web/home/UseCasesSection";
 
-// influence Google Search to display search results with the name "Ameliorate" instead of ameliorate.app https://developers.google.com/search/docs/appearance/site-names#how-site-names-in-google-search-are-created
-const siteNameJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  name: "Ameliorate",
-  url: "https://ameliorate.app/",
-};
-
 const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Ameliorate</title>
-        <meta
-          name="description"
-          content="Ameliorate is a tool for analyzing debatable problems effectively, collaboratively, and with an open mind."
-        />
-        <script type="application/ld+json">{JSON.stringify(siteNameJsonLd)}</script>
+        {/* not in _app.page.tsx because these shouldn't override the og tags on other pages */}
+        {/* since we prefer to on title and link tags in most cases, to avoid duplication */}
+        <meta property="og:title" content="Ameliorate" />
+        <meta property="og:url" content="https://ameliorate.app/" />
       </Head>
 
       <div className="flex w-full flex-col divide-y">
