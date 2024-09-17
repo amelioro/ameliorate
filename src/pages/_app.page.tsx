@@ -13,6 +13,14 @@ import { getThemeOptions } from "@/web/common/theme";
 import { trpc } from "@/web/common/trpc";
 import "@/web/common/globals.css";
 
+// influence Google Search to display search results with the name "Ameliorate" instead of ameliorate.app https://developers.google.com/search/docs/appearance/site-names#how-site-names-in-google-search-are-created
+const siteNameJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Ameliorate",
+  url: "https://ameliorate.app/",
+};
+
 // eslint-disable-next-line functional/no-let -- jank way to enable trpc queries outside of react tree, e.g. from zustand middleware https://github.com/trpc/trpc/discussions/2926#discussioncomment-5647033
 export let trpcClient = null as unknown as ReturnType<typeof trpc.useContext>["client"];
 
@@ -28,14 +36,21 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     <>
       <Head>
         <title>Ameliorate</title>
-        <meta name="description" content="Solve problems" />
+        <meta
+          name="description"
+          content="Ameliorate is a tool for analyzing debatable problems effectively, collaboratively, and with an open mind."
+        />
+
         <link rel="icon" href="/favicon.ico" />
 
         {/* https://mui.com/material-ui/getting-started/usage/#responsive-meta-tag */}
         <meta name="viewport" content="initial-scale=1, width=device-width" />
 
+        <meta property="og:type" content="website" />
+
         {/* influence Google Search to display search results with the name "Ameliorate" instead of ameliorate.app https://developers.google.com/search/docs/appearance/site-names#how-site-names-in-google-search-are-created */}
         <meta property="og:site_name" content="Ameliorate" />
+        <script type="application/ld+json">{JSON.stringify(siteNameJsonLd)}</script>
       </Head>
 
       {/* https://mui.com/material-ui/integrations/interoperability/#setup */}

@@ -86,10 +86,9 @@ const Topic: NextPage = () => {
         <title>
           {username}/{topicTitle} | Ameliorate
         </title>
-        <meta
-          name="description"
-          content={`${username}/${topicTitle} - understand your topic better.`}
-        />
+
+        <meta property="og:title" content={`${username}/${topicTitle} | Ameliorate`} />
+        <meta name="description" content={getDiagram.data.description} />
 
         {/* prevent google mis-indexing - somehow "https://ameliorate.app/keyserj/mta-congestion-pricing?view=Good+about+Solution" was not being indexed because google thought "https://ameliorate.app/examples" was canonical */}
         {/* found solution via https://support.google.com/webmasters/answer/7440203 "Duplicate without user-selected canonical" section */}
