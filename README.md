@@ -48,7 +48,7 @@ Frontend:
 
 Feel free to start discussion or ask questions in the [Discord server](https://discord.gg/3KhdyJkTWT).
 
-Use GitHub's [issues](https://github.com/amelioro/ameliorate/issues) to submit a [bug report](https://github.com/amelioro/ameliorate/issues/new?assignees=&labels=bug%2C+needs+review&template=bug_report.md&title=), [feature request](https://github.com/amelioro/ameliorate/issues/new?assignees=&labels=enhancement%2C+needs+review&template=feature_request.md&title=), or any other [idea/question](https://github.com/amelioro/ameliorate/issues/new?assignees=&labels=needs+review&template=other-issues.md&title=) you've got.
+Use GitHub's [issues](https://github.com/amelioro/ameliorate/issues) to submit a [bug report](https://github.com/amelioro/ameliorate/issues/new?assignees=&labels=bug%2Cneeds+review&projects=&template=bug_report.yml), [feature request](https://github.com/amelioro/ameliorate/issues/new?assignees=&labels=enhancement%2Cneeds+review&projects=&template=feature_request.yml), or any other [idea/question](https://github.com/amelioro/ameliorate/issues/new?assignees=&labels=needs+review&projects=&template=other-issues.md&title=) you've got.
 
 See the [Contributor's Guide](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md) for
 
