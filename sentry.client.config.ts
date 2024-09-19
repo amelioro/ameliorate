@@ -28,17 +28,4 @@ Sentry.init({
     }
     return event;
   },
-
-  // Replays seem like they could be useful, so we'll just keep them enabled until we know that we'll exceed the free tier
-  replaysOnErrorSampleRate: 1.0,
-  // This sets the sample rate to be 10%. You may want this to be 100% while
-  // in development and sample at a lower rate in production
-  replaysSessionSampleRate: 0.1,
-  integrations: [
-    Sentry.replayIntegration({
-      // Additional Replay configuration goes in here, for example:
-      maskAllText: true,
-      blockAllMedia: true,
-    }),
-  ],
 });
