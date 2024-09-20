@@ -6,6 +6,7 @@ import {
   useForceNodesIntoLayers,
   useLayerNodeIslandsTogether,
   useLayoutThoroughness,
+  useMinimizeEdgeCrossings,
 } from "@/web/view/currentViewStore/layout";
 import { useSelectedGraphPart } from "@/web/view/currentViewStore/store";
 
@@ -13,11 +14,18 @@ import { useSelectedGraphPart } from "@/web/view/currentViewStore/store";
 export const useLayoutedDiagram = (diagram: Diagram) => {
   const forceNodesIntoLayers = useForceNodesIntoLayers();
   const layerNodeIslandsTogether = useLayerNodeIslandsTogether();
+  const minimizeEdgeCrossings = useMinimizeEdgeCrossings();
   const thoroughness = useLayoutThoroughness();
 
+  // re-layout if this changes
   const diagramHash = [...diagram.nodes, ...diagram.edges]
     .map((graphPart) => graphPart.id)
-    .concat(String(forceNodesIntoLayers), String(layerNodeIslandsTogether), String(thoroughness)) // re-layout if this changes
+    .concat(
+      String(forceNodesIntoLayers),
+      String(layerNodeIslandsTogether),
+      String(minimizeEdgeCrossings),
+      String(thoroughness),
+    )
     .join();
   const [prevDiagramHash, setPrevDiagramHash] = useState<string | null>(null);
 
@@ -34,6 +42,7 @@ export const useLayoutedDiagram = (diagram: Diagram) => {
         diagram,
         forceNodesIntoLayers,
         layerNodeIslandsTogether,
+        minimizeEdgeCrossings,
         thoroughness,
       );
       setLayoutedNodes(newLayoutedNodes);

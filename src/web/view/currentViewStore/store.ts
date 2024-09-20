@@ -37,6 +37,7 @@ export interface ViewState {
   // layout
   forceNodesIntoLayers: boolean;
   layerNodeIslandsTogether: boolean;
+  minimizeEdgeCrossings: boolean;
   layoutThoroughness: number;
 }
 
@@ -68,6 +69,7 @@ export const initialViewState: ViewState = {
 
   forceNodesIntoLayers: true,
   layerNodeIslandsTogether: false,
+  minimizeEdgeCrossings: false,
   layoutThoroughness: 1, // by default, prefer keeping node types together over keeping parents close to children
 };
 
