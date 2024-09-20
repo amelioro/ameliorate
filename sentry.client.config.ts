@@ -28,4 +28,18 @@ Sentry.init({
     }
     return event;
   },
+
+  // honestly not sure what value session tracking provides, but when true, this sends an envelope
+  // fetch twice every time a quick view is selected (ending a session and starting one), which is a lot.
+  autoSessionTracking: false,
+
+  integrations: [
+    Sentry.browserTracingIntegration({
+      // when true, this sends an envelope fetch every time a quick view is selected, which is a lot.
+      // for error debugging we can see when a different page is fetched by looking at backend requests.
+      // if we wanted to see analytics of how many times a page was viewed, we could turn this on,
+      // but without paying for sentry dashboards, I think we can't see that data easily anyway.
+      instrumentNavigation: false,
+    }),
+  ],
 });

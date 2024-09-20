@@ -10,6 +10,10 @@ export const useLayerNodeIslandsTogether = () => {
   return useCurrentViewStore((state) => state.layerNodeIslandsTogether);
 };
 
+export const useMinimizeEdgeCrossings = () => {
+  return useCurrentViewStore((state) => state.minimizeEdgeCrossings);
+};
+
 export const useLayoutThoroughness = () => {
   return useCurrentViewStore((state) => state.layoutThoroughness);
 };
@@ -23,6 +27,12 @@ export const toggleForceNodesIntoLayers = (force: boolean) => {
 
 export const toggleLayerNodeIslandsTogether = (layer: boolean) => {
   useCurrentViewStore.setState({ layerNodeIslandsTogether: layer });
+
+  emitter.emit("changedLayoutConfig");
+};
+
+export const toggleMinimizeEdgeCrossings = (minimize: boolean) => {
+  useCurrentViewStore.setState({ minimizeEdgeCrossings: minimize });
 
   emitter.emit("changedLayoutConfig");
 };

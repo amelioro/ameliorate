@@ -86,6 +86,7 @@ export const layout = async (
   diagram: Diagram,
   partition: boolean,
   layerNodeIslandsTogether: boolean,
+  minimizeEdgeCrossings: boolean,
   thoroughness: number,
 ): Promise<NodePosition[]> => {
   const { nodes, edges } = diagram;
@@ -121,6 +122,9 @@ export const layout = async (
     // perhaps higher thoroughness means it'll find a layout that better uses space,
     // caring less about node order.
     "elk.layered.thoroughness": thoroughness.toString(),
+    // elk defaults to minimizing, but sometimes this makes nodes in the same layer be spread out a lot;
+    // turning this off prioritizes nodes in the same layer being close together at the cost of more edge crossings.
+    "crossingMinimization.strategy": minimizeEdgeCrossings ? "LAYER_SWEEP" : "NONE",
   };
 
   const graph: ElkNode = {

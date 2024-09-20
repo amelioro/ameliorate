@@ -13,6 +13,7 @@ import {
   PhotoCamera,
   PowerInput,
   Route,
+  SsidChart,
   Upload,
   WbTwilight,
 } from "@mui/icons-material";
@@ -51,9 +52,11 @@ import {
   setLayoutThoroughness,
   toggleForceNodesIntoLayers,
   toggleLayerNodeIslandsTogether,
+  toggleMinimizeEdgeCrossings,
   useForceNodesIntoLayers,
   useLayerNodeIslandsTogether,
   useLayoutThoroughness,
+  useMinimizeEdgeCrossings,
 } from "@/web/view/currentViewStore/layout";
 import { resetView, useFormat } from "@/web/view/currentViewStore/store";
 import { resetQuickViews } from "@/web/view/quickViewStore/store";
@@ -119,6 +122,7 @@ export const MoreActionsDrawer = ({
   const unrestrictedEditing = useUnrestrictedEditing();
   const forceNodesIntoLayers = useForceNodesIntoLayers();
   const layerNodeIslandsTogether = useLayerNodeIslandsTogether();
+  const minimizeEdgeCrossings = useMinimizeEdgeCrossings();
   const flashlightMode = useFlashlightMode();
   const readonlyMode = useReadonlyMode();
   const layoutThoroughness = useLayoutThoroughness();
@@ -305,6 +309,18 @@ export const MoreActionsDrawer = ({
                 sx={{ borderRadius: "50%", border: "0" }}
               >
                 <PowerInput />
+              </ToggleButton>
+              <ToggleButton
+                value={minimizeEdgeCrossings}
+                title="Minimize edge crossings"
+                aria-label="Minimize edge crossings"
+                color="primary"
+                size="small"
+                selected={minimizeEdgeCrossings}
+                onClick={() => toggleMinimizeEdgeCrossings(!minimizeEdgeCrossings)}
+                sx={{ borderRadius: "50%", border: "0" }}
+              >
+                <SsidChart />
               </ToggleButton>
             </ListItem>
 
