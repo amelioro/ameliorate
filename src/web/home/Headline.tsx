@@ -1,3 +1,4 @@
+import { OpenInNew } from "@mui/icons-material";
 import { Button, Typography } from "@mui/material";
 import Image from "next/image";
 
@@ -62,12 +63,21 @@ export const Headline = () => {
           <b>make better decisions</b>.
         </Typography>
 
-        <div className="flex justify-center gap-2 sm:justify-normal">
+        <div className="flex flex-wrap items-center justify-center gap-2 *:shrink-0 sm:justify-normal">
           <Button variant="contained" LinkComponent={Link} href="/new">
             Start Building
           </Button>
           <Button variant="outlined" LinkComponent={Link} href="/playground">
             Play Around
+          </Button>
+          <Button
+            variant="text"
+            LinkComponent={Link}
+            href="https://www.youtube.com/watch?v=eC-Xs5ec90Q"
+            target="_blank"
+            endIcon={<OpenInNew />}
+          >
+            See Demo
           </Button>
         </div>
       </div>
