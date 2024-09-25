@@ -73,7 +73,7 @@ const applyProblemFilter = (graph: Graph, filters: ProblemOptions) => {
   if (filters.problemDetails.includes("effects")) detailEdges.push("createdBy");
   if (filters.problemDetails.includes("subproblems")) detailEdges.push("subproblemOf");
   if (filters.problemDetails.includes("criteria")) detailEdges.push("criterionFor");
-  if (filters.problemDetails.includes("solutions")) detailEdges.push("addresses");
+  if (filters.problemDetails.includes("solutions")) detailEdges.push("addresses", "accomplishes");
   /* eslint-enable functional/immutable-data */
 
   const problemDetails = descendants(centralProblem, graph, detailEdges);
@@ -176,19 +176,19 @@ const getSolutionDetails = (
 ) => {
   if (detailType === "none") return [];
 
-  const solutionComponentsEffects = solutions.flatMap((solution) =>
+  const ancestorDetails = solutions.flatMap((solution) =>
     ancestors(solution, graph, ["has", "creates"]),
   );
 
-  const solutionObstacles = solutions.flatMap((solution) =>
-    descendants(solution, graph, ["obstacleOf", "addresses"]),
+  const descendantDetails = solutions.flatMap(
+    (solution) => descendants(solution, graph, ["obstacleOf", "addresses", "accomplishes"]), // accomplishes?
   );
 
   const criteriaIds = criteria.map((criterion) => criterion.id);
 
   return detailType === "all"
-    ? [...solutionComponentsEffects, ...solutionObstacles]
-    : solutionComponentsEffects.filter((detail) =>
+    ? [...ancestorDetails, ...descendantDetails]
+    : ancestorDetails.filter((detail) =>
         ancestors(detail, graph).some((ancestor) => criteriaIds.includes(ancestor.id)),
       );
 };
