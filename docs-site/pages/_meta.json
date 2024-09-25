@@ -1,5 +1,6 @@
 {
   "index": "Introduction",
+  "comparisons": "Comparisons",
   "-- App": {
     "type": "separator",
     "title": "App"

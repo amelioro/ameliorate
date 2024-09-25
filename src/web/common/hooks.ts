@@ -58,7 +58,7 @@ export const useSessionUser = () => {
     {
       enabled: !!authUser?.sub,
       onSuccess: (user) => {
-        if (user) Sentry.setUser({ username: user.username, ip_address: undefined }); // don't log username with their ip
+        if (user) Sentry.setUser({ username: user.username });
       },
     },
   );

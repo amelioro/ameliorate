@@ -136,6 +136,7 @@ enum EdgeType {
   subproblemOf
   addresses
   accomplishes
+  contingencyFor
   createdBy
   has
   criterionFor
