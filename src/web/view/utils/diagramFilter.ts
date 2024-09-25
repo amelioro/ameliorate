@@ -180,8 +180,8 @@ const getSolutionDetails = (
     ancestors(solution, graph, ["has", "creates"]),
   );
 
-  const descendantDetails = solutions.flatMap(
-    (solution) => descendants(solution, graph, ["obstacleOf", "addresses", "accomplishes"]), // accomplishes?
+  const descendantDetails = solutions.flatMap((solution) =>
+    descendants(solution, graph, ["obstacleOf", "addresses", "accomplishes", "contingencyFor"]),
   );
 
   const criteriaIds = criteria.map((criterion) => criterion.id);
