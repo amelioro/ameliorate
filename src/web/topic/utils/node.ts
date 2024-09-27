@@ -95,7 +95,7 @@ export const nodeDecorations: Record<FlowNodeType, NodeDecoration> = {
     NodeIcon: Code,
   },
 
-  // claim
+  // justification
   rootClaim: {
     title: "Root Claim",
     NodeIcon: Article,

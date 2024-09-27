@@ -54,7 +54,7 @@ export const buildNode = ({
       customType: customType,
       label: label ?? `new node`,
       notes: notes ?? "",
-      arguedDiagramPartId: justificationNodeTypes.includes(type) ? arguedDiagramPartId : undefined, // don't set arguedDiagramPartId on non-claims because non-claims shouldn't be deleted when the claim tree is deleted
+      arguedDiagramPartId: justificationNodeTypes.includes(type) ? arguedDiagramPartId : undefined, // don't set arguedDiagramPartId on non-justifications because non-justifications shouldn't be deleted when the justification tree is deleted
       showing: true,
     },
     type: type,
@@ -122,7 +122,7 @@ export const buildEdge = ({
       notes: notes ?? "",
       arguedDiagramPartId: justificationRelationNames.includes(relation)
         ? arguedDiagramPartId
-        : undefined, // don't set arguedDiagramPartId on non-claims because non-claims shouldn't be deleted when the claim tree is deleted
+        : undefined, // don't set arguedDiagramPartId on non-justifications because non-justifications shouldn't be deleted when the justification tree is deleted
     },
     label: relation,
     source: sourceId,

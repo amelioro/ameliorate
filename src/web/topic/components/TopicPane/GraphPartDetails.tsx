@@ -12,7 +12,7 @@ import { StandaloneEdge } from "@/web/topic/components/Edge/StandaloneEdge";
 import { EditableNode } from "@/web/topic/components/Node/EditableNode";
 import { AnswerDetails } from "@/web/topic/components/TopicPane/AnswerDetails";
 import { CommentSection } from "@/web/topic/components/TopicPane/CommentSection";
-import { DetailsClaimsSection } from "@/web/topic/components/TopicPane/DetailsClaimsSection";
+import { DetailsJustificationSection } from "@/web/topic/components/TopicPane/DetailsJustificationSection";
 import { DetailsResearchSection } from "@/web/topic/components/TopicPane/DetailsResearchSection";
 import { FactDetails } from "@/web/topic/components/TopicPane/FactDetails";
 import { QuestionDetails } from "@/web/topic/components/TopicPane/QuestionDetails";
@@ -109,7 +109,7 @@ export const GraphPartDetails = ({ graphPart }: Props) => {
 
         <Divider className="my-1" />
 
-        <DetailsClaimsSection graphPart={graphPart} />
+        <DetailsJustificationSection graphPart={graphPart} />
 
         {/* prevent adding research nodes to edges; not 100% sure that we want to restrict this, but if it continues to seem good, this section can accept node instead of graphPart */}
         {partIsNode && (

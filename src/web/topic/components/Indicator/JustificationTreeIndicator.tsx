@@ -3,8 +3,8 @@ import { MouseEventHandler, useCallback } from "react";
 
 import { Indicator } from "@/web/topic/components/Indicator/Indicator";
 import {
-  useExplicitClaimCount,
-  useNonTopLevelClaimCount,
+  useJustificationCount,
+  useNonTopLevelJustificationCount,
   useRootClaim,
 } from "@/web/topic/store/graphPartHooks";
 import { viewJustification } from "@/web/view/currentViewStore/filter";
@@ -13,10 +13,10 @@ interface Props {
   graphPartId: string;
 }
 
-export const ClaimTreeIndicator = ({ graphPartId }: Props) => {
+export const JustificationTreeIndicator = ({ graphPartId }: Props) => {
   const rootClaim = useRootClaim(graphPartId);
-  const explicitClaimCount = useExplicitClaimCount(graphPartId);
-  const nonTopLevelClaimCount = useNonTopLevelClaimCount(graphPartId);
+  const justificationCount = useJustificationCount(graphPartId);
+  const nonTopLevelJustificationCount = useNonTopLevelJustificationCount(graphPartId);
 
   const onClick: MouseEventHandler<HTMLButtonElement> = useCallback(
     (event) => {
@@ -29,17 +29,19 @@ export const ClaimTreeIndicator = ({ graphPartId }: Props) => {
     [rootClaim],
   );
 
-  const Icon = explicitClaimCount > 0 ? AccountTree : AccountTreeOutlined;
+  const Icon = justificationCount > 0 ? AccountTree : AccountTreeOutlined;
   const title =
     "View justification tree" +
-    (nonTopLevelClaimCount > 0 ? ` (${nonTopLevelClaimCount} justifications not shown here)` : "");
+    (nonTopLevelJustificationCount > 0
+      ? ` (${nonTopLevelJustificationCount} justifications not shown here)`
+      : "");
 
   return (
     <Indicator
       Icon={Icon}
       iconHasBackground={false}
       title={title}
-      onClick={explicitClaimCount > 0 ? onClick : undefined}
+      onClick={justificationCount > 0 ? onClick : undefined}
     />
   );
 };

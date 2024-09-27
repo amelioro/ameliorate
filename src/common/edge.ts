@@ -24,7 +24,7 @@ export const relationNames = [
   "sourceOf", //source to fact
   "mentions", //source to source
 
-  // claim
+  // justification
   "supports",
   "critiques",
 

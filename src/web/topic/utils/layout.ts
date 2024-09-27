@@ -45,7 +45,7 @@ const partitionOrders: { [type in NodeType]: string } = {
   fact: "null",
   source: "null",
 
-  // claim
+  // justification
   rootClaim: "null",
   support: "null",
   critique: "null",

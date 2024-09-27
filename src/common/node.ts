@@ -27,7 +27,7 @@ export const nodeTypes = [
   "fact",
   "source",
 
-  // claim
+  // justification
   "rootClaim",
   "support",
   "critique",

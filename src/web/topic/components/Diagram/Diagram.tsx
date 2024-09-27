@@ -57,7 +57,7 @@ const nodeTypes: Record<FlowNodeType, ComponentType<NodeProps>> = {
   fact: buildNodeComponent("fact"),
   source: buildNodeComponent("source"),
 
-  // claim
+  // justification
   rootClaim: buildNodeComponent("rootClaim"),
   support: buildNodeComponent("support"),
   critique: buildNodeComponent("critique"),

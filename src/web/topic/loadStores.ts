@@ -93,7 +93,7 @@ export const downloadTopic = () => {
  * Generate new ids for nodes, edges, and views to avoid conflicts with the topic that this was downloaded
  * from.
  *
- * Also, ensure that related scores, claims, edges, and views are updated accordingly.
+ * Also, ensure that related scores, justifications, edges, and views are updated accordingly.
  */
 const ensureUnique = (
   topicStoreState: TopicStoreState,
