@@ -31,6 +31,7 @@ import { TopicData } from "@/web/topic/utils/apiConversion";
 import { loadActionConfig } from "@/web/view/actionConfigStore";
 import { loadView } from "@/web/view/currentViewStore/store";
 import { loadMiscTopicConfig } from "@/web/view/miscTopicConfigStore";
+import { migrate as migrateQuickView } from "@/web/view/quickViewStore/migrate";
 import {
   QuickView,
   QuickViewStoreState,
@@ -92,7 +93,7 @@ export const downloadTopic = () => {
  * Generate new ids for nodes, edges, and views to avoid conflicts with the topic that this was downloaded
  * from.
  *
- * Also, ensure that related scores, claims, edges, and views are updated accordingly.
+ * Also, ensure that related scores, justifications, edges, and views are updated accordingly.
  */
 const ensureUnique = (
   topicStoreState: TopicStoreState,
@@ -155,7 +156,16 @@ export const uploadTopic = (
       ) as TopicStoreState;
 
       const viewsPersistState = downloadJson.views;
-      const migratedViewsState = viewsPersistState.state; // TODO: migrate when quick views have migrations
+      if (!viewsPersistState.version) {
+        throw errorWithData(
+          "No version found in file, cannot migrate old state",
+          viewsPersistState,
+        );
+      }
+      const migratedViewsState = migrateQuickView(
+        viewsPersistState.state,
+        viewsPersistState.version,
+      ) as QuickViewStoreState;
 
       // avoid conflicts with existing topics
       const { uniqueTopic, uniqueViews } = ensureUnique(migratedTopicState, migratedViewsState);

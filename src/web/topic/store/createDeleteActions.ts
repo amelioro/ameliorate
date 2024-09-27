@@ -1,13 +1,12 @@
 import { createDraft, finishDraft } from "immer";
 
 import { errorWithData } from "@/common/errorHandling";
-import { justificationNodeTypes, structureNodeTypes } from "@/common/node";
+import { breakdownNodeTypes, justificationNodeTypes } from "@/common/node";
 import { emitter } from "@/web/common/event";
 import { setNewlyAddedNode } from "@/web/common/store/ephemeralStore";
 import { WorkspaceContextType } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
-import { getExplicitClaimCount } from "@/web/topic/store/graphPartHooks";
+import { getJustificationCount } from "@/web/topic/store/graphPartHooks";
 import { TopicStoreState, useTopicStore } from "@/web/topic/store/store";
-import { getImplicitLabel } from "@/web/topic/utils/claim";
 import { Relation, canCreateEdge, getRelation } from "@/web/topic/utils/edge";
 import {
   Graph,
@@ -21,6 +20,7 @@ import {
   getNodesComposedBy,
   isNode,
 } from "@/web/topic/utils/graph";
+import { getImplicitLabel } from "@/web/topic/utils/justification";
 import { FlowNodeType, edges } from "@/web/topic/utils/node";
 import { getUnrestrictedEditing } from "@/web/view/actionConfigStore";
 import { setSelected } from "@/web/view/currentViewStore/store";
@@ -66,7 +66,7 @@ const connectCriteriaToSolutions = (state: TopicStoreState, newNode: Node, probl
       return buildEdge({
         sourceId,
         targetId,
-        relation: "embodies",
+        relation: "fulfills",
       });
     });
 
@@ -99,7 +99,7 @@ export const addNode = ({
 
   const topicGraph = { nodes: state.nodes, edges: state.edges };
 
-  // TODO: replace root claim hackery with direct edge from claims to argued diagram part
+  // TODO: replace root claim hackery with direct edge from justification to argued diagram part
   // e.g. instead of support -> supports -> root claim, which requires this creation of a root claim
   // if it doesn't exist, just do support -> supports -> argued diagram part.
   // root claim has existed because edges could not previously point to other edges, but they will
@@ -231,7 +231,7 @@ const createEdgeAndImpliedEdges = (
   // don't create implied edges if the node being added is not in the topic diagram
   // e.g. when adding a question to the solution component, don't also link the solution to that
   // question, because it's not as relevant
-  if (structureNodeTypes.includes(parent.type) && structureNodeTypes.includes(child.type)) {
+  if (breakdownNodeTypes.includes(parent.type) && breakdownNodeTypes.includes(child.type)) {
     // indirectly recurses by calling this method after determining which implied edges to create
     // note: modifies topicGraph.edges through `state` (via the line above)
     createEdgesImpliedByComposition(topicGraph, parent, child, relation);
@@ -295,9 +295,9 @@ export const deleteNode = (nodeId: string) => {
 
   const arguedDiagramPartId = deletedNode.data.arguedDiagramPartId;
   if (justificationNodeTypes.includes(deletedNode.type) && arguedDiagramPartId) {
-    const remainingArguedClaims = getExplicitClaimCount(state, arguedDiagramPartId);
+    const remainingArguedJustification = getJustificationCount(state, arguedDiagramPartId);
     // deleted node was the last
-    if (remainingArguedClaims <= 1) {
+    if (remainingArguedJustification <= 1) {
       /* eslint-disable functional/immutable-data, no-param-reassign */
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete -- consider using a map instead of an object?
       state.nodes = state.nodes.filter(
@@ -316,7 +316,7 @@ export const deleteNode = (nodeId: string) => {
   // delete this node and edges connected to this node
   state.nodes = state.nodes.filter((node) => node.id !== nodeId);
   state.edges = state.edges.filter((edge) => !nodeEdges.includes(edge));
-  deleteInvalidClaims(state);
+  deleteInvalidJustification(state);
   deleteInvalidScores(state);
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
@@ -329,14 +329,14 @@ export const deleteEdge = (edgeId: string) => {
   /* eslint-disable functional/immutable-data, no-param-reassign */
   // delete this edge
   state.edges = state.edges.filter((edge) => edge.id !== edgeId);
-  deleteInvalidClaims(state);
+  deleteInvalidJustification(state);
   deleteInvalidScores(state);
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   useTopicStore.setState(finishDraft(state), false, "deleteEdge");
 };
 
-const deleteInvalidClaims = (state: TopicStoreState) => {
+const deleteInvalidJustification = (state: TopicStoreState) => {
   const graphPartIds = [...state.nodes, ...state.edges].map((graphPart) => graphPart.id);
 
   /* eslint-disable functional/immutable-data, no-param-reassign */

@@ -2,24 +2,24 @@ import { ThumbsUpDown } from "@mui/icons-material";
 import { ListItem, ListItemIcon, ListItemText, Stack, Typography } from "@mui/material";
 
 import { justificationNodeTypes } from "@/common/node";
-import { ClaimTreeIndicator } from "@/web/topic/components/Indicator/ClaimTreeIndicator";
+import { JustificationTreeIndicator } from "@/web/topic/components/Indicator/JustificationTreeIndicator";
 import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
 import { EditableNode } from "@/web/topic/components/Node/EditableNode";
 import { nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
-import { useTopLevelClaims } from "@/web/topic/store/graphPartHooks";
-import { isClaimEdge } from "@/web/topic/utils/claim";
+import { useTopLevelJustification } from "@/web/topic/store/graphPartHooks";
 import { GraphPart, isNode } from "@/web/topic/utils/graph";
+import { isJustificationEdge } from "@/web/topic/utils/justification";
 
 interface Props {
   graphPart: GraphPart;
 }
 
-export const DetailsClaimsSection = ({ graphPart }: Props) => {
-  const { supports, critiques } = useTopLevelClaims(graphPart.id);
+export const DetailsJustificationSection = ({ graphPart }: Props) => {
+  const { supports, critiques } = useTopLevelJustification(graphPart.id);
 
-  if (isClaimEdge(graphPart)) return <></>; // claim edges can't have their own claims
+  if (isJustificationEdge(graphPart)) return <></>; // justification edges can't have their own justifications
 
-  const isClaimNode = isNode(graphPart) && justificationNodeTypes.includes(graphPart.type);
+  const isJustificationNode = isNode(graphPart) && justificationNodeTypes.includes(graphPart.type);
 
   return (
     <>
@@ -46,11 +46,13 @@ export const DetailsClaimsSection = ({ graphPart }: Props) => {
           relation={{
             child: "support",
             name: "supports",
-            parent: isClaimNode ? graphPart.type : "rootClaim",
+            parent: isJustificationNode ? graphPart.type : "rootClaim",
           }}
           selectNewNode={false}
         />
-        <ClaimTreeIndicator graphPartId={graphPart.data.arguedDiagramPartId ?? graphPart.id} />
+        <JustificationTreeIndicator
+          graphPartId={graphPart.data.arguedDiagramPartId ?? graphPart.id}
+        />
         <AddNodeButton
           fromPartId={graphPart.id}
           as="child"
@@ -59,7 +61,7 @@ export const DetailsClaimsSection = ({ graphPart }: Props) => {
           relation={{
             child: "critique",
             name: "critiques",
-            parent: isClaimNode ? graphPart.type : "rootClaim",
+            parent: isJustificationNode ? graphPart.type : "rootClaim",
           }}
           selectNewNode={false}
         />

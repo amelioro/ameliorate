@@ -54,7 +54,7 @@ export const buildNode = ({
       customType: customType,
       label: label ?? `new node`,
       notes: notes ?? "",
-      arguedDiagramPartId: justificationNodeTypes.includes(type) ? arguedDiagramPartId : undefined, // don't set arguedDiagramPartId on non-claims because non-claims shouldn't be deleted when the claim tree is deleted
+      arguedDiagramPartId: justificationNodeTypes.includes(type) ? arguedDiagramPartId : undefined, // don't set arguedDiagramPartId on non-justifications because non-justifications shouldn't be deleted when the justification tree is deleted
       showing: true,
     },
     type: type,
@@ -122,7 +122,7 @@ export const buildEdge = ({
       notes: notes ?? "",
       arguedDiagramPartId: justificationRelationNames.includes(relation)
         ? arguedDiagramPartId
-        : undefined, // don't set arguedDiagramPartId on non-claims because non-claims shouldn't be deleted when the claim tree is deleted
+        : undefined, // don't set arguedDiagramPartId on non-justifications because non-justifications shouldn't be deleted when the justification tree is deleted
     },
     label: relation,
     source: sourceId,
@@ -260,24 +260,24 @@ export const getSecondaryNeighbors = (
     secondaryNeighbors.push(...secondaryResearch);
   }
 
-  if (generalFilter.showSecondaryStructure) {
-    const primaryNonStructureIds = primaryNodes
-      .filter((node) => !infoNodeTypes.structure.includes(node.type))
+  if (generalFilter.showSecondaryBreakdown) {
+    const primaryNonBreakdownIds = primaryNodes
+      .filter((node) => !infoNodeTypes.breakdown.includes(node.type))
       .map((node) => node.id);
 
-    const secondaryStructure = graph.nodes.filter(
+    const secondaryBreakdown = graph.nodes.filter(
       (node) =>
         !primaryNodeIds.includes(node.id) &&
-        infoNodeTypes.structure.includes(node.type) &&
+        infoNodeTypes.breakdown.includes(node.type) &&
         graph.edges.some(
           (edge) =>
-            (edge.source === node.id && primaryNonStructureIds.includes(edge.target)) ||
-            (edge.target === node.id && primaryNonStructureIds.includes(edge.source)),
+            (edge.source === node.id && primaryNonBreakdownIds.includes(edge.target)) ||
+            (edge.target === node.id && primaryNonBreakdownIds.includes(edge.source)),
         ),
     );
 
     // eslint-disable-next-line functional/immutable-data
-    secondaryNeighbors.push(...secondaryStructure);
+    secondaryNeighbors.push(...secondaryBreakdown);
   }
 
   return secondaryNeighbors;

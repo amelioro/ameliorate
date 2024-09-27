@@ -172,7 +172,7 @@ const sharedPalette = {
   fact: augmentColor({ color: { main: orange["700"] } }), // orange, fact
   source: augmentColor({ color: { main: "#0288d1", contrastText: "rgba(0, 0, 0, 0.87)" } }), // blue, info
 
-  // claim
+  // justification
   rootClaim: augmentColor({ color: { main: "#DA9526" } }), // goldenrod (gold): somewhat neutral; analogous to critique
   // Picked a non-green support-ish color (cyan) for support #26C5DA, grabbed its complement #DA2626 (red-orange) for critique,
   // then entered those into the material 3 theme builder and grabbed 5 tones from each of those two colors' tonal palettes.

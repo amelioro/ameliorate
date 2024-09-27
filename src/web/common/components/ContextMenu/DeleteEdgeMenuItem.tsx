@@ -10,7 +10,7 @@ export const DeleteEdgeMenuItem = ({ edge }: { edge: Edge }) => {
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
 
   if (!userCanEditTopicData) return <></>;
-  // doesn't make sense to delete claim edges because they're a tree not a graph - just delete the nodes
+  // doesn't make sense to delete justification edges because they're a tree not a graph - just delete the nodes
   if (justificationRelationNames.includes(edge.label)) return <></>;
 
   return <ContextMenuItem onClick={() => deleteEdge(edge.id)}>Delete edge</ContextMenuItem>;

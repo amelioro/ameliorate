@@ -16,7 +16,7 @@ export const generalFilterSchema = z.object({
   nodesToShow: z.string().uuid().array(),
   nodesToHide: z.string().uuid().array(),
   showSecondaryResearch: z.boolean(),
-  showSecondaryStructure: z.boolean(),
+  showSecondaryBreakdown: z.boolean(),
 });
 
 export type GeneralFilter = z.infer<typeof generalFilterSchema>;

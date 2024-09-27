@@ -14,7 +14,7 @@ export const relationNames = [
   "has",
   "criterionFor",
   "creates",
-  "embodies",
+  "fulfills",
   "obstacleOf",
 
   // research
@@ -24,7 +24,7 @@ export const relationNames = [
   "sourceOf", //source to fact
   "mentions", //source to source
 
-  // claim
+  // justification
   "supports",
   "critiques",
 
@@ -54,7 +54,7 @@ export const edgeSchema = z.object({
 export type Edge = z.infer<typeof edgeSchema>;
 
 export const infoRelationNames: Record<InfoCategory, RelationName[]> = {
-  structure: [
+  breakdown: [
     "causes",
     "subproblemOf",
     "addresses",
@@ -64,7 +64,7 @@ export const infoRelationNames: Record<InfoCategory, RelationName[]> = {
     "has",
     "criterionFor",
     "creates",
-    "embodies",
+    "fulfills",
     "obstacleOf",
     "relatesTo", // is a generic relation but currently only seems worthwhile in topic
   ],
@@ -72,12 +72,12 @@ export const infoRelationNames: Record<InfoCategory, RelationName[]> = {
   justification: ["supports", "critiques"],
 };
 
-export const structureRelationNames = infoRelationNames.structure;
+export const breakdownRelationNames = infoRelationNames.breakdown;
 export const researchRelationNames = infoRelationNames.research;
 export const justificationRelationNames = infoRelationNames.justification;
 
 export const getSameCategoryEdgeTypes = (edgeType: RelationName): RelationName[] => {
-  if (structureRelationNames.includes(edgeType)) return structureRelationNames;
+  if (breakdownRelationNames.includes(edgeType)) return breakdownRelationNames;
   else if (researchRelationNames.includes(edgeType)) return researchRelationNames;
   else if (justificationRelationNames.includes(edgeType)) return justificationRelationNames;
   else return [];

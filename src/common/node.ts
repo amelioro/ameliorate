@@ -27,7 +27,7 @@ export const nodeTypes = [
   "fact",
   "source",
 
-  // claim
+  // justification
   "rootClaim",
   "support",
   "critique",
@@ -57,7 +57,7 @@ export const nodeSchema = z.object({
 export type Node = z.infer<typeof nodeSchema>;
 
 export const infoNodeTypes: Record<InfoCategory, NodeType[]> = {
-  structure: [
+  breakdown: [
     "problem",
     "cause",
     "criterion",
@@ -73,7 +73,7 @@ export const infoNodeTypes: Record<InfoCategory, NodeType[]> = {
   justification: ["rootClaim", "support", "critique"],
 };
 
-export const structureNodeTypes = infoNodeTypes.structure;
+export const breakdownNodeTypes = infoNodeTypes.breakdown;
 export const researchNodeTypes = infoNodeTypes.research;
 export const justificationNodeTypes = infoNodeTypes.justification;
 
@@ -90,7 +90,7 @@ export const getNewTopicProblemNode = (topicId: number, topicTitle: string): Nod
 };
 
 export const getSameCategoryNodeTypes = (nodeType: NodeType): NodeType[] => {
-  if (structureNodeTypes.includes(nodeType)) return structureNodeTypes;
+  if (breakdownNodeTypes.includes(nodeType)) return breakdownNodeTypes;
   else if (researchNodeTypes.includes(nodeType)) return researchNodeTypes;
   else if (justificationNodeTypes.includes(nodeType)) return justificationNodeTypes;
   else return [];

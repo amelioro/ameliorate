@@ -141,7 +141,7 @@ enum EdgeType {
   has
   criterionFor
   creates
-  embodies
+  fulfills
   obstacleOf
 
   // research

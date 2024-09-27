@@ -28,12 +28,12 @@ const useStandardFilter = (category: InfoCategory) => {
 
 export const useDiagramFilter = (): DiagramFilter => {
   const categoriesToShow = useCategoriesToShow();
-  const structureFilter = useStandardFilter("structure");
+  const breakdownFilter = useStandardFilter("breakdown");
   const researchFilter = useStandardFilter("research");
   const justificationFilter = useStandardFilter("justification");
 
   return {
-    structure: { show: categoriesToShow.includes("structure"), ...structureFilter },
+    breakdown: { show: categoriesToShow.includes("breakdown"), ...breakdownFilter },
     research: { show: categoriesToShow.includes("research"), ...researchFilter },
     justification: { show: categoriesToShow.includes("justification"), ...justificationFilter },
   };
@@ -95,8 +95,8 @@ export const setShowInformation = (category: InfoCategory, show: boolean) => {
 
 export const setStandardFilter = (category: InfoCategory, filter: StandardFilter) => {
   const newFilter =
-    category === "structure"
-      ? { structureFilter: filter }
+    category === "breakdown"
+      ? { breakdownFilter: filter }
       : category === "research"
         ? { researchFilter: filter }
         : { justificationFilter: filter };

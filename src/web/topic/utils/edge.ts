@@ -1,7 +1,7 @@
 import { RelationName, justificationRelationNames } from "@/common/edge";
 import { NodeType, justificationNodeTypes, nodeTypes, researchNodeTypes } from "@/common/node";
-import { hasClaims } from "@/web/topic/utils/claim";
 import { Edge, Graph, Node, RelationDirection, findNodeOrThrow } from "@/web/topic/utils/graph";
+import { hasJustification } from "@/web/topic/utils/justification";
 import { children, components, parents } from "@/web/topic/utils/node";
 
 const questionRelations: AddableRelation[] = nodeTypes.map((nodeType) => ({
@@ -89,11 +89,11 @@ export const relations: AddableRelation[] = researchRelations.concat([
 
   { child: "benefit", name: "addresses", parent: "cause", addableFrom: "neither" },
 
-  { child: "effect", name: "embodies", parent: "criterion", addableFrom: "neither" },
-  { child: "benefit", name: "embodies", parent: "criterion", addableFrom: "neither" },
+  { child: "effect", name: "fulfills", parent: "criterion", addableFrom: "neither" },
+  { child: "benefit", name: "fulfills", parent: "criterion", addableFrom: "neither" },
   { child: "detriment", name: "relatesTo", parent: "criterion", addableFrom: "neither" },
-  { child: "solutionComponent", name: "embodies", parent: "criterion", addableFrom: "neither" },
-  { child: "solution", name: "embodies", parent: "criterion", addableFrom: "neither" },
+  { child: "solutionComponent", name: "fulfills", parent: "criterion", addableFrom: "neither" },
+  { child: "solution", name: "fulfills", parent: "criterion", addableFrom: "neither" },
 
   { child: "solutionComponent", name: "creates", parent: "effect", addableFrom: "child" },
   { child: "solution", name: "creates", parent: "effect", addableFrom: "child" },
@@ -114,7 +114,7 @@ export const relations: AddableRelation[] = researchRelations.concat([
 
   { child: "solution", name: "addresses", parent: "obstacle", addableFrom: "parent" },
 
-  // claim relations
+  // justification relations
   { child: "support", name: "supports", parent: "rootClaim", addableFrom: "parent" },
   { child: "critique", name: "critiques", parent: "rootClaim", addableFrom: "parent" },
 
@@ -165,7 +165,7 @@ interface ShortcutRelation {
 /**
  * Shortcut relations are implied through detour nodes.
  *
- * e.g. a criterion is a detour for a solution-addresses-problem relation because if a solution embodies
+ * e.g. a criterion is a detour for a solution-addresses-problem relation because if a solution fulfills
  * the criterion and the criterion is for a problem, then the solution addresses the problem
  */
 export const shortcutRelations: ShortcutRelation[] = [
@@ -220,11 +220,13 @@ export const canCreateEdge = (topicGraph: Graph, parent: Node, child: Node) => {
     return false;
   }
 
-  const secondParentForClaim =
+  const secondParentForJustification =
     justificationNodeTypes.includes(child.type) &&
     topicGraph.edges.find((edge) => edge.target === child.id);
-  if (secondParentForClaim) {
-    console.log("cannot connect nodes: claims are in a tree so can't have multiple parents");
+  if (secondParentForJustification) {
+    console.log(
+      "cannot connect nodes: justifications are in a tree so can't have multiple parents",
+    );
     return false;
   }
 
@@ -336,17 +338,17 @@ export const isEdgeImpliedByComposition = (edge: Edge, topicGraph: Graph) => {
 // We don't want users to apply scores and then never see them again due to an implied edge being
 // hidden. The button to show implied edges should reduce this pain, but maybe we need a better view
 // to reduce the need to hide implied edges?
-const isEdgeImplied = (edge: Edge, graph: Graph, claimEdges: Edge[]) => {
-  if (justificationRelationNames.includes(edge.label)) return false; // claims can't be implied
-  if (hasClaims(edge, claimEdges)) return false;
+const isEdgeImplied = (edge: Edge, graph: Graph, justificationEdges: Edge[]) => {
+  if (justificationRelationNames.includes(edge.label)) return false; // justifications can't be implied
+  if (hasJustification(edge, justificationEdges)) return false;
 
   return isEdgeAShortcut(edge, graph) || isEdgeImpliedByComposition(edge, graph);
 };
 
 export const hideImpliedEdges = (edges: Edge[], displayGraph: Graph, topicGraph: Graph) => {
-  const claimEdges = topicGraph.edges.filter((edge) =>
+  const justificationEdges = topicGraph.edges.filter((edge) =>
     justificationRelationNames.includes(edge.label),
   );
 
-  return edges.filter((edge) => !isEdgeImplied(edge, displayGraph, claimEdges));
+  return edges.filter((edge) => !isEdgeImplied(edge, displayGraph, justificationEdges));
 };

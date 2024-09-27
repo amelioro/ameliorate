@@ -4,7 +4,7 @@ import { useCallback } from "react";
 
 import { emitter } from "@/web/common/event";
 import { Indicator } from "@/web/topic/components/Indicator/Indicator";
-import { useTopLevelClaims } from "@/web/topic/store/graphPartHooks";
+import { useTopLevelJustification } from "@/web/topic/store/graphPartHooks";
 import { useDisplayScores } from "@/web/topic/store/scoreHooks";
 import { Score } from "@/web/topic/utils/graph";
 import { getNumericScore, scoreColors } from "@/web/topic/utils/score";
@@ -16,7 +16,7 @@ interface Props {
 }
 
 export const JustificationIndicator = ({ graphPartId, partColor }: Props) => {
-  const { supports, critiques } = useTopLevelClaims(graphPartId);
+  const { supports, critiques } = useTopLevelJustification(graphPartId);
   const justificationNodes = supports.concat(critiques);
   const scoresByGraphPart = useDisplayScores(justificationNodes.map((node) => node.id));
 

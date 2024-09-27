@@ -4,8 +4,8 @@ import { justificationRelationNames } from "@/common/edge";
 import { NodeType, justificationNodeTypes, researchNodeTypes } from "@/common/node";
 import { deepIsEqual } from "@/common/utils";
 import { TopicStoreState, useTopicStore } from "@/web/topic/store/store";
-import { isClaimEdge } from "@/web/topic/utils/claim";
 import { Node } from "@/web/topic/utils/graph";
+import { isJustificationEdge } from "@/web/topic/utils/justification";
 
 export const useRootClaim = (graphPartId: string) => {
   return useTopicStore((state) => {
@@ -15,7 +15,7 @@ export const useRootClaim = (graphPartId: string) => {
   }, shallow);
 };
 
-export const getExplicitClaimCount = (state: TopicStoreState, graphPartId: string) => {
+export const getJustificationCount = (state: TopicStoreState, graphPartId: string) => {
   return state.nodes.filter(
     (node) =>
       justificationNodeTypes.includes(node.type) &&
@@ -24,33 +24,34 @@ export const getExplicitClaimCount = (state: TopicStoreState, graphPartId: strin
   ).length;
 };
 
-export const useExplicitClaimCount = (graphPartId: string) => {
-  return useTopicStore((state) => getExplicitClaimCount(state, graphPartId));
+export const useJustificationCount = (graphPartId: string) => {
+  return useTopicStore((state) => getJustificationCount(state, graphPartId));
 };
 
-export const useTopLevelClaims = (graphPartId: string) => {
+export const useTopLevelJustification = (graphPartId: string) => {
   return useTopicStore((state) => {
     const graphPart = [...state.nodes, ...state.edges].find((part) => part.id === graphPartId);
-    if (!graphPart || isClaimEdge(graphPart)) return { supports: [], critiques: [] };
+    if (!graphPart || isJustificationEdge(graphPart)) return { supports: [], critiques: [] };
 
     // TODO: cleanup when root claims are removed
-    const nodeToCheckForClaims = justificationNodeTypes.includes(graphPart.type as NodeType)
+    const nodeToCheckForJustification = justificationNodeTypes.includes(graphPart.type as NodeType)
       ? graphPart
       : state.nodes.find(
           (node) => node.type === "rootClaim" && node.data.arguedDiagramPartId === graphPartId,
         );
-    if (!nodeToCheckForClaims) return { supports: [], critiques: [] };
+    if (!nodeToCheckForJustification) return { supports: [], critiques: [] };
 
-    const topLevelClaimEdges = state.edges.filter(
+    const topLevelJustificationEdges = state.edges.filter(
       (edge) =>
-        justificationRelationNames.includes(edge.label) && edge.source === nodeToCheckForClaims.id,
+        justificationRelationNames.includes(edge.label) &&
+        edge.source === nodeToCheckForJustification.id,
     );
 
-    const supports = topLevelClaimEdges
+    const supports = topLevelJustificationEdges
       .map((edge) => state.nodes.find((node) => node.id === edge.target && node.type === "support"))
       .filter((node): node is Node => !!node);
 
-    const critiques = topLevelClaimEdges
+    const critiques = topLevelJustificationEdges
       .map((edge) =>
         state.nodes.find((node) => node.id === edge.target && node.type === "critique"),
       )
@@ -60,7 +61,7 @@ export const useTopLevelClaims = (graphPartId: string) => {
   }, deepIsEqual);
 };
 
-export const useNonTopLevelClaimCount = (graphPartId: string) => {
+export const useNonTopLevelJustificationCount = (graphPartId: string) => {
   return useTopicStore((state) => {
     const rootClaim = state.nodes.find(
       (node) => node.type === "rootClaim" && node.data.arguedDiagramPartId === graphPartId,
