@@ -10,23 +10,27 @@ import { xprisma } from "@/db/extendedPrisma";
 
 // following code example from https://www.prisma.io/docs/orm/prisma-migrate/workflows/data-migration#create-a-data-migration-file
 async function main() {
-  await xprisma.$transaction(async (tx) => {
-    const views = await tx.view.findMany();
+  await xprisma.$transaction(
+    async (tx) => {
+      const views = await tx.view.findMany();
 
-    // eslint-disable-next-line functional/no-loop-statements
-    for (const view of views) {
-      renameStructureToBreakdown(view.viewState as unknown as FromViewState1);
+      // eslint-disable-next-line functional/no-loop-statements
+      for (const view of views) {
+        renameStructureToBreakdown(view.viewState as unknown as FromViewState1);
 
-      // this could be long if there are a ton of view records, but at this point in time, there aren't that many (~150), so not worth optimizing
-      await tx.view.update({
-        where: { id: view.id },
-        data: {
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          viewState: view.viewState!,
-        },
-      });
-    }
-  });
+        // this could be long if there are a ton of view records, but at this point in time, there aren't that many (~150), so not worth optimizing
+        await tx.view.update({
+          where: { id: view.id },
+          data: {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            viewState: view.viewState!,
+          },
+        });
+      }
+    },
+    // prod took ~15s to run, and 5s is the default timeout for a transaction, so we need to set it higher
+    { timeout: 20000 },
+  );
 }
 
 // not sure how to use top-level await without messing with project config
