@@ -14,7 +14,7 @@ export const relationNames = [
   "has",
   "criterionFor",
   "creates",
-  "embodies",
+  "fulfills",
   "obstacleOf",
 
   // research
@@ -64,7 +64,7 @@ export const infoRelationNames: Record<InfoCategory, RelationName[]> = {
     "has",
     "criterionFor",
     "creates",
-    "embodies",
+    "fulfills",
     "obstacleOf",
     "relatesTo", // is a generic relation but currently only seems worthwhile in topic
   ],

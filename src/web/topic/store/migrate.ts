@@ -29,6 +29,7 @@ export const migrate = (persistedState: any, version: number) => {
     migrate_20_to_21,
     migrate_21_to_22,
     migrate_22_to_23,
+    migrate_23_to_24,
   ];
 
   let state = persistedState;
@@ -525,6 +526,22 @@ const migrate_22_to_23 = (state: FromState22) => {
     state.userScores["playground.user"] = state.userScores["me."];
     delete state.userScores["me."];
   }
+
+  return state;
+};
+
+interface FromState23 {
+  edges: {
+    label: string;
+  }[];
+}
+
+const migrate_23_to_24 = (state: FromState23) => {
+  state.edges.forEach((edge) => {
+    if (edge.label === "embodies") {
+      edge.label = "fulfills";
+    }
+  });
 
   return state;
 };

@@ -89,11 +89,11 @@ export const relations: AddableRelation[] = researchRelations.concat([
 
   { child: "benefit", name: "addresses", parent: "cause", addableFrom: "neither" },
 
-  { child: "effect", name: "embodies", parent: "criterion", addableFrom: "neither" },
-  { child: "benefit", name: "embodies", parent: "criterion", addableFrom: "neither" },
+  { child: "effect", name: "fulfills", parent: "criterion", addableFrom: "neither" },
+  { child: "benefit", name: "fulfills", parent: "criterion", addableFrom: "neither" },
   { child: "detriment", name: "relatesTo", parent: "criterion", addableFrom: "neither" },
-  { child: "solutionComponent", name: "embodies", parent: "criterion", addableFrom: "neither" },
-  { child: "solution", name: "embodies", parent: "criterion", addableFrom: "neither" },
+  { child: "solutionComponent", name: "fulfills", parent: "criterion", addableFrom: "neither" },
+  { child: "solution", name: "fulfills", parent: "criterion", addableFrom: "neither" },
 
   { child: "solutionComponent", name: "creates", parent: "effect", addableFrom: "child" },
   { child: "solution", name: "creates", parent: "effect", addableFrom: "child" },
@@ -165,7 +165,7 @@ interface ShortcutRelation {
 /**
  * Shortcut relations are implied through detour nodes.
  *
- * e.g. a criterion is a detour for a solution-addresses-problem relation because if a solution embodies
+ * e.g. a criterion is a detour for a solution-addresses-problem relation because if a solution fulfills
  * the criterion and the criterion is for a problem, then the solution addresses the problem
  */
 export const shortcutRelations: ShortcutRelation[] = [

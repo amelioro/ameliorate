@@ -66,7 +66,7 @@ const connectCriteriaToSolutions = (state: TopicStoreState, newNode: Node, probl
       return buildEdge({
         sourceId,
         targetId,
-        relation: "embodies",
+        relation: "fulfills",
       });
     });
 
