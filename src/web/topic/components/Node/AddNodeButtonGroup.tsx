@@ -1,7 +1,7 @@
 import { ButtonGroup } from "@mui/material";
 import { memo } from "react";
 
-import { NodeType, structureNodeTypes } from "@/common/node";
+import { NodeType, breakdownNodeTypes } from "@/common/node";
 import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
 import { Relation, addableRelationsFrom } from "@/web/topic/utils/edge";
 import { type RelationDirection } from "@/web/topic/utils/graph";
@@ -24,8 +24,8 @@ const AddNodeButtonGroup = memo(
       // if unrestricted, allow adding any topic node as parent or child (shouldn't be very useful to have outside of topic nodes)
       // also allow adding any node from custom node
       fromNodeType === "custom" ||
-      (unrestrictedEditing && structureNodeTypes.includes(fromNodeType))
-        ? structureNodeTypes.map((nodeType) => ({
+      (unrestrictedEditing && breakdownNodeTypes.includes(fromNodeType))
+        ? breakdownNodeTypes.map((nodeType) => ({
             toNodeType: nodeType,
             relation: {
               child: as === "child" ? nodeType : fromNodeType,

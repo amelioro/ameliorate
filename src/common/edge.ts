@@ -54,7 +54,7 @@ export const edgeSchema = z.object({
 export type Edge = z.infer<typeof edgeSchema>;
 
 export const infoRelationNames: Record<InfoCategory, RelationName[]> = {
-  structure: [
+  breakdown: [
     "causes",
     "subproblemOf",
     "addresses",
@@ -72,12 +72,12 @@ export const infoRelationNames: Record<InfoCategory, RelationName[]> = {
   justification: ["supports", "critiques"],
 };
 
-export const structureRelationNames = infoRelationNames.structure;
+export const breakdownRelationNames = infoRelationNames.breakdown;
 export const researchRelationNames = infoRelationNames.research;
 export const justificationRelationNames = infoRelationNames.justification;
 
 export const getSameCategoryEdgeTypes = (edgeType: RelationName): RelationName[] => {
-  if (structureRelationNames.includes(edgeType)) return structureRelationNames;
+  if (breakdownRelationNames.includes(edgeType)) return breakdownRelationNames;
   else if (researchRelationNames.includes(edgeType)) return researchRelationNames;
   else if (justificationRelationNames.includes(edgeType)) return justificationRelationNames;
   else return [];

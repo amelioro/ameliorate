@@ -353,7 +353,7 @@ const zStandardFilterTypes = z.enum(standardFilterTypes);
 type StandardFilterType = z.infer<typeof zStandardFilterTypes>;
 
 export const infoStandardFilterTypes: Record<InfoCategory, StandardFilterType[]> = {
-  structure: ["none", "highLevel", "problem", "tradeoffs", "solution"],
+  breakdown: ["none", "highLevel", "problem", "tradeoffs", "solution"],
   research: ["none", "question", "source"],
   justification: ["none", "rootClaim"],
 };

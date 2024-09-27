@@ -260,24 +260,24 @@ export const getSecondaryNeighbors = (
     secondaryNeighbors.push(...secondaryResearch);
   }
 
-  if (generalFilter.showSecondaryStructure) {
-    const primaryNonStructureIds = primaryNodes
-      .filter((node) => !infoNodeTypes.structure.includes(node.type))
+  if (generalFilter.showSecondaryBreakdown) {
+    const primaryNonBreakdownIds = primaryNodes
+      .filter((node) => !infoNodeTypes.breakdown.includes(node.type))
       .map((node) => node.id);
 
-    const secondaryStructure = graph.nodes.filter(
+    const secondaryBreakdown = graph.nodes.filter(
       (node) =>
         !primaryNodeIds.includes(node.id) &&
-        infoNodeTypes.structure.includes(node.type) &&
+        infoNodeTypes.breakdown.includes(node.type) &&
         graph.edges.some(
           (edge) =>
-            (edge.source === node.id && primaryNonStructureIds.includes(edge.target)) ||
-            (edge.target === node.id && primaryNonStructureIds.includes(edge.source)),
+            (edge.source === node.id && primaryNonBreakdownIds.includes(edge.target)) ||
+            (edge.target === node.id && primaryNonBreakdownIds.includes(edge.source)),
         ),
     );
 
     // eslint-disable-next-line functional/immutable-data
-    secondaryNeighbors.push(...secondaryStructure);
+    secondaryNeighbors.push(...secondaryBreakdown);
   }
 
   return secondaryNeighbors;

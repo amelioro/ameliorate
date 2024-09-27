@@ -40,7 +40,7 @@ const partitionOrders: { [type in NodeType]: string } = {
   // research
   question: "null",
   answer: "null",
-  // was partitioning facts/sources along bottom, but that's not desirable if structure nodes are primary,
+  // was partitioning facts/sources along bottom, but that's not desirable if breakdown nodes are primary,
   // so partitioning was removed. can conditionally partition if that seems worthwhile.
   fact: "null",
   source: "null",

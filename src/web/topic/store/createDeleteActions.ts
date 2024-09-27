@@ -1,7 +1,7 @@
 import { createDraft, finishDraft } from "immer";
 
 import { errorWithData } from "@/common/errorHandling";
-import { justificationNodeTypes, structureNodeTypes } from "@/common/node";
+import { breakdownNodeTypes, justificationNodeTypes } from "@/common/node";
 import { emitter } from "@/web/common/event";
 import { setNewlyAddedNode } from "@/web/common/store/ephemeralStore";
 import { WorkspaceContextType } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
@@ -231,7 +231,7 @@ const createEdgeAndImpliedEdges = (
   // don't create implied edges if the node being added is not in the topic diagram
   // e.g. when adding a question to the solution component, don't also link the solution to that
   // question, because it's not as relevant
-  if (structureNodeTypes.includes(parent.type) && structureNodeTypes.includes(child.type)) {
+  if (breakdownNodeTypes.includes(parent.type) && breakdownNodeTypes.includes(child.type)) {
     // indirectly recurses by calling this method after determining which implied edges to create
     // note: modifies topicGraph.edges through `state` (via the line above)
     createEdgesImpliedByComposition(topicGraph, parent, child, relation);

@@ -63,8 +63,8 @@ export const GeneralFilters = () => {
                 label={<ShowSecondaryNeighborsLabel secondaryInfoCategory="research" />}
               />
               <Switch
-                name="showSecondaryStructure"
-                label={<ShowSecondaryNeighborsLabel secondaryInfoCategory="structure" />}
+                name="showSecondaryBreakdown"
+                label={<ShowSecondaryNeighborsLabel secondaryInfoCategory="breakdown" />}
               />
             </Stack>
           )}

@@ -3,7 +3,6 @@
 import set from "lodash/set";
 import camelCase from "lodash/camelCase";
 import { v4 as uuid } from "uuid";
-import { userScoreSchema } from "../../../common/userScore";
 
 export const migrate = (persistedState: any, version: number) => {
   const migrations = [

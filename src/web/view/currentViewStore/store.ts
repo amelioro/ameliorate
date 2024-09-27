@@ -8,6 +8,7 @@ import { Format, InfoCategory } from "@/common/infoCategory";
 import { withDefaults } from "@/common/object";
 import { emitter } from "@/web/common/event";
 import { useGraphPart } from "@/web/topic/store/graphPartHooks";
+import { migrate } from "@/web/view/currentViewStore/migrate";
 import { triggerEvent } from "@/web/view/currentViewStore/triggerEventMiddleware";
 import {
   getDefaultQuickView,
@@ -24,7 +25,7 @@ export interface ViewState {
 
   // info category state is flattened (rather than `[category]: state`) for ease of modifying
   categoriesToShow: InfoCategory[];
-  structureFilter: StandardFilter;
+  breakdownFilter: StandardFilter;
   researchFilter: StandardFilter;
   justificationFilter: StandardFilter;
 
@@ -45,8 +46,8 @@ export const initialViewState: ViewState = {
   selectedGraphPartId: null,
   format: "diagram",
 
-  categoriesToShow: ["structure"],
-  structureFilter: { type: "none" },
+  categoriesToShow: ["breakdown"],
+  breakdownFilter: { type: "none" },
   researchFilter: { type: "none" },
   justificationFilter: { type: "none" },
 
@@ -62,7 +63,7 @@ export const initialViewState: ViewState = {
     nodesToShow: [],
     nodesToHide: [],
     showSecondaryResearch: false,
-    showSecondaryStructure: true,
+    showSecondaryBreakdown: true,
   },
 
   showImpliedEdges: false,
@@ -79,7 +80,8 @@ export const useCurrentViewStore = createWithEqualityFn<ViewState>()(
   triggerEvent(
     persist(temporal(devtools(() => initialViewState, { name: persistedNameBase })), {
       name: persistedNameBase,
-      version: 1,
+      version: 2,
+      migrate: migrate,
       skipHydration: true,
       // don't merge persisted state with current state when rehydrating - instead, use the initialState to fill in missing values
       // e.g. so that a new non-null value in initialState is non-null in the persisted state,

@@ -12,6 +12,7 @@ import { emitter } from "@/web/common/event";
 import { StoreTopic, UserTopic } from "@/web/topic/store/store";
 import { ViewState, getView, initialViewState, setView } from "@/web/view/currentViewStore/store";
 import { apiSyncer } from "@/web/view/quickViewStore/apiSyncerMiddleware";
+import { migrate } from "@/web/view/quickViewStore/migrate";
 
 type QuickViewType = "quick"; // eventually maybe separate "recommended" vs "personal"
 
@@ -63,13 +64,14 @@ export const initialStateWithBasicViews = () => {
 };
 
 const persistedNameBase = "quickViewStore";
-export const currentVersion = 1;
+export const currentVersion = 2;
 
 export const useQuickViewStore = createWithEqualityFn<QuickViewStoreState>()(
   apiSyncer(
     persist(temporal(devtools(() => initialState, { name: persistedNameBase })), {
       name: persistedNameBase,
       version: currentVersion,
+      migrate: migrate,
       skipHydration: true,
       // don't merge persisted state with current state when rehydrating - instead, use the initialState to fill in missing values
       // e.g. so that a new non-null value in initialState is non-null in the persisted state,

@@ -19,13 +19,13 @@ export const InformationFilters = () => {
         }
         control={
           <MuiSwitch
-            checked={diagramFilter.structure.show}
-            onChange={(_event, checked) => setShowInformation("structure", checked)}
+            checked={diagramFilter.breakdown.show}
+            onChange={(_event, checked) => setShowInformation("breakdown", checked)}
           />
         }
       />
-      {diagramFilter.structure.show && (
-        <StandardFilter infoCategory="structure" filter={diagramFilter.structure} />
+      {diagramFilter.breakdown.show && (
+        <StandardFilter infoCategory="breakdown" filter={diagramFilter.breakdown} />
       )}
 
       <FormControlLabel
