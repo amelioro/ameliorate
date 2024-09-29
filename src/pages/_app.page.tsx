@@ -12,6 +12,7 @@ import Layout from "@/web/common/components/Layout";
 import { getThemeOptions } from "@/web/common/theme";
 import { trpc } from "@/web/common/trpc";
 import "@/web/common/globals.css";
+import "@/web/common/patches/fixGoogleTranslateIssue";
 
 // influence Google Search to display search results with the name "Ameliorate" instead of ameliorate.app https://developers.google.com/search/docs/appearance/site-names#how-site-names-in-google-search-are-created
 const siteNameJsonLd = {
