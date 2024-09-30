@@ -94,10 +94,16 @@ export const useGraphPart = (graphPartId: string | null) => {
   return useTopicStore((state) => {
     if (!graphPartId) return null;
 
-    return (
-      state.edges.find((edge) => edge.id === graphPartId) ??
-      state.nodes.find((node) => node.id === graphPartId) ??
-      null
-    );
+    return getGraphPart(graphPartId, state);
   });
+};
+
+export const getGraphPart = (graphPartId: string, storeState?: TopicStoreState) => {
+  const state = storeState ?? useTopicStore.getState();
+
+  return (
+    state.edges.find((edge) => edge.id === graphPartId) ??
+    state.nodes.find((node) => node.id === graphPartId) ??
+    null
+  );
 };

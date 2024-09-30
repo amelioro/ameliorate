@@ -19,7 +19,7 @@ import { Score, possibleScores } from "@/web/topic/utils/graph";
 import { hotkeys } from "@/web/topic/utils/hotkeys";
 import { userCanEditScores } from "@/web/topic/utils/score";
 import { getReadonlyMode, toggleReadonlyMode } from "@/web/view/actionConfigStore";
-import { getSelectedGraphPartId, setSelected, useFormat } from "@/web/view/currentViewStore/store";
+import { getSelectedGraphPart, setSelected, useFormat } from "@/web/view/currentViewStore/store";
 import { getPerspectives } from "@/web/view/perspectiveStore";
 
 const useWorkspaceHotkeys = (user: { username: string } | null | undefined) => {
@@ -27,15 +27,15 @@ const useWorkspaceHotkeys = (user: { username: string } | null | undefined) => {
   useHotkeys([hotkeys.readonlyMode], () => toggleReadonlyMode());
 
   useHotkeys([hotkeys.score], (_, hotkeysEvent) => {
-    const selectedPartId = getSelectedGraphPartId();
-    if (!selectedPartId || !hotkeysEvent.keys) return;
+    const selectedPart = getSelectedGraphPart();
+    if (!selectedPart || !hotkeysEvent.keys) return;
     const [score] = hotkeysEvent.keys;
     if (!score || !possibleScores.some((s) => score === s)) return;
 
     // seems slightly awkward that there's logic here not reused with the Score component, but hard to reuse that in a clean way
     const myUsername = isOnPlayground() ? playgroundUsername : user?.username;
     if (!userCanEditScores(myUsername, getPerspectives(), getReadonlyMode())) return;
-    setScore(myUsername, selectedPartId, score as Score);
+    setScore(myUsername, selectedPart.id, score as Score);
   });
 };
 

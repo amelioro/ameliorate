@@ -7,7 +7,7 @@ import { createWithEqualityFn } from "zustand/traditional";
 import { Format, InfoCategory } from "@/common/infoCategory";
 import { withDefaults } from "@/common/object";
 import { emitter } from "@/web/common/event";
-import { useGraphPart } from "@/web/topic/store/graphPartHooks";
+import { getGraphPart, useGraphPart } from "@/web/topic/store/graphPartHooks";
 import { migrate } from "@/web/view/currentViewStore/migrate";
 import { triggerEvent } from "@/web/view/currentViewStore/triggerEventMiddleware";
 import {
@@ -202,8 +202,11 @@ export const getView = () => {
   return useCurrentViewStore.getState();
 };
 
-export const getSelectedGraphPartId = () => {
-  return useCurrentViewStore.getState().selectedGraphPartId;
+export const getSelectedGraphPart = () => {
+  const selectedGraphPartId = useCurrentViewStore.getState().selectedGraphPartId;
+  if (!selectedGraphPartId) return null;
+
+  return getGraphPart(selectedGraphPartId);
 };
 
 // misc
