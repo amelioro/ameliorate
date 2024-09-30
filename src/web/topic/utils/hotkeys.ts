@@ -2,6 +2,8 @@
  * Using `alt` for some where `ctrl` is used for browser shortcuts that make sense to maintain.
  *
  * Might eventually need to re-evaluate these.
+ *
+ * Strings to use for keys can mostly be found here (bottom of page for special keys) https://react-hotkeys-hook.vercel.app/docs/documentation/useHotkeys/basic-usage
  */
 export const hotkeys = {
   deselectPart: "Esc",
