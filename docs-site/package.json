@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "next": "^14.1.1",
+    "next-plausible": "^3.12.2",
     "nextra": "^2.13.3",
     "nextra-theme-docs": "^2.13.3",
     "react": "^18.2.0",
@@ -25,7 +26,7 @@
     "eslint-config-next": "^14.1.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-functional": "^6.0.1",
-    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-import": "2.26.0",
     "eslint-plugin-storybook": "^0.8.0",
     "postcss": "^8.4.39",
     "tailwindcss": "^3.4.6",
