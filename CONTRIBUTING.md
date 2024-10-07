@@ -50,7 +50,7 @@ Make sure you have [git](https://git-scm.com/downloads), [nvm](https://github.co
 Setup:
 
 ```bash
-git clone https://github.com/amelioro/ameliorate.git
+git clone https://github.com/amelioro/ameliorate.git # clone your forked repo instead if contributing
 cd ameliorate
 
 # install node version (and npm) specified in .nvmrc
