@@ -53,7 +53,7 @@ export const Headline = () => {
         </Typography>
 
         <Typography variant="body1">
-          Problems can be tough, especially when they're debatable.
+          Gain traction on tackling <b>any</b> problem.
         </Typography>
 
         <Typography variant="body1" className="-mt-1">
