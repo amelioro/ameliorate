@@ -23,6 +23,7 @@ There's plenty of room for improvement in this project, and any ideas, suggestio
 
 And here are some things that come to mind that’d be particularly useful for to share about:
 
+- People, groups, or organizations that might be interested in hearing about the tool
 - Anything in the experience that feels awkward
 - Bugs
 - Feature ideas
@@ -37,7 +38,7 @@ There are also [quite a few ideas](https://github.com/orgs/amelioro/projects/2/v
 
 ## Finding an issue to work on
 
-Check out the [first issues filter](https://github.com/orgs/amelioro/projects/2/views/7) in the project backlog - https://github.com/amelioro/ameliorate/labels/good%20first%20issue s have a narrow scope and are expected to entail a small number of changes, and https://github.com/amelioro/ameliorate/labels/ok%20first%20issue s have a narrow scope, but are expected to be a bit tougher. There are also https://github.com/amelioro/ameliorate/labels/non-code issues that can be good if you want to help out for learning about the tool rather than the code behind it. You can check out the [backlog of all issues](https://github.com/orgs/amelioro/projects/2/views/1) if you're feeling daring, plucky, or if this isn't your first rodeo. This list should be prioritized, but you don't need to limit yourself to the top.
+Check out the [first issues filter](https://github.com/orgs/amelioro/projects/2/views/7) in the project backlog - https://github.com/amelioro/ameliorate/labels/good%20first%20issue s have a narrow scope and are expected to entail a small number of changes, and https://github.com/amelioro/ameliorate/labels/ok%20first%20issue s have a narrow scope, but are expected to be a bit tougher. You can check out the [backlog of all issues](https://github.com/orgs/amelioro/projects/2/views/1) if you're feeling daring, plucky, or if this isn't your first rodeo. This list should be prioritized, but you don't need to limit yourself to the top.
 
 Feel free to clarify any issues via commenting on the issue or asking in [Discord](https://discord.gg/3KhdyJkTWT). When you find an issue you want to work on, please comment on it to avoid duplicating work on it.
 
@@ -45,7 +46,7 @@ Note: be particularly wary of [issues with a "needs [x]" label](https://github.c
 
 ### Non-code contributions
 
-There are many ways to contribute without coding! Providing feedback, building example diagrams, joining [discourse sessions](https://ameliorate.app/docs/discourse-sessions), sharing about the tool, creating/updating docs, etc. Check out the https://github.com/amelioro/ameliorate/labels/non-code issues for some specific tickets.
+There are many ways to contribute without coding! [Providing feedback](#providing-feedback), building example diagrams, joining [discourse sessions](https://ameliorate.app/docs/discourse-sessions), sharing about the tool, creating/updating docs, etc. Check out the https://github.com/amelioro/ameliorate/labels/non-code issues for some specific tickets.
 
 ## Running the project
 
