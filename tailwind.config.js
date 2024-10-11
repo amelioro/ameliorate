@@ -11,7 +11,6 @@ const muiGeneratedPalette = createPalette(muiExplicitPalette);
 const muiColorsToExtend = {
   ...muiExplicitPalette,
   primary: muiGeneratedPalette.primary,
-  secondary: muiGeneratedPalette.secondary,
   error: muiGeneratedPalette.error,
   warning: muiGeneratedPalette.warning,
   info: muiGeneratedPalette.info,

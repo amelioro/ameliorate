@@ -22,7 +22,7 @@ export const Perspectives = () => {
       options={usernameOptions}
       value={perspectives}
       onChange={(_event, value) => setPerspectives([...value])} // hmm need to spread because value is readonly and our params would have to be readonly all the way up the chain for ts to accept it
-      renderInput={(params) => <TextField {...params} color="secondary" label="Perspectives" />}
+      renderInput={(params) => <TextField {...params} color="primary" label="Perspectives" />}
       size="small"
       sx={{ width: "100%" }}
     />

@@ -1,8 +1,40 @@
-// used material color palettes to find complement https://material.io/design/color/the-color-system.html#tools-for-picking-colors
-// used material color tool to confirm accessibility (legibility) https://material.io/resources/color/#!/?view.left=1&view.right=1&primary.color=4ab74c&secondary.color=b74ab5
-// used mui-theme-creator to see the colors in action and pick light & dark palettes https://bareynol.github.io/mui-theme-creator/?firstName=&lastName=&email=&password=
-// color names from color-name.com
-// used color calculator for complementary, analagous colors https://www.sessions.edu/color-calculator/
+/**
+ * Resources:
+ * - For seeing which OKLCH colors can be rendered, what LCH combinations look like: https://oklch.com/
+ * - For testing WCAG 2.1 contrast with white/black text: https://lea.verou.me/blog/2024/contrast-color/#does-this-mythical-l-threshold-actually-exist%3F
+ * - For identifying roughly complementary/analogous colors https://www.sessions.edu/color-calculator/
+ *
+ * General strategy for node colors:
+ * - reds/purples represent bad things,
+ * - greens/blues represent good things,
+ * - yellows/hue-less represent neutral things.
+ *
+ * For most nodes, used 75% Lightness and 0.15 Chroma, because most Hues pass WCAG 2.1 AA for black text
+ * Some blues have reduced saturation because their hue seems naturally saturated.
+ *
+ * Node hues should be chosen to be distinct from other nodes that would typically be adjacent.
+ * Lightness/Chroma can be manually adjusted to make the colors more or less distinct.
+ *
+ * Node colors across the 0-360 hue space:
+ * 0 obstacle
+ * 20 critique
+ * 60 fact
+ * 80 root claim
+ * 100 effect
+ * 130 benefit
+ * 138 solution, component (desaturated)
+ * 150 answer
+ * 160 criterion
+ * 200 support
+ * 240 source
+ * 300 problem
+ * 320 cause
+ * 340 detriment
+ *
+ * Node colors that are independent of hue:
+ * 0 custom
+ * 0 question
+ */
 
 import {
   type Theme as MaterialUITheme,
@@ -10,7 +42,7 @@ import {
   type ThemeOptions,
   createTheme,
 } from "@mui/material";
-import { grey, orange, yellow } from "@mui/material/colors";
+import Color from "colorjs.io";
 
 import { type FlowNodeType } from "@/web/topic/utils/node";
 
@@ -24,8 +56,6 @@ declare module "@mui/material/styles" {
   type NodeTypePaletteOptions = { [key in FlowNodeType]: PaletteOptions["primary"] };
 
   interface Palette extends NodeTypePalettes {
-    primaryVariantDark: Palette["primary"];
-    primaryVariantLight: Palette["primary"];
     neutral: Palette["primary"];
     neutralContrast: Palette["primary"];
     paper: Palette["primary"];
@@ -40,8 +70,6 @@ declare module "@mui/material/styles" {
   }
 
   interface PaletteOptions extends NodeTypePaletteOptions {
-    primaryVariantDark: PaletteOptions["primary"];
-    primaryVariantLight: PaletteOptions["primary"];
     neutral: PaletteOptions["primary"];
     neutralContrast: PaletteOptions["primary"];
     paper: PaletteOptions["primary"];
@@ -65,8 +93,6 @@ declare module "@mui/material" {
   type NodeTypeColors = { [key in FlowNodeType]: true };
 
   interface ButtonPropsColorOverrides extends NodeTypeColors {
-    primaryVariantDark: true;
-    primaryVariantLight: true;
     neutral: true;
     neutralContrast: true;
     paper: true;
@@ -81,8 +107,6 @@ declare module "@mui/material" {
   }
 
   interface AppBarPropsColorOverrides extends NodeTypeColors {
-    primaryVariantDark: true;
-    primaryVariantLight: true;
     neutral: true;
     neutralContrast: true;
     paper: true;
@@ -97,8 +121,6 @@ declare module "@mui/material" {
   }
 
   interface SvgIconPropsColorOverrides extends NodeTypeColors {
-    primaryVariantDark: true;
-    primaryVariantLight: true;
     neutral: true;
     neutralContrast: true;
     paper: true;
@@ -134,60 +156,62 @@ const darkPalette = {
   // },
 };
 
-const primary = "#4AB84E"; // apple (green): good, optimistic, let's solve things
-const primaryVariantLight = "#82CE84"; // 200 lower than primary on material design color tool
-const secondary = "#B84AB4"; // deep fuchsia (purple): truth; complementary to primary
-export const infoColor = "#0288d1"; // mui default info https://mui.com/material-ui/customization/palette/#values
+/**
+ * MUI doesn't support `oklch(string)` for its theme yet, so we have to convert to hex
+ *
+ * See https://github.com/mui/material-ui/issues/41728
+ */
+const oklchToHex = (oklchStr: string): string => {
+  return new Color(oklchStr).to("srgb").toString({ format: "hex" });
+};
+
 const { palette } = createTheme();
 const { augmentColor } = palette; // automatically creates light and dark colors too, thanks https://stackoverflow.com/a/69836010
+export const infoColor = "#0288D1"; // mui default info https://mui.com/material-ui/customization/palette/#values
 
 const sharedPalette = {
-  primary: { main: primary },
+  primary: { main: "#4AB84E" }, // apple (green): good, optimistic, let's solve things; different from solution because this is too dark for contrasting with black small node text, but solution color is too light from using for text on white background
   info: { main: infoColor },
 
-  // material design recommends variants for contrasting UI elements, see Primary Colors at https://m2.material.io/design/color/the-color-system.html#color-theme-creation
-  primaryVariantDark: { main: "#359639" }, // 200 higher than primary on material design color tool
-  primaryVariantLight: { main: primaryVariantLight },
-
-  // use black contrast text for consistency with other node colors; accessibility tool indicates black is still accessible
-  secondary: { main: secondary, contrastText: "rgba(0, 0, 0, 0.87)" },
   neutral: augmentColor({ color: { main: "#BDBDBD" } }), // gray is very neutral, somewhat arbitrarily chosen, no particular relation to the other colors
   neutralContrast: augmentColor({ color: { main: "#000000" } }), // black contrasts with gray, separate from neutral.contrastText so that it gets its own augments I guess
   paper: augmentColor({ color: { main: "#fff" } }), // used for neutral-but-chosen score
 
   // topic
-  problem: augmentColor({ color: { main: secondary, contrastText: "rgba(0, 0, 0, 0.87)" } }),
-  cause: augmentColor({ color: { main: "#D795D3" } }), // 200 lower than problem color on material design color tool
-  solution: augmentColor({ color: { main: primary } }),
-  solutionComponent: augmentColor({ color: { main: primaryVariantLight } }),
-  criterion: augmentColor({ color: { main: "#4AB885" } }), // mint: analogous to solution; between solution & support because criteria are kind of like supports for solutions
-  effect: augmentColor({ color: { main: yellow[500] } }), // random yellow that looks decent: somewhat similar to green/solution but also goes well with lightning bolt icon
-  benefit: augmentColor({ color: { main: "#A0DC46" } }), // calculated analogous color to effect, solution, and support
-  detriment: augmentColor({ color: { main: "#DC477B", contrastText: "rgba(0, 0, 0, 0.87)" } }), // calculated analogous color to effect, problem, and critique
-  obstacle: augmentColor({ color: { main: "#C26586", contrastText: "rgba(0, 0, 0, 0.87)" } }), // calculated monochromatic color to detriment (hard to find a decent color, butobstaclen's relation to solution is kind of similar to detriment's)
+  problem: augmentColor({ color: { main: oklchToHex("oklch(75% 0.15 300)") } }), // purple: truth; complementary to solution; no increased saturation because its hue stands out already
+  cause: augmentColor({ color: { main: oklchToHex("oklch(75% 0.15 320)") } }), // light-purple: bad, so similar color to problem
+  solution: augmentColor({ color: { main: oklchToHex("oklch(75% 0.18 138)") } }), // green: good, optimistic, let's solve things; increased saturation to help it stand out
+  solutionComponent: augmentColor({ color: { main: oklchToHex("oklch(75% 0.12 138)") } }), // grey-green: same as solution but with less saturation
+  criterion: augmentColor({ color: { main: oklchToHex("oklch(75% 0.10 160)") } }), // green-blue: between solution & support colors because criteria are kind of like supports for solutions
+  effect: augmentColor({ color: { main: oklchToHex("oklch(85% 0.15 100)") } }), // yellow: goes well with lightning icon
+  benefit: augmentColor({ color: { main: oklchToHex("oklch(75% 0.16 130)") } }), // light-green: good thing; slightly more saturated because the color seems nicer
+  detriment: augmentColor({ color: { main: oklchToHex("oklch(75% 0.15 340)") } }), // purple-red: bad thing
+  obstacle: augmentColor({ color: { main: oklchToHex("oklch(75% 0.15 0)") } }), // red: bad thing
 
-  // research - palette https://coolors.co/9e9e9e-f57c00-0288d1-04f06a-1c110a
-  question: augmentColor({ color: { main: grey[500] } }), // grey, ambiguous, uncertain
-  answer: augmentColor({ color: { main: "#04f06a" } }), // spring green, green like answer/good, but distinct from solution's green
-  fact: augmentColor({ color: { main: orange["700"] } }), // orange, fact
-  source: augmentColor({ color: { main: "#0288d1", contrastText: "rgba(0, 0, 0, 0.87)" } }), // blue, info
+  // research
+  question: augmentColor({ color: { main: oklchToHex("oklch(75% 0 0)") } }), // grey: ambiguous, uncertain
+  answer: augmentColor({ color: { main: oklchToHex("oklch(75% 0.15 150)") } }), // mint green: green like answer/good, but distinct from solution's green
+  fact: augmentColor({ color: { main: oklchToHex("oklch(75% 0.15 60)") } }), // orange: neutral, fact
+  source: augmentColor({ color: { main: oklchToHex("oklch(75% 0.12 240)") } }), // blue: info
 
   // justification
-  rootClaim: augmentColor({ color: { main: "#DA9526" } }), // goldenrod (gold): somewhat neutral; analogous to critique
-  // Picked a non-green support-ish color (cyan) for support #26C5DA, grabbed its complement #DA2626 (red-orange) for critique,
-  // then entered those into the material 3 theme builder and grabbed 5 tones from each of those two colors' tonal palettes.
-  // The numbered support & critique colors are used for coloring scores.
-  // Material 3 theme builder: https://m3.material.io/theme-builder#/custom
-  support: augmentColor({ color: { main: "#0bbcd1" } }),
-  support1: augmentColor({ color: { main: "#47d8ee" } }),
-  support2: augmentColor({ color: { main: "#9af0ff" } }),
-  support3: augmentColor({ color: { main: "#d1f8ff" } }),
-  support4: augmentColor({ color: { main: "#edfcff" } }),
-  critique: augmentColor({ color: { main: "#ff553d", contrastText: "rgba(0, 0, 0, 0.87)" } }),
-  critique1: augmentColor({ color: { main: "#ff8a76", contrastText: "rgba(0, 0, 0, 0.87)" } }),
-  critique2: augmentColor({ color: { main: "#ffb4a7", contrastText: "rgba(0, 0, 0, 0.87)" } }),
-  critique3: augmentColor({ color: { main: "#ffdad4", contrastText: "rgba(0, 0, 0, 0.87)" } }),
-  critique4: augmentColor({ color: { main: "#ffedea", contrastText: "rgba(0, 0, 0, 0.87)" } }),
+  rootClaim: augmentColor({ color: { main: oklchToHex("oklch(75% 0.15 80)") } }), // gold: somewhat neutral; analogous to critique
+  // support blue and critique red are roughly complements
+  // To generate shades, start slightly lighter than the main color, make similar steps in lightness/chroma, towards 100% lightness/0 chroma.
+  // Start darker than main support color so that it could follow the same lightness/chroma steps as critiques.
+  // First support color is also too saturated if it follows the same steps as critiques, so that one is desaturated.
+  // Also had to adjust steps so that the colors are within rgb gamut.
+  support: augmentColor({ color: { main: oklchToHex("oklch(80% 0.09 200)") } }),
+  support1: augmentColor({ color: { main: oklchToHex("oklch(81% 0.10 200)") } }),
+  support2: augmentColor({ color: { main: oklchToHex("oklch(87% 0.06 200)") } }),
+  support3: augmentColor({ color: { main: oklchToHex("oklch(93% 0.03 200)") } }),
+  support4: augmentColor({ color: { main: oklchToHex("oklch(97% 0.014 200)") } }),
+
+  critique: augmentColor({ color: { main: oklchToHex("oklch(75% 0.15 20)") } }),
+  critique1: augmentColor({ color: { main: oklchToHex("oklch(81% 0.10 20)") } }),
+  critique2: augmentColor({ color: { main: oklchToHex("oklch(87% 0.06 20)") } }),
+  critique3: augmentColor({ color: { main: oklchToHex("oklch(93% 0.03 20)") } }),
+  critique4: augmentColor({ color: { main: oklchToHex("oklch(97% 0.014 20)") } }),
 
   // generic
   custom: augmentColor({ color: { main: "#ffffff" } }), // neutral white

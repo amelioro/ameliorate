@@ -61,6 +61,7 @@
     "@trpc/next": "10.34.0",
     "@trpc/react-query": "10.34.0",
     "@trpc/server": "10.34.0",
+    "colorjs.io": "0.5.2",
     "elkjs": "0.9.2",
     "framer-motion": "^10.16.5",
     "he": "1.2.0",
