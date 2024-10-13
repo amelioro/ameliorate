@@ -60,8 +60,10 @@ export const StyledTextareaAutosize = styled(TextareaAutosize)`
   color: ${({ theme }) => theme.palette.text.primary};
 
   &[readonly] {
-    // don't want clicking to select a spot in the input before the node is editable
-    pointer-events: none;
+    // So that the cursor doesn't imply that textarea is editable.
+    // Previously had "pointer-events: none" to also prevent clicking from selecting text before
+    // node becomes editable, but this also prevents scrolling, which is not desirable, so that was removed.
+    cursor: default;
   }
 `;
 
