@@ -10,6 +10,7 @@
     "start": "next start -p 3008"
   },
   "dependencies": {
+    "docs-site": "file:",
     "next": "^14.1.1",
     "next-plausible": "^3.12.2",
     "nextra": "^2.13.3",

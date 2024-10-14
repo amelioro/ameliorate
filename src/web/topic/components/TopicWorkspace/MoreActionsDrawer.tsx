@@ -67,39 +67,140 @@ import {
   useIndicateWhenNodeForcedToShow,
 } from "@/web/view/userConfigStore";
 
-const imageWidth = 2560;
-const imageHeight = 1440;
-
-const downloadScreenshot = () => {
+// const imageWidth = 2560;
+// const imageHeight = 1440;
+const downloadScreenshot = (): void => {
   const nodes = getDisplayNodes();
-
-  // thanks react flow example https://reactflow.dev/examples/misc/download-image
   const nodesBounds = getRectOfNodes(nodes);
-  const transform = getTransformForBounds(nodesBounds, imageWidth, imageHeight, 0.5, 2);
-  const viewportElement = document.querySelector(".react-flow__viewport");
-  if (!viewportElement) throw new Error("Couldn't find viewport element to take screenshot of");
 
-  toPng(viewportElement as HTMLElement, {
-    backgroundColor: "#fff",
-    width: imageWidth,
-    height: imageHeight,
-    style: {
-      width: imageWidth.toString(),
-      height: imageHeight.toString(),
-      transform: `translate(${transform[0]}px, ${transform[1]}px) scale(${transform[2]})`,
-    },
-  })
-    .then((dataUrl) => {
-      const a = document.createElement("a");
+  const viewportElement = document.querySelector(".react-flow__viewport") as HTMLElement | null;
 
-      a.setAttribute("download", "topic.png");
-      a.setAttribute("href", dataUrl);
-      a.click();
+  if (!viewportElement) {
+    throw new Error("Couldn't find viewport element to take screenshot of");
+  }
+
+  // Create an overlay for dragging and selecting resolution
+  const overlay = document.createElement("div");
+  overlay.style.position = "absolute";
+  overlay.style.top = "0";
+  overlay.style.left = "0";
+  overlay.style.width = "100vw";
+  overlay.style.height = "100vh";
+  overlay.style.backgroundColor = "rgba(0, 0, 0, 0.3)";
+  overlay.style.zIndex = "1000";
+  document.body.appendChild(overlay);
+
+  let startX = 0;
+  let startY = 0;
+  let endX = 0;
+  let endY = 0;
+  let selectionBox: HTMLDivElement | null = null;
+
+  // Start dragging
+  overlay.onmousedown = (event) => {
+    startX = event.clientX;
+    startY = event.clientY;
+
+    // Create a selection box
+    selectionBox = document.createElement("div");
+    selectionBox.style.position = "absolute";
+    selectionBox.style.border = "2px dashed white";
+    selectionBox.style.backgroundColor = "rgba(255, 255, 255, 0.3)";
+    selectionBox.style.zIndex = "1001";
+    overlay.appendChild(selectionBox);
+  };
+
+  // While dragging
+  overlay.onmousemove = (event) => {
+    if (selectionBox) {
+      endX = event.clientX;
+      endY = event.clientY;
+
+      const width = Math.abs(endX - startX);
+      const height = Math.abs(endY - startY);
+
+      selectionBox.style.left = Math.min(startX, endX) + "px";
+      selectionBox.style.top = Math.min(startY, endY) + "px";
+      selectionBox.style.width = width + "px";
+      selectionBox.style.height = height + "px";
+    }
+  };
+
+  // End dragging
+  overlay.onmouseup = () => {
+    // Calculate final dimensions
+    const width = Math.abs(endX - startX);
+    const height = Math.abs(endY - startY);
+
+    // Clean up the overlay and selection box
+    document.body.removeChild(overlay);
+
+    if (selectionBox) {
+      overlay.removeChild(selectionBox);
+    }
+
+    // Check if a valid area was selected
+    if (width === 0 || height === 0) {
+      alert("Invalid selection area");
+      return;
+    }
+
+    const transform = getTransformForBounds(nodesBounds, width, height, 0.5, 2);
+
+    // Take the screenshot with the selected resolution
+    toPng(viewportElement, {
+      backgroundColor: "#fff",
+      width: width,
+      height: height,
+      style: {
+        width: width.toString(),
+        height: height.toString(),
+        transform: `translate(${transform[0]}px, ${transform[1]}px) scale(${transform[2]})`,
+      },
     })
-    .catch((error: unknown) => {
-      throw error;
-    });
+      .then((dataUrl: string) => {
+        const a = document.createElement("a");
+        a.setAttribute("download", "custom-screenshot.png");
+        a.setAttribute("href", dataUrl);
+        a.click();
+      })
+      .catch((error: unknown) => {
+        throw error;
+      });
+  };
 };
+
+
+// const downloadScreenshot = () => {
+//   const nodes = getDisplayNodes();
+
+//   // thanks react flow example https://reactflow.dev/examples/misc/download-image
+//   const nodesBounds = getRectOfNodes(nodes);
+//   const transform = getTransformForBounds(nodesBounds, imageWidth, imageHeight, 0.5, 2);
+//   const viewportElement = document.querySelector(".react-flow__viewport");
+//   if (!viewportElement) throw new Error("Couldn't find viewport element to take screenshot of");
+
+//   toPng(viewportElement as HTMLElement, {
+//     backgroundColor: "#fff",
+//     width: imageWidth,
+//     height: imageHeight,
+//     style: {
+//       width: imageWidth.toString(),
+//       height: imageHeight.toString(),
+//       transform: `translate(${transform[0]}px, ${transform[1]}px) scale(${transform[2]})`,
+//     },
+//   })
+//     .then((dataUrl) => {
+//       const a = document.createElement("a");
+
+//       a.setAttribute("download", "topic.png");
+//       a.setAttribute("href", dataUrl);
+//       a.click();
+//     })
+//     .catch((error: unknown) => {
+//       throw error;
+//     });
+// };
 
 interface Props {
   isMoreActionsDrawerOpen: boolean;
