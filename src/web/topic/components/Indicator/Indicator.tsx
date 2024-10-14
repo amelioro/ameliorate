@@ -16,6 +16,7 @@ interface IndicatorProps {
    */
   iconHasBackground?: boolean;
   color?: ButtonProps["color"];
+  filled?: boolean;
 }
 
 export const Indicator = ({
@@ -24,6 +25,7 @@ export const Indicator = ({
   onClick,
   iconHasBackground = true,
   color = "neutral",
+  filled = true,
 }: IndicatorProps) => {
   return (
     // black outline looks a bit weird on the table icon, not sure how to easily fix though
@@ -44,14 +46,14 @@ export const Indicator = ({
             },
           }}
         >
-          <Icon color={color} />
+          <Icon color={filled ? color : "paper"} />
         </StyledButton>
       ) : (
         <StyledButton
           title={title}
           aria-label={title}
           variant="contained"
-          color={color}
+          color={filled ? color : "paper"}
           onClick={onClick}
           sx={{
             border: "1px solid",
