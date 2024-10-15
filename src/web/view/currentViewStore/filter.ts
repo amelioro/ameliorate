@@ -133,6 +133,7 @@ export const viewCriteriaTable = (problemNodeId: string) => {
 export const viewJustification = (arguedDiagramPartId: string) => {
   useCurrentViewStore.setState(
     {
+      ...initialViewStateWithoutSelected,
       format: "diagram",
       categoriesToShow: ["justification"],
       justificationFilter: { type: "rootClaim", centralRootClaimId: arguedDiagramPartId },
@@ -140,6 +141,7 @@ export const viewJustification = (arguedDiagramPartId: string) => {
     false,
     "viewJustification",
   );
+  emitter.emit("changedDiagramFilter");
 };
 
 /**
