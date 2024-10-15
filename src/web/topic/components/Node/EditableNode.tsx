@@ -131,7 +131,7 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
             {typeText}
           </NodeTypeSpan>
         </NodeTypeBox>
-        <CommonIndicators graphPartId={node.id} notes={node.data.notes} />
+        <CommonIndicators graphPart={node} notes={node.data.notes} />
       </YEdgeBox>
       <MiddleDiv>
         <StyledTextareaAutosize
