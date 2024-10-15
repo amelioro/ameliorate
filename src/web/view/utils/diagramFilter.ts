@@ -114,7 +114,6 @@ type ProblemOptions = z.infer<typeof problemSchema>;
 
 /**
  * Description:
- * - Show problem
  * - Show selected criteria with all depth-1 related parents (causes, effects, benefits, detriments)
  * - Show selected solutions with all components, recursive effects, benefits, detriments
  *
@@ -154,13 +153,7 @@ const applyTradeoffsFilter = (graph: Graph, filters: TradeoffsOptions) => {
   );
 
   const nodes = uniqBy(
-    [
-      centralProblem,
-      ...selectedSolutions,
-      ...selectedCriteria,
-      ...criteriaParents,
-      ...filteredSolutionDetails,
-    ],
+    [...selectedSolutions, ...selectedCriteria, ...criteriaParents, ...filteredSolutionDetails],
     (node) => node.id,
   );
   const edges = getRelevantEdges(nodes, graph);
