@@ -12,7 +12,10 @@ import {
   initialViewStateWithoutSelected,
   useCurrentViewStore,
 } from "@/web/view/currentViewStore/store";
-import { getCriterionContextFilter } from "@/web/view/utils/contextFilters";
+import {
+  getCriterionContextFilter,
+  getFulfillsContextFilter,
+} from "@/web/view/utils/contextFilters";
 import {
   DiagramFilter,
   StandardFilter,
@@ -158,6 +161,20 @@ export const viewCriterionContext = (criterionId: string) => {
     },
     false,
     "viewCriterionContext",
+  );
+  emitter.emit("changedDiagramFilter");
+};
+
+export const viewFulfillsEdgeContext = (fulfillsEdgeId: string) => {
+  const graph = useTopicStore.getState();
+
+  useCurrentViewStore.setState(
+    {
+      ...initialViewStateWithoutSelected,
+      breakdownFilter: getFulfillsContextFilter(graph, fulfillsEdgeId),
+    },
+    false,
+    "viewFulfillsContext",
   );
   emitter.emit("changedDiagramFilter");
 };

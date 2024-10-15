@@ -1,7 +1,7 @@
 import { RelationName } from "@/common/edge";
 import { NodeType } from "@/common/node";
-import { useCriterionHasContext } from "@/web/topic/store/partContextHooks";
-import { viewCriterionContext } from "@/web/view/currentViewStore/filter";
+import { useCriterionHasContext, useFulfillsHasContext } from "@/web/topic/store/partContextHooks";
+import { viewCriterionContext, viewFulfillsEdgeContext } from "@/web/view/currentViewStore/filter";
 
 export const contextMethods: Partial<
   Record<
@@ -12,5 +12,9 @@ export const contextMethods: Partial<
   criterion: {
     useHasContext: useCriterionHasContext,
     viewContext: viewCriterionContext,
+  },
+  fulfills: {
+    useHasContext: useFulfillsHasContext,
+    viewContext: viewFulfillsEdgeContext,
   },
 };
