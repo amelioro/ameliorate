@@ -8,7 +8,15 @@ import { getDefaultNode } from "@/web/topic/store/nodeGetters";
 import { useTopicStore } from "@/web/topic/store/store";
 import { findNodeOrThrow } from "@/web/topic/utils/graph";
 import { neighbors } from "@/web/topic/utils/node";
-import { useCurrentViewStore } from "@/web/view/currentViewStore/store";
+import {
+  initialViewStateWithoutSelected,
+  useCurrentViewStore,
+} from "@/web/view/currentViewStore/store";
+import {
+  getCriterionContextFilter,
+  getFulfillsContextFilter,
+  getSolutionContextFilter,
+} from "@/web/view/utils/contextFilters";
 import {
   DiagramFilter,
   StandardFilter,
@@ -133,6 +141,7 @@ export const viewCriteriaTable = (problemNodeId: string) => {
 export const viewJustification = (arguedDiagramPartId: string) => {
   useCurrentViewStore.setState(
     {
+      ...initialViewStateWithoutSelected,
       format: "diagram",
       categoriesToShow: ["justification"],
       justificationFilter: { type: "rootClaim", centralRootClaimId: arguedDiagramPartId },
@@ -140,6 +149,49 @@ export const viewJustification = (arguedDiagramPartId: string) => {
     false,
     "viewJustification",
   );
+  emitter.emit("changedDiagramFilter");
+};
+
+export const viewSolutionContext = (solutionId: string) => {
+  const graph = useTopicStore.getState();
+
+  useCurrentViewStore.setState(
+    {
+      ...initialViewStateWithoutSelected,
+      breakdownFilter: getSolutionContextFilter(graph, solutionId),
+    },
+    false,
+    "viewSolutionContext",
+  );
+  emitter.emit("changedDiagramFilter");
+};
+
+export const viewCriterionContext = (criterionId: string) => {
+  const graph = useTopicStore.getState();
+
+  useCurrentViewStore.setState(
+    {
+      ...initialViewStateWithoutSelected,
+      breakdownFilter: getCriterionContextFilter(graph, criterionId),
+    },
+    false,
+    "viewCriterionContext",
+  );
+  emitter.emit("changedDiagramFilter");
+};
+
+export const viewFulfillsEdgeContext = (fulfillsEdgeId: string) => {
+  const graph = useTopicStore.getState();
+
+  useCurrentViewStore.setState(
+    {
+      ...initialViewStateWithoutSelected,
+      breakdownFilter: getFulfillsContextFilter(graph, fulfillsEdgeId),
+    },
+    false,
+    "viewFulfillsContext",
+  );
+  emitter.emit("changedDiagramFilter");
 };
 
 /**

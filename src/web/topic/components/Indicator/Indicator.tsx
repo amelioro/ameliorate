@@ -16,6 +16,7 @@ interface IndicatorProps {
    */
   iconHasBackground?: boolean;
   color?: ButtonProps["color"];
+  filled?: boolean;
 }
 
 export const Indicator = ({
@@ -24,11 +25,18 @@ export const Indicator = ({
   onClick,
   iconHasBackground = true,
   color = "neutral",
+  filled = true,
 }: IndicatorProps) => {
+  const onClickHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
+    if (onClick) {
+      // In most cases, we don't want the click to result in selecting the parent node.
+      // If we want that to happen, we can call `setSelected` manually in that indicator's specific onClick.
+      event.stopPropagation();
+      onClick(event);
+    }
+  };
+
   return (
-    // black outline looks a bit weird on the table icon, not sure how to easily fix though
-    // also hover color diff for black is impossible to see, so a custom hover is added to darken the gray instead
-    // see permalink for a few attempted variations in comments https://github.com/amelioro/ameliorate/blob/a6001b43b30a57b47acc67ce4065c4122d7929a8/web/src/modules/topic/components/Indicator/Indicator.tsx#L28-L54
     <>
       {iconHasBackground ? (
         <StyledButton
@@ -36,23 +44,24 @@ export const Indicator = ({
           aria-label={title}
           variant="contained"
           color="neutralContrast"
-          onClick={onClick}
+          onClick={onClickHandler}
           sx={{
             pointerEvents: !onClick ? "none" : undefined,
+            // hover color diff for black is impossible to see, so a custom hover is added to darken the gray instead
             "&:hover > svg": {
               color: (theme) => theme.palette.neutral.dark,
             },
           }}
         >
-          <Icon color={color} />
+          <Icon color={filled ? color : "paper"} />
         </StyledButton>
       ) : (
         <StyledButton
           title={title}
           aria-label={title}
           variant="contained"
-          color={color}
-          onClick={onClick}
+          color={filled ? color : "paper"}
+          onClick={onClickHandler}
           sx={{
             border: "1px solid",
             pointerEvents: !onClick ? "none" : undefined,

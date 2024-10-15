@@ -1,4 +1,4 @@
-import { TableChart, TableChartOutlined } from "@mui/icons-material";
+import { TableChart } from "@mui/icons-material";
 import { memo, useCallback } from "react";
 
 import { Indicator } from "@/web/topic/components/Indicator/Indicator";
@@ -22,9 +22,14 @@ const CriteriaTableIndicatorBase = ({ nodeId }: Props) => {
 
   const hasCriteria = nodeChildren.some((child) => child.type === "criterion");
 
-  const Icon = hasCriteria ? TableChart : TableChartOutlined;
-
-  return <Indicator Icon={Icon} title={"View criteria table"} onClick={onClick} />;
+  return (
+    <Indicator
+      Icon={TableChart}
+      filled={hasCriteria}
+      title={"View criteria table"}
+      onClick={onClick}
+    />
+  );
 };
 
 export const CriteriaTableIndicator = memo(CriteriaTableIndicatorBase);

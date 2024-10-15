@@ -75,7 +75,7 @@ const downloadScreenshot = () => {
 
   // thanks react flow example https://reactflow.dev/examples/misc/download-image
   const nodesBounds = getRectOfNodes(nodes);
-  const transform = getTransformForBounds(nodesBounds, imageWidth, imageHeight, 0.5, 2);
+  const transform = getTransformForBounds(nodesBounds, imageWidth, imageHeight, 0.125, 2);
   const viewportElement = document.querySelector(".react-flow__viewport");
   if (!viewportElement) throw new Error("Couldn't find viewport element to take screenshot of");
 

@@ -1,4 +1,4 @@
-import { Article, ArticleOutlined } from "@mui/icons-material";
+import { Article } from "@mui/icons-material";
 import { useCallback } from "react";
 
 import { emitter } from "@/web/common/event";
@@ -12,12 +12,11 @@ interface Props {
 
 export const DetailsIndicator = ({ graphPartId, notes }: Props) => {
   const hasDetails = notes.length > 0;
-  const Icon = hasDetails ? Article : ArticleOutlined;
 
   const onClick = useCallback(() => {
     setSelected(graphPartId);
     emitter.emit("viewTopicDetails");
   }, [graphPartId]);
 
-  return <Indicator Icon={Icon} title={"View details"} onClick={onClick} />;
+  return <Indicator Icon={Article} title={"View details"} onClick={onClick} filled={hasDetails} />;
 };

@@ -137,7 +137,7 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
       onContextMenu={(event) => openContextMenu(event, { edge })}
       spotlight={spotlight}
     >
-      <CommonIndicators graphPartId={edge.id} notes={edge.data.notes} />
+      <CommonIndicators graphPart={edge} notes={edge.data.notes} />
       <Typography
         variant="body1"
         margin="0"

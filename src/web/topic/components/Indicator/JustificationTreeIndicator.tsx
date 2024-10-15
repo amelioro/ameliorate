@@ -1,4 +1,4 @@
-import { AccountTree, AccountTreeOutlined } from "@mui/icons-material";
+import { AccountTree } from "@mui/icons-material";
 import { MouseEventHandler, useCallback } from "react";
 
 import { Indicator } from "@/web/topic/components/Indicator/Indicator";
@@ -18,18 +18,11 @@ export const JustificationTreeIndicator = ({ graphPartId }: Props) => {
   const justificationCount = useJustificationCount(graphPartId);
   const nonTopLevelJustificationCount = useNonTopLevelJustificationCount(graphPartId);
 
-  const onClick: MouseEventHandler<HTMLButtonElement> = useCallback(
-    (event) => {
-      // prevent setting the node as selected because we're about to navigate away from this diagram
-      event.stopPropagation();
+  const onClick: MouseEventHandler<HTMLButtonElement> = useCallback(() => {
+    if (!rootClaim) return;
+    viewJustification(rootClaim.id);
+  }, [rootClaim]);
 
-      if (!rootClaim) return;
-      viewJustification(rootClaim.id);
-    },
-    [rootClaim],
-  );
-
-  const Icon = justificationCount > 0 ? AccountTree : AccountTreeOutlined;
   const title =
     "View justification tree" +
     (nonTopLevelJustificationCount > 0
@@ -38,8 +31,9 @@ export const JustificationTreeIndicator = ({ graphPartId }: Props) => {
 
   return (
     <Indicator
-      Icon={Icon}
+      Icon={AccountTree}
       iconHasBackground={false}
+      filled={justificationCount > 0}
       title={title}
       onClick={justificationCount > 0 ? onClick : undefined}
     />
