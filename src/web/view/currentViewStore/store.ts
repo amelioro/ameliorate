@@ -74,6 +74,9 @@ export const initialViewState: ViewState = {
   layoutThoroughness: 100, // by default, prefer keeping parents close to children over keeping node types together
 };
 
+// TODO?: oftentimes don't want to reset selected part - should selectedGraphPartId really be in the view store?
+export const { selectedGraphPartId: _, ...initialViewStateWithoutSelected } = initialViewState;
+
 const persistedNameBase = "navigateStore";
 
 export const useCurrentViewStore = createWithEqualityFn<ViewState>()(

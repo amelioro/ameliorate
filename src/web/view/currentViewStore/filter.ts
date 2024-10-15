@@ -8,7 +8,11 @@ import { getDefaultNode } from "@/web/topic/store/nodeGetters";
 import { useTopicStore } from "@/web/topic/store/store";
 import { findNodeOrThrow } from "@/web/topic/utils/graph";
 import { neighbors } from "@/web/topic/utils/node";
-import { useCurrentViewStore } from "@/web/view/currentViewStore/store";
+import {
+  initialViewStateWithoutSelected,
+  useCurrentViewStore,
+} from "@/web/view/currentViewStore/store";
+import { getCriterionContextFilter } from "@/web/view/utils/contextFilters";
 import {
   DiagramFilter,
   StandardFilter,
@@ -140,6 +144,20 @@ export const viewJustification = (arguedDiagramPartId: string) => {
     },
     false,
     "viewJustification",
+  );
+  emitter.emit("changedDiagramFilter");
+};
+
+export const viewCriterionContext = (criterionId: string) => {
+  const graph = useTopicStore.getState();
+
+  useCurrentViewStore.setState(
+    {
+      ...initialViewStateWithoutSelected,
+      breakdownFilter: getCriterionContextFilter(graph, criterionId),
+    },
+    false,
+    "viewCriterionContext",
   );
   emitter.emit("changedDiagramFilter");
 };

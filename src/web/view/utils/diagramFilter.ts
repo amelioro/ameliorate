@@ -126,7 +126,7 @@ type ProblemOptions = z.infer<typeof problemSchema>;
  * - Brainstorm solutions
  * - Compare solutions
  */
-const applyTradeoffsFilter = (graph: Graph, filters: TradeoffsOptions) => {
+export const applyTradeoffsFilter = (graph: Graph, filters: TradeoffsOptions) => {
   const centralProblem = graph.nodes.find((node) => node.id === filters.centralProblemId);
   if (!centralProblem) return graph;
 
@@ -216,7 +216,7 @@ const tradeoffsSchema = z.object({
   criteria: z.array(nodeSchema.shape.id),
 });
 
-type TradeoffsOptions = z.infer<typeof tradeoffsSchema>;
+export type TradeoffsOptions = z.infer<typeof tradeoffsSchema>;
 
 /**
  * Description:
