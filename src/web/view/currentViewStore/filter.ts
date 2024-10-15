@@ -15,6 +15,7 @@ import {
 import {
   getCriterionContextFilter,
   getFulfillsContextFilter,
+  getSolutionContextFilter,
 } from "@/web/view/utils/contextFilters";
 import {
   DiagramFilter,
@@ -147,6 +148,20 @@ export const viewJustification = (arguedDiagramPartId: string) => {
     },
     false,
     "viewJustification",
+  );
+  emitter.emit("changedDiagramFilter");
+};
+
+export const viewSolutionContext = (solutionId: string) => {
+  const graph = useTopicStore.getState();
+
+  useCurrentViewStore.setState(
+    {
+      ...initialViewStateWithoutSelected,
+      breakdownFilter: getSolutionContextFilter(graph, solutionId),
+    },
+    false,
+    "viewSolutionContext",
   );
   emitter.emit("changedDiagramFilter");
 };

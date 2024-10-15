@@ -2,7 +2,16 @@ import { throwError } from "@/common/errorHandling";
 import { childNode, parentNode } from "@/web/topic/utils/edge";
 import { Graph, findEdgeOrThrow, findNodeOrThrow } from "@/web/topic/utils/graph";
 import { children, parents } from "@/web/topic/utils/node";
-import { TradeoffsOptions } from "@/web/view/utils/diagramFilter";
+import { SolutionOptions, TradeoffsOptions } from "@/web/view/utils/diagramFilter";
+
+export const getSolutionContextFilter = (graph: Graph, solutionId: string): SolutionOptions => {
+  const solution = findNodeOrThrow(solutionId, graph.nodes);
+
+  return {
+    type: "solution",
+    centralSolutionId: solution.id,
+  };
+};
 
 export const getCriterionContextFilter = (graph: Graph, criterionId: string): TradeoffsOptions => {
   const criterion = findNodeOrThrow(criterionId, graph.nodes);

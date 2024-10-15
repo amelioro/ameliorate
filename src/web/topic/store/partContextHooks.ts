@@ -3,8 +3,30 @@ import { findEdgeOrThrow } from "@/web/topic/utils/graph";
 import {
   getCriterionContextFilter,
   getFulfillsContextFilter,
+  getSolutionContextFilter,
 } from "@/web/view/utils/contextFilters";
-import { applyTradeoffsFilter } from "@/web/view/utils/diagramFilter";
+import { applySolutionFilter, applyTradeoffsFilter } from "@/web/view/utils/diagramFilter";
+
+export const useSolutionHasContext = (solutionId: string) => {
+  return useTopicStore((state) => {
+    const topicGraph = { nodes: state.nodes, edges: state.edges };
+
+    try {
+      const filter = getSolutionContextFilter(topicGraph, solutionId);
+      // Running the filter guarantees that if we change the filter logic, this hook will still be accurate.
+      // If performance is a concern, potentially we could:
+      // - manually check if context exists, i.e. run only the parts of the filter we know we need to
+      // - move the context indicator to only show within the criteria topic
+      // - remove reactiveness from the context indicator
+      const { nodes } = applySolutionFilter(topicGraph, filter);
+      const contextNodes = nodes.filter((node) => node.id !== solutionId);
+
+      return contextNodes.length > 0;
+    } catch {
+      return false;
+    }
+  });
+};
 
 export const useCriterionHasContext = (criterionId: string) => {
   return useTopicStore((state) => {

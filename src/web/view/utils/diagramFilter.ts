@@ -220,19 +220,18 @@ export type TradeoffsOptions = z.infer<typeof tradeoffsSchema>;
 
 /**
  * Description:
- * - Show solution with all components and effects
+ * - Show solution with all of its details
  *
  * Use cases:
  * - Detail a solution
  */
-const applySolutionFilter = (graph: Graph, filters: SolutionOptions) => {
+export const applySolutionFilter = (graph: Graph, filters: SolutionOptions) => {
   const centralSolution = graph.nodes.find((node) => node.id === filters.centralSolutionId);
   if (!centralSolution) return graph;
 
-  const ancestorDetails = ancestors(centralSolution, graph, ["has", "creates"]);
-  const descendantDetails = descendants(centralSolution, graph, ["obstacleOf", "addresses"]);
+  const solutionDetails = getSolutionDetails([centralSolution], [], "all", graph);
 
-  const nodes = [centralSolution, ...ancestorDetails, ...descendantDetails];
+  const nodes = [centralSolution, ...solutionDetails];
   const edges = getRelevantEdges(nodes, graph);
 
   return { nodes, edges };
@@ -243,7 +242,7 @@ const solutionSchema = z.object({
   centralSolutionId: nodeSchema.shape.id,
 });
 
-type SolutionOptions = z.infer<typeof solutionSchema>;
+export type SolutionOptions = z.infer<typeof solutionSchema>;
 
 /**
  * Description:
