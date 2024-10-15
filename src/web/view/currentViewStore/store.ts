@@ -70,8 +70,8 @@ export const initialViewState: ViewState = {
 
   forceNodesIntoLayers: true,
   layerNodeIslandsTogether: false,
-  minimizeEdgeCrossings: false,
-  layoutThoroughness: 1, // by default, prefer keeping node types together over keeping parents close to children
+  minimizeEdgeCrossings: true,
+  layoutThoroughness: 100, // by default, prefer keeping parents close to children over keeping node types together
 };
 
 const persistedNameBase = "navigateStore";
