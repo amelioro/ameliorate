@@ -1,7 +1,7 @@
 import { createDraft, finishDraft } from "immer";
 
 import { errorWithData } from "@/common/errorHandling";
-import { breakdownNodeTypes, justificationNodeTypes } from "@/common/node";
+import { justificationNodeTypes } from "@/common/node";
 import { emitter } from "@/web/common/event";
 import { setNewlyAddedNode } from "@/web/common/store/ephemeralStore";
 import { WorkspaceContextType } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
@@ -17,7 +17,6 @@ import {
   buildNode,
   findGraphPartOrThrow,
   findNodeOrThrow,
-  getNodesComposedBy,
   isNode,
 } from "@/web/topic/utils/graph";
 import { getImplicitLabel } from "@/web/topic/utils/justification";
@@ -133,7 +132,7 @@ export const addNode = ({
 
   const parent = as === "parent" ? newNode : fromPart;
   const child = as === "parent" ? fromPart : newNode;
-  createEdgeAndImpliedEdges(topicGraph, parent, child, relation);
+  createEdge(topicGraph, parent, child, relation);
 
   // connect criteria
   if (
@@ -172,45 +171,8 @@ export const addNodeWithoutParent = (
   useTopicStore.setState(finishDraft(state), false, "addNodeWithoutParent");
 };
 
-const createEdgesImpliedByComposition = (
-  topicGraph: Graph,
-  parent: Node,
-  child: Node,
-  relation: Relation,
-) => {
-  // creating nodes that are composed of other nodes is complex, and doesn't seem worth trying to manage (i.e. hide)
-  // TODO?: this complexity makes me think it's not worth trying to create composed edges at all, and
-  // that #434 is a better solution to the issue of showing connections when nodes are hidden
-  if (relation.name === "has") return;
-
-  const nodesComposedByParent = getNodesComposedBy(parent, topicGraph);
-  nodesComposedByParent
-    .filter((composedNode) => composedNode.id != child.id)
-    .forEach((composedNode) => {
-      const relationForComposed = getRelation(composedNode.type, relation.child, relation.name);
-      if (!relationForComposed) return;
-
-      createEdgeAndImpliedEdges(topicGraph, composedNode, child, relationForComposed);
-    });
-
-  const nodesComposedByChild = getNodesComposedBy(child, topicGraph);
-  nodesComposedByChild
-    .filter((composedNode) => composedNode.id != parent.id)
-    .forEach((composedNode) => {
-      const relationForComposed = getRelation(relation.parent, composedNode.type, relation.name);
-      if (!relationForComposed) return;
-
-      createEdgeAndImpliedEdges(topicGraph, parent, composedNode, relationForComposed);
-    });
-};
-
 // see algorithm pseudocode & example at https://github.com/amelioro/ameliorate/issues/66#issuecomment-1465078133
-const createEdgeAndImpliedEdges = (
-  topicGraph: Graph,
-  parent: GraphPart,
-  child: GraphPart,
-  relation: Relation,
-) => {
+const createEdge = (topicGraph: Graph, parent: GraphPart, child: GraphPart, relation: Relation) => {
   // We aren't yet fully supporting edges pointing to other edges.
   // It's not clear at this time whether completely adding or removing support for edges to edges is better,
   // so here's a hack assuming we won't use it for now.,
@@ -228,15 +190,6 @@ const createEdgeAndImpliedEdges = (
   topicGraph.edges.push(newEdge);
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  // don't create implied edges if the node being added is not in the topic diagram
-  // e.g. when adding a question to the solution component, don't also link the solution to that
-  // question, because it's not as relevant
-  if (breakdownNodeTypes.includes(parent.type) && breakdownNodeTypes.includes(child.type)) {
-    // indirectly recurses by calling this method after determining which implied edges to create
-    // note: modifies topicGraph.edges through `state` (via the line above)
-    createEdgesImpliedByComposition(topicGraph, parent, child, relation);
-  }
-
   return topicGraph.edges;
 };
 
@@ -253,7 +206,7 @@ const createConnection = (topicGraph: Graph, parentId: string | null, childId: s
   const relation = getRelation(parent.type, child.type)!;
 
   // modifies topicGraph.edges through `state`
-  createEdgeAndImpliedEdges(topicGraph, parent, child, relation);
+  createEdge(topicGraph, parent, child, relation);
 
   return true;
 };
