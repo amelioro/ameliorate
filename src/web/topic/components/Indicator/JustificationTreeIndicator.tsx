@@ -18,16 +18,10 @@ export const JustificationTreeIndicator = ({ graphPartId }: Props) => {
   const justificationCount = useJustificationCount(graphPartId);
   const nonTopLevelJustificationCount = useNonTopLevelJustificationCount(graphPartId);
 
-  const onClick: MouseEventHandler<HTMLButtonElement> = useCallback(
-    (event) => {
-      // prevent setting the node as selected because we're about to navigate away from this diagram
-      event.stopPropagation();
-
-      if (!rootClaim) return;
-      viewJustification(rootClaim.id);
-    },
-    [rootClaim],
-  );
+  const onClick: MouseEventHandler<HTMLButtonElement> = useCallback(() => {
+    if (!rootClaim) return;
+    viewJustification(rootClaim.id);
+  }, [rootClaim]);
 
   const title =
     "View justification tree" +

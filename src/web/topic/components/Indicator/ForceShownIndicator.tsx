@@ -15,10 +15,7 @@ const ForceShownIndicatorBase = ({ nodeId, partColor }: Props) => {
   const nodeIsForcedToShow = useIsNodeForcedToShow(nodeId);
 
   const onClick: MouseEventHandler<HTMLButtonElement> = useCallback(
-    (event) => {
-      stopForcingNodeToShow(nodeId);
-      event.stopPropagation(); // prevent selecting the node and awkwardly re-showing if flashlight mode is on
-    },
+    () => stopForcingNodeToShow(nodeId),
     [nodeId],
   );
 
