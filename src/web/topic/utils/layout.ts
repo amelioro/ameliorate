@@ -69,7 +69,8 @@ const calculatePartition = (node: Node, edges: Edge[]) => {
 
     if (shouldBeAboveCriteria && shouldBeBelowCriteria) return "null";
     else if (shouldBeAboveCriteria) return "0";
-    else return "2";
+    else if (shouldBeBelowCriteria) return "2";
+    else return "null";
   } else {
     return partitionOrders[node.type];
   }
