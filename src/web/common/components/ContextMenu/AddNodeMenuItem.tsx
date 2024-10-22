@@ -30,13 +30,8 @@ export const AddNodeMenuItem = ({ parentMenuOpen }: Props) => {
       <NestedMenuItem
         label="Add node"
         parentMenuOpen={parentMenuOpen}
-        sx={{
-          paddingX: "16px",
-          "& p": {
-            fontSize: "14px", // match default mui menu item text
-            paddingX: 0,
-          },
-        }}
+        // match default mui menu padding and size
+        className="px-[16px] [&_p]:px-0 [&_p]:text-sm"
       >
         {shownNodeTypes.map((type) => (
           <ContextMenuItem key={type} onClick={() => addNodeWithoutParent(type, "diagram")}>
