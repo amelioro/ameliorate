@@ -68,7 +68,7 @@ export const WorkspaceToolbar = () => {
   }, []);
 
   return (
-    <AppBar position="sticky" className="border-b bg-gray-50 shadow-none">
+    <AppBar position="sticky" className="overflow-x-auto border-b bg-gray-50 shadow-none">
       <Toolbar variant="dense">
         <IconButton
           color="inherit"
