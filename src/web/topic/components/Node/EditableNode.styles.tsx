@@ -6,42 +6,23 @@ import { ContentIndicators } from "@/web/topic/components/Indicator/ContentIndic
 import { StatusIndicators } from "@/web/topic/components/Indicator/StatusIndicators";
 
 export const nodeWidthRem = 11;
+const nodeHeightRem = 4.125;
 
 export const nodeWidthPx = nodeWidthRem * htmlDefaultFontSize;
-export const nodeHeightPx = 66;
+export const nodeHeightPx = nodeHeightRem * htmlDefaultFontSize;
 
-export const YEdgeBox = styled(Box)`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
+export const TopDiv = styled.div``;
+export const NodeTypeDiv = styled.div``;
 
-export const NodeTypeBox = styled(Box)`
-  display: flex;
-  height: 24px;
-  align-items: center;
-`;
-
-export const NodeTypeSpan = styled.span`
-  font-size: 0.875rem;
-  line-height: 1;
-  padding-right: 4px;
-`;
+export const NodeTypeSpan = styled.span``;
 
 export const IndicatorDiv = styled.div`
   display: flex;
 `;
 
-export const XEdgeDiv = styled.div`
-  width: 24px;
-`;
-
 // allow handling mouse events for whole node without mouse icon changing to input for textarea
-export const MiddleDiv = styled.div`
-  display: flex;
-  flex-grow: 1; // fill out remaining space with this div because it contains the textarea
-  padding: 4px 4px 8px;
-`;
+export const MiddleDiv = styled.div``;
+export const BottomDiv = styled.div``;
 
 export const StyledTextareaAutosize = styled(TextareaAutosize)`
   padding: 0;
@@ -102,7 +83,7 @@ export const RightCornerContentIndicators = styled(ContentIndicators)`
   right: 0;
   bottom: 0;
   // amount that looks decent hanging over the edge of node
-  transform: translate(10px, 65%);
+  transform: translate(0.625rem, 65%);
 `;
 
 export const LeftCornerStatusIndicators = styled(StatusIndicators)`
@@ -110,5 +91,5 @@ export const LeftCornerStatusIndicators = styled(StatusIndicators)`
   left: 0;
   bottom: 0;
   // amount that looks decent hanging over the edge of node
-  transform: translate(-10px, 65%);
+  transform: translate(-0.625px, 65%);
 `;
