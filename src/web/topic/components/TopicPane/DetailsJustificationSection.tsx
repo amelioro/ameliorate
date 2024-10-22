@@ -1,11 +1,11 @@
 import { ThumbsUpDown } from "@mui/icons-material";
-import { ListItem, ListItemIcon, ListItemText, Stack, Typography } from "@mui/material";
+import { Box, ListItem, ListItemIcon, ListItemText, Stack, Typography } from "@mui/material";
 
 import { justificationNodeTypes } from "@/common/node";
 import { JustificationTreeIndicator } from "@/web/topic/components/Indicator/JustificationTreeIndicator";
 import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
 import { EditableNode } from "@/web/topic/components/Node/EditableNode";
-import { nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
+import { nodeWidthRem } from "@/web/topic/components/Node/EditableNode.styles";
 import { useTopLevelJustification } from "@/web/topic/store/graphPartHooks";
 import { GraphPart, isNode } from "@/web/topic/utils/graph";
 import { isJustificationEdge } from "@/web/topic/utils/justification";
@@ -67,29 +67,27 @@ export const DetailsJustificationSection = ({ graphPart }: Props) => {
         />
       </Stack>
 
-      <Stack
-        direction="row"
-        justifyContent="center"
-        alignItems="flex-start"
-        spacing="2px"
-        marginBottom={0.5}
+      <Box
+        className="mb-1 flex flex-wrap justify-center gap-0.5 *:shrink-0"
+        // ensure "No X yet!" takes up the same width as the nodes
+        sx={{ "& > div": { width: `${nodeWidthRem}rem` } }}
       >
-        <Stack width={nodeWidthPx} alignItems="center" spacing="2px">
+        <div className="flex flex-col items-center gap-0.5">
           {supports.length > 0 ? (
             supports.map((support) => <EditableNode key={support.id} node={support} />)
           ) : (
             <Typography variant="body2">No supports yet!</Typography>
           )}
-        </Stack>
+        </div>
 
-        <Stack width={nodeWidthPx} alignItems="center" spacing="2px">
+        <div className="flex flex-col items-center gap-0.5">
           {critiques.length > 0 ? (
             critiques.map((critique) => <EditableNode key={critique.id} node={critique} />)
           ) : (
             <Typography variant="body2">No critiques yet!</Typography>
           )}
-        </Stack>
-      </Stack>
+        </div>
+      </Box>
     </>
   );
 };
