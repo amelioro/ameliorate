@@ -5,9 +5,11 @@ import { Card } from "@/web/home/Card";
 export const UseCasesSection = () => {
   return (
     <div className="flex flex-col items-center gap-4">
-      <Typography variant="h4">Work Constructively</Typography>
+      <Typography variant="h4" className="text-center">
+        Work Constructively
+      </Typography>
 
-      <div className="grid grid-cols-1 gap-2 md:grid-cols-3 md:*:w-56">
+      <div className="flex flex-wrap justify-center gap-2 md:*:w-56">
         <Card
           title="Grasp your own thoughts"
           description="Lay out your ideas with all of their nuance to better think through a problem and make better decisions for yourself."

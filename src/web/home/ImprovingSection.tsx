@@ -25,7 +25,7 @@ export const ImprovingSection = () => {
         </Typography>
       </div>
 
-      <div className="flex flex-col divide-y divide-gray-300 rounded-md border border-gray-300 sm:flex-row sm:divide-x sm:divide-y-0">
+      <div className="flex flex-wrap justify-center gap-1">
         <SubscribeForm
           header="Get progress updates"
           headerAnchor={
