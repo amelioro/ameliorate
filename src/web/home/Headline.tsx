@@ -19,8 +19,13 @@ const RotatingDescriptors = () => {
         with an open mind
       </span>
 
-      {/* size the text space to a line's worth, while allowing the rotating words to be absolute and appear in the same spot as each other */}
-      <br />
+      {/*
+        size the text space to the largest of the lines (a line's worth except for small screen + big font),
+        while allowing the rotating words to be absolute and appear in the same spot as each other
+      */}
+      <span className="invisible left-0 w-full text-transparent sm:left-auto">
+        with an open mind
+      </span>
     </>
   );
 };

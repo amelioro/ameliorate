@@ -45,13 +45,8 @@ export const Indicator = ({
           variant="contained"
           color="neutralContrast"
           onClick={onClickHandler}
-          sx={{
-            pointerEvents: !onClick ? "none" : undefined,
-            // hover color diff for black is impossible to see, so a custom hover is added to darken the gray instead
-            "&:hover > svg": {
-              color: (theme) => theme.palette.neutral.dark,
-            },
-          }}
+          // hover color for black button is impossible to see, so a custom hover is added to the svg instead of the button
+          className={`[&_>_svg]:hover:text-neutral-dark ${!onClick ? "pointer-events-none" : ""}`}
         >
           <Icon color={filled ? color : "paper"} />
         </StyledButton>
@@ -62,11 +57,8 @@ export const Indicator = ({
           variant="contained"
           color={filled ? color : "paper"}
           onClick={onClickHandler}
-          sx={{
-            border: "1px solid",
-            pointerEvents: !onClick ? "none" : undefined,
-            fontSize: "16px", // default seems to be 14px, but 16px fits more snuggly within button size
-          }}
+          // text-base seems to fit more snuggly than the default 14px
+          className={`border border-solid text-base ${!onClick ? "pointer-events-none" : ""}`}
         >
           <Icon color="neutralContrast" fontSize="inherit" />
         </StyledButton>

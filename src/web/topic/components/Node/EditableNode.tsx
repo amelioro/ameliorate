@@ -6,14 +6,15 @@ import { openContextMenu } from "@/web/common/store/contextMenuActions";
 import { clearNewlyAddedNode, isNodeNewlyAdded } from "@/web/common/store/ephemeralStore";
 import { CommonIndicators } from "@/web/topic/components/Indicator/CommonIndicators";
 import {
+  BottomDiv,
   LeftCornerStatusIndicators,
   MiddleDiv,
   NodeBox,
-  NodeTypeBox,
+  NodeTypeDiv,
   NodeTypeSpan,
   RightCornerContentIndicators,
   StyledTextareaAutosize,
-  YEdgeBox,
+  TopDiv,
 } from "@/web/topic/components/Node/EditableNode.styles";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { setCustomNodeType, setNodeLabel } from "@/web/topic/store/actions";
@@ -91,17 +92,17 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
           backgroundColor: "white",
           borderColor: color,
 
-          [NodeTypeBox.toString()]: {
+          [NodeTypeDiv.toString()]: {
             backgroundColor: color,
             // anti-aliasing between white node background and colored border/icon background creates a gray line - add colored shadow to hide this https://stackoverflow.com/a/40100710/8409296
             boxShadow: `-1px -1px 0px 1px ${color}`,
           },
 
-          [`&.selected ${NodeTypeBox.toString()}`]: {
+          [`&.selected ${NodeTypeDiv.toString()}`]: {
             boxShadow: "-1px -1px 0px 1px black",
           },
 
-          [`&.spotlight-secondary ${NodeTypeBox.toString()}`]: {
+          [`&.spotlight-secondary ${NodeTypeDiv.toString()}`]: {
             boxShadow: `-1px -1px 0px 1px ${theme.palette.info.main}`,
           },
         };
@@ -115,9 +116,9 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
       onContextMenu={(event) => openContextMenu(event, { node })}
       sx={nodeStyles}
     >
-      <YEdgeBox height="24px">
-        <NodeTypeBox sx={{ borderTopLeftRadius: "4px", borderBottomRightRadius: "4px" }}>
-          <NodeIcon sx={{ width: "0.875rem", height: "0.875rem", marginX: "4px" }} />
+      <TopDiv className="flex h-6 items-center justify-between">
+        <NodeTypeDiv className="flex h-6 items-center rounded-br rounded-tl">
+          <NodeIcon className="mx-1 size-3.5" />
           <NodeTypeSpan
             contentEditable={customizable}
             suppressContentEditableWarning // https://stackoverflow.com/a/49639256/8409296
@@ -126,14 +127,15 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
               if (text && text !== nodeDecoration.title && text !== node.data.customType)
                 setCustomNodeType(node, text);
             }}
-            className="nopan"
+            className="nopan pr-1 text-sm leading-none"
           >
             {typeText}
           </NodeTypeSpan>
-        </NodeTypeBox>
+        </NodeTypeDiv>
         <CommonIndicators graphPart={node} notes={node.data.notes} />
-      </YEdgeBox>
-      <MiddleDiv>
+      </TopDiv>
+      {/* grow to fill out remaining space with this div because it contains the textarea */}
+      <MiddleDiv className="flex grow px-1 pb-2 pt-1">
         <StyledTextareaAutosize
           id={textAreaId}
           ref={textAreaRef}
@@ -147,7 +149,7 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
           readOnly={!editable}
         />
       </MiddleDiv>
-      <YEdgeBox position="relative">
+      <BottomDiv className="relative">
         {node.type !== "rootClaim" && ( // root claim indicators don't seem very helpful
           <>
             {/* TODO?: how to make corner indicators not look bad in the table? they're cut off */}
@@ -159,7 +161,7 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
             />
           </>
         )}
-      </YEdgeBox>
+      </BottomDiv>
     </NodeBox>
   );
 };

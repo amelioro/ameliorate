@@ -1,5 +1,5 @@
 import { Check } from "@mui/icons-material";
-import { Box, Button, InputBase, Typography, useTheme } from "@mui/material";
+import { Button, InputBase, Typography } from "@mui/material";
 import { ReactNode, useState } from "react";
 
 interface Props {
@@ -10,11 +10,10 @@ interface Props {
 }
 
 export const SubscribeForm = ({ header, headerAnchor, action, buttonText }: Props) => {
-  const theme = useTheme();
   const [submitted, setSubmitted] = useState(false);
 
   return (
-    <div className="flex flex-col justify-center space-y-2 p-4 pt-2 text-center">
+    <div className="flex flex-col justify-center space-y-2 rounded-md border border-gray-300 p-4 pt-2 text-center">
       <Typography variant="body1">
         {header} {headerAnchor}
       </Typography>
@@ -29,23 +28,13 @@ export const SubscribeForm = ({ header, headerAnchor, action, buttonText }: Prop
         style={{ display: "flex", justifyContent: "center" }}
         onSubmit={() => setSubmitted(true)}
       >
-        <Box display="flex" justifyContent="center">
+        <div className="flex flex-wrap justify-center gap-1">
           <InputBase
             placeholder="Type your email..."
             type="email"
             name="email"
             required
-            sx={{
-              border: `1px solid ${theme.palette.primary.main}`,
-              borderTopLeftRadius: "4px",
-              borderBottomLeftRadius: "4px",
-              padding: "8px",
-              fontFamily: theme.typography.body1.fontFamily,
-              fontSize: "14px",
-              width: "200px",
-
-              ":focus": { outline: "none" },
-            }}
+            className="max-w-52 grow rounded border border-primary-main p-2 text-sm focus:outline-none"
           />
 
           <Button
@@ -53,11 +42,11 @@ export const SubscribeForm = ({ header, headerAnchor, action, buttonText }: Prop
             color="primary"
             type="submit"
             disabled={submitted}
-            sx={{ boxShadow: "none", borderTopLeftRadius: "0", borderBottomLeftRadius: "0" }}
+            className="shrink-0 text-nowrap rounded shadow-none"
           >
             {submitted ? <Check /> : buttonText}
           </Button>
-        </Box>
+        </div>
       </form>
 
       {submitted && (

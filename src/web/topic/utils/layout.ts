@@ -1,6 +1,7 @@
 import ELK, { ElkNode, LayoutOptions } from "elkjs";
 
 import { NodeType, nodeTypes } from "@/common/node";
+import { scalePxViaDefaultFontSize } from "@/pages/_document.page";
 import { nodeHeightPx, nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
 import { Diagram } from "@/web/topic/utils/diagram";
 import { type Edge, type Node } from "@/web/topic/utils/graph";
@@ -105,13 +106,19 @@ export const layout = async (
     // tried using `position` to do this but it doesn't group nodes near their source node
     "elk.layered.considerModelOrder.strategy": "PREFER_NODES",
     // these spacings are just what roughly seem to look good
-    "elk.layered.spacing.nodeNodeBetweenLayers": orientation === "DOWN" ? "130" : "220",
-    "elk.spacing.nodeNode": orientation === "DOWN" ? "20" : "50",
+    "elk.layered.spacing.nodeNodeBetweenLayers":
+      orientation === "DOWN"
+        ? scalePxViaDefaultFontSize(130).toString()
+        : scalePxViaDefaultFontSize(220).toString(),
+    "elk.spacing.nodeNode":
+      orientation === "DOWN"
+        ? scalePxViaDefaultFontSize(20).toString()
+        : scalePxViaDefaultFontSize(50).toString(),
     // allow nodes to be partitioned into layers by type
     "elk.partitioning.activate": partition ? "true" : "false",
     // ensure node islands don't overlap (needed for when node has 3 rows of text)
     // also keep node islands ("components") significantly spaced out, so they can be easily seen as separate
-    "elk.spacing.componentComponent": "150", // default is 20
+    "elk.spacing.componentComponent": scalePxViaDefaultFontSize(150).toString(), // default is 20
     // e.g. if no problem ties solutions together, still put those solutions into the same partition (if partitions are on)
     // want this off for cases when islands are truly unrelated, but on for when we're just hiding edges
     "elk.separateConnectedComponents": layerNodeIslandsTogether ? "false" : "true",

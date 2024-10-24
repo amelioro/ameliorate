@@ -16,7 +16,7 @@ import {
 
 export const Footer = () => {
   return (
-    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 [&_a]:text-sm">
+    <div className="flex flex-wrap justify-evenly gap-4 [&_a]:text-sm">
       <div className="flex flex-col">
         <Typography variant="h6">Ameliorate</Typography>
         <NavLink href={docsPage} target="_blank">
