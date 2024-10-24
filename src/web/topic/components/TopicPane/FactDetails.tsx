@@ -4,6 +4,7 @@ import { ListItem, ListItemIcon, ListItemText, Stack, Typography } from "@mui/ma
 import { StandaloneEdge } from "@/web/topic/components/Edge/StandaloneEdge";
 import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
 import { EditableNode } from "@/web/topic/components/Node/EditableNode";
+import { NodeList } from "@/web/topic/components/TopicPane/NodeList";
 import { useFactDetails } from "@/web/topic/store/nodeTypeHooks";
 import { Node } from "@/web/topic/utils/graph";
 
@@ -23,14 +24,7 @@ export const FactDetails = ({ factNode }: Props) => {
         <ListItemText primary="Relevant For" />
       </ListItem>
 
-      <Stack
-        direction="row"
-        justifyContent="center"
-        alignItems="stretch"
-        flexWrap="wrap"
-        useFlexGap
-        spacing="2px"
-      >
+      <NodeList>
         {nodesRelevantFor.length === 0 && edgesRelevantFor.length === 0 && (
           <Typography variant="body2">No relevant parts yet!</Typography>
         )}
@@ -38,7 +32,7 @@ export const FactDetails = ({ factNode }: Props) => {
           nodesRelevantFor.map((node) => <EditableNode key={node.id} node={node} />)}
         {edgesRelevantFor.length > 0 &&
           edgesRelevantFor.map((edge) => <StandaloneEdge key={edge.id} edge={edge} />)}
-      </Stack>
+      </NodeList>
 
       <ListItem disablePadding={false}>
         <ListItemIcon>
@@ -61,21 +55,13 @@ export const FactDetails = ({ factNode }: Props) => {
         />
       </Stack>
 
-      <Stack
-        direction="row"
-        justifyContent="center"
-        alignItems="stretch"
-        flexWrap="wrap"
-        useFlexGap
-        spacing="2px"
-        marginBottom="8px"
-      >
+      <NodeList>
         {sources.length > 0 ? (
           sources.map((source) => <EditableNode key={source.id} node={source} />)
         ) : (
           <Typography variant="body2">No sources yet!</Typography>
         )}
-      </Stack>
+      </NodeList>
     </>
   );
 };

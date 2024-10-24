@@ -3,6 +3,7 @@ import { ListItem, ListItemIcon, ListItemText, Stack, Typography } from "@mui/ma
 
 import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
 import { EditableNode } from "@/web/topic/components/Node/EditableNode";
+import { NodeList } from "@/web/topic/components/TopicPane/NodeList";
 import { useResearchNodes } from "@/web/topic/store/graphPartHooks";
 import { Node } from "@/web/topic/utils/graph";
 
@@ -70,14 +71,7 @@ export const DetailsResearchSection = ({ node }: Props) => {
         )}
       </Stack>
 
-      <Stack
-        direction="row"
-        justifyContent="center"
-        alignItems="stretch"
-        flexWrap="wrap"
-        useFlexGap
-        spacing="2px"
-      >
+      <NodeList>
         {researchNodes.length > 0 ? (
           researchNodes.map((researchNode) => (
             <EditableNode key={researchNode.id} node={researchNode} />
@@ -85,7 +79,7 @@ export const DetailsResearchSection = ({ node }: Props) => {
         ) : (
           <Typography variant="body2">No research nodes yet!</Typography>
         )}
-      </Stack>
+      </NodeList>
     </>
   );
 };
