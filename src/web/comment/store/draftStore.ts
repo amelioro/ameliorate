@@ -10,10 +10,20 @@ import { withDefaults } from "@/common/object";
 import { storageWithDates } from "@/web/common/store/utils";
 
 interface Draft {
+  /**
+   * There's only one draft possible per commenting textbox you see in the UI - in other words, there's
+   * only one draft possible per thread, node, or edge. For this reason, we store drafts by thread/node/edge ("parent")
+   * ID instead of a draft ID.
+   */
   parentId: string | null;
   parentType: CommentParentType;
   content: string;
-  commentId?: string; // presence implies this draft has an existing comment
+  /**
+   * Only present if the draft is for editing an existing comment - this id is that comment's id,
+   * and is needed to distinguish from a draft in the same thread that isn't for editing an existing
+   * comment.
+   */
+  commentId?: string;
 }
 
 export interface DraftStoreState {
