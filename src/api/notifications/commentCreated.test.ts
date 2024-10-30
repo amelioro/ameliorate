@@ -477,6 +477,7 @@ describe("handleCommentCreated", () => {
             html: `<div style="white-space: pre;">${commentWithCommentParent.content}
 —
 <a href="http://localhost:3000/creatorOfTopic/topicWithoutAllowAnyEdit?comment=${commentWithCommentParent.id}">View comment on Ameliorate</a>.
+
 <a href="http://localhost:3000/unsubscribe/${unsubscribeThreadCode.code}">Unsubscribe from thread</a> | <a href="http://localhost:3000/unsubscribe/${unsubscribeAllCode.code}">Unsubscribe from all Ameliorate notification emails</a>.
 </div>`,
           },
@@ -518,6 +519,7 @@ describe("handleCommentCreated", () => {
             html: `<div style="white-space: pre;">${commentWithTopicParent.content}
 —
 <a href="http://localhost:3000/creatorOfTopic/topicWithoutAllowAnyEdit?comment=${commentWithTopicParent.id}">View comment on Ameliorate</a>.
+
 <a href="http://localhost:3000/unsubscribe/${unsubscribeThreadCode.code}">Unsubscribe from thread</a> | <a href="http://localhost:3000/unsubscribe/${unsubscribeAllCode.code}">Unsubscribe from all Ameliorate notification emails</a>.
 </div>`,
           },
