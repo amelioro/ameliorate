@@ -39,7 +39,6 @@ export const QuestionIndicator = ({ graphPartId, partColor }: Props) => {
       Icon={Icon}
       title={`Has ${questions.length} questions`}
       onClick={onClick}
-      iconHasBackground={false}
       color={scoreColor ?? partColor}
     />
   );

@@ -1,4 +1,4 @@
-import { TableChart } from "@mui/icons-material";
+import { TableChartOutlined } from "@mui/icons-material";
 import { memo, useCallback } from "react";
 
 import { Indicator } from "@/web/topic/components/Indicator/Indicator";
@@ -24,7 +24,7 @@ const CriteriaTableIndicatorBase = ({ nodeId }: Props) => {
 
   return (
     <Indicator
-      Icon={TableChart}
+      Icon={TableChartOutlined}
       filled={hasCriteria}
       title={"View criteria table"}
       onClick={onClick}

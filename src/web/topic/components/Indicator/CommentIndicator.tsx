@@ -31,7 +31,6 @@ export const CommentIndicator = ({ graphPartId, graphPartType, partColor }: Prop
       Icon={ChatBubbleOutline}
       title={`Has ${commentCount} threads`} // could count total comments as well but logic is more annoying, and doesn't seem that important
       onClick={onClick}
-      iconHasBackground={false}
       color={partColor}
     />
   );

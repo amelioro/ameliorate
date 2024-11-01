@@ -26,7 +26,6 @@ const ForceShownIndicatorBase = ({ nodeId, partColor }: Props) => {
       Icon={WbTwilight}
       title={"Stop forcing node to show"}
       onClick={onClick}
-      iconHasBackground={false}
       color={partColor}
     />
   );
