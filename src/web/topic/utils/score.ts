@@ -5,7 +5,7 @@ import round from "lodash/round";
 import { Score } from "@/web/topic/utils/graph";
 
 export const scoreColors: Record<Score, keyof Palette> = {
-  "-": "neutral",
+  "-": "paper",
   "1": "critique1",
   "2": "critique2",
   "3": "critique3",

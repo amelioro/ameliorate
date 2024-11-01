@@ -79,7 +79,10 @@ export const PieChart = ({ onClick, customData, startAngle, type = "regular" }: 
 
             onClick(segmentData);
           }}
-          background="white"
+          // use a gray background so that white segments have a clear edge (against diagram's white background, it's otherwise hard to tell where the pie ends)
+          background="#E1E1E1" // neutral-main
+          // stroke-46 with the background looks like a 1px border for radius 45 i.e. regular pie (don't care for button pie because it's got a border from its parent container)
+          className="[&_>_path:first-child]:stroke-[46]"
         />
       </div>
     </Tooltip>
