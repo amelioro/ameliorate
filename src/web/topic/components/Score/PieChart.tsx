@@ -49,8 +49,9 @@ export const PieChart = ({ onClick, customData, startAngle, type = "regular" }: 
           data={data}
           // Radius is relative to viewbox size [100, 100]; so 50 means diameter 100 means take up the whole svg space.
           // Radius should be 45 if we want to scale(1.1) so that there's space within the svg to scale
-          // Radius should be 50 if we don't need to scale, and want the pie to take the whole svg space
-          radius={type === "regular" ? 45 : 50}
+          // Radius should be 63 if we don't need to scale, and want the pie to actually be a square
+          // -> 50 makes it a circle, 70+ makes a square, 63 makes for a square with roughly ~4px border radius, trying to match a button's radius
+          radius={type === "regular" ? 45 : 63}
           label={({ dataEntry }) => (type === "regular" ? dataEntry.key : undefined)}
           labelStyle={() => ({
             fontSize: "14", // is relative to viewbox size [100, 100]

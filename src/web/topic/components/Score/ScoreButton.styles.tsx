@@ -23,5 +23,4 @@ export const StyledButton = styled(Button, buttonOptions)<StyledButtonProps>`
   }}
 
   padding: 0px;
-  border-radius: 50%;
 `;
