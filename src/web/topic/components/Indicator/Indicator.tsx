@@ -36,8 +36,11 @@ export const Indicator = ({
         variant="contained"
         color={filled ? color : "paper"}
         onClick={onClickHandler}
-        // text-base seems to fit more snuggly than the default 14px
-        className={`border border-solid text-base ${!onClick ? "pointer-events-none" : ""}`}
+        className={
+          // text-base seems to fit more snuggly than the default 14px
+          "border border-solid border-neutral-main text-base shadow-none" +
+          ` ${!onClick ? "pointer-events-none" : ""}`
+        }
       >
         <Icon color="neutralContrast" fontSize="inherit" />
       </StyledButton>
