@@ -30,7 +30,6 @@ export const ContextIndicator = ({ graphPart }: Props) => {
   return (
     <Indicator
       Icon={ControlCamera}
-      iconHasBackground={false}
       filled={hasContext}
       title={"View context"}
       onClick={() => partContextMethods.viewContext(graphPart.id)}

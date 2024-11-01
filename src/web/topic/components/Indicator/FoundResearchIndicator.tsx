@@ -1,4 +1,4 @@
-import { Code, InfoOutlined, School } from "@mui/icons-material";
+import { Code, InfoOutlined, SchoolOutlined } from "@mui/icons-material";
 import { type ButtonProps } from "@mui/material";
 import { useCallback } from "react";
 
@@ -37,10 +37,9 @@ export const FoundResearchIndicator = ({ graphPartId, partColor }: Props) => {
   if (facts.length > 0 && sources.length > 0)
     return (
       <Indicator
-        Icon={School}
+        Icon={SchoolOutlined}
         title={`Has ${facts.length} facts and ${sources.length} sources`}
         onClick={onClick}
-        iconHasBackground={false}
         color={color}
       />
     );
@@ -50,7 +49,6 @@ export const FoundResearchIndicator = ({ graphPartId, partColor }: Props) => {
         Icon={InfoOutlined}
         title={`Has ${facts.length} facts`}
         onClick={onClick}
-        iconHasBackground={false}
         color={color}
       />
     );
@@ -60,7 +58,6 @@ export const FoundResearchIndicator = ({ graphPartId, partColor }: Props) => {
         Icon={Code}
         title={`Has ${sources.length} sources`}
         onClick={onClick}
-        iconHasBackground={false}
         color={color}
       />
     );

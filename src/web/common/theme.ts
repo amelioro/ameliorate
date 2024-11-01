@@ -173,7 +173,7 @@ const sharedPalette = {
   primary: { main: "#4AB84E" }, // apple (green): good, optimistic, let's solve things; different from solution because this is too dark for contrasting with black small node text, but solution color is too light from using for text on white background
   info: { main: infoColor },
 
-  neutral: augmentColor({ color: { main: "#BDBDBD" } }), // gray is very neutral, somewhat arbitrarily chosen, no particular relation to the other colors
+  neutral: augmentColor({ color: { main: oklchToHex("oklch(91% 0 0)") } }), // gray is very neutral, light-ish to not stand out too much, no particular relation to the other colors
   neutralContrast: augmentColor({ color: { main: "#000000" } }), // black contrasts with gray, separate from neutral.contrastText so that it gets its own augments I guess
   paper: augmentColor({ color: { main: "#fff" } }), // used for neutral-but-chosen score
 

@@ -1,4 +1,4 @@
-import { Article } from "@mui/icons-material";
+import { Notes } from "@mui/icons-material";
 import { useCallback } from "react";
 
 import { emitter } from "@/web/common/event";
@@ -18,5 +18,5 @@ export const DetailsIndicator = ({ graphPartId, notes }: Props) => {
     emitter.emit("viewTopicDetails");
   }, [graphPartId]);
 
-  return <Indicator Icon={Article} title={"View details"} onClick={onClick} filled={hasDetails} />;
+  return <Indicator Icon={Notes} title={"View details"} onClick={onClick} filled={hasDetails} />;
 };

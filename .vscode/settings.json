@@ -15,7 +15,10 @@
     ["Classes \\=([^;]*);", "\\`([^\\`]*)\\`"],
     ["Class \\=([^;]*);", "'([^']*)'"],
     ["Class \\=([^;]*);", "\"([^\"]*)\""],
-    ["Class \\=([^;]*);", "\\`([^\\`]*)\\`"]
+    ["Class \\=([^;]*);", "\\`([^\\`]*)\\`"],
+    ["className: '([^']*)'"],
+    ["className: \"([^\"]*)\""],
+    ["className: `([^`]*)`"]
   ],
   "typescript.preferences.importModuleSpecifier": "non-relative",
   "[prisma]": {

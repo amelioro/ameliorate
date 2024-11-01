@@ -37,9 +37,6 @@ export const StyledTextareaAutosize = styled(TextareaAutosize)`
   line-height: 1;
   font-family: inherit;
 
-  // so that readonly textarea doesn't appear gray
-  color: ${({ theme }) => theme.palette.text.primary};
-
   &[readonly] {
     // So that the cursor doesn't imply that textarea is editable.
     // Previously had "pointer-events: none" to also prevent clicking from selecting text before

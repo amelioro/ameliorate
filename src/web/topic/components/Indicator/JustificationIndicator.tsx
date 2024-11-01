@@ -39,7 +39,6 @@ export const JustificationIndicator = ({ graphPartId, partColor }: Props) => {
         Icon={ThumbsUpDownOutlined}
         title={`Has ${supports.length} supports and ${critiques.length} critiques`}
         onClick={onClick}
-        iconHasBackground={false}
         color={partColor}
       />
     );
@@ -49,7 +48,6 @@ export const JustificationIndicator = ({ graphPartId, partColor }: Props) => {
         Icon={ThumbUpOutlined}
         title={`Has ${supports.length} supports`}
         onClick={onClick}
-        iconHasBackground={false}
         color={scoreColor ?? partColor}
       />
     );
@@ -59,7 +57,6 @@ export const JustificationIndicator = ({ graphPartId, partColor }: Props) => {
         Icon={ThumbDownOutlined}
         title={`Has ${critiques.length} critiques`}
         onClick={onClick}
-        iconHasBackground={false}
         color={scoreColor ?? partColor}
       />
     );

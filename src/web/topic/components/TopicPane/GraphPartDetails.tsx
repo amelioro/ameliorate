@@ -90,10 +90,9 @@ export const GraphPartDetails = ({ graphPart }: Props) => {
               multiline
               fullWidth
               size="small"
-              inputProps={{ className: "text-sm" }}
+              InputProps={{ className: "text-sm", readOnly: !userCanEditTopicData }}
               InputLabelProps={{ className: "text-sm" }}
               maxRows={10}
-              disabled={!userCanEditTopicData}
             />
           </ListItem>
         </div>

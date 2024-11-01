@@ -32,7 +32,6 @@ export const JustificationTreeIndicator = ({ graphPartId }: Props) => {
   return (
     <Indicator
       Icon={AccountTree}
-      iconHasBackground={false}
       filled={justificationCount > 0}
       title={title}
       onClick={justificationCount > 0 ? onClick : undefined}
