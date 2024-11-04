@@ -10,6 +10,7 @@ import { emitter } from "@/web/common/event";
 import { storageWithDates } from "@/web/common/store/utils";
 import { StoreTopic, UserTopic } from "@/web/topic/store/store";
 import { setSelected } from "@/web/view/currentViewStore/store";
+import { toggleShowResolvedComments } from "@/web/view/miscTopicConfigStore";
 
 export type StoreComment = Omit<Comment, "topicId">;
 
@@ -228,9 +229,10 @@ export const viewComment = (commentId: string) => {
   if (!threadStarterComment)
     throw errorWithData("couldn't find thread-starter comment", comment.parentId, state.comments);
 
+  if (threadStarterComment.resolved) toggleShowResolvedComments(true); // otherwise going to comment via URL won't show it if it's resolved
+
   const commentParentGraphPartId =
     threadStarterComment.parentType === "topic" ? null : threadStarterComment.parentId;
-
   setSelected(commentParentGraphPartId);
   emitter.emit("viewTopicDetails");
 };
