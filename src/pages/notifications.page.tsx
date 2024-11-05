@@ -12,7 +12,7 @@ import { Loading } from "@/web/common/components/Loading/Loading";
 import { useSessionUser } from "@/web/common/hooks";
 import { trpc } from "@/web/common/trpc";
 
-type RowData = InAppNotification & { topic: Topic };
+type RowData = InAppNotification & { topic: Topic | null };
 
 export default withPageAuthRequired(({ user }) => {
   const utils = trpc.useContext();
@@ -72,8 +72,14 @@ export default withPageAuthRequired(({ user }) => {
         return (
           <div className="flex flex-col">
             <div className="flex">
-              <Link href={`/${topic.creatorName}`}>{topic.creatorName}</Link>/
-              <Link href={`/${topic.creatorName}/${topic.title}`}>{topic.title}</Link>
+              {topic ? (
+                <>
+                  <Link href={`/${topic.creatorName}`}>{topic.creatorName}</Link>/
+                  <Link href={`/${topic.creatorName}/${topic.title}`}>{topic.title}</Link>
+                </>
+              ) : (
+                "(Topic not found)"
+              )}
             </div>
             <p>{message}</p>
           </div>

@@ -18,7 +18,7 @@ export const maxMessageLength = 500;
 export const inAppNotificationSchema = z.object({
   id: z.number(),
   notifiedUsername: userSchema.shape.username,
-  topicId: topicSchema.shape.id,
+  topicId: topicSchema.shape.id.nullable(),
   type: zNotificationTypes,
   data: notificationDataSchema,
   message: z.string().max(maxMessageLength),

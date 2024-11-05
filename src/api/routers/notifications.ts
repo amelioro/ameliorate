@@ -15,7 +15,10 @@ export const notificationRouter = router({
     });
 
     // we already know most of the types, but we're parsing so that the `notification.data` is typed
-    return inAppNotificationSchema.extend({ topic: topicSchema }).array().parse(notifications);
+    return inAppNotificationSchema
+      .extend({ topic: topicSchema.nullable() })
+      .array()
+      .parse(notifications);
   }),
 
   delete: procedure
