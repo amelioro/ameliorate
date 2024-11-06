@@ -267,8 +267,9 @@ export const resetQuickViews = () => {
 
 export const loadQuickViewsFromApi = (topic: UserTopic, views: QuickView[]) => {
   const builtPersistedName = `${persistedNameBase}-user`;
-
   useQuickViewStore.persist.setOptions({ name: builtPersistedName });
+
+  useQuickViewStore.apiSyncer.pause();
 
   useQuickViewStore.setState(
     {
@@ -293,14 +294,17 @@ export const loadQuickViewsFromApi = (topic: UserTopic, views: QuickView[]) => {
     "loadQuickViewsFromApi",
   );
 
+  useQuickViewStore.apiSyncer.resume();
+
   // it doesn't make sense to want to undo a page load
   useQuickViewStore.temporal.getState().clear();
 };
 
 export const loadQuickViewsFromLocalStorage = async () => {
   const builtPersistedName = `${persistedNameBase}-playground`;
-
   useQuickViewStore.persist.setOptions({ name: builtPersistedName });
+
+  useQuickViewStore.apiSyncer.pause();
 
   if (useQuickViewStore.persist.getOptions().storage?.getItem(builtPersistedName)) {
     // TODO(bug): for some reason, this results in an empty undo action _after_ clear() is run - despite awaiting this promise
@@ -308,6 +312,8 @@ export const loadQuickViewsFromLocalStorage = async () => {
   } else {
     useQuickViewStore.setState(initialStateWithBasicViews(), true, "loadFromLocalStorage");
   }
+
+  useQuickViewStore.apiSyncer.resume();
 
   // it doesn't make sense to want to undo a page load
   useQuickViewStore.temporal.getState().clear();

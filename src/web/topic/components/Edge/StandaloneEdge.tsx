@@ -44,9 +44,10 @@ export const StandaloneEdge = ({ edge }: Props) => {
 
   return (
     <Stack>
-      <EditableNode node={sourceNode} />
+      {/* z-index to ensure hanging node indicators don't fall behind the edge svg empty background */}
+      <EditableNode node={sourceNode} className="z-10" />
       <ScoreEdge inReactFlow={false} {...flowEdge} />
-      <EditableNode node={targetNode} />
+      <EditableNode node={targetNode} className="z-10" />
     </Stack>
   );
 };
