@@ -174,8 +174,9 @@ export const resolveComment = (commentId: string, resolved: boolean) => {
 
 export const loadCommentsFromApi = (topic: UserTopic, comments: StoreComment[]) => {
   const builtPersistedName = `${persistedNameBase}-user`;
-
   useCommentStore.persist.setOptions({ name: builtPersistedName });
+
+  useCommentStore.apiSyncer.pause();
 
   useCommentStore.setState(
     {
@@ -201,12 +202,15 @@ export const loadCommentsFromApi = (topic: UserTopic, comments: StoreComment[]) 
     true,
     "loadCommentsFromApi",
   );
+
+  useCommentStore.apiSyncer.resume();
 };
 
 export const loadCommentsFromLocalStorage = async () => {
   const builtPersistedName = `${persistedNameBase}-playground`;
-
   useCommentStore.persist.setOptions({ name: builtPersistedName });
+
+  useCommentStore.apiSyncer.pause();
 
   if (useCommentStore.persist.getOptions().storage?.getItem(builtPersistedName)) {
     // TODO(bug): for some reason, this results in an empty undo action _after_ clear() is run - despite awaiting this promise
@@ -214,6 +218,8 @@ export const loadCommentsFromLocalStorage = async () => {
   } else {
     useCommentStore.setState(initialState, true, "loadCommentsFromLocalStorage");
   }
+
+  useCommentStore.apiSyncer.resume();
 };
 
 export const viewComment = (commentId: string) => {
