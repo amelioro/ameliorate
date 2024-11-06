@@ -180,8 +180,8 @@ const sharedPalette = {
   // topic
   problem: augmentColor({ color: { main: oklchToHex("oklch(75% 0.15 300)") } }), // purple: truth; complementary to solution; no increased saturation because its hue stands out already
   cause: augmentColor({ color: { main: oklchToHex("oklch(70% 0.15 320)") } }), // light-purple: bad, so similar color to problem, darker to contrast more with detriment
-  solution: augmentColor({ color: { main: oklchToHex("oklch(75% 0.24 140)") } }), // green: good, optimistic, let's solve things; increased saturation to help it stand out
-  solutionComponent: augmentColor({ color: { main: oklchToHex("oklch(75% 0.12 140)") } }), // grey-green: same as solution but with less saturation
+  solution: augmentColor({ color: { main: oklchToHex("oklch(70% 0.15 140)") } }), // green: good, optimistic, let's solve things; darkened to give it what seems like a nicer color, and distinguish from component.
+  solutionComponent: augmentColor({ color: { main: oklchToHex("oklch(75% 0.09 140)") } }), // grey-green: same as solution but with less saturation
   criterion: augmentColor({ color: { main: oklchToHex("oklch(75% 0.10 160)") } }), // green-blue: between solution & support colors because criteria are kind of like supports for solutions
   effect: augmentColor({ color: { main: oklchToHex("oklch(85% 0.15 100)") } }), // yellow: goes well with lightning icon
   benefit: augmentColor({ color: { main: oklchToHex("oklch(85% 0.16 130)") } }), // light-green: good thing; slightly more saturated because the color seems nicer, brighter to contrast more with other greens (mainly solution/component)
