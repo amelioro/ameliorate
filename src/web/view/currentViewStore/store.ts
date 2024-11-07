@@ -15,8 +15,8 @@ import {
   getQuickViewByTitle,
   selectViewFromState,
 } from "@/web/view/quickViewStore/store";
-import { StandardFilter } from "@/web/view/utils/diagramFilter";
 import { GeneralFilter } from "@/web/view/utils/generalFilter";
+import { StandardFilter } from "@/web/view/utils/infoFilter";
 import { TableFilter } from "@/web/view/utils/tableFilter";
 
 export interface ViewState {
@@ -32,8 +32,15 @@ export interface ViewState {
   tableFilter: TableFilter;
   generalFilter: GeneralFilter;
 
-  // infrequent options
+  // general show/hide options
   showImpliedEdges: boolean;
+  /**
+   * These can be numerous and get long, making the diagram chaotic, and they're often implied,
+   * so hiding them can be desirable.
+   *
+   * The criteria table can be used to see these relationships more clearly.
+   */
+  showProblemCriterionSolutionEdges: boolean;
 
   // layout
   forceNodesIntoLayers: boolean;
@@ -67,6 +74,7 @@ export const initialViewState: ViewState = {
   },
 
   showImpliedEdges: false,
+  showProblemCriterionSolutionEdges: true,
 
   forceNodesIntoLayers: true,
   layerNodeIslandsTogether: false,
@@ -150,8 +158,19 @@ export const setFormat = (format: Format) => {
   useCurrentViewStore.setState({ format }, false, "setFormat");
 };
 
+/**
+ * Use the initialState to fill in missing values.
+ *
+ * E.g. so that a new non-null value in initialState is non-null in the persisted state,
+ * removing the need to write a migration for every new field.
+ */
+const withViewDefaults = (viewState?: Partial<ViewState>) => {
+  if (!viewState) return initialViewState;
+  return withDefaults(viewState, initialViewState);
+};
+
 export const setView = (viewState: ViewState) => {
-  useCurrentViewStore.setState(viewState, true, "setView");
+  useCurrentViewStore.setState(withViewDefaults(viewState), true, "setView");
 
   emitter.emit("changedDiagramFilter");
 };
@@ -181,13 +200,13 @@ export const loadView = async (persistId: string) => {
   const quickViewFromParams = titleFromParams ? getQuickViewByTitle(titleFromParams) : undefined;
 
   if (quickViewFromParams) {
-    useCurrentViewStore.setState(quickViewFromParams.viewState, true, "loadView");
+    useCurrentViewStore.setState(withViewDefaults(quickViewFromParams.viewState), true, "loadView");
   } else if (useCurrentViewStore.persist.getOptions().storage?.getItem(builtPersistedName)) {
     // TODO(bug): for some reason, this results in an empty undo action _after_ clear() is run - despite awaiting this promise
     await useCurrentViewStore.persist.rehydrate();
   } else {
     const defaultQuickView = getDefaultQuickView();
-    const defaultViewState = defaultQuickView?.viewState ?? initialViewState;
+    const defaultViewState = withViewDefaults(defaultQuickView?.viewState);
 
     useCurrentViewStore.setState(defaultViewState, true, "loadView");
   }

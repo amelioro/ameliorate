@@ -7,7 +7,6 @@ import { apiSyncer } from "@/web/topic/store/apiSyncerMiddleware";
 import { migrate } from "@/web/topic/store/migrate";
 import { getDisplayScoresByGraphPartId } from "@/web/topic/store/scoreGetters";
 import { Diagram } from "@/web/topic/utils/diagram";
-import { hideImpliedEdges } from "@/web/topic/utils/edge";
 import {
   Edge,
   Node,
@@ -17,13 +16,18 @@ import {
   getSecondaryNeighbors,
 } from "@/web/topic/utils/graph";
 import {
-  useDiagramFilter,
   useGeneralFilter,
+  useInfoFilter,
   useShowImpliedEdges,
+  useShowProblemCriterionSolutionEdges,
 } from "@/web/view/currentViewStore/filter";
 import { usePerspectives } from "@/web/view/perspectiveStore";
-import { applyDiagramFilter } from "@/web/view/utils/diagramFilter";
 import { applyNodeTypeFilter, applyScoreFilter } from "@/web/view/utils/generalFilter";
+import { applyInfoFilter } from "@/web/view/utils/infoFilter";
+import {
+  hideImpliedEdges,
+  hideProblemCriterionSolutionEdges,
+} from "@/web/view/utils/miscDiagramFilters";
 
 export interface PlaygroundTopic {
   id: undefined; // so we can check this to see if the store topic is a playground topic
@@ -84,16 +88,17 @@ export const useTopicStore = createWithEqualityFn<TopicStoreState>()(
 );
 
 export const useDiagram = (): Diagram => {
-  const diagramFilter = useDiagramFilter();
+  const infoFilter = useInfoFilter();
   const generalFilter = useGeneralFilter();
 
   const showImpliedEdges = useShowImpliedEdges();
+  const showProblemCriterionSolutionEdges = useShowProblemCriterionSolutionEdges();
   const perspectives = usePerspectives();
 
   return useTopicStore((state) => {
     const topicGraph = { nodes: state.nodes, edges: state.edges };
 
-    const nodesAfterDiagramFilter = applyDiagramFilter(topicGraph, diagramFilter);
+    const nodesAfterDiagramFilter = applyInfoFilter(topicGraph, infoFilter);
 
     const nodesAfterTypeFilter = applyNodeTypeFilter(
       nodesAfterDiagramFilter,
@@ -118,9 +123,13 @@ export const useDiagram = (): Diagram => {
     const nodes = uniqBy(nodesAfterHide, "id");
 
     const relevantEdges = getRelevantEdges(nodes, topicGraph);
-    const edges = showImpliedEdges
+    const edgesAfterImplied = showImpliedEdges
       ? relevantEdges
       : hideImpliedEdges(relevantEdges, { nodes, edges: relevantEdges }, topicGraph);
+
+    const edges = showProblemCriterionSolutionEdges
+      ? edgesAfterImplied
+      : hideProblemCriterionSolutionEdges(nodes, edgesAfterImplied);
 
     return { nodes, edges };
   });

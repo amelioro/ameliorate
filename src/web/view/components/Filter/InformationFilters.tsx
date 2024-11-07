@@ -2,10 +2,10 @@ import { AutoStories, School, ThumbsUpDown } from "@mui/icons-material";
 import { FormControlLabel, Switch as MuiSwitch, Stack, Typography } from "@mui/material";
 
 import { StandardFilter } from "@/web/view/components/Filter/StandardFilter";
-import { setShowInformation, useDiagramFilter } from "@/web/view/currentViewStore/filter";
+import { setShowInformation, useInfoFilter } from "@/web/view/currentViewStore/filter";
 
 export const InformationFilters = () => {
-  const diagramFilter = useDiagramFilter();
+  const diagramFilter = useInfoFilter();
 
   return (
     // TODO: extract Switch component from FormSwitch

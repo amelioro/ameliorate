@@ -7,6 +7,7 @@ import {
   Engineering,
   FilterAltOutlined,
   FormatColorFill,
+  Grid4x4,
   Highlight,
   Info,
   Layers,
@@ -47,7 +48,12 @@ import {
   useUnrestrictedEditing,
 } from "@/web/view/actionConfigStore";
 import { Perspectives } from "@/web/view/components/Perspectives/Perspectives";
-import { toggleShowImpliedEdges, useShowImpliedEdges } from "@/web/view/currentViewStore/filter";
+import {
+  toggleShowImpliedEdges,
+  toggleShowProblemCriterionSolutionEdges,
+  useShowImpliedEdges,
+  useShowProblemCriterionSolutionEdges,
+} from "@/web/view/currentViewStore/filter";
 import {
   setLayoutThoroughness,
   toggleForceNodesIntoLayers,
@@ -119,6 +125,7 @@ export const MoreActionsDrawer = ({
   const isTableActive = format === "table";
 
   const showImpliedEdges = useShowImpliedEdges();
+  const showProblemCriterionSolutionEdges = useShowProblemCriterionSolutionEdges();
   const unrestrictedEditing = useUnrestrictedEditing();
   const forceNodesIntoLayers = useForceNodesIntoLayers();
   const layerNodeIslandsTogether = useLayerNodeIslandsTogether();
@@ -285,6 +292,20 @@ export const MoreActionsDrawer = ({
                 sx={{ borderRadius: "50%", border: "0" }}
               >
                 <Route />
+              </ToggleButton>
+              <ToggleButton
+                value={showProblemCriterionSolutionEdges}
+                title="Show edges between Problems, Criterion, and Solutions"
+                aria-label="Show edges between Problems, Criterion, and Solutions"
+                color="primary"
+                size="small"
+                selected={showProblemCriterionSolutionEdges}
+                onClick={() =>
+                  toggleShowProblemCriterionSolutionEdges(!showProblemCriterionSolutionEdges)
+                }
+                sx={{ borderRadius: "50%", border: "0" }}
+              >
+                <Grid4x4 />
               </ToggleButton>
               <ToggleButton
                 value={forceNodesIntoLayers}

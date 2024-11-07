@@ -2,7 +2,7 @@ import { throwError } from "@/common/errorHandling";
 import { childNode, parentNode } from "@/web/topic/utils/edge";
 import { Graph, findEdgeOrThrow, findNodeOrThrow } from "@/web/topic/utils/graph";
 import { children, parents } from "@/web/topic/utils/node";
-import { SolutionOptions, TradeoffsOptions } from "@/web/view/utils/diagramFilter";
+import { SolutionOptions, TradeoffsOptions } from "@/web/view/utils/infoFilter";
 
 export const getSolutionContextFilter = (graph: Graph, solutionId: string): SolutionOptions => {
   const solution = findNodeOrThrow(solutionId, graph.nodes);

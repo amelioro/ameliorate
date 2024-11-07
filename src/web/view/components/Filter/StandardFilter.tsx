@@ -19,7 +19,7 @@ import {
   problemDetails,
   standardFilterSchema,
   standardFilterSchemasByType,
-} from "@/web/view/utils/diagramFilter";
+} from "@/web/view/utils/infoFilter";
 
 interface Props {
   infoCategory: InfoCategory;
