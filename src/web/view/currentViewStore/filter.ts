@@ -17,12 +17,12 @@ import {
   getFulfillsContextFilter,
   getSolutionContextFilter,
 } from "@/web/view/utils/contextFilters";
+import { GeneralFilter } from "@/web/view/utils/generalFilter";
 import {
-  DiagramFilter,
+  InfoFilter,
   StandardFilter,
   StandardFilterWithFallbacks,
-} from "@/web/view/utils/diagramFilter";
-import { GeneralFilter } from "@/web/view/utils/generalFilter";
+} from "@/web/view/utils/infoFilter";
 import { TableFilter } from "@/web/view/utils/tableFilter";
 
 // hooks
@@ -34,7 +34,7 @@ const useStandardFilter = (category: InfoCategory) => {
   return useCurrentViewStore((state) => state[`${category}Filter`], shallow);
 };
 
-export const useDiagramFilter = (): DiagramFilter => {
+export const useInfoFilter = (): InfoFilter => {
   const categoriesToShow = useCategoriesToShow();
   const breakdownFilter = useStandardFilter("breakdown");
   const researchFilter = useStandardFilter("research");

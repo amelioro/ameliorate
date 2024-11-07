@@ -5,7 +5,7 @@ import {
   getFulfillsContextFilter,
   getSolutionContextFilter,
 } from "@/web/view/utils/contextFilters";
-import { applySolutionFilter, applyTradeoffsFilter } from "@/web/view/utils/diagramFilter";
+import { applySolutionFilter, applyTradeoffsFilter } from "@/web/view/utils/infoFilter";
 
 export const useSolutionHasContext = (solutionId: string) => {
   return useTopicStore((state) => {

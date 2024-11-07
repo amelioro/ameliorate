@@ -29,8 +29,8 @@ import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { getConnectingEdge } from "@/web/topic/utils/edge";
 import { Edge, Node } from "@/web/topic/utils/graph";
 import { useGeneralFilter, useTableFilter } from "@/web/view/currentViewStore/filter";
-import { getSelectedTradeoffNodes } from "@/web/view/utils/diagramFilter";
 import { applyScoreFilter } from "@/web/view/utils/generalFilter";
+import { getSelectedTradeoffNodes } from "@/web/view/utils/infoFilter";
 
 interface RowData {
   rowHeader: HeaderCell;

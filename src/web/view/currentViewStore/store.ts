@@ -15,8 +15,8 @@ import {
   getQuickViewByTitle,
   selectViewFromState,
 } from "@/web/view/quickViewStore/store";
-import { StandardFilter } from "@/web/view/utils/diagramFilter";
 import { GeneralFilter } from "@/web/view/utils/generalFilter";
+import { StandardFilter } from "@/web/view/utils/infoFilter";
 import { TableFilter } from "@/web/view/utils/tableFilter";
 
 export interface ViewState {

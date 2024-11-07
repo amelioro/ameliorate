@@ -17,13 +17,13 @@ import {
   getSecondaryNeighbors,
 } from "@/web/topic/utils/graph";
 import {
-  useDiagramFilter,
   useGeneralFilter,
+  useInfoFilter,
   useShowImpliedEdges,
 } from "@/web/view/currentViewStore/filter";
 import { usePerspectives } from "@/web/view/perspectiveStore";
-import { applyDiagramFilter } from "@/web/view/utils/diagramFilter";
 import { applyNodeTypeFilter, applyScoreFilter } from "@/web/view/utils/generalFilter";
+import { applyInfoFilter } from "@/web/view/utils/infoFilter";
 
 export interface PlaygroundTopic {
   id: undefined; // so we can check this to see if the store topic is a playground topic
@@ -84,7 +84,7 @@ export const useTopicStore = createWithEqualityFn<TopicStoreState>()(
 );
 
 export const useDiagram = (): Diagram => {
-  const diagramFilter = useDiagramFilter();
+  const infoFilter = useInfoFilter();
   const generalFilter = useGeneralFilter();
 
   const showImpliedEdges = useShowImpliedEdges();
@@ -93,7 +93,7 @@ export const useDiagram = (): Diagram => {
   return useTopicStore((state) => {
     const topicGraph = { nodes: state.nodes, edges: state.edges };
 
-    const nodesAfterDiagramFilter = applyDiagramFilter(topicGraph, diagramFilter);
+    const nodesAfterDiagramFilter = applyInfoFilter(topicGraph, infoFilter);
 
     const nodesAfterTypeFilter = applyNodeTypeFilter(
       nodesAfterDiagramFilter,

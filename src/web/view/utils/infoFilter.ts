@@ -367,8 +367,8 @@ export const applyStandardFilter = (graph: Graph, filter: StandardFilter): Graph
  * Show nodes for each information category whose toggle is on.
  * For each category, if it has a standard filter, its nodes are filtered by that.
  */
-export const applyDiagramFilter = (graph: Graph, diagramFilter: DiagramFilter) => {
-  return Object.entries(diagramFilter)
+export const applyInfoFilter = (graph: Graph, infoFilter: InfoFilter) => {
+  return Object.entries(infoFilter)
     .filter(([_, filter]) => filter.show)
     .flatMap(([category, filter]) => {
       const categoryNodes = graph.nodes.filter((node) =>
@@ -430,4 +430,4 @@ export const standardFilterSchemasByType = {
 
 export type StandardFilter = z.infer<typeof standardFilterSchema>;
 export type StandardFilterWithFallbacks = z.infer<typeof standardFilterWithFallbacksSchema>;
-export type DiagramFilter = Record<InfoCategory, StandardFilter & { show: boolean }>;
+export type InfoFilter = Record<InfoCategory, StandardFilter & { show: boolean }>;
