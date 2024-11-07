@@ -32,8 +32,15 @@ export interface ViewState {
   tableFilter: TableFilter;
   generalFilter: GeneralFilter;
 
-  // infrequent options
+  // general show/hide options
   showImpliedEdges: boolean;
+  /**
+   * These can be numerous and get long, making the diagram chaotic, and they're often implied,
+   * so hiding them can be desirable.
+   *
+   * The criteria table can be used to see these relationships more clearly.
+   */
+  showProblemCriterionSolutionEdges: boolean;
 
   // layout
   forceNodesIntoLayers: boolean;
@@ -67,6 +74,7 @@ export const initialViewState: ViewState = {
   },
 
   showImpliedEdges: false,
+  showProblemCriterionSolutionEdges: true,
 
   forceNodesIntoLayers: true,
   layerNodeIslandsTogether: false,

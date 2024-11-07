@@ -80,6 +80,10 @@ export const useShowImpliedEdges = () => {
   return useCurrentViewStore((state) => state.showImpliedEdges);
 };
 
+export const useShowProblemCriterionSolutionEdges = () => {
+  return useCurrentViewStore((state) => state.showProblemCriterionSolutionEdges);
+};
+
 // actions
 export const setShowInformation = (category: InfoCategory, show: boolean) => {
   const oldCategoriesToShow = useCurrentViewStore.getState().categoriesToShow;
@@ -173,6 +177,11 @@ export const viewCriterionContext = (criterionId: string) => {
     {
       ...initialViewStateWithoutSelected,
       breakdownFilter: getCriterionContextFilter(graph, criterionId),
+      // could have the standard filter control this, but this way allows users to use the standard
+      // filter and choose to show the extra edges if they want
+      showProblemCriterionSolutionEdges: false,
+      forceNodesIntoLayers: true, // otherwise hidden edges will scatter nodes
+      layerNodeIslandsTogether: true, // otherwise hidden edges will scatter nodes
     },
     false,
     "viewCriterionContext",
@@ -187,6 +196,11 @@ export const viewFulfillsEdgeContext = (fulfillsEdgeId: string) => {
     {
       ...initialViewStateWithoutSelected,
       breakdownFilter: getFulfillsContextFilter(graph, fulfillsEdgeId),
+      // could have the standard filter control this, but this way allows users to use the standard
+      // filter and choose to show the extra edges if they want
+      showProblemCriterionSolutionEdges: false,
+      forceNodesIntoLayers: true, // otherwise hidden edges will scatter nodes
+      layerNodeIslandsTogether: true, // otherwise hidden edges will scatter nodes
     },
     false,
     "viewFulfillsContext",
@@ -258,6 +272,12 @@ export const hideNode = (nodeId: string) => {
 
 export const toggleShowImpliedEdges = (show: boolean) => {
   useCurrentViewStore.setState({ showImpliedEdges: show });
+
+  emitter.emit("changedDiagramFilter");
+};
+
+export const toggleShowProblemCriterionSolutionEdges = (show: boolean) => {
+  useCurrentViewStore.setState({ showProblemCriterionSolutionEdges: show });
 
   emitter.emit("changedDiagramFilter");
 };

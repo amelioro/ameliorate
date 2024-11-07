@@ -19,11 +19,15 @@ import {
   useGeneralFilter,
   useInfoFilter,
   useShowImpliedEdges,
+  useShowProblemCriterionSolutionEdges,
 } from "@/web/view/currentViewStore/filter";
 import { usePerspectives } from "@/web/view/perspectiveStore";
 import { applyNodeTypeFilter, applyScoreFilter } from "@/web/view/utils/generalFilter";
 import { applyInfoFilter } from "@/web/view/utils/infoFilter";
-import { hideImpliedEdges } from "@/web/view/utils/miscDiagramFilters";
+import {
+  hideImpliedEdges,
+  hideProblemCriterionSolutionEdges,
+} from "@/web/view/utils/miscDiagramFilters";
 
 export interface PlaygroundTopic {
   id: undefined; // so we can check this to see if the store topic is a playground topic
@@ -88,6 +92,7 @@ export const useDiagram = (): Diagram => {
   const generalFilter = useGeneralFilter();
 
   const showImpliedEdges = useShowImpliedEdges();
+  const showProblemCriterionSolutionEdges = useShowProblemCriterionSolutionEdges();
   const perspectives = usePerspectives();
 
   return useTopicStore((state) => {
@@ -118,9 +123,13 @@ export const useDiagram = (): Diagram => {
     const nodes = uniqBy(nodesAfterHide, "id");
 
     const relevantEdges = getRelevantEdges(nodes, topicGraph);
-    const edges = showImpliedEdges
+    const edgesAfterImplied = showImpliedEdges
       ? relevantEdges
       : hideImpliedEdges(relevantEdges, { nodes, edges: relevantEdges }, topicGraph);
+
+    const edges = showProblemCriterionSolutionEdges
+      ? edgesAfterImplied
+      : hideProblemCriterionSolutionEdges(nodes, edgesAfterImplied);
 
     return { nodes, edges };
   });
