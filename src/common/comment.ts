@@ -59,7 +59,9 @@ export const userCanDeleteComment = (
 };
 
 export const getLinkToComment = (comment: Comment, commentTopic: Topic) => {
+  // duplicate of getLinkToTopic because we want to add the comment param before returning the `href`
   const sourceUrl = new URL(`/${commentTopic.creatorName}/${commentTopic.title}`, getBaseUrl());
+
   sourceUrl.searchParams.set("comment", comment.id);
 
   return sourceUrl.href;
