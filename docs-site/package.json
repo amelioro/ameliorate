@@ -6,12 +6,14 @@
     "dev": "next -p 3008",
     "//build": "delete .next to prevent netlify from caching and not updating sidebar when page titles change - thanks https://github.com/shuding/nextra/issues/1564#issuecomment-1688460307",
     "build": "npm run clean && next build",
+    "postbuild": "next-sitemap",
     "clean": "rm -rf .next",
     "start": "next start -p 3008"
   },
   "dependencies": {
     "next": "^14.1.1",
     "next-plausible": "^3.12.2",
+    "next-sitemap": "^4.2.3",
     "nextra": "^2.13.3",
     "nextra-theme-docs": "^2.13.3",
     "react": "^18.2.0",
