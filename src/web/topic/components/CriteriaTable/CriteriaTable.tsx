@@ -213,8 +213,12 @@ export const CriteriaTable = () => {
     tableFilter,
   );
 
-  const filteredSolutions = applyScoreFilter(selectedSolutions, generalFilter, scores);
-  const filteredCriteria = applyScoreFilter(selectedCriteria, generalFilter, scores);
+  const filteredSolutions = applyScoreFilter(selectedSolutions, generalFilter, scores).filter(
+    (node) => !generalFilter.nodesToHide.includes(node.id),
+  );
+  const filteredCriteria = applyScoreFilter(selectedCriteria, generalFilter, scores).filter(
+    (node) => !generalFilter.nodesToHide.includes(node.id),
+  );
 
   const tableData = buildTableCells(problemNode, filteredSolutions, filteredCriteria, edges);
   const [headerRow, ..._bodyRows] = tableData;
