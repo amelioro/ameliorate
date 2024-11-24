@@ -41,11 +41,38 @@ export interface ViewState {
    * The criteria table can be used to see these relationships more clearly.
    */
   showProblemCriterionSolutionEdges: boolean;
+  /**
+   * Draw a simple cubic bezier for edge paths, rather than drawing paths that are output from the
+   * layout algorithm.
+   *
+   * This only exists because the layout output does not result in vertical slopes at the start and
+   * end points of each path. These vertical slopes often seem desirable, because they go with the
+   * top-down flow of the diagram.
+   *
+   * TODO: modify algorithm for drawing path from layout algorithm, such that it has vertical slopes
+   * at the start and end points of each path.
+   *
+   * Note: this doesn't affect layout at all, just what's shown.
+   */
+  drawSimpleEdgePaths: boolean;
 
   // layout
   forceNodesIntoLayers: boolean;
   layerNodeIslandsTogether: boolean;
   minimizeEdgeCrossings: boolean;
+  /**
+   * Ideally we'd always avoid edge label overlap, because the diagram seems more chaotic when
+   * there's overlap, but unfortunately including labels in the layout create a few problems:
+   * 1. spacing between node layers can be consistent,
+   * 2. more node layers can be created than otherwise.
+   *
+   * These problems both result in a layout that often seems even more chaotic than just
+   * accepting edge overlap.
+   *
+   * This ELK ticket exists to address these issues, and if resolved, we should be able to
+   * unconditionally include edge labels in layout: https://github.com/eclipse/elk/issues/1092
+   */
+  avoidEdgeLabelOverlap: boolean;
   layoutThoroughness: number;
 }
 
@@ -75,10 +102,12 @@ export const initialViewState: ViewState = {
 
   showImpliedEdges: false,
   showProblemCriterionSolutionEdges: true,
+  drawSimpleEdgePaths: true,
 
   forceNodesIntoLayers: true,
   layerNodeIslandsTogether: false,
   minimizeEdgeCrossings: true,
+  avoidEdgeLabelOverlap: false,
   layoutThoroughness: 100, // by default, prefer keeping parents close to children over keeping node types together
 };
 
@@ -136,6 +165,10 @@ export const useFormat = () => {
   return useCurrentViewStore((state) => state.format);
 };
 
+export const useDrawSimpleEdgePaths = () => {
+  return useCurrentViewStore((state) => state.drawSimpleEdgePaths);
+};
+
 export const useCanGoBackForward = () => {
   const temporalStore = useTemporalStore();
 
@@ -156,6 +189,10 @@ export const setSelected = (graphPartId: string | null) => {
 
 export const setFormat = (format: Format) => {
   useCurrentViewStore.setState({ format }, false, "setFormat");
+};
+
+export const setDrawSimpleEdgePaths = (draw: boolean) => {
+  useCurrentViewStore.setState({ drawSimpleEdgePaths: draw }, false, "setDrawSimpleEdgePaths");
 };
 
 /**

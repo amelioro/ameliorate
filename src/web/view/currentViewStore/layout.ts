@@ -14,6 +14,10 @@ export const useMinimizeEdgeCrossings = () => {
   return useCurrentViewStore((state) => state.minimizeEdgeCrossings);
 };
 
+export const useAvoidEdgeLabelOverlap = () => {
+  return useCurrentViewStore((state) => state.avoidEdgeLabelOverlap);
+};
+
 export const useLayoutThoroughness = () => {
   return useCurrentViewStore((state) => state.layoutThoroughness);
 };
@@ -33,6 +37,12 @@ export const toggleLayerNodeIslandsTogether = (layer: boolean) => {
 
 export const toggleMinimizeEdgeCrossings = (minimize: boolean) => {
   useCurrentViewStore.setState({ minimizeEdgeCrossings: minimize });
+
+  emitter.emit("changedLayoutConfig");
+};
+
+export const toggleAvoidEdgeLabelOverlap = (avoid: boolean) => {
+  useCurrentViewStore.setState({ avoidEdgeLabelOverlap: avoid });
 
   emitter.emit("changedLayoutConfig");
 };

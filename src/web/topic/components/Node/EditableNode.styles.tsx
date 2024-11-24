@@ -6,7 +6,7 @@ import { ContentIndicators } from "@/web/topic/components/Indicator/ContentIndic
 import { StatusIndicators } from "@/web/topic/components/Indicator/StatusIndicators";
 
 export const nodeWidthRem = 11;
-const nodeHeightRem = 4.125;
+const nodeHeightRem = 3.5625; // 1 line of text results in 57px height, / 16px = 3.5625rem
 
 export const nodeWidthPx = nodeWidthRem * htmlDefaultFontSize;
 export const nodeHeightPx = nodeHeightRem * htmlDefaultFontSize;

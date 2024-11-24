@@ -1,4 +1,5 @@
 import {
+  AutoAwesomeMotion,
   AutoStoriesOutlined,
   Build,
   Close,
@@ -14,6 +15,7 @@ import {
   PhotoCamera,
   PowerInput,
   Route,
+  ShowChart,
   SsidChart,
   Upload,
   WbTwilight,
@@ -56,15 +58,22 @@ import {
 } from "@/web/view/currentViewStore/filter";
 import {
   setLayoutThoroughness,
+  toggleAvoidEdgeLabelOverlap,
   toggleForceNodesIntoLayers,
   toggleLayerNodeIslandsTogether,
   toggleMinimizeEdgeCrossings,
+  useAvoidEdgeLabelOverlap,
   useForceNodesIntoLayers,
   useLayerNodeIslandsTogether,
   useLayoutThoroughness,
   useMinimizeEdgeCrossings,
 } from "@/web/view/currentViewStore/layout";
-import { resetView, useFormat } from "@/web/view/currentViewStore/store";
+import {
+  resetView,
+  setDrawSimpleEdgePaths,
+  useDrawSimpleEdgePaths,
+  useFormat,
+} from "@/web/view/currentViewStore/store";
 import { resetQuickViews } from "@/web/view/quickViewStore/store";
 import {
   toggleFillNodesWithColor,
@@ -124,15 +133,20 @@ export const MoreActionsDrawer = ({
   const format = useFormat();
   const isTableActive = format === "table";
 
+  const unrestrictedEditing = useUnrestrictedEditing();
+  const flashlightMode = useFlashlightMode();
+  const readonlyMode = useReadonlyMode();
+
   const showImpliedEdges = useShowImpliedEdges();
   const showProblemCriterionSolutionEdges = useShowProblemCriterionSolutionEdges();
-  const unrestrictedEditing = useUnrestrictedEditing();
+  const drawSimpleEdgePaths = useDrawSimpleEdgePaths();
+
   const forceNodesIntoLayers = useForceNodesIntoLayers();
   const layerNodeIslandsTogether = useLayerNodeIslandsTogether();
   const minimizeEdgeCrossings = useMinimizeEdgeCrossings();
-  const flashlightMode = useFlashlightMode();
-  const readonlyMode = useReadonlyMode();
+  const avoidEdgeLabelOverlap = useAvoidEdgeLabelOverlap();
   const layoutThoroughness = useLayoutThoroughness();
+
   const fillNodesWithColor = useFillNodesWithColor();
   const indicateWhenNodeForcedToShow = useIndicateWhenNodeForcedToShow();
 
@@ -280,6 +294,7 @@ export const MoreActionsDrawer = ({
           <>
             <Divider>Diagram Config</Divider>
 
+            {/* General showing/hiding diagram config */}
             <ListItem disablePadding={false}>
               <ToggleButton
                 value={showImpliedEdges}
@@ -307,6 +322,22 @@ export const MoreActionsDrawer = ({
               >
                 <Grid4x4 />
               </ToggleButton>
+              <ToggleButton
+                value={drawSimpleEdgePaths}
+                title="Draw edges using simple paths"
+                aria-label="Draw edges using simple paths"
+                color="primary"
+                size="small"
+                selected={drawSimpleEdgePaths}
+                onClick={() => setDrawSimpleEdgePaths(!drawSimpleEdgePaths)}
+                sx={{ borderRadius: "50%", border: "0" }}
+              >
+                <ShowChart />
+              </ToggleButton>
+            </ListItem>
+
+            {/* Layout config */}
+            <ListItem disablePadding={false}>
               <ToggleButton
                 value={forceNodesIntoLayers}
                 title="Force nodes into layers"
@@ -342,6 +373,18 @@ export const MoreActionsDrawer = ({
                 sx={{ borderRadius: "50%", border: "0" }}
               >
                 <SsidChart />
+              </ToggleButton>
+              <ToggleButton
+                value={avoidEdgeLabelOverlap}
+                title="Avoid edge label overlap"
+                aria-label="Avoid edge label overlap"
+                color="primary"
+                size="small"
+                selected={avoidEdgeLabelOverlap}
+                onClick={() => toggleAvoidEdgeLabelOverlap(!avoidEdgeLabelOverlap)}
+                sx={{ borderRadius: "50%", border: "0" }}
+              >
+                <AutoAwesomeMotion />
               </ToggleButton>
             </ListItem>
 
