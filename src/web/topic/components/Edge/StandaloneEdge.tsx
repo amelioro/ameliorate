@@ -12,7 +12,7 @@ import { useIsGraphPartSelected } from "@/web/view/currentViewStore/store";
 const convertToStandaloneFlowEdge = (edge: Edge, selected: boolean): EdgeProps => {
   return {
     id: edge.id,
-    data: edge.data,
+    data: { ...edge.data, elkSections: [] },
     label: edge.label,
     selected: selected,
     source: edge.source,

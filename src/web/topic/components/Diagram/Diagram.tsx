@@ -23,8 +23,7 @@ import { PanDirection, panDirections, useViewportUpdater } from "@/web/topic/hoo
 import { connectNodes, reconnectEdge } from "@/web/topic/store/createDeleteActions";
 import { useDiagram } from "@/web/topic/store/store";
 import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
-import { Diagram as DiagramData } from "@/web/topic/utils/diagram";
-import { type Edge, type Node } from "@/web/topic/utils/graph";
+import { Diagram as DiagramData, PositionedEdge, PositionedNode } from "@/web/topic/utils/diagram";
 import { hotkeys } from "@/web/topic/utils/hotkeys";
 import { FlowNodeType } from "@/web/topic/utils/node";
 import { tutorialIsOpen } from "@/web/tutorial/tutorial";
@@ -71,13 +70,13 @@ const edgeTypes: Record<"FlowEdge", ComponentType<EdgeProps>> = { FlowEdge: Flow
 // react-flow passes exactly DefaultNodeProps but data can be customized
 // not sure why, but DefaultNodeProps has xPos and yPos instead of Node's position.x and position.y
 export interface NodeProps extends DefaultNodeProps {
-  data: Node["data"];
+  data: PositionedNode["data"];
 }
 
 export interface EdgeProps extends DefaultEdgeProps {
   // we'll always pass data - why does react-flow make it nullable :(
   // can't figure out how to amend this to make it non-nullable, since react-flow's Edge is defined as a type, not an interface
-  data?: Edge["data"];
+  data?: PositionedEdge["data"];
 }
 
 const onEdgeUpdate: OnEdgeUpdateFunc = (oldEdge, newConnection) => {

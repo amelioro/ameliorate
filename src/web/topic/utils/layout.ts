@@ -1,5 +1,6 @@
-import ELK, { ElkNode, LayoutOptions } from "elkjs";
+import ELK, { ElkEdgeSection, ElkNode, LayoutOptions } from "elkjs";
 
+import { throwError } from "@/common/errorHandling";
 import { NodeType, nodeTypes } from "@/common/node";
 import { scalePxViaDefaultFontSize } from "@/pages/_document.page";
 import { nodeHeightPx, nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
@@ -129,28 +130,62 @@ const calculateNodeHeight = (label: string) => {
   return nodeHeightPx + scalePxViaDefaultFontSize(additionalHeightPx);
 };
 
-export interface NodePosition {
+interface LayoutedNode {
   id: string;
   x: number;
   y: number;
 }
 
-// TODO?: feels a little weird to have layout know Ameliorate domain, like DiagramType
+export interface LayoutedEdge {
+  id: string;
+  elkSections: ElkEdgeSection[];
+}
+
+export interface LayoutedGraph {
+  layoutedNodes: LayoutedNode[];
+  layoutedEdges: LayoutedEdge[];
+}
+
+const parseElkjsOutput = (layoutedGraph: ElkNode): LayoutedGraph => {
+  const { children, edges } = layoutedGraph;
+  if (!children || !edges) {
+    return throwError("layouted graph missing children or edges", layoutedGraph);
+  }
+
+  const layoutedNodes = children.map((node) => {
+    const { x, y } = node;
+    if (x === undefined || y === undefined) {
+      return throwError("node missing x or y in layout", node);
+    }
+    return { id: node.id, x, y };
+  });
+
+  const layoutedEdges = edges.map((edge) => {
+    const elkSections = edge.sections;
+    if (!elkSections) {
+      return throwError("edge missing sections in layout", edge);
+    }
+    return { id: edge.id, elkSections };
+  });
+
+  return { layoutedNodes, layoutedEdges };
+};
+
 export const layout = async (
   diagram: Diagram,
   partition: boolean,
   layerNodeIslandsTogether: boolean,
   minimizeEdgeCrossings: boolean,
   thoroughness: number,
-): Promise<NodePosition[]> => {
+): Promise<LayoutedGraph> => {
   const { nodes, edges } = diagram;
 
   // see support layout options at https://www.eclipse.org/elk/reference/algorithms/org-eclipse-elk-layered.html
   const layoutOptions: LayoutOptions = {
     algorithm: "layered",
     "elk.direction": orientation,
-    // results in a more centered layout - seems to moreso ignore edges when laying out
-    "elk.edgeRouting": "POLYLINE",
+    // results in edges curving more around other things
+    "elk.edgeRouting": "SPLINES",
     "elk.spacing.edgeEdge": "0",
     // other placement strategies seem to either spread nodes out too much, or ignore edges between layers
     "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX",
@@ -185,6 +220,9 @@ export const layout = async (
     // Elk defaults to minimizing, but sometimes this makes nodes in the same layer be spread out a lot;
     // turning this off prioritizes nodes in the same layer being close together at the cost of more edge crossings.
     "crossingMinimization.strategy": minimizeEdgeCrossings ? "LAYER_SWEEP" : "NONE",
+    // Edges should all connect to a node at the same point, rather than different points
+    // this is particularly needed when drawing edge paths based on this layout algorithm's output.
+    mergeEdges: "true",
   };
 
   const graph: ElkNode = {
@@ -221,26 +259,22 @@ export const layout = async (
   try {
     const layoutedGraph = await elk.layout(graph, {
       layoutOptions,
-      logging: true,
-      measureExecutionTime: true,
+      // log-related options throw error with SPLINES edge routing somehow; see https://github.com/kieler/elkjs/issues/309
+      // logging: true,
+      // measureExecutionTime: true,
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return layoutedGraph.children!.map((node) => {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      return { id: node.id, x: node.x!, y: node.y! };
-    });
+    const parsedGraph = parseElkjsOutput(layoutedGraph);
+    return parsedGraph;
   } catch (error) {
     const layoutedGraph = await elk.layout(graph, {
       layoutOptions: { ...layoutOptions, "elk.partitioning.activate": "false" },
-      logging: true,
-      measureExecutionTime: true,
+      // log-related options throw error with SPLINES edge routing somehow; see https://github.com/kieler/elkjs/issues/309
+      // logging: true,
+      // measureExecutionTime: true,
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return layoutedGraph.children!.map((node) => {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      return { id: node.id, x: node.x!, y: node.y! };
-    });
+    const parsedGraph = parseElkjsOutput(layoutedGraph);
+    return parsedGraph;
   }
 };

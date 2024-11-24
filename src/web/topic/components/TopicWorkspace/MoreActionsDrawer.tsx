@@ -14,6 +14,7 @@ import {
   PhotoCamera,
   PowerInput,
   Route,
+  ShowChart,
   SsidChart,
   Upload,
   WbTwilight,
@@ -64,7 +65,12 @@ import {
   useLayoutThoroughness,
   useMinimizeEdgeCrossings,
 } from "@/web/view/currentViewStore/layout";
-import { resetView, useFormat } from "@/web/view/currentViewStore/store";
+import {
+  resetView,
+  setDrawSimpleEdgePaths,
+  useDrawSimpleEdgePaths,
+  useFormat,
+} from "@/web/view/currentViewStore/store";
 import { resetQuickViews } from "@/web/view/quickViewStore/store";
 import {
   toggleFillNodesWithColor,
@@ -124,15 +130,19 @@ export const MoreActionsDrawer = ({
   const format = useFormat();
   const isTableActive = format === "table";
 
+  const unrestrictedEditing = useUnrestrictedEditing();
+  const flashlightMode = useFlashlightMode();
+  const readonlyMode = useReadonlyMode();
+
   const showImpliedEdges = useShowImpliedEdges();
   const showProblemCriterionSolutionEdges = useShowProblemCriterionSolutionEdges();
-  const unrestrictedEditing = useUnrestrictedEditing();
+  const drawSimpleEdgePaths = useDrawSimpleEdgePaths();
+
   const forceNodesIntoLayers = useForceNodesIntoLayers();
   const layerNodeIslandsTogether = useLayerNodeIslandsTogether();
   const minimizeEdgeCrossings = useMinimizeEdgeCrossings();
-  const flashlightMode = useFlashlightMode();
-  const readonlyMode = useReadonlyMode();
   const layoutThoroughness = useLayoutThoroughness();
+
   const fillNodesWithColor = useFillNodesWithColor();
   const indicateWhenNodeForcedToShow = useIndicateWhenNodeForcedToShow();
 
@@ -306,6 +316,18 @@ export const MoreActionsDrawer = ({
                 sx={{ borderRadius: "50%", border: "0" }}
               >
                 <Grid4x4 />
+              </ToggleButton>
+              <ToggleButton
+                value={drawSimpleEdgePaths}
+                title="Draw edges using simple paths"
+                aria-label="Draw edges using simple paths"
+                color="primary"
+                size="small"
+                selected={drawSimpleEdgePaths}
+                onClick={() => setDrawSimpleEdgePaths(!drawSimpleEdgePaths)}
+                sx={{ borderRadius: "50%", border: "0" }}
+              >
+                <ShowChart />
               </ToggleButton>
               <ToggleButton
                 value={forceNodesIntoLayers}
