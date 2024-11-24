@@ -15,8 +15,8 @@ export const nodeTypes = [
   "problem", // weird for problem not to be first, but subproblems should be to the right of causes for layout - maybe just make a subproblem node so this isn't awkward?
   "criterion",
   "solutionComponent",
-  "effect",
   "benefit",
+  "effect",
   "detriment",
   "solution",
   "obstacle",

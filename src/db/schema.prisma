@@ -87,8 +87,8 @@ enum NodeType {
   problem
   cause
   criterion
-  effect
   benefit
+  effect
   detriment
   solutionComponent
   solution

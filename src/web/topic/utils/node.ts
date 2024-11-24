@@ -52,13 +52,13 @@ export const nodeDecorations: Record<FlowNodeType, NodeDecoration> = {
     title: "Criterion",
     NodeIcon: Ballot,
   },
-  effect: {
-    title: "Effect",
-    NodeIcon: Bolt,
-  },
   benefit: {
     title: "Benefit",
     NodeIcon: LocalFlorist,
+  },
+  effect: {
+    title: "Effect",
+    NodeIcon: Bolt,
   },
   detriment: {
     title: "Detriment",
