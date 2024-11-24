@@ -21,6 +21,22 @@ const compareNodes = (node1: Node, node2: Node) => {
   return Number(priorities[node1.type]) - Number(priorities[node2.type]);
 };
 
+// sort by source priority, then target priority
+const compareEdges = (edge1: Edge, edge2: Edge, nodes: Node[]) => {
+  const source1 = nodes.find((node) => node.id === edge1.source);
+  const source2 = nodes.find((node) => node.id === edge2.source);
+  const target1 = nodes.find((node) => node.id === edge1.target);
+  const target2 = nodes.find((node) => node.id === edge2.target);
+
+  if (!source1 || !source2 || !target1 || !target2)
+    throw new Error("Edge source or target not found");
+
+  const sourceCompare = Number(priorities[source1.type]) - Number(priorities[source2.type]);
+  if (sourceCompare !== 0) return sourceCompare;
+
+  return Number(priorities[target1.type]) - Number(priorities[target2.type]);
+};
+
 /**
  * "null" means no partition; the node will be placed in any layer that makes sense based on edges.
  * "[number]" means the node will be placed in a layer higher than nodes with lower [number], and lower than nodes with higher [number].
@@ -140,7 +156,7 @@ export const layout = async (
     "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX",
     // allows grouping nodes by type (within a layer) when nodes are sorted by type
     // tried using `position` to do this but it doesn't group nodes near their source node
-    "elk.layered.considerModelOrder.strategy": "PREFER_NODES",
+    "elk.layered.considerModelOrder.strategy": "PREFER_EDGES",
     // these spacings are just what roughly seem to look good
     "elk.layered.spacing.nodeNodeBetweenLayers":
       orientation === "DOWN"
@@ -166,7 +182,7 @@ export const layout = async (
     // perhaps higher thoroughness means it'll find a layout that better uses space,
     // caring less about node order.
     "elk.layered.thoroughness": thoroughness.toString(),
-    // elk defaults to minimizing, but sometimes this makes nodes in the same layer be spread out a lot;
+    // Elk defaults to minimizing, but sometimes this makes nodes in the same layer be spread out a lot;
     // turning this off prioritizes nodes in the same layer being close together at the cost of more edge crossings.
     "crossingMinimization.strategy": minimizeEdgeCrossings ? "LAYER_SWEEP" : "NONE",
   };
@@ -193,9 +209,11 @@ export const layout = async (
           },
         };
       }),
-    edges: edges.map((edge) => {
-      return { id: edge.id, sources: [edge.source], targets: [edge.target] };
-    }),
+    edges: edges
+      .toSorted((edge1, edge2) => compareEdges(edge1, edge2, nodes))
+      .map((edge) => {
+        return { id: edge.id, sources: [edge.source], targets: [edge.target] };
+      }),
   };
 
   // hack to try laying out without partition if partitions cause error
