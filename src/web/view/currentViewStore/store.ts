@@ -60,6 +60,19 @@ export interface ViewState {
   forceNodesIntoLayers: boolean;
   layerNodeIslandsTogether: boolean;
   minimizeEdgeCrossings: boolean;
+  /**
+   * Ideally we'd always avoid edge label overlap, because the diagram seems more chaotic when
+   * there's overlap, but unfortunately including labels in the layout create a few problems:
+   * 1. spacing between node layers can be consistent,
+   * 2. more node layers can be created than otherwise.
+   *
+   * These problems both result in a layout that often seems even more chaotic than just
+   * accepting edge overlap.
+   *
+   * This ELK ticket exists to address these issues, and if resolved, we should be able to
+   * unconditionally include edge labels in layout: https://github.com/eclipse/elk/issues/1092
+   */
+  avoidEdgeLabelOverlap: boolean;
   layoutThoroughness: number;
 }
 
@@ -94,6 +107,7 @@ export const initialViewState: ViewState = {
   forceNodesIntoLayers: true,
   layerNodeIslandsTogether: false,
   minimizeEdgeCrossings: true,
+  avoidEdgeLabelOverlap: false,
   layoutThoroughness: 100, // by default, prefer keeping parents close to children over keeping node types together
 };
 

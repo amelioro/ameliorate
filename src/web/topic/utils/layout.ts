@@ -1,4 +1,4 @@
-import ELK, { ElkEdgeSection, ElkNode, LayoutOptions } from "elkjs";
+import ELK, { ElkEdgeSection, ElkLabel, ElkNode, LayoutOptions } from "elkjs";
 
 import { throwError } from "@/common/errorHandling";
 import { NodeType, nodeTypes } from "@/common/node";
@@ -10,6 +10,11 @@ import { edges as nodeEdges } from "@/web/topic/utils/node";
 
 export type Orientation = "DOWN" | "UP" | "RIGHT" | "LEFT";
 export const orientation: Orientation = "DOWN" as Orientation; // not constant to allow potential other orientations in the future, and keeping code that currently exists for handling "LEFT" orientation
+
+/**
+ * Roughly accurate, using the average-length "addresses" label
+ */
+export const labelWidthPx = 85;
 
 const priorities = Object.fromEntries(nodeTypes.map((type, index) => [type, index.toString()])) as {
   [type in NodeType]: string;
@@ -138,6 +143,10 @@ interface LayoutedNode {
 
 export interface LayoutedEdge {
   id: string;
+  /**
+   * Will be undefined when edge labels are excluded from the layout calculation
+   */
+  elkLabel?: ElkLabel;
   elkSections: ElkEdgeSection[];
 }
 
@@ -161,11 +170,12 @@ const parseElkjsOutput = (layoutedGraph: ElkNode): LayoutedGraph => {
   });
 
   const layoutedEdges = edges.map((edge) => {
+    const elkLabel = edge.labels?.[0]; // allowed to be missing if we're excluding labels from the layout calc
     const elkSections = edge.sections;
     if (!elkSections) {
       return throwError("edge missing sections in layout", edge);
     }
-    return { id: edge.id, elkSections };
+    return { id: edge.id, elkLabel, elkSections };
   });
 
   return { layoutedNodes, layoutedEdges };
@@ -176,6 +186,7 @@ export const layout = async (
   partition: boolean,
   layerNodeIslandsTogether: boolean,
   minimizeEdgeCrossings: boolean,
+  avoidEdgeLabelOverlap: boolean,
   thoroughness: number,
 ): Promise<LayoutedGraph> => {
   const { nodes, edges } = diagram;
@@ -192,11 +203,13 @@ export const layout = async (
     // allows grouping nodes by type (within a layer) when nodes are sorted by type
     // tried using `position` to do this but it doesn't group nodes near their source node
     "elk.layered.considerModelOrder.strategy": "PREFER_EDGES",
-    // these spacings are just what roughly seem to look good
+    // These spacings are just what roughly seem to look good.
+    // Note: Edge labels are given layers like nodes, so we need to halve the spacing between layers
+    // when including labels in the layout, in order to keep the same distance between nodes.
     "elk.layered.spacing.nodeNodeBetweenLayers":
       orientation === "DOWN"
-        ? scalePxViaDefaultFontSize(130).toString()
-        : scalePxViaDefaultFontSize(220).toString(),
+        ? scalePxViaDefaultFontSize(avoidEdgeLabelOverlap ? 65 : 130).toString()
+        : scalePxViaDefaultFontSize(avoidEdgeLabelOverlap ? 55 : 110).toString(),
     "elk.spacing.nodeNode":
       orientation === "DOWN"
         ? scalePxViaDefaultFontSize(20).toString()
@@ -250,7 +263,25 @@ export const layout = async (
     edges: edges
       .toSorted((edge1, edge2) => compareEdges(edge1, edge2, nodes))
       .map((edge) => {
-        return { id: edge.id, sources: [edge.source], targets: [edge.target] };
+        return {
+          id: edge.id,
+          sources: [edge.source],
+          targets: [edge.target],
+          labels: avoidEdgeLabelOverlap
+            ? [
+                {
+                  text: edge.label,
+                  layoutOptions: {
+                    "edgeLabels.inline": "true",
+                  },
+                  width: scalePxViaDefaultFontSize(labelWidthPx),
+                  // Give labels 0 height so they don't create more space between node layers;
+                  // layout still avoids overlap with labels based on their widths when they have 0 height.
+                  height: 0,
+                },
+              ]
+            : undefined,
+        };
       }),
   };
 

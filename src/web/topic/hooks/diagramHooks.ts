@@ -9,6 +9,7 @@ import {
 import { isNode } from "@/web/topic/utils/graph";
 import { LayoutedGraph, layout } from "@/web/topic/utils/layout";
 import {
+  useAvoidEdgeLabelOverlap,
   useForceNodesIntoLayers,
   useLayerNodeIslandsTogether,
   useLayoutThoroughness,
@@ -21,6 +22,7 @@ export const useLayoutedDiagram = (diagram: Diagram) => {
   const forceNodesIntoLayers = useForceNodesIntoLayers();
   const layerNodeIslandsTogether = useLayerNodeIslandsTogether();
   const minimizeEdgeCrossings = useMinimizeEdgeCrossings();
+  const avoidEdgeLabelOverlap = useAvoidEdgeLabelOverlap();
   const thoroughness = useLayoutThoroughness();
 
   // re-layout if this changes
@@ -31,6 +33,7 @@ export const useLayoutedDiagram = (diagram: Diagram) => {
       String(forceNodesIntoLayers),
       String(layerNodeIslandsTogether),
       String(minimizeEdgeCrossings),
+      String(avoidEdgeLabelOverlap),
       String(thoroughness),
     )
     .join();
@@ -50,6 +53,7 @@ export const useLayoutedDiagram = (diagram: Diagram) => {
         forceNodesIntoLayers,
         layerNodeIslandsTogether,
         minimizeEdgeCrossings,
+        avoidEdgeLabelOverlap,
         thoroughness,
       );
       setLayoutedGraph(newLayoutedGraph);
@@ -85,11 +89,11 @@ export const useLayoutedDiagram = (diagram: Diagram) => {
           (layoutedEdge) => layoutedEdge.id === edge.id,
         );
         if (!layoutedEdge) return null;
-        const { elkSections } = layoutedEdge;
+        const { elkLabel, elkSections } = layoutedEdge;
 
         return {
           ...edge,
-          data: { ...edge.data, elkSections },
+          data: { ...edge.data, elkLabel, elkSections },
           selected: edge.id === selectedGraphPart?.id, // add selected here because react flow uses it (as opposed to our custom components, which can rely on selectedGraphPart hook independently)
         } as PositionedEdge;
       })

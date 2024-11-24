@@ -1,7 +1,9 @@
 import { getBezierPath } from "reactflow";
 
 import { throwError } from "@/common/errorHandling";
+import { scalePxViaDefaultFontSize } from "@/pages/_document.page";
 import { EdgeProps } from "@/web/topic/components/Diagram/Diagram";
+import { labelWidthPx } from "@/web/topic/utils/layout";
 
 /**
  * If `drawSimpleEdgePaths` is true, draw a simple bezier between the source and target.
@@ -14,7 +16,7 @@ import { EdgeProps } from "@/web/topic/components/Diagram/Diagram";
  */
 export const getPathDefinitionForEdge = (flowEdge: EdgeProps, drawSimpleEdgePaths: boolean) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- reactflow types data as nullable but we always pass it, so it should always be here
-  const { elkSections } = flowEdge.data!;
+  const { elkLabel, elkSections } = flowEdge.data!;
   const elkSection = elkSections[0];
   const bendPoints = elkSection?.bendPoints;
   const firstBendPoint = bendPoints?.[0];
@@ -27,6 +29,7 @@ export const getPathDefinitionForEdge = (flowEdge: EdgeProps, drawSimpleEdgePath
     lastBendPoint === undefined;
 
   if (drawSimpleEdgePaths || missingBendPoints) {
+    // TODO: probably ideally would draw this path through the ELK label position if that's provided
     const [pathDefinition, labelX, labelY] = getBezierPath({
       sourceX: flowEdge.sourceX,
       sourceY: flowEdge.sourceY,
@@ -70,7 +73,12 @@ export const getPathDefinitionForEdge = (flowEdge: EdgeProps, drawSimpleEdgePath
     endPoint,
   );
 
-  const { x: labelX, y: labelY } = getPathMidpoint(pathDefinition);
+  const { x: labelX, y: labelY } = elkLabel
+    ? // Note: ELK label position is moved left by half of its width in order to center it.
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      { x: elkLabel.x! + 0.5 * scalePxViaDefaultFontSize(labelWidthPx), y: elkLabel.y! }
+    : getPathMidpoint(pathDefinition);
+
   return { pathDefinition, labelX, labelY };
 };
 

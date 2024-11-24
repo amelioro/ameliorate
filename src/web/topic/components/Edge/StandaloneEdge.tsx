@@ -12,6 +12,7 @@ import { useIsGraphPartSelected } from "@/web/view/currentViewStore/store";
 const convertToStandaloneFlowEdge = (edge: Edge, selected: boolean): EdgeProps => {
   return {
     id: edge.id,
+    // don't provide a position for the label, so it defaults to being placed between the two nodes
     data: { ...edge.data, elkSections: [] },
     label: edge.label,
     selected: selected,

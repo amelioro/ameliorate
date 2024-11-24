@@ -1,4 +1,5 @@
 import {
+  AutoAwesomeMotion,
   AutoStoriesOutlined,
   Build,
   Close,
@@ -57,9 +58,11 @@ import {
 } from "@/web/view/currentViewStore/filter";
 import {
   setLayoutThoroughness,
+  toggleAvoidEdgeLabelOverlap,
   toggleForceNodesIntoLayers,
   toggleLayerNodeIslandsTogether,
   toggleMinimizeEdgeCrossings,
+  useAvoidEdgeLabelOverlap,
   useForceNodesIntoLayers,
   useLayerNodeIslandsTogether,
   useLayoutThoroughness,
@@ -141,6 +144,7 @@ export const MoreActionsDrawer = ({
   const forceNodesIntoLayers = useForceNodesIntoLayers();
   const layerNodeIslandsTogether = useLayerNodeIslandsTogether();
   const minimizeEdgeCrossings = useMinimizeEdgeCrossings();
+  const avoidEdgeLabelOverlap = useAvoidEdgeLabelOverlap();
   const layoutThoroughness = useLayoutThoroughness();
 
   const fillNodesWithColor = useFillNodesWithColor();
@@ -290,6 +294,7 @@ export const MoreActionsDrawer = ({
           <>
             <Divider>Diagram Config</Divider>
 
+            {/* General showing/hiding diagram config */}
             <ListItem disablePadding={false}>
               <ToggleButton
                 value={showImpliedEdges}
@@ -329,6 +334,10 @@ export const MoreActionsDrawer = ({
               >
                 <ShowChart />
               </ToggleButton>
+            </ListItem>
+
+            {/* Layout config */}
+            <ListItem disablePadding={false}>
               <ToggleButton
                 value={forceNodesIntoLayers}
                 title="Force nodes into layers"
@@ -364,6 +373,18 @@ export const MoreActionsDrawer = ({
                 sx={{ borderRadius: "50%", border: "0" }}
               >
                 <SsidChart />
+              </ToggleButton>
+              <ToggleButton
+                value={avoidEdgeLabelOverlap}
+                title="Avoid edge label overlap"
+                aria-label="Avoid edge label overlap"
+                color="primary"
+                size="small"
+                selected={avoidEdgeLabelOverlap}
+                onClick={() => toggleAvoidEdgeLabelOverlap(!avoidEdgeLabelOverlap)}
+                sx={{ borderRadius: "50%", border: "0" }}
+              >
+                <AutoAwesomeMotion />
               </ToggleButton>
             </ListItem>
 
