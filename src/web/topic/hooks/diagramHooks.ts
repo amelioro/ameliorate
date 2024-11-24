@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { Diagram, PositionedDiagram, PositionedNode } from "@/web/topic/utils/diagram";
+import { isNode } from "@/web/topic/utils/graph";
 import { NodePosition, layout } from "@/web/topic/utils/layout";
 import {
   useForceNodesIntoLayers,
@@ -19,7 +20,8 @@ export const useLayoutedDiagram = (diagram: Diagram) => {
 
   // re-layout if this changes
   const diagramHash = [...diagram.nodes, ...diagram.edges]
-    .map((graphPart) => graphPart.id)
+    // not 100% sure that it's worth re-laying out when node text changes, but we can easily remove if it doesn't seem like it
+    .map((graphPart) => (isNode(graphPart) ? graphPart.id + graphPart.data.label : graphPart.id))
     .concat(
       String(forceNodesIntoLayers),
       String(layerNodeIslandsTogether),

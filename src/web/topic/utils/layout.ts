@@ -77,6 +77,42 @@ const calculatePartition = (node: Node, edges: Edge[]) => {
   }
 };
 
+const textAreaWidthPx = 164;
+const textAreaPerRowPx = 16;
+const heightPxOfOneRowDiv = textAreaPerRowPx + 1; // not sure why but a one-row text area seems to have an extra pixel
+const maxRows = 3;
+const maxTextAreaHeightPx = heightPxOfOneRowDiv + textAreaPerRowPx * (maxRows - 1);
+
+/* eslint-disable functional/immutable-data */
+// Create a hidden div to calculate the height of a node based on its text.
+// Reusing this div instead of re-creating for each calculation reduces the average
+// calculation time per node from ~0.125ms to ~0.05ms.
+// Note: using a `div` improved performance over using a `textarea` from ~0.125ms to ~0.05ms
+// (yes a similar additional gain to the gain of reusing the div).
+const div = document.createElement("div");
+div.style.width = `${textAreaWidthPx}px`;
+div.style.fontSize = "16px";
+div.style.lineHeight = "1";
+div.style.fontFamily = "inherit";
+div.style.overflow = "hidden";
+div.style.visibility = "hidden";
+div.tabIndex = -1;
+div.ariaHidden = "true";
+document.body.appendChild(div);
+/* eslint-enable functional/immutable-data */
+
+/**
+ * Create a hidden div to calculate the height of a node based on its text.
+ */
+const calculateNodeHeight = (label: string) => {
+  // eslint-disable-next-line functional/immutable-data
+  div.textContent = label;
+
+  const additionalHeightPx = Math.min(div.scrollHeight - heightPxOfOneRowDiv, maxTextAreaHeightPx);
+
+  return nodeHeightPx + scalePxViaDefaultFontSize(additionalHeightPx);
+};
+
 export interface NodePosition {
   id: string;
   x: number;
@@ -138,13 +174,16 @@ export const layout = async (
   const graph: ElkNode = {
     id: "elkgraph",
     children: [...nodes]
-      .sort((node1, node2) => compareNodes(node1, node2))
+      .toSorted((node1, node2) => compareNodes(node1, node2))
       .map((node) => {
         return {
           id: node.id,
           width: nodeWidthPx,
-          height: nodeHeightPx,
+          height: calculateNodeHeight(node.data.label),
           layoutOptions: {
+            // Some nodes can be taller than others (based on how long their text is),
+            // so align them all along the center.
+            "elk.alignment": "CENTER",
             // Allow nodes to be partitioned into layers by type.
             // This can get awkward if there are multiple problems with their own sets of criteria,
             // solutions, components, effects; we might be able to improve that situation by modeling
