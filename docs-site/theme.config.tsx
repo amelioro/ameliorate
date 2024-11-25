@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useConfig } from "nextra-theme-docs";
 
 import { discordInvite, feedbackPage, githubRepo } from "../src/web/common/urls";
 
@@ -25,13 +26,13 @@ const config = {
 
   // other config
   banner: {
-    text: (
+    content: (
       <>
         While Ameliorate is in{" "}
         <Link
           href="/release-status"
           // not sure why this isn't applied to banner, but just took these classes from a link generated from an mdx file
-          className="nx-text-primary-600 underline nx-decoration-from-font [text-underline-position:from-font]"
+          className="_text-primary-600 underline _decoration-from-font [text-underline-position:from-font]"
         >
           Alpha
         </Link>
@@ -40,7 +41,7 @@ const config = {
           href="https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md#providing-feedback"
           target="_blank"
           // not sure why this isn't applied to banner, but just took these classes from a link generated from an mdx file
-          className="nx-text-primary-600 underline nx-decoration-from-font [text-underline-position:from-font]"
+          className="_text-primary-600 underline _decoration-from-font [text-underline-position:from-font]"
         >
           mention
         </Link>{" "}
@@ -48,20 +49,23 @@ const config = {
       </>
     ),
   },
-  useNextSeoProps() {
-    return { titleTemplate: "%s | Ameliorate" };
-  },
-  head: (
-    <>
-      <link rel="icon" href={faviconIco} />
+  head: function Head() {
+    const config = useConfig();
+    const title = `${config.title} | Ameliorate`;
 
-      {/* https://mui.com/material-ui/getting-started/usage/#responsive-meta-tag */}
-      <meta name="viewport" content="initial-scale=1, width=device-width" />
-    </>
-  ),
+    return (
+      <>
+        <link rel="icon" href={faviconIco} />
+
+        {/* https://mui.com/material-ui/getting-started/usage/#responsive-meta-tag */}
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <title>{title}</title>
+      </>
+    );
+  },
   footer: { component: <></> },
   toc: {
-    backToTop: true,
+    backToTop: <>Scroll to top</>,
   },
 };
 
