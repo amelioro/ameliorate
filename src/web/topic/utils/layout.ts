@@ -122,7 +122,8 @@ div.style.fontSize = "16px";
 div.style.lineHeight = "1";
 div.style.fontFamily = "inherit";
 div.style.overflow = "hidden";
-div.style.visibility = "hidden";
+div.style.visibility = "hidden"; // don't show in DOM but still be added to it so height calcs work
+div.style.position = "absolute"; // don't affect layout (visibility: hidden otherwise still affects layout)
 div.tabIndex = -1;
 div.ariaHidden = "true";
 document.body.appendChild(div);
