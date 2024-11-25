@@ -12,9 +12,14 @@ export type Orientation = "DOWN" | "UP" | "RIGHT" | "LEFT";
 export const orientation: Orientation = "DOWN" as Orientation; // not constant to allow potential other orientations in the future, and keeping code that currently exists for handling "LEFT" orientation
 
 /**
- * Roughly accurate, using the average-length "addresses" label
+ * Using the highest-width of the common labels ("subproblem of"; excludes "contingency for" because
+ * that's rarely used).
+ *
+ * Could use the average-width to try and balance using too much space vs using too little space,
+ * but it doesn't seem like a big deal to use too much space, whereas labels still overlapping
+ * basically forfeits a lot of the value of trying to avoid overlap.
  */
-export const labelWidthPx = 85;
+export const labelWidthPx = 115;
 
 const priorities = Object.fromEntries(nodeTypes.map((type, index) => [type, index.toString()])) as {
   [type in NodeType]: string;
