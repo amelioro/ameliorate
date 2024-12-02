@@ -1,3 +1,4 @@
+import sortBy from "lodash/sortBy";
 import uniqBy from "lodash/uniqBy";
 import { temporal } from "zundo";
 import { devtools, persist } from "zustand/middleware";
@@ -131,6 +132,7 @@ export const useDiagram = (): Diagram => {
       ? edgesAfterImplied
       : hideProblemCriterionSolutionEdges(nodes, edgesAfterImplied);
 
-    return { nodes, edges };
+    // sort nodes/edges to ensure layout doesn't change if nodes/edges occur in a different order
+    return { nodes: sortBy(nodes, "id"), edges: sortBy(edges, "id") };
   });
 };

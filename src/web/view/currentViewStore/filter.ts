@@ -292,6 +292,7 @@ export const getStandardFilterWithFallbacks = (standardFilter: StandardFilter): 
 
   const standardFilterDefaults: StandardFilterWithFallbacks = {
     type: "none",
+    layersDeep: 1,
     centralProblemId,
     problemDetails: ["causes", "effects", "subproblems", "criteria", "solutions"],
     centralSolutionId,

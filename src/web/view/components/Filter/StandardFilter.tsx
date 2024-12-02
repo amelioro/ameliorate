@@ -7,6 +7,7 @@ import { InfoCategory } from "@/common/infoCategory";
 import { deepIsEqual } from "@/common/utils";
 import { FormContext } from "@/web/common/components/Form/FormContext";
 import { NodeSelect } from "@/web/common/components/Form/NodeSelect";
+import { NumberInput } from "@/web/common/components/Form/NumberInput";
 import { Select } from "@/web/common/components/Form/Select";
 import { useCriteria, useNodesOfType, useSolutions } from "@/web/topic/store/nodeHooks";
 import {
@@ -72,6 +73,8 @@ export const StandardFilter = ({ infoCategory, filter }: Props) => {
         <form style={{ padding: "8px" }}>
           <Stack spacing={1.5}>
             <Select name="type" label="Standard Filter" options={filterTypes} />
+
+            {"layersDeep" in typeSchemaShape && <NumberInput name="layersDeep" min={0} max={10} />}
 
             {"centralProblemId" in typeSchemaShape && (
               <NodeSelect

@@ -5,7 +5,7 @@ import { RelationName, researchRelationNames } from "@/common/edge";
 import { InfoCategory } from "@/common/infoCategory";
 import { infoNodeTypes, nodeSchema } from "@/common/node";
 import { Graph, Node, ancestors, descendants, getRelevantEdges } from "@/web/topic/utils/graph";
-import { children, parents } from "@/web/topic/utils/node";
+import { children, neighbors, parents } from "@/web/topic/utils/node";
 
 // cross-standard-filter options
 const detailTypes = ["all", "connectedToCriteria", "none"] as const;
@@ -19,23 +19,25 @@ const noneSchema = z.object({
 
 /**
  * Description:
- * - If there are problems, show each problems' immediate causes, effects, solutions
- * - Otherwise show whole diagram
+ * - Show each core node (problem & solution) along with X layers of nodes from them,
+ * excluding criteria.
  *
  * Use cases:
  * - Give a quick overview of the topic
  */
-const applyHighLevelFilter = (graph: Graph, _filters: HighLevelOptions) => {
-  const problems = graph.nodes.filter((node) => node.type === "problem");
-  if (problems.length === 0) return graph;
+const applyHighLevelFilter = (graph: Graph, filters: HighLevelOptions) => {
+  const coreNodes = graph.nodes.filter((node) => ["problem", "solution"].includes(node.type));
 
-  const details = problems.flatMap((problem) =>
-    children(problem, graph).filter((child) =>
-      ["cause", "effect", "benefit", "detriment", "solution"].includes(child.type),
-    ),
-  );
+  const details =
+    filters.layersDeep === 0
+      ? []
+      : coreNodes
+          .flatMap((coreNode) => neighbors(coreNode, graph, filters.layersDeep))
+          .filter((node) => {
+            return node.type !== "criterion";
+          });
 
-  const nodes = [...problems, ...details];
+  const nodes = [...coreNodes, ...details];
   const edges = getRelevantEdges(nodes, graph);
 
   return { nodes, edges };
@@ -43,6 +45,7 @@ const applyHighLevelFilter = (graph: Graph, _filters: HighLevelOptions) => {
 
 const highLevelSchema = z.object({
   type: z.literal("highLevel"),
+  layersDeep: z.number().min(0).max(10), // 10 is an arbitrary max to prevent worrying about large recursions
 });
 
 type HighLevelOptions = z.infer<typeof highLevelSchema>;
