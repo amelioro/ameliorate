@@ -3,7 +3,7 @@ import { Global } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { StyledEngineProvider, ThemeProvider, createTheme } from "@mui/material/styles";
 import { TourProvider } from "@reactour/tour";
-import PlausibleProvider from "next-plausible";
+import PlausibleProvider, { usePlausible } from "next-plausible";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { useEffect } from "react";
@@ -26,6 +26,9 @@ const siteNameJsonLd = {
 // eslint-disable-next-line functional/no-let -- jank way to enable trpc queries outside of react tree, e.g. from zustand middleware https://github.com/trpc/trpc/discussions/2926#discussioncomment-5647033
 export let trpcClient = null as unknown as ReturnType<typeof trpc.useContext>["client"];
 
+// eslint-disable-next-line functional/no-let -- not sure why `plausible()` is only exposed through a hook, but this enables using it outside of a react tree, e.g. from zustand store
+export let plausible = null as unknown as ReturnType<typeof usePlausible>;
+
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const theme = createTheme(getThemeOptions("light"));
 
@@ -33,6 +36,11 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
     trpcClient = utils.client;
   }, [utils.client]);
+
+  const plausibleHook = usePlausible();
+  useEffect(() => {
+    plausible = plausibleHook;
+  }, [plausibleHook]);
 
   return (
     <>

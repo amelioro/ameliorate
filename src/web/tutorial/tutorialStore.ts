@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+import { plausible } from "@/pages/_app.page";
 import { Tutorial } from "@/web/tutorial/tutorialUtils";
 
 interface TutorialStoreState {
@@ -35,6 +36,8 @@ export const setTutorialHasStarted = (tutorial: Tutorial) => {
 
   if (startedTutorials.includes(tutorial)) return;
 
+  plausible(`Started tutorial: ${tutorial}`, { props: {} });
+
   useTutorialStore.setState({
     startedTutorials: [...startedTutorials, tutorial],
   });
@@ -44,6 +47,8 @@ export const setTutorialHasCompleted = (tutorial: Tutorial) => {
   const completedTutorials = useTutorialStore.getState().completedTutorials;
 
   if (completedTutorials.includes(tutorial)) return;
+
+  plausible(`Completed tutorial: ${tutorial}`, { props: {} });
 
   useTutorialStore.setState({
     completedTutorials: [...completedTutorials, tutorial],
