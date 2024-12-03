@@ -17,3 +17,17 @@ export const useIsNodeSelected = (edgeId: string) => {
 
   return useIsAnyGraphPartSelected(neighborNodes.map((node) => node.id));
 };
+
+export const useIsTableEdge = (edgeId: string) => {
+  return useTopicStore((state) => {
+    try {
+      const edge = findEdgeOrThrow(edgeId, state.edges);
+      if (edge.label !== "fulfills") return false;
+
+      const [parentNode, childNode] = nodes(edge, state.nodes);
+      return parentNode.type === "criterion" && childNode.type === "solution";
+    } catch {
+      return false;
+    }
+  });
+};

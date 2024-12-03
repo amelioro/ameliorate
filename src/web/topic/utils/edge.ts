@@ -246,7 +246,7 @@ export const childNode = (edge: Edge, nodes: Node[]) => {
   return findNodeOrThrow(edge.target, nodes);
 };
 
-export const nodes = (edge: Edge, nodes: Node[]) => {
+export const nodes = (edge: Edge, nodes: Node[]): [Node, Node] => {
   return [parentNode(edge, nodes), childNode(edge, nodes)];
 };
 

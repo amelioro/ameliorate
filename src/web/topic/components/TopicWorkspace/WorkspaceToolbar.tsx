@@ -19,6 +19,7 @@ import { useSessionUser } from "@/web/common/hooks";
 import { HelpMenu } from "@/web/topic/components/TopicWorkspace/HelpMenu";
 import { MoreActionsDrawer } from "@/web/topic/components/TopicWorkspace/MoreActionsDrawer";
 import { deleteGraphPart } from "@/web/topic/store/createDeleteActions";
+import { useIsTableEdge } from "@/web/topic/store/edgeHooks";
 import { useOnPlayground } from "@/web/topic/store/topicHooks";
 import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { redo, undo } from "@/web/topic/store/utilActions";
@@ -44,15 +45,18 @@ import {
 export const WorkspaceToolbar = () => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
+
   const onPlayground = useOnPlayground();
   const [canUndo, canRedo] = useTemporalHooks();
   const [canGoBack, canGoForward] = useCanGoBackForward();
+
   const isComparingPerspectives = useIsComparingPerspectives();
   const flashlightMode = useFlashlightMode();
   const readonlyMode = useReadonlyMode();
   const [hasErrored, setHasErrored] = useState(false);
 
   const selectedGraphPart = useSelectedGraphPart();
+  const partIsTableEdge = useIsTableEdge(selectedGraphPart?.id ?? "");
 
   const [isMoreActionsDrawerOpen, setIsMoreActionsDrawerOpen] = useState(false);
   const [helpAnchorEl, setHelpAnchorEl] = useState<null | HTMLElement>(null);
@@ -124,7 +128,8 @@ export const WorkspaceToolbar = () => {
                   deleteGraphPart(selectedGraphPart);
                 }
               }}
-              disabled={!selectedGraphPart}
+              // don't allow modifying edges that are part of the table, because they should always exist as long as their nodes do
+              disabled={!selectedGraphPart || partIsTableEdge}
               className="hidden sm:flex"
             >
               <Delete />
