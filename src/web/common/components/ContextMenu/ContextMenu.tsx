@@ -9,6 +9,9 @@ import { DeleteEdgeMenuItem } from "@/web/common/components/ContextMenu/DeleteEd
 import { DeleteNodeMenuItem } from "@/web/common/components/ContextMenu/DeleteNodeMenuItem";
 import { HideMenuItem } from "@/web/common/components/ContextMenu/HideMenuItem";
 import { OnlyShowNodeAndNeighborsMenuItem } from "@/web/common/components/ContextMenu/OnlyShowNodeAndNeighborsMenuItem";
+import { ViewContextMenuItem } from "@/web/common/components/ContextMenu/ViewContextMenuItem";
+import { ViewDetailsMenuItem } from "@/web/common/components/ContextMenu/ViewDetailsMenuItem";
+import { ViewTableMenuItem } from "@/web/common/components/ContextMenu/ViewTableMenuItem";
 import { closeContextMenu } from "@/web/common/store/contextMenuActions";
 import { useAnchorPosition, useContextMenuContext } from "@/web/common/store/contextMenuStore";
 
@@ -20,29 +23,28 @@ export const ContextMenu = () => {
 
   const isOpen = Boolean(anchorPosition);
 
+  const contextNode = contextMenuContext.node;
+  const contextEdge = contextMenuContext.edge;
+  const contextPart = contextNode ?? contextEdge;
+
   // create these based on what's set in the context
   const menuItems = [
+    // view actions (so that this functionality is still available if indicators are hidden)
+    contextPart && <ViewDetailsMenuItem graphPart={contextPart} key={1} />,
+    contextNode?.type === "problem" && <ViewTableMenuItem node={contextNode} key={2} />,
+    contextPart && <ViewContextMenuItem graphPart={contextPart} key={3} />,
+
     // CRUD actions
-    !contextMenuContext.node && !contextMenuContext.edge && (
-      <AddNodeMenuItem parentMenuOpen={isOpen} key={9} />
-    ),
-    contextMenuContext.node && (
-      <ChangeNodeTypeMenuItem node={contextMenuContext.node} parentMenuOpen={isOpen} key={7} />
-    ),
-    contextMenuContext.edge && (
-      <ChangeEdgeTypeMenuItem edge={contextMenuContext.edge} parentMenuOpen={isOpen} key={8} />
-    ),
-    contextMenuContext.node && <DeleteNodeMenuItem node={contextMenuContext.node} key={5} />,
-    contextMenuContext.edge && <DeleteEdgeMenuItem edge={contextMenuContext.edge} key={6} />,
+    contextPart === undefined && <AddNodeMenuItem parentMenuOpen={isOpen} key={9} />,
+    contextNode && <ChangeNodeTypeMenuItem node={contextNode} parentMenuOpen={isOpen} key={7} />,
+    contextEdge && <ChangeEdgeTypeMenuItem edge={contextEdge} parentMenuOpen={isOpen} key={8} />,
+    contextNode && <DeleteNodeMenuItem node={contextNode} key={5} />,
+    contextEdge && <DeleteEdgeMenuItem edge={contextEdge} key={6} />,
 
     // show/hide actions
-    contextMenuContext.node && (
-      <AlsoShowNodeAndNeighborsMenuItem node={contextMenuContext.node} key={11} />
-    ),
-    contextMenuContext.node && (
-      <OnlyShowNodeAndNeighborsMenuItem node={contextMenuContext.node} key={12} />
-    ),
-    contextMenuContext.node && <HideMenuItem node={contextMenuContext.node} key={13} />,
+    contextNode && <AlsoShowNodeAndNeighborsMenuItem node={contextNode} key={11} />,
+    contextNode && <OnlyShowNodeAndNeighborsMenuItem node={contextNode} key={12} />,
+    contextNode && <HideMenuItem node={contextNode} key={13} />,
 
     // ensure there's never an empty context menu; that shows an empty bubble and feels awkward
     <ContextMenuItem key={10}>Cancel</ContextMenuItem>,

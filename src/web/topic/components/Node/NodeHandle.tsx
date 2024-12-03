@@ -1,12 +1,13 @@
 import { Visibility } from "@mui/icons-material";
 import { IconButton, Tooltip, Typography } from "@mui/material";
 import { ReactNode, memo } from "react";
-import { Position } from "reactflow";
+import { Handle, Position } from "reactflow";
 
 import { nodeTypes } from "@/common/node";
-import { StyledHandle } from "@/web/topic/components/Node/NodeHandle.styles";
+import { useSessionUser } from "@/web/common/hooks";
 import { useHiddenNodes } from "@/web/topic/hooks/flowHooks";
 import { useNeighborsInDirection } from "@/web/topic/store/nodeHooks";
+import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { Node, RelationDirection } from "@/web/topic/utils/graph";
 import { Orientation } from "@/web/topic/utils/layout";
 import { nodeDecorations } from "@/web/topic/utils/node";
@@ -33,6 +34,9 @@ interface Props {
 }
 
 const NodeHandleBase = ({ node, direction, orientation }: Props) => {
+  const { sessionUser } = useSessionUser();
+  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
+
   const neighborsInDirection = useNeighborsInDirection(node.id, direction);
   const hiddenNeighbors = useHiddenNodes(neighborsInDirection);
 
@@ -41,6 +45,9 @@ const NodeHandleBase = ({ node, direction, orientation }: Props) => {
     const diff = nodeTypes.indexOf(a.type) - nodeTypes.indexOf(b.type);
     return diff;
   });
+
+  const hasHiddenNeighbors = sortedHiddenNeighbors.length > 0;
+  const showHandle = userCanEditTopicData || hasHiddenNeighbors;
 
   const type = direction === "parent" ? "target" : "source";
 
@@ -56,7 +63,7 @@ const NodeHandleBase = ({ node, direction, orientation }: Props) => {
   return (
     <Tooltip
       title={
-        sortedHiddenNeighbors.length > 0 ? (
+        hasHiddenNeighbors ? (
           <div className="space-y-2">
             {sortedHiddenNeighbors.map((neighbor) => (
               <NodeSummary
@@ -76,10 +83,14 @@ const NodeHandleBase = ({ node, direction, orientation }: Props) => {
       }
       disableFocusListener
     >
-      <StyledHandle
+      <Handle
         type={type}
         position={position}
-        hasHiddenComponents={sortedHiddenNeighbors.length > 0}
+        className={
+          "size-[10px]" +
+          (!showHandle ? " invisible" : "") +
+          (hasHiddenNeighbors ? " bg-info-main" : "")
+        }
       />
     </Tooltip>
   );
