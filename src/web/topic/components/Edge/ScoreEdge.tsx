@@ -125,6 +125,21 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
     />
   );
 
+  /**
+   * Allow edges to be more-easily hovered/clicked, based on a wider width than what is visibly drawn.
+   * Taken from react flow's implementation https://github.com/xyflow/xyflow/blob/616d2665235447e0280368228ac64b987afecba0/packages/react/src/components/Edges/BaseEdge.tsx#L35-L43
+   */
+  const hiddenInteractivePath = (
+    <path
+      className="react-flow__edge-interaction"
+      d={pathDefinition}
+      fill="none"
+      strokeOpacity={0}
+      strokeWidth={20}
+      onClick={() => setSelected(edge.id)}
+    />
+  );
+
   const labelText = edge.data.customLabel ?? lowerCase(edge.label);
 
   const label = (
@@ -165,6 +180,7 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
         {/* shouldn't need an svg marker def per edge, but it's easiest to just put here */}
         {svgMarkerDef(inReactFlow, spotlight)}
         {path}
+        {hiddenInteractivePath}
 
         {/* see for example usage https://reactflow.dev/docs/api/edges/edge-label-renderer/ */}
         <EdgeLabelRenderer>{label}</EdgeLabelRenderer>
