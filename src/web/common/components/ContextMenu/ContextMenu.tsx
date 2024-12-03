@@ -9,6 +9,9 @@ import { DeleteEdgeMenuItem } from "@/web/common/components/ContextMenu/DeleteEd
 import { DeleteNodeMenuItem } from "@/web/common/components/ContextMenu/DeleteNodeMenuItem";
 import { HideMenuItem } from "@/web/common/components/ContextMenu/HideMenuItem";
 import { OnlyShowNodeAndNeighborsMenuItem } from "@/web/common/components/ContextMenu/OnlyShowNodeAndNeighborsMenuItem";
+import { ViewContextMenuItem } from "@/web/common/components/ContextMenu/ViewContextMenuItem";
+import { ViewDetailsMenuItem } from "@/web/common/components/ContextMenu/ViewDetailsMenuItem";
+import { ViewTableMenuItem } from "@/web/common/components/ContextMenu/ViewTableMenuItem";
 import { closeContextMenu } from "@/web/common/store/contextMenuActions";
 import { useAnchorPosition, useContextMenuContext } from "@/web/common/store/contextMenuStore";
 
@@ -26,6 +29,11 @@ export const ContextMenu = () => {
 
   // create these based on what's set in the context
   const menuItems = [
+    // view actions (so that this functionality is still available if indicators are hidden)
+    contextPart && <ViewDetailsMenuItem graphPart={contextPart} key={1} />,
+    contextNode?.type === "problem" && <ViewTableMenuItem node={contextNode} key={2} />,
+    contextPart && <ViewContextMenuItem graphPart={contextPart} key={3} />,
+
     // CRUD actions
     contextPart === undefined && <AddNodeMenuItem parentMenuOpen={isOpen} key={9} />,
     contextNode && <ChangeNodeTypeMenuItem node={contextNode} parentMenuOpen={isOpen} key={7} />,
