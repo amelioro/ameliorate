@@ -13,8 +13,12 @@ const config = {
   project: {
     link: githubRepo,
   },
-  // TODO: Make this identical to the logo in the main app (i.e. add "Alpha", and "Ameliorate")
-  logo: <Image src={faviconPng} height={32} width={32} alt="home" />,
+  logo: (
+    <div className="_flex _items-center _gap-2">
+      <Image src={faviconPng} alt="home" height={32} width={32} />
+      <span className="_text-xl _font-medium">Ameliorate</span>
+    </div>
+  ),
   logoLink: "https://ameliorate.app",
   chat: {
     link: discordInvite,
