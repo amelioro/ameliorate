@@ -14,6 +14,7 @@ const meta = {
   },
   "discourse-sessions": "",
   "release-status": "",
+  "roles-to-fill": "",
   faq: "FAQ",
 };
 
