@@ -123,7 +123,11 @@ div.style.lineHeight = "1";
 div.style.fontFamily = "inherit";
 div.style.overflow = "hidden";
 div.style.visibility = "hidden"; // don't show in DOM but still be added to it so height calcs work
-div.style.position = "absolute"; // don't affect layout (visibility: hidden otherwise still affects layout)
+// Don't affect layout (visibility: hidden otherwise still affects layout).
+// Cannot for the life of me figure out why `absolute` still affects layout when tutorial is opened,
+// yet `fixed` doesn't - Mozilla docs suggest the only difference is that `absolute` can be
+// positioned relative to a positioned ancestor, but here there are no positioned ancestors.
+div.style.position = "fixed";
 div.tabIndex = -1;
 div.ariaHidden = "true";
 document.body.appendChild(div);
