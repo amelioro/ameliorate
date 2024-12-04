@@ -6,6 +6,8 @@ All contributors (with GitHub accounts) will be recognized by being added to the
 
 If you're new to open source, you'll probably find [this open source guide](https://opensource.guide/how-to-contribute) useful.
 
+If you're interested in playing a specific role for the project, check out [Roles to Fill](https://ameliorate.app/docs/roles-to-fill).
+
 ## Code of Conduct
 
 This project adheres to the Contributor Covenant [code of conduct](https://github.com/amelioro/ameliorate/blob/main/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
@@ -46,7 +48,7 @@ Note: be particularly wary of [issues with a "needs [x]" label](https://github.c
 
 ### Non-code contributions
 
-There are many ways to contribute without coding! [Providing feedback](#providing-feedback), building example diagrams, joining [discourse sessions](https://ameliorate.app/docs/discourse-sessions), sharing about the tool, creating/updating docs, etc. Check out the https://github.com/amelioro/ameliorate/labels/non-code issues for some specific tickets.
+There are many ways to contribute without coding! [Providing feedback](#providing-feedback), building example diagrams, joining [discourse sessions](https://ameliorate.app/docs/discourse-sessions), sharing about the tool, creating/updating docs, etc. Check out the https://github.com/amelioro/ameliorate/labels/non-code issues for some specific tickets, and [Roles to Fill](https://ameliorate.app/docs/roles-to-fill) for specific roles you can help fill.
 
 ## Running the project
 
