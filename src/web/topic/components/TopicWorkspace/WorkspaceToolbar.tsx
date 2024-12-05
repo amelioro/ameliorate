@@ -151,7 +151,7 @@ export const WorkspaceToolbar = () => {
               onClick={() =>
                 isComparingPerspectives ? resetPerspectives() : comparePerspectives()
               }
-              sx={{ borderRadius: "50%", border: "0" }}
+              className="rounded-full border-none"
             >
               <Group />
             </ToggleButton>
@@ -171,7 +171,7 @@ export const WorkspaceToolbar = () => {
             size="small"
             selected={flashlightMode}
             onClick={() => toggleFlashlightMode(!flashlightMode)}
-            sx={{ borderRadius: "50%", border: "0" }}
+            className="rounded-full border-none"
           >
             <Highlight />
           </ToggleButton>
@@ -186,7 +186,7 @@ export const WorkspaceToolbar = () => {
             size="small"
             selected={readonlyMode}
             onClick={() => toggleReadonlyMode()}
-            sx={{ borderRadius: "50%", border: "0" }}
+            className="rounded-full border-none"
           >
             <EditOff />
           </ToggleButton>
@@ -234,12 +234,10 @@ export const WorkspaceToolbar = () => {
             <IconButton
               color="error"
               aria-label="Error info"
-              sx={{
-                // Don't make it look like clicking will do something, since it won't.
-                // Using a button here is an attempt to make it accessible, since the tooltip will show
-                // on focus.
-                cursor: "default",
-              }}
+              // Don't make it look like clicking will do something, since it won't.
+              // Using a button here is an attempt to make it accessible, since the tooltip will show
+              // on focus.
+              className="cursor-default"
             >
               <Error />
             </IconButton>
