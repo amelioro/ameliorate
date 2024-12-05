@@ -9,6 +9,7 @@ import {
   Highlight,
   QuestionMark,
   Redo,
+  SelfImprovement,
   Undo,
 } from "@mui/icons-material";
 import { AppBar, Divider, IconButton, ToggleButton, Toolbar, Tooltip } from "@mui/material";
@@ -24,6 +25,7 @@ import { useOnPlayground } from "@/web/topic/store/topicHooks";
 import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { redo, undo } from "@/web/topic/store/utilActions";
 import { useTemporalHooks } from "@/web/topic/store/utilHooks";
+import { hotkeys } from "@/web/topic/utils/hotkeys";
 import {
   toggleFlashlightMode,
   toggleReadonlyMode,
@@ -41,6 +43,7 @@ import {
   resetPerspectives,
   useIsComparingPerspectives,
 } from "@/web/view/perspectiveStore";
+import { toggleZenMode, useZenMode } from "@/web/view/userConfigStore";
 
 export const WorkspaceToolbar = () => {
   const { sessionUser } = useSessionUser();
@@ -50,6 +53,7 @@ export const WorkspaceToolbar = () => {
   const [canUndo, canRedo] = useTemporalHooks();
   const [canGoBack, canGoForward] = useCanGoBackForward();
 
+  const zenMode = useZenMode();
   const isComparingPerspectives = useIsComparingPerspectives();
   const flashlightMode = useFlashlightMode();
   const readonlyMode = useReadonlyMode();
@@ -137,10 +141,23 @@ export const WorkspaceToolbar = () => {
           </>
         )}
 
+        <Divider orientation="vertical" flexItem />
+
+        <ToggleButton
+          value={zenMode}
+          title={`Zen mode (${hotkeys.zenMode})`}
+          aria-label={`Zen mode (${hotkeys.zenMode})`}
+          color="primary"
+          size="small"
+          selected={zenMode}
+          onClick={() => toggleZenMode()}
+          className="rounded-full border-none"
+        >
+          <SelfImprovement />
+        </ToggleButton>
+
         {!onPlayground && (
           <>
-            <Divider orientation="vertical" flexItem />
-
             <ToggleButton
               value={isComparingPerspectives}
               title="Compare perspectives"
@@ -171,7 +188,7 @@ export const WorkspaceToolbar = () => {
             size="small"
             selected={flashlightMode}
             onClick={() => toggleFlashlightMode(!flashlightMode)}
-            className="rounded-full border-none"
+            className="hidden rounded-full border-none sm:flex" // hide on mobile because there's not enough space
           >
             <Highlight />
           </ToggleButton>
@@ -180,8 +197,8 @@ export const WorkspaceToolbar = () => {
         {readonlyMode && (
           <ToggleButton
             value={readonlyMode}
-            title="Read-only mode"
-            aria-label="Read-only mode"
+            title={`Read-only mode (${hotkeys.readonlyMode})`}
+            aria-label={`Read-only mode (${hotkeys.readonlyMode})`}
             color="primary"
             size="small"
             selected={readonlyMode}

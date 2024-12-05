@@ -12,6 +12,7 @@ import { Node, RelationDirection } from "@/web/topic/utils/graph";
 import { Orientation } from "@/web/topic/utils/layout";
 import { nodeDecorations } from "@/web/topic/utils/node";
 import { showNode } from "@/web/view/currentViewStore/filter";
+import { useZenMode } from "@/web/view/userConfigStore";
 
 const NodeSummary = ({ node, beforeSlot }: { node: Node; beforeSlot?: ReactNode }) => {
   const { NodeIcon, title } = nodeDecorations[node.type];
@@ -37,6 +38,7 @@ const NodeHandleBase = ({ node, direction, orientation }: Props) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
 
+  const zenMode = useZenMode();
   const neighborsInDirection = useNeighborsInDirection(node.id, direction);
   const hiddenNeighbors = useHiddenNodes(neighborsInDirection);
 
@@ -47,7 +49,7 @@ const NodeHandleBase = ({ node, direction, orientation }: Props) => {
   });
 
   const hasHiddenNeighbors = sortedHiddenNeighbors.length > 0;
-  const showHandle = userCanEditTopicData || hasHiddenNeighbors;
+  const showHandle = !zenMode && (userCanEditTopicData || hasHiddenNeighbors);
 
   const type = direction === "parent" ? "target" : "source";
 

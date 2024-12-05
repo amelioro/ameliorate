@@ -10,6 +10,7 @@ export const hotkeys = {
   readonlyMode: "Alt + R",
   pan: "Up, Down, Left, Right",
   score: "1, 2, 3, 4, 5, 6, 7, 8, 9, -",
+  zenMode: "Alt + Z",
   zoomIn: "Ctrl + =",
   zoomOut: "Ctrl + -",
 };
