@@ -71,12 +71,7 @@ export const Score = ({ graphPartId }: ScoreProps) => {
 
   // always show score on table because the main purpose of the table is to compare scores
   const showScore = !zenMode || workspaceContext === "table";
-  // allow score to be hidden but still show on hover/select so it's discoverable
-  const showScoreClasses = showScore
-    ? ""
-    : " hidden" +
-      " [.diagram-node:hover_&]:flex [.diagram-node.selected_&]:flex" +
-      " [.diagram-edge:hover_&]:flex [.diagram-edge.selected_&]:flex";
+  const showScoreClasses = showScore ? "" : " hidden";
 
   if (!isInteractive) {
     return <ScoreButton userScores={userScores} className={showScoreClasses} />;

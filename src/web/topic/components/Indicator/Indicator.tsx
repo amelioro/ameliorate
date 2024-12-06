@@ -38,12 +38,6 @@ export const Indicator = ({
 
   // no need to hide indicators that aren't for graph parts e.g. JustificationTreeIndicator
   const showIndicator = !zenMode || !graphPartIndicator;
-  // allow score to be hidden but still show on hover/select so it's discoverable
-  const showIndicatorClasses = showIndicator
-    ? ""
-    : " hidden" +
-      " [.diagram-node:hover_&]:flex [.diagram-node.selected_&]:flex" +
-      " [.diagram-edge:hover_&]:flex [.diagram-edge.selected_&]:flex";
 
   return (
     <>
@@ -57,7 +51,7 @@ export const Indicator = ({
           // text-base seems to fit more snuggly than the default 14px
           "border border-solid border-neutral-main text-base shadow-none" +
           (!onClick ? " pointer-events-none" : "") +
-          showIndicatorClasses
+          (showIndicator ? "" : " hidden")
         }
       >
         <Icon color="neutralContrast" fontSize="inherit" />
