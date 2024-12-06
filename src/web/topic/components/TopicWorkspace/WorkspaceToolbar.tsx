@@ -9,7 +9,7 @@ import {
   Highlight,
   QuestionMark,
   Redo,
-  SelfImprovement,
+  TabUnselected,
   Undo,
 } from "@mui/icons-material";
 import { AppBar, Divider, IconButton, ToggleButton, Toolbar, Tooltip } from "@mui/material";
@@ -43,7 +43,7 @@ import {
   resetPerspectives,
   useIsComparingPerspectives,
 } from "@/web/view/perspectiveStore";
-import { toggleZenMode, useZenMode } from "@/web/view/userConfigStore";
+import { toggleShowIndicators, useShowIndicators } from "@/web/view/userConfigStore";
 
 export const WorkspaceToolbar = () => {
   const { sessionUser } = useSessionUser();
@@ -53,7 +53,7 @@ export const WorkspaceToolbar = () => {
   const [canUndo, canRedo] = useTemporalHooks();
   const [canGoBack, canGoForward] = useCanGoBackForward();
 
-  const zenMode = useZenMode();
+  const showIndicators = useShowIndicators();
   const isComparingPerspectives = useIsComparingPerspectives();
   const flashlightMode = useFlashlightMode();
   const readonlyMode = useReadonlyMode();
@@ -144,16 +144,16 @@ export const WorkspaceToolbar = () => {
         <Divider orientation="vertical" flexItem />
 
         <ToggleButton
-          value={zenMode}
-          title={`Zen mode (${hotkeys.zenMode})`}
-          aria-label={`Zen mode (${hotkeys.zenMode})`}
+          value={showIndicators}
+          title={`Show indicators (${hotkeys.showIndicators})`}
+          aria-label={`Show indicators (${hotkeys.showIndicators})`}
           color="primary"
           size="small"
-          selected={zenMode}
-          onClick={() => toggleZenMode()}
+          selected={showIndicators}
+          onClick={() => toggleShowIndicators()}
           className="rounded-full border-none"
         >
-          <SelfImprovement />
+          <TabUnselected />
         </ToggleButton>
 
         {!onPlayground && (

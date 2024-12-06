@@ -52,17 +52,17 @@ export const FlowNode = (flowNode: NodeProps) => {
     setAnimated(true);
   }, []);
 
-  const hoverShowAddButtons =
+  const showAddButtonsClasses =
     "[.selectable:hover_>_&]:flex [.selectable:has(>_div_>_.selected)_>_&]:flex";
 
-  const positionParentButtons =
+  const positionParentButtonsClasses =
     orientation === "DOWN"
       ? // have to use [arbitrary] tw values because can't apply two translate-x-* class names
         // `left-1/2 top-0 -translate-x-1/2 translate-y-[calc(-100%-${nodeBridgeGap}px)]`
         // also can't use `${nodeBridgeGap}` because tw classes are detected based on full class names being present in the source file https://tailwindcss.com/docs/content-configuration#dynamic-class-names
         `left-1/2 top-0 -translate-x-1/2 translate-y-[calc(-100%-16px)]`
       : `top-1/2 left-0 -translate-y-1/2 translate-x-[calc(-100%-16px)]`;
-  const positionChildButtons =
+  const positionChildButtonsClasses =
     orientation === "DOWN"
       ? `left-1/2 bottom-0 -translate-x-1/2 translate-y-[calc(100%+16px)]`
       : `top-1/2 right-0 -translate-y-1/2 translate-x-[calc(100%+16px)]`;
@@ -80,7 +80,7 @@ export const FlowNode = (flowNode: NodeProps) => {
           fromNodeType={node.type}
           as="parent"
           orientation={orientation}
-          className={`absolute hidden ${hoverShowAddButtons} ${positionParentButtons}`}
+          className={`absolute hidden ${showAddButtonsClasses} ${positionParentButtonsClasses}`}
         />
       )}
 
@@ -104,7 +104,7 @@ export const FlowNode = (flowNode: NodeProps) => {
           fromNodeType={node.type}
           as="child"
           orientation={orientation}
-          className={`absolute hidden ${hoverShowAddButtons} ${positionChildButtons}`}
+          className={`absolute hidden ${showAddButtonsClasses} ${positionChildButtonsClasses}`}
         />
       )}
     </>

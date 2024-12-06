@@ -3,6 +3,7 @@ import { MouseEventHandler } from "react";
 
 import { StyledButton } from "@/web/topic/components/Indicator/Indicator.styles";
 import { MuiIcon } from "@/web/topic/utils/node";
+import { useShowIndicators } from "@/web/view/userConfigStore";
 
 interface IndicatorProps {
   Icon: MuiIcon;
@@ -10,6 +11,10 @@ interface IndicatorProps {
   onClick?: MouseEventHandler<HTMLButtonElement>;
   color?: ButtonProps["color"];
   filled?: boolean;
+  /**
+   * true if this indicator is for a node or edge; example of false is JustificationTreeIndicator
+   */
+  graphPartIndicator?: boolean;
 }
 
 export const Indicator = ({
@@ -18,7 +23,10 @@ export const Indicator = ({
   onClick,
   color = "neutral",
   filled = true,
+  graphPartIndicator = true,
 }: IndicatorProps) => {
+  const showIndicators = useShowIndicators();
+
   const onClickHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (onClick) {
       // In most cases, we don't want the click to result in selecting the parent node.
@@ -27,6 +35,9 @@ export const Indicator = ({
       onClick(event);
     }
   };
+
+  // no need to hide indicators that aren't for graph parts e.g. JustificationTreeIndicator
+  const showIndicator = showIndicators || !graphPartIndicator;
 
   return (
     <>
@@ -39,7 +50,8 @@ export const Indicator = ({
         className={
           // text-base seems to fit more snuggly than the default 14px
           "border border-solid border-neutral-main text-base shadow-none" +
-          ` ${!onClick ? "pointer-events-none" : ""}`
+          (!onClick ? " pointer-events-none" : "") +
+          (showIndicator ? "" : " hidden")
         }
       >
         <Icon color="neutralContrast" fontSize="inherit" />

@@ -21,11 +21,11 @@ import { userCanEditScores } from "@/web/topic/utils/score";
 import { getReadonlyMode, toggleReadonlyMode } from "@/web/view/actionConfigStore";
 import { getSelectedGraphPart, setSelected, useFormat } from "@/web/view/currentViewStore/store";
 import { getPerspectives } from "@/web/view/perspectiveStore";
-import { toggleZenMode } from "@/web/view/userConfigStore";
+import { toggleShowIndicators } from "@/web/view/userConfigStore";
 
 const useWorkspaceHotkeys = (user: { username: string } | null | undefined) => {
   useHotkeys([hotkeys.deselectPart], () => setSelected(null));
-  useHotkeys([hotkeys.zenMode], () => toggleZenMode());
+  useHotkeys([hotkeys.showIndicators], () => toggleShowIndicators());
   useHotkeys([hotkeys.readonlyMode], () => toggleReadonlyMode());
 
   useHotkeys([hotkeys.score], (_, hotkeysEvent) => {

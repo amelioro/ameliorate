@@ -33,6 +33,7 @@ interface Props {
 const EditableNodeBase = ({ node, className = "" }: Props) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
+
   const unrestrictedEditing = useUnrestrictedEditing();
   const fillNodesWithColor = useFillNodesWithColor();
   const selected = useIsGraphPartSelected(node.id);
@@ -109,7 +110,13 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
 
   return (
     <NodeBox
-      className={className + (selected ? " selected" : "")}
+      className={
+        className +
+        // allow other components to apply conditional css related to this node, e.g. when it's hovered/selected
+        // separate from react-flow__node because sometimes nodes are rendered outside of react-flow (e.g. details pane), and we still want to style these
+        " diagram-node" +
+        (selected ? " selected" : "")
+      }
       onClick={() => {
         if (context != "details") setSelected(node.id);
       }}

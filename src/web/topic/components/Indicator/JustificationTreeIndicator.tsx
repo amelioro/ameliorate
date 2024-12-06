@@ -35,6 +35,7 @@ export const JustificationTreeIndicator = ({ graphPartId }: Props) => {
       filled={justificationCount > 0}
       title={title}
       onClick={justificationCount > 0 ? onClick : undefined}
+      graphPartIndicator={false}
     />
   );
 };
