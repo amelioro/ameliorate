@@ -1,3 +1,4 @@
+import { TabUnselected } from "@mui/icons-material";
 import { Button, Typography } from "@mui/material";
 import { StepType } from "@reactour/tour";
 import Image from "next/image";
@@ -87,7 +88,8 @@ export const getReadingDiagramSteps = (nextTutorial?: Tutorial | null): StepType
         text={
           <span>
             Scores convey positive or negative opinion about a node or edge. If you're logged in,
-            you can score other people's topics.
+            you can score other people's topics. Click the "Show indicators" button{" "}
+            <TabUnselected /> in the toolbar to show scores and other indicators.
             <br />
             <br />
             Here we're saying that we think pedestrians getting hit is a big concern, and that

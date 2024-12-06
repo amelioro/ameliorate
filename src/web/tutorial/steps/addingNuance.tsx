@@ -1,3 +1,4 @@
+import { TabUnselected } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import { StepType } from "@reactour/tour";
 import Image from "next/image";
@@ -16,7 +17,9 @@ export const addingNuanceSteps: StepType[] = [
         stepTitle="Scoring"
         text={
           <span>
-            You can use scores to convey positive or negative opinion about nodes and edges.
+            You can use scores to convey positive or negative opinion about nodes and edges. Click
+            the "Show indicators" button <TabUnselected /> in the toolbar to show scores and other
+            indicators.
             <br />
             <br />
             Here we're saying that we think pedestrians getting hit is a big concern, and that
