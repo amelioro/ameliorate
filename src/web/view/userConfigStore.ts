@@ -8,7 +8,7 @@ interface UserConfigStoreState {
 }
 
 const initialState: UserConfigStoreState = {
-  zenMode: false,
+  zenMode: true,
   fillNodesWithColor: false,
   indicateWhenNodeForcedToShow: false,
 };
