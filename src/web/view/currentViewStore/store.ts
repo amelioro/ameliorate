@@ -106,7 +106,7 @@ export const initialViewState: ViewState = {
 
   forceNodesIntoLayers: true,
   layerNodeIslandsTogether: false,
-  minimizeEdgeCrossings: true,
+  minimizeEdgeCrossings: false,
   avoidEdgeLabelOverlap: false,
   layoutThoroughness: 100, // by default, prefer keeping parents close to children over keeping node types together
 };
