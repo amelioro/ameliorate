@@ -15,7 +15,7 @@ import { useOnPlayground } from "@/web/topic/store/topicHooks";
 import { userCanEditScores } from "@/web/topic/utils/score";
 import { useReadonlyMode } from "@/web/view/actionConfigStore";
 import { usePerspectives } from "@/web/view/perspectiveStore";
-import { useZenMode } from "@/web/view/userConfigStore";
+import { useShowIndicators } from "@/web/view/userConfigStore";
 
 const circleDiameter = 6 * buttonDiameterRem; // no collisions for fitting 10 elements
 
@@ -31,7 +31,7 @@ export const Score = ({ graphPartId }: ScoreProps) => {
   const onPlayground = useOnPlayground();
   const workspaceContext = useContext(WorkspaceContext);
 
-  const zenMode = useZenMode();
+  const showIndicators = useShowIndicators();
   const readonlyMode = useReadonlyMode();
 
   const myUsername = onPlayground ? playgroundUsername : sessionUser?.username;
@@ -70,7 +70,7 @@ export const Score = ({ graphPartId }: ScoreProps) => {
   const isInteractive = hoverCircle !== undefined;
 
   // always show score on table because the main purpose of the table is to compare scores
-  const showScore = !zenMode || workspaceContext === "table";
+  const showScore = showIndicators || workspaceContext === "table";
   const showScoreClasses = showScore ? "" : " hidden";
 
   if (!isInteractive) {

@@ -3,7 +3,7 @@ import { MouseEventHandler } from "react";
 
 import { StyledButton } from "@/web/topic/components/Indicator/Indicator.styles";
 import { MuiIcon } from "@/web/topic/utils/node";
-import { useZenMode } from "@/web/view/userConfigStore";
+import { useShowIndicators } from "@/web/view/userConfigStore";
 
 interface IndicatorProps {
   Icon: MuiIcon;
@@ -25,7 +25,7 @@ export const Indicator = ({
   filled = true,
   graphPartIndicator = true,
 }: IndicatorProps) => {
-  const zenMode = useZenMode();
+  const showIndicators = useShowIndicators();
 
   const onClickHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (onClick) {
@@ -37,7 +37,7 @@ export const Indicator = ({
   };
 
   // no need to hide indicators that aren't for graph parts e.g. JustificationTreeIndicator
-  const showIndicator = !zenMode || !graphPartIndicator;
+  const showIndicator = showIndicators || !graphPartIndicator;
 
   return (
     <>

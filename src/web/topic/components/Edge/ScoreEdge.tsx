@@ -27,7 +27,7 @@ import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { Edge } from "@/web/topic/utils/graph";
 import { useUnrestrictedEditing } from "@/web/view/actionConfigStore";
 import { setSelected, useDrawSimpleEdgePaths } from "@/web/view/currentViewStore/store";
-import { useZenMode } from "@/web/view/userConfigStore";
+import { useShowIndicators } from "@/web/view/userConfigStore";
 
 const flowMarkerId = "flowMarker";
 const nonFlowMarkerId = "nonFlowMarker";
@@ -98,7 +98,7 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
 
   const unrestrictedEditing = useUnrestrictedEditing();
-  const zenMode = useZenMode();
+  const showIndicators = useShowIndicators();
   const drawSimpleEdgePaths = useDrawSimpleEdgePaths();
 
   const edge = convertToEdge(flowEdge);
@@ -155,8 +155,8 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
       className={
         // pointer-events and cursor are set because this div is within an SVG and doesn't handle pointer-events properly by default
         "[pointer-events:all] cursor-default flex flex-col items-center justify-center bg-white p-1 rounded-xl" +
-        // during zenMode, div only contains the label text (no indicators), so border doesn't seem necessary (if this looks awkward, we can always show border instead)
-        (zenMode && spotlight === "normal" ? " border-none" : "") +
+        // when hiding indicators, div only contains the label text, so border doesn't seem necessary (if this looks awkward, we can always show border instead)
+        (!showIndicators && spotlight === "normal" ? " border-none" : "") +
         // allow other components to apply conditional css related to this edge, e.g. when it's hovered/selected
         // separate from react-flow__edge because sometimes edges are rendered outside of react-flow (e.g. details pane), and we still want to style these
         " diagram-edge" +
