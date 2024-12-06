@@ -16,6 +16,7 @@ interface ScoreButtonProps {
   onMouseLeave?: () => void;
   zoomRatio?: number;
   userScores: Record<string, ScoreData>;
+  className?: string;
 }
 
 export const ScoreButton = ({
@@ -25,6 +26,7 @@ export const ScoreButton = ({
   onMouseLeave,
   zoomRatio = 1,
   userScores,
+  className = "",
 }: ScoreButtonProps) => {
   const isComparing = Object.keys(userScores).length > 1;
 
@@ -45,7 +47,8 @@ export const ScoreButton = ({
         className={
           "shadow-none border border-solid border-neutral-main" +
           ` ${isComparing ? "pointer-events-none z-0 bg-transparent" : ""}` +
-          ` ${onClick ? "" : "pointer-events-none"}`
+          ` ${onClick ? "" : "pointer-events-none"}` +
+          ` ${className}`
         }
       >
         {isComparing && (

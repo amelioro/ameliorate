@@ -156,7 +156,11 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
         // pointer-events and cursor are set because this div is within an SVG and doesn't handle pointer-events properly by default
         "[pointer-events:all] cursor-default flex flex-col items-center justify-center bg-white p-1 rounded-xl" +
         // during zenMode, div only contains the label text (no indicators), so border doesn't seem necessary (if this looks awkward, we can always show border instead)
-        (zenMode && spotlight === "normal" ? " border-none" : "")
+        (zenMode && spotlight === "normal" ? " border-none hover:border-solid" : "") +
+        // allow other components to apply conditional css related to this edge, e.g. when it's hovered/selected
+        // separate from react-flow__edge because sometimes edges are rendered outside of react-flow (e.g. details pane), and we still want to style these
+        " diagram-edge" +
+        (flowEdge.selected ? " selected" : "")
       }
     >
       <CommonIndicators graphPart={edge} notes={edge.data.notes} />
