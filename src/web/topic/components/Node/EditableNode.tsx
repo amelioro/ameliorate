@@ -72,11 +72,6 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
   const NodeIcon = nodeDecoration.NodeIcon;
   const typeText = node.data.customType ?? nodeDecoration.title;
 
-  // Require selecting a node before editing it, because oftentimes you'll want to select a node to
-  // view more details, and the editing will be distracting. Only edit after clicking when selected.
-  // Details nodes are always editable, because clicking does not select them.
-  const editable = userCanEditTopicData && (context === "details" || selected);
-
   const customizable = userCanEditTopicData && (unrestrictedEditing || node.type === "custom");
 
   const backgroundColorType: ButtonProps["color"] =
@@ -117,10 +112,9 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
         " diagram-node" +
         (selected ? " selected" : "")
       }
-      onClick={() => {
-        if (context != "details") setSelected(node.id);
-      }}
+      onClick={() => setSelected(node.id)}
       onContextMenu={(event) => openContextMenu(event, { node })}
+      role="button"
       sx={nodeStyles}
     >
       <TopDiv className="flex h-6 items-center justify-between">
@@ -149,11 +143,20 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
           placeholder="Enter text..."
           defaultValue={node.data.label}
           maxRows={3}
+          // Prevent selecting node when we want to just edit text.
+          // Particularly important for enabling text editing in details pane without selecting the node.
+          onClick={(event) => event.stopPropagation()}
           onBlur={(event) => {
             if (event.target.value !== node.data.label) setNodeLabel(node, event.target.value);
           }}
           className="nopan" // allow regular text input drag functionality without using reactflow's pan behavior
-          readOnly={!editable}
+          // Previously required selecting a node before editing its text, because oftentimes you'll
+          // want to select a node to view more details and the editing will be distracting, but
+          // "cursor: pointer" on the node box allows selecting the node without clicking the text.
+          // We'll want to keep an eye out on if selecting vs editing is annoying on mobile, because
+          // of the lack of hover to convey which one your click will perform.
+          readOnly={!userCanEditTopicData}
+          spellCheck="false" // often may use terms not in dictionary, and we override browser context menu so we can't "add to dictionary"
         />
       </MiddleDiv>
       <BottomDiv className="relative">

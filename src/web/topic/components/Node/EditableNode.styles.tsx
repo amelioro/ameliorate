@@ -57,10 +57,6 @@ export const NodeBox = styled(Box)`
   border-width: 2px;
   border-style: solid;
 
-  // react-flow sets this to pan hand because nodes can't be moved, so dragging a node will pan, but
-  // we want to indicate that the node is selectable.
-  cursor: default;
-
   // avoid inheriting because flow node will wrap in a motion.div that ignores pointer events
   pointer-events: auto;
 
