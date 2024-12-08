@@ -150,6 +150,7 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
       labelX={labelX}
       labelY={labelY}
       onClick={() => setSelected(edge.id)}
+      role="button"
       onContextMenu={(event) => openContextMenu(event, { edge })}
       spotlight={spotlight}
       className={
