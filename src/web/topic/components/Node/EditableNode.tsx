@@ -112,6 +112,9 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
     <NodeBox
       className={
         className +
+        // react-flow sets cursor to pan hand because nodes can't be moved, so dragging a node will pan, but
+        // we want to allow the node to be selectable, so we override cursor to default
+        " cursor-default" +
         // allow other components to apply conditional css related to this node, e.g. when it's hovered/selected
         // separate from react-flow__node because sometimes nodes are rendered outside of react-flow (e.g. details pane), and we still want to style these
         " diagram-node" +
@@ -120,6 +123,7 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
       onClick={() => {
         if (context != "details") setSelected(node.id);
       }}
+      role="button"
       onContextMenu={(event) => openContextMenu(event, { node })}
       sx={nodeStyles}
     >
