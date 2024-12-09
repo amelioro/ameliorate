@@ -11,7 +11,7 @@ import {
   viewSolutionContext,
 } from "@/web/view/currentViewStore/filter";
 
-export const contextMethods: Partial<
+export const diagramPartContextMethods: Partial<
   Record<
     NodeType | RelationName,
     { useHasContext: (graphPartId: string) => boolean; viewContext: (graphPartId: string) => void }

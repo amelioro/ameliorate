@@ -15,7 +15,6 @@ import {
   PhotoCamera,
   PowerInput,
   Route,
-  ShowChart,
   SsidChart,
   Upload,
   WbTwilight,
@@ -68,12 +67,7 @@ import {
   useLayoutThoroughness,
   useMinimizeEdgeCrossings,
 } from "@/web/view/currentViewStore/layout";
-import {
-  resetView,
-  setDrawSimpleEdgePaths,
-  useDrawSimpleEdgePaths,
-  useFormat,
-} from "@/web/view/currentViewStore/store";
+import { resetView, useFormat } from "@/web/view/currentViewStore/store";
 import { resetQuickViews } from "@/web/view/quickViewStore/store";
 import {
   toggleFillNodesWithColor,
@@ -139,7 +133,6 @@ export const MoreActionsDrawer = ({
 
   const showImpliedEdges = useShowImpliedEdges();
   const showProblemCriterionSolutionEdges = useShowProblemCriterionSolutionEdges();
-  const drawSimpleEdgePaths = useDrawSimpleEdgePaths();
 
   const forceNodesIntoLayers = useForceNodesIntoLayers();
   const layerNodeIslandsTogether = useLayerNodeIslandsTogether();
@@ -292,51 +285,8 @@ export const MoreActionsDrawer = ({
 
         {!isTableActive && (
           <>
-            <Divider>Diagram Config</Divider>
+            <Divider>Layout Config</Divider>
 
-            {/* General showing/hiding diagram config */}
-            <ListItem disablePadding={false}>
-              <ToggleButton
-                value={showImpliedEdges}
-                title="Show implied edges"
-                aria-label="Show implied edges"
-                color="primary"
-                size="small"
-                selected={showImpliedEdges}
-                onClick={() => toggleShowImpliedEdges(!showImpliedEdges)}
-                sx={{ borderRadius: "50%", border: "0" }}
-              >
-                <Route />
-              </ToggleButton>
-              <ToggleButton
-                value={showProblemCriterionSolutionEdges}
-                title="Show edges between Problems, Criterion, and Solutions"
-                aria-label="Show edges between Problems, Criterion, and Solutions"
-                color="primary"
-                size="small"
-                selected={showProblemCriterionSolutionEdges}
-                onClick={() =>
-                  toggleShowProblemCriterionSolutionEdges(!showProblemCriterionSolutionEdges)
-                }
-                sx={{ borderRadius: "50%", border: "0" }}
-              >
-                <Grid4x4 />
-              </ToggleButton>
-              <ToggleButton
-                value={drawSimpleEdgePaths}
-                title="Draw edges using simple paths"
-                aria-label="Draw edges using simple paths"
-                color="primary"
-                size="small"
-                selected={drawSimpleEdgePaths}
-                onClick={() => setDrawSimpleEdgePaths(!drawSimpleEdgePaths)}
-                sx={{ borderRadius: "50%", border: "0" }}
-              >
-                <ShowChart />
-              </ToggleButton>
-            </ListItem>
-
-            {/* Layout config */}
             <ListItem disablePadding={false}>
               <ToggleButton
                 value={forceNodesIntoLayers}
@@ -417,6 +367,37 @@ export const MoreActionsDrawer = ({
                   if (value) setLayoutThoroughness(value);
                 }}
               />
+            </ListItem>
+
+            <Divider>Filter Config</Divider>
+
+            <ListItem disablePadding={false}>
+              <ToggleButton
+                value={showImpliedEdges}
+                title="Show implied edges"
+                aria-label="Show implied edges"
+                color="primary"
+                size="small"
+                selected={showImpliedEdges}
+                onClick={() => toggleShowImpliedEdges(!showImpliedEdges)}
+                sx={{ borderRadius: "50%", border: "0" }}
+              >
+                <Route />
+              </ToggleButton>
+              <ToggleButton
+                value={showProblemCriterionSolutionEdges}
+                title="Show edges between Problems, Criterion, and Solutions"
+                aria-label="Show edges between Problems, Criterion, and Solutions"
+                color="primary"
+                size="small"
+                selected={showProblemCriterionSolutionEdges}
+                onClick={() =>
+                  toggleShowProblemCriterionSolutionEdges(!showProblemCriterionSolutionEdges)
+                }
+                sx={{ borderRadius: "50%", border: "0" }}
+              >
+                <Grid4x4 />
+              </ToggleButton>
             </ListItem>
           </>
         )}
