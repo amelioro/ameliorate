@@ -285,39 +285,8 @@ export const MoreActionsDrawer = ({
 
         {!isTableActive && (
           <>
-            <Divider>Diagram Config</Divider>
+            <Divider>Layout Config</Divider>
 
-            {/* General showing/hiding diagram config */}
-            <ListItem disablePadding={false}>
-              <ToggleButton
-                value={showImpliedEdges}
-                title="Show implied edges"
-                aria-label="Show implied edges"
-                color="primary"
-                size="small"
-                selected={showImpliedEdges}
-                onClick={() => toggleShowImpliedEdges(!showImpliedEdges)}
-                sx={{ borderRadius: "50%", border: "0" }}
-              >
-                <Route />
-              </ToggleButton>
-              <ToggleButton
-                value={showProblemCriterionSolutionEdges}
-                title="Show edges between Problems, Criterion, and Solutions"
-                aria-label="Show edges between Problems, Criterion, and Solutions"
-                color="primary"
-                size="small"
-                selected={showProblemCriterionSolutionEdges}
-                onClick={() =>
-                  toggleShowProblemCriterionSolutionEdges(!showProblemCriterionSolutionEdges)
-                }
-                sx={{ borderRadius: "50%", border: "0" }}
-              >
-                <Grid4x4 />
-              </ToggleButton>
-            </ListItem>
-
-            {/* Layout config */}
             <ListItem disablePadding={false}>
               <ToggleButton
                 value={forceNodesIntoLayers}
@@ -398,6 +367,37 @@ export const MoreActionsDrawer = ({
                   if (value) setLayoutThoroughness(value);
                 }}
               />
+            </ListItem>
+
+            <Divider>Filter Config</Divider>
+
+            <ListItem disablePadding={false}>
+              <ToggleButton
+                value={showImpliedEdges}
+                title="Show implied edges"
+                aria-label="Show implied edges"
+                color="primary"
+                size="small"
+                selected={showImpliedEdges}
+                onClick={() => toggleShowImpliedEdges(!showImpliedEdges)}
+                sx={{ borderRadius: "50%", border: "0" }}
+              >
+                <Route />
+              </ToggleButton>
+              <ToggleButton
+                value={showProblemCriterionSolutionEdges}
+                title="Show edges between Problems, Criterion, and Solutions"
+                aria-label="Show edges between Problems, Criterion, and Solutions"
+                color="primary"
+                size="small"
+                selected={showProblemCriterionSolutionEdges}
+                onClick={() =>
+                  toggleShowProblemCriterionSolutionEdges(!showProblemCriterionSolutionEdges)
+                }
+                sx={{ borderRadius: "50%", border: "0" }}
+              >
+                <Grid4x4 />
+              </ToggleButton>
             </ListItem>
           </>
         )}
