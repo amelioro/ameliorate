@@ -3,8 +3,8 @@ import { useContext } from "react";
 
 import { Indicator } from "@/web/topic/components/Indicator/Indicator";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
+import { diagramPartContextMethods } from "@/web/topic/utils/diagramPartContext";
 import { GraphPart, isNode } from "@/web/topic/utils/graph";
-import { contextMethods } from "@/web/topic/utils/partContext";
 
 interface Props {
   graphPart: GraphPart;
@@ -20,7 +20,7 @@ export const ContextIndicator = ({ graphPart }: Props) => {
   // We likely won't care about this indicator for fulfills edges in the diagram view anyway.
   const fulfillsOutOfTable = type === "fulfills" && workspaceContext !== "table";
 
-  const partContextMethods = fulfillsOutOfTable ? undefined : contextMethods[type];
+  const partContextMethods = fulfillsOutOfTable ? undefined : diagramPartContextMethods[type];
 
   const useHasContext = partContextMethods?.useHasContext ?? (() => false);
   const hasContext = useHasContext(graphPart.id);
@@ -31,7 +31,7 @@ export const ContextIndicator = ({ graphPart }: Props) => {
     <Indicator
       Icon={ControlCamera}
       filled={hasContext}
-      title={"View context"}
+      title={"View context in diagram"}
       onClick={() => partContextMethods.viewContext(graphPart.id)}
     />
   );
