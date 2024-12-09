@@ -6,15 +6,14 @@ import { EdgeProps } from "@/web/topic/components/Diagram/Diagram";
 import { labelWidthPx } from "@/web/topic/utils/layout";
 
 /**
- * If `drawSimpleEdgePaths` is true, draw a simple bezier between the source and target.
- * Otherwise, use the ELK layout's bend points to draw a more complex path.
+ * If `avoidEdgeLabelOverlap` is true and there are edge bendpoints from the ELK layout, use the
+ * bend points to draw a complex path; otherwise draw a simple bezier between the source and target.
  *
  * TODO: modify complex-path algorithm such that curve has vertical slopes at start and end points.
- * The lack of this implementation is the main reason why the `drawSimpleEdgePaths` option exists.
  * Tried inserting a control point directly below `startPoint` and above `endPoint`, and that
  * resulted in vertical slopes, but the curve to/from the next bend points became jagged.
  */
-export const getPathDefinitionForEdge = (flowEdge: EdgeProps, drawSimpleEdgePaths: boolean) => {
+export const getPathDefinitionForEdge = (flowEdge: EdgeProps, avoidEdgeLabelOverlap: boolean) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- reactflow types data as nullable but we always pass it, so it should always be here
   const { elkLabel, elkSections } = flowEdge.data!;
   const elkSection = elkSections[0];
@@ -28,7 +27,7 @@ export const getPathDefinitionForEdge = (flowEdge: EdgeProps, drawSimpleEdgePath
     firstBendPoint === undefined ||
     lastBendPoint === undefined;
 
-  if (drawSimpleEdgePaths || missingBendPoints) {
+  if (!avoidEdgeLabelOverlap || missingBendPoints) {
     // TODO: probably ideally would draw this path through the ELK label position if that's provided
     const [pathDefinition, labelX, labelY] = getBezierPath({
       sourceX: flowEdge.sourceX,

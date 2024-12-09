@@ -26,7 +26,8 @@ import { useIsNodeSelected } from "@/web/topic/store/edgeHooks";
 import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { Edge } from "@/web/topic/utils/graph";
 import { useUnrestrictedEditing } from "@/web/view/actionConfigStore";
-import { setSelected, useDrawSimpleEdgePaths } from "@/web/view/currentViewStore/store";
+import { useAvoidEdgeLabelOverlap } from "@/web/view/currentViewStore/layout";
+import { setSelected } from "@/web/view/currentViewStore/store";
 import { useShowIndicators } from "@/web/view/userConfigStore";
 
 const flowMarkerId = "flowMarker";
@@ -99,7 +100,7 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
 
   const unrestrictedEditing = useUnrestrictedEditing();
   const showIndicators = useShowIndicators();
-  const drawSimpleEdgePaths = useDrawSimpleEdgePaths();
+  const avoidEdgeLabelOverlap = useAvoidEdgeLabelOverlap();
 
   const edge = convertToEdge(flowEdge);
   const isNodeSelected = useIsNodeSelected(edge.id);
@@ -112,7 +113,7 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
 
   const { pathDefinition, labelX, labelY } = getPathDefinitionForEdge(
     flowEdge,
-    drawSimpleEdgePaths,
+    avoidEdgeLabelOverlap,
   );
 
   const path = (

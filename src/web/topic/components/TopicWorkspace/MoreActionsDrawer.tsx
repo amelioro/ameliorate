@@ -15,7 +15,6 @@ import {
   PhotoCamera,
   PowerInput,
   Route,
-  ShowChart,
   SsidChart,
   Upload,
   WbTwilight,
@@ -68,12 +67,7 @@ import {
   useLayoutThoroughness,
   useMinimizeEdgeCrossings,
 } from "@/web/view/currentViewStore/layout";
-import {
-  resetView,
-  setDrawSimpleEdgePaths,
-  useDrawSimpleEdgePaths,
-  useFormat,
-} from "@/web/view/currentViewStore/store";
+import { resetView, useFormat } from "@/web/view/currentViewStore/store";
 import { resetQuickViews } from "@/web/view/quickViewStore/store";
 import {
   toggleFillNodesWithColor,
@@ -139,7 +133,6 @@ export const MoreActionsDrawer = ({
 
   const showImpliedEdges = useShowImpliedEdges();
   const showProblemCriterionSolutionEdges = useShowProblemCriterionSolutionEdges();
-  const drawSimpleEdgePaths = useDrawSimpleEdgePaths();
 
   const forceNodesIntoLayers = useForceNodesIntoLayers();
   const layerNodeIslandsTogether = useLayerNodeIslandsTogether();
@@ -321,18 +314,6 @@ export const MoreActionsDrawer = ({
                 sx={{ borderRadius: "50%", border: "0" }}
               >
                 <Grid4x4 />
-              </ToggleButton>
-              <ToggleButton
-                value={drawSimpleEdgePaths}
-                title="Draw edges using simple paths"
-                aria-label="Draw edges using simple paths"
-                color="primary"
-                size="small"
-                selected={drawSimpleEdgePaths}
-                onClick={() => setDrawSimpleEdgePaths(!drawSimpleEdgePaths)}
-                sx={{ borderRadius: "50%", border: "0" }}
-              >
-                <ShowChart />
               </ToggleButton>
             </ListItem>
 
