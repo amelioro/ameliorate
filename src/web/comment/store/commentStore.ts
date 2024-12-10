@@ -10,7 +10,7 @@ import { emitter } from "@/web/common/event";
 import { storageWithDates } from "@/web/common/store/utils";
 import { StoreTopic, UserTopic } from "@/web/topic/store/store";
 import { setSelected } from "@/web/view/currentViewStore/store";
-import { toggleShowResolvedComments } from "@/web/view/miscTopicConfigStore";
+import { useState } from "react";
 
 export type StoreComment = Omit<Comment, "topicId">;
 
@@ -160,6 +160,10 @@ export const deleteComment = (commentId: string) => {
   );
 };
 
+export const resetComment = () => {
+  useCommentStore.setState({ ...initialState, comments: [] }, false, "resetComment");
+};
+
 export const resolveComment = (commentId: string, resolved: boolean) => {
   useCommentStore.setState(
     (state) => ({
@@ -174,9 +178,8 @@ export const resolveComment = (commentId: string, resolved: boolean) => {
 
 export const loadCommentsFromApi = (topic: UserTopic, comments: StoreComment[]) => {
   const builtPersistedName = `${persistedNameBase}-user`;
-  useCommentStore.persist.setOptions({ name: builtPersistedName });
 
-  useCommentStore.apiSyncer.pause();
+  useCommentStore.persist.setOptions({ name: builtPersistedName });
 
   useCommentStore.setState(
     {
@@ -202,15 +205,12 @@ export const loadCommentsFromApi = (topic: UserTopic, comments: StoreComment[]) 
     true,
     "loadCommentsFromApi",
   );
-
-  useCommentStore.apiSyncer.resume();
 };
 
 export const loadCommentsFromLocalStorage = async () => {
   const builtPersistedName = `${persistedNameBase}-playground`;
-  useCommentStore.persist.setOptions({ name: builtPersistedName });
 
-  useCommentStore.apiSyncer.pause();
+  useCommentStore.persist.setOptions({ name: builtPersistedName });
 
   if (useCommentStore.persist.getOptions().storage?.getItem(builtPersistedName)) {
     // TODO(bug): for some reason, this results in an empty undo action _after_ clear() is run - despite awaiting this promise
@@ -218,8 +218,6 @@ export const loadCommentsFromLocalStorage = async () => {
   } else {
     useCommentStore.setState(initialState, true, "loadCommentsFromLocalStorage");
   }
-
-  useCommentStore.apiSyncer.resume();
 };
 
 export const viewComment = (commentId: string) => {
@@ -235,10 +233,9 @@ export const viewComment = (commentId: string) => {
   if (!threadStarterComment)
     throw errorWithData("couldn't find thread-starter comment", comment.parentId, state.comments);
 
-  if (threadStarterComment.resolved) toggleShowResolvedComments(true); // otherwise going to comment via URL won't show it if it's resolved
-
   const commentParentGraphPartId =
     threadStarterComment.parentType === "topic" ? null : threadStarterComment.parentId;
+
   setSelected(commentParentGraphPartId);
   emitter.emit("viewTopicDetails");
 };
