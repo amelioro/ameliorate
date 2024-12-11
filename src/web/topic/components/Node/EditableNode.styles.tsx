@@ -36,13 +36,6 @@ export const StyledTextareaAutosize = styled(TextareaAutosize)`
   font-size: 1rem;
   line-height: 1;
   font-family: inherit;
-
-  &[readonly] {
-    // So that the cursor doesn't imply that textarea is editable.
-    // Previously had "pointer-events: none" to also prevent clicking from selecting text before
-    // node becomes editable, but this also prevents scrolling, which is not desirable, so that was removed.
-    cursor: default;
-  }
 `;
 
 /* some copied from https://github.com/wbkd/react-flow/blob/147656b22f577bb4141664d000e62ada9b490473/src/theme-default.css#L42-L77 */
