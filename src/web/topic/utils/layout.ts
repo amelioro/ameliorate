@@ -140,7 +140,7 @@ const calculateNodeHeight = (label: string) => {
   // eslint-disable-next-line functional/immutable-data
   div.textContent = label;
 
-  const additionalHeightPx = Math.min(div.scrollHeight - heightPxOfOneRowDiv, maxTextAreaHeightPx);
+  const additionalHeightPx = Math.min(div.scrollHeight, maxTextAreaHeightPx) - heightPxOfOneRowDiv;
 
   return nodeHeightPx + scalePxViaDefaultFontSize(additionalHeightPx);
 };
