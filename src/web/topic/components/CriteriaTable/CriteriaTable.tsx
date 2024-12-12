@@ -286,12 +286,13 @@ export const CriteriaTable = () => {
         enableStickyHeader={true}
         // not very well documented in the library, but this drop zone takes up space for unknown reasons.
         positionToolbarDropZone="none"
-        muiTablePaperProps={{
-          className: "criteria-table-paper",
-        }}
         muiTableProps={{
           className: tableZoomClasses,
         }}
+        muiTablePaperProps={{
+          className: "criteria-table-paper",
+        }}
+        muiTableBodyRowProps={{ hover: false }}
         state={{
           // have to set columnOrder because otherwise new columns are appended to the end, instead of before the last cell in the case of Solution Totals when table is transposed
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- all columns should have an id or accessorKey set
