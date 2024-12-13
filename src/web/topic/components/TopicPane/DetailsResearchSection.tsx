@@ -1,5 +1,4 @@
-import { School } from "@mui/icons-material";
-import { ListItem, ListItemIcon, ListItemText, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 
 import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
 import { EditableNode } from "@/web/topic/components/Node/EditableNode";
@@ -21,13 +20,6 @@ export const DetailsResearchSection = ({ node }: Props) => {
 
   return (
     <>
-      <ListItem disablePadding={false}>
-        <ListItemIcon>
-          <School />
-        </ListItemIcon>
-        <ListItemText primary="Research" />
-      </ListItem>
-
       {/* spacing is the amount that centers the add buttons above the columns */}
       <Stack direction="row" justifyContent="center" alignItems="center" marginBottom="8px">
         <AddNodeButton

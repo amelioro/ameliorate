@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Article } from "@mui/icons-material";
-import { ListItem, ListItemIcon, ListItemText, TextField } from "@mui/material";
+import { ListItem, TextField } from "@mui/material";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -57,13 +56,6 @@ export const DetailsBasicsSection = ({ graphPart }: Props) => {
         })(event);
       }}
     >
-      <ListItem disablePadding={false}>
-        <ListItemIcon>
-          <Article />
-        </ListItemIcon>
-        <ListItemText primary="Basics" />
-      </ListItem>
-
       <ListItem disablePadding={false}>
         <TextField
           {...register("notes")}

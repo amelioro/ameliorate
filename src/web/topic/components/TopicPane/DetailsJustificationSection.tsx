@@ -1,5 +1,4 @@
-import { ThumbsUpDown } from "@mui/icons-material";
-import { Box, ListItem, ListItemIcon, ListItemText, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 
 import { justificationNodeTypes } from "@/common/node";
 import { JustificationTreeIndicator } from "@/web/topic/components/Indicator/JustificationTreeIndicator";
@@ -23,13 +22,6 @@ export const DetailsJustificationSection = ({ graphPart }: Props) => {
 
   return (
     <>
-      <ListItem disablePadding={false}>
-        <ListItemIcon>
-          <ThumbsUpDown />
-        </ListItemIcon>
-        <ListItemText primary="Justification" />
-      </ListItem>
-
       {/* spacing is the amount that centers the add buttons above the columns */}
       <Stack
         direction="row"
