@@ -83,7 +83,12 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
       <TogglePaneButton onClick={handlePaneToggle} color="primary" anchor={anchor}>
         <ToggleIcon />
       </TogglePaneButton>
-      <StyledDrawer variant="permanent" open={isOpen} anchor={anchor}>
+      <StyledDrawer
+        variant="permanent"
+        open={isOpen}
+        anchor={anchor}
+        PaperProps={{ className: "bg-gray-50" }}
+      >
         <TabContext value={selectedTab}>
           <TabList onChange={handleTabChange} centered>
             {tabs.map((tab) => (
