@@ -17,9 +17,9 @@ interface Props {
 const ContentIndicatorsBase = ({ graphPartId, graphPartType, color, className }: Props) => {
   return (
     <Stack direction="row" margin="2px" spacing="2px" className={className}>
+      <JustificationIndicator graphPartId={graphPartId} partColor={color} />
       <QuestionIndicator graphPartId={graphPartId} partColor={color} />
       <FoundResearchIndicator graphPartId={graphPartId} partColor={color} />
-      <JustificationIndicator graphPartId={graphPartId} partColor={color} />
       <CommentIndicator graphPartId={graphPartId} graphPartType={graphPartType} partColor={color} />
     </Stack>
   );
