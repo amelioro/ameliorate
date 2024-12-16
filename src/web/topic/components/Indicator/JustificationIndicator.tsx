@@ -22,7 +22,7 @@ export const JustificationIndicator = ({ graphPartId, partColor }: Props) => {
 
   const onClick = useCallback(() => {
     setSelected(graphPartId);
-    emitter.emit("viewTopicDetails");
+    emitter.emit("viewJustification");
   }, [graphPartId]);
 
   if (justificationNodes.length === 0) return <></>;

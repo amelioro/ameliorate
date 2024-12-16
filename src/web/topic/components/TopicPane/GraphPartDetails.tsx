@@ -1,132 +1,199 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Timeline } from "@mui/icons-material";
-import { Divider, List, ListItem, ListItemIcon, ListItemText, TextField } from "@mui/material";
-import lowerCase from "lodash/lowerCase";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import {
+  Article,
+  ArticleOutlined,
+  ChatBubble,
+  ChatBubbleOutline,
+  School,
+  SchoolOutlined,
+  ThumbsUpDown,
+  ThumbsUpDownOutlined,
+} from "@mui/icons-material";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
+import {
+  Divider,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Tab,
+  Typography,
+} from "@mui/material";
 
-import { nodeSchema, researchNodeTypes } from "@/common/node";
-import { useSessionUser } from "@/web/common/hooks";
+import { useCommentCount } from "@/web/comment/store/commentStore";
 import { StandaloneEdge } from "@/web/topic/components/Edge/StandaloneEdge";
 import { EditableNode } from "@/web/topic/components/Node/EditableNode";
-import { AnswerDetails } from "@/web/topic/components/TopicPane/AnswerDetails";
 import { CommentSection } from "@/web/topic/components/TopicPane/CommentSection";
+import { DetailsBasicsSection } from "@/web/topic/components/TopicPane/DetailsBasicsSection";
 import { DetailsJustificationSection } from "@/web/topic/components/TopicPane/DetailsJustificationSection";
 import { DetailsResearchSection } from "@/web/topic/components/TopicPane/DetailsResearchSection";
-import { FactDetails } from "@/web/topic/components/TopicPane/FactDetails";
-import { QuestionDetails } from "@/web/topic/components/TopicPane/QuestionDetails";
-import { SourceDetails } from "@/web/topic/components/TopicPane/SourceDetails";
-import { setGraphPartNotes } from "@/web/topic/store/actions";
-import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
-import { GraphPart, isNode, isNodeType } from "@/web/topic/utils/graph";
-import { nodeDecorations } from "@/web/topic/utils/node";
+import { useResearchNodes, useTopLevelJustification } from "@/web/topic/store/graphPartHooks";
+import { GraphPart, isNode } from "@/web/topic/utils/graph";
+import { useShowResolvedComments } from "@/web/view/miscTopicConfigStore";
+import { useExpandDetailsTabs } from "@/web/view/userConfigStore";
 
-const formSchema = z.object({
-  // same restrictions as edge, so we should be fine reusing node's schema
-  notes: nodeSchema.shape.notes,
-});
-type FormData = z.infer<typeof formSchema>;
+export type DetailsTab = "Basics" | "Justification" | "Research" | "Comments";
 
 interface Props {
   graphPart: GraphPart;
+  /**
+   * This is hoisted to parent so that it's preserved when a part becomes deselected & reselected.
+   *
+   * - Alternative 1: keep `GraphPartDetails` always rendered; but performance, and `viewTab` event
+   * handling would need to move around.
+   * - Alternative 2: use a store for this state; but seems like overkill?
+   */
+  selectedTab: DetailsTab;
+  setSelectedTab: (tab: DetailsTab) => void;
 }
 
-export const GraphPartDetails = ({ graphPart }: Props) => {
-  const { sessionUser } = useSessionUser();
-  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
-
-  const {
-    register,
-    reset,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>({
-    mode: "onBlur",
-    reValidateMode: "onBlur",
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      notes: graphPart.data.notes,
-    },
-  });
-
-  useEffect(() => {
-    // when notes changes from outside of form (e.g. undo/redo), make sure form is updated
-    reset({ notes: graphPart.data.notes });
-  }, [graphPart.data.notes, reset]);
+export const GraphPartDetails = ({ graphPart, selectedTab, setSelectedTab }: Props) => {
+  const expandDetailsTabs = useExpandDetailsTabs();
 
   const partIsNode = isNode(graphPart);
-  const GraphPartIcon = partIsNode ? nodeDecorations[graphPart.type].NodeIcon : Timeline;
-  const headerText = partIsNode
-    ? `${nodeDecorations[graphPart.type].title} Node`
-    : `"${lowerCase(graphPart.label)}" Edge`;
+
+  // Ideally we could exactly reuse the indicator logic here, rather than duplicating, but not sure
+  // a good way to do that, so we're just duplicating the logic for now.
+  // Don't want to use the exact indicators, because in the pane, it seems worse to show partial icons e.g. ThumbsUp vs ThumbsDown.
+  // Maybe could extract logic from the specific indicators, but that seems also like a decent amount of extra abstraction.
+  const { supports, critiques } = useTopLevelJustification(graphPart.id);
+  const { questions, facts, sources } = useResearchNodes(graphPart.id);
+  const showResolved = useShowResolvedComments();
+  const commentCount = useCommentCount(graphPart.id, partIsNode ? "node" : "edge", showResolved);
+
+  const indicateBasics = graphPart.data.notes.length > 0;
+  const indicateJustification = [...supports, ...critiques].length > 0;
+  const indicateResearch = [...questions, ...facts, ...sources].length > 0;
+  const indicateComments = commentCount > 0;
 
   return (
-    <form
-      onBlur={(event) => {
-        void handleSubmit((data) => {
-          if (graphPart.data.notes === data.notes) return;
-          setGraphPartNotes(graphPart, data.notes);
-        })(event);
-      }}
-    >
-      <List>
-        <div className="flex flex-col items-center">
+    <List>
+      <div className="flex flex-col items-center">
+        {partIsNode ? (
+          // z-index to ensure hanging node indicators don't fall behind the next section's empty background
+          <EditableNode node={graphPart} className="z-10" />
+        ) : (
+          <StandaloneEdge edge={graphPart} />
+        )}
+      </div>
+
+      {/* mt-2 to match distance from Tabs look to graph part */}
+      <Divider className="mb-1 mt-2" />
+
+      {!expandDetailsTabs ? (
+        <>
+          <TabContext value={!partIsNode && selectedTab === "Research" ? "Basics" : selectedTab}>
+            <TabList
+              onChange={(_, value: DetailsTab) => setSelectedTab(value)}
+              centered
+              className="px-2"
+            >
+              <Tab
+                icon={indicateBasics ? <Article /> : <ArticleOutlined />}
+                value="Basics"
+                title="Basics"
+                aria-label="Basics"
+              />
+              <Tab
+                icon={indicateJustification ? <ThumbsUpDown /> : <ThumbsUpDownOutlined />}
+                value="Justification"
+                title="Justification"
+                aria-label="Justification"
+              />
+              {partIsNode && (
+                <Tab
+                  icon={indicateResearch ? <School /> : <SchoolOutlined />}
+                  value="Research"
+                  title="Research"
+                  aria-label="Research"
+                />
+              )}
+              <Tab
+                icon={indicateComments ? <ChatBubble /> : <ChatBubbleOutline />}
+                value="Comments"
+                title="Comments"
+                aria-label="Comments"
+              />
+            </TabList>
+
+            <TabPanel value="Basics" className="p-2">
+              <ListItem disablePadding={false}>
+                <Typography variant="body1" className="mx-auto">
+                  Basics
+                </Typography>
+              </ListItem>
+              <DetailsBasicsSection graphPart={graphPart} />
+            </TabPanel>
+            <TabPanel value="Justification" className="p-2">
+              <ListItem disablePadding={false}>
+                <Typography variant="body1" className="mx-auto">
+                  Justification
+                </Typography>
+              </ListItem>
+              <DetailsJustificationSection graphPart={graphPart} />
+            </TabPanel>
+            {partIsNode && (
+              <TabPanel value="Research" className="p-2">
+                <ListItem disablePadding={false}>
+                  <Typography variant="body1" className="mx-auto">
+                    Research
+                  </Typography>
+                </ListItem>
+                <DetailsResearchSection node={graphPart} />
+              </TabPanel>
+            )}
+            <TabPanel value="Comments" className="p-2">
+              <ListItem disablePadding={false}>
+                <Typography variant="body1" className="mx-auto">
+                  Comments
+                </Typography>
+              </ListItem>
+              <CommentSection parentId={graphPart.id} parentType={partIsNode ? "node" : "edge"} />
+            </TabPanel>
+          </TabContext>
+        </>
+      ) : (
+        <>
           <ListItem disablePadding={false}>
             <ListItemIcon>
-              <GraphPartIcon />
+              <Article />
             </ListItemIcon>
-            <ListItemText primary={headerText} />
+            <ListItemText primary="Basics" />
           </ListItem>
+          <DetailsBasicsSection graphPart={graphPart} />
 
-          {partIsNode ? (
-            // z-index to ensure hanging node indicators don't fall behind the next section's empty background
-            <EditableNode node={graphPart} className="z-10" />
-          ) : (
-            <StandaloneEdge edge={graphPart} />
+          <Divider className="my-1" />
+          <ListItem disablePadding={false}>
+            <ListItemIcon>
+              <ThumbsUpDown />
+            </ListItemIcon>
+            <ListItemText primary="Justification" />
+          </ListItem>
+          <DetailsJustificationSection graphPart={graphPart} />
+
+          {/* prevent adding research nodes to edges; not 100% sure that we want to restrict this, but if it continues to seem good, this section can accept node instead of graphPart */}
+          {partIsNode && (
+            <>
+              <Divider className="my-1" />
+              <ListItem disablePadding={false}>
+                <ListItemIcon>
+                  <School />
+                </ListItemIcon>
+                <ListItemText primary="Research" />
+              </ListItem>
+              <DetailsResearchSection node={graphPart} />
+            </>
           )}
 
-          <ListItem disablePadding={false} className="pt-3">
-            <TextField
-              {...register("notes")}
-              label="Notes"
-              error={!!errors.notes}
-              helperText={errors.notes?.message}
-              multiline
-              fullWidth
-              size="small"
-              InputProps={{ className: "text-sm", readOnly: !userCanEditTopicData }}
-              InputLabelProps={{ className: "text-sm" }}
-              maxRows={10}
-            />
-          </ListItem>
-        </div>
-
-        {isNode(graphPart) && researchNodeTypes.includes(graphPart.type) && (
           <Divider className="my-1" />
-        )}
-
-        {isNodeType(graphPart, "question") && <QuestionDetails questionNode={graphPart} />}
-        {isNodeType(graphPart, "answer") && <AnswerDetails answerNode={graphPart} />}
-        {isNodeType(graphPart, "fact") && <FactDetails factNode={graphPart} />}
-        {isNodeType(graphPart, "source") && <SourceDetails sourceNode={graphPart} />}
-
-        <Divider className="my-1" />
-
-        <DetailsJustificationSection graphPart={graphPart} />
-
-        {/* prevent adding research nodes to edges; not 100% sure that we want to restrict this, but if it continues to seem good, this section can accept node instead of graphPart */}
-        {partIsNode && (
-          <>
-            <Divider className="my-1" />
-            <DetailsResearchSection node={graphPart} />
-          </>
-        )}
-
-        <Divider className="my-1" />
-
-        <CommentSection parentId={graphPart.id} parentType={partIsNode ? "node" : "edge"} />
-      </List>
-    </form>
+          <ListItem disablePadding={false}>
+            <ListItemIcon>
+              <ChatBubble />
+            </ListItemIcon>
+            <ListItemText primary="Comments" />
+          </ListItem>
+          <CommentSection parentId={graphPart.id} parentType={partIsNode ? "node" : "edge"} />
+        </>
+      )}
+    </List>
   );
 };

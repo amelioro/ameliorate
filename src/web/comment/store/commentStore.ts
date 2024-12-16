@@ -240,5 +240,5 @@ export const viewComment = (commentId: string) => {
   const commentParentGraphPartId =
     threadStarterComment.parentType === "topic" ? null : threadStarterComment.parentId;
   setSelected(commentParentGraphPartId);
-  emitter.emit("viewTopicDetails");
+  emitter.emit("viewComments");
 };

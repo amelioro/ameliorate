@@ -21,7 +21,7 @@ export const QuestionIndicator = ({ graphPartId, partColor }: Props) => {
 
   const onClick = useCallback(() => {
     setSelected(graphPartId);
-    emitter.emit("viewTopicDetails");
+    emitter.emit("viewResearch");
   }, [graphPartId]);
 
   if (questions.length === 0) return <></>;

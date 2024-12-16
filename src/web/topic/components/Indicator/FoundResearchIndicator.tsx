@@ -22,7 +22,7 @@ export const FoundResearchIndicator = ({ graphPartId, partColor }: Props) => {
 
   const onClick = useCallback(() => {
     setSelected(graphPartId);
-    emitter.emit("viewTopicDetails");
+    emitter.emit("viewResearch");
   }, [graphPartId]);
 
   if (foundResearchNodes.length === 0) return <></>;

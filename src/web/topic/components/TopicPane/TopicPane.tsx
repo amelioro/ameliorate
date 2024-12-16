@@ -11,7 +11,7 @@ import { memo, useEffect, useState } from "react";
 
 import { deepIsEqual } from "@/common/utils";
 import { emitter } from "@/web/common/event";
-import { GraphPartDetails } from "@/web/topic/components/TopicPane/GraphPartDetails";
+import { DetailsTab, GraphPartDetails } from "@/web/topic/components/TopicPane/GraphPartDetails";
 import { TopicDetails } from "@/web/topic/components/TopicPane/TopicDetails";
 import {
   Anchor,
@@ -38,13 +38,35 @@ interface Props {
 const TopicPaneBase = ({ anchor, tabs }: Props) => {
   const [isOpen, setIsOpen] = useState(true);
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
+
+  const [selectedPartDetailsTab, setSelectedPartDetailsTab] = useState<DetailsTab>("Basics");
+
   const selectedGraphPart = useSelectedGraphPart();
 
   useEffect(() => {
     if (!tabs.includes("Details")) return;
 
-    const unbindSelectDetails = emitter.on("viewTopicDetails", () => {
+    const unbindSelectBasics = emitter.on("viewBasics", () => {
       setSelectedTab("Details");
+      setSelectedPartDetailsTab("Basics");
+      setIsOpen(true);
+    });
+
+    const unbindSelectJustification = emitter.on("viewJustification", () => {
+      setSelectedTab("Details");
+      setSelectedPartDetailsTab("Justification");
+      setIsOpen(true);
+    });
+
+    const unbindSelectResearch = emitter.on("viewResearch", () => {
+      setSelectedTab("Details");
+      setSelectedPartDetailsTab("Research");
+      setIsOpen(true);
+    });
+
+    const unbindSelectComments = emitter.on("viewComments", () => {
+      setSelectedTab("Details");
+      setSelectedPartDetailsTab("Comments");
       setIsOpen(true);
     });
 
@@ -53,7 +75,10 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
     });
 
     return () => {
-      unbindSelectDetails();
+      unbindSelectBasics();
+      unbindSelectJustification();
+      unbindSelectResearch();
+      unbindSelectComments();
       unbindSelectedPart();
     };
   }, [tabs]);
@@ -71,7 +96,13 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
   const TabPanelContent = {
     Details:
       selectedGraphPart !== null ? (
-        <GraphPartDetails graphPart={selectedGraphPart} key={selectedGraphPart.id} />
+        <GraphPartDetails
+          graphPart={selectedGraphPart}
+          selectedTab={selectedPartDetailsTab}
+          setSelectedTab={setSelectedPartDetailsTab}
+          // use `key` to prevent details from being reused from previous part when a new one is selected
+          key={selectedGraphPart.id}
+        />
       ) : (
         <TopicDetails />
       ),
@@ -83,7 +114,12 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
       <TogglePaneButton onClick={handlePaneToggle} color="primary" anchor={anchor}>
         <ToggleIcon />
       </TogglePaneButton>
-      <StyledDrawer variant="permanent" open={isOpen} anchor={anchor}>
+      <StyledDrawer
+        variant="permanent"
+        open={isOpen}
+        anchor={anchor}
+        PaperProps={{ className: "bg-gray-50" }}
+      >
         <TabContext value={selectedTab}>
           <TabList onChange={handleTabChange} centered>
             {tabs.map((tab) => (

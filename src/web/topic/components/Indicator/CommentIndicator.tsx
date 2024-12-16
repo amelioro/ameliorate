@@ -21,7 +21,7 @@ export const CommentIndicator = ({ graphPartId, graphPartType, partColor }: Prop
 
   const onClick = useCallback(() => {
     setSelected(graphPartId);
-    emitter.emit("viewTopicDetails");
+    emitter.emit("viewComments");
   }, [graphPartId]);
 
   if (commentCount === 0) return <></>;

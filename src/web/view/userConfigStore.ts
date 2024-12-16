@@ -5,12 +5,14 @@ interface UserConfigStoreState {
   showIndicators: boolean;
   fillNodesWithColor: boolean;
   indicateWhenNodeForcedToShow: boolean;
+  expandDetailsTabs: boolean;
 }
 
 const initialState: UserConfigStoreState = {
   showIndicators: false,
   fillNodesWithColor: false,
   indicateWhenNodeForcedToShow: false,
+  expandDetailsTabs: false,
 };
 
 const useUserConfigStore = create<UserConfigStoreState>()(
@@ -32,6 +34,10 @@ export const useIndicateWhenNodeForcedToShow = () => {
   return useUserConfigStore((state) => state.indicateWhenNodeForcedToShow);
 };
 
+export const useExpandDetailsTabs = () => {
+  return useUserConfigStore((state) => state.expandDetailsTabs);
+};
+
 // actions
 export const toggleShowIndicators = () => {
   useUserConfigStore.setState((state) => ({ showIndicators: !state.showIndicators }));
@@ -43,4 +49,8 @@ export const toggleFillNodesWithColor = (fill: boolean) => {
 
 export const toggleIndicateWhenNodeForcedToShow = (indicate: boolean) => {
   useUserConfigStore.setState({ indicateWhenNodeForcedToShow: indicate });
+};
+
+export const toggleExpandDetailsTabs = () => {
+  useUserConfigStore.setState((state) => ({ expandDetailsTabs: !state.expandDetailsTabs }));
 };
