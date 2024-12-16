@@ -11,7 +11,7 @@ import { memo, useEffect, useState } from "react";
 
 import { deepIsEqual } from "@/common/utils";
 import { emitter } from "@/web/common/event";
-import { GraphPartDetails } from "@/web/topic/components/TopicPane/GraphPartDetails";
+import { DetailsTab, GraphPartDetails } from "@/web/topic/components/TopicPane/GraphPartDetails";
 import { TopicDetails } from "@/web/topic/components/TopicPane/TopicDetails";
 import {
   Anchor,
@@ -38,6 +38,9 @@ interface Props {
 const TopicPaneBase = ({ anchor, tabs }: Props) => {
   const [isOpen, setIsOpen] = useState(true);
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
+
+  const [selectedPartDetailsTab, setSelectedPartDetailsTab] = useState<DetailsTab>("Basics");
+
   const selectedGraphPart = useSelectedGraphPart();
 
   useEffect(() => {
@@ -71,7 +74,13 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
   const TabPanelContent = {
     Details:
       selectedGraphPart !== null ? (
-        <GraphPartDetails graphPart={selectedGraphPart} key={selectedGraphPart.id} />
+        <GraphPartDetails
+          graphPart={selectedGraphPart}
+          selectedTab={selectedPartDetailsTab}
+          setSelectedTab={setSelectedPartDetailsTab}
+          // use `key` to prevent details from being reused from previous part when a new one is selected
+          key={selectedGraphPart.id}
+        />
       ) : (
         <TopicDetails />
       ),

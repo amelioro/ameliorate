@@ -16,6 +16,7 @@ import {
   PowerInput,
   Route,
   SsidChart,
+  UnfoldMore,
   Upload,
   WbTwilight,
 } from "@mui/icons-material";
@@ -70,8 +71,10 @@ import {
 import { resetView, useFormat } from "@/web/view/currentViewStore/store";
 import { resetQuickViews } from "@/web/view/quickViewStore/store";
 import {
+  toggleExpandDetailsTabs,
   toggleFillNodesWithColor,
   toggleIndicateWhenNodeForcedToShow,
+  useExpandDetailsTabs,
   useFillNodesWithColor,
   useIndicateWhenNodeForcedToShow,
 } from "@/web/view/userConfigStore";
@@ -142,6 +145,7 @@ export const MoreActionsDrawer = ({
 
   const fillNodesWithColor = useFillNodesWithColor();
   const indicateWhenNodeForcedToShow = useIndicateWhenNodeForcedToShow();
+  const expandDetailsTabs = useExpandDetailsTabs();
 
   return (
     <Drawer
@@ -438,6 +442,18 @@ export const MoreActionsDrawer = ({
             sx={{ borderRadius: "50%", border: "0" }}
           >
             <WbTwilight />
+          </ToggleButton>
+          <ToggleButton
+            value={expandDetailsTabs}
+            title="Expand details tabs"
+            aria-label="Expand details tabs"
+            color="primary"
+            size="small"
+            selected={expandDetailsTabs}
+            onClick={() => toggleExpandDetailsTabs()}
+            sx={{ borderRadius: "50%", border: "0" }}
+          >
+            <UnfoldMore />
           </ToggleButton>
         </ListItem>
       </List>
