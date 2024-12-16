@@ -5,8 +5,7 @@ import { NodeType, nodeTypes } from "@/common/node";
 import { scalePxViaDefaultFontSize } from "@/pages/_document.page";
 import { nodeHeightPx, nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
 import { Diagram } from "@/web/topic/utils/diagram";
-import { type Edge, type Node } from "@/web/topic/utils/graph";
-import { edges as nodeEdges } from "@/web/topic/utils/node";
+import { type Edge, type Node, ancestors, descendants } from "@/web/topic/utils/graph";
 
 export type Orientation = "DOWN" | "UP" | "RIGHT" | "LEFT";
 export const orientation: Orientation = "DOWN" as Orientation; // not constant to allow potential other orientations in the future, and keeping code that currently exists for handling "LEFT" orientation
@@ -82,22 +81,20 @@ const partitionOrders: { [type in NodeType]: string } = {
   custom: "null",
 };
 
-const calculatePartition = (node: Node, edges: Edge[]) => {
+const calculatePartition = (node: Node, diagram: Diagram) => {
   if (["effect", "benefit", "detriment"].includes(node.type)) {
-    const edgesOfNode = nodeEdges(node, edges);
-    const hasParentCreatedBy = edgesOfNode.some(
-      (edge) => edge.label === "createdBy" && edge.target === node.id,
+    // could rely on just edge "createdBy" vs "creates" rather than traversing relations, but then
+    // mitigation effects wouldn't be distinguishable from solution effects
+    const createdByProblem = ancestors(node, diagram, ["createdBy"]).some(
+      (ancestor) => ancestor.type === "problem",
     );
-    const hasChildCreates = edgesOfNode.some(
-      (edge) => edge.label === "creates" && edge.source === node.id,
+    const createdBySolution = descendants(node, diagram, ["creates"]).some(
+      (descendant) => descendant.type === "solution" || descendant.type === "solutionComponent",
     );
 
-    const shouldBeAboveCriteria = hasParentCreatedBy; // effect createdBy problem
-    const shouldBeBelowCriteria = hasChildCreates; // solution creates effect
-
-    if (shouldBeAboveCriteria && shouldBeBelowCriteria) return "null";
-    else if (shouldBeAboveCriteria) return "0";
-    else if (shouldBeBelowCriteria) return "2";
+    if (createdByProblem && createdBySolution) return "null";
+    else if (createdByProblem) return "0";
+    else if (createdBySolution) return "2";
     else return "null";
   } else {
     return partitionOrders[node.type];
@@ -266,7 +263,7 @@ export const layout = async (
             // solutions, components, effects; we might be able to improve that situation by modeling
             // each problem within a nested node. Or maybe we could just do partitioning within
             // a special "problem context view" rather than in the main topic diagram view.
-            "elk.partitioning.partition": calculatePartition(node, edges),
+            "elk.partitioning.partition": calculatePartition(node, diagram),
           },
         };
       }),
