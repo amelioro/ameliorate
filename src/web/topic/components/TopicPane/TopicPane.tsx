@@ -46,8 +46,27 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
   useEffect(() => {
     if (!tabs.includes("Details")) return;
 
-    const unbindSelectDetails = emitter.on("viewTopicDetails", () => {
+    const unbindSelectBasics = emitter.on("viewBasics", () => {
       setSelectedTab("Details");
+      setSelectedPartDetailsTab("Basics");
+      setIsOpen(true);
+    });
+
+    const unbindSelectJustification = emitter.on("viewJustification", () => {
+      setSelectedTab("Details");
+      setSelectedPartDetailsTab("Justification");
+      setIsOpen(true);
+    });
+
+    const unbindSelectResearch = emitter.on("viewResearch", () => {
+      setSelectedTab("Details");
+      setSelectedPartDetailsTab("Research");
+      setIsOpen(true);
+    });
+
+    const unbindSelectComments = emitter.on("viewComments", () => {
+      setSelectedTab("Details");
+      setSelectedPartDetailsTab("Comments");
       setIsOpen(true);
     });
 
@@ -56,7 +75,10 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
     });
 
     return () => {
-      unbindSelectDetails();
+      unbindSelectBasics();
+      unbindSelectJustification();
+      unbindSelectResearch();
+      unbindSelectComments();
       unbindSelectedPart();
     };
   }, [tabs]);

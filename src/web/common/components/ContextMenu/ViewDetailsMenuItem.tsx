@@ -8,7 +8,7 @@ export const ViewDetailsMenuItem = ({ graphPart }: { graphPart: GraphPart }) => 
     <ContextMenuItem
       onClick={() => {
         setSelected(graphPart.id);
-        emitter.emit("viewTopicDetails");
+        emitter.emit("viewBasics");
       }}
     >
       View details

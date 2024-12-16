@@ -15,7 +15,7 @@ export const DetailsIndicator = ({ graphPartId, notes }: Props) => {
 
   const onClick = useCallback(() => {
     setSelected(graphPartId);
-    emitter.emit("viewTopicDetails");
+    emitter.emit("viewBasics");
   }, [graphPartId]);
 
   return <Indicator Icon={Notes} title={"View details"} onClick={onClick} filled={hasDetails} />;
