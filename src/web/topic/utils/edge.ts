@@ -58,9 +58,14 @@ export const relations: AddableRelation[] = researchRelations.concat([
   { child: "criterion", name: "criterionFor", parent: "problem", addableFrom: "parent" },
   { child: "solutionComponent", name: "addresses", parent: "problem", addableFrom: "child" },
   { child: "solution", name: "addresses", parent: "problem", addableFrom: "both" },
+  { child: "mitigationComponent", name: "addresses", parent: "problem", addableFrom: "neither" },
+  { child: "mitigation", name: "addresses", parent: "problem", addableFrom: "neither" },
 
   { child: "cause", name: "causes", parent: "cause", addableFrom: "parent" },
+  { child: "solutionComponent", name: "addresses", parent: "cause", addableFrom: "neither" },
   { child: "solution", name: "addresses", parent: "cause", addableFrom: "parent" },
+  { child: "mitigationComponent", name: "addresses", parent: "cause", addableFrom: "neither" },
+  { child: "mitigation", name: "addresses", parent: "cause", addableFrom: "neither" },
 
   { child: "criterion", name: "relatesTo", parent: "benefit", addableFrom: "neither" },
   { child: "criterion", name: "relatesTo", parent: "effect", addableFrom: "neither" },
@@ -94,6 +99,8 @@ export const relations: AddableRelation[] = researchRelations.concat([
   { child: "detriment", name: "relatesTo", parent: "criterion", addableFrom: "neither" },
   { child: "solutionComponent", name: "fulfills", parent: "criterion", addableFrom: "neither" },
   { child: "solution", name: "fulfills", parent: "criterion", addableFrom: "neither" },
+  { child: "mitigationComponent", name: "fulfills", parent: "criterion", addableFrom: "neither" },
+  { child: "mitigation", name: "fulfills", parent: "criterion", addableFrom: "neither" },
 
   { child: "solutionComponent", name: "creates", parent: "benefit", addableFrom: "child" },
   { child: "solution", name: "creates", parent: "benefit", addableFrom: "child" },
@@ -101,18 +108,40 @@ export const relations: AddableRelation[] = researchRelations.concat([
   { child: "solution", name: "creates", parent: "effect", addableFrom: "child" },
   { child: "solutionComponent", name: "creates", parent: "detriment", addableFrom: "child" },
   { child: "solution", name: "creates", parent: "detriment", addableFrom: "child" },
+  { child: "mitigationComponent", name: "creates", parent: "benefit", addableFrom: "child" },
+  { child: "mitigation", name: "creates", parent: "benefit", addableFrom: "child" },
+  { child: "mitigationComponent", name: "creates", parent: "effect", addableFrom: "child" },
+  { child: "mitigation", name: "creates", parent: "effect", addableFrom: "child" },
+  { child: "mitigationComponent", name: "creates", parent: "detriment", addableFrom: "child" },
+  { child: "mitigation", name: "creates", parent: "detriment", addableFrom: "child" },
 
+  { child: "solutionComponent", name: "addresses", parent: "detriment", addableFrom: "neither" },
   { child: "solution", name: "addresses", parent: "detriment", addableFrom: "parent" },
+  { child: "mitigationComponent", name: "mitigates", parent: "detriment", addableFrom: "neither" },
+  { child: "mitigation", name: "mitigates", parent: "detriment", addableFrom: "neither" }, // there's a hack to make this relation addable instead of solution for solution detriments
 
-  { child: "solution", name: "has", parent: "solutionComponent", addableFrom: "child" },
   { child: "solutionComponent", name: "has", parent: "solutionComponent", addableFrom: "child" },
+  { child: "solution", name: "has", parent: "solutionComponent", addableFrom: "child" },
+  {
+    child: "mitigationComponent",
+    name: "has",
+    parent: "mitigationComponent",
+    addableFrom: "child",
+  },
+  { child: "mitigation", name: "has", parent: "mitigationComponent", addableFrom: "child" },
+
   { child: "obstacle", name: "obstacleOf", parent: "solutionComponent", addableFrom: "parent" },
+  { child: "obstacle", name: "obstacleOf", parent: "solution", addableFrom: "parent" },
+  { child: "obstacle", name: "obstacleOf", parent: "mitigationComponent", addableFrom: "parent" },
+  { child: "obstacle", name: "obstacleOf", parent: "mitigation", addableFrom: "parent" },
+
+  { child: "solutionComponent", name: "addresses", parent: "obstacle", addableFrom: "neither" },
+  { child: "solution", name: "addresses", parent: "obstacle", addableFrom: "neither" },
+  { child: "mitigationComponent", name: "mitigates", parent: "obstacle", addableFrom: "neither" },
+  { child: "mitigation", name: "mitigates", parent: "obstacle", addableFrom: "parent" },
 
   { child: "solution", name: "accomplishes", parent: "solution", addableFrom: "parent" },
   { child: "solution", name: "contingencyFor", parent: "solution", addableFrom: "neither" },
-  { child: "obstacle", name: "obstacleOf", parent: "solution", addableFrom: "parent" },
-
-  { child: "solution", name: "addresses", parent: "obstacle", addableFrom: "parent" },
 
   // justification relations
   { child: "support", name: "supports", parent: "rootClaim", addableFrom: "parent" },

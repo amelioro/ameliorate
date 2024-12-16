@@ -26,6 +26,7 @@
  * 150 answer
  * 160 criterion
  * 200 support
+ * 230 mitigation, component (desaturated)
  * 240 source
  * 300 problem
  * 320 cause
@@ -187,6 +188,8 @@ const sharedPalette = {
   benefit: augmentColor({ color: { main: oklchToHex("oklch(85% 0.16 130)") } }), // light-green: good thing; slightly more saturated because the color seems nicer, brighter to contrast more with other greens (mainly solution/component)
   detriment: augmentColor({ color: { main: oklchToHex("oklch(85% 0.15 340)") } }), // purple-red: bad thing; slightly brighter to contrast more with cause
   obstacle: augmentColor({ color: { main: oklchToHex("oklch(75% 0.15 0)") } }), // red: bad thing
+  mitigation: augmentColor({ color: { main: oklchToHex("oklch(75% 0.11 230)") } }), // blue: good but different than solution/support; desaturated because the hue seems to naturally be very saturated
+  mitigationComponent: augmentColor({ color: { main: oklchToHex("oklch(75% 0.07 230)") } }), // grey-blue: same as mitigation but with less saturation
 
   // research
   question: augmentColor({ color: { main: oklchToHex("oklch(75% 0 0)") } }), // grey: ambiguous, uncertain

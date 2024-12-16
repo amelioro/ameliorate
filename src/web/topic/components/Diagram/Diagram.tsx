@@ -49,6 +49,8 @@ const nodeTypes: Record<FlowNodeType, ComponentType<NodeProps>> = {
   benefit: buildNodeComponent("benefit"),
   detriment: buildNodeComponent("detriment"),
   obstacle: buildNodeComponent("obstacle"),
+  mitigation: buildNodeComponent("mitigation"),
+  mitigationComponent: buildNodeComponent("mitigationComponent"),
 
   // research
   question: buildNodeComponent("question"),

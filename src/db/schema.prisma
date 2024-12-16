@@ -93,6 +93,8 @@ enum NodeType {
   solutionComponent
   solution
   obstacle
+  mitigationComponent
+  mitigation
 
   // research
   question
@@ -143,6 +145,7 @@ enum EdgeType {
   creates
   fulfills
   obstacleOf
+  mitigates
 
   // research
   asksAbout

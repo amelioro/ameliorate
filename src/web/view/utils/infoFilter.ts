@@ -177,7 +177,7 @@ const getSolutionDetails = (
   );
 
   const descendantDetails = solutions.flatMap((solution) =>
-    descendants(solution, graph, ["obstacleOf", "addresses", "accomplishes", "contingencyFor"]),
+    descendants(solution, graph, ["createdBy", "obstacleOf", "accomplishes", "contingencyFor"]),
   );
 
   const criteriaIds = criteria.map((criterion) => criterion.id);

@@ -15,6 +15,7 @@ import {
   QuestionMark,
   ThumbDown,
   ThumbUp,
+  VerifiedUserOutlined,
   Widgets,
 } from "@mui/icons-material";
 
@@ -75,6 +76,14 @@ export const nodeDecorations: Record<FlowNodeType, NodeDecoration> = {
   obstacle: {
     title: "Obstacle",
     NodeIcon: Fence,
+  },
+  mitigationComponent: {
+    title: "Component",
+    NodeIcon: Widgets,
+  },
+  mitigation: {
+    title: "Mitigation",
+    NodeIcon: VerifiedUserOutlined,
   },
 
   // research
