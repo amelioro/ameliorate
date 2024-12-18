@@ -1,16 +1,25 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AutoStories, Info, Settings, Visibility } from "@mui/icons-material";
+import {
+  Article,
+  ArticleOutlined,
+  ChatBubble,
+  ChatBubbleOutline,
+  Info,
+  Settings,
+} from "@mui/icons-material";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
 import {
   Divider,
   IconButton,
   List,
   ListItem,
-  ListItemButton,
   ListItemIcon,
   ListItemText,
   MenuItem,
+  Tab,
   TextField,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import NextLink from "next/link";
 import { useEffect } from "react";
@@ -19,13 +28,17 @@ import { z } from "zod";
 
 import { topicSchema } from "@/common/topic";
 import { WatchType, watchTypes } from "@/common/watch";
+import { useCommentCount } from "@/web/comment/store/commentStore";
 import { Link } from "@/web/common/components/Link";
 import { useSessionUser } from "@/web/common/hooks";
 import { trpc } from "@/web/common/trpc";
 import { CommentSection } from "@/web/topic/components/TopicPane/CommentSection";
+import { StoreTopic } from "@/web/topic/store/store";
 import { setTopicDetails } from "@/web/topic/store/topicActions";
 import { useTopic } from "@/web/topic/store/topicHooks";
 import { useUserCanEditTopicData, useUserIsCreator } from "@/web/topic/store/userHooks";
+import { useShowResolvedComments } from "@/web/view/miscTopicConfigStore";
+import { useExpandDetailsTabs } from "@/web/view/userConfigStore";
 
 const formSchema = () => {
   return z.object({
@@ -34,24 +47,9 @@ const formSchema = () => {
 };
 type FormData = z.infer<ReturnType<typeof formSchema>>;
 
-export const TopicDetails = () => {
+const BasicsSection = ({ topic }: { topic: StoreTopic }) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
-  const userIsCreator = useUserIsCreator(sessionUser?.username);
-
-  const topic = useTopic();
-  const isPlaygroundTopic = topic.id === undefined;
-
-  const willShowWatch = !isPlaygroundTopic && !!sessionUser;
-  const findWatch = trpc.watch.find.useQuery(
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- non-playground topics will have an id
-    { topicId: topic.id! },
-    { enabled: willShowWatch },
-  );
-  const setWatch = trpc.watch.setWatch.useMutation({
-    onSuccess: () => findWatch.refetch(),
-  });
-  const showWatch = willShowWatch && findWatch.isSuccess;
 
   const {
     register,
@@ -81,30 +79,98 @@ export const TopicDetails = () => {
         })(event);
       }}
     >
-      <List>
-        <ListItem disablePadding={false}>
-          <ListItemIcon>
-            <AutoStories />
-          </ListItemIcon>
-          <ListItemText
-            primary={
-              isPlaygroundTopic ? (
-                "Playground Topic"
-              ) : (
-                <>
-                  <Link href={`/${topic.creatorName}`}>{topic.creatorName}</Link> /{" "}
-                  <Link href={`/${topic.creatorName}/${topic.title}`}>{topic.title}</Link>
-                </>
-              )
-            }
-          />
-        </ListItem>
+      <ListItem disablePadding={false} sx={{ paddingTop: 1 }}>
+        <TextField
+          {...register("description")}
+          label="Description"
+          error={!!errors.description}
+          helperText={errors.description?.message}
+          multiline
+          fullWidth
+          size="small"
+          InputProps={{ className: "text-sm", readOnly: !userCanEditTopicData }}
+          InputLabelProps={{ className: "text-sm" }}
+          maxRows={10}
+        />
+      </ListItem>
+    </form>
+  );
+};
 
-        {showWatch && (
+export type DetailsTab = "Basics" | "Comments";
+
+interface Props {
+  /**
+   * This is hoisted to parent so that it's preserved when a part becomes deselected & reselected.
+   *
+   * - Alternative 1: keep `TopicDetails` always rendered; but performance.
+   * - Alternative 2: use a store for this state; but seems like overkill?
+   */
+  selectedTab: DetailsTab;
+  setSelectedTab: (tab: DetailsTab) => void;
+}
+
+export const TopicDetails = ({ selectedTab, setSelectedTab }: Props) => {
+  const { sessionUser } = useSessionUser();
+  const userIsCreator = useUserIsCreator(sessionUser?.username);
+
+  const topic = useTopic();
+  const isPlaygroundTopic = topic.id === undefined;
+  const expandDetailsTabs = useExpandDetailsTabs();
+
+  // Ideally we could exactly reuse the indicator logic here, rather than duplicating, but not sure
+  // a good way to do that, so we're just duplicating the logic for now.
+  // Don't want to use the exact indicators, because pane indication seems to look better with Icon
+  // vs IconOutlined as opposed to background color.
+  // Maybe could extract logic from the specific indicators, but that seems also like a decent amount of extra abstraction.
+  const showResolved = useShowResolvedComments();
+  const commentCount = useCommentCount(null, "topic", showResolved);
+
+  const indicateBasics = topic.description.length > 0;
+  const indicateComments = commentCount > 0;
+
+  const willShowWatch = !isPlaygroundTopic && !!sessionUser;
+  const findWatch = trpc.watch.find.useQuery(
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- non-playground topics will have an id
+    { topicId: topic.id! },
+    { enabled: willShowWatch },
+  );
+  const setWatch = trpc.watch.setWatch.useMutation({
+    onSuccess: () => findWatch.refetch(),
+  });
+  const showWatch = willShowWatch && findWatch.isSuccess;
+
+  return (
+    <List>
+      <div className="flex items-center justify-center">
+        {isPlaygroundTopic ? (
+          "Playground Topic"
+        ) : (
+          <>
+            <Link href={`/${topic.creatorName}`}>{topic.creatorName}</Link>
+            <pre> / </pre>
+            <Link href={`/${topic.creatorName}/${topic.title}`}>{topic.title}</Link>
+          </>
+        )}
+
+        {!isPlaygroundTopic && userIsCreator && (
+          <IconButton
+            size="small"
+            title="Settings"
+            aria-label="Settings"
+            LinkComponent={NextLink}
+            href={`/${topic.creatorName}/${topic.title}/settings`}
+          >
+            <Settings fontSize="inherit" />
+          </IconButton>
+        )}
+      </div>
+
+      <Divider sx={{ my: 1 }} />
+
+      {showWatch && (
+        <>
           <ListItem disablePadding={false} sx={{ paddingTop: 1 }}>
-            <ListItemIcon>
-              <Visibility />
-            </ListItemIcon>
             <TextField
               select
               label="Watch"
@@ -159,41 +225,72 @@ export const TopicDetails = () => {
               </IconButton>
             </Tooltip>
           </ListItem>
-        )}
 
-        <ListItem disablePadding={false} sx={{ paddingTop: 1 }}>
-          <TextField
-            {...register("description")}
-            label="Description"
-            error={!!errors.description}
-            helperText={errors.description?.message}
-            multiline
-            fullWidth
-            size="small"
-            InputProps={{ className: "text-sm", readOnly: !userCanEditTopicData }}
-            InputLabelProps={{ className: "text-sm" }}
-            maxRows={10}
-          />
-        </ListItem>
+          <Divider sx={{ my: 1 }} />
+        </>
+      )}
 
-        {!isPlaygroundTopic && userIsCreator && (
-          <ListItem>
-            <ListItemButton
-              LinkComponent={NextLink}
-              href={`/${topic.creatorName}/${topic.title}/settings`}
+      {!expandDetailsTabs ? (
+        <>
+          <TabContext value={selectedTab}>
+            <TabList
+              onChange={(_, value: DetailsTab) => setSelectedTab(value)}
+              centered
+              className="px-2"
             >
-              <ListItemIcon>
-                <Settings />
-              </ListItemIcon>
-              <ListItemText primary="Settings" />
-            </ListItemButton>
+              <Tab
+                icon={indicateBasics ? <Article /> : <ArticleOutlined />}
+                value="Basics"
+                title="Basics"
+                aria-label="Basics"
+              />
+              <Tab
+                icon={indicateComments ? <ChatBubble /> : <ChatBubbleOutline />}
+                value="Comments"
+                title="Comments"
+                aria-label="Comments"
+              />
+            </TabList>
+
+            <TabPanel value="Basics" className="p-2">
+              <ListItem disablePadding={false}>
+                <Typography variant="body1" className="mx-auto">
+                  Basics
+                </Typography>
+              </ListItem>
+              <BasicsSection topic={topic} />
+            </TabPanel>
+            <TabPanel value="Comments" className="p-2">
+              <ListItem disablePadding={false}>
+                <Typography variant="body1" className="mx-auto">
+                  Comments
+                </Typography>
+              </ListItem>
+              <CommentSection parentId={null} parentType="topic" />
+            </TabPanel>
+          </TabContext>
+        </>
+      ) : (
+        <>
+          <ListItem disablePadding={false}>
+            <ListItemIcon>
+              <Article />
+            </ListItemIcon>
+            <ListItemText primary="Basics" />
           </ListItem>
-        )}
+          <BasicsSection topic={topic} />
 
-        <Divider sx={{ my: 1 }} />
+          <Divider sx={{ my: 1 }} />
 
-        <CommentSection parentId={null} parentType="topic" />
-      </List>
-    </form>
+          <ListItem disablePadding={false}>
+            <ListItemIcon>
+              <ChatBubble />
+            </ListItemIcon>
+            <ListItemText primary="Comments" />
+          </ListItem>
+          <CommentSection parentId={null} parentType="topic" />
+        </>
+      )}
+    </List>
   );
 };

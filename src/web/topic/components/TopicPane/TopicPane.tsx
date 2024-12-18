@@ -11,8 +11,14 @@ import { memo, useEffect, useState } from "react";
 
 import { deepIsEqual } from "@/common/utils";
 import { emitter } from "@/web/common/event";
-import { DetailsTab, GraphPartDetails } from "@/web/topic/components/TopicPane/GraphPartDetails";
-import { TopicDetails } from "@/web/topic/components/TopicPane/TopicDetails";
+import {
+  GraphPartDetails,
+  DetailsTab as PartDetailsTab,
+} from "@/web/topic/components/TopicPane/GraphPartDetails";
+import {
+  TopicDetails,
+  DetailsTab as TopicDetailsTab,
+} from "@/web/topic/components/TopicPane/TopicDetails";
 import {
   Anchor,
   PositionedDiv,
@@ -39,7 +45,8 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
   const [isOpen, setIsOpen] = useState(true);
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
 
-  const [selectedPartDetailsTab, setSelectedPartDetailsTab] = useState<DetailsTab>("Basics");
+  const [selectedTopicDetailsTab, setSelectedTopicDetailsTab] = useState<TopicDetailsTab>("Basics");
+  const [selectedPartDetailsTab, setSelectedPartDetailsTab] = useState<PartDetailsTab>("Basics");
 
   const selectedGraphPart = useSelectedGraphPart();
 
@@ -104,7 +111,10 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
           key={selectedGraphPart.id}
         />
       ) : (
-        <TopicDetails />
+        <TopicDetails
+          selectedTab={selectedTopicDetailsTab}
+          setSelectedTab={setSelectedTopicDetailsTab}
+        />
       ),
     Views: <TopicViews />,
   };
