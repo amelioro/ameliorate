@@ -53,7 +53,8 @@ export const GraphPartDetails = ({ graphPart, selectedTab, setSelectedTab }: Pro
 
   // Ideally we could exactly reuse the indicator logic here, rather than duplicating, but not sure
   // a good way to do that, so we're just duplicating the logic for now.
-  // Don't want to use the exact indicators, because in the pane, it seems worse to show partial icons e.g. ThumbsUp vs ThumbsDown.
+  // Don't want to use the exact indicators, because pane indication seems to look better with Icon
+  // vs IconOutlined as opposed to background color.
   // Maybe could extract logic from the specific indicators, but that seems also like a decent amount of extra abstraction.
   const { supports, critiques } = useTopLevelJustification(graphPart.id);
   const { questions, facts, sources } = useResearchNodes(graphPart.id);
@@ -162,6 +163,7 @@ export const GraphPartDetails = ({ graphPart, selectedTab, setSelectedTab }: Pro
           <DetailsBasicsSection graphPart={graphPart} />
 
           <Divider className="my-1" />
+
           <ListItem disablePadding={false}>
             <ListItemIcon>
               <ThumbsUpDown />
@@ -174,6 +176,7 @@ export const GraphPartDetails = ({ graphPart, selectedTab, setSelectedTab }: Pro
           {partIsNode && (
             <>
               <Divider className="my-1" />
+
               <ListItem disablePadding={false}>
                 <ListItemIcon>
                   <School />
@@ -185,6 +188,7 @@ export const GraphPartDetails = ({ graphPart, selectedTab, setSelectedTab }: Pro
           )}
 
           <Divider className="my-1" />
+
           <ListItem disablePadding={false}>
             <ListItemIcon>
               <ChatBubble />
