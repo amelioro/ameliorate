@@ -142,7 +142,8 @@ export const TopicDetails = ({ selectedTab, setSelectedTab }: Props) => {
 
   return (
     <List>
-      <div className="flex items-center justify-center">
+      {/* whitespace-normal to wrap long topic titles */}
+      <div className="flex items-center justify-center whitespace-normal px-4">
         {isPlaygroundTopic ? (
           "Playground Topic"
         ) : (
