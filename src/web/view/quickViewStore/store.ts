@@ -129,7 +129,8 @@ export const createView = () => {
     id: newViewId,
     type: "quick",
     title: newTitle,
-    order: Math.max(...state.views.map((view) => view.order)) + 1,
+    // provide -1 by default to `Math.max` because otherwise it returns -Infinity with no arguments
+    order: Math.max(-1, ...state.views.map((view) => view.order)) + 1,
     viewState: currentView,
   };
 

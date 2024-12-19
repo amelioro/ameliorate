@@ -19,7 +19,7 @@ export const savedViewSchema = z.object({
       "Title may only contain alphanumeric characters, spaces, and dashes, and cannot begin or end with a space or dash.",
     )
     .optional(),
-  order: z.number().optional(),
+  order: z.number().safe().optional(),
   viewState: z.object({}).passthrough(), // TODO: extract view options from web/ so we can have type safety here
 });
 
