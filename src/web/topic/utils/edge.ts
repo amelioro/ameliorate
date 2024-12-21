@@ -67,6 +67,10 @@ export const relations: AddableRelation[] = researchRelations.concat([
   { child: "mitigationComponent", name: "addresses", parent: "cause", addableFrom: "neither" },
   { child: "mitigation", name: "addresses", parent: "cause", addableFrom: "neither" },
 
+  { child: "criterion", name: "relatesTo", parent: "benefit", addableFrom: "neither" },
+  { child: "criterion", name: "relatesTo", parent: "effect", addableFrom: "neither" },
+  { child: "criterion", name: "relatesTo", parent: "detriment", addableFrom: "neither" },
+
   // These relations above `creates` relations so that new edges result in these over `creates`
   // by default; usually `creates` edges will be the result of an add node button, not a drag-and-drop edge.
   // This issue would probably be better solved by distinguishing problem effects vs solution effects,
@@ -76,14 +80,6 @@ export const relations: AddableRelation[] = researchRelations.concat([
   { child: "detriment", name: "causes", parent: "detriment", addableFrom: "neither" },
   { child: "benefit", name: "addresses", parent: "cause", addableFrom: "neither" },
   { child: "benefit", name: "addresses", parent: "detriment", addableFrom: "neither" },
-  { child: "solutionComponent", name: "addresses", parent: "detriment", addableFrom: "neither" },
-  { child: "solution", name: "addresses", parent: "detriment", addableFrom: "parent" },
-  { child: "mitigationComponent", name: "mitigates", parent: "detriment", addableFrom: "neither" },
-  { child: "mitigation", name: "mitigates", parent: "detriment", addableFrom: "neither" }, // there's a hack to make this relation addable instead of solution for solution detriments
-
-  { child: "criterion", name: "relatesTo", parent: "benefit", addableFrom: "neither" },
-  { child: "criterion", name: "relatesTo", parent: "effect", addableFrom: "neither" },
-  { child: "criterion", name: "relatesTo", parent: "detriment", addableFrom: "neither" },
 
   // effects, benefits, detriments, can each create each other (when coming up from solution)
   // and be created by each other (when going up to problem)
@@ -105,6 +101,12 @@ export const relations: AddableRelation[] = researchRelations.concat([
   { child: "benefit", name: "createdBy", parent: "detriment", addableFrom: "parent" },
   { child: "effect", name: "createdBy", parent: "detriment", addableFrom: "parent" },
   { child: "detriment", name: "createdBy", parent: "detriment", addableFrom: "parent" },
+
+  // below effect-create-effect relations so that Add Solution button is to the right of Add Effect button for Detriment, because effects are expected to be more commonly added than solutions
+  { child: "solutionComponent", name: "addresses", parent: "detriment", addableFrom: "neither" },
+  { child: "solution", name: "addresses", parent: "detriment", addableFrom: "parent" },
+  { child: "mitigationComponent", name: "mitigates", parent: "detriment", addableFrom: "neither" },
+  { child: "mitigation", name: "mitigates", parent: "detriment", addableFrom: "neither" }, // there's a hack to make this relation addable instead of solution for solution detriments
 
   { child: "benefit", name: "fulfills", parent: "criterion", addableFrom: "neither" },
   { child: "effect", name: "fulfills", parent: "criterion", addableFrom: "neither" },
