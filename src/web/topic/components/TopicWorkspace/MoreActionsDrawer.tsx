@@ -24,6 +24,8 @@ import {
   Divider,
   Drawer,
   IconButton,
+  Select,
+  MenuItem,
   List,
   ListItem,
   ListItemIcon,
@@ -345,7 +347,7 @@ export const MoreActionsDrawer = ({
             <ListItem disablePadding={false}>
               <Typography variant="body2">Layout Thoroughness</Typography>
               <Tooltip
-                title="Determines how much effort the layout algorithm puts into laying out nodes such that they efficiently use space. 1 = lowest effort, 100 = highest effort."
+                title="Determines how much effort the layout algorithm puts into laying out nodes such that they efficiently use space. Low = minimal effort, High = maximum effort."
                 enterTouchDelay={0} // allow touch to immediately trigger
                 leaveTouchDelay={Infinity} // touch-away to close on mobile, since message is long
               >
@@ -353,24 +355,28 @@ export const MoreActionsDrawer = ({
                   color="info"
                   aria-label="Thoroughness info"
                   sx={{
-                    // Don't make it look like clicking will do something, since it won't.
-                    // Using a button here is an attempt to make it accessible, since the tooltip will show
-                    // on focus.
-                    cursor: "default",
+                    cursor: "default", // Maintain accessibility while preventing click actions
                     alignSelf: "center",
                   }}
                 >
                   <Info />
                 </IconButton>
               </Tooltip>
-              <NumberInput
-                min={1}
-                max={100}
+              <Select
                 value={layoutThoroughness}
-                onChange={(_event, value) => {
-                  if (value) setLayoutThoroughness(value);
+                onChange={(event) => {
+                  const value = event.target.value;
+                  setLayoutThoroughness(Number(value));
                 }}
-              />
+                sx={{
+                  marginLeft: "16px",
+                  minWidth: "120px",
+                }}
+              >
+                <MenuItem value={1}>Low</MenuItem>
+                <MenuItem value={10}>Medium</MenuItem>
+                <MenuItem value={100}>High</MenuItem>
+              </Select>
             </ListItem>
 
             <Divider>Filter Config</Divider>
