@@ -24,12 +24,12 @@ import {
   Divider,
   Drawer,
   IconButton,
-  Select,
-  MenuItem,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
+  MenuItem,
+  Select,
   ToggleButton,
   Tooltip,
   Typography,
@@ -37,7 +37,6 @@ import {
 import { toPng } from "html-to-image";
 import { getRectOfNodes, getTransformForBounds } from "reactflow";
 
-import { NumberInput } from "@/web/common/components/NumberInput/NumberInput";
 import { getDisplayNodes } from "@/web/topic/components/Diagram/externalFlowStore";
 import { downloadTopic, uploadTopic } from "@/web/topic/loadStores";
 import { useOnPlayground } from "@/web/topic/store/topicHooks";
@@ -344,12 +343,12 @@ export const MoreActionsDrawer = ({
               </ToggleButton>
             </ListItem>
 
-            <ListItem disablePadding={false}>
+            <ListItem disablePadding>
               <Typography variant="body2">Layout Thoroughness</Typography>
               <Tooltip
                 title="Determines how much effort the layout algorithm puts into laying out nodes such that they efficiently use space. Low = minimal effort, High = maximum effort."
-                enterTouchDelay={0} // allow touch to immediately trigger
-                leaveTouchDelay={Infinity} // touch-away to close on mobile, since message is long
+                enterTouchDelay={0} // Trigger immediately on touch
+                leaveTouchDelay={Infinity} // Close on touch-away
               >
                 <IconButton
                   color="info"
@@ -364,13 +363,11 @@ export const MoreActionsDrawer = ({
               </Tooltip>
               <Select
                 value={layoutThoroughness}
-                onChange={(event) => {
-                  const value = event.target.value;
-                  setLayoutThoroughness(Number(value));
-                }}
+                onChange={(event) => setLayoutThoroughness(Number(event.target.value))}
+                fullWidth // Use fullWidth for proper alignment
+                size="small" // Smaller size for better fit
                 sx={{
-                  marginLeft: "16px",
-                  minWidth: "120px",
+                  marginLeft: "16px", // Adjust spacing
                 }}
               >
                 <MenuItem value={1}>Low</MenuItem>
