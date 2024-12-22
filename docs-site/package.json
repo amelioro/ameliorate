@@ -33,7 +33,6 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-functional": "^6.0.1",
     "eslint-plugin-import": "2.26.0",
-    "eslint-plugin-storybook": "^0.8.0",
     "postcss": "^8.4.39",
     "tailwindcss": "^3.4.6",
     "typescript": "5.3.3"
