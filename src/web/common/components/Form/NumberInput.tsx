@@ -27,7 +27,7 @@ export const NumberInput = ({ name, min, max }: Props) => {
         value={field.value as number}
         onChange={(event, value) => {
           event.preventDefault(); // don't trigger default form submit, which would refresh the page
-
+          if (value === null) throw new Error("NumberInput should not allow empty value");
           field.onChange(value);
           submit();
         }}

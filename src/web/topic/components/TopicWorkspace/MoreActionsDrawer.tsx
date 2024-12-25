@@ -343,18 +343,20 @@ export const MoreActionsDrawer = ({
               </ToggleButton>
             </ListItem>
 
-            <ListItem disablePadding>
-              <Typography variant="body2">Layout Thoroughness</Typography>
+            <ListItem disablePadding = {false}>
+              <Typography variant="body2">Thoroughness</Typography>
               <Tooltip
                 title="Determines how much effort the layout algorithm puts into laying out nodes such that they efficiently use space. Low = minimal effort, High = maximum effort."
                 enterTouchDelay={0} // Trigger immediately on touch
-                leaveTouchDelay={Infinity} // Close on touch-away
+                leaveTouchDelay={Infinity} // touch-away to close on mobile, since message is long
               >
                 <IconButton
                   color="info"
                   aria-label="Thoroughness info"
                   sx={{
-                    cursor: "default", // Maintain accessibility while preventing click actions
+                    // Using a button here is an attempt to make it accessible, since the tooltip will show
+                    // on focus.
+                    cursor: "default", 
                     alignSelf: "center",
                   }}
                 >
@@ -366,9 +368,7 @@ export const MoreActionsDrawer = ({
                 onChange={(event) => setLayoutThoroughness(Number(event.target.value))}
                 fullWidth // Use fullWidth for proper alignment
                 size="small" // Smaller size for better fit
-                sx={{
-                  marginLeft: "16px", // Adjust spacing
-                }}
+               
               >
                 <MenuItem value={1}>Low</MenuItem>
                 <MenuItem value={10}>Medium</MenuItem>
