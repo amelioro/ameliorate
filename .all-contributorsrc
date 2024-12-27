@@ -85,6 +85,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "shibv",
+      "name": "Shiv Shankar ",
+      "avatar_url": "https://avatars.githubusercontent.com/u/96898103?v=4",
+      "profile": "https://shiv-iiitk.vercel.app/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
