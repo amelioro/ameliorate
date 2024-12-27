@@ -28,6 +28,8 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  MenuItem,
+  Select,
   ToggleButton,
   Tooltip,
   Typography,
@@ -35,7 +37,6 @@ import {
 import { toPng } from "html-to-image";
 import { getRectOfNodes, getTransformForBounds } from "reactflow";
 
-import { NumberInput } from "@/web/common/components/NumberInput/NumberInput";
 import { getDisplayNodes } from "@/web/topic/components/Diagram/externalFlowStore";
 import { downloadTopic, uploadTopic } from "@/web/topic/loadStores";
 import { useOnPlayground } from "@/web/topic/store/topicHooks";
@@ -343,10 +344,10 @@ export const MoreActionsDrawer = ({
             </ListItem>
 
             <ListItem disablePadding={false}>
-              <Typography variant="body2">Layout Thoroughness</Typography>
+              <Typography variant="body2">Thoroughness</Typography>
               <Tooltip
-                title="Determines how much effort the layout algorithm puts into laying out nodes such that they efficiently use space. 1 = lowest effort, 100 = highest effort."
-                enterTouchDelay={0} // allow touch to immediately trigger
+                title="Determines how much effort the layout algorithm puts into laying out nodes such that they efficiently use space. Low = minimal effort, High = maximum effort."
+                enterTouchDelay={0} // Trigger immediately on touch
                 leaveTouchDelay={Infinity} // touch-away to close on mobile, since message is long
               >
                 <IconButton
@@ -363,14 +364,16 @@ export const MoreActionsDrawer = ({
                   <Info />
                 </IconButton>
               </Tooltip>
-              <NumberInput
-                min={1}
-                max={100}
+              <Select
                 value={layoutThoroughness}
-                onChange={(_event, value) => {
-                  if (value) setLayoutThoroughness(value);
-                }}
-              />
+                onChange={(event) => setLayoutThoroughness(Number(event.target.value))}
+                fullWidth // Use fullWidth for proper alignment
+                size="small" // Smaller size for better fit
+              >
+                <MenuItem value={1}>Low</MenuItem>
+                <MenuItem value={10}>Medium</MenuItem>
+                <MenuItem value={100}>High</MenuItem>
+              </Select>
             </ListItem>
 
             <Divider>Filter Config</Divider>
