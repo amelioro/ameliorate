@@ -24,10 +24,11 @@ export const NumberInput = ({ name, min, max }: Props) => {
         {...field}
         min={min}
         max={max}
-        value={field.value as number}
+        value={field.value as number} // should be able to type-safe this but seems hard and not worth effort
         onChange={(event, value) => {
           event.preventDefault(); // don't trigger default form submit, which would refresh the page
           if (value === null) throw new Error("NumberInput should not allow empty value");
+
           field.onChange(value);
           submit();
         }}
