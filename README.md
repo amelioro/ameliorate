@@ -27,6 +27,7 @@ Full-stack:
 - [auth0](https://auth0.com/) - user authentication
 - [sentry](https://sentry.io/) - monitoring, observability
 - [vitest](https://vitest.dev/) - api & unit testing
+- [playwright](https://playwright.dev/) - e2e testing
 
 Backend:
 
