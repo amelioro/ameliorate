@@ -1,0 +1,29 @@
+{
+  "name": "ameliorate-e2e",
+  "version": "0.1.0",
+  "description": "This is a separate package specifically for the e2e tests dependencies, since they don't require the large majority of package setup as the root project",
+  "type": "module",
+  "engines": {
+    "//": "run `nvm install` to use the right versions; these are enforced via .npmrc's engine-strict when npm is used",
+    "//2": "different from root package.json because these are the versions that come with the playwright container",
+    "//3": "without these, CI would use a different version than local, since it pulls the root repo's directory first, which has a different version of node",
+    "node": "22.12.0",
+    "npm": "10.9.0"
+  },
+  "private": true,
+  "scripts": {
+    "build": "docker build -t e2e-tests .",
+    "// container commands": "these are for running locally, which is intended to be from outside of the container, for convenience",
+    "container:test": "bash ./runInContainer.sh 'npm run test'",
+    "container:update-snapshots": "bash ./runInContainer.sh 'npm run update-snapshots'",
+    "container:ui": "bash ./runInContainer.sh 'npm run ui'",
+    "// non-container commands": "these are for running via CI, which is entirely run within a container already",
+    "test": "npx playwright test",
+    "update-snapshots": "npx playwright test --update-snapshots",
+    "ui": "npx playwright test --ui-port=0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.49.1",
+    "@types/node": "^22.10.2"
+  }
+}

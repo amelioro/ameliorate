@@ -83,6 +83,39 @@ Update project after pulling new changes:
 npm run update # run new migrations, install new dependencies
 ```
 
+## Running tests
+
+The non-e2e tests run against smaller pieces of the system - they include api tests and unit tests. You can run the non-e2e tests without further setup:
+
+```bash
+npm run test
+```
+
+### E2e tests
+
+E2e tests perform actions via headless browser against a running instance of the app. They require a few steps to properly run:
+
+```bash
+npm run dev # start the app on localhost
+# (you'll need to open a new terminal window because the previous command runs in the foreground)
+npm run e2e:build # build e2e container (includes dependencies for running playwright)
+# Note: the e2e container requires docker desktop version 4.29+ and enabling
+# "Enable host networking" in the Features in Development settings - explanation https://github.com/amelioro/ameliorate/blob/main/e2e/runInContainer.sh#L15-L17
+```
+
+Then you can run e2e tests:
+
+```bash
+npm run e2e:test
+```
+
+And here are some more e2e-specific commands that might be useful:
+
+```bash
+npm run e2e:update-snapshots # run e2e tests and update snapshots if there are visual differences
+npm run e2e:ui # open playwright UI for watching/managing e2e tests
+```
+
 ## Codebase overview
 
 These are diagrams that might help provide high-level views of different pieces of the codebase:

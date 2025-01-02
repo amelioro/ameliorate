@@ -40,3 +40,9 @@ yarn-error.log*
 
 # Local Netlify folder
 .netlify
+
+# e2e test things
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
