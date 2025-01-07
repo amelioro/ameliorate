@@ -59,7 +59,8 @@ declare module "@mui/material/styles" {
   interface Palette extends NodeTypePalettes {
     neutral: Palette["primary"];
     neutralContrast: Palette["primary"];
-    paper: Palette["primary"];
+    paperPlain: Palette["primary"];
+    paperShaded: Palette["primary"];
     support1: Palette["primary"];
     support2: Palette["primary"];
     support3: Palette["primary"];
@@ -73,7 +74,8 @@ declare module "@mui/material/styles" {
   interface PaletteOptions extends NodeTypePaletteOptions {
     neutral: PaletteOptions["primary"];
     neutralContrast: PaletteOptions["primary"];
-    paper: PaletteOptions["primary"];
+    paperPlain: PaletteOptions["primary"];
+    paperShaded: PaletteOptions["primary"];
     support1: PaletteOptions["primary"];
     support2: PaletteOptions["primary"];
     support3: PaletteOptions["primary"];
@@ -96,7 +98,8 @@ declare module "@mui/material" {
   interface ButtonPropsColorOverrides extends NodeTypeColors {
     neutral: true;
     neutralContrast: true;
-    paper: true;
+    paperPlain: true;
+    paperShaded: true;
     support1: true;
     support2: true;
     support3: true;
@@ -110,7 +113,8 @@ declare module "@mui/material" {
   interface AppBarPropsColorOverrides extends NodeTypeColors {
     neutral: true;
     neutralContrast: true;
-    paper: true;
+    paperPlain: true;
+    paperShaded: true;
     support1: true;
     support2: true;
     support3: true;
@@ -124,7 +128,8 @@ declare module "@mui/material" {
   interface SvgIconPropsColorOverrides extends NodeTypeColors {
     neutral: true;
     neutralContrast: true;
-    paper: true;
+    paperPlain: true;
+    paperShaded: true;
     support1: true;
     support2: true;
     support3: true;
@@ -176,7 +181,8 @@ const sharedPalette = {
 
   neutral: augmentColor({ color: { main: oklchToHex("oklch(91% 0 0)") } }), // gray is very neutral, light-ish to not stand out too much, no particular relation to the other colors
   neutralContrast: augmentColor({ color: { main: "#000000" } }), // black contrasts with gray, separate from neutral.contrastText so that it gets its own augments I guess
-  paper: augmentColor({ color: { main: "#fff" } }), // used for neutral-but-chosen score
+  paperPlain: augmentColor({ color: { main: "#fff" } }), // used for neutral-but-chosen score, plain backgrounds
+  paperShaded: augmentColor({ color: { main: "#f9fafb" } }), // bg-gray-50; more gray-ish to contrast slightly with paperPlain, e.g. for toolbar backgrounds
 
   // topic
   problem: augmentColor({ color: { main: oklchToHex("oklch(75% 0.15 300)") } }), // purple: truth; complementary to solution; no increased saturation because its hue stands out already

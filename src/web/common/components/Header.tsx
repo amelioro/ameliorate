@@ -41,7 +41,7 @@ export const Header = () => {
   const isLoggedIn = sessionUser != null;
 
   return (
-    <AppBar position="sticky" className="overflow-x-auto border-b bg-gray-50 shadow-none">
+    <AppBar position="sticky" className="overflow-x-auto border-b bg-paperShaded-main shadow-none">
       <Toolbar variant="dense">
         <div className="flex flex-1 items-center justify-between gap-4 *:shrink-0">
           <div className="flex items-center gap-4">

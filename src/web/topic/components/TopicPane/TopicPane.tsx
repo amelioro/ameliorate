@@ -128,7 +128,7 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
         variant="permanent"
         open={isOpen}
         anchor={anchor}
-        PaperProps={{ className: "bg-gray-50" }}
+        PaperProps={{ className: "bg-paperShaded-main" }}
       >
         <TabContext value={selectedTab}>
           <TabList onChange={handleTabChange} centered>
