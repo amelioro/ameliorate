@@ -51,7 +51,7 @@ export const AddNodeMenuItem = ({ parentMenuOpen }: Props) => {
                 },
               }}
             >
-              <NodeIcon style={{ marginRight: 8 }} />
+              <NodeIcon className="mr-2" />
               {title}
             </ContextMenuItem>
           );
