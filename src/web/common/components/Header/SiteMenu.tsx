@@ -6,7 +6,11 @@ import { useEffect, useState } from "react";
 import { SiteDrawer } from "@/web/common/components/SiteDrawer/SiteDrawer";
 import { useSessionUser } from "@/web/common/hooks";
 
-export const SiteMenu = () => {
+interface Props {
+  className?: string;
+}
+
+export const SiteMenu = ({ className }: Props) => {
   const { sessionUser } = useSessionUser();
   const { asPath } = useRouter();
 
@@ -19,7 +23,7 @@ export const SiteMenu = () => {
 
   return (
     <>
-      <IconButton onClick={() => setIsSiteDrawerOpen(true)} className="block p-0 sm:hidden">
+      <IconButton onClick={() => setIsSiteDrawerOpen(true)} className={className}>
         <Menu />
       </IconButton>
       <SiteDrawer

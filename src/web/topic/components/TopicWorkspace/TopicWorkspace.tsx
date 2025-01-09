@@ -7,6 +7,7 @@ import { useSessionUser } from "@/web/common/hooks";
 import { CriteriaTable } from "@/web/topic/components/CriteriaTable/CriteriaTable";
 import { Diagram } from "@/web/topic/components/Diagram/Diagram";
 import { TopicPane } from "@/web/topic/components/TopicPane/TopicPane";
+import { AppHeader } from "@/web/topic/components/TopicWorkspace/AppHeader";
 import { TourSetter } from "@/web/topic/components/TopicWorkspace/TourSetter";
 import { TutorialAnchor } from "@/web/topic/components/TopicWorkspace/TutorialAnchor";
 import { TutorialController } from "@/web/topic/components/TopicWorkspace/TutorialController";
@@ -53,8 +54,9 @@ export const TopicWorkspace = () => {
   const useSplitPanes = isLandscape && usingBigScreen;
 
   return (
-    // hardcode workspace to take up full height of screen minus the navbar
-    <div className="relative flex h-[calc(100svh-49px)] flex-col">
+    // h-svh to force workspace to take up full height of screen
+    <div className="relative flex h-svh flex-col">
+      <AppHeader />
       <WorkspaceToolbar />
 
       <div

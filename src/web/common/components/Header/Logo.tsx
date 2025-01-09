@@ -4,14 +4,25 @@ import Image from "next/image";
 import { Link } from "@/web/common/components/Link";
 import favicon from "~/public/favicon.png";
 
-export const Logo = () => {
+interface Props {
+  className?: string;
+  titleClassName?: string;
+}
+
+export const Logo = ({ className, titleClassName }: Props) => {
   return (
-    <div className="relative flex">
+    <div className={"relative flex" + (className ? ` ${className}` : "")}>
       <Link href="/" className="flex items-center gap-2" underline="none">
         {/* use styling to set width and height instead of Image props because otherwise this throws a warning about only having height or width set */}
         {/* no idea why specifically this favicon throws this warning, and other Image-links in Header don't. */}
         <Image src={favicon} alt="home" className="size-8" />
-        <span className="text-xl font-medium text-black">Ameliorate</span>
+        <span
+          className={
+            "text-xl font-medium text-black" + (titleClassName ? ` ${titleClassName}` : "")
+          }
+        >
+          Ameliorate
+        </span>
       </Link>
       <MuiLink
         href="https://ameliorate.app/docs/release-status"
