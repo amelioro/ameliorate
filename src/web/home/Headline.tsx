@@ -50,7 +50,7 @@ export const Headline = () => {
           cars-going-too-fast
         </Link>
       </Typography>
-      <div className="relative my-24 flex max-w-lg flex-col gap-4 rounded-3xl bg-paper-main text-center sm:my-32 sm:border sm:border-primary-main sm:p-8 sm:text-left sm:shadow-xl">
+      <div className="relative my-24 flex max-w-lg flex-col gap-4 rounded-3xl bg-paperPlain-main text-center sm:my-32 sm:border sm:border-primary-main sm:p-8 sm:text-left sm:shadow-xl">
         <Typography variant="h1" fontWeight="bold" className="text-4xl sm:text-5xl">
           Analyze problems
           <br />

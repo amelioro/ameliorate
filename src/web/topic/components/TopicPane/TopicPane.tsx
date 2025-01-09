@@ -21,7 +21,6 @@ import {
 } from "@/web/topic/components/TopicPane/TopicDetails";
 import {
   Anchor,
-  PositionedDiv,
   StyledDrawer,
   TogglePaneButton,
 } from "@/web/topic/components/TopicPane/TopicPane.styles";
@@ -42,7 +41,7 @@ interface Props {
 }
 
 const TopicPaneBase = ({ anchor, tabs }: Props) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(tabs.includes("Details") ? true : false); // Views is expected to be used less, so close it by default
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
 
   const [selectedTopicDetailsTab, setSelectedTopicDetailsTab] = useState<TopicDetailsTab>("Basics");
@@ -120,7 +119,18 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
   };
 
   return (
-    <PositionedDiv>
+    <div
+      className={
+        // pt-12 to make room for the overlayed header.
+        // Bg with border for the whole div instead of just the Drawer so that it doesn't look like
+        // the diagram will show above the Drawer (for cases where the App Header isn't as wide as
+        // the Drawer, e.g. when screen is big enough for anchoring right).
+        "relative bg-paperShaded-main " +
+        (anchor !== "bottom" ? " lg:pt-12" : "") +
+        (anchor === "left" ? " border-r" : "") +
+        (anchor === "right" ? " border-l" : "")
+      }
+    >
       <TogglePaneButton onClick={handlePaneToggle} color="primary" anchor={anchor}>
         <ToggleIcon />
       </TogglePaneButton>
@@ -128,7 +138,8 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
         variant="permanent"
         open={isOpen}
         anchor={anchor}
-        PaperProps={{ className: "bg-gray-50" }}
+        // z-auto because Pane should share space with other elements, so doesn't need to be in front
+        PaperProps={{ className: "bg-inherit border-x-0 lg:border-t z-auto" }}
       >
         <TabContext value={selectedTab}>
           <TabList onChange={handleTabChange} centered>
@@ -143,7 +154,7 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
           ))}
         </TabContext>
       </StyledDrawer>
-    </PositionedDiv>
+    </div>
   );
 };
 

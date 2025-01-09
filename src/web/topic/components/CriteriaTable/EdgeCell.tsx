@@ -23,7 +23,7 @@ export const EdgeCell = ({ edge }: { edge: Edge }) => {
         className="ml-0"
         graphPartId={edge.id}
         graphPartType="edge"
-        color="paper"
+        color="paperPlain"
       />
     </div>
   );

@@ -1,4 +1,4 @@
-import { AutoStories, Close, Fort } from "@mui/icons-material";
+import { AutoStories, Close, Fort, MenuBook } from "@mui/icons-material";
 import {
   Divider,
   Drawer,
@@ -9,7 +9,6 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Stack,
   useTheme,
 } from "@mui/material";
 import Image from "next/image";
@@ -46,7 +45,7 @@ export const SiteDrawer = ({ username, isSiteDrawerOpen, setIsSiteDrawerOpen }: 
           <ListItemText primary="Ameliorate" />
         </ListItem>
 
-        <Divider />
+        <Divider className="my-1" />
 
         <ListItem>
           <ListItemButton LinkComponent={NextLink} href="/playground">
@@ -67,10 +66,23 @@ export const SiteDrawer = ({ username, isSiteDrawerOpen, setIsSiteDrawerOpen }: 
           </ListItem>
         )}
 
-        <Divider />
+        <Divider className="my-1" />
 
         <ListItem>
-          <Stack direction="row" alignItems="center" spacing={2} padding={2}>
+          <ListItemButton
+            LinkComponent={NextLink}
+            href="https://ameliorate.app/docs"
+            target="_blank"
+          >
+            <ListItemIcon>
+              <MenuBook />
+            </ListItemIcon>
+            <ListItemText primary="Docs" />
+          </ListItemButton>
+        </ListItem>
+
+        <ListItem>
+          <div className="flex items-center gap-2 px-4 py-2">
             <Link href={discordInvite} target="_blank" display="flex">
               <Image
                 src={`/${theme.palette.mode}/Discord-Mark.png`}
@@ -87,7 +99,7 @@ export const SiteDrawer = ({ username, isSiteDrawerOpen, setIsSiteDrawerOpen }: 
                 alt="github link"
               />
             </Link>
-          </Stack>
+          </div>
         </ListItem>
       </List>
     </Drawer>

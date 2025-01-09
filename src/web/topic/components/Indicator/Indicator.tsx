@@ -45,7 +45,7 @@ export const Indicator = ({
         title={title}
         aria-label={title}
         variant="contained"
-        color={filled ? color : "paper"}
+        color={filled ? color : "paperPlain"}
         onClick={onClickHandler}
         className={
           // text-base seems to fit more snuggly than the default 14px

@@ -17,7 +17,6 @@ const muiColorsToExtend = {
   success: muiGeneratedPalette.success,
   text: muiGeneratedPalette.text,
   background: muiGeneratedPalette.background,
-  paper: muiGeneratedPalette.paper,
 };
 
 /** @type {import('tailwindcss').Config} */

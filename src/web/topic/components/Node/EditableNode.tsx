@@ -75,7 +75,7 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
   const customizable = userCanEditTopicData && (unrestrictedEditing || node.type === "custom");
 
   const backgroundColorType: ButtonProps["color"] =
-    fillNodesWithColor || node.type === "custom" ? node.type : "paper";
+    fillNodesWithColor || node.type === "custom" ? node.type : "paperPlain";
 
   // TODO: use `fill-node`/`no-fill-node` class, and extract these to styles file; not sure how to use type-specific colors without js though? maybe css vars for type-specific colors, and a var for the node type that's scoped to the current node?
   const nodeStyles: SxProps =

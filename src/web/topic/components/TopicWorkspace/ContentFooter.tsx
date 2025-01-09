@@ -1,6 +1,4 @@
 import {
-  ArrowBack,
-  ArrowForward,
   Build,
   Delete,
   EditOff,
@@ -8,23 +6,20 @@ import {
   Group,
   Highlight,
   QuestionMark,
-  Redo,
   TabUnselected,
-  Undo,
 } from "@mui/icons-material";
-import { AppBar, Divider, IconButton, ToggleButton, Toolbar, Tooltip } from "@mui/material";
+import { Divider, IconButton, ToggleButton, Tooltip } from "@mui/material";
 import { useEffect, useState } from "react";
 
 import { emitter } from "@/web/common/event";
 import { useSessionUser } from "@/web/common/hooks";
 import { HelpMenu } from "@/web/topic/components/TopicWorkspace/HelpMenu";
 import { MoreActionsDrawer } from "@/web/topic/components/TopicWorkspace/MoreActionsDrawer";
+import { QuickViewSelect } from "@/web/topic/components/TopicWorkspace/QuickViewSelect";
 import { deleteGraphPart } from "@/web/topic/store/createDeleteActions";
 import { useIsTableEdge } from "@/web/topic/store/edgeHooks";
-import { useOnPlayground } from "@/web/topic/store/topicHooks";
+import { useTopic } from "@/web/topic/store/topicHooks";
 import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
-import { redo, undo } from "@/web/topic/store/utilActions";
-import { useTemporalHooks } from "@/web/topic/store/utilHooks";
 import { hotkeys } from "@/web/topic/utils/hotkeys";
 import {
   toggleFlashlightMode,
@@ -32,12 +27,7 @@ import {
   useFlashlightMode,
   useReadonlyMode,
 } from "@/web/view/actionConfigStore";
-import {
-  goBack,
-  goForward,
-  useCanGoBackForward,
-  useSelectedGraphPart,
-} from "@/web/view/currentViewStore/store";
+import { useSelectedGraphPart } from "@/web/view/currentViewStore/store";
 import {
   comparePerspectives,
   resetPerspectives,
@@ -45,13 +35,22 @@ import {
 } from "@/web/view/perspectiveStore";
 import { toggleShowIndicators, useShowIndicators } from "@/web/view/userConfigStore";
 
-export const WorkspaceToolbar = () => {
+interface Props {
+  /**
+   * True if footer should overlay on top of content, false if it should be in-line.
+   *
+   * Generally is true for diagram since diagram can be moved around the overlay if it's in the way,
+   * otherwise false e.g. for table since that can't be moved if the overlay is in the way.
+   */
+  overlay: boolean;
+}
+
+export const ContentFooter = ({ overlay }: Props) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
 
-  const onPlayground = useOnPlayground();
-  const [canUndo, canRedo] = useTemporalHooks();
-  const [canGoBack, canGoForward] = useCanGoBackForward();
+  const topic = useTopic();
+  const onPlayground = topic.id === undefined;
 
   const showIndicators = useShowIndicators();
   const isComparingPerspectives = useIsComparingPerspectives();
@@ -76,73 +75,22 @@ export const WorkspaceToolbar = () => {
   }, []);
 
   return (
-    <AppBar position="sticky" className="overflow-x-auto border-b bg-gray-50 shadow-none">
-      <Toolbar variant="dense">
-        <IconButton
-          color="inherit"
-          title="Back"
-          aria-label="Back"
-          onClick={goBack}
-          disabled={!canGoBack}
-        >
-          <ArrowBack />
-        </IconButton>
-        <IconButton
-          color="inherit"
-          title="Forward"
-          aria-label="Forward"
-          onClick={goForward}
-          disabled={!canGoForward}
-        >
-          <ArrowForward />
-        </IconButton>
+    <div
+      className={
+        // max-w to keep children from being wide, but also prevent from being wider than screen (e.g. small 320px screen is scrunched without padding on 20rem)
+        "inset-x-0 bottom-0 flex flex-col gap-1.5 p-2 items-center *:max-w-[calc(min(20rem,100%))]" +
+        (overlay
+          ? " absolute z-10 pointer-events-none *:pointer-events-auto"
+          : " bg-paperShaded-main border-t")
+      }
+    >
+      {/* show this in content footer when screens are small and it doesn't fit between AppHeader corners, otherwise put in header */}
+      <div className="block bg-paperShaded-main lg:hidden">
+        <QuickViewSelect openDirection="top" />
+      </div>
 
-        {userCanEditTopicData && (
-          <>
-            <Divider orientation="vertical" flexItem />
-            {/* diagram state change actions */}
-
-            <IconButton
-              color="inherit"
-              title="Undo"
-              aria-label="Undo"
-              onClick={undo}
-              disabled={!canUndo}
-            >
-              <Undo />
-            </IconButton>
-            <IconButton
-              color="inherit"
-              title="Redo"
-              aria-label="Redo"
-              onClick={redo}
-              disabled={!canRedo}
-            >
-              <Redo />
-            </IconButton>
-
-            <Divider orientation="vertical" flexItem className="hidden sm:block" />
-
-            <IconButton
-              color="inherit"
-              title="Delete"
-              aria-label="Delete"
-              onClick={() => {
-                if (selectedGraphPart) {
-                  deleteGraphPart(selectedGraphPart);
-                }
-              }}
-              // don't allow modifying edges that are part of the table, because they should always exist as long as their nodes do
-              disabled={!selectedGraphPart || partIsTableEdge}
-              className="hidden sm:flex"
-            >
-              <Delete />
-            </IconButton>
-          </>
-        )}
-
-        <Divider orientation="vertical" flexItem />
-
+      {/* Toolbar */}
+      <div className="flex rounded border bg-paperShaded-main">
         <ToggleButton
           value={showIndicators}
           title={`Show indicators (${hotkeys.showIndicators})`}
@@ -175,8 +123,6 @@ export const WorkspaceToolbar = () => {
           </>
         )}
 
-        <Divider orientation="vertical" flexItem />
-
         {/* TODO?: seems a bit awkward to only show when flashlight mode is on, but it's more awkward */}
         {/* if we have no way of telling that it's on when we're clicking around the diagram */}
         {flashlightMode && (
@@ -188,7 +134,7 @@ export const WorkspaceToolbar = () => {
             size="small"
             selected={flashlightMode}
             onClick={() => toggleFlashlightMode(!flashlightMode)}
-            className="hidden rounded-full border-none sm:flex" // hide on mobile because there's not enough space
+            className="rounded-full border-none"
           >
             <Highlight />
           </ToggleButton>
@@ -208,6 +154,29 @@ export const WorkspaceToolbar = () => {
             <EditOff />
           </ToggleButton>
         )}
+
+        {userCanEditTopicData && (
+          <>
+            <Divider orientation="vertical" flexItem />
+
+            <IconButton
+              color="inherit"
+              title="Delete"
+              aria-label="Delete"
+              onClick={() => {
+                if (selectedGraphPart) {
+                  deleteGraphPart(selectedGraphPart);
+                }
+              }}
+              // don't allow modifying edges that are part of the table, because they should always exist as long as their nodes do
+              disabled={!selectedGraphPart || partIsTableEdge}
+            >
+              <Delete />
+            </IconButton>
+          </>
+        )}
+
+        <Divider orientation="vertical" flexItem />
 
         <IconButton
           color="inherit"
@@ -260,7 +229,7 @@ export const WorkspaceToolbar = () => {
             </IconButton>
           </Tooltip>
         )}
-      </Toolbar>
-    </AppBar>
+      </div>
+    </div>
   );
 };
