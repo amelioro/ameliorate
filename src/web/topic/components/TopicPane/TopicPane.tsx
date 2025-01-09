@@ -41,7 +41,7 @@ interface Props {
 }
 
 const TopicPaneBase = ({ anchor, tabs }: Props) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(tabs.includes("Details") ? true : false); // Views is expected to be used less, so close it by default
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
 
   const [selectedTopicDetailsTab, setSelectedTopicDetailsTab] = useState<TopicDetailsTab>("Basics");

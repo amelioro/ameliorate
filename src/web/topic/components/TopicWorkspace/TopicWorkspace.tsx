@@ -66,7 +66,7 @@ export const TopicWorkspace = () => {
         <WorkspaceContext.Provider value="details">
           <TopicPane
             anchor={isLandscape ? "left" : "bottom"}
-            tabs={useSplitPanes ? ["Views"] : ["Details", "Views"]}
+            tabs={useSplitPanes ? ["Details"] : ["Details", "Views"]}
           />
         </WorkspaceContext.Provider>
 
@@ -90,7 +90,7 @@ export const TopicWorkspace = () => {
 
         {useSplitPanes && (
           <WorkspaceContext.Provider value="details">
-            <TopicPane anchor="right" tabs={["Details"]} />
+            <TopicPane anchor="right" tabs={["Views"]} />
           </WorkspaceContext.Provider>
         )}
 
