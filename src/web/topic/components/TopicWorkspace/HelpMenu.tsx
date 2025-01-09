@@ -60,6 +60,7 @@ export const HelpMenu = ({ helpAnchorEl, setHelpAnchorEl }: Props) => {
       anchorEl={helpAnchorEl}
       isOpen={helpMenuOpen}
       closeMenu={() => setHelpAnchorEl(null)}
+      openDirection="top"
     >
       <Divider>Help</Divider>
 

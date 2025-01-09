@@ -1,4 +1,5 @@
 import { Global, useTheme } from "@emotion/react";
+import styled from "@emotion/styled";
 import { useMediaQuery } from "@mui/material";
 import { useHotkeys } from "react-hotkeys-hook";
 
@@ -8,11 +9,12 @@ import { CriteriaTable } from "@/web/topic/components/CriteriaTable/CriteriaTabl
 import { Diagram } from "@/web/topic/components/Diagram/Diagram";
 import { TopicPane } from "@/web/topic/components/TopicPane/TopicPane";
 import { AppHeader } from "@/web/topic/components/TopicWorkspace/AppHeader";
+import { ContentFooter } from "@/web/topic/components/TopicWorkspace/ContentFooter";
+import { ContentHeader } from "@/web/topic/components/TopicWorkspace/ContentHeader";
 import { TourSetter } from "@/web/topic/components/TopicWorkspace/TourSetter";
 import { TutorialAnchor } from "@/web/topic/components/TopicWorkspace/TutorialAnchor";
 import { TutorialController } from "@/web/topic/components/TopicWorkspace/TutorialController";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
-import { WorkspaceToolbar } from "@/web/topic/components/TopicWorkspace/WorkspaceToolbar";
 import { setScore } from "@/web/topic/store/actions";
 import { playgroundUsername } from "@/web/topic/store/store";
 import { isOnPlayground } from "@/web/topic/store/utilActions";
@@ -57,7 +59,6 @@ export const TopicWorkspace = () => {
     // h-svh to force workspace to take up full height of screen
     <div className="relative flex h-svh flex-col">
       <AppHeader />
-      <WorkspaceToolbar />
 
       <div
         className={`relative flex size-full overflow-auto ${isLandscape ? "flex-row" : "flex-col-reverse"}`}
@@ -69,7 +70,9 @@ export const TopicWorkspace = () => {
           />
         </WorkspaceContext.Provider>
 
-        <div className="flex h-full flex-1 overflow-auto">
+        <ContentDiv className="relative flex h-full flex-1 flex-col overflow-auto">
+          <ContentHeader overlay={format === "diagram"} />
+
           {format === "table" && (
             <WorkspaceContext.Provider value="table">
               <CriteriaTable />
@@ -81,7 +84,9 @@ export const TopicWorkspace = () => {
               <Diagram />
             </WorkspaceContext.Provider>
           )}
-        </div>
+
+          <ContentFooter overlay={format === "diagram"} />
+        </ContentDiv>
 
         {useSplitPanes && (
           <WorkspaceContext.Provider value="details">
@@ -101,3 +106,5 @@ export const TopicWorkspace = () => {
     </div>
   );
 };
+
+const ContentDiv = styled.div``;

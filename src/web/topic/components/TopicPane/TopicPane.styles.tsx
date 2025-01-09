@@ -4,9 +4,6 @@ import { Drawer, IconButton, css } from "@mui/material";
 import { nodeWidthRem } from "@/web/topic/components/Node/EditableNode.styles";
 
 export type Anchor = "top" | "left" | "bottom" | "right";
-export const PositionedDiv = styled.div`
-  position: relative;
-`;
 
 interface ButtonProps {
   anchor: Anchor;
@@ -89,7 +86,6 @@ export const StyledDrawer = styled(Drawer, options)<DrawerProps>`
   white-space: nowrap; // prevent wrapping during drawer transition
 
   & .MuiDrawer-paper {
-    z-index: ${({ theme }) => theme.zIndex.appBar - 1};
     transition: ${({ theme }) => theme.transitions.create(["width", "height"])};
     overflow-x: hidden; // prevent scrollbar during drawer transition
     // allows the drawer to start at parent position, as opposed to MUI's default fixed positioning starting from top of page
