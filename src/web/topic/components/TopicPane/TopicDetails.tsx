@@ -149,7 +149,7 @@ export const TopicDetails = ({ selectedTab, setSelectedTab }: Props) => {
         ) : (
           <>
             <Link href={`/${topic.creatorName}`}>{topic.creatorName}</Link>
-            <pre> / </pre>
+            <span className="px-1">/</span>
             <Link href={`/${topic.creatorName}/${topic.title}`}>{topic.title}</Link>
           </>
         )}
