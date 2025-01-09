@@ -23,7 +23,6 @@ export const AddNodeMenuItem = ({ parentMenuOpen }: Props) => {
   // always showing breakdown + research nodes seems reasonable. justification nodes never need to be added on their own.
   const shownNodeTypes = breakdownNodeTypes.concat(researchNodeTypes);
 
-  // New Addition: Allows colors to be carried over from theme.ts. Roy 1/2025.
   const theme = useTheme();
 
   // shouldn't be able to view this menu item if we're in the table view
