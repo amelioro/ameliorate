@@ -4,12 +4,13 @@ import { Card } from "@/web/home/Card";
 
 export const UseCasesSection = () => {
   return (
-    <div className="flex flex-col items-center gap-4">
-      <Typography variant="h4" className="text-center">
-        Work Constructively
+    <div className="flex flex-col items-center text-center">
+      <Typography variant="h4">Using Your Diagram</Typography>
+      <Typography variant="body1">
+        Once you've got your diagram, there are a few different ways you can use it.
       </Typography>
 
-      <div className="flex flex-wrap justify-center gap-2 md:*:w-56">
+      <div className="mt-4 flex flex-wrap justify-center gap-2 text-start md:*:w-56">
         <Card
           title="Grasp your own thoughts"
           description="Lay out your ideas with all of their nuance to better think through a problem and make better decisions for yourself."
