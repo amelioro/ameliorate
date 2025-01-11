@@ -1,4 +1,4 @@
-Closes #[insert issue number]
+Closes #issue-number-here
 
 ### Description of changes
 
