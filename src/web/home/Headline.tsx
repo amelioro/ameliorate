@@ -24,8 +24,8 @@ export const Headline = () => {
           cars-going-too-fast
         </Link>
       </Typography>
-      {/* max-w-34rem to barely fit the headline on two lines */}
-      <div className="relative my-24 flex max-w-[34rem] flex-col gap-4 rounded-3xl bg-paperPlain-main text-center sm:my-32 sm:border sm:border-primary-main sm:p-8 sm:text-left sm:shadow-xl">
+      {/* max-w-xl to barely fit the headline on two lines */}
+      <div className="relative my-24 flex max-w-xl flex-col gap-4 rounded-3xl bg-paperPlain-main text-center sm:my-32 sm:border sm:border-primary-main sm:p-8 sm:text-left sm:shadow-xl">
         <Typography
           variant="h1"
           fontWeight="bold"
