@@ -13,4 +13,5 @@ export const hotkeys = {
   showIndicators: "Alt + i",
   zoomIn: "Ctrl + =",
   zoomOut: "Ctrl + -",
+   delete: "del",
 };

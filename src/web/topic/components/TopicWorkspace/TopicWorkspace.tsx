@@ -15,8 +15,7 @@ import { TourSetter } from "@/web/topic/components/TopicWorkspace/TourSetter";
 import { TutorialAnchor } from "@/web/topic/components/TopicWorkspace/TutorialAnchor";
 import { TutorialController } from "@/web/topic/components/TopicWorkspace/TutorialController";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
-import { setScore } from "@/web/topic/store/actions";
-import { deleteNode } from "@/web/topic/store/createDeleteActions";
+import { deleteGraphPart, setScore } from "@/web/topic/store/actions";
 import { playgroundUsername } from "@/web/topic/store/store";
 import { isOnPlayground } from "@/web/topic/store/utilActions";
 import { Score, possibleScores } from "@/web/topic/utils/graph";
@@ -26,16 +25,6 @@ import { getReadonlyMode, toggleReadonlyMode } from "@/web/view/actionConfigStor
 import { getSelectedGraphPart, setSelected, useFormat } from "@/web/view/currentViewStore/store";
 import { getPerspectives } from "@/web/view/perspectiveStore";
 import { toggleShowIndicators } from "@/web/view/userConfigStore";
-
-const getSelectedNodeId = (): string | null => {
-  const selectedPart = getSelectedGraphPart();
-  return selectedPart ? selectedPart.id : null;
-};
-
-const nodeExists = (nodeId: string): boolean => {
-  const selectedPart = getSelectedGraphPart();
-  return selectedPart ? selectedPart.id === nodeId : false;
-};
 
 const useWorkspaceHotkeys = (user: { username: string } | null | undefined) => {
   useHotkeys([hotkeys.deselectPart], () => setSelected(null));
@@ -53,12 +42,10 @@ const useWorkspaceHotkeys = (user: { username: string } | null | undefined) => {
     setScore(myUsername, selectedPart.id, score as Score);
   });
 
-  useHotkeys("delete", () => {
-    const selectedNodeId = getSelectedNodeId();
-    if (selectedNodeId && nodeExists(selectedNodeId)) {
-      deleteNode(selectedNodeId);
-    } else {
-      console.error("Node not found:", selectedNodeId);
+  useHotkeys([hotkeys.delete || "del"], () => {
+    const selectedPart = getSelectedGraphPart();
+    if (selectedPart?.id) {
+      deleteGraphPart(selectedPart.id);
     }
   });
 };

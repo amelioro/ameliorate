@@ -131,3 +131,17 @@ export const setGraphPartNotes = (graphPart: GraphPart, value: string) => {
 
   useTopicStore.setState(finishDraft(state), false, "setGraphPartNotes");
 };
+
+export const deleteGraphPart = (graphPartId: string) => {
+  const state = createDraft(useTopicStore.getState());
+
+  const foundGraphPart = findGraphPartOrThrow(graphPartId, state.nodes, state.edges);
+
+  // Видалення графічної частини
+  // eslint-disable-next-line functional/immutable-data
+  state.nodes = state.nodes.filter((node) => node.id !== foundGraphPart.id);
+  // eslint-disable-next-line functional/immutable-data
+  state.edges = state.edges.filter((edge) => edge.source !== foundGraphPart.id && edge.target !== foundGraphPart.id);
+
+  useTopicStore.setState(finishDraft(state), false, "deleteGraphPart");
+};
