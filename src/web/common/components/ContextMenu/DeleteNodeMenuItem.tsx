@@ -11,20 +11,20 @@ export const DeleteNodeMenuItem = ({ node }: { node: Node }) => {
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
 
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
+    const handleGlobalDelete = (event: KeyboardEvent) => {
       if (event.key === "Delete" && userCanEditTopicData) {
         deleteNode(node.id);
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keydown", handleGlobalDelete);
 
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keydown", handleGlobalDelete);
     };
-  }, [node, userCanEditTopicData]);
+  }, [node.id, userCanEditTopicData]);
 
-  if (!userCanEditTopicData) return <></>;
+  if (!userCanEditTopicData) return null;
 
-  return <ContextMenuItem onClick={() => deleteNode(node.id)}>Delete node</ContextMenuItem>;
+  return <ContextMenuItem onClick={() => deleteNode(node.id)}>Delete Node</ContextMenuItem>;
 };
