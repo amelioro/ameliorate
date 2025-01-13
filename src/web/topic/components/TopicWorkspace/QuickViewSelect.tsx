@@ -1,12 +1,8 @@
-import { MenuItem, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 
 import { selectView, useQuickViews, useSelectedViewId } from "@/web/view/quickViewStore/store";
 
-interface Props {
-  openDirection: "top" | "bottom";
-}
-
-export const QuickViewSelect = ({ openDirection }: Props) => {
+export const QuickViewSelect = () => {
   const quickViews = useQuickViews();
   const selectedViewId = useSelectedViewId();
 
@@ -19,31 +15,22 @@ export const QuickViewSelect = ({ openDirection }: Props) => {
       // jank to manually specify these, but the label should be reduced in size since the Select's text is reduced
       InputLabelProps={{ className: "text-sm translate-x-[1.0625rem] -translate-y-2 scale-75" }}
       SelectProps={{
+        // native select dropdown maybe looks less stylish but it comes with space-to-open/close, up/down-to-change-value, esc to blur, which is really nice
+        // TODO: native select also doesn't size based on selected option, would be nice if it did... unfortunately it seems like right now this requires annoying js https://stackoverflow.com/questions/20091481/auto-resizing-the-select-element-according-to-selected-options-width
+        native: true,
         // override to be smaller than MUI allows
-        SelectDisplayProps: { className: "text-sm py-1" },
-        MenuProps: {
-          anchorOrigin: {
-            vertical: openDirection === "top" ? "top" : "bottom",
-            horizontal: "left",
-          },
-          transformOrigin: {
-            vertical: openDirection === "top" ? "bottom" : "top",
-            horizontal: "left",
-          },
-        },
+        className: "text-sm [&_>_select]:py-1 [&_*]:text-ellipsis",
       }}
-      // ensure no overflow if view titles are really  long
-      className="max-w-full"
     >
       {/* e.g. if user manually changes a filter */}
-      <MenuItem key="no-view-selected" value="no-view-selected" hidden>
+      <option key="no-view-selected" value="no-view-selected" hidden>
         Custom
-      </MenuItem>
+      </option>
 
       {quickViews.map((view, index) => (
-        <MenuItem key={view.id} value={view.id} className="text-sm">
+        <option key={view.id} value={view.id} className="text-sm">
           {index + 1}. {view.title}
-        </MenuItem>
+        </option>
       ))}
     </TextField>
   );

@@ -86,7 +86,7 @@ export const ContentFooter = ({ overlay }: Props) => {
     >
       {/* show this in content footer when screens are small and it doesn't fit between AppHeader corners, otherwise put in header */}
       <div className="block bg-paperShaded-main lg:hidden">
-        <QuickViewSelect openDirection="top" />
+        <QuickViewSelect />
       </div>
 
       {/* Toolbar */}

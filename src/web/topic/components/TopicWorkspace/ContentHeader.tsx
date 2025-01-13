@@ -77,7 +77,7 @@ export const ContentHeader = ({ overlay }: Props) => {
 
       {/* show this in content footer when screens are small and it doesn't fit between AppHeader corners, otherwise put in header */}
       <div className="hidden bg-paperShaded-main lg:block">
-        <QuickViewSelect openDirection="bottom" />
+        <QuickViewSelect />
       </div>
     </div>
   );
