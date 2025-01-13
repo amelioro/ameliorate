@@ -15,9 +15,10 @@ import { useTemporalHooks } from "@/web/topic/store/utilHooks";
 import { goBack, goForward, useCanGoBackForward } from "@/web/view/currentViewStore/store";
 
 // TODO: check if need overflow-x-auto to deal with increased html font size
-// h-[49px] to match SiteHeader's 48px + 1px border
+// h-[calc(3rem + 1 px)] to match SiteHeader's 48px + 1px border
 // border stuff to allow corners to have their own border on large screens, but use the parent's shared border for smaller screens
-const headerCornerClasses = "h-[49px] bg-paperShaded-main flex items-center border-0 lg:border-b";
+const headerCornerClasses =
+  "h-[calc(3rem_+_1px)] bg-paperShaded-main flex items-center border-0 lg:border-b";
 
 export const AppHeader = () => {
   const theme = useTheme();
