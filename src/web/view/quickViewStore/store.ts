@@ -353,12 +353,23 @@ export const getPersistState = () => {
 };
 
 // misc
-// if a quick view is selected and the view changes from that, deselect it
-emitter.on("changedView", (_newView) => {
-  if (selectingView) return; // don't deselect the view if this event was triggered by selection
+// ensure selected quick view is updated when the current view changes
+emitter.on("changedView", (newView) => {
+  if (selectingView) return; // don't change selected view if this event was triggered by selection
 
   const state = useQuickViewStore.getState();
-  if (state.selectedViewId === null) return;
 
-  selectView(null);
+  // If the view changed, and the state matches a Quick View, set that Quick View as selected,
+  // otherwise deselect the selected view.
+  // Doing a deep comparison for each quick view on every current view change is probably a
+  // bit unperformant, but it's nice to have when merely selecting a node results in deselecting the
+  // current view.
+  // TODO: consider removing `selectedGraphPartId` from this store so that doesn't trigger this event,
+  // then maybe it'd be less painful to remove this deep comparison.
+  const match = state.views.find((view) => deepIsEqual(withViewDefaults(view.viewState), newView));
+  if (match) {
+    if (state.selectedViewId !== match.id) selectView(match.id);
+  } else {
+    if (state.selectedViewId !== null) selectView(null);
+  }
 });
