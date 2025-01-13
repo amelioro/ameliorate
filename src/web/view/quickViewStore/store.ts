@@ -10,7 +10,13 @@ import { withDefaults } from "@/common/object";
 import { deepIsEqual } from "@/common/utils";
 import { emitter } from "@/web/common/event";
 import { StoreTopic, UserTopic } from "@/web/topic/store/store";
-import { ViewState, getView, initialViewState, setView } from "@/web/view/currentViewStore/store";
+import {
+  ViewState,
+  getView,
+  initialViewState,
+  setView,
+  withViewDefaults,
+} from "@/web/view/currentViewStore/store";
 import { apiSyncer } from "@/web/view/quickViewStore/apiSyncerMiddleware";
 import { migrate } from "@/web/view/quickViewStore/migrate";
 
@@ -242,7 +248,7 @@ export const selectView = (viewId: string | null) => {
 export const selectViewFromState = (viewState: ViewState) => {
   const { views } = useQuickViewStore.getState();
 
-  const view = views.find((view) => deepIsEqual(view.viewState, viewState));
+  const view = views.find((view) => deepIsEqual(withViewDefaults(view.viewState), viewState));
   if (view === undefined) return;
 
   useQuickViewStore.temporal.getState().pause();

@@ -178,7 +178,7 @@ export const setFormat = (format: Format) => {
  * E.g. so that a new non-null value in initialState is non-null in the persisted state,
  * removing the need to write a migration for every new field.
  */
-const withViewDefaults = (viewState?: Partial<ViewState>) => {
+export const withViewDefaults = (viewState?: Partial<ViewState>) => {
   if (!viewState) return initialViewState;
   return withDefaults(viewState, initialViewState);
 };
