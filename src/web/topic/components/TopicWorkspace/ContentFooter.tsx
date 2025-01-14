@@ -7,6 +7,7 @@ import {
   Group,
   Highlight,
   QuestionMark,
+  SelfImprovement,
   TabUnselected,
 } from "@mui/icons-material";
 import { Divider, IconButton, ToggleButton, Tooltip } from "@mui/material";
@@ -36,7 +37,7 @@ import {
   resetPerspectives,
   useIsComparingPerspectives,
 } from "@/web/view/perspectiveStore";
-import { toggleShowIndicators, useShowIndicators } from "@/web/view/userConfigStore";
+import { toggleShowIndicators, toggleZenMode, useShowIndicators } from "@/web/view/userConfigStore";
 
 interface PerspectivesMenuProps {
   anchorEl: HTMLElement | null;
@@ -122,6 +123,19 @@ export const ContentFooter = ({ overlay }: Props) => {
       {/* Toolbar buttons have square-rounding to fit more snuggly into the toolbar; potentially could make */}
       {/* all icon buttons match this but they seem ok as the default full-rounded. */}
       <div className="flex rounded border bg-paperShaded-main">
+        <ToggleButton
+          value={false}
+          selected={false}
+          title="Zen mode"
+          aria-label="Zen mode"
+          color="primary"
+          size="small"
+          onClick={() => toggleZenMode()}
+          className="rounded border-none"
+        >
+          <SelfImprovement />
+        </ToggleButton>
+
         <ToggleButton
           value={showIndicators}
           title={`Show indicators (${hotkeys.showIndicators})`}

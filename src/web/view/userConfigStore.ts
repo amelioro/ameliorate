@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface UserConfigStoreState {
+  zenMode: boolean;
   showIndicators: boolean;
   fillNodesWithColor: boolean;
   indicateWhenNodeForcedToShow: boolean;
@@ -9,6 +10,7 @@ interface UserConfigStoreState {
 }
 
 const initialState: UserConfigStoreState = {
+  zenMode: false,
   showIndicators: false,
   fillNodesWithColor: false,
   indicateWhenNodeForcedToShow: false,
@@ -22,6 +24,10 @@ const useUserConfigStore = create<UserConfigStoreState>()(
 );
 
 // hooks
+export const useZenMode = () => {
+  return useUserConfigStore((state) => state.zenMode);
+};
+
 export const useShowIndicators = () => {
   return useUserConfigStore((state) => state.showIndicators);
 };
@@ -39,6 +45,10 @@ export const useExpandDetailsTabs = () => {
 };
 
 // actions
+export const toggleZenMode = () => {
+  useUserConfigStore.setState((state) => ({ zenMode: !state.zenMode }));
+};
+
 export const toggleShowIndicators = () => {
   useUserConfigStore.setState((state) => ({ showIndicators: !state.showIndicators }));
 };
