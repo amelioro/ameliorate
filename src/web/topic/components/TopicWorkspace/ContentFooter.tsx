@@ -1,4 +1,5 @@
 import {
+  ArrowDropDown,
   Build,
   Delete,
   EditOff,
@@ -9,8 +10,9 @@ import {
   TabUnselected,
 } from "@mui/icons-material";
 import { Divider, IconButton, ToggleButton, Tooltip } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
+import { Menu } from "@/web/common/components/Menu/Menu";
 import { emitter } from "@/web/common/event";
 import { useSessionUser } from "@/web/common/hooks";
 import { HelpMenu } from "@/web/topic/components/TopicWorkspace/HelpMenu";
@@ -27,6 +29,7 @@ import {
   useFlashlightMode,
   useReadonlyMode,
 } from "@/web/view/actionConfigStore";
+import { Perspectives } from "@/web/view/components/Perspectives/Perspectives";
 import { useSelectedGraphPart } from "@/web/view/currentViewStore/store";
 import {
   comparePerspectives,
@@ -34,6 +37,29 @@ import {
   useIsComparingPerspectives,
 } from "@/web/view/perspectiveStore";
 import { toggleShowIndicators, useShowIndicators } from "@/web/view/userConfigStore";
+
+interface PerspectivesMenuProps {
+  anchorEl: HTMLElement | null;
+  setAnchorEl: Dispatch<SetStateAction<HTMLElement | null>>;
+}
+
+const PerspectivesMenu = ({ anchorEl, setAnchorEl }: PerspectivesMenuProps) => {
+  const menuOpen = Boolean(anchorEl);
+  if (!menuOpen) return;
+
+  return (
+    <Menu
+      anchorEl={anchorEl}
+      isOpen={menuOpen}
+      closeMenu={() => setAnchorEl(null)}
+      openDirection="top"
+      // match the ~300px width of drawer
+      className="w-[18.75rem] px-2"
+    >
+      <Perspectives />
+    </Menu>
+  );
+};
 
 interface Props {
   /**
@@ -61,6 +87,9 @@ export const ContentFooter = ({ overlay }: Props) => {
   const selectedGraphPart = useSelectedGraphPart();
   const partIsTableEdge = useIsTableEdge(selectedGraphPart?.id ?? "");
 
+  const [perspectivesMenuAnchorEl, setPerspectivesMenuAnchorEl] = useState<null | HTMLElement>(
+    null,
+  );
   const [isMoreActionsDrawerOpen, setIsMoreActionsDrawerOpen] = useState(false);
   const [helpAnchorEl, setHelpAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -90,6 +119,8 @@ export const ContentFooter = ({ overlay }: Props) => {
       </div>
 
       {/* Toolbar */}
+      {/* Toolbar buttons have square-rounding to fit more snuggly into the toolbar; potentially could make */}
+      {/* all icon buttons match this but they seem ok as the default full-rounded. */}
       <div className="flex rounded border bg-paperShaded-main">
         <ToggleButton
           value={showIndicators}
@@ -99,7 +130,7 @@ export const ContentFooter = ({ overlay }: Props) => {
           size="small"
           selected={showIndicators}
           onClick={() => toggleShowIndicators()}
-          className="rounded-full border-none"
+          className="rounded border-none"
         >
           <TabUnselected />
         </ToggleButton>
@@ -116,10 +147,27 @@ export const ContentFooter = ({ overlay }: Props) => {
               onClick={() =>
                 isComparingPerspectives ? resetPerspectives() : comparePerspectives()
               }
-              className="rounded-full border-none"
+              className="rounded border-none"
             >
               <Group />
             </ToggleButton>
+
+            <IconButton
+              color="inherit"
+              title="Perspectives menu"
+              aria-label="Perspectives menu"
+              onClick={(event) => setPerspectivesMenuAnchorEl(event.currentTarget)}
+              // small width to keep the menu button narrow
+              // extra right padding because otherwise icon is too close to right-divider
+              // extra y padding to match other icon buttons with default fontSize="medium"
+              className="w-3 rounded py-2.5 pl-2 pr-2.5"
+            >
+              <ArrowDropDown fontSize="small" />
+            </IconButton>
+            <PerspectivesMenu
+              anchorEl={perspectivesMenuAnchorEl}
+              setAnchorEl={setPerspectivesMenuAnchorEl}
+            />
           </>
         )}
 
@@ -134,7 +182,7 @@ export const ContentFooter = ({ overlay }: Props) => {
             size="small"
             selected={flashlightMode}
             onClick={() => toggleFlashlightMode(!flashlightMode)}
-            className="rounded-full border-none"
+            className="rounded border-none"
           >
             <Highlight />
           </ToggleButton>
@@ -149,7 +197,7 @@ export const ContentFooter = ({ overlay }: Props) => {
             size="small"
             selected={readonlyMode}
             onClick={() => toggleReadonlyMode()}
-            className="rounded-full border-none"
+            className="rounded border-none"
           >
             <EditOff />
           </ToggleButton>
@@ -170,6 +218,7 @@ export const ContentFooter = ({ overlay }: Props) => {
               }}
               // don't allow modifying edges that are part of the table, because they should always exist as long as their nodes do
               disabled={!selectedGraphPart || partIsTableEdge}
+              className="rounded"
             >
               <Delete />
             </IconButton>
@@ -183,6 +232,7 @@ export const ContentFooter = ({ overlay }: Props) => {
           title="More actions"
           aria-label="More actions"
           onClick={() => setIsMoreActionsDrawerOpen(true)}
+          className="rounded"
         >
           <Build />
         </IconButton>
@@ -198,6 +248,7 @@ export const ContentFooter = ({ overlay }: Props) => {
           title="Help"
           aria-label="Help"
           onClick={(event) => setHelpAnchorEl(event.currentTarget)}
+          className="rounded"
         >
           <QuestionMark />
         </IconButton>
@@ -223,7 +274,7 @@ export const ContentFooter = ({ overlay }: Props) => {
               // Don't make it look like clicking will do something, since it won't.
               // Using a button here is an attempt to make it accessible, since the tooltip will show
               // on focus.
-              className="cursor-default"
+              className="cursor-default rounded"
             >
               <Error />
             </IconButton>
