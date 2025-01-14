@@ -68,7 +68,7 @@ export const ContentHeader = ({ overlay }: Props) => {
             aria-label="Settings"
             LinkComponent={NextLink}
             href={`/${topic.creatorName}/${topic.title}/settings`}
-            className="p-0"
+            className="py-0 pr-0"
           >
             <Settings fontSize="inherit" />
           </IconButton>
