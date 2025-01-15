@@ -69,9 +69,9 @@ export const TopicWorkspace = () => {
 
   const format = useFormat();
   const theme = useTheme();
-  const isLandscape = useMediaQuery("(orientation: landscape)");
-  const usingBigScreen = useMediaQuery(theme.breakpoints.up("2xl"));
-  const useSplitPanes = isLandscape && usingBigScreen;
+  const using2xlScreen = useMediaQuery(theme.breakpoints.up("2xl"));
+  const useSplitPanes = using2xlScreen;
+  const usingLgScreen = useMediaQuery(theme.breakpoints.up("lg"));
 
   const zenMode = useZenMode();
 
@@ -80,12 +80,10 @@ export const TopicWorkspace = () => {
     <div className="relative flex h-svh flex-col">
       {!zenMode && <AppHeader />}
 
-      <div
-        className={`relative flex size-full overflow-auto ${isLandscape ? "flex-row" : "flex-col-reverse"}`}
-      >
+      <div className="relative flex size-full flex-row overflow-auto">
         <WorkspaceContext.Provider value="details">
           <TopicPane
-            anchor={isLandscape ? "left" : "bottom"}
+            anchor={usingLgScreen ? "left" : "modal"}
             tabs={useSplitPanes ? ["Details"] : ["Details", "Views"]}
           />
         </WorkspaceContext.Provider>

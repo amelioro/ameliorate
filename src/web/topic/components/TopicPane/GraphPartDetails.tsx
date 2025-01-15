@@ -17,6 +17,7 @@ import {
   ListItemText,
   Tab,
   Typography,
+  styled,
 } from "@mui/material";
 
 import { useCommentCount } from "@/web/comment/store/commentStore";
@@ -67,7 +68,8 @@ export const GraphPartDetails = ({ graphPart, selectedTab, setSelectedTab }: Pro
   const indicateComments = commentCount > 0;
 
   return (
-    <List>
+    // flex & max-h to ensure content takes up no more than full height, allowing inner containers to control scrolling
+    <List className="flex max-h-full flex-col pb-0">
       <div className="flex flex-col items-center">
         {partIsNode ? (
           // z-index to ensure hanging node indicators don't fall behind the next section's empty background
@@ -78,126 +80,130 @@ export const GraphPartDetails = ({ graphPart, selectedTab, setSelectedTab }: Pro
       </div>
 
       {/* mt-2 to match distance from Tabs look to graph part */}
-      <Divider className="mb-1 mt-2" />
+      <Divider className="mb-1 mt-2 shadow" />
 
-      {!expandDetailsTabs ? (
-        <>
-          <TabContext value={!partIsNode && selectedTab === "Research" ? "Basics" : selectedTab}>
-            <TabList
-              onChange={(_, value: DetailsTab) => setSelectedTab(value)}
-              centered
-              className="px-2"
-            >
-              <Tab
-                icon={indicateBasics ? <Article /> : <ArticleOutlined />}
-                value="Basics"
-                title="Basics"
-                aria-label="Basics"
-              />
-              <Tab
-                icon={indicateJustification ? <ThumbsUpDown /> : <ThumbsUpDownOutlined />}
-                value="Justification"
-                title="Justification"
-                aria-label="Justification"
-              />
-              {partIsNode && (
+      <ContentDiv className="overflow-auto">
+        {!expandDetailsTabs ? (
+          <>
+            <TabContext value={!partIsNode && selectedTab === "Research" ? "Basics" : selectedTab}>
+              <TabList
+                onChange={(_, value: DetailsTab) => setSelectedTab(value)}
+                centered
+                className="px-2"
+              >
                 <Tab
-                  icon={indicateResearch ? <School /> : <SchoolOutlined />}
-                  value="Research"
-                  title="Research"
-                  aria-label="Research"
+                  icon={indicateBasics ? <Article /> : <ArticleOutlined />}
+                  value="Basics"
+                  title="Basics"
+                  aria-label="Basics"
                 />
-              )}
-              <Tab
-                icon={indicateComments ? <ChatBubble /> : <ChatBubbleOutline />}
-                value="Comments"
-                title="Comments"
-                aria-label="Comments"
-              />
-            </TabList>
+                <Tab
+                  icon={indicateJustification ? <ThumbsUpDown /> : <ThumbsUpDownOutlined />}
+                  value="Justification"
+                  title="Justification"
+                  aria-label="Justification"
+                />
+                {partIsNode && (
+                  <Tab
+                    icon={indicateResearch ? <School /> : <SchoolOutlined />}
+                    value="Research"
+                    title="Research"
+                    aria-label="Research"
+                  />
+                )}
+                <Tab
+                  icon={indicateComments ? <ChatBubble /> : <ChatBubbleOutline />}
+                  value="Comments"
+                  title="Comments"
+                  aria-label="Comments"
+                />
+              </TabList>
 
-            <TabPanel value="Basics" className="p-2">
-              <ListItem disablePadding={false}>
-                <Typography variant="body1" className="mx-auto">
-                  Basics
-                </Typography>
-              </ListItem>
-              <DetailsBasicsSection graphPart={graphPart} />
-            </TabPanel>
-            <TabPanel value="Justification" className="p-2">
-              <ListItem disablePadding={false}>
-                <Typography variant="body1" className="mx-auto">
-                  Justification
-                </Typography>
-              </ListItem>
-              <DetailsJustificationSection graphPart={graphPart} />
-            </TabPanel>
-            {partIsNode && (
-              <TabPanel value="Research" className="p-2">
+              <TabPanel value="Basics" className="p-2">
                 <ListItem disablePadding={false}>
                   <Typography variant="body1" className="mx-auto">
-                    Research
+                    Basics
                   </Typography>
                 </ListItem>
-                <DetailsResearchSection node={graphPart} />
+                <DetailsBasicsSection graphPart={graphPart} />
               </TabPanel>
+              <TabPanel value="Justification" className="p-2">
+                <ListItem disablePadding={false}>
+                  <Typography variant="body1" className="mx-auto">
+                    Justification
+                  </Typography>
+                </ListItem>
+                <DetailsJustificationSection graphPart={graphPart} />
+              </TabPanel>
+              {partIsNode && (
+                <TabPanel value="Research" className="p-2">
+                  <ListItem disablePadding={false}>
+                    <Typography variant="body1" className="mx-auto">
+                      Research
+                    </Typography>
+                  </ListItem>
+                  <DetailsResearchSection node={graphPart} />
+                </TabPanel>
+              )}
+              <TabPanel value="Comments" className="p-2">
+                <ListItem disablePadding={false}>
+                  <Typography variant="body1" className="mx-auto">
+                    Comments
+                  </Typography>
+                </ListItem>
+                <CommentSection parentId={graphPart.id} parentType={partIsNode ? "node" : "edge"} />
+              </TabPanel>
+            </TabContext>
+          </>
+        ) : (
+          <>
+            <ListItem disablePadding={false}>
+              <ListItemIcon>
+                <Article />
+              </ListItemIcon>
+              <ListItemText primary="Basics" />
+            </ListItem>
+            <DetailsBasicsSection graphPart={graphPart} />
+
+            <Divider className="my-1" />
+
+            <ListItem disablePadding={false}>
+              <ListItemIcon>
+                <ThumbsUpDown />
+              </ListItemIcon>
+              <ListItemText primary="Justification" />
+            </ListItem>
+            <DetailsJustificationSection graphPart={graphPart} />
+
+            {/* prevent adding research nodes to edges; not 100% sure that we want to restrict this, but if it continues to seem good, this section can accept node instead of graphPart */}
+            {partIsNode && (
+              <>
+                <Divider className="my-1" />
+
+                <ListItem disablePadding={false}>
+                  <ListItemIcon>
+                    <School />
+                  </ListItemIcon>
+                  <ListItemText primary="Research" />
+                </ListItem>
+                <DetailsResearchSection node={graphPart} />
+              </>
             )}
-            <TabPanel value="Comments" className="p-2">
-              <ListItem disablePadding={false}>
-                <Typography variant="body1" className="mx-auto">
-                  Comments
-                </Typography>
-              </ListItem>
-              <CommentSection parentId={graphPart.id} parentType={partIsNode ? "node" : "edge"} />
-            </TabPanel>
-          </TabContext>
-        </>
-      ) : (
-        <>
-          <ListItem disablePadding={false}>
-            <ListItemIcon>
-              <Article />
-            </ListItemIcon>
-            <ListItemText primary="Basics" />
-          </ListItem>
-          <DetailsBasicsSection graphPart={graphPart} />
 
-          <Divider className="my-1" />
+            <Divider className="my-1" />
 
-          <ListItem disablePadding={false}>
-            <ListItemIcon>
-              <ThumbsUpDown />
-            </ListItemIcon>
-            <ListItemText primary="Justification" />
-          </ListItem>
-          <DetailsJustificationSection graphPart={graphPart} />
-
-          {/* prevent adding research nodes to edges; not 100% sure that we want to restrict this, but if it continues to seem good, this section can accept node instead of graphPart */}
-          {partIsNode && (
-            <>
-              <Divider className="my-1" />
-
-              <ListItem disablePadding={false}>
-                <ListItemIcon>
-                  <School />
-                </ListItemIcon>
-                <ListItemText primary="Research" />
-              </ListItem>
-              <DetailsResearchSection node={graphPart} />
-            </>
-          )}
-
-          <Divider className="my-1" />
-
-          <ListItem disablePadding={false}>
-            <ListItemIcon>
-              <ChatBubble />
-            </ListItemIcon>
-            <ListItemText primary="Comments" />
-          </ListItem>
-          <CommentSection parentId={graphPart.id} parentType={partIsNode ? "node" : "edge"} />
-        </>
-      )}
+            <ListItem disablePadding={false}>
+              <ListItemIcon>
+                <ChatBubble />
+              </ListItemIcon>
+              <ListItemText primary="Comments" />
+            </ListItem>
+            <CommentSection parentId={graphPart.id} parentType={partIsNode ? "node" : "edge"} />
+          </>
+        )}
+      </ContentDiv>
     </List>
   );
 };
+
+const ContentDiv = styled("div")``;
