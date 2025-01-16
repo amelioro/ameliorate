@@ -1,3 +1,4 @@
+import { Topic as ApiTopic } from "@prisma/client";
 import Router from "next/router";
 import shortUUID from "short-uuid";
 import { temporal } from "zundo";
@@ -9,8 +10,14 @@ import { errorWithData } from "@/common/errorHandling";
 import { withDefaults } from "@/common/object";
 import { deepIsEqual } from "@/common/utils";
 import { emitter } from "@/web/common/event";
-import { StoreTopic, UserTopic } from "@/web/topic/store/store";
-import { ViewState, getView, initialViewState, setView } from "@/web/view/currentViewStore/store";
+import { StoreTopic } from "@/web/topic/store/store";
+import {
+  ViewState,
+  getView,
+  initialViewState,
+  setView,
+  withViewDefaults,
+} from "@/web/view/currentViewStore/store";
 import { apiSyncer } from "@/web/view/quickViewStore/apiSyncerMiddleware";
 import { migrate } from "@/web/view/quickViewStore/migrate";
 
@@ -242,7 +249,7 @@ export const selectView = (viewId: string | null) => {
 export const selectViewFromState = (viewState: ViewState) => {
   const { views } = useQuickViewStore.getState();
 
-  const view = views.find((view) => deepIsEqual(view.viewState, viewState));
+  const view = views.find((view) => deepIsEqual(withViewDefaults(view.viewState), viewState));
   if (view === undefined) return;
 
   useQuickViewStore.temporal.getState().pause();
@@ -266,7 +273,7 @@ export const resetQuickViews = () => {
   useQuickViewStore.setState({ ...initialStateWithBasicViews(), topic }, true, "reset");
 };
 
-export const loadQuickViewsFromApi = (topic: UserTopic, views: QuickView[]) => {
+export const loadQuickViewsFromApi = (topic: ApiTopic, views: QuickView[]) => {
   const builtPersistedName = `${persistedNameBase}-user`;
   useQuickViewStore.persist.setOptions({ name: builtPersistedName });
 
@@ -274,12 +281,16 @@ export const loadQuickViewsFromApi = (topic: UserTopic, views: QuickView[]) => {
 
   useQuickViewStore.setState(
     {
-      // specify each field because we don't need to store extra data like createdAt etc.
+      // specify each field because we don't need to store extra data like topic's relations if they're passed in
       topic: {
         id: topic.id,
-        creatorName: topic.creatorName,
         title: topic.title,
+        creatorName: topic.creatorName,
         description: topic.description,
+        visibility: topic.visibility,
+        allowAnyoneToEdit: topic.allowAnyoneToEdit,
+        createdAt: topic.createdAt,
+        updatedAt: topic.updatedAt,
       },
       // specify each field because we don't need to store extra data like createdAt etc.
       views: views.map((view) => ({
@@ -347,12 +358,23 @@ export const getPersistState = () => {
 };
 
 // misc
-// if a quick view is selected and the view changes from that, deselect it
-emitter.on("changedView", (_newView) => {
-  if (selectingView) return; // don't deselect the view if this event was triggered by selection
+// ensure selected quick view is updated when the current view changes
+emitter.on("changedView", (newView) => {
+  if (selectingView) return; // don't change selected view if this event was triggered by selection
 
   const state = useQuickViewStore.getState();
-  if (state.selectedViewId === null) return;
 
-  selectView(null);
+  // If the view changed, and the state matches a Quick View, set that Quick View as selected,
+  // otherwise deselect the selected view.
+  // Doing a deep comparison for each quick view on every current view change is probably a
+  // bit unperformant, but it's nice to have when merely selecting a node results in deselecting the
+  // current view.
+  // TODO: consider removing `selectedGraphPartId` from this store so that doesn't trigger this event,
+  // then maybe it'd be less painful to remove this deep comparison.
+  const match = state.views.find((view) => deepIsEqual(withViewDefaults(view.viewState), newView));
+  if (match) {
+    if (state.selectedViewId !== match.id) selectView(match.id);
+  } else {
+    if (state.selectedViewId !== null) selectView(null);
+  }
 });

@@ -1,3 +1,4 @@
+import { Topic as ApiTopic } from "@prisma/client";
 import sortBy from "lodash/sortBy";
 import uniqBy from "lodash/uniqBy";
 import { temporal } from "zundo";
@@ -35,13 +36,7 @@ export interface PlaygroundTopic {
   description: string;
 }
 
-export type UserTopic = Omit<PlaygroundTopic, "id"> & {
-  id: number;
-  creatorName: string;
-  title: string;
-};
-
-export type StoreTopic = UserTopic | PlaygroundTopic;
+export type StoreTopic = ApiTopic | PlaygroundTopic;
 
 // TODO: probably better to put userScores into a separate store (it doesn't seem necessary to
 // couple scores with the nodes/edges, and we'd be able to avoid triggering score comparators by

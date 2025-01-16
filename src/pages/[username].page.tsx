@@ -1,5 +1,5 @@
 import { AutoStories, Settings } from "@mui/icons-material";
-import { Box, Button, IconButton } from "@mui/material";
+import { Box, Button, Dialog, IconButton } from "@mui/material";
 import { type Topic } from "@prisma/client";
 import {
   type MRT_ColumnDef,
@@ -9,14 +9,15 @@ import {
 } from "material-react-table";
 import { NextPage } from "next";
 import Head from "next/head";
-import NextLink from "next/link";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 import { NotFoundError, QueryError } from "@/web/common/components/Error/Error";
 import { Link } from "@/web/common/components/Link";
 import { Loading } from "@/web/common/components/Loading/Loading";
 import { useSessionUser } from "@/web/common/hooks";
 import { trpc } from "@/web/common/trpc";
+import { CreateTopicForm, EditTopicForm } from "@/web/topic/components/TopicForm/TopicForm";
 
 type RowData = Topic;
 
@@ -34,6 +35,9 @@ const User: NextPage = () => {
     { username: username! },
     { enabled: !!username },
   );
+
+  const [editingTopicId, setEditingTopicId] = useState<number | null>(null);
+  const [creatingTopic, setCreatingTopic] = useState(false);
 
   // TODO: use suspense to better handle loading & error
   if (!router.isReady || !username || findUser.isLoading || sessionUserIsLoading)
@@ -113,14 +117,22 @@ const User: NextPage = () => {
         layoutMode="grid"
         enableRowActions={hasEditAccess}
         renderRowActions={({ row }) => (
-          <IconButton
-            onClick={(e) => {
-              e.stopPropagation(); // prevent row click
-              void router.push(`/${foundUser.username}/${row.original.title}/settings`);
-            }}
-          >
-            <Settings />
-          </IconButton>
+          <>
+            <IconButton
+              title="Settings"
+              aria-label="Settings"
+              onClick={() => setEditingTopicId(row.original.id)}
+            >
+              <Settings fontSize="inherit" />
+            </IconButton>
+            <Dialog
+              open={editingTopicId === row.original.id}
+              onClose={() => setEditingTopicId(null)}
+              aria-label="Topic Settings"
+            >
+              <EditTopicForm topic={row.original} creatorName={foundUser.username} />
+            </Dialog>
+          </>
         )}
         positionActionsColumn="last"
         renderToolbarInternalActions={({ table }) => {
@@ -130,14 +142,22 @@ const User: NextPage = () => {
               <MRT_ShowHideColumnsButton table={table} />
 
               {hasEditAccess && (
-                <Button
-                  variant="contained"
-                  LinkComponent={NextLink}
-                  href="/new"
-                  startIcon={<AutoStories />}
-                >
-                  New
-                </Button>
+                <>
+                  <Button
+                    variant="contained"
+                    onClick={() => setCreatingTopic(true)}
+                    startIcon={<AutoStories />}
+                  >
+                    New
+                  </Button>
+                  <Dialog
+                    open={creatingTopic}
+                    onClose={() => setCreatingTopic(false)}
+                    aria-label="New Topic"
+                  >
+                    <CreateTopicForm creatorName={foundUser.username} />
+                  </Dialog>
+                </>
               )}
             </>
           );

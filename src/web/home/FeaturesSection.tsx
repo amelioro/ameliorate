@@ -114,13 +114,13 @@ export const FeaturesSection = () => {
 
   return (
     <div className="flex flex-col text-center">
-      <Typography variant="h4">Organize, navigate, and focus discussion</Typography>
+      <Typography variant="h4">Features</Typography>
       <Typography variant="body1">
         Check out the{" "}
         <Link href="https://ameliorate.app/docs" target="_blank">
           docs
         </Link>{" "}
-        for more features.
+        to learn more.
       </Typography>
 
       <div className="mt-2 hidden grid-cols-3 items-center gap-3 sm:grid">

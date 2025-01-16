@@ -1,5 +1,7 @@
-import { Global, useTheme } from "@emotion/react";
-import { useMediaQuery } from "@mui/material";
+import { useTheme } from "@emotion/react";
+import styled from "@emotion/styled";
+import { SelfImprovement } from "@mui/icons-material";
+import { ToggleButton, useMediaQuery } from "@mui/material";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import { ContextMenu } from "@/web/common/components/ContextMenu/ContextMenu";
@@ -7,11 +9,13 @@ import { useSessionUser } from "@/web/common/hooks";
 import { CriteriaTable } from "@/web/topic/components/CriteriaTable/CriteriaTable";
 import { Diagram } from "@/web/topic/components/Diagram/Diagram";
 import { TopicPane } from "@/web/topic/components/TopicPane/TopicPane";
+import { AppHeader } from "@/web/topic/components/TopicWorkspace/AppHeader";
+import { ContentFooter } from "@/web/topic/components/TopicWorkspace/ContentFooter";
+import { ContentHeader } from "@/web/topic/components/TopicWorkspace/ContentHeader";
 import { TourSetter } from "@/web/topic/components/TopicWorkspace/TourSetter";
 import { TutorialAnchor } from "@/web/topic/components/TopicWorkspace/TutorialAnchor";
 import { TutorialController } from "@/web/topic/components/TopicWorkspace/TutorialController";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
-import { WorkspaceToolbar } from "@/web/topic/components/TopicWorkspace/WorkspaceToolbar";
 import { setScore } from "@/web/topic/store/actions";
 import { playgroundUsername } from "@/web/topic/store/store";
 import { isOnPlayground } from "@/web/topic/store/utilActions";
@@ -21,7 +25,7 @@ import { userCanEditScores } from "@/web/topic/utils/score";
 import { getReadonlyMode, toggleReadonlyMode } from "@/web/view/actionConfigStore";
 import { getSelectedGraphPart, setSelected, useFormat } from "@/web/view/currentViewStore/store";
 import { getPerspectives } from "@/web/view/perspectiveStore";
-import { toggleShowIndicators } from "@/web/view/userConfigStore";
+import { toggleShowIndicators, toggleZenMode, useZenMode } from "@/web/view/userConfigStore";
 
 const useWorkspaceHotkeys = (user: { username: string } | null | undefined) => {
   useHotkeys([hotkeys.deselectPart], () => setSelected(null));
@@ -41,6 +45,23 @@ const useWorkspaceHotkeys = (user: { username: string } | null | undefined) => {
   });
 };
 
+const ZenModeButton = () => {
+  return (
+    <ToggleButton
+      value={true}
+      selected={true}
+      title="Zen mode"
+      aria-label="Zen mode"
+      color="primary"
+      size="small"
+      onClick={() => toggleZenMode()}
+      className="absolute bottom-0 left-0 z-10 rounded border-none"
+    >
+      <SelfImprovement />
+    </ToggleButton>
+  );
+};
+
 export const TopicWorkspace = () => {
   const { sessionUser } = useSessionUser();
 
@@ -48,26 +69,29 @@ export const TopicWorkspace = () => {
 
   const format = useFormat();
   const theme = useTheme();
-  const isLandscape = useMediaQuery("(orientation: landscape)");
-  const usingBigScreen = useMediaQuery(theme.breakpoints.up("2xl"));
-  const useSplitPanes = isLandscape && usingBigScreen;
+  const using2xlScreen = useMediaQuery(theme.breakpoints.up("2xl"));
+  const useSplitPanes = using2xlScreen;
+  const usingLgScreen = useMediaQuery(theme.breakpoints.up("lg"));
+
+  const zenMode = useZenMode();
 
   return (
-    // hardcode workspace to take up full height of screen minus the navbar
-    <div className="relative flex h-[calc(100svh-49px)] flex-col">
-      <WorkspaceToolbar />
+    // h-svh to force workspace to take up full height of screen
+    <div className="relative flex h-svh flex-col">
+      {!zenMode && <AppHeader />}
 
-      <div
-        className={`relative flex size-full overflow-auto ${isLandscape ? "flex-row" : "flex-col-reverse"}`}
-      >
+      <div className="relative flex size-full flex-row overflow-auto">
         <WorkspaceContext.Provider value="details">
           <TopicPane
-            anchor={isLandscape ? "left" : "bottom"}
-            tabs={useSplitPanes ? ["Views"] : ["Details", "Views"]}
+            anchor={usingLgScreen ? "left" : "modal"}
+            tabs={useSplitPanes ? ["Details"] : ["Details", "Views"]}
           />
         </WorkspaceContext.Provider>
 
-        <div className="flex h-full flex-1 overflow-auto">
+        <ContentDiv className="relative flex h-full flex-1 flex-col overflow-auto">
+          {!zenMode && <ContentHeader overlay={format === "diagram"} />}
+          {zenMode && <ZenModeButton />}
+
           {format === "table" && (
             <WorkspaceContext.Provider value="table">
               <CriteriaTable />
@@ -79,16 +103,15 @@ export const TopicWorkspace = () => {
               <Diagram />
             </WorkspaceContext.Provider>
           )}
-        </div>
+
+          {!zenMode && <ContentFooter overlay={format === "diagram"} />}
+        </ContentDiv>
 
         {useSplitPanes && (
           <WorkspaceContext.Provider value="details">
-            <TopicPane anchor="right" tabs={["Details"]} />
+            <TopicPane anchor="right" tabs={["Views"]} />
           </WorkspaceContext.Provider>
         )}
-
-        {/* prevents body scrolling when workspace is rendered*/}
-        <Global styles={{ body: { overflow: "hidden" } }} />
       </div>
 
       <ContextMenu />
@@ -99,3 +122,5 @@ export const TopicWorkspace = () => {
     </div>
   );
 };
+
+const ContentDiv = styled.div``;

@@ -39,7 +39,6 @@ import { getRectOfNodes, getTransformForBounds } from "reactflow";
 
 import { getDisplayNodes } from "@/web/topic/components/Diagram/externalFlowStore";
 import { downloadTopic, uploadTopic } from "@/web/topic/loadStores";
-import { useOnPlayground } from "@/web/topic/store/topicHooks";
 import { resetTopicData } from "@/web/topic/store/utilActions";
 import { hotkeys } from "@/web/topic/utils/hotkeys";
 import {
@@ -50,7 +49,6 @@ import {
   useReadonlyMode,
   useUnrestrictedEditing,
 } from "@/web/view/actionConfigStore";
-import { Perspectives } from "@/web/view/components/Perspectives/Perspectives";
 import {
   toggleShowImpliedEdges,
   toggleShowProblemCriterionSolutionEdges,
@@ -127,7 +125,6 @@ export const MoreActionsDrawer = ({
   sessionUser,
   userCanEditTopicData,
 }: Props) => {
-  const onPlayground = useOnPlayground();
   const format = useFormat();
   const isTableActive = format === "table";
 
@@ -405,16 +402,6 @@ export const MoreActionsDrawer = ({
               >
                 <Grid4x4 />
               </ToggleButton>
-            </ListItem>
-          </>
-        )}
-
-        {!onPlayground && (
-          <>
-            <Divider>Perspectives</Divider>
-
-            <ListItem disablePadding={false}>
-              <Perspectives />
             </ListItem>
           </>
         )}

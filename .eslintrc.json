@@ -67,6 +67,8 @@
     "functional/functional-parameters": [
       "error",
       {
+        // want to allow currying with arbitrary arguments e.g. for zustand middleware
+        "allowRestParameter": true,
         "enforceParameterCount": false
       }
     ],

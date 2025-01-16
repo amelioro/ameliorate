@@ -151,9 +151,9 @@ const apiSyncerImpl: ApiSyncerImpl = (create) => (set, get, api) => {
   // relies on `setState`, but we might as well override `set` too in case we ever want to use that.
   // Tried extracting the code into a reusable function, but that seemed hard to read, so we're just
   // duplicating it here.
-  const apiSyncerSet: typeof set = (args) => {
+  const apiSyncerSet: typeof set = (...args) => {
     const storeBefore = get();
-    set(args);
+    set(...args);
     const storeAfter = get();
 
     if (isPlaygroundTopic(storeAfter.topic)) return;
@@ -164,9 +164,9 @@ const apiSyncerImpl: ApiSyncerImpl = (create) => (set, get, api) => {
 
   const origSetState = api.setState;
   // eslint-disable-next-line functional/immutable-data, no-param-reassign -- mutation required https://github.com/pmndrs/zustand/issues/881#issuecomment-1076957006
-  api.setState = (args) => {
+  api.setState = (...args) => {
     const storeBefore = api.getState();
-    origSetState(args);
+    origSetState(...args);
     const storeAfter = api.getState();
 
     if (isPlaygroundTopic(storeAfter.topic)) return;

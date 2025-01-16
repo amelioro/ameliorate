@@ -180,8 +180,8 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
       >
         {labelText}
       </Typography>
-      <LeftCornerStatusIndicators graphPartId={edge.id} color="paper" />
-      <RightCornerContentIndicators graphPartId={edge.id} graphPartType="edge" color="paper" />
+      <LeftCornerStatusIndicators graphPartId={edge.id} color="paperPlain" />
+      <RightCornerContentIndicators graphPartId={edge.id} graphPartType="edge" color="paperPlain" />
     </StyledDiv>
   );
 

@@ -1,6 +1,5 @@
 import {
-  ArrowBack,
-  ArrowForward,
+  ArrowDropDown,
   Build,
   Delete,
   EditOff,
@@ -8,23 +7,22 @@ import {
   Group,
   Highlight,
   QuestionMark,
-  Redo,
+  SelfImprovement,
   TabUnselected,
-  Undo,
 } from "@mui/icons-material";
-import { AppBar, Divider, IconButton, ToggleButton, Toolbar, Tooltip } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Divider, IconButton, ToggleButton, Tooltip } from "@mui/material";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
+import { Menu } from "@/web/common/components/Menu/Menu";
 import { emitter } from "@/web/common/event";
 import { useSessionUser } from "@/web/common/hooks";
 import { HelpMenu } from "@/web/topic/components/TopicWorkspace/HelpMenu";
 import { MoreActionsDrawer } from "@/web/topic/components/TopicWorkspace/MoreActionsDrawer";
+import { QuickViewSelect } from "@/web/topic/components/TopicWorkspace/QuickViewSelect";
 import { deleteGraphPart } from "@/web/topic/store/createDeleteActions";
 import { useIsTableEdge } from "@/web/topic/store/edgeHooks";
-import { useOnPlayground } from "@/web/topic/store/topicHooks";
+import { useTopic } from "@/web/topic/store/topicHooks";
 import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
-import { redo, undo } from "@/web/topic/store/utilActions";
-import { useTemporalHooks } from "@/web/topic/store/utilHooks";
 import { hotkeys } from "@/web/topic/utils/hotkeys";
 import {
   toggleFlashlightMode,
@@ -32,26 +30,54 @@ import {
   useFlashlightMode,
   useReadonlyMode,
 } from "@/web/view/actionConfigStore";
-import {
-  goBack,
-  goForward,
-  useCanGoBackForward,
-  useSelectedGraphPart,
-} from "@/web/view/currentViewStore/store";
+import { Perspectives } from "@/web/view/components/Perspectives/Perspectives";
+import { useSelectedGraphPart } from "@/web/view/currentViewStore/store";
 import {
   comparePerspectives,
   resetPerspectives,
   useIsComparingPerspectives,
 } from "@/web/view/perspectiveStore";
-import { toggleShowIndicators, useShowIndicators } from "@/web/view/userConfigStore";
+import { toggleShowIndicators, toggleZenMode, useShowIndicators } from "@/web/view/userConfigStore";
 
-export const WorkspaceToolbar = () => {
+interface PerspectivesMenuProps {
+  anchorEl: HTMLElement | null;
+  setAnchorEl: Dispatch<SetStateAction<HTMLElement | null>>;
+}
+
+const PerspectivesMenu = ({ anchorEl, setAnchorEl }: PerspectivesMenuProps) => {
+  const menuOpen = Boolean(anchorEl);
+  if (!menuOpen) return;
+
+  return (
+    <Menu
+      anchorEl={anchorEl}
+      isOpen={menuOpen}
+      closeMenu={() => setAnchorEl(null)}
+      openDirection="top"
+      // match the ~300px width of drawer
+      className="w-[18.75rem] px-2"
+    >
+      <Perspectives />
+    </Menu>
+  );
+};
+
+interface Props {
+  /**
+   * True if footer should overlay on top of content, false if it should be in-line.
+   *
+   * Generally is true for diagram since diagram can be moved around the overlay if it's in the way,
+   * otherwise false e.g. for table since that can't be moved if the overlay is in the way.
+   */
+  overlay: boolean;
+}
+
+export const ContentFooter = ({ overlay }: Props) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
 
-  const onPlayground = useOnPlayground();
-  const [canUndo, canRedo] = useTemporalHooks();
-  const [canGoBack, canGoForward] = useCanGoBackForward();
+  const topic = useTopic();
+  const onPlayground = topic.id === undefined;
 
   const showIndicators = useShowIndicators();
   const isComparingPerspectives = useIsComparingPerspectives();
@@ -62,6 +88,9 @@ export const WorkspaceToolbar = () => {
   const selectedGraphPart = useSelectedGraphPart();
   const partIsTableEdge = useIsTableEdge(selectedGraphPart?.id ?? "");
 
+  const [perspectivesMenuAnchorEl, setPerspectivesMenuAnchorEl] = useState<null | HTMLElement>(
+    null,
+  );
   const [isMoreActionsDrawerOpen, setIsMoreActionsDrawerOpen] = useState(false);
   const [helpAnchorEl, setHelpAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -76,72 +105,36 @@ export const WorkspaceToolbar = () => {
   }, []);
 
   return (
-    <AppBar position="sticky" className="overflow-x-auto border-b bg-gray-50 shadow-none">
-      <Toolbar variant="dense">
-        <IconButton
-          color="inherit"
-          title="Back"
-          aria-label="Back"
-          onClick={goBack}
-          disabled={!canGoBack}
+    <div
+      className={
+        // max-w to keep children from being wide, but also prevent from being wider than screen (e.g. small 320px screen is scrunched without padding on 20rem)
+        "inset-x-0 bottom-0 flex flex-col gap-1.5 p-2 items-center *:max-w-[calc(min(20rem,100%))]" +
+        (overlay
+          ? " absolute z-10 pointer-events-none *:pointer-events-auto"
+          : " bg-paperShaded-main border-t")
+      }
+    >
+      {/* show this in content footer when screens are small and it doesn't fit between AppHeader corners, otherwise put in header */}
+      <div className="block bg-paperShaded-main lg:hidden">
+        <QuickViewSelect />
+      </div>
+
+      {/* Toolbar */}
+      {/* Toolbar buttons have square-rounding to fit more snuggly into the toolbar; potentially could make */}
+      {/* all icon buttons match this but they seem ok as the default full-rounded. */}
+      <div className="flex rounded border bg-paperShaded-main">
+        <ToggleButton
+          value={false}
+          selected={false}
+          title="Zen mode"
+          aria-label="Zen mode"
+          color="primary"
+          size="small"
+          onClick={() => toggleZenMode()}
+          className="rounded border-none"
         >
-          <ArrowBack />
-        </IconButton>
-        <IconButton
-          color="inherit"
-          title="Forward"
-          aria-label="Forward"
-          onClick={goForward}
-          disabled={!canGoForward}
-        >
-          <ArrowForward />
-        </IconButton>
-
-        {userCanEditTopicData && (
-          <>
-            <Divider orientation="vertical" flexItem />
-            {/* diagram state change actions */}
-
-            <IconButton
-              color="inherit"
-              title="Undo"
-              aria-label="Undo"
-              onClick={undo}
-              disabled={!canUndo}
-            >
-              <Undo />
-            </IconButton>
-            <IconButton
-              color="inherit"
-              title="Redo"
-              aria-label="Redo"
-              onClick={redo}
-              disabled={!canRedo}
-            >
-              <Redo />
-            </IconButton>
-
-            <Divider orientation="vertical" flexItem className="hidden sm:block" />
-
-            <IconButton
-              color="inherit"
-              title="Delete"
-              aria-label="Delete"
-              onClick={() => {
-                if (selectedGraphPart) {
-                  deleteGraphPart(selectedGraphPart);
-                }
-              }}
-              // don't allow modifying edges that are part of the table, because they should always exist as long as their nodes do
-              disabled={!selectedGraphPart || partIsTableEdge}
-              className="hidden sm:flex"
-            >
-              <Delete />
-            </IconButton>
-          </>
-        )}
-
-        <Divider orientation="vertical" flexItem />
+          <SelfImprovement />
+        </ToggleButton>
 
         <ToggleButton
           value={showIndicators}
@@ -151,7 +144,7 @@ export const WorkspaceToolbar = () => {
           size="small"
           selected={showIndicators}
           onClick={() => toggleShowIndicators()}
-          className="rounded-full border-none"
+          className="rounded border-none"
         >
           <TabUnselected />
         </ToggleButton>
@@ -168,14 +161,29 @@ export const WorkspaceToolbar = () => {
               onClick={() =>
                 isComparingPerspectives ? resetPerspectives() : comparePerspectives()
               }
-              className="rounded-full border-none"
+              className="rounded border-none"
             >
               <Group />
             </ToggleButton>
+
+            <IconButton
+              color="inherit"
+              title="Perspectives menu"
+              aria-label="Perspectives menu"
+              onClick={(event) => setPerspectivesMenuAnchorEl(event.currentTarget)}
+              // small width to keep the menu button narrow
+              // extra right padding because otherwise icon is too close to right-divider
+              // extra y padding to match other icon buttons with default fontSize="medium"
+              className="w-3 rounded py-2.5 pl-2 pr-2.5"
+            >
+              <ArrowDropDown fontSize="small" />
+            </IconButton>
+            <PerspectivesMenu
+              anchorEl={perspectivesMenuAnchorEl}
+              setAnchorEl={setPerspectivesMenuAnchorEl}
+            />
           </>
         )}
-
-        <Divider orientation="vertical" flexItem />
 
         {/* TODO?: seems a bit awkward to only show when flashlight mode is on, but it's more awkward */}
         {/* if we have no way of telling that it's on when we're clicking around the diagram */}
@@ -188,7 +196,7 @@ export const WorkspaceToolbar = () => {
             size="small"
             selected={flashlightMode}
             onClick={() => toggleFlashlightMode(!flashlightMode)}
-            className="hidden rounded-full border-none sm:flex" // hide on mobile because there's not enough space
+            className="rounded border-none"
           >
             <Highlight />
           </ToggleButton>
@@ -203,17 +211,42 @@ export const WorkspaceToolbar = () => {
             size="small"
             selected={readonlyMode}
             onClick={() => toggleReadonlyMode()}
-            className="rounded-full border-none"
+            className="rounded border-none"
           >
             <EditOff />
           </ToggleButton>
         )}
+
+        {userCanEditTopicData && (
+          <>
+            <Divider orientation="vertical" flexItem />
+
+            <IconButton
+              color="inherit"
+              title="Delete"
+              aria-label="Delete"
+              onClick={() => {
+                if (selectedGraphPart) {
+                  deleteGraphPart(selectedGraphPart);
+                }
+              }}
+              // don't allow modifying edges that are part of the table, because they should always exist as long as their nodes do
+              disabled={!selectedGraphPart || partIsTableEdge}
+              className="rounded"
+            >
+              <Delete />
+            </IconButton>
+          </>
+        )}
+
+        <Divider orientation="vertical" flexItem />
 
         <IconButton
           color="inherit"
           title="More actions"
           aria-label="More actions"
           onClick={() => setIsMoreActionsDrawerOpen(true)}
+          className="rounded"
         >
           <Build />
         </IconButton>
@@ -229,6 +262,7 @@ export const WorkspaceToolbar = () => {
           title="Help"
           aria-label="Help"
           onClick={(event) => setHelpAnchorEl(event.currentTarget)}
+          className="rounded"
         >
           <QuestionMark />
         </IconButton>
@@ -254,13 +288,13 @@ export const WorkspaceToolbar = () => {
               // Don't make it look like clicking will do something, since it won't.
               // Using a button here is an attempt to make it accessible, since the tooltip will show
               // on focus.
-              className="cursor-default"
+              className="cursor-default rounded"
             >
               <Error />
             </IconButton>
           </Tooltip>
         )}
-      </Toolbar>
-    </AppBar>
+      </div>
+    </div>
   );
 };
