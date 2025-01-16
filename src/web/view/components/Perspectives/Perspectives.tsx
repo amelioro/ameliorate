@@ -18,7 +18,7 @@ export const Perspectives = () => {
     <Autocomplete
       multiple
       disableCloseOnSelect
-      limitTags={10} // there's a ton of space in the drawer, so limiting isn't super necessary
+      limitTags={10} // there's a ton of space in the menu, so limiting isn't super necessary
       options={usernameOptions}
       value={perspectives}
       onChange={(_event, value) => setPerspectives([...value])} // hmm need to spread because value is readonly and our params would have to be readonly all the way up the chain for ts to accept it

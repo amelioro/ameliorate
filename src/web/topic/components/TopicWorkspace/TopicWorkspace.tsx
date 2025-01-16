@@ -1,6 +1,7 @@
-import { Global, useTheme } from "@emotion/react";
+import { useTheme } from "@emotion/react";
 import styled from "@emotion/styled";
-import { useMediaQuery } from "@mui/material";
+import { SelfImprovement } from "@mui/icons-material";
+import { ToggleButton, useMediaQuery } from "@mui/material";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import { ContextMenu } from "@/web/common/components/ContextMenu/ContextMenu";
@@ -24,7 +25,7 @@ import { userCanEditScores } from "@/web/topic/utils/score";
 import { getReadonlyMode, toggleReadonlyMode } from "@/web/view/actionConfigStore";
 import { getSelectedGraphPart, setSelected, useFormat } from "@/web/view/currentViewStore/store";
 import { getPerspectives } from "@/web/view/perspectiveStore";
-import { toggleShowIndicators } from "@/web/view/userConfigStore";
+import { toggleShowIndicators, toggleZenMode, useZenMode } from "@/web/view/userConfigStore";
 
 const useWorkspaceHotkeys = (user: { username: string } | null | undefined) => {
   useHotkeys([hotkeys.deselectPart], () => setSelected(null));
@@ -44,6 +45,23 @@ const useWorkspaceHotkeys = (user: { username: string } | null | undefined) => {
   });
 };
 
+const ZenModeButton = () => {
+  return (
+    <ToggleButton
+      value={true}
+      selected={true}
+      title="Zen mode"
+      aria-label="Zen mode"
+      color="primary"
+      size="small"
+      onClick={() => toggleZenMode()}
+      className="absolute bottom-0 left-0 z-10 rounded border-none"
+    >
+      <SelfImprovement />
+    </ToggleButton>
+  );
+};
+
 export const TopicWorkspace = () => {
   const { sessionUser } = useSessionUser();
 
@@ -51,27 +69,28 @@ export const TopicWorkspace = () => {
 
   const format = useFormat();
   const theme = useTheme();
-  const isLandscape = useMediaQuery("(orientation: landscape)");
-  const usingBigScreen = useMediaQuery(theme.breakpoints.up("2xl"));
-  const useSplitPanes = isLandscape && usingBigScreen;
+  const using2xlScreen = useMediaQuery(theme.breakpoints.up("2xl"));
+  const useSplitPanes = using2xlScreen;
+  const usingLgScreen = useMediaQuery(theme.breakpoints.up("lg"));
+
+  const zenMode = useZenMode();
 
   return (
     // h-svh to force workspace to take up full height of screen
     <div className="relative flex h-svh flex-col">
-      <AppHeader />
+      {!zenMode && <AppHeader />}
 
-      <div
-        className={`relative flex size-full overflow-auto ${isLandscape ? "flex-row" : "flex-col-reverse"}`}
-      >
+      <div className="relative flex size-full flex-row overflow-auto">
         <WorkspaceContext.Provider value="details">
           <TopicPane
-            anchor={isLandscape ? "left" : "bottom"}
+            anchor={usingLgScreen ? "left" : "modal"}
             tabs={useSplitPanes ? ["Details"] : ["Details", "Views"]}
           />
         </WorkspaceContext.Provider>
 
         <ContentDiv className="relative flex h-full flex-1 flex-col overflow-auto">
-          <ContentHeader overlay={format === "diagram"} />
+          {!zenMode && <ContentHeader overlay={format === "diagram"} />}
+          {zenMode && <ZenModeButton />}
 
           {format === "table" && (
             <WorkspaceContext.Provider value="table">
@@ -85,7 +104,7 @@ export const TopicWorkspace = () => {
             </WorkspaceContext.Provider>
           )}
 
-          <ContentFooter overlay={format === "diagram"} />
+          {!zenMode && <ContentFooter overlay={format === "diagram"} />}
         </ContentDiv>
 
         {useSplitPanes && (
@@ -93,9 +112,6 @@ export const TopicWorkspace = () => {
             <TopicPane anchor="right" tabs={["Views"]} />
           </WorkspaceContext.Provider>
         )}
-
-        {/* prevents body scrolling when workspace is rendered*/}
-        <Global styles={{ body: { overflow: "hidden" } }} />
       </div>
 
       <ContextMenu />

@@ -1,9 +1,10 @@
 import { Settings } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
-import NextLink from "next/link";
+import { Dialog, IconButton } from "@mui/material";
+import { useState } from "react";
 
 import { Link } from "@/web/common/components/Link";
 import { useSessionUser } from "@/web/common/hooks";
+import { EditTopicForm } from "@/web/topic/components/TopicForm/TopicForm";
 import { QuickViewSelect } from "@/web/topic/components/TopicWorkspace/QuickViewSelect";
 import { useTopic } from "@/web/topic/store/topicHooks";
 import { useUserIsCreator } from "@/web/topic/store/userHooks";
@@ -24,6 +25,9 @@ export const ContentHeader = ({ overlay }: Props) => {
 
   const topic = useTopic();
   const onPlayground = topic.id === undefined;
+  const showSettings = !onPlayground && sessionUser && userIsCreator;
+
+  const [topicFormOpen, setTopicFormOpen] = useState(false);
 
   return (
     <div
@@ -38,7 +42,13 @@ export const ContentHeader = ({ overlay }: Props) => {
       {/* Max-w on individual children so that topic title can take up more space than creator's name, */}
       {/* since it usually will be longer, yet keep creator name from being scrunched if it's already short but topic title is really long. */}
       {/* Classes like text-nowrap are for keeping children on one line, because we don't want them taking much vertical space */}
-      <div className="flex items-center justify-center text-nowrap rounded border bg-paperShaded-main px-2">
+      <div
+        className={
+          "flex items-center justify-center text-nowrap rounded border bg-paperShaded-main" +
+          // settings button has right padding, so exclude right padding if that's showing
+          (showSettings ? " pl-2" : " px-2")
+        }
+      >
         {onPlayground ? (
           "Playground Topic"
         ) : (
@@ -61,23 +71,31 @@ export const ContentHeader = ({ overlay }: Props) => {
           </>
         )}
 
-        {!onPlayground && userIsCreator && (
-          <IconButton
-            size="small"
-            title="Settings"
-            aria-label="Settings"
-            LinkComponent={NextLink}
-            href={`/${topic.creatorName}/${topic.title}/settings`}
-            className="p-0"
-          >
-            <Settings fontSize="inherit" />
-          </IconButton>
+        {showSettings && (
+          <>
+            <IconButton
+              size="small"
+              title="Settings"
+              aria-label="Settings"
+              className="py-0"
+              onClick={() => setTopicFormOpen(true)}
+            >
+              <Settings fontSize="inherit" />
+            </IconButton>
+            <Dialog
+              open={topicFormOpen}
+              onClose={() => setTopicFormOpen(false)}
+              aria-label="Topic Settings"
+            >
+              <EditTopicForm topic={topic} creatorName={sessionUser.username} />
+            </Dialog>
+          </>
         )}
       </div>
 
       {/* show this in content footer when screens are small and it doesn't fit between AppHeader corners, otherwise put in header */}
       <div className="hidden bg-paperShaded-main lg:block">
-        <QuickViewSelect openDirection="bottom" />
+        <QuickViewSelect />
       </div>
     </div>
   );

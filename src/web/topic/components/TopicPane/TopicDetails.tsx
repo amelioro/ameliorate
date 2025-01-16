@@ -1,3 +1,4 @@
+import styled from "@emotion/styled";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Article,
@@ -9,6 +10,7 @@ import {
 } from "@mui/icons-material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import {
+  Dialog,
   Divider,
   IconButton,
   List,
@@ -21,8 +23,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import NextLink from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -32,6 +33,7 @@ import { useCommentCount } from "@/web/comment/store/commentStore";
 import { Link } from "@/web/common/components/Link";
 import { useSessionUser } from "@/web/common/hooks";
 import { trpc } from "@/web/common/trpc";
+import { EditTopicForm } from "@/web/topic/components/TopicForm/TopicForm";
 import { CommentSection } from "@/web/topic/components/TopicPane/CommentSection";
 import { StoreTopic } from "@/web/topic/store/store";
 import { setTopicDetails } from "@/web/topic/store/topicActions";
@@ -118,6 +120,8 @@ export const TopicDetails = ({ selectedTab, setSelectedTab }: Props) => {
   const isPlaygroundTopic = topic.id === undefined;
   const expandDetailsTabs = useExpandDetailsTabs();
 
+  const [topicFormOpen, setTopicFormOpen] = useState(false);
+
   // Ideally we could exactly reuse the indicator logic here, rather than duplicating, but not sure
   // a good way to do that, so we're just duplicating the logic for now.
   // Don't want to use the exact indicators, because pane indication seems to look better with Icon
@@ -141,7 +145,8 @@ export const TopicDetails = ({ selectedTab, setSelectedTab }: Props) => {
   const showWatch = willShowWatch && findWatch.isSuccess;
 
   return (
-    <List>
+    // flex & max-h to ensure content takes up no more than full height, allowing inner containers to control scrolling
+    <List className="flex max-h-full flex-col pb-0">
       {/* whitespace-normal to wrap long topic titles */}
       <div className="flex items-center justify-center whitespace-normal px-4">
         {isPlaygroundTopic ? (
@@ -154,144 +159,156 @@ export const TopicDetails = ({ selectedTab, setSelectedTab }: Props) => {
           </>
         )}
 
-        {!isPlaygroundTopic && userIsCreator && (
-          <IconButton
-            size="small"
-            title="Settings"
-            aria-label="Settings"
-            LinkComponent={NextLink}
-            href={`/${topic.creatorName}/${topic.title}/settings`}
-          >
-            <Settings fontSize="inherit" />
-          </IconButton>
+        {!isPlaygroundTopic && sessionUser && userIsCreator && (
+          <>
+            <IconButton
+              size="small"
+              title="Settings"
+              aria-label="Settings"
+              onClick={() => setTopicFormOpen(true)}
+            >
+              <Settings fontSize="inherit" />
+            </IconButton>
+            <Dialog
+              open={topicFormOpen}
+              onClose={() => setTopicFormOpen(false)}
+              aria-label="Topic Settings"
+            >
+              <EditTopicForm topic={topic} creatorName={sessionUser.username} />
+            </Dialog>
+          </>
         )}
       </div>
 
-      <Divider sx={{ my: 1 }} />
+      <Divider className="my-1 shadow" />
 
-      {showWatch && (
-        <>
-          <ListItem disablePadding={false} sx={{ paddingTop: 1 }}>
-            <TextField
-              select
-              label="Watch"
-              value={findWatch.data?.type ?? "participatingOrMentions"}
-              fullWidth
-              size="small"
-              onChange={(event) => {
-                setWatch.mutate({ topicId: topic.id, type: event.target.value as WatchType });
-              }}
-            >
-              {watchTypes.map((type) => (
-                <MenuItem key={type} value={type}>
-                  {type}
-                </MenuItem>
-              ))}
-            </TextField>
-            <Tooltip
-              title={
-                <span>
-                  You will receive notifications if you're subscribed to a thread.
-                  <br />
-                  <br />
-                  Your watch determines in which cases you automatically become subscribed to a
-                  thread.
-                  <br />
-                  <br />
-                  "participatingOrMentions" will subscribe you when you participate (comment) in a
-                  thread (the "mentions" half is not implemented yet).
-                  <br />
-                  <br />
-                  "all" will subscribe you to all new threads.
-                  <br />
-                  <br />
-                  "ignore" will not subscribe you to any new threads.
-                </span>
-              }
-              enterTouchDelay={0} // allow touch to immediately trigger
-              leaveTouchDelay={Infinity} // touch-away to close on mobile, since message is long
-            >
-              <IconButton
-                color="info"
-                aria-label="Watch info"
-                sx={{
-                  // Don't make it look like clicking will do something, since it won't.
-                  // Using a button here is an attempt to make it accessible, since the tooltip will show
-                  // on focus.
-                  cursor: "default",
-                  alignSelf: "center",
+      <ContentDiv className="overflow-auto">
+        {showWatch && (
+          <>
+            <ListItem disablePadding={false} sx={{ paddingTop: 1 }}>
+              <TextField
+                select
+                label="Watch"
+                value={findWatch.data?.type ?? "participatingOrMentions"}
+                fullWidth
+                size="small"
+                onChange={(event) => {
+                  setWatch.mutate({ topicId: topic.id, type: event.target.value as WatchType });
                 }}
               >
-                <Info />
-              </IconButton>
-            </Tooltip>
-          </ListItem>
+                {watchTypes.map((type) => (
+                  <MenuItem key={type} value={type}>
+                    {type}
+                  </MenuItem>
+                ))}
+              </TextField>
+              <Tooltip
+                title={
+                  <span>
+                    You will receive notifications if you're subscribed to a thread.
+                    <br />
+                    <br />
+                    Your watch determines in which cases you automatically become subscribed to a
+                    thread.
+                    <br />
+                    <br />
+                    "participatingOrMentions" will subscribe you when you participate (comment) in a
+                    thread (the "mentions" half is not implemented yet).
+                    <br />
+                    <br />
+                    "all" will subscribe you to all new threads.
+                    <br />
+                    <br />
+                    "ignore" will not subscribe you to any new threads.
+                  </span>
+                }
+                enterTouchDelay={0} // allow touch to immediately trigger
+                leaveTouchDelay={Infinity} // touch-away to close on mobile, since message is long
+              >
+                <IconButton
+                  color="info"
+                  aria-label="Watch info"
+                  sx={{
+                    // Don't make it look like clicking will do something, since it won't.
+                    // Using a button here is an attempt to make it accessible, since the tooltip will show
+                    // on focus.
+                    cursor: "default",
+                    alignSelf: "center",
+                  }}
+                >
+                  <Info />
+                </IconButton>
+              </Tooltip>
+            </ListItem>
 
-          <Divider sx={{ my: 1 }} />
-        </>
-      )}
+            <Divider sx={{ my: 1 }} />
+          </>
+        )}
 
-      {!expandDetailsTabs ? (
-        <>
-          <TabContext value={selectedTab}>
-            <TabList
-              onChange={(_, value: DetailsTab) => setSelectedTab(value)}
-              centered
-              className="px-2"
-            >
-              <Tab
-                icon={indicateBasics ? <Article /> : <ArticleOutlined />}
-                value="Basics"
-                title="Basics"
-                aria-label="Basics"
-              />
-              <Tab
-                icon={indicateComments ? <ChatBubble /> : <ChatBubbleOutline />}
-                value="Comments"
-                title="Comments"
-                aria-label="Comments"
-              />
-            </TabList>
+        {!expandDetailsTabs ? (
+          <>
+            <TabContext value={selectedTab}>
+              <TabList
+                onChange={(_, value: DetailsTab) => setSelectedTab(value)}
+                centered
+                className="px-2"
+              >
+                <Tab
+                  icon={indicateBasics ? <Article /> : <ArticleOutlined />}
+                  value="Basics"
+                  title="Basics"
+                  aria-label="Basics"
+                />
+                <Tab
+                  icon={indicateComments ? <ChatBubble /> : <ChatBubbleOutline />}
+                  value="Comments"
+                  title="Comments"
+                  aria-label="Comments"
+                />
+              </TabList>
 
-            <TabPanel value="Basics" className="p-2">
-              <ListItem disablePadding={false}>
-                <Typography variant="body1" className="mx-auto">
-                  Basics
-                </Typography>
-              </ListItem>
-              <BasicsSection topic={topic} />
-            </TabPanel>
-            <TabPanel value="Comments" className="p-2">
-              <ListItem disablePadding={false}>
-                <Typography variant="body1" className="mx-auto">
-                  Comments
-                </Typography>
-              </ListItem>
-              <CommentSection parentId={null} parentType="topic" />
-            </TabPanel>
-          </TabContext>
-        </>
-      ) : (
-        <>
-          <ListItem disablePadding={false}>
-            <ListItemIcon>
-              <Article />
-            </ListItemIcon>
-            <ListItemText primary="Basics" />
-          </ListItem>
-          <BasicsSection topic={topic} />
+              <TabPanel value="Basics" className="p-2">
+                <ListItem disablePadding={false}>
+                  <Typography variant="body1" className="mx-auto">
+                    Basics
+                  </Typography>
+                </ListItem>
+                <BasicsSection topic={topic} />
+              </TabPanel>
+              <TabPanel value="Comments" className="p-2">
+                <ListItem disablePadding={false}>
+                  <Typography variant="body1" className="mx-auto">
+                    Comments
+                  </Typography>
+                </ListItem>
+                <CommentSection parentId={null} parentType="topic" />
+              </TabPanel>
+            </TabContext>
+          </>
+        ) : (
+          <>
+            <ListItem disablePadding={false}>
+              <ListItemIcon>
+                <Article />
+              </ListItemIcon>
+              <ListItemText primary="Basics" />
+            </ListItem>
+            <BasicsSection topic={topic} />
 
-          <Divider sx={{ my: 1 }} />
+            <Divider sx={{ my: 1 }} />
 
-          <ListItem disablePadding={false}>
-            <ListItemIcon>
-              <ChatBubble />
-            </ListItemIcon>
-            <ListItemText primary="Comments" />
-          </ListItem>
-          <CommentSection parentId={null} parentType="topic" />
-        </>
-      )}
+            <ListItem disablePadding={false}>
+              <ListItemIcon>
+                <ChatBubble />
+              </ListItemIcon>
+              <ListItemText primary="Comments" />
+            </ListItem>
+            <CommentSection parentId={null} parentType="topic" />
+          </>
+        )}
+      </ContentDiv>
     </List>
   );
 };
+
+const ContentDiv = styled.div``;

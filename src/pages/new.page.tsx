@@ -23,7 +23,7 @@ const NewTopic: NextPage = () => {
         <meta name="description" content="Create a topic to mutually understand with Ameliorate." />
       </Head>
 
-      <CreateTopicForm user={sessionUser} />
+      <CreateTopicForm creatorName={sessionUser.username} />
     </>
   );
 };

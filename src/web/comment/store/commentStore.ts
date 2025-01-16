@@ -1,3 +1,4 @@
+import { Topic as ApiTopic } from "@prisma/client";
 import shortUUID from "short-uuid";
 import { devtools, persist } from "zustand/middleware";
 import { createWithEqualityFn } from "zustand/traditional";
@@ -8,7 +9,7 @@ import { withDefaults } from "@/common/object";
 import { apiSyncer } from "@/web/comment/store/apiSyncerMiddleware";
 import { emitter } from "@/web/common/event";
 import { storageWithDates } from "@/web/common/store/utils";
-import { StoreTopic, UserTopic } from "@/web/topic/store/store";
+import { StoreTopic } from "@/web/topic/store/store";
 import { setSelected } from "@/web/view/currentViewStore/store";
 import { toggleShowResolvedComments } from "@/web/view/miscTopicConfigStore";
 
@@ -172,7 +173,7 @@ export const resolveComment = (commentId: string, resolved: boolean) => {
   );
 };
 
-export const loadCommentsFromApi = (topic: UserTopic, comments: StoreComment[]) => {
+export const loadCommentsFromApi = (topic: ApiTopic, comments: StoreComment[]) => {
   const builtPersistedName = `${persistedNameBase}-user`;
   useCommentStore.persist.setOptions({ name: builtPersistedName });
 
@@ -180,12 +181,16 @@ export const loadCommentsFromApi = (topic: UserTopic, comments: StoreComment[]) 
 
   useCommentStore.setState(
     {
-      // specify each field because we don't need to store extra data like createdAt etc.
+      // specify each field because we don't need to store extra data like topic's relations if they're passed in
       topic: {
         id: topic.id,
-        creatorName: topic.creatorName,
         title: topic.title,
+        creatorName: topic.creatorName,
         description: topic.description,
+        visibility: topic.visibility,
+        allowAnyoneToEdit: topic.allowAnyoneToEdit,
+        createdAt: topic.createdAt,
+        updatedAt: topic.updatedAt,
       },
       // specify each field because we don't need to store extra data like topicId etc.
       comments: comments.map((comment) => ({
