@@ -41,7 +41,7 @@ const TopicSettings: NextPage = () => {
         <meta name="description" content="Update your topic settings." />
       </Head>
 
-      <EditTopicForm topic={findTopic.data} user={sessionUser} />
+      <EditTopicForm topic={findTopic.data} creatorName={sessionUser.username} />
     </>
   );
 };
