@@ -40,12 +40,12 @@ export const AddNodeMenuItem = ({ parentMenuOpen }: Props) => {
           const { NodeIcon, title } = nodeDecorations[type];
           return (
             <ContextMenuItem key={type} onClick={() => addNodeWithoutParent(type, "diagram")}>
-            <NodeIcon
-              sx={{ backgroundColor: theme.palette[type].main }}
-              className="mr-2 rounded p-0.5"
-            />
-            {title}
-          </ContextMenuItem>
+              <NodeIcon
+                sx={{ backgroundColor: theme.palette[type].main }}
+                className="mr-2 rounded p-0.5"
+              />
+              {title}
+            </ContextMenuItem>
           );
         })}
       </NestedMenuItem>
