@@ -1,3 +1,4 @@
+import { useTheme } from "@mui/material/styles";
 import { NestedMenuItem } from "mui-nested-menu";
 
 import { breakdownNodeTypes, researchNodeTypes } from "@/common/node";
@@ -22,6 +23,8 @@ export const AddNodeMenuItem = ({ parentMenuOpen }: Props) => {
   // always showing breakdown + research nodes seems reasonable. justification nodes never need to be added on their own.
   const shownNodeTypes = breakdownNodeTypes.concat(researchNodeTypes);
 
+  const theme = useTheme();
+
   // shouldn't be able to view this menu item if we're in the table view
   if (!userCanEditTopicData || format == "table") return <></>;
 
@@ -33,11 +36,18 @@ export const AddNodeMenuItem = ({ parentMenuOpen }: Props) => {
         // match default mui menu padding and size
         className="px-[16px] [&_p]:px-0 [&_p]:text-sm"
       >
-        {shownNodeTypes.map((type) => (
-          <ContextMenuItem key={type} onClick={() => addNodeWithoutParent(type, "diagram")}>
-            {nodeDecorations[type].title}
-          </ContextMenuItem>
-        ))}
+        {shownNodeTypes.map((type) => {
+          const { NodeIcon, title } = nodeDecorations[type];
+          return (
+            <ContextMenuItem key={type} onClick={() => addNodeWithoutParent(type, "diagram")}>
+              <NodeIcon
+                sx={{ backgroundColor: theme.palette[type].main }}
+                className="mr-2 rounded p-0.5"
+              />
+              {title}
+            </ContextMenuItem>
+          );
+        })}
       </NestedMenuItem>
     </>
   );
