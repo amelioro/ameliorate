@@ -25,6 +25,7 @@ import { z } from "zod";
 
 import { topicSchema, visibilityTypes } from "@/common/topic";
 import { trpc } from "@/web/common/trpc";
+import { setTopic } from "@/web/topic/store/topicActions";
 import { generateBasicViews } from "@/web/view/quickViewStore/store";
 
 export const CreateTopicForm = ({ creatorName }: { creatorName: string }) => {
@@ -67,8 +68,23 @@ export const EditTopicForm = ({ topic, creatorName }: { topic: Topic; creatorNam
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const updateTopic = trpc.topic.update.useMutation({
-    onSuccess: async (updatedTopic, variables) => {
-      await Router.push(`/${creatorName}/${variables.title}/settings`);
+    onSuccess: (updatedTopic) => {
+      // need to update the URL if we're changing from the topic's page in the app
+      const url = new URL(window.location.href);
+      const oldPath = `/${creatorName}/${topic.title}`;
+      const newPath = `/${creatorName}/${updatedTopic.title}`;
+      if (oldPath != newPath && url.pathname === oldPath) {
+        // eslint-disable-next-line functional/immutable-data
+        url.pathname = newPath;
+        const newUrl = url.toString();
+        // Tried updating URL without reloading page (via Router `shallow` and also tried `window.history.replaceState` https://github.com/vercel/next.js/discussions/18072#discussioncomment-109059),
+        // but after doing that, when later updating query params e.g. by selecting a view, the page would reload.
+        // So we're just accepting having to reload right away.
+        void Router.push(newUrl);
+      }
+
+      // update topic in store e.g. if changing description and viewing topic details in pane
+      setTopic(updatedTopic);
 
       // this endpoint returns all topics
       utils.user.findByUsername.setData({ username: creatorName }, (oldUser) => {

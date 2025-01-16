@@ -10,6 +10,7 @@ import {
 } from "@mui/icons-material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import {
+  Dialog,
   Divider,
   IconButton,
   List,
@@ -22,8 +23,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import NextLink from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -33,6 +33,7 @@ import { useCommentCount } from "@/web/comment/store/commentStore";
 import { Link } from "@/web/common/components/Link";
 import { useSessionUser } from "@/web/common/hooks";
 import { trpc } from "@/web/common/trpc";
+import { EditTopicForm } from "@/web/topic/components/TopicForm/TopicForm";
 import { CommentSection } from "@/web/topic/components/TopicPane/CommentSection";
 import { StoreTopic } from "@/web/topic/store/store";
 import { setTopicDetails } from "@/web/topic/store/topicActions";
@@ -119,6 +120,8 @@ export const TopicDetails = ({ selectedTab, setSelectedTab }: Props) => {
   const isPlaygroundTopic = topic.id === undefined;
   const expandDetailsTabs = useExpandDetailsTabs();
 
+  const [topicFormOpen, setTopicFormOpen] = useState(false);
+
   // Ideally we could exactly reuse the indicator logic here, rather than duplicating, but not sure
   // a good way to do that, so we're just duplicating the logic for now.
   // Don't want to use the exact indicators, because pane indication seems to look better with Icon
@@ -156,16 +159,24 @@ export const TopicDetails = ({ selectedTab, setSelectedTab }: Props) => {
           </>
         )}
 
-        {!isPlaygroundTopic && userIsCreator && (
-          <IconButton
-            size="small"
-            title="Settings"
-            aria-label="Settings"
-            LinkComponent={NextLink}
-            href={`/${topic.creatorName}/${topic.title}/settings`}
-          >
-            <Settings fontSize="inherit" />
-          </IconButton>
+        {!isPlaygroundTopic && sessionUser && userIsCreator && (
+          <>
+            <IconButton
+              size="small"
+              title="Settings"
+              aria-label="Settings"
+              onClick={() => setTopicFormOpen(true)}
+            >
+              <Settings fontSize="inherit" />
+            </IconButton>
+            <Dialog
+              open={topicFormOpen}
+              onClose={() => setTopicFormOpen(false)}
+              aria-label="Topic Settings"
+            >
+              <EditTopicForm topic={topic} creatorName={sessionUser.username} />
+            </Dialog>
+          </>
         )}
       </div>
 
