@@ -36,24 +36,16 @@ export const AddNodeMenuItem = ({ parentMenuOpen }: Props) => {
         // match default mui menu padding and size
         className="px-[16px] [&_p]:px-0 [&_p]:text-sm"
       >
-        {/* New Addition: shownNodeTypes.map now includes icons and background color. Roy 1/2025. */}
         {shownNodeTypes.map((type) => {
           const { NodeIcon, title } = nodeDecorations[type];
           return (
-            <ContextMenuItem
-              key={type}
-              onClick={() => addNodeWithoutParent(type, "diagram")}
-              sx={{
-                backgroundColor: theme.palette[type].main,
-                color: "inherit",
-                "&:hover": {
-                  backgroundColor: theme.palette[type].dark,
-                },
-              }}
-            >
-              <NodeIcon className="mr-2" />
-              {title}
-            </ContextMenuItem>
+            <ContextMenuItem key={type} onClick={() => addNodeWithoutParent(type, "diagram")}>
+            <NodeIcon
+              sx={{ backgroundColor: theme.palette[type].main }}
+              className="mr-2 rounded p-0.5"
+            />
+            {title}
+          </ContextMenuItem>
           );
         })}
       </NestedMenuItem>
