@@ -1,3 +1,4 @@
+import { Topic as ApiTopic } from "@prisma/client";
 import Router from "next/router";
 import shortUUID from "short-uuid";
 import { temporal } from "zundo";
@@ -9,7 +10,7 @@ import { errorWithData } from "@/common/errorHandling";
 import { withDefaults } from "@/common/object";
 import { deepIsEqual } from "@/common/utils";
 import { emitter } from "@/web/common/event";
-import { StoreTopic, UserTopic } from "@/web/topic/store/store";
+import { StoreTopic } from "@/web/topic/store/store";
 import {
   ViewState,
   getView,
@@ -272,7 +273,7 @@ export const resetQuickViews = () => {
   useQuickViewStore.setState({ ...initialStateWithBasicViews(), topic }, true, "reset");
 };
 
-export const loadQuickViewsFromApi = (topic: UserTopic, views: QuickView[]) => {
+export const loadQuickViewsFromApi = (topic: ApiTopic, views: QuickView[]) => {
   const builtPersistedName = `${persistedNameBase}-user`;
   useQuickViewStore.persist.setOptions({ name: builtPersistedName });
 
@@ -280,12 +281,16 @@ export const loadQuickViewsFromApi = (topic: UserTopic, views: QuickView[]) => {
 
   useQuickViewStore.setState(
     {
-      // specify each field because we don't need to store extra data like createdAt etc.
+      // specify each field because we don't need to store extra data like topic's relations if they're passed in
       topic: {
         id: topic.id,
-        creatorName: topic.creatorName,
         title: topic.title,
+        creatorName: topic.creatorName,
         description: topic.description,
+        visibility: topic.visibility,
+        allowAnyoneToEdit: topic.allowAnyoneToEdit,
+        createdAt: topic.createdAt,
+        updatedAt: topic.updatedAt,
       },
       // specify each field because we don't need to store extra data like createdAt etc.
       views: views.map((view) => ({
