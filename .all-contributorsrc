@@ -94,6 +94,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "rdubbi",
+      "name": "Roy Badell",
+      "avatar_url": "https://avatars.githubusercontent.com/u/145716905?v=4",
+      "profile": "https://github.com/rdubbi",
+      "contributions": [
+        "code",
+        "design"
+      ]
     }
   ],
   "contributorsPerLine": 7,
