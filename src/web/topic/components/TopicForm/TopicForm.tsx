@@ -25,7 +25,7 @@ import { z } from "zod";
 
 import { topicSchema, visibilityTypes } from "@/common/topic";
 import { trpc } from "@/web/common/trpc";
-import { setTopic } from "@/web/topic/store/topicActions";
+import { updateTopic as updateStoreTopic } from "@/web/topic/store/topicActions";
 import { generateBasicViews } from "@/web/view/quickViewStore/store";
 
 export const CreateTopicForm = ({ creatorName }: { creatorName: string }) => {
@@ -69,11 +69,13 @@ export const EditTopicForm = ({ topic, creatorName }: { topic: Topic; creatorNam
 
   const updateTopic = trpc.topic.update.useMutation({
     onSuccess: (updatedTopic) => {
-      // need to update the URL if we're changing from the topic's page in the app
+      // need to update the URL if we're changing from the topic's page in the workspace
       const url = new URL(window.location.href);
       const oldPath = `/${creatorName}/${topic.title}`;
       const newPath = `/${creatorName}/${updatedTopic.title}`;
-      if (oldPath != newPath && url.pathname === oldPath) {
+      const changingTitleWhileViewingInWorkspace = oldPath != newPath && url.pathname === oldPath;
+
+      if (changingTitleWhileViewingInWorkspace) {
         // eslint-disable-next-line functional/immutable-data
         url.pathname = newPath;
         const newUrl = url.toString();
@@ -84,7 +86,7 @@ export const EditTopicForm = ({ topic, creatorName }: { topic: Topic; creatorNam
       }
 
       // update topic in store e.g. if changing description and viewing topic details in pane
-      setTopic(updatedTopic);
+      updateStoreTopic(updatedTopic);
 
       // this endpoint returns all topics
       utils.user.findByUsername.setData({ username: creatorName }, (oldUser) => {
