@@ -29,7 +29,7 @@ export const Headline = () => {
         <Typography
           variant="h1"
           fontWeight="bold"
-          className="flex self-center border-b-4 border-primary-main pb-1 text-3xl sm:border-b-8 sm:text-5xl"
+          className="flex self-center border-b-4 border-primary-main pb-1 text-3xl sm:self-start sm:border-b-8 sm:text-5xl"
         >
           Understand problems.
           <br />
