@@ -26,6 +26,7 @@ export const ChangeNodeTypeMenuItem = ({ node, parentMenuOpen }: Props) => {
     <NestedMenuItem
       label="Change node type"
       parentMenuOpen={parentMenuOpen}
+      // match default mui menu padding and size
       className="px-[16px] [&_p]:px-0 [&_p]:text-sm"
     >
       {getSameCategoryNodeTypes(node.type).map((type) => {
