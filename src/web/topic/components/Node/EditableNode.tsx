@@ -118,7 +118,8 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
       sx={nodeStyles}
     >
       <TopDiv className="flex h-6 items-center justify-between">
-        <NodeTypeDiv className="flex h-6 items-center rounded-br rounded-tl">
+        {/* pb/pr-0.5 to have 2px of space below/right, to match the 2px border of the node that's above/left of this node type div */}
+        <NodeTypeDiv className="flex h-6 items-center rounded-br rounded-tl pb-0.5 pr-0.5">
           <NodeIcon className="mx-1 size-3.5" />
           <NodeTypeSpan
             contentEditable={customizable}
