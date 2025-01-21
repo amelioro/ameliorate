@@ -128,7 +128,7 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
               if (text && text !== nodeDecoration.title && text !== node.data.customType)
                 setCustomNodeType(node, text);
             }}
-            className="nopan pr-1 text-sm leading-none"
+            className="nopan pr-1 text-sm leading-normal"
           >
             {typeText}
           </NodeTypeSpan>
