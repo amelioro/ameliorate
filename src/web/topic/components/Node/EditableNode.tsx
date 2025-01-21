@@ -91,15 +91,19 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
           [NodeTypeDiv.toString()]: {
             backgroundColor: color,
             // anti-aliasing between white node background and colored border/icon background creates a gray line - add colored shadow to hide this https://stackoverflow.com/a/40100710/8409296
-            boxShadow: `-1px -1px 0px 1px ${color}`,
+            // 0.5px spread instead of 1px because 1px creates a really thin shadow on the bottom/right, which can be seen
+            // more clearly e.g. when selecting a benefit node (black shadow against bright background)
+            boxShadow: `-1px -1px 0px 0.5px ${color}`,
           },
 
           [`&.selected ${NodeTypeDiv.toString()}`]: {
-            boxShadow: "-1px -1px 0px 1px black",
+            // Match the shadow size of not-selected nodes
+            boxShadow: `-1px -1px 0px 0.5px black`,
           },
 
           [`&.spotlight-secondary ${NodeTypeDiv.toString()}`]: {
-            boxShadow: `-1px -1px 0px 1px ${theme.palette.info.main}`,
+            // Match the shadow size of not-selected nodes
+            boxShadow: `-1px -1px 0px 0.5px ${theme.palette.info.main}`,
           },
         };
 
@@ -118,7 +122,8 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
       sx={nodeStyles}
     >
       <TopDiv className="flex h-6 items-center justify-between">
-        <NodeTypeDiv className="flex h-6 items-center rounded-br rounded-tl">
+        {/* pb/pr-0.5 to have 2px of space below/right, to match the 2px border of the node that's above/left of this node type div */}
+        <NodeTypeDiv className="flex h-6 items-center rounded-br rounded-tl pb-0.5 pr-0.5">
           <NodeIcon className="mx-1 size-3.5" />
           <NodeTypeSpan
             contentEditable={customizable}
@@ -128,7 +133,7 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
               if (text && text !== nodeDecoration.title && text !== node.data.customType)
                 setCustomNodeType(node, text);
             }}
-            className="nopan pr-1 text-sm leading-none"
+            className="nopan pr-1 text-sm leading-normal"
           >
             {typeText}
           </NodeTypeSpan>
