@@ -91,15 +91,19 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
           [NodeTypeDiv.toString()]: {
             backgroundColor: color,
             // anti-aliasing between white node background and colored border/icon background creates a gray line - add colored shadow to hide this https://stackoverflow.com/a/40100710/8409296
-            boxShadow: `-1px -1px 0px 1px ${color}`,
+            // 0.5px spread instead of 1px because 1px creates a really thin shadow on the bottom/right, which can be seen
+            // more clearly e.g. when selecting a benefit node (black shadow against bright background)
+            boxShadow: `-1px -1px 0px 0.5px ${color}`,
           },
 
           [`&.selected ${NodeTypeDiv.toString()}`]: {
-            boxShadow: "-1px -1px 0px 1px black",
+            // Match the shadow size of not-selected nodes
+            boxShadow: `-1px -1px 0px 0.5px black`,
           },
 
           [`&.spotlight-secondary ${NodeTypeDiv.toString()}`]: {
-            boxShadow: `-1px -1px 0px 1px ${theme.palette.info.main}`,
+            // Match the shadow size of not-selected nodes
+            boxShadow: `-1px -1px 0px 0.5px ${theme.palette.info.main}`,
           },
         };
 
