@@ -37,7 +37,14 @@ export const CoreIdeasSection = () => {
           priority={true}
         />
         <Typography variant="caption">
-          Top-right:{" "}
+          See{" "}
+          <Link
+            href="https://ameliorate.app/examples/ontology?view=Breakdown+node+types"
+            target="_blank"
+          >
+            ontology
+          </Link>{" "}
+          for all possible node types. Top-right:{" "}
           <Link
             href="https://ameliorate.app/examples/climate-change?view=Causes+and+concerns"
             target="_blank"
