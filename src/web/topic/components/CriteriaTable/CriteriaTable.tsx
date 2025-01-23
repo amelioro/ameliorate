@@ -290,7 +290,8 @@ export const CriteriaTable = () => {
           className: tableZoomClasses,
         }}
         muiTablePaperProps={{
-          className: "criteria-table-paper",
+          // no shadow because that creates lines that don't line up well with the app header
+          className: "criteria-table-paper shadow-none",
         }}
         muiTableBodyRowProps={{ hover: false }}
         state={{
