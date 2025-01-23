@@ -34,9 +34,7 @@ export const ContentHeader = ({ overlay }: Props) => {
       className={
         // max-w to keep children from being wide, but also prevent from being wider than screen (e.g. small 320px screen is scrunched without padding on 20rem)
         "inset-x-0 flex flex-col items-center p-2 text-sm *:max-w-[calc(min(20rem,100%))] gap-1.5" +
-        (overlay
-          ? " absolute pointer-events-none *:pointer-events-auto z-10"
-          : " bg-paperShaded-main border-b")
+        (overlay ? " absolute pointer-events-none *:pointer-events-auto z-10" : "")
       }
     >
       {/* Max-w on individual children so that topic title can take up more space than creator's name, */}
