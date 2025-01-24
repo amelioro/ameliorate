@@ -138,7 +138,7 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
             {typeText}
           </NodeTypeSpan>
         </NodeTypeDiv>
-        <CommonIndicators graphPart={node} notes={node.data.notes} />
+        <CommonIndicators graphPart={node} />
       </TopDiv>
       {/* grow to fill out remaining space with this div because it contains the textarea */}
       <MiddleDiv className="flex grow px-1 pb-2 pt-1">
@@ -168,7 +168,11 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
         {node.type !== "rootClaim" && ( // root claim indicators don't seem very helpful
           <>
             {/* TODO?: how to make corner indicators not look bad in the table? they're cut off */}
-            <LeftCornerStatusIndicators graphPartId={node.id} color={backgroundColorType} />
+            <LeftCornerStatusIndicators
+              graphPartId={node.id}
+              color={backgroundColorType}
+              notes={node.data.notes}
+            />
             <RightCornerContentIndicators
               graphPartId={node.id}
               graphPartType="node"

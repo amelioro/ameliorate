@@ -16,11 +16,9 @@ import {
 } from "@/web/topic/components/Edge/ScoreEdge.styles";
 import { getPathDefinitionForEdge } from "@/web/topic/components/Edge/svgPathDrawer";
 import { CommonIndicators } from "@/web/topic/components/Indicator/CommonIndicators";
-import {
-  LeftCornerStatusIndicators,
-  RightCornerContentIndicators,
-  nodeWidthPx,
-} from "@/web/topic/components/Node/EditableNode.styles";
+import { ContentIndicators } from "@/web/topic/components/Indicator/ContentIndicators";
+import { StatusIndicators } from "@/web/topic/components/Indicator/StatusIndicators";
+import { nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
 import { setCustomEdgeLabel } from "@/web/topic/store/actions";
 import { useIsNodeSelected } from "@/web/topic/store/edgeHooks";
 import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
@@ -165,7 +163,7 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
         (flowEdge.selected ? " selected" : "")
       }
     >
-      <CommonIndicators graphPart={edge} notes={edge.data.notes} />
+      <CommonIndicators graphPart={edge} />
       <Typography
         variant="body1"
         margin="0"
@@ -180,8 +178,15 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
       >
         {labelText}
       </Typography>
-      <LeftCornerStatusIndicators graphPartId={edge.id} color="paperPlain" />
-      <RightCornerContentIndicators graphPartId={edge.id} graphPartType="edge" color="paperPlain" />
+      <div className="absolute bottom-0 flex translate-y-3.5">
+        <StatusIndicators graphPartId={edge.id} color="paperPlain" notes={edge.data.notes} />
+        <ContentIndicators
+          graphPartId={edge.id}
+          graphPartType="edge"
+          color="paperPlain"
+          className="ml-0"
+        />
+      </div>
     </StyledDiv>
   );
 
