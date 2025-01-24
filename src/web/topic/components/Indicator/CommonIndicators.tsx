@@ -8,11 +8,12 @@ import { GraphPart } from "@/web/topic/utils/graph";
 
 interface Props {
   graphPart: GraphPart;
+  className?: string;
 }
 
-const CommonIndicatorsBase = ({ graphPart }: Props) => {
+const CommonIndicatorsBase = ({ graphPart, className }: Props) => {
   return (
-    <Stack direction="row" margin="2px" spacing="2px">
+    <Stack direction="row" margin="2px" spacing="2px" className={className}>
       {/* TODO: should this be moved because it's not used for all graph parts? */}
       <ContextIndicator graphPart={graphPart} />
       {/* TODO: should this be moved because it's only used for problem? */}

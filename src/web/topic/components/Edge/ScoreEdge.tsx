@@ -26,7 +26,6 @@ import { Edge } from "@/web/topic/utils/graph";
 import { useUnrestrictedEditing } from "@/web/view/actionConfigStore";
 import { useAvoidEdgeLabelOverlap } from "@/web/view/currentViewStore/layout";
 import { setSelected } from "@/web/view/currentViewStore/store";
-import { useShowIndicators } from "@/web/view/userConfigStore";
 
 const flowMarkerId = "flowMarker";
 const nonFlowMarkerId = "nonFlowMarker";
@@ -97,7 +96,6 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
 
   const unrestrictedEditing = useUnrestrictedEditing();
-  const showIndicators = useShowIndicators();
   const avoidEdgeLabelOverlap = useAvoidEdgeLabelOverlap();
 
   const edge = convertToEdge(flowEdge);
@@ -155,30 +153,33 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
       className={
         // pointer-events is set because this div is within an SVG and doesn't handle pointer-events properly by default
         "[pointer-events:all] flex flex-col items-center justify-center bg-white p-1 rounded-xl" +
-        // when hiding indicators, div only contains the label text, so border doesn't seem necessary (if this looks awkward, we can always show border instead)
-        (!showIndicators && spotlight === "normal" ? " border-none" : "") +
+        // border adds a lot of clutter so only show it if we're highlighting the edge
+        (spotlight === "normal" ? " border-none" : "") +
         // allow other components to apply conditional css related to this edge, e.g. when it's hovered/selected
         // separate from react-flow__edge because sometimes edges are rendered outside of react-flow (e.g. details pane), and we still want to style these
         " diagram-edge" +
         (flowEdge.selected ? " selected" : "")
       }
     >
-      <CommonIndicators graphPart={edge} />
-      <Typography
-        variant="body1"
-        margin="0"
-        contentEditable={userCanEditTopicData && unrestrictedEditing}
-        suppressContentEditableWarning // https://stackoverflow.com/a/49639256/8409296
-        onBlur={(event) => {
-          const text = event.target.textContent?.trim();
-          if (text && text !== lowerCase(edge.label) && text !== edge.data.customLabel)
-            setCustomEdgeLabel(edge, text);
-        }}
-        className="nopan"
-      >
-        {labelText}
-      </Typography>
-      <div className="absolute bottom-0 flex translate-y-3.5">
+      <div className="flex">
+        <Typography
+          variant="body1"
+          margin="0"
+          contentEditable={userCanEditTopicData && unrestrictedEditing}
+          suppressContentEditableWarning // https://stackoverflow.com/a/49639256/8409296
+          onBlur={(event) => {
+            const text = event.target.textContent?.trim();
+            if (text && text !== lowerCase(edge.label) && text !== edge.data.customLabel)
+              setCustomEdgeLabel(edge, text);
+          }}
+          className="nopan"
+        >
+          {labelText}
+        </Typography>
+        {/* only use margin when indicators are showing */}
+        <CommonIndicators graphPart={edge} className="mx-0 *:ml-0.5" />
+      </div>
+      <div className="absolute bottom-0 flex translate-y-4">
         <StatusIndicators graphPartId={edge.id} color="paperPlain" notes={edge.data.notes} />
         <ContentIndicators
           graphPartId={edge.id}
