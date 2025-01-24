@@ -77,5 +77,5 @@ export const LeftCornerStatusIndicators = styled(StatusIndicators)`
   left: 0;
   bottom: 0;
   // amount that looks decent hanging over the edge of node
-  transform: translate(-0.625px, 65%);
+  transform: translate(-0.625rem, 65%);
 `;
