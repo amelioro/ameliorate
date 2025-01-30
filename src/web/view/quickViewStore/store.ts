@@ -52,14 +52,14 @@ export const generateBasicViews = (): QuickView[] => {
     {
       id: shortUUID.generate(), // generate UUIDs that are easier to read (shorter, alphanumeric)
       type: "quick",
-      title: "All Breakdown",
+      title: "Breakdown",
       order: 0,
       viewState: initialViewState,
     },
     {
       id: shortUUID.generate(),
       type: "quick",
-      title: "All Research",
+      title: "Research",
       order: 1,
       viewState: withDefaults({ categoriesToShow: ["research"] }, initialViewState),
     },

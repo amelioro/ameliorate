@@ -23,7 +23,7 @@ jobs:
           node-version-file: e2e/.nvmrc
       - name: Install dependencies
         run: npm ci
-      - run: npm run test
+      - run: npm run test:smoke
         env:
           DEPLOY_PRIME_URL: https://ameliorate.app
       - uses: actions/upload-artifact@v4
