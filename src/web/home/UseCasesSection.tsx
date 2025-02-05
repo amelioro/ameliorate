@@ -5,7 +5,7 @@ import { Card } from "@/web/home/Card";
 export const UseCasesSection = () => {
   return (
     <div className="flex flex-col items-center text-center">
-      <Typography variant="h4">Using Your Diagram</Typography>
+      <Typography variant="h4">Using your diagram</Typography>
       <Typography variant="body1">
         Once you've got your diagram, there are a few different ways you can use it.
       </Typography>
