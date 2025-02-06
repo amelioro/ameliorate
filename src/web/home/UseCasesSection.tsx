@@ -10,7 +10,7 @@ export const UseCasesSection = () => {
         Once you've got your diagram, there are a few different ways you can use it.
       </Typography>
 
-      <div className="mt-4 flex flex-wrap justify-center gap-2 text-start md:*:w-56">
+      <div className="mt-4 flex flex-wrap justify-center gap-2 text-start *:w-full md:*:w-56">
         <Card
           title="Grasp your own thoughts"
           description="Lay out your ideas with all of their nuance to better think through a problem and make better decisions for yourself."
