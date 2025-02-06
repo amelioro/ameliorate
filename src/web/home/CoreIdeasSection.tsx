@@ -1,110 +1,78 @@
-import { Typography } from "@mui/material";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
+import { Tab, Typography } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
 
-import { Link } from "@/web/common/components/Link";
-import { gettingStartedPage } from "@/web/common/urls";
-import { Card } from "@/web/home/Card";
+type Tab = "diagram" | "details";
+
+const copy = {
+  diagram: {
+    title: "Problem-Solving Diagram",
+    description: `Lay out causes and effects, showing precisely how problems can be addressed. This creates a concrete visual in which discussion can be grounded.`,
+    image: (
+      <Image
+        src="https://github.com/user-attachments/assets/4ef151aa-ebd3-4a4d-b2af-259d7a55a285"
+        alt="problem solving diagram"
+        // want to be a max height of 600px - resolution is scaled from 1189x1440 (not using max-h because we still want to avoid layout shift)
+        width={495.416}
+        height={600}
+        unoptimized
+        className="rounded-xl border shadow"
+      />
+    ),
+  },
+  details: {
+    title: '"Humble" Information',
+    description: `All information is assumed to be arguable. Anything can be scored, justified, questioned, and have relevant facts and unstructured discussion.`,
+    image: (
+      <Image
+        src="https://github.com/user-attachments/assets/06808ff9-f785-4ec6-9369-3cede79d9249"
+        alt="humble information"
+        // want to be a max height of 600px - resolution is scaled from 558x809 (not using max-h because we still want to avoid layout shift)
+        width={413.84}
+        height={600}
+        unoptimized
+        // extra padding & bg because spacing seems to look better
+        className="rounded-xl border bg-paperPlain-main p-3 shadow"
+      />
+    ),
+  },
+};
 
 export const CoreIdeasSection = () => {
-  const [selectedCard, setSelectedCard] = useState<"diagram" | "details">("diagram");
-
-  const cards = (
-    <>
-      <Card
-        title="Build a diagram"
-        description="Break down problems and solutions into parts that can be considered individually, or together."
-        onClick={() => setSelectedCard("diagram")}
-        selected={selectedCard === "diagram"}
-      />
-      <Card
-        title="Add nuance"
-        description="For any individual part of the diagram, add things like how important you think it is and why, or questions that would be good to answer."
-        onClick={() => setSelectedCard("details")}
-        selected={selectedCard === "details"}
-      />
-    </>
-  );
-
-  const carouselItems = (
-    <>
-      <div className={selectedCard === "diagram" ? "" : "hidden"}>
-        <Image
-          src="https://github.com/user-attachments/assets/95b6c4cb-1f5f-4885-8012-bf92bda308d1"
-          alt="climate change and congestion pricing topics"
-          width={1970}
-          height={1650}
-          priority={true}
-        />
-        <Typography variant="caption">
-          See{" "}
-          <Link
-            href="https://ameliorate.app/examples/ontology?view=Breakdown+node+types"
-            target="_blank"
-          >
-            ontology
-          </Link>{" "}
-          for all possible node types. Top-right:{" "}
-          <Link
-            href="https://ameliorate.app/examples/climate-change?view=Causes+and+concerns"
-            target="_blank"
-          >
-            climate-change
-          </Link>
-          , bottom-left:{" "}
-          <Link
-            href="https://ameliorate.app/keyserj/mta-congestion-pricing?view=Good+about+Solution"
-            target="_blank"
-          >
-            mta-congestion-pricing
-          </Link>
-        </Typography>
-      </div>
-      <div className={selectedCard === "details" ? "" : "hidden"}>
-        <Image
-          src="https://github.com/user-attachments/assets/32c8f820-4e04-4cd3-91ce-231da60a0ab8"
-          alt="cars going too fast topic"
-          width={707}
-          height={519}
-        />
-        <Typography variant="caption">
-          Indicators on the bottom-right of a part convey which kinds of details are associated with
-          it. Scores convey how important you think a part is. Images from{" "}
-          <Link
-            href="https://ameliorate.app/examples/detailed-cars-going-too-fast?view=All+with+problem+selected"
-            target="_blank"
-          >
-            cars-going-too-fast
-          </Link>
-          .
-        </Typography>
-      </div>
-    </>
-  );
+  const [selectedCard, setSelectedCard] = useState<Tab>("diagram");
 
   return (
     <div className="flex flex-col text-center">
       <Typography variant="h4">Break things down</Typography>
-      <Typography variant="body1">
-        Check out{" "}
-        <Link href={gettingStartedPage} target="_blank">
-          Getting Started
-        </Link>{" "}
-        for a more detailed explanation of the core ideas.
-      </Typography>
 
-      <div className="mt-2 hidden grid-cols-3 items-center gap-3 sm:grid">
-        <div className="flex flex-col gap-2 text-start">{cards}</div>
-        {/* aspect ratio to keep different-sized images from jumping around */}
-        <div className="col-span-2 flex aspect-[19/18] items-center lg:aspect-[19/17]">
-          {carouselItems}
-        </div>
-      </div>
+      <TabContext value={selectedCard}>
+        <TabList
+          onChange={(_, value: Tab) => setSelectedCard(value)}
+          // super jank, but it doesn't seem like there's a standard way to center MUI tabs while still having them scroll into view if they're overflowed
+          // so here 470px is the exact width of the two tabs side-by-side; if the screen is larger, they need to be centered, otherwise they need to scroll
+          // note: if user had increased default font size, this won't be correct :( but it seems that rem can't be used for breakpoints https://stackoverflow.com/a/51993054/8409296
+          // this seems ok though because 470 to ~700px width screens seem almost nonexistent
+          className="min-[470px]:[&_.MuiTabs-flexContainer]:justify-center"
+        >
+          <Tab label={copy.diagram.title} value="diagram" />
+          <Tab label={copy.details.title} value="details" />
+        </TabList>
 
-      <div className="mt-4 flex flex-col gap-3 sm:hidden">
-        <div className="flex h-48 overflow-x-auto text-start *:w-56 *:shrink-0">{cards}</div>
-        <div className="flex">{carouselItems}</div>
-      </div>
+        <TabPanel key="diagram" value="diagram" className="flex flex-col items-center gap-2 p-0">
+          <Typography variant="body1" className="pt-3">
+            {copy.diagram.description}
+          </Typography>
+          {copy.diagram.image}
+        </TabPanel>
+
+        <TabPanel key="details" value="details" className="flex flex-col items-center gap-2 p-0">
+          <Typography variant="body1" className="pt-3">
+            {copy.details.description}
+          </Typography>
+          {copy.details.image}
+        </TabPanel>
+      </TabContext>
     </div>
   );
 };
