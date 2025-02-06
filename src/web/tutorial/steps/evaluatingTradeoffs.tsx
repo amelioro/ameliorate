@@ -6,9 +6,9 @@ import { Link } from "@/web/common/components/Link";
 import { celebrateGif } from "@/web/common/urls";
 import { StepContent } from "@/web/tutorial/StepContent";
 import { startTutorial } from "@/web/tutorial/tutorial";
-import { Tutorial, tutorialDefaultAnchorClass } from "@/web/tutorial/tutorialUtils";
+import { Track, tutorialDefaultAnchorClass } from "@/web/tutorial/tutorialUtils";
 
-export const getEvaluatingTradeoffsSteps = (nextTutorial?: Tutorial | null): StepType[] => [
+export const getEvaluatingTradeoffsSteps = (track?: Track | null): StepType[] => [
   {
     selector: `.${tutorialDefaultAnchorClass}`,
     content: (
@@ -113,7 +113,7 @@ export const getEvaluatingTradeoffsSteps = (nextTutorial?: Tutorial | null): Ste
       />
     ),
   },
-  nextTutorial === "buildingViews"
+  track === "builders"
     ? {
         selector: `.${tutorialDefaultAnchorClass}`,
         content: (
@@ -137,7 +137,7 @@ export const getEvaluatingTradeoffsSteps = (nextTutorial?: Tutorial | null): Ste
           />
         ),
       }
-    : nextTutorial === "navigatingTopic"
+    : track === "tableViewers"
       ? {
           selector: `.${tutorialDefaultAnchorClass}`,
           content: (

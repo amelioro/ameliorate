@@ -14,7 +14,7 @@ import {
   getTutorialIsOpening,
   setTutorialIsOpening,
 } from "@/web/tutorial/tutorialStore";
-import { Tutorial } from "@/web/tutorial/tutorialUtils";
+import { Track } from "@/web/tutorial/tutorialUtils";
 import { useFormat } from "@/web/view/currentViewStore/store";
 
 export const TutorialController = () => {
@@ -33,19 +33,19 @@ export const TutorialController = () => {
     if (getTutorialIsOpening() || tourProps.isOpen) return;
 
     if (!getTutorialHasCompleted("welcome")) {
-      const nextTutorial: Tutorial = userCanEditTopicData
-        ? "diagramBasics"
+      const track: Track = userCanEditTopicData
+        ? "builders"
         : format === "diagram"
-          ? "readingDiagram"
-          : "evaluatingTradeoffs";
+          ? "diagramViewers"
+          : "tableViewers";
 
-      startWelcomeTutorial(nextTutorial);
+      startWelcomeTutorial(track);
       setTutorialIsOpening(true);
       return;
     }
 
     if (userCanEditTopicData && !getTutorialHasStarted("diagramBasics")) {
-      startTutorial("diagramBasics");
+      startTutorial("diagramBasics", "builders");
       setTutorialIsOpening(true);
       return;
     }

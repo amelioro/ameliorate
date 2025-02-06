@@ -190,7 +190,7 @@ export const addingNuanceSteps: StepType[] = [
         actionSlot={
           <Button
             variant="contained"
-            onClick={() => startTutorial("evaluatingTradeoffs", "buildingViews")}
+            onClick={() => startTutorial("evaluatingTradeoffs", "builders")}
           >
             Next: Evaluating tradeoffs
           </Button>

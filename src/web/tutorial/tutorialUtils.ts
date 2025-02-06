@@ -24,3 +24,20 @@ export type Tutorial =
   // experts
   | "moreActions"
   | "advancedFiltering";
+
+export type Track = "builders" | "diagramViewers" | "tableViewers" | "experts";
+
+// TODO?: could refactor so that things like `startTutorial` calculate the step based on the track,
+// but doesn't seem like worth the effort to implement that right now.
+export const tracks: Record<Track, Tutorial[]> = {
+  builders: [
+    "diagramBasics",
+    "breakingDownAProblem",
+    "addingNuance",
+    "evaluatingTradeoffs",
+    "buildingViews",
+  ],
+  diagramViewers: ["readingADiagram", "navigatingATopic"],
+  tableViewers: ["evaluatingTradeoffs", "navigatingATopic"],
+  experts: ["moreActions", "advancedFiltering"],
+};

@@ -10,12 +10,12 @@ import { navigatingTopicSteps } from "@/web/tutorial/steps/navigatingTopic";
 import { getReadingDiagramSteps } from "@/web/tutorial/steps/readingDiagram";
 import { welcomeSteps } from "@/web/tutorial/steps/welcome";
 import { setTutorialHasCompleted, setTutorialHasStarted } from "@/web/tutorial/tutorialStore";
-import { Tutorial } from "@/web/tutorial/tutorialUtils";
+import { Track, Tutorial } from "@/web/tutorial/tutorialUtils";
 
 /**
  * @param nextTutorial null if there should be no next tutorial, undefined to use the tutorial's default
  */
-const getTutorialSteps = (tutorial: Tutorial, nextTutorial?: Tutorial | null) => {
+const getTutorialSteps = (tutorial: Tutorial, track?: Track | null) => {
   switch (tutorial) {
     // builders
     case "diagramBasics":
@@ -25,13 +25,13 @@ const getTutorialSteps = (tutorial: Tutorial, nextTutorial?: Tutorial | null) =>
     case "addingNuance":
       return addingNuanceSteps;
     case "evaluatingTradeoffs":
-      return getEvaluatingTradeoffsSteps(nextTutorial);
+      return getEvaluatingTradeoffsSteps(track);
     case "buildingViews":
       return buildingViewsSteps;
 
     // viewers
     case "readingDiagram":
-      return getReadingDiagramSteps(nextTutorial);
+      return getReadingDiagramSteps(track);
     // 1b. evaluatingTradeoffs is reused from builders path
     case "navigatingTopic":
       return navigatingTopicSteps;
@@ -53,20 +53,20 @@ const markTutorialCompletedOnLastStep = (tutorial: Tutorial, steps: StepType[]) 
   };
 };
 
-export const startWelcomeTutorial = (nextTutorial: Tutorial) => {
+export const startWelcomeTutorial = (track: Track) => {
   if (!reactour || !reactour.setSteps) throw new Error("Tour props not set");
 
-  const steps = welcomeSteps(nextTutorial);
+  const steps = welcomeSteps(track);
   reactour.setSteps(steps);
   setTutorialHasCompleted("welcome");
 
   reactour.setIsOpen(true);
 };
 
-export const startTutorial = (tutorial: Tutorial, nextTutorial?: Tutorial | null) => {
+export const startTutorial = (tutorial: Tutorial, track?: Track | null) => {
   if (!reactour || !reactour.setSteps) throw new Error("Tour props not set");
 
-  const steps = getTutorialSteps(tutorial, nextTutorial);
+  const steps = getTutorialSteps(tutorial, track);
   if (steps.length === 0) throw new Error("No steps found for tutorial: " + tutorial);
 
   markTutorialCompletedOnLastStep(tutorial, steps);

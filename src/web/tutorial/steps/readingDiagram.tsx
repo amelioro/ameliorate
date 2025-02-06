@@ -8,9 +8,9 @@ import { celebrateGif } from "@/web/common/urls";
 import { NodeTypeText } from "@/web/topic/components/NodeTypeText/NodeTypeText";
 import { StepContent } from "@/web/tutorial/StepContent";
 import { startTutorial } from "@/web/tutorial/tutorial";
-import { Tutorial, tutorialDefaultAnchorClass } from "@/web/tutorial/tutorialUtils";
+import { Track, tutorialDefaultAnchorClass } from "@/web/tutorial/tutorialUtils";
 
-export const getReadingDiagramSteps = (nextTutorial?: Tutorial | null): StepType[] => [
+export const getReadingDiagramSteps = (track?: Track | null): StepType[] => [
   {
     selector: `.${tutorialDefaultAnchorClass}`,
     content: (
@@ -109,7 +109,7 @@ export const getReadingDiagramSteps = (nextTutorial?: Tutorial | null): StepType
       />
     ),
   },
-  nextTutorial === undefined
+  track === "diagramViewers"
     ? {
         selector: `.${tutorialDefaultAnchorClass}`,
         content: (
