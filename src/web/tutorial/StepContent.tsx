@@ -19,7 +19,10 @@ export const StepContent = ({
   text,
   imageSlot,
   actionSlot,
-  heightClass = "h-[428px]",
+  // Hardcode height to be consistent for most steps so that nav buttons don't move around as you click through steps.
+  // Only use up to 75vh because more than that will overflow the 95vh height of the reactour popover
+  // (can't use 100% of parent container because of how we're sizing the image).
+  heightClass = "h-[min(75vh,512px)]",
 }: Props) => {
   return (
     <div className={`${heightClass} flex flex-col gap-2`}>
