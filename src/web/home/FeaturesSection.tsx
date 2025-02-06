@@ -13,23 +13,16 @@ const copy = {
     content: (
       <div>
         <Image
-          src="https://github.com/user-attachments/assets/6733473d-9122-4199-9e2d-d6d651f4a846"
-          alt="criteria tables of cars-going-too-fast and ORM topics"
-          width={1221}
-          height={787}
+          src="https://github.com/user-attachments/assets/60ac157d-03f7-4fa5-907b-b8e3abab0e7a"
+          alt="criteria tables of cars-going-too-fast"
+          width={727}
+          height={455}
           unoptimized
           // extra padding & bg because spacing seems to look better
-          className="rounded-xl border bg-paperPlain-main p-1 shadow"
+          className="rounded-xl border bg-paperPlain-main p-3 shadow"
         />
         <Typography variant="caption">
-          Top-left:{" "}
-          <Link
-            href="https://ameliorate.app/examples/ORM?view=Tradeoffs+scored+as+important"
-            target="_blank"
-          >
-            ORM
-          </Link>
-          , bottom-right:{" "}
+          Topic:{" "}
           <Link
             href="https://ameliorate.app/examples/detailed-cars-going-too-fast?view=Tradeoff+table"
             target="_blank"
@@ -46,10 +39,10 @@ const copy = {
     content: (
       <div>
         <Image
-          src="https://github.com/user-attachments/assets/de5d9ebf-1b66-42f7-b1c5-cb0c0f595ee3"
+          src="https://github.com/user-attachments/assets/87055acd-debb-45f2-981f-ef511e770222"
           alt="clicking between views in cars-going-too-fast topic"
-          width={1018}
-          height={601}
+          width={1096}
+          height={847}
           unoptimized // warning without this - gifs aren't optimized by nextjs apparently
           // extra padding & bg because spacing seems to look better
           className="rounded-xl border bg-paperPlain-main p-2 shadow"
