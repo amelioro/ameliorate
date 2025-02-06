@@ -45,9 +45,9 @@ export const Headline = () => {
           <span className="font-bold underline decoration-primary-main decoration-2">
             Ameliorate
           </span>{" "}
-          makes it easier to understand problems by defining a{" "}
-          <Link href="#strategy-for-organizing">strategy for organizing information</Link> along
-          with <Link href="#features">tooling</Link> for navigating and refining that information.
+          helps you <Link href="#break-things-down">break down problems</Link> in a way that's easy
+          to understand, refine, and align on, and provides <Link href="#features">tooling</Link>{" "}
+          for navigating and working with that information.
         </Typography>
 
         <div className="flex flex-wrap items-center justify-center gap-2 *:shrink-0 sm:justify-normal">
