@@ -1,3 +1,4 @@
+import { AutoStories, Build, Group } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import { StepType } from "@reactour/tour";
 import Image from "next/image";
@@ -5,32 +6,31 @@ import Image from "next/image";
 import { Link } from "@/web/common/components/Link";
 import { celebrateGif } from "@/web/common/urls";
 import { StepContent } from "@/web/tutorial/StepContent";
-import { tutorialDefaultAnchorClass, viewsPaneSelector } from "@/web/tutorial/tutorialUtils";
+import {
+  quickViewDropdownSelector,
+  tutorialDefaultAnchorClass,
+} from "@/web/tutorial/tutorialUtils";
 
 export const navigatingTopicSteps: StepType[] = [
   {
-    selector: viewsPaneSelector,
+    selector: quickViewDropdownSelector,
     content: (
       <StepContent
         stepTitle="Quick Views"
         text={
-          <span>
-            Quick Views allow you to easily jump between different aspects of a topic.
-            <br />
-            <br />
-            Found in the Views Pane on the side, they're a good place to start when trying to
-            understand a topic.
-          </span>
+          <span>Quick Views allow you to easily jump between different aspects of a topic.</span>
         }
         imageSlot={
           <>
             <Image
-              key="https://github.com/user-attachments/assets/17014abe-f9c5-4ca2-b95d-9683e2b1034b"
-              src="https://github.com/user-attachments/assets/17014abe-f9c5-4ca2-b95d-9683e2b1034b"
+              key="https://github.com/user-attachments/assets/87055acd-debb-45f2-981f-ef511e770222"
+              src="https://github.com/user-attachments/assets/87055acd-debb-45f2-981f-ef511e770222"
               alt="clicking between views in cars-going-too-fast topic"
-              width={666}
-              height={448}
-              unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+              width={1096}
+              height={847}
+              unoptimized // warning without this - gifs aren't optimized by nextjs apparently
+              // extra padding & bg because spacing seems to look better
+              className="rounded-xl border bg-paperPlain-main p-2 shadow"
             />
             <Typography variant="caption">
               From:{" "}
@@ -56,7 +56,8 @@ export const navigatingTopicSteps: StepType[] = [
             Indicators convey at-a-glance where extra details are.
             <br />
             <br />
-            Details can be found by selecting the piece and looking at the Details Pane.
+            Details can be found by selecting the piece and looking at the Details Pane{" "}
+            <AutoStories color="primary" />.
           </span>
         }
         imageSlot={
@@ -68,6 +69,7 @@ export const navigatingTopicSteps: StepType[] = [
               width={600}
               height={467}
               unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+              className="rounded-xl border shadow"
             />
           </>
         }
@@ -85,8 +87,8 @@ export const navigatingTopicSteps: StepType[] = [
             topic's creator.
             <br />
             <br />
-            You can compare multiple people's scores via the Compare button, or select specific
-            perspectives via the More Actions Drawer.
+            You can compare multiple people's scores via the Compare button <Group />, or select
+            specific perspectives via the More Actions Drawer <Build />.
           </span>
         }
         imageSlot={
@@ -97,6 +99,7 @@ export const navigatingTopicSteps: StepType[] = [
             width={492}
             height={411}
             unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+            className="rounded-xl border shadow"
           />
         }
       />

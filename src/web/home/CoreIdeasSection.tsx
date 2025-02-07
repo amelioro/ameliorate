@@ -23,7 +23,7 @@ const copy = {
   },
   details: {
     title: '"Humble" Information',
-    description: `All information is assumed to be arguable. Anything can be scored, justified, questioned, and have relevant facts and unstructured discussion.`,
+    description: `All information is open to argument. Anything can be scored, justified, questioned, and have relevant facts and unstructured discussion.`,
     image: (
       <Image
         src="https://github.com/user-attachments/assets/06808ff9-f785-4ec6-9369-3cede79d9249"

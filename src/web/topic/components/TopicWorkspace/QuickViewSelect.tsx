@@ -9,6 +9,7 @@ export const QuickViewSelect = () => {
   return (
     <TextField
       select
+      id="quick-view-select" // allow selecting element from tutorial
       label="Quick View"
       value={selectedViewId ?? "no-view-selected"}
       onChange={(event) => selectView(event.target.value)}

@@ -147,15 +147,19 @@ export const TopicDetails = ({ selectedTab, setSelectedTab }: Props) => {
   return (
     // flex & max-h to ensure content takes up no more than full height, allowing inner containers to control scrolling
     <List className="flex max-h-full flex-col pb-0">
-      {/* whitespace-normal to wrap long topic titles */}
-      <div className="flex items-center justify-center whitespace-normal px-4">
+      {/* max-w and wrap/break to handle long topic titles */}
+      <div className="flex items-center justify-center text-wrap break-all px-4">
         {isPlaygroundTopic ? (
           "Playground Topic"
         ) : (
           <>
-            <Link href={`/${topic.creatorName}`}>{topic.creatorName}</Link>
+            <Link className="max-w-[40%]" href={`/${topic.creatorName}`}>
+              {topic.creatorName}
+            </Link>
             <span className="px-1">/</span>
-            <Link href={`/${topic.creatorName}/${topic.title}`}>{topic.title}</Link>
+            <Link className="max-w-[60%]" href={`/${topic.creatorName}/${topic.title}`}>
+              {topic.title}
+            </Link>
           </>
         )}
 

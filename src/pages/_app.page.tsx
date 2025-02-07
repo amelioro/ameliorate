@@ -79,9 +79,18 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
               steps={[]}
               showBadge={false}
               styles={{ maskWrapper: () => ({ display: "none" }) }}
-              // super jank & brittle way to hide nav when there's only one step, because there's no exposed way for reactour do this...
-              // also add padding to nav buttons so they're easier to click
-              className="rounded-2xl border border-black !shadow-lg !shadow-black [&_>_div:nth-child(3):has(div_>_button:only-child)]:!hidden [&_>_div:nth-child(3)_button]:!p-1"
+              className={
+                "rounded-2xl border border-black !shadow-lg !shadow-black" +
+                // 32rem is the most we really need, but only go up to 95vw so it doesn't go to the edge of the screen.
+                // use w instead of max-w so that width is consistent
+                " !max-w-none w-[min(95vw,32rem)]" +
+                // for (probably extremely rare) 480px height phones
+                // use max-h because children will take up consistent height
+                " max-h-[95vh]" +
+                // super jank & brittle way to hide nav when there's only one step, because there's no exposed way for reactour do this...
+                // also add padding to nav buttons so they're easier to click
+                " [&_>_div:nth-child(3):has(div_>_button:only-child)]:!hidden [&_>_div:nth-child(3)_button]:!p-1"
+              }
             >
               <AuthUserProvider>
                 <Layout>

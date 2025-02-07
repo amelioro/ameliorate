@@ -1,3 +1,4 @@
+import { Build } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import { StepType } from "@reactour/tour";
 import Image from "next/image";
@@ -23,6 +24,8 @@ Below is a problem node, which suggests that "cars going too fast in my neighbor
             alt="problem node - cars going too fast"
             width={305}
             height={159}
+            unoptimized
+            className="rounded-xl border shadow"
           />
         }
       />
@@ -44,6 +47,7 @@ Note that editing is only possible if you created the topic or if you were given
             width={322}
             height={205}
             unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+            className="rounded-xl border shadow"
           />
         }
       />
@@ -63,6 +67,7 @@ Note that editing is only possible if you created the topic or if you were given
             width={527}
             height={387}
             unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+            className="rounded-xl border shadow"
           />
         }
       />
@@ -73,9 +78,16 @@ Note that editing is only possible if you created the topic or if you were given
     content: (
       <StepContent
         stepTitle="Other actions"
-        text={`Per-node actions, like delete, can be found by right-clicking a node, and other common actions like undo/redo are in the toolbar.
-
-Advanced actions and configuration can be found by clicking on the More Actions wrench.`}
+        text={
+          <span>
+            Per-node actions, like delete, can be found by right-clicking a node, and other common
+            actions like undo/redo are in the toolbar.
+            <br />
+            <br />
+            Advanced actions and configuration can be found by clicking on the More Actions wrench{" "}
+            <Build />.
+          </span>
+        }
         imageSlot={
           <Image
             key="https://github.com/user-attachments/assets/61b07a44-bd48-49ef-b9ee-780b4c2a676c"
@@ -84,6 +96,7 @@ Advanced actions and configuration can be found by clicking on the More Actions 
             width={413}
             height={476}
             unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+            className="rounded-xl border shadow"
           />
         }
       />
@@ -102,6 +115,8 @@ Advanced actions and configuration can be found by clicking on the More Actions 
             alt="Edges"
             width={273}
             height={324}
+            unoptimized
+            className="rounded-xl border shadow"
           />
         }
       />
@@ -114,7 +129,10 @@ Advanced actions and configuration can be found by clicking on the More Actions 
         stepTitle='Completed "Diagram Basics"! 🎉'
         text="Yay! Next, learn how to break down a problem."
         actionSlot={
-          <Button variant="contained" onClick={() => startTutorial("breakdown")}>
+          <Button
+            variant="contained"
+            onClick={() => startTutorial("breakingDownAProblem", "builders")}
+          >
             Next: Breakdown
           </Button>
         }
