@@ -207,7 +207,7 @@ export const breakdownSteps: StepType[] = [
         stepTitle='Completed "Breaking down a problem"! 🎉'
         text="Woohoo! Next, learn how to add nuance to your topic."
         actionSlot={
-          <Button variant="contained" onClick={() => startTutorial("addingNuance")}>
+          <Button variant="contained" onClick={() => startTutorial("addingNuance", "builders")}>
             Next: Nuance
           </Button>
         }

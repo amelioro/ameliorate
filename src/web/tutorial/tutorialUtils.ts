@@ -1,3 +1,6 @@
+import capitalize from "lodash/capitalize";
+import startCase from "lodash/startCase";
+
 /**
  * Separate file for this const because Workspace and steps both need to reference it, and want to
  * avoid circular dependencies.
@@ -12,14 +15,14 @@ export type Tutorial =
 
   // builders
   | "diagramBasics"
-  | "breakdown"
+  | "breakingDownAProblem"
   | "addingNuance"
   | "evaluatingTradeoffs"
   | "buildingViews"
 
   // viewers
-  | "readingDiagram"
-  | "navigatingTopic"
+  | "readingADiagram"
+  | "navigatingATopic"
 
   // experts
   | "moreActions"
@@ -40,4 +43,21 @@ export const tracks: Record<Track, Tutorial[]> = {
   diagramViewers: ["readingADiagram", "navigatingATopic"],
   tableViewers: ["evaluatingTradeoffs", "navigatingATopic"],
   experts: ["moreActions", "advancedFiltering"],
+};
+
+export const getStepHeader = (tutorial: Tutorial | null, track: Track | null) => {
+  if (tutorial === "welcome") return ""; // there's only one step in the welcome tutorial and its title would be duplicate of the tutorial header
+
+  const sentenceCaseTutorial = capitalize(startCase(tutorial ?? undefined));
+
+  if (tutorial && track) {
+    const prettyTrack =
+      track === "diagramViewers" || track === "tableViewers" ? "VIEWERS" : track.toUpperCase();
+    const stepNumber = tracks[track].indexOf(tutorial) + 1;
+    const totalSteps = tracks[track].length;
+
+    return `${prettyTrack} > ${sentenceCaseTutorial} (${stepNumber}/${totalSteps})`;
+  } else {
+    return sentenceCaseTutorial;
+  }
 };

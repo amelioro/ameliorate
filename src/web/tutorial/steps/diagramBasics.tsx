@@ -114,7 +114,10 @@ Advanced actions and configuration can be found by clicking on the More Actions 
         stepTitle='Completed "Diagram Basics"! 🎉'
         text="Yay! Next, learn how to break down a problem."
         actionSlot={
-          <Button variant="contained" onClick={() => startTutorial("breakdown")}>
+          <Button
+            variant="contained"
+            onClick={() => startTutorial("breakingDownAProblem", "builders")}
+          >
             Next: Breakdown
           </Button>
         }

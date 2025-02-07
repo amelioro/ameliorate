@@ -117,7 +117,7 @@ export const getReadingDiagramSteps = (track?: Track | null): StepType[] => [
             stepTitle='Completed "Reading a diagram"! 🎉'
             text="Woot woot! Next, learn how to navigate all the information in a topic."
             actionSlot={
-              <Button variant="contained" onClick={() => startTutorial("navigatingTopic")}>
+              <Button variant="contained" onClick={() => startTutorial("navigatingATopic", track)}>
                 Next: Navigating
               </Button>
             }

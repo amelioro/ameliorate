@@ -57,11 +57,11 @@ export const TutorialController = () => {
     if (
       format === "diagram" &&
       !userCanEditTopicData &&
-      !getTutorialHasStarted("readingDiagram") &&
+      !getTutorialHasStarted("readingADiagram") &&
       !getTutorialHasStarted("diagramBasics") // don't start Viewers tutorial if already did Builders because Builders is more comprehensive than Viewers
     ) {
       // timeout to prevent error rendering TourProvider within TutorialController (startTutorial results in such a render)
-      setTimeout(() => startTutorial("readingDiagram", null));
+      setTimeout(() => startTutorial("readingADiagram", null));
       setTutorialIsOpening(true);
     }
 

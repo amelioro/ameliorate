@@ -41,7 +41,7 @@ export const welcomeSteps = (track: Track): StepType[] => {
             ) : track === "diagramViewers" ? (
               <Button
                 variant="contained"
-                onClick={() => startTutorial("readingDiagram", "diagramViewers")}
+                onClick={() => startTutorial("readingADiagram", "diagramViewers")}
               >
                 Start: Reading Diagrams
               </Button>

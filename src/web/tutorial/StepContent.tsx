@@ -1,6 +1,9 @@
 import { Typography } from "@mui/material";
 import { ReactNode } from "react";
 
+import { getLastStartedTrack, getLastStartedTutorial } from "@/web/tutorial/tutorialStore";
+import { getStepHeader } from "@/web/tutorial/tutorialUtils";
+
 interface Props {
   stepTitle?: string;
   text: ReactNode;
@@ -24,8 +27,18 @@ export const StepContent = ({
   // (can't use 100% of parent container because of how we're sizing the image).
   heightClass = "h-[min(75vh,512px)]",
 }: Props) => {
+  const currentTutorial = getLastStartedTutorial();
+  const currentTrack = getLastStartedTrack();
+  const header = getStepHeader(currentTutorial, currentTrack);
+
   return (
     <div className={`${heightClass} flex flex-col gap-2`}>
+      {header && (
+        <Typography variant="body2" className="opacity-50">
+          {" "}
+          {header}{" "}
+        </Typography>
+      )}
       <Typography variant="h5">{stepTitle}</Typography>
       <Typography variant="body2" className="whitespace-pre-wrap">
         {text}

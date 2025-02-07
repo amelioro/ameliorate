@@ -8,7 +8,7 @@ import { StepContent } from "@/web/tutorial/StepContent";
 import { startTutorial } from "@/web/tutorial/tutorial";
 import { Track, tutorialDefaultAnchorClass } from "@/web/tutorial/tutorialUtils";
 
-export const getEvaluatingTradeoffsSteps = (track?: Track | null): StepType[] => [
+export const getEvaluatingTradeoffsSteps = (track: Track | null): StepType[] => [
   {
     selector: `.${tutorialDefaultAnchorClass}`,
     content: (
@@ -121,7 +121,7 @@ export const getEvaluatingTradeoffsSteps = (track?: Track | null): StepType[] =>
             stepTitle='Completed "Evaluating tradeoffs"! 🎉'
             text="Woot woot! Next and finally, learn how to build views to quickly look at different aspects of your topic."
             actionSlot={
-              <Button variant="contained" onClick={() => startTutorial("buildingViews")}>
+              <Button variant="contained" onClick={() => startTutorial("buildingViews", track)}>
                 Next: Building Views
               </Button>
             }
@@ -145,7 +145,10 @@ export const getEvaluatingTradeoffsSteps = (track?: Track | null): StepType[] =>
               stepTitle='Completed "Evaluating tradeoffs"! 🎉'
               text="Woot woot! Next and finally, learn how to navigate all the information that's in a topic."
               actionSlot={
-                <Button variant="contained" onClick={() => startTutorial("navigatingTopic")}>
+                <Button
+                  variant="contained"
+                  onClick={() => startTutorial("navigatingATopic", track)}
+                >
                   Next: Navigating
                 </Button>
               }

@@ -15,12 +15,12 @@ import { Track, Tutorial } from "@/web/tutorial/tutorialUtils";
 /**
  * @param nextTutorial null if there should be no next tutorial, undefined to use the tutorial's default
  */
-const getTutorialSteps = (tutorial: Tutorial, track?: Track | null) => {
+const getTutorialSteps = (tutorial: Tutorial, track: Track | null) => {
   switch (tutorial) {
     // builders
     case "diagramBasics":
       return diagramBasicsSteps;
-    case "breakdown":
+    case "breakingDownAProblem":
       return breakdownSteps;
     case "addingNuance":
       return addingNuanceSteps;
@@ -30,10 +30,10 @@ const getTutorialSteps = (tutorial: Tutorial, track?: Track | null) => {
       return buildingViewsSteps;
 
     // viewers
-    case "readingDiagram":
+    case "readingADiagram":
       return getReadingDiagramSteps(track);
     // 1b. evaluatingTradeoffs is reused from builders path
-    case "navigatingTopic":
+    case "navigatingATopic":
       return navigatingTopicSteps;
     default:
       throw new Error("No steps found for tutorial: " + tutorial);
@@ -63,7 +63,7 @@ export const startWelcomeTutorial = (track: Track) => {
   reactour.setIsOpen(true);
 };
 
-export const startTutorial = (tutorial: Tutorial, track?: Track | null) => {
+export const startTutorial = (tutorial: Tutorial, track: Track | null) => {
   if (!reactour || !reactour.setSteps) throw new Error("Tour props not set");
 
   const steps = getTutorialSteps(tutorial, track);
@@ -72,7 +72,7 @@ export const startTutorial = (tutorial: Tutorial, track?: Track | null) => {
   markTutorialCompletedOnLastStep(tutorial, steps);
   reactour.setSteps(steps);
   reactour.setCurrentStep(0);
-  setTutorialHasStarted(tutorial);
+  setTutorialHasStarted(tutorial, track);
 
   // Previously had issue where the first step of the new tutorial was being sized the same as the
   // previously-seen tutorial step, causing it to be positioned incorrectly.
