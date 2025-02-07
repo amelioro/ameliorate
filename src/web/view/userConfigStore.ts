@@ -14,7 +14,7 @@ const initialState: UserConfigStoreState = {
   showIndicators: false,
   fillNodesWithColor: false,
   indicateWhenNodeForcedToShow: false,
-  expandDetailsTabs: false,
+  expandDetailsTabs: true,
 };
 
 const useUserConfigStore = create<UserConfigStoreState>()(
