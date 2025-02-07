@@ -23,6 +23,7 @@ export const navigatingTopicSteps: StepType[] = [
         imageSlot={
           <>
             <Image
+              key="https://github.com/user-attachments/assets/87055acd-debb-45f2-981f-ef511e770222"
               src="https://github.com/user-attachments/assets/87055acd-debb-45f2-981f-ef511e770222"
               alt="clicking between views in cars-going-too-fast topic"
               width={1096}
