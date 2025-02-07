@@ -1,3 +1,4 @@
+import { AutoStories, Build, Group } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import { StepType } from "@reactour/tour";
 import Image from "next/image";
@@ -18,8 +19,8 @@ export const navigatingTopicSteps: StepType[] = [
             Quick Views allow you to easily jump between different aspects of a topic.
             <br />
             <br />
-            Found in the Views Pane on the side, they're a good place to start when trying to
-            understand a topic.
+            Found in the Views Pane <AutoStories color="primary" />, they're a good place to start
+            when trying to understand a topic.
           </span>
         }
         imageSlot={
@@ -56,7 +57,8 @@ export const navigatingTopicSteps: StepType[] = [
             Indicators convey at-a-glance where extra details are.
             <br />
             <br />
-            Details can be found by selecting the piece and looking at the Details Pane.
+            Details can be found by selecting the piece and looking at the Details Pane{" "}
+            <AutoStories color="primary" />.
           </span>
         }
         imageSlot={
@@ -85,8 +87,8 @@ export const navigatingTopicSteps: StepType[] = [
             topic's creator.
             <br />
             <br />
-            You can compare multiple people's scores via the Compare button, or select specific
-            perspectives via the More Actions Drawer.
+            You can compare multiple people's scores via the Compare button <Group />, or select
+            specific perspectives via the More Actions Drawer <Build />.
           </span>
         }
         imageSlot={

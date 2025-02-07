@@ -1,3 +1,4 @@
+import { Build } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import { StepType } from "@reactour/tour";
 import Image from "next/image";
@@ -73,9 +74,16 @@ Note that editing is only possible if you created the topic or if you were given
     content: (
       <StepContent
         stepTitle="Other actions"
-        text={`Per-node actions, like delete, can be found by right-clicking a node, and other common actions like undo/redo are in the toolbar.
-
-Advanced actions and configuration can be found by clicking on the More Actions wrench.`}
+        text={
+          <span>
+            Per-node actions, like delete, can be found by right-clicking a node, and other common
+            actions like undo/redo are in the toolbar.
+            <br />
+            <br />
+            Advanced actions and configuration can be found by clicking on the More Actions wrench{" "}
+            <Build />.
+          </span>
+        }
         imageSlot={
           <Image
             key="https://github.com/user-attachments/assets/61b07a44-bd48-49ef-b9ee-780b4c2a676c"

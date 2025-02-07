@@ -1,3 +1,4 @@
+import { Build } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import { StepType } from "@reactour/tour";
 import Image from "next/image";
@@ -58,7 +59,7 @@ export const buildingViewsSteps: StepType[] = [
             <br />
             <br />
             There are Information Filters, General Filters, Table Filters (if you're viewing a
-            table), and some Diagram Config in the More Actions Drawer.
+            table), and some Diagram Config in the More Actions Drawer <Build />.
           </span>
         }
         imageSlot={
