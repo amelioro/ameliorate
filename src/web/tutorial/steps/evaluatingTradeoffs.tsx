@@ -1,3 +1,4 @@
+import { AutoStories } from "@mui/icons-material";
 import { Button, Typography } from "@mui/material";
 import { StepType } from "@reactour/tour";
 import Image from "next/image";
@@ -16,20 +17,21 @@ export const getEvaluatingTradeoffsSteps = (track: Track | null): StepType[] => 
         stepTitle="Viewing the table"
         text={
           <span>
-            The Criteria Table can help make it easier to compare tradeoffs of each solution.
+            The Criteria Table can help make it easier to compare tradeoffs of each solution. You
+            can find it by right-clicking on a problem node.
             <br />
             <br />
-            You can find it by clicking on a problem's table button, or changing the format to
-            "table" and selecting a problem in the table filter.
+            If you need to return to the diagram, you can change the format back to "Diagram" under
+            VIEWS {">"} Format in the Topic pane <AutoStories color="primary" />.
           </span>
         }
         imageSlot={
           <Image
-            key="https://github.com/user-attachments/assets/baf22aab-cea0-4e6d-b295-2edb34dd7b44"
-            src="https://github.com/user-attachments/assets/baf22aab-cea0-4e6d-b295-2edb34dd7b44"
+            key="https://github.com/user-attachments/assets/5ccc00a7-a3e9-439f-8e19-4d32106bfdef"
+            src="https://github.com/user-attachments/assets/5ccc00a7-a3e9-439f-8e19-4d32106bfdef"
             alt="viewing criteria table"
-            width={600}
-            height={460}
+            width={677}
+            height={472}
             unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
             className="rounded-xl border shadow"
           />
