@@ -57,7 +57,6 @@ export const welcomeSteps = (track: Track): StepType[] => {
           heightClass="" // override default to let height be based on content size here - we don't care about matching height of other steps because this tutorial only has one step
         />
       ),
-      stepInteraction: false, // don't let users click the help button when it's highlighted, because the popover would awkwardly cover the opened menu
       styles: {
         maskWrapper: (props) => ({ ...props, display: "unset" }), // show the mask to spotlight the help button
       },
