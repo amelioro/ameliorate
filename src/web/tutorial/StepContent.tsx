@@ -44,9 +44,8 @@ export const StepContent = ({
         {text}
       </Typography>
       {actionSlot && <div className="flex pt-2">{actionSlot}</div>}
-      {imageSlot && (
-        // allow image to grow to fill height & width space while maintaining aspect ratio
-        <div className="flex min-h-0 flex-1 flex-col items-center justify-center pt-2 [&_>_img]:max-h-full [&_>_img]:max-w-full [&_>_img]:object-contain">
+      {imageSlot && ( // allow image to grow to fill height & width space while maintaining aspect ratio
+        <div className="flex min-h-0 grow flex-col items-center justify-center pt-2 [&_>_img]:size-auto [&_>_img]:max-h-full">
           {imageSlot}
         </div>
       )}

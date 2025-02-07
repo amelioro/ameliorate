@@ -76,6 +76,7 @@ export const buildingViewsSteps: StepType[] = [
               width={450}
               height={434}
               unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+              className="rounded-xl border shadow"
             />
           </>
         }
@@ -111,6 +112,7 @@ export const buildingViewsSteps: StepType[] = [
               width={659}
               height={412}
               unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+              className="rounded-xl border shadow"
             />
             <Typography variant="caption">
               From:{" "}
@@ -150,6 +152,7 @@ export const buildingViewsSteps: StepType[] = [
               width={659}
               height={369}
               unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+              className="rounded-xl border shadow"
             />
             <Typography variant="caption">
               From:{" "}
@@ -189,6 +192,7 @@ export const buildingViewsSteps: StepType[] = [
               width={600}
               height={445}
               unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+              className="rounded-xl border shadow"
             />
             <Typography variant="caption">
               From:{" "}
@@ -227,6 +231,7 @@ export const buildingViewsSteps: StepType[] = [
               width={596}
               height={475}
               unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+              className="rounded-xl border shadow"
             />
             <Typography variant="caption">
               From:{" "}
@@ -266,6 +271,7 @@ export const buildingViewsSteps: StepType[] = [
               width={591}
               height={516}
               unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+              className="rounded-xl border shadow"
             />
             <Typography variant="caption">
               From:{" "}
@@ -304,6 +310,7 @@ export const buildingViewsSteps: StepType[] = [
               width={788}
               height={475}
               unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+              className="rounded-xl border shadow"
             />
           </>
         }

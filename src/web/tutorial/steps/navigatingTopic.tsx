@@ -68,6 +68,7 @@ export const navigatingTopicSteps: StepType[] = [
               width={600}
               height={467}
               unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+              className="rounded-xl border shadow"
             />
           </>
         }
@@ -97,6 +98,7 @@ export const navigatingTopicSteps: StepType[] = [
             width={492}
             height={411}
             unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+            className="rounded-xl border shadow"
           />
         }
       />

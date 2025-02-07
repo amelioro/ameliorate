@@ -33,6 +33,8 @@ export const getReadingDiagramSteps = (track?: Track | null): StepType[] => [
             alt="Edges"
             width={273}
             height={324}
+            unoptimized
+            className="rounded-xl border shadow"
           />
         }
       />
@@ -65,6 +67,8 @@ export const getReadingDiagramSteps = (track?: Track | null): StepType[] => [
               alt="layout of details via cars-going-too-fast"
               width={1237}
               height={911}
+              unoptimized
+              className="rounded-xl border shadow"
             />
             <Typography variant="caption">
               From:{" "}
@@ -104,6 +108,7 @@ export const getReadingDiagramSteps = (track?: Track | null): StepType[] => [
             width={434}
             height={328}
             unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+            className="rounded-xl border shadow"
           />
         }
       />

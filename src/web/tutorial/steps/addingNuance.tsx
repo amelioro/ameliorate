@@ -34,6 +34,7 @@ export const addingNuanceSteps: StepType[] = [
             width={434}
             height={328}
             unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+            className="rounded-xl border shadow"
           />
         }
       />
@@ -61,6 +62,7 @@ export const addingNuanceSteps: StepType[] = [
             width={492}
             height={411}
             unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+            className="rounded-xl border shadow"
           />
         }
       />
@@ -90,6 +92,7 @@ export const addingNuanceSteps: StepType[] = [
             width={600}
             height={353}
             unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+            className="rounded-xl border shadow"
           />
         }
       />
@@ -118,6 +121,7 @@ export const addingNuanceSteps: StepType[] = [
             width={579}
             height={379}
             unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+            className="rounded-xl border shadow"
           />
         }
       />
@@ -142,7 +146,8 @@ export const addingNuanceSteps: StepType[] = [
               alt="note"
               width={377}
               height={140}
-              className="mr-3 shadow-lg"
+              unoptimized
+              className="rounded-xl border shadow-lg"
             />
             <Image
               key="https://github.com/user-attachments/assets/e7a9c06c-71f4-4f41-9fc5-d89bf81d60ad"
@@ -150,7 +155,8 @@ export const addingNuanceSteps: StepType[] = [
               alt="comment"
               width={382}
               height={224}
-              className="ml-3 pt-3 shadow-lg"
+              unoptimized
+              className="mt-3 rounded-xl border shadow-lg"
             />
           </>
         }
@@ -176,6 +182,7 @@ export const addingNuanceSteps: StepType[] = [
             width={507}
             height={360}
             unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+            className="rounded-xl border shadow"
           />
         }
       />
