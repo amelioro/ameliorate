@@ -52,6 +52,7 @@ export const ContentHeader = ({ overlay }: Props) => {
         ) : (
           <>
             <Link
+              // hardcoded max-w instead of % because it seems like % results in the parent div being wider than these contents, despite being a flex container and items/justify center
               className="max-w-28 overflow-hidden text-ellipsis"
               href={`/${topic.creatorName}`}
               title={topic.creatorName} // allow hovering since it can be truncated
