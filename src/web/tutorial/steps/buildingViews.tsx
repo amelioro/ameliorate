@@ -7,11 +7,15 @@ import { Link } from "@/web/common/components/Link";
 import { celebrateGif } from "@/web/common/urls";
 import { NodeTypeText } from "@/web/topic/components/NodeTypeText/NodeTypeText";
 import { StepContent } from "@/web/tutorial/StepContent";
-import { tutorialDefaultAnchorClass, viewsPaneSelector } from "@/web/tutorial/tutorialUtils";
+import {
+  quickViewDropdownSelector,
+  tutorialDefaultAnchorClass,
+  viewsPaneSelector,
+} from "@/web/tutorial/tutorialUtils";
 
 export const buildingViewsSteps: StepType[] = [
   {
-    selector: viewsPaneSelector,
+    selector: quickViewDropdownSelector,
     content: (
       <StepContent
         stepTitle="Quick Views"
@@ -27,12 +31,13 @@ export const buildingViewsSteps: StepType[] = [
         imageSlot={
           <>
             <Image
-              key="https://github.com/user-attachments/assets/17014abe-f9c5-4ca2-b95d-9683e2b1034b"
-              src="https://github.com/user-attachments/assets/17014abe-f9c5-4ca2-b95d-9683e2b1034b"
+              src="https://github.com/user-attachments/assets/87055acd-debb-45f2-981f-ef511e770222"
               alt="clicking between views in cars-going-too-fast topic"
-              width={666}
-              height={448}
-              unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+              width={1096}
+              height={847}
+              unoptimized // warning without this - gifs aren't optimized by nextjs apparently
+              // extra padding & bg because spacing seems to look better
+              className="rounded-xl border bg-paperPlain-main p-2 shadow"
             />
             <Typography variant="caption">
               From:{" "}
