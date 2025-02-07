@@ -7,8 +7,8 @@ import startCase from "lodash/startCase";
  */
 export const tutorialDefaultAnchorClass = "tutorial-anchor";
 
-export const detailsPaneSelector = `.MuiDrawer-root:has(div[id$="-Details"])`;
-export const viewsPaneSelector = `.MuiDrawer-root:has(div[id$="-Views"])`;
+export const detailsPaneSelector = `.MuiDrawer-root:has(button[id$="-Details"])`;
+export const viewsPaneSelector = `.MuiDrawer-root:has(button[id$="-Views"])`;
 export const quickViewDropdownSelector = `#quick-view-select`;
 
 export type Tutorial =
