@@ -3,7 +3,7 @@ import { CommonIndicators } from "@/web/topic/components/Indicator/CommonIndicat
 import { ContentIndicators } from "@/web/topic/components/Indicator/ContentIndicators";
 import { StatusIndicators } from "@/web/topic/components/Indicator/StatusIndicators";
 import { Edge } from "@/web/topic/utils/graph";
-import { setSelected, useIsGraphPartSelected } from "@/web/view/currentViewStore/store";
+import { setSelected, useIsGraphPartSelected } from "@/web/view/selectedPartStore";
 
 export const EdgeCell = ({ edge }: { edge: Edge }) => {
   const selected = useIsGraphPartSelected(edge.id);

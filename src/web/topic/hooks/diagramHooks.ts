@@ -15,7 +15,7 @@ import {
   useLayoutThoroughness,
   useMinimizeEdgeCrossings,
 } from "@/web/view/currentViewStore/layout";
-import { useSelectedGraphPart } from "@/web/view/currentViewStore/store";
+import { useSelectedGraphPart } from "@/web/view/selectedPartStore";
 
 // re-renders when diagram changes, but only re-layouts if graph parts are added or removed
 export const useLayoutedDiagram = (diagram: Diagram) => {

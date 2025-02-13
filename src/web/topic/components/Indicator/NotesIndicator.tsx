@@ -4,7 +4,7 @@ import { useCallback } from "react";
 
 import { emitter } from "@/web/common/event";
 import { Indicator } from "@/web/topic/components/Indicator/Indicator";
-import { setSelected } from "@/web/view/currentViewStore/store";
+import { setSelected } from "@/web/view/selectedPartStore";
 
 interface Props {
   graphPartId: string;

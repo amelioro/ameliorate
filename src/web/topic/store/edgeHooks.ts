@@ -3,7 +3,7 @@ import { shallow } from "zustand/shallow";
 import { useTopicStore } from "@/web/topic/store/store";
 import { nodes } from "@/web/topic/utils/edge";
 import { findEdgeOrThrow } from "@/web/topic/utils/graph";
-import { useIsAnyGraphPartSelected } from "@/web/view/currentViewStore/store";
+import { useIsAnyGraphPartSelected } from "@/web/view/selectedPartStore";
 
 export const useIsNodeSelected = (edgeId: string) => {
   const neighborNodes = useTopicStore((state) => {

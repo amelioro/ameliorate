@@ -7,7 +7,6 @@ import { createWithEqualityFn } from "zustand/traditional";
 import { Format, InfoCategory } from "@/common/infoCategory";
 import { withDefaults } from "@/common/object";
 import { emitter } from "@/web/common/event";
-import { getGraphPart, useGraphPart } from "@/web/topic/store/graphPartHooks";
 import { migrate } from "@/web/view/currentViewStore/migrate";
 import { triggerEvent } from "@/web/view/currentViewStore/triggerEventMiddleware";
 import {
@@ -20,7 +19,6 @@ import { StandardFilter } from "@/web/view/utils/infoFilter";
 import { TableFilter } from "@/web/view/utils/tableFilter";
 
 export interface ViewState {
-  selectedGraphPartId: string | null;
   format: Format;
 
   // info category state is flattened (rather than `[category]: state`) for ease of modifying
@@ -63,7 +61,6 @@ export interface ViewState {
 }
 
 export const initialViewState: ViewState = {
-  selectedGraphPartId: null,
   format: "diagram",
 
   categoriesToShow: ["breakdown"],
@@ -96,9 +93,6 @@ export const initialViewState: ViewState = {
   layoutThoroughness: 100, // by default, prefer keeping parents close to children over keeping node types together
 };
 
-// TODO?: oftentimes don't want to reset selected part - should selectedGraphPartId really be in the view store?
-export const { selectedGraphPartId: _, ...initialViewStateWithoutSelected } = initialViewState;
-
 const persistedNameBase = "navigateStore";
 
 export const useCurrentViewStore = createWithEqualityFn<ViewState>()(
@@ -126,26 +120,6 @@ export const useCurrentViewStore = createWithEqualityFn<ViewState>()(
 const useTemporalStore = () => useStore(useCurrentViewStore.temporal);
 
 // hooks
-export const useSelectedGraphPart = () => {
-  const selectedGraphPartId = useCurrentViewStore((state) => state.selectedGraphPartId);
-
-  return useGraphPart(selectedGraphPartId);
-};
-
-export const useIsGraphPartSelected = (graphPartId: string) => {
-  return useCurrentViewStore((state) => {
-    if (!state.selectedGraphPartId) return false;
-    return state.selectedGraphPartId === graphPartId;
-  });
-};
-
-export const useIsAnyGraphPartSelected = (graphPartIds: string[]) => {
-  return useCurrentViewStore((state) => {
-    if (!state.selectedGraphPartId) return false;
-    return graphPartIds.includes(state.selectedGraphPartId);
-  });
-};
-
 export const useFormat = () => {
   return useCurrentViewStore((state) => state.format);
 };
@@ -159,15 +133,6 @@ export const useCanGoBackForward = () => {
 };
 
 // actions
-export const setSelected = (graphPartId: string | null) => {
-  const { selectedGraphPartId } = useCurrentViewStore.getState();
-  if (selectedGraphPartId === graphPartId) return;
-
-  useCurrentViewStore.setState({ selectedGraphPartId: graphPartId }, false, "setSelected");
-
-  emitter.emit("partSelected", graphPartId);
-};
-
 export const setFormat = (format: Format) => {
   useCurrentViewStore.setState({ format }, false, "setFormat");
 };
@@ -236,13 +201,6 @@ export const loadView = async (persistId: string) => {
 // util actions
 export const getView = () => {
   return useCurrentViewStore.getState();
-};
-
-export const getSelectedGraphPart = () => {
-  const selectedGraphPartId = useCurrentViewStore.getState().selectedGraphPartId;
-  if (!selectedGraphPartId) return null;
-
-  return getGraphPart(selectedGraphPartId);
 };
 
 // misc

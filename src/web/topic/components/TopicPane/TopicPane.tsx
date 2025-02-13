@@ -15,7 +15,7 @@ import {
 } from "@/web/topic/components/TopicPane/TopicDetails";
 import { StyledDrawer, drawerMinWidthRem } from "@/web/topic/components/TopicPane/TopicPane.styles";
 import { TopicViews } from "@/web/topic/components/TopicPane/TopicViews";
-import { useSelectedGraphPart } from "@/web/view/currentViewStore/store";
+import { useSelectedGraphPart } from "@/web/view/selectedPartStore";
 
 type TopicTab = "Details" | "Views";
 interface Props {

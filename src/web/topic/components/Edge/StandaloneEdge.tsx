@@ -7,7 +7,7 @@ import { EditableNode } from "@/web/topic/components/Node/EditableNode";
 import { nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
 import { useNode } from "@/web/topic/store/nodeHooks";
 import { Edge } from "@/web/topic/utils/graph";
-import { useIsGraphPartSelected } from "@/web/view/currentViewStore/store";
+import { useIsGraphPartSelected } from "@/web/view/selectedPartStore";
 
 const convertToStandaloneFlowEdge = (edge: Edge, selected: boolean): EdgeProps => {
   return {

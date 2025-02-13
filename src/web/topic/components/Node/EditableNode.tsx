@@ -22,7 +22,7 @@ import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { Node } from "@/web/topic/utils/graph";
 import { nodeDecorations } from "@/web/topic/utils/node";
 import { useUnrestrictedEditing } from "@/web/view/actionConfigStore";
-import { setSelected, useIsGraphPartSelected } from "@/web/view/currentViewStore/store";
+import { setSelected, useIsGraphPartSelected } from "@/web/view/selectedPartStore";
 import { useFillNodesWithColor } from "@/web/view/userConfigStore";
 
 interface Props {

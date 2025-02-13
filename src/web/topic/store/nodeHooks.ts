@@ -6,7 +6,7 @@ import { getDefaultNode } from "@/web/topic/store/nodeGetters";
 import { useTopicStore } from "@/web/topic/store/store";
 import { RelationDirection, findNodeOrThrow } from "@/web/topic/utils/graph";
 import { children, edges, neighbors, parents } from "@/web/topic/utils/node";
-import { useIsAnyGraphPartSelected } from "@/web/view/currentViewStore/store";
+import { useIsAnyGraphPartSelected } from "@/web/view/selectedPartStore";
 
 export const useNode = (nodeId: string | null) => {
   return useTopicStore((state) => {
