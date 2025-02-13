@@ -8,7 +8,7 @@ import { useResearchNodes } from "@/web/topic/store/graphPartHooks";
 import { useDisplayScores } from "@/web/topic/store/scoreHooks";
 import { Score } from "@/web/topic/utils/graph";
 import { getNumericScore, scoreColors } from "@/web/topic/utils/score";
-import { setSelected } from "@/web/view/currentViewStore/store";
+import { setSelected } from "@/web/view/selectedPartStore";
 
 interface Props {
   graphPartId: string;

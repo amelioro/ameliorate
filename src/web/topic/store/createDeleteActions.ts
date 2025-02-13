@@ -22,7 +22,7 @@ import {
 import { getImplicitLabel } from "@/web/topic/utils/justification";
 import { FlowNodeType, edges } from "@/web/topic/utils/node";
 import { getUnrestrictedEditing } from "@/web/view/actionConfigStore";
-import { setSelected } from "@/web/view/currentViewStore/store";
+import { setSelected } from "@/web/view/selectedPartStore";
 
 const createNode = (
   state: TopicStoreState,

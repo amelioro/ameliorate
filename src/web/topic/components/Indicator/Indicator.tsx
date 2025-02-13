@@ -1,7 +1,8 @@
 import { type ButtonProps } from "@mui/material";
-import { MouseEventHandler } from "react";
+import { MouseEventHandler, useContext } from "react";
 
 import { StyledButton } from "@/web/topic/components/Indicator/Indicator.styles";
+import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { MuiIcon } from "@/web/topic/utils/node";
 import { useShowIndicators } from "@/web/view/userConfigStore";
 
@@ -25,6 +26,7 @@ export const Indicator = ({
   filled = true,
   graphPartIndicator = true,
 }: IndicatorProps) => {
+  const workspaceContext = useContext(WorkspaceContext);
   const showIndicators = useShowIndicators();
 
   const onClickHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -36,8 +38,9 @@ export const Indicator = ({
     }
   };
 
-  // no need to hide indicators that aren't for graph parts e.g. JustificationTreeIndicator
-  const showIndicator = showIndicators || !graphPartIndicator;
+  // Nice to always show indicators in details view so there's some way for new users to be exposed to them.
+  // No need to hide indicators that aren't for graph parts e.g. JustificationTreeIndicator.
+  const showIndicator = workspaceContext === "details" || showIndicators || !graphPartIndicator;
 
   return (
     <>

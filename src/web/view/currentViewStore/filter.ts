@@ -8,10 +8,7 @@ import { getDefaultNode } from "@/web/topic/store/nodeGetters";
 import { useTopicStore } from "@/web/topic/store/store";
 import { findNodeOrThrow } from "@/web/topic/utils/graph";
 import { neighbors } from "@/web/topic/utils/node";
-import {
-  initialViewStateWithoutSelected,
-  useCurrentViewStore,
-} from "@/web/view/currentViewStore/store";
+import { initialViewState, useCurrentViewStore } from "@/web/view/currentViewStore/store";
 import {
   getCriterionContextFilter,
   getFulfillsContextFilter,
@@ -145,7 +142,7 @@ export const viewCriteriaTable = (problemNodeId: string) => {
 export const viewJustification = (arguedDiagramPartId: string) => {
   useCurrentViewStore.setState(
     {
-      ...initialViewStateWithoutSelected,
+      ...initialViewState,
       format: "diagram",
       categoriesToShow: ["justification"],
       justificationFilter: { type: "rootClaim", centralRootClaimId: arguedDiagramPartId },
@@ -161,7 +158,7 @@ export const viewSolutionContext = (solutionId: string) => {
 
   useCurrentViewStore.setState(
     {
-      ...initialViewStateWithoutSelected,
+      ...initialViewState,
       breakdownFilter: getSolutionContextFilter(graph, solutionId),
     },
     false,
@@ -175,7 +172,7 @@ export const viewCriterionContext = (criterionId: string) => {
 
   useCurrentViewStore.setState(
     {
-      ...initialViewStateWithoutSelected,
+      ...initialViewState,
       breakdownFilter: getCriterionContextFilter(graph, criterionId),
       // could have the standard filter control this, but this way allows users to use the standard
       // filter and choose to show the extra edges if they want
@@ -194,7 +191,7 @@ export const viewFulfillsEdgeContext = (fulfillsEdgeId: string) => {
 
   useCurrentViewStore.setState(
     {
-      ...initialViewStateWithoutSelected,
+      ...initialViewState,
       breakdownFilter: getFulfillsContextFilter(graph, fulfillsEdgeId),
       // could have the standard filter control this, but this way allows users to use the standard
       // filter and choose to show the extra edges if they want

@@ -31,12 +31,12 @@ import {
   useReadonlyMode,
 } from "@/web/view/actionConfigStore";
 import { Perspectives } from "@/web/view/components/Perspectives/Perspectives";
-import { useSelectedGraphPart } from "@/web/view/currentViewStore/store";
 import {
   comparePerspectives,
   resetPerspectives,
   useIsComparingPerspectives,
 } from "@/web/view/perspectiveStore";
+import { useSelectedGraphPart } from "@/web/view/selectedPartStore";
 import { toggleShowIndicators, toggleZenMode, useShowIndicators } from "@/web/view/userConfigStore";
 
 interface PerspectivesMenuProps {

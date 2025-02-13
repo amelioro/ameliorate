@@ -23,8 +23,9 @@ import { Score, possibleScores } from "@/web/topic/utils/graph";
 import { hotkeys } from "@/web/topic/utils/hotkeys";
 import { userCanEditScores } from "@/web/topic/utils/score";
 import { getReadonlyMode, toggleReadonlyMode } from "@/web/view/actionConfigStore";
-import { getSelectedGraphPart, setSelected, useFormat } from "@/web/view/currentViewStore/store";
+import { useFormat } from "@/web/view/currentViewStore/store";
 import { getPerspectives } from "@/web/view/perspectiveStore";
+import { getSelectedGraphPart, setSelected } from "@/web/view/selectedPartStore";
 import { toggleShowIndicators, toggleZenMode, useZenMode } from "@/web/view/userConfigStore";
 
 const useWorkspaceHotkeys = (user: { username: string } | null | undefined) => {

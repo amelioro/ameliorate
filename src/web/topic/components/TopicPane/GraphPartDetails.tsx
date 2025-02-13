@@ -69,7 +69,7 @@ export const GraphPartDetails = ({ graphPart, selectedTab, setSelectedTab }: Pro
 
   return (
     // flex & max-h to ensure content takes up no more than full height, allowing inner containers to control scrolling
-    <List className="flex max-h-full flex-col pb-0">
+    <List className="flex max-h-full flex-col py-0">
       <div className="flex flex-col items-center">
         {partIsNode ? (
           // z-index to ensure hanging node indicators don't fall behind the next section's empty background
