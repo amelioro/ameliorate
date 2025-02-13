@@ -1,5 +1,5 @@
 import { temporal } from "zundo";
-import { create } from "zustand";
+import { create, useStore } from "zustand";
 import { persist } from "zustand/middleware";
 
 import { emitter } from "@/web/common/event";
@@ -31,6 +31,9 @@ const useSelectedPartStore = create<SelectedPartStoreState>()(
   ),
 );
 
+// temporal store is a vanilla store, we need to wrap it to use it as a hook and be able to react to changes
+const useTemporalStore = () => useStore(useSelectedPartStore.temporal);
+
 // hooks
 export const useSelectedGraphPart = () => {
   const selectedGraphPartId = useSelectedPartStore((state) => state.selectedGraphPartId);
@@ -52,6 +55,14 @@ export const useIsAnyGraphPartSelected = (graphPartIds: string[]) => {
   });
 };
 
+export const useCanGoBackForward = () => {
+  const temporalStore = useTemporalStore();
+
+  const canGoBack = temporalStore.pastStates.length > 0;
+  const canGoForward = temporalStore.futureStates.length > 0;
+  return [canGoBack, canGoForward];
+};
+
 // actions
 export const setSelected = (graphPartId: string | null) => {
   const { selectedGraphPartId } = useSelectedPartStore.getState();
@@ -60,6 +71,14 @@ export const setSelected = (graphPartId: string | null) => {
   useSelectedPartStore.setState({ selectedGraphPartId: graphPartId });
 
   emitter.emit("partSelected", graphPartId);
+};
+
+export const goBack = () => {
+  useSelectedPartStore.temporal.getState().undo();
+};
+
+export const goForward = () => {
+  useSelectedPartStore.temporal.getState().redo();
 };
 
 // util actions

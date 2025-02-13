@@ -1,4 +1,10 @@
-import { AutoStories, ChevronLeft, ChevronRight } from "@mui/icons-material";
+import {
+  ArrowBack,
+  ArrowForward,
+  AutoStories,
+  ChevronLeft,
+  ChevronRight,
+} from "@mui/icons-material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { IconButton, Modal, Tab } from "@mui/material";
 import { memo, useEffect, useState } from "react";
@@ -15,7 +21,39 @@ import {
 } from "@/web/topic/components/TopicPane/TopicDetails";
 import { StyledDrawer, drawerMinWidthRem } from "@/web/topic/components/TopicPane/TopicPane.styles";
 import { TopicViews } from "@/web/topic/components/TopicPane/TopicViews";
-import { useSelectedGraphPart } from "@/web/view/selectedPartStore";
+import {
+  goBack,
+  goForward,
+  useCanGoBackForward,
+  useSelectedGraphPart,
+} from "@/web/view/selectedPartStore";
+
+const DetailsToolbar = () => {
+  const [canGoBack, canGoForward] = useCanGoBackForward();
+
+  return (
+    <div className="flex items-center justify-center">
+      <IconButton
+        color="inherit"
+        title="Previous Selection"
+        aria-label="Previous Selection"
+        onClick={goBack}
+        disabled={!canGoBack}
+      >
+        <ArrowBack />
+      </IconButton>
+      <IconButton
+        color="inherit"
+        title="Next Selection"
+        aria-label="Next Selection"
+        onClick={goForward}
+        disabled={!canGoForward}
+      >
+        <ArrowForward />
+      </IconButton>
+    </div>
+  );
+};
 
 type TopicTab = "Details" | "Views";
 interface Props {
@@ -89,9 +127,14 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
         ))}
       </TabList>
 
+      {/* flex flex-col to put details toolbar above the content */}
       {/* overflow-auto to allow tab content to scroll */}
       {/* p-0 to allow tab content to manage its own padding, since e.g. dividers prefer not to be padded */}
-      <TabPanel key="Details" value="Details" className="overflow-auto p-0">
+      <TabPanel key="Details" value="Details" className="flex flex-col overflow-auto p-0">
+        {/* Toolbar centered above content to be near content's title, in hopes of implying that the */}
+        {/* back/forward buttons are to navigate to previous/next content. */}
+        <DetailsToolbar />
+
         {selectedGraphPart !== null ? (
           <GraphPartDetails
             graphPart={selectedGraphPart}

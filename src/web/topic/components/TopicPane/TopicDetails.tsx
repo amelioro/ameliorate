@@ -146,7 +146,7 @@ export const TopicDetails = ({ selectedTab, setSelectedTab }: Props) => {
 
   return (
     // flex & max-h to ensure content takes up no more than full height, allowing inner containers to control scrolling
-    <List className="flex max-h-full flex-col pb-0">
+    <List className="flex max-h-full flex-col py-0">
       {/* max-w and wrap/break to handle long topic titles */}
       <div className="flex items-center justify-center text-wrap break-all px-4">
         {isPlaygroundTopic ? (
