@@ -3,36 +3,9 @@ import { Link, Tab, Typography } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
 
-type Tab = "tradeoffs" | "views" | "flashlight" | "disagree";
+type Tab = "views" | "disagree" | "tradeoffs" | "flashlight";
 
 const copy = {
-  tradeoffs: {
-    title: "Summarize tradeoffs between solutions",
-    description:
-      "Show how important you think each tradeoff is, and how well each solution fulfills that tradeoff.",
-    content: (
-      <div>
-        <Image
-          src="https://github.com/user-attachments/assets/60ac157d-03f7-4fa5-907b-b8e3abab0e7a"
-          alt="criteria tables of cars-going-too-fast"
-          width={727}
-          height={455}
-          unoptimized
-          // extra padding & bg because spacing seems to look better
-          className="rounded-xl border bg-paperPlain-main p-3 shadow"
-        />
-        <Typography variant="caption">
-          Topic:{" "}
-          <Link
-            href="https://ameliorate.app/examples/detailed-cars-going-too-fast?view=Tradeoff+table"
-            target="_blank"
-          >
-            cars-going-too-fast
-          </Link>
-        </Typography>
-      </div>
-    ),
-  },
   views: {
     title: "Focus on different aspects",
     description: "Create views to highlight specific parts of the diagram.",
@@ -51,28 +24,6 @@ const copy = {
           Topic:{" "}
           <Link href="https://ameliorate.app/examples/detailed-cars-going-too-fast" target="_blank">
             cars-going-too-fast
-          </Link>
-        </Typography>
-      </div>
-    ),
-  },
-  flashlight: {
-    title: "Move through complex diagrams",
-    description: "Use flashlight mode to easily explore large diagrams.",
-    content: (
-      <div>
-        <Image
-          src="https://github.com/user-attachments/assets/98d75b2b-6ca4-41cd-9322-314c75126232"
-          alt="using flashlight mode in brutality-sugar topic"
-          width={1022}
-          height={728}
-          unoptimized // warning without this - gifs aren't optimized by nextjs apparently
-          className="rounded-xl border shadow"
-        />
-        <Typography variant="caption">
-          Topic:{" "}
-          <Link href="https://ameliorate.app/keyserj/brutality-sugar-article" target="_blank">
-            brutality-sugar-article
           </Link>
         </Typography>
       </div>
@@ -101,10 +52,59 @@ const copy = {
       </div>
     ),
   },
+  tradeoffs: {
+    title: "Summarize tradeoffs between solutions",
+    description:
+      "Show how important you think each tradeoff is, and how well each solution fulfills that tradeoff.",
+    content: (
+      <div>
+        <Image
+          src="https://github.com/user-attachments/assets/60ac157d-03f7-4fa5-907b-b8e3abab0e7a"
+          alt="criteria tables of cars-going-too-fast"
+          width={727}
+          height={455}
+          unoptimized
+          // extra padding & bg because spacing seems to look better
+          className="rounded-xl border bg-paperPlain-main p-3 shadow"
+        />
+        <Typography variant="caption">
+          Topic:{" "}
+          <Link
+            href="https://ameliorate.app/examples/detailed-cars-going-too-fast?view=Tradeoff+table"
+            target="_blank"
+          >
+            cars-going-too-fast
+          </Link>
+        </Typography>
+      </div>
+    ),
+  },
+  flashlight: {
+    title: "Move through complex diagrams",
+    description: "Use flashlight mode to easily explore large diagrams.",
+    content: (
+      <div>
+        <Image
+          src="https://github.com/user-attachments/assets/98d75b2b-6ca4-41cd-9322-314c75126232"
+          alt="using flashlight mode in brutality-sugar topic"
+          width={1022}
+          height={728}
+          unoptimized // warning without this - gifs aren't optimized by nextjs apparently
+          className="rounded-xl border shadow"
+        />
+        <Typography variant="caption">
+          Topic:{" "}
+          <Link href="https://ameliorate.app/keyserj/brutality-sugar-article" target="_blank">
+            brutality-sugar-article
+          </Link>
+        </Typography>
+      </div>
+    ),
+  },
 };
 
 export const FeaturesSection = () => {
-  const [selectedCard, setSelectedCard] = useState<Tab>("tradeoffs");
+  const [selectedCard, setSelectedCard] = useState<Tab>("views");
 
   return (
     <div className="flex flex-col text-center">
@@ -112,11 +112,25 @@ export const FeaturesSection = () => {
 
       <TabContext value={selectedCard}>
         <TabList onChange={(_, value: Tab) => setSelectedCard(value)} variant="fullWidth">
-          <Tab label={copy.tradeoffs.title} value="tradeoffs" wrapped />
           <Tab label={copy.views.title} value="views" wrapped />
-          <Tab label={copy.flashlight.title} value="flashlight" wrapped />
           <Tab label={copy.disagree.title} value="disagree" wrapped />
+          <Tab label={copy.tradeoffs.title} value="tradeoffs" wrapped />
+          <Tab label={copy.flashlight.title} value="flashlight" wrapped />
         </TabList>
+
+        <TabPanel key="views" value="views" className="flex flex-col items-center gap-2 p-0">
+          <Typography variant="body1" className="pt-3">
+            {copy.views.description}
+          </Typography>
+          {copy.views.content}
+        </TabPanel>
+
+        <TabPanel key="disagree" value="disagree" className="flex flex-col items-center gap-2 p-0">
+          <Typography variant="body1" className="pt-3">
+            {copy.disagree.description}
+          </Typography>
+          {copy.disagree.content}
+        </TabPanel>
 
         <TabPanel
           key="tradeoffs"
@@ -129,13 +143,6 @@ export const FeaturesSection = () => {
           {copy.tradeoffs.content}
         </TabPanel>
 
-        <TabPanel key="views" value="views" className="flex flex-col items-center gap-2 p-0">
-          <Typography variant="body1" className="pt-3">
-            {copy.views.description}
-          </Typography>
-          {copy.views.content}
-        </TabPanel>
-
         <TabPanel
           key="flashlight"
           value="flashlight"
@@ -145,13 +152,6 @@ export const FeaturesSection = () => {
             {copy.flashlight.description}
           </Typography>
           {copy.flashlight.content}
-        </TabPanel>
-
-        <TabPanel key="disagree" value="disagree" className="flex flex-col items-center gap-2 p-0">
-          <Typography variant="body1" className="pt-3">
-            {copy.disagree.description}
-          </Typography>
-          {copy.disagree.content}
         </TabPanel>
       </TabContext>
     </div>

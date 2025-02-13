@@ -20,7 +20,7 @@ test("can play around", async ({ page }) => {
       // pixels, creating a significant diff... not sure how to fix this (probably need to file an issue?),
       // but masking the images is a workaround for now.
       page.getByRole("img", { name: "problem solving diagram" }),
-      page.getByRole("img", { name: "criteria tables of cars-going" }),
+      page.getByRole("img", { name: "clicking between views in cars-going-too-fast topic" }),
     ],
   });
 
