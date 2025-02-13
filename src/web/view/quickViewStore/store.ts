@@ -206,6 +206,33 @@ export const deleteView = (viewId: string) => {
   );
 };
 
+export const moveView = (viewId: string, direction: "up" | "down") => {
+  const views = useQuickViewStore
+    .getState()
+    .views.toSorted((view1, view2) => view1.order - view2.order);
+
+  const indexFrom = views.findIndex((view) => view.id === viewId);
+  if (indexFrom === -1) throw new Error(`No view with id ${viewId}`);
+  if (indexFrom === 0 && direction === "up") return;
+  if (indexFrom === views.length - 1 && direction === "down") return;
+
+  const viewsWithoutMoved = views.toSpliced(indexFrom, 1);
+  const reorderedViews = viewsWithoutMoved.toSpliced(
+    direction === "up" ? indexFrom - 1 : indexFrom + 1,
+    0,
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- we found the index from `views`, we know it exists
+    views[indexFrom]!,
+  );
+
+  useQuickViewStore.setState(
+    {
+      views: reorderedViews.map((view, index) => ({ ...view, order: index })),
+    },
+    false,
+    "moveView",
+  );
+};
+
 /**
  * if deselecting, remove the view param, else set the view param to the view's title
  */
