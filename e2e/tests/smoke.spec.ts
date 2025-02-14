@@ -9,6 +9,8 @@
 
 import { expect, test } from "@playwright/test";
 
+import { getNode } from "@/tests/utils";
+
 test("can play around", async ({ page }) => {
   // confirm can go to playground from home page
   await page.goto("/");
@@ -19,10 +21,10 @@ test("can play around", async ({ page }) => {
 
   // confirm nodes/edges can be added and persist after refresh
   await page.getByLabel("Close Tour").click();
-  await page.getByRole("button", { name: "Problem new node" }).click();
+  await getNode(page, "Problem").click();
   await page.getByRole("button", { name: "Add new Solution" }).click();
   await page.reload();
   await page.getByLabel("Close Tour").click(); // make sure page is done reloading, and get the tour out of the screenshot so we can see the diagram
-  await expect(page.getByRole("button", { name: "Problem new node" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Solution new node" })).toHaveCount(2); // there'll be one solution node in the details pane, one in the diagram
+  await expect(getNode(page, "Problem")).toBeVisible();
+  await expect(getNode(page, "Solution")).toHaveCount(2); // there'll be one solution node in the details pane, one in the diagram
 });

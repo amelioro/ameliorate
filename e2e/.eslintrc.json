@@ -1,0 +1,103 @@
+{
+  // lean strict on linting, can reduce strictness if/when things get annoying
+  "extends": [
+    "next/core-web-vitals",
+    "eslint:recommended",
+    "plugin:import/recommended",
+    "prettier"
+  ],
+  "plugins": ["functional", "import"],
+  "overrides": [
+    // don't use ts checking for js files https://stackoverflow.com/a/64488475
+    {
+      "files": ["*.ts", "*.tsx"],
+      "extends": [
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/strict-type-checked",
+        "plugin:@typescript-eslint/stylistic-type-checked"
+      ],
+      "plugins": ["@typescript-eslint"],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "project": true
+      },
+      "rules": {
+        "@typescript-eslint/member-ordering": "error",
+        "@typescript-eslint/switch-exhaustiveness-check": "error",
+        "@typescript-eslint/no-confusing-void-expression": [
+          "error",
+          { "ignoreArrowShorthand": true }
+        ],
+        // annoying when wanting to overspecify different types that happen to be the same but could become different
+        "@typescript-eslint/no-duplicate-type-constituents": "off",
+        // annoying to have to dupe this with the js version
+        "@typescript-eslint/no-unused-vars": [
+          "error",
+          {
+            "args": "all",
+            "argsIgnorePattern": "^_",
+            "varsIgnorePattern": "^_"
+          }
+        ]
+      }
+    }
+  ],
+  "rules": {
+    "functional/functional-parameters": [
+      "error",
+      {
+        "enforceParameterCount": false
+      }
+    ],
+    "functional/immutable-data": ["error", { "ignoreIdentifierPattern": ["router"] }],
+    "functional/no-classes": "error",
+    "functional/no-let": "error",
+    "functional/no-loop-statements": "error",
+    "functional/no-this-expressions": "error",
+    // huh, this seems needed for resolving paths? https://stackoverflow.com/a/55280867/8409296
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    },
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin", // Built-in imports (come from NodeJS native) go first
+          "external",
+          "internal",
+          ["sibling", "parent"], // <- Relative imports, the sibling and parent types they can be mingled together
+          "index",
+          "unknown"
+        ],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc"
+        }
+      }
+    ],
+    "no-param-reassign": [
+      "error",
+      {
+        "props": true
+      }
+    ],
+    "no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
+      }
+    ],
+    "react/no-unescaped-entities": "off",
+    "sort-imports": [
+      "error",
+      {
+        "ignoreDeclarationSort": true, // don"t want to sort import lines, use eslint-plugin-import instead
+        "allowSeparatedGroups": true // separating imports by group seems more readable
+      }
+    ]
+  },
+  "root": true // use this eslint config instead of parents
+}
