@@ -6,6 +6,7 @@
  * noise on PRs, since that noise can be auto-committed without much issue.
  */
 
+import { getNode } from "@/tests/utils";
 import { expect, test } from "@playwright/test";
 
 test("can play around", async ({ page }) => {
@@ -27,7 +28,7 @@ test("can play around", async ({ page }) => {
   // confirm playground looks normal with some nodes, laid out, persisted after refresh
   await page.getByRole("link", { name: "Play Around" }).first().click();
   await page.getByLabel("Close Tour").click();
-  await page.getByRole("button", { name: "Problem new node" }).click();
+  await getNode(page, "Problem").click();
   await page.getByRole("button", { name: "Add new Solution" }).click();
   await page.reload();
   await page.getByLabel("Close Tour").click(); // make sure page is done reloading, and get the tour out of the screenshot so we can see the diagram
