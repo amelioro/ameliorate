@@ -3,6 +3,7 @@ import Head from "next/head";
 
 import { ConcludingSection } from "@/web/home/ConcludingSection";
 import { CoreIdeasSection } from "@/web/home/CoreIdeasSection";
+import { ExamplesSection } from "@/web/home/ExamplesSection";
 import { FeaturesSection } from "@/web/home/FeaturesSection";
 import { Footer } from "@/web/home/Footer";
 import { Headline } from "@/web/home/Headline";
@@ -34,6 +35,12 @@ const Home: NextPage = () => {
         >
           <div className="w-full max-w-6xl px-4 py-8 sm:p-8">
             <CoreIdeasSection />
+          </div>
+        </section>
+
+        <section className="flex justify-center odd:bg-paperPlain-main even:bg-paperShaded-main">
+          <div className="w-full max-w-6xl px-4 py-8 sm:p-8">
+            <ExamplesSection />
           </div>
         </section>
 
