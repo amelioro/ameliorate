@@ -93,8 +93,8 @@ test("includes public topics, and excludes unlisted and private topics", async (
 
   // expect(createdSitemap).toMatchSnapshot();
   expect(createdSitemap).toMatchInlineSnapshot(`
-    "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>
-    <urlset xmlns=\\"http://www.sitemaps.org/schemas/sitemap/0.9\\">
+    "<?xml version="1.0" encoding="UTF-8"?>
+    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url><loc>http://localhost:3000</loc><changefreq>daily</changefreq><priority>1</priority></url>
     <url><loc>http://localhost:3000/playground</loc><changefreq>daily</changefreq></url>
     <url><loc>http://localhost:3000/user1/publicTopic</loc><changefreq>daily</changefreq><lastmod>2024-11-20T00:00:00.000Z</lastmod></url>
