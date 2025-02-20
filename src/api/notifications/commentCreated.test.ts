@@ -1,7 +1,7 @@
 /* eslint-disable functional/no-let -- let is needed to reuse `before`-initialized variables across tests */
 import { InAppNotification, Topic, User } from "@prisma/client";
 import shortUUID from "short-uuid";
-import { SpyInstance, beforeEach, describe, expect, test, vi } from "vitest";
+import { MockInstance, beforeEach, describe, expect, test, vi } from "vitest";
 
 import * as email from "@/api/email";
 import {
@@ -379,7 +379,7 @@ describe("handleCommentCreated", () => {
   });
 
   describe("email notifications", () => {
-    let sendAllEmailsSpy: SpyInstance;
+    let sendAllEmailsSpy: MockInstance;
 
     beforeEach(() => {
       sendAllEmailsSpy = vi.spyOn(email, "sendAllEmails");

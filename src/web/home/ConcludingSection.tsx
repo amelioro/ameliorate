@@ -17,7 +17,7 @@ export const ConcludingSection = () => {
 
         <div className="flex justify-center gap-2 pt-2 sm:justify-normal">
           <Button variant="contained" LinkComponent={Link} href="/new">
-            Start Building
+            Create Topic
           </Button>
           <Button variant="outlined" LinkComponent={Link} href="/playground">
             Play Around
