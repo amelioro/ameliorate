@@ -37,8 +37,8 @@ export const Headline = () => {
         </Typography>
 
         <Typography variant="body1">
-          Tackle problems with confidence, knowing that every detail and perspective has been
-          properly considered.
+          Tackle problems with confidence, working together to ensure that every detail and
+          perspective has been properly considered.
         </Typography>
 
         <Typography variant="body1" className="-mt-1">
@@ -52,7 +52,7 @@ export const Headline = () => {
 
         <div className="flex flex-wrap items-center justify-center gap-2 *:shrink-0 sm:justify-normal">
           <Button variant="contained" LinkComponent={Link} href="/new">
-            Get Started
+            Create Topic
           </Button>
           <Button variant="outlined" LinkComponent={Link} href="/playground">
             Play Around

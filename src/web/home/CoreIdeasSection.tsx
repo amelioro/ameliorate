@@ -8,7 +8,7 @@ type Tab = "diagram" | "details";
 const copy = {
   diagram: {
     title: "Problem-Solving Diagram",
-    description: `Lay out causes and effects, showing precisely how problems can be addressed. This creates a concrete visual in which discussion can be grounded.`,
+    description: `Lay out causes and effects, showing exactly how problems can be addressed. This creates a concrete visual in which discussion can be grounded.`,
     image: (
       <Image
         src="https://github.com/user-attachments/assets/4ef151aa-ebd3-4a4d-b2af-259d7a55a285"
@@ -23,7 +23,7 @@ const copy = {
   },
   details: {
     title: '"Humble" Information',
-    description: `All information is open to argument. Anything can be scored, justified, questioned, and have relevant facts and unstructured discussion.`,
+    description: `Each individual detail invites scrutiny in a structured manner. Anything can be scored, justified, questioned, have relevant facts, and more.`,
     image: (
       <Image
         src="https://github.com/user-attachments/assets/06808ff9-f785-4ec6-9369-3cede79d9249"
