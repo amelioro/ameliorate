@@ -55,11 +55,13 @@ const NodeHandleBase = ({ node, direction, orientation }: Props) => {
   const hasHiddenNeighbors = sortedHiddenNeighbors.length > 0;
 
   const showHandle = isPotentiallyConnectingToThisHandle || (showIndicators && hasHiddenNeighbors);
-  // if editing, we should be able to see handles on-hover/-select so that we can create edges
-  const conditionalShowClasses = userCanEditTopicData
-    ? // `String.raw` in order to allow underscores to be escaped for tailwind, so they don't get converted to spaces
-      String.raw` [.react-flow\_\_node:hover_&]:visible [.react-flow\_\_node.selected_&]:visible`
-    : "";
+  // if editing, show handles on-hover/-select so that we can create edges
+  // if there are hidden neighbors, show handle on-hover/-select so that hidden nodes are discoverable for new users
+  const conditionalShowClasses =
+    userCanEditTopicData || hasHiddenNeighbors
+      ? // `String.raw` in order to allow underscores to be escaped for tailwind, so they don't get converted to spaces
+        String.raw` [.react-flow\_\_node:hover_&]:visible [.react-flow\_\_node.selected_&]:visible`
+      : "";
 
   const position =
     direction === "parent"
