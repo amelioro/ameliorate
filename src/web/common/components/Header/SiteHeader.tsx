@@ -37,9 +37,14 @@ export const SiteHeader = () => {
               Playground
             </NavLink>
             {sessionUser && (
-              <NavLink href={`/${sessionUser.username}`} className="hidden sm:block">
-                My Topics
-              </NavLink>
+              <>
+                <NavLink href={`/${sessionUser.username}`} className="hidden sm:block">
+                  My Topics
+                </NavLink>
+                <NavLink href={"/new"} className="hidden sm:block">
+                  New Topic
+                </NavLink>
+              </>
             )}
           </div>
 

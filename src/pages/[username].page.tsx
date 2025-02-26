@@ -1,4 +1,4 @@
-import { AutoStories, Settings } from "@mui/icons-material";
+import { Settings } from "@mui/icons-material";
 import { Box, Button, Dialog, IconButton } from "@mui/material";
 import { type Topic } from "@prisma/client";
 import {
@@ -143,12 +143,8 @@ const User: NextPage = () => {
 
               {hasEditAccess && (
                 <>
-                  <Button
-                    variant="contained"
-                    onClick={() => setCreatingTopic(true)}
-                    startIcon={<AutoStories />}
-                  >
-                    New
+                  <Button variant="contained" onClick={() => setCreatingTopic(true)}>
+                    New Topic
                   </Button>
                   <Dialog
                     open={creatingTopic}
