@@ -206,8 +206,10 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
       >
         <div
           // flex to ensure content takes up no more than full height, allowing inner containers to control scrolling
-          className="flex h-5/6 flex-col bg-paperPlain-main"
-          style={{ width: `${drawerMinWidthRem}rem` }}
+          // h-[90%] to allow modal to take up more space than default, also to have a max height
+          className="flex h-[90%] flex-col bg-paperPlain-main"
+          // try to fit 2 cols of nodes, but ensure space is left on side of screen so that it's obvious we're in a modal
+          style={{ width: `${drawerMinWidthRem}rem`, maxWidth: "90%" }}
         >
           {paneContent}
         </div>
