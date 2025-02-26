@@ -280,13 +280,13 @@ const TopicForm = ({ topic, creatorName, onSubmit, DeleteSection }: Props) => {
           </Typography>
 
           <Stack direction="row" spacing={1} sx={{ width: "100%" }}>
-            {/* TODO: shrink to width of username (this box takes up a lot of space in mobile) */}
+            {/* only use up to 1/3rd for username because the topic title matters more space-wise here */}
             <TextField
               disabled
               required
               value={creatorName}
               label="Username"
-              sx={{ flexShrink: 0 }}
+              className="max-w-[33%]"
             />
             <Typography variant="h5" sx={{ pt: "0.75rem" }}>
               /
