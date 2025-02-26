@@ -1,7 +1,7 @@
 import { type ButtonProps } from "@mui/material";
 import { MouseEventHandler, useContext } from "react";
 
-import { StyledButton } from "@/web/topic/components/Indicator/Indicator.styles";
+import { StyledButton } from "@/web/topic/components/Indicator/Base/Indicator.styles";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { MuiIcon } from "@/web/topic/utils/node";
 import { useShowIndicators } from "@/web/view/userConfigStore";

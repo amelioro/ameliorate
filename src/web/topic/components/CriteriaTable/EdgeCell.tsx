@@ -1,7 +1,7 @@
 import { openContextMenu } from "@/web/common/store/contextMenuActions";
-import { CommonIndicators } from "@/web/topic/components/Indicator/CommonIndicators";
-import { ContentIndicators } from "@/web/topic/components/Indicator/ContentIndicators";
-import { StatusIndicators } from "@/web/topic/components/Indicator/StatusIndicators";
+import { CommonIndicatorGroup } from "@/web/topic/components/Indicator/Base/CommonIndicatorGroup";
+import { ContentIndicatorGroup } from "@/web/topic/components/Indicator/Base/ContentIndicatorGroup";
+import { StatusIndicatorGroup } from "@/web/topic/components/Indicator/Base/StatusIndicatorGroup";
 import { Edge } from "@/web/topic/utils/graph";
 import { setSelected, useIsGraphPartSelected } from "@/web/view/selectedPartStore";
 
@@ -19,15 +19,15 @@ export const EdgeCell = ({ edge }: { edge: Edge }) => {
       onContextMenu={(event) => openContextMenu(event, { edge })}
       role="button"
     >
-      <CommonIndicators graphPart={edge} />
+      <CommonIndicatorGroup graphPart={edge} />
       <div className="flex">
-        <StatusIndicators
+        <StatusIndicatorGroup
           graphPartId={edge.id}
           color="paperPlain"
           notes={edge.data.notes}
           className="my-0 ml-0"
         />
-        <ContentIndicators
+        <ContentIndicatorGroup
           className="m-0"
           graphPartId={edge.id}
           graphPartType="edge"

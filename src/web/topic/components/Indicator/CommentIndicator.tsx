@@ -4,7 +4,7 @@ import { useCallback } from "react";
 
 import { useCommentCount } from "@/web/comment/store/commentStore";
 import { emitter } from "@/web/common/event";
-import { Indicator } from "@/web/topic/components/Indicator/Indicator";
+import { Indicator } from "@/web/topic/components/Indicator/Base/Indicator";
 import { GraphPartType } from "@/web/topic/utils/graph";
 import { useShowResolvedComments } from "@/web/view/miscTopicConfigStore";
 import { setSelected } from "@/web/view/selectedPartStore";

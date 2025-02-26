@@ -1,7 +1,7 @@
 import { TableChartOutlined } from "@mui/icons-material";
 import { memo, useCallback } from "react";
 
-import { Indicator } from "@/web/topic/components/Indicator/Indicator";
+import { Indicator } from "@/web/topic/components/Indicator/Base/Indicator";
 import { useNode, useNodeChildren } from "@/web/topic/store/nodeHooks";
 import { Node, ProblemNode } from "@/web/topic/utils/graph";
 import { viewCriteriaTable } from "@/web/view/currentViewStore/filter";

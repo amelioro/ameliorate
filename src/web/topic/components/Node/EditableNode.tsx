@@ -4,7 +4,7 @@ import { memo, useContext, useEffect, useRef } from "react";
 import { useSessionUser } from "@/web/common/hooks";
 import { openContextMenu } from "@/web/common/store/contextMenuActions";
 import { clearNewlyAddedNode, isNodeNewlyAdded } from "@/web/common/store/ephemeralStore";
-import { CommonIndicators } from "@/web/topic/components/Indicator/CommonIndicators";
+import { CommonIndicatorGroup } from "@/web/topic/components/Indicator/Base/CommonIndicatorGroup";
 import {
   BottomDiv,
   LeftCornerStatusIndicators,
@@ -138,7 +138,7 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
             {typeText}
           </NodeTypeSpan>
         </NodeTypeDiv>
-        <CommonIndicators graphPart={node} />
+        <CommonIndicatorGroup graphPart={node} />
       </TopDiv>
       {/* grow to fill out remaining space with this div because it contains the textarea */}
       <MiddleDiv className="flex grow px-1 pb-2 pt-1">

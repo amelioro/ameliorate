@@ -15,9 +15,9 @@ import {
   highlightedEdgeColor,
 } from "@/web/topic/components/Edge/ScoreEdge.styles";
 import { getPathDefinitionForEdge } from "@/web/topic/components/Edge/svgPathDrawer";
-import { CommonIndicators } from "@/web/topic/components/Indicator/CommonIndicators";
-import { ContentIndicators } from "@/web/topic/components/Indicator/ContentIndicators";
-import { StatusIndicators } from "@/web/topic/components/Indicator/StatusIndicators";
+import { CommonIndicatorGroup } from "@/web/topic/components/Indicator/Base/CommonIndicatorGroup";
+import { ContentIndicatorGroup } from "@/web/topic/components/Indicator/Base/ContentIndicatorGroup";
+import { StatusIndicatorGroup } from "@/web/topic/components/Indicator/Base/StatusIndicatorGroup";
 import { nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
 import { setCustomEdgeLabel } from "@/web/topic/store/actions";
 import { useIsNodeSelected } from "@/web/topic/store/edgeHooks";
@@ -177,11 +177,11 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
           {labelText}
         </Typography>
         {/* only use margin when indicators are showing */}
-        <CommonIndicators graphPart={edge} className="mx-0 *:ml-0.5" />
+        <CommonIndicatorGroup graphPart={edge} className="mx-0 *:ml-0.5" />
       </div>
       <div className="absolute bottom-0 flex translate-y-4">
-        <StatusIndicators graphPartId={edge.id} color="paperPlain" notes={edge.data.notes} />
-        <ContentIndicators
+        <StatusIndicatorGroup graphPartId={edge.id} color="paperPlain" notes={edge.data.notes} />
+        <ContentIndicatorGroup
           graphPartId={edge.id}
           graphPartType="edge"
           color="paperPlain"

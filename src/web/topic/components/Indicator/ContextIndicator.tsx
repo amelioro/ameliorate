@@ -1,7 +1,7 @@
 import { ControlCamera } from "@mui/icons-material";
 import { useContext } from "react";
 
-import { Indicator } from "@/web/topic/components/Indicator/Indicator";
+import { Indicator } from "@/web/topic/components/Indicator/Base/Indicator";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { diagramPartContextMethods } from "@/web/topic/utils/diagramPartContext";
 import { GraphPart, isNode } from "@/web/topic/utils/graph";

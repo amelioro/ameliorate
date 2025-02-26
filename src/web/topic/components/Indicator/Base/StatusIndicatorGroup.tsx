@@ -15,7 +15,7 @@ interface Props {
 /**
  * Future: e.g. controversial, hot, solid
  */
-const StatusIndicatorsBase = ({ graphPartId, color, notes, className }: Props) => {
+const StatusIndicatorGroupBase = ({ graphPartId, color, notes, className }: Props) => {
   const indicateWhenNodeForcedToShow = useIndicateWhenNodeForcedToShow();
 
   return (
@@ -31,4 +31,4 @@ const StatusIndicatorsBase = ({ graphPartId, color, notes, className }: Props) =
   );
 };
 
-export const StatusIndicators = memo(StatusIndicatorsBase);
+export const StatusIndicatorGroup = memo(StatusIndicatorGroupBase);

@@ -1,7 +1,7 @@
 import { AccountTree } from "@mui/icons-material";
 import { MouseEventHandler, useCallback } from "react";
 
-import { Indicator } from "@/web/topic/components/Indicator/Indicator";
+import { Indicator } from "@/web/topic/components/Indicator/Base/Indicator";
 import {
   useJustificationCount,
   useNonTopLevelJustificationCount,
