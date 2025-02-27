@@ -30,6 +30,7 @@ interface MenuProps {
   isOpen: boolean;
   closeMenu: () => void;
   children: React.ReactNode;
+  closeOnClick?: boolean;
   openDirection?: "top" | "bottom";
   className?: string;
 }
@@ -39,10 +40,11 @@ export const Menu = ({
   isOpen,
   closeMenu,
   children,
+  closeOnClick = true,
   openDirection = "bottom",
   className,
 }: MenuProps) => {
-  const menuItemsWithCloseOnClick = addCloseOnClick(closeMenu, children);
+  const menuItems = closeOnClick ? addCloseOnClick(closeMenu, children) : children;
 
   return (
     <MuiMenu
@@ -53,7 +55,7 @@ export const Menu = ({
       anchorOrigin={{ vertical: openDirection === "top" ? "top" : "bottom", horizontal: "left" }}
       transformOrigin={{ vertical: openDirection === "top" ? "bottom" : "top", horizontal: "left" }}
     >
-      {menuItemsWithCloseOnClick}
+      {menuItems}
     </MuiMenu>
   );
 };

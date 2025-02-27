@@ -4,13 +4,27 @@ import {
   Delete,
   EditOff,
   Error,
+  FiberManualRecord,
   Group,
   Highlight,
+  Looks6,
   QuestionMark,
   SelfImprovement,
   TabUnselected,
+  TableChartOutlined,
+  ThumbsUpDown,
+  WbTwilight,
 } from "@mui/icons-material";
-import { Divider, IconButton, ToggleButton, Tooltip } from "@mui/material";
+import {
+  Divider,
+  IconButton,
+  ListItemIcon,
+  ListItemText,
+  MenuItem,
+  Switch,
+  ToggleButton,
+  Tooltip,
+} from "@mui/material";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import { Menu } from "@/web/common/components/Menu/Menu";
@@ -37,7 +51,19 @@ import {
   useIsComparingPerspectives,
 } from "@/web/view/perspectiveStore";
 import { useSelectedGraphPart } from "@/web/view/selectedPartStore";
-import { toggleShowIndicators, toggleZenMode, useShowIndicators } from "@/web/view/userConfigStore";
+import {
+  toggleIndicateWhenNodeForcedToShow,
+  toggleShowContentIndicators,
+  toggleShowNeighborIndicators,
+  toggleShowScores,
+  toggleShowViewIndicators,
+  toggleZenMode,
+  useIndicateWhenNodeForcedToShow,
+  useShowContentIndicators,
+  useShowNeighborIndicators,
+  useShowScores,
+  useShowViewIndicators,
+} from "@/web/view/userConfigStore";
 
 interface PerspectivesMenuProps {
   anchorEl: HTMLElement | null;
@@ -62,6 +88,93 @@ const PerspectivesMenu = ({ anchorEl, setAnchorEl }: PerspectivesMenuProps) => {
   );
 };
 
+interface ShowHideMenuProps {
+  anchorEl: HTMLElement | null;
+  setAnchorEl: Dispatch<SetStateAction<HTMLElement | null>>;
+}
+
+const ShowHideMenu = ({ anchorEl, setAnchorEl }: ShowHideMenuProps) => {
+  const showScores = useShowScores();
+  const showContentIndicators = useShowContentIndicators();
+  const showNeighborIndicators = useShowNeighborIndicators();
+  const showViewIndicators = useShowViewIndicators();
+  const indicateWhenNodeForcedToShow = useIndicateWhenNodeForcedToShow();
+
+  const menuOpen = Boolean(anchorEl);
+  if (!menuOpen) return;
+
+  return (
+    <Menu
+      anchorEl={anchorEl}
+      isOpen={menuOpen}
+      closeMenu={() => setAnchorEl(null)}
+      closeOnClick={false}
+      openDirection="top"
+    >
+      <MenuItem onClick={() => toggleShowScores()}>
+        <ListItemIcon>
+          <Looks6 />
+        </ListItemIcon>
+        <ListItemText primary="Show scores" />
+        <Switch
+          checked={showScores}
+          // for some reason the parent MenuItem click gets doubled if we don't stopPropagation
+          onClick={(e) => e.stopPropagation()}
+          className="pointer-events-none"
+        />
+      </MenuItem>
+      <MenuItem onClick={() => toggleShowContentIndicators()}>
+        <ListItemIcon>
+          <ThumbsUpDown />
+        </ListItemIcon>
+        <ListItemText primary="Show content indicators" />
+        <Switch
+          checked={showContentIndicators}
+          // for some reason the parent MenuItem click gets doubled if we don't stopPropagation
+          onClick={(e) => e.stopPropagation()}
+          className="pointer-events-none"
+        />
+      </MenuItem>
+      <MenuItem onClick={() => toggleShowNeighborIndicators()}>
+        <ListItemIcon>
+          <FiberManualRecord />
+        </ListItemIcon>
+        <ListItemText primary="Show neighbor indicators" />
+        <Switch
+          checked={showNeighborIndicators}
+          // for some reason the parent MenuItem click gets doubled if we don't stopPropagation
+          onClick={(e) => e.stopPropagation()}
+          className="pointer-events-none"
+        />
+      </MenuItem>
+      <MenuItem onClick={() => toggleShowViewIndicators()}>
+        <ListItemIcon>
+          <TableChartOutlined />
+        </ListItemIcon>
+        <ListItemText primary="Show view indicators" />
+        <Switch
+          checked={showViewIndicators}
+          // for some reason the parent MenuItem click gets doubled if we don't stopPropagation
+          onClick={(e) => e.stopPropagation()}
+          className="pointer-events-none"
+        />
+      </MenuItem>
+      <MenuItem onClick={() => toggleIndicateWhenNodeForcedToShow()}>
+        <ListItemIcon>
+          <WbTwilight />
+        </ListItemIcon>
+        <ListItemText primary="Show force shown indicators" />
+        <Switch
+          checked={indicateWhenNodeForcedToShow}
+          // for some reason the parent MenuItem click gets doubled if we don't stopPropagation
+          onClick={(e) => e.stopPropagation()}
+          className="pointer-events-none"
+        />
+      </MenuItem>
+    </Menu>
+  );
+};
+
 interface Props {
   /**
    * True if footer should overlay on top of content, false if it should be in-line.
@@ -79,7 +192,6 @@ export const ContentFooter = ({ overlay }: Props) => {
   const topic = useTopic();
   const onPlayground = topic.id === undefined;
 
-  const showIndicators = useShowIndicators();
   const isComparingPerspectives = useIsComparingPerspectives();
   const flashlightMode = useFlashlightMode();
   const readonlyMode = useReadonlyMode();
@@ -88,6 +200,7 @@ export const ContentFooter = ({ overlay }: Props) => {
   const selectedGraphPart = useSelectedGraphPart();
   const partIsTableEdge = useIsTableEdge(selectedGraphPart?.id ?? "");
 
+  const [showHideMenuAnchorEl, setShowHideMenuAnchorEl] = useState<null | HTMLElement>(null);
   const [perspectivesMenuAnchorEl, setPerspectivesMenuAnchorEl] = useState<null | HTMLElement>(
     null,
   );
@@ -136,18 +249,19 @@ export const ContentFooter = ({ overlay }: Props) => {
           <SelfImprovement />
         </ToggleButton>
 
-        <ToggleButton
-          value={showIndicators}
-          title={`Show indicators (${hotkeys.showIndicators})`}
-          aria-label={`Show indicators (${hotkeys.showIndicators})`}
-          color="primary"
+        <IconButton
+          title="Show/hide menu"
+          aria-label="Show/hide menu"
+          color="inherit"
           size="small"
-          selected={showIndicators}
-          onClick={() => toggleShowIndicators()}
-          className="rounded border-none"
+          onClick={(event) => setShowHideMenuAnchorEl(event.currentTarget)}
+          // pr-0 because the dropdown arrow has a bunch of extra space
+          className="rounded border-none pr-0"
         >
           <TabUnselected />
-        </ToggleButton>
+          <ArrowDropDown fontSize="small" />
+        </IconButton>
+        <ShowHideMenu anchorEl={showHideMenuAnchorEl} setAnchorEl={setShowHideMenuAnchorEl} />
 
         {!onPlayground && (
           <>

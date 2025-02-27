@@ -1,7 +1,7 @@
 import { ControlCamera } from "@mui/icons-material";
 import { useContext } from "react";
 
-import { Indicator } from "@/web/topic/components/Indicator/Base/Indicator";
+import { ViewIndicator } from "@/web/topic/components/Indicator/Base/ViewIndicator";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { diagramPartContextMethods } from "@/web/topic/utils/diagramPartContext";
 import { GraphPart, isNode } from "@/web/topic/utils/graph";
@@ -28,7 +28,7 @@ export const ContextIndicator = ({ graphPart }: Props) => {
   if (!partContextMethods) return <></>;
 
   return (
-    <Indicator
+    <ViewIndicator
       Icon={ControlCamera}
       filled={hasContext}
       title={"View context in diagram"}

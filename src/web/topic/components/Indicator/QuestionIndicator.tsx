@@ -3,7 +3,7 @@ import { type ButtonProps } from "@mui/material";
 import { useCallback } from "react";
 
 import { emitter } from "@/web/common/event";
-import { Indicator } from "@/web/topic/components/Indicator/Base/Indicator";
+import { ContentIndicator } from "@/web/topic/components/Indicator/Base/ContentIndicator";
 import { useResearchNodes } from "@/web/topic/store/graphPartHooks";
 import { useDisplayScores } from "@/web/topic/store/scoreHooks";
 import { Score } from "@/web/topic/utils/graph";
@@ -35,7 +35,7 @@ export const QuestionIndicator = ({ graphPartId, partColor }: Props) => {
   const Icon = QuestionMark;
 
   return (
-    <Indicator
+    <ContentIndicator
       Icon={Icon}
       title={`Has ${questions.length} questions`}
       onClick={onClick}

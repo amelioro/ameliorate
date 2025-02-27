@@ -4,7 +4,7 @@ import { useCallback } from "react";
 
 import { useCommentCount } from "@/web/comment/store/commentStore";
 import { emitter } from "@/web/common/event";
-import { Indicator } from "@/web/topic/components/Indicator/Base/Indicator";
+import { ContentIndicator } from "@/web/topic/components/Indicator/Base/ContentIndicator";
 import { GraphPartType } from "@/web/topic/utils/graph";
 import { useShowResolvedComments } from "@/web/view/miscTopicConfigStore";
 import { setSelected } from "@/web/view/selectedPartStore";
@@ -27,7 +27,7 @@ export const CommentIndicator = ({ graphPartId, graphPartType, partColor }: Prop
   if (commentCount === 0) return <></>;
 
   return (
-    <Indicator
+    <ContentIndicator
       Icon={ChatBubbleOutline}
       title={`Has ${commentCount} threads`} // could count total comments as well but logic is more annoying, and doesn't seem that important
       onClick={onClick}

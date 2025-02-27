@@ -12,7 +12,7 @@ import { Node, RelationDirection } from "@/web/topic/utils/graph";
 import { Orientation } from "@/web/topic/utils/layout";
 import { nodeDecorations } from "@/web/topic/utils/node";
 import { showNode } from "@/web/view/currentViewStore/filter";
-import { useShowIndicators } from "@/web/view/userConfigStore";
+import { useShowNeighborIndicators } from "@/web/view/userConfigStore";
 
 const NodeSummary = ({ node, beforeSlot }: { node: Node; beforeSlot?: ReactNode }) => {
   const { NodeIcon, title } = nodeDecorations[node.type];
@@ -38,7 +38,7 @@ const NodeHandleBase = ({ node, direction, orientation }: Props) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
 
-  const showIndicators = useShowIndicators();
+  const showNeighborIndicators = useShowNeighborIndicators();
   const neighborsInDirection = useNeighborsInDirection(node.id, direction);
   const hiddenNeighbors = useHiddenNodes(neighborsInDirection);
 
@@ -54,7 +54,8 @@ const NodeHandleBase = ({ node, direction, orientation }: Props) => {
   });
   const hasHiddenNeighbors = sortedHiddenNeighbors.length > 0;
 
-  const showHandle = isPotentiallyConnectingToThisHandle || (showIndicators && hasHiddenNeighbors);
+  const showHandle =
+    isPotentiallyConnectingToThisHandle || (showNeighborIndicators && hasHiddenNeighbors);
   // if editing, show handles on-hover/-select so that we can create edges
   // if there are hidden neighbors, show handle on-hover/-select so that hidden nodes are discoverable for new users
   const conditionalShowClasses =

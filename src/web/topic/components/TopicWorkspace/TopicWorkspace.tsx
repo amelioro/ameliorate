@@ -26,11 +26,10 @@ import { getReadonlyMode, toggleReadonlyMode } from "@/web/view/actionConfigStor
 import { useFormat } from "@/web/view/currentViewStore/store";
 import { getPerspectives } from "@/web/view/perspectiveStore";
 import { getSelectedGraphPart, setSelected } from "@/web/view/selectedPartStore";
-import { toggleShowIndicators, toggleZenMode, useZenMode } from "@/web/view/userConfigStore";
+import { toggleZenMode, useZenMode } from "@/web/view/userConfigStore";
 
 const useWorkspaceHotkeys = (user: { username: string } | null | undefined) => {
   useHotkeys([hotkeys.deselectPart], () => setSelected(null));
-  useHotkeys([hotkeys.showIndicators], () => toggleShowIndicators());
   useHotkeys([hotkeys.readonlyMode], () => toggleReadonlyMode());
 
   useHotkeys([hotkeys.score], (_, hotkeysEvent) => {

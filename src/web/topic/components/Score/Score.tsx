@@ -15,7 +15,7 @@ import { useOnPlayground } from "@/web/topic/store/topicHooks";
 import { userCanEditScores } from "@/web/topic/utils/score";
 import { useReadonlyMode } from "@/web/view/actionConfigStore";
 import { usePerspectives } from "@/web/view/perspectiveStore";
-import { useShowIndicators } from "@/web/view/userConfigStore";
+import { useShowScores } from "@/web/view/userConfigStore";
 
 const circleDiameter = 6 * buttonDiameterRem; // no collisions for fitting 10 elements
 
@@ -31,7 +31,7 @@ export const Score = ({ graphPartId }: ScoreProps) => {
   const onPlayground = useOnPlayground();
   const workspaceContext = useContext(WorkspaceContext);
 
-  const showIndicators = useShowIndicators();
+  const showScores = useShowScores();
   const readonlyMode = useReadonlyMode();
 
   const myUsername = onPlayground ? playgroundUsername : sessionUser?.username;
@@ -71,8 +71,7 @@ export const Score = ({ graphPartId }: ScoreProps) => {
 
   // Nice to show scores in details view so there's some way for new users to be exposed to them.
   // Always show score on table because the main purpose of the table is to compare scores.
-  const showScore =
-    workspaceContext === "table" || workspaceContext === "details" || showIndicators;
+  const showScore = workspaceContext === "table" || workspaceContext === "details" || showScores;
   const showScoreClasses = showScore ? "" : " hidden";
 
   if (!isInteractive) {

@@ -3,7 +3,7 @@ import { type ButtonProps } from "@mui/material";
 import { useCallback } from "react";
 
 import { emitter } from "@/web/common/event";
-import { Indicator } from "@/web/topic/components/Indicator/Base/Indicator";
+import { ContentIndicator } from "@/web/topic/components/Indicator/Base/ContentIndicator";
 import { useResearchNodes } from "@/web/topic/store/graphPartHooks";
 import { useDisplayScores } from "@/web/topic/store/scoreHooks";
 import { Score } from "@/web/topic/utils/graph";
@@ -36,7 +36,7 @@ export const FoundResearchIndicator = ({ graphPartId, partColor }: Props) => {
 
   if (facts.length > 0 && sources.length > 0)
     return (
-      <Indicator
+      <ContentIndicator
         Icon={SchoolOutlined}
         title={`Has ${facts.length} facts and ${sources.length} sources`}
         onClick={onClick}
@@ -45,7 +45,7 @@ export const FoundResearchIndicator = ({ graphPartId, partColor }: Props) => {
     );
   else if (facts.length > 0)
     return (
-      <Indicator
+      <ContentIndicator
         Icon={InfoOutlined}
         title={`Has ${facts.length} facts`}
         onClick={onClick}
@@ -54,7 +54,7 @@ export const FoundResearchIndicator = ({ graphPartId, partColor }: Props) => {
     );
   else
     return (
-      <Indicator
+      <ContentIndicator
         Icon={Code}
         title={`Has ${sources.length} sources`}
         onClick={onClick}
