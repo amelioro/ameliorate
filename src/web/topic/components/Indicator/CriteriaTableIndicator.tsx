@@ -1,7 +1,7 @@
 import { TableChartOutlined } from "@mui/icons-material";
 import { memo, useCallback } from "react";
 
-import { Indicator } from "@/web/topic/components/Indicator/Indicator";
+import { ViewIndicator } from "@/web/topic/components/Indicator/Base/ViewIndicator";
 import { useNode, useNodeChildren } from "@/web/topic/store/nodeHooks";
 import { Node, ProblemNode } from "@/web/topic/utils/graph";
 import { viewCriteriaTable } from "@/web/view/currentViewStore/filter";
@@ -23,7 +23,7 @@ const CriteriaTableIndicatorBase = ({ nodeId }: Props) => {
   const hasCriteria = nodeChildren.some((child) => child.type === "criterion");
 
   return (
-    <Indicator
+    <ViewIndicator
       Icon={TableChartOutlined}
       filled={hasCriteria}
       title={"View criteria table"}

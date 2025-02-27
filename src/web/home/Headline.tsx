@@ -52,7 +52,7 @@ export const Headline = () => {
 
         <div className="flex flex-wrap items-center justify-center gap-2 *:shrink-0 sm:justify-normal">
           <Button variant="contained" LinkComponent={Link} href="/new">
-            Create Topic
+            Start Building
           </Button>
           <Button variant="outlined" LinkComponent={Link} href="/playground">
             Play Around

@@ -14,7 +14,7 @@ interface Props {
   className?: string;
 }
 
-const ContentIndicatorsBase = ({ graphPartId, graphPartType, color, className }: Props) => {
+const ContentIndicatorGroupBase = ({ graphPartId, graphPartType, color, className }: Props) => {
   return (
     <Stack direction="row" margin="2px" spacing="2px" className={className}>
       <JustificationIndicator graphPartId={graphPartId} partColor={color} />
@@ -25,4 +25,4 @@ const ContentIndicatorsBase = ({ graphPartId, graphPartType, color, className }:
   );
 };
 
-export const ContentIndicators = memo(ContentIndicatorsBase);
+export const ContentIndicatorGroup = memo(ContentIndicatorGroupBase);

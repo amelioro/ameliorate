@@ -1,21 +1,16 @@
 import { type ButtonProps } from "@mui/material";
-import { MouseEventHandler, useContext } from "react";
+import { MouseEventHandler } from "react";
 
-import { StyledButton } from "@/web/topic/components/Indicator/Indicator.styles";
-import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
+import { StyledButton } from "@/web/topic/components/Indicator/Base/Indicator.styles";
 import { MuiIcon } from "@/web/topic/utils/node";
-import { useShowIndicators } from "@/web/view/userConfigStore";
 
-interface IndicatorProps {
+export interface IndicatorProps {
   Icon: MuiIcon;
   title: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   color?: ButtonProps["color"];
   filled?: boolean;
-  /**
-   * true if this indicator is for a node or edge; example of false is JustificationTreeIndicator
-   */
-  graphPartIndicator?: boolean;
+  className?: string;
 }
 
 export const Indicator = ({
@@ -24,11 +19,8 @@ export const Indicator = ({
   onClick,
   color = "neutral",
   filled = true,
-  graphPartIndicator = true,
+  className,
 }: IndicatorProps) => {
-  const workspaceContext = useContext(WorkspaceContext);
-  const showIndicators = useShowIndicators();
-
   const onClickHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (onClick) {
       // In most cases, we don't want the click to result in selecting the parent node.
@@ -37,10 +29,6 @@ export const Indicator = ({
       onClick(event);
     }
   };
-
-  // Nice to always show indicators in details view so there's some way for new users to be exposed to them.
-  // No need to hide indicators that aren't for graph parts e.g. JustificationTreeIndicator.
-  const showIndicator = workspaceContext === "details" || showIndicators || !graphPartIndicator;
 
   return (
     <>
@@ -54,7 +42,7 @@ export const Indicator = ({
           // text-base seems to fit more snuggly than the default 14px
           "border border-solid border-neutral-main text-base shadow-none" +
           (!onClick ? " pointer-events-none" : "") +
-          (showIndicator ? "" : " hidden")
+          (className ? ` ${className}` : "")
         }
       >
         <Icon color="neutralContrast" fontSize="inherit" />

@@ -18,7 +18,6 @@ import {
   SsidChart,
   UnfoldMore,
   Upload,
-  WbTwilight,
 } from "@mui/icons-material";
 import {
   Divider,
@@ -72,10 +71,8 @@ import { resetQuickViews } from "@/web/view/quickViewStore/store";
 import {
   toggleExpandDetailsTabs,
   toggleFillNodesWithColor,
-  toggleIndicateWhenNodeForcedToShow,
   useExpandDetailsTabs,
   useFillNodesWithColor,
-  useIndicateWhenNodeForcedToShow,
 } from "@/web/view/userConfigStore";
 
 const imageWidth = 2560;
@@ -142,7 +139,6 @@ export const MoreActionsDrawer = ({
   const layoutThoroughness = useLayoutThoroughness();
 
   const fillNodesWithColor = useFillNodesWithColor();
-  const indicateWhenNodeForcedToShow = useIndicateWhenNodeForcedToShow();
   const expandDetailsTabs = useExpandDetailsTabs();
 
   return (
@@ -420,18 +416,6 @@ export const MoreActionsDrawer = ({
             sx={{ borderRadius: "50%", border: "0" }}
           >
             <FormatColorFill />
-          </ToggleButton>
-          <ToggleButton
-            value={indicateWhenNodeForcedToShow}
-            title="Indicate when node forced to show"
-            aria-label="Indicate when node forced to show"
-            color="primary"
-            size="small"
-            selected={indicateWhenNodeForcedToShow}
-            onClick={() => toggleIndicateWhenNodeForcedToShow(!indicateWhenNodeForcedToShow)}
-            sx={{ borderRadius: "50%", border: "0" }}
-          >
-            <WbTwilight />
           </ToggleButton>
           <ToggleButton
             value={expandDetailsTabs}

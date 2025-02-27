@@ -11,7 +11,7 @@ interface Props {
   className?: string;
 }
 
-const CommonIndicatorsBase = ({ graphPart, className }: Props) => {
+const CommonIndicatorGroupBase = ({ graphPart, className }: Props) => {
   return (
     <Stack direction="row" margin="2px" spacing="2px" className={className}>
       {/* TODO: should this be moved because it's not used for all graph parts? */}
@@ -23,4 +23,4 @@ const CommonIndicatorsBase = ({ graphPart, className }: Props) => {
   );
 };
 
-export const CommonIndicators = memo(CommonIndicatorsBase);
+export const CommonIndicatorGroup = memo(CommonIndicatorGroupBase);

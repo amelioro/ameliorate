@@ -158,7 +158,7 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
         edgeTypes={edgeTypes}
         fitView
         fitViewOptions={{ maxZoom: 1 }}
-        minZoom={0.25}
+        minZoom={0} // is annoying if you can't see the whole diagram... not sure of downsides to allowing further zooming out; maybe you could lose where the diagram is if it's too small? but that doesn't seem like a big deal, since diagram autofits on filter change
         nodesFocusable={false}
         onConnect={
           userCanEditTopicData ? ({ source, target }) => connectNodes(source, target) : undefined

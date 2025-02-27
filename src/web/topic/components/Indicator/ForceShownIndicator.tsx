@@ -2,7 +2,7 @@ import { WbTwilight } from "@mui/icons-material";
 import { type ButtonProps } from "@mui/material";
 import { MouseEventHandler, memo, useCallback } from "react";
 
-import { Indicator } from "@/web/topic/components/Indicator/Indicator";
+import { Indicator } from "@/web/topic/components/Indicator/Base/Indicator";
 import { stopForcingNodeToShow, useIsNodeForcedToShow } from "@/web/view/currentViewStore/filter";
 
 interface Props {

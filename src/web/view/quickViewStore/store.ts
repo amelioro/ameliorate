@@ -273,6 +273,29 @@ export const selectView = (viewId: string | null) => {
   selectingView = false;
 };
 
+/**
+ * Different from `selectView` because this just sets the selected view without triggering further
+ * changes based on the selected view i.e. no URL changes, no current view changes.
+ *
+ * This is because these things are unexpected when the selection changes automatically.
+ */
+const recalculateSelectedView = (newView: ViewState) => {
+  const state = useQuickViewStore.getState();
+
+  // If the view changed, and the state matches a Quick View, set that Quick View as selected,
+  // otherwise deselect the selected view.
+  // Doing a deep comparison for each quick view on every current view change is probably a
+  // bit unperformant, but it's nice to have so we know if our view is the same as an existing one.
+  const match = state.views.find((view) => deepIsEqual(withViewDefaults(view.viewState), newView));
+  const newViewId = match ? match.id : null;
+  if (state.selectedViewId === newViewId) return;
+
+  // new recalculated selection shouldn't be undoable because it was automatic
+  useQuickViewStore.temporal.getState().pause();
+  useQuickViewStore.setState({ selectedViewId: newViewId }, false, "recalculateSelectedView");
+  useQuickViewStore.temporal.getState().resume();
+};
+
 export const selectViewFromState = (viewState: ViewState) => {
   const { views } = useQuickViewStore.getState();
 
@@ -389,19 +412,5 @@ export const getPersistState = () => {
 emitter.on("changedView", (newView) => {
   if (selectingView) return; // don't change selected view if this event was triggered by selection
 
-  const state = useQuickViewStore.getState();
-
-  // If the view changed, and the state matches a Quick View, set that Quick View as selected,
-  // otherwise deselect the selected view.
-  // Doing a deep comparison for each quick view on every current view change is probably a
-  // bit unperformant, but it's nice to have when merely selecting a node results in deselecting the
-  // current view.
-  // TODO: consider removing `selectedGraphPartId` from this store so that doesn't trigger this event,
-  // then maybe it'd be less painful to remove this deep comparison.
-  const match = state.views.find((view) => deepIsEqual(withViewDefaults(view.viewState), newView));
-  if (match) {
-    if (state.selectedViewId !== match.id) selectView(match.id);
-  } else {
-    if (state.selectedViewId !== null) selectView(null);
-  }
+  recalculateSelectedView(newView);
 });

@@ -2,8 +2,8 @@ import styled from "@emotion/styled";
 import { Box, TextareaAutosize } from "@mui/material";
 
 import { htmlDefaultFontSize } from "@/pages/_document.page";
-import { ContentIndicators } from "@/web/topic/components/Indicator/ContentIndicators";
-import { StatusIndicators } from "@/web/topic/components/Indicator/StatusIndicators";
+import { ContentIndicatorGroup } from "@/web/topic/components/Indicator/Base/ContentIndicatorGroup";
+import { StatusIndicatorGroup } from "@/web/topic/components/Indicator/Base/StatusIndicatorGroup";
 
 export const nodeWidthRem = 11;
 const nodeHeightRem = 3.5625; // 1 line of text results in 57px height, / 16px = 3.5625rem
@@ -64,7 +64,7 @@ export const NodeBox = styled(Box)`
   }
 `;
 
-export const RightCornerContentIndicators = styled(ContentIndicators)`
+export const RightCornerContentIndicators = styled(ContentIndicatorGroup)`
   position: absolute;
   right: 0;
   bottom: 0;
@@ -72,7 +72,7 @@ export const RightCornerContentIndicators = styled(ContentIndicators)`
   transform: translate(0.625rem, 65%);
 `;
 
-export const LeftCornerStatusIndicators = styled(StatusIndicators)`
+export const LeftCornerStatusIndicators = styled(StatusIndicatorGroup)`
   position: absolute;
   left: 0;
   bottom: 0;
