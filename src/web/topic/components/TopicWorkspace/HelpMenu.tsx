@@ -88,9 +88,12 @@ export const HelpMenu = ({ helpAnchorEl, setHelpAnchorEl }: Props) => {
           <Tab icon={<Carpenter />} label="Builders" value="Builders" />
           <Tab icon={<LocalLibrary />} label="Viewers" value="Viewers" />
           <Tab icon={<Handyman />} label="Experts" value="Experts" />
+          {/* <Tab label="Builders" value="Builders" />
+          <Tab label="Viewers" value="Viewers" />
+          <Tab label="Experts" value="Experts" /> */}
         </TabList>
 
-        <TabPanel value="Builders" className="p-2">
+        {/* <TabPanel value="Builders" className="p-2">
           <TutorialMenuItem onClick={() => startTutorial("diagramBasics", "builders")}>
             {getProgressIcon("diagramBasics")} 1. Diagram basics
           </TutorialMenuItem>
@@ -123,7 +126,7 @@ export const HelpMenu = ({ helpAnchorEl, setHelpAnchorEl }: Props) => {
         <TabPanel value="Experts" className="p-2">
           <TutorialMenuItem disabled>More actions (coming later)</TutorialMenuItem>
           <TutorialMenuItem disabled>Advanced filtering (coming later)</TutorialMenuItem>
-        </TabPanel>
+        </TabPanel> */}
       </TabContext>
     </Menu>
   );

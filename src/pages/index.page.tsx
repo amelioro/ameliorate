@@ -3,6 +3,7 @@ import Head from "next/head";
 
 import { ConcludingSection } from "@/web/home/ConcludingSection";
 import { CoreIdeasSection } from "@/web/home/CoreIdeasSection";
+import { ExamplesSection } from "@/web/home/ExamplesSection";
 import { FeaturesSection } from "@/web/home/FeaturesSection";
 import { Footer } from "@/web/home/Footer";
 import { Headline } from "@/web/home/Headline";
@@ -34,6 +35,22 @@ const Home: NextPage = () => {
         >
           <div className="w-full max-w-6xl px-4 py-8 sm:p-8">
             <CoreIdeasSection />
+          </div>
+        </section>
+
+        {/* <section className="flex h-[calc(100svh-50px)] justify-center odd:bg-paperPlain-main even:bg-paperShaded-main "> */}
+        {/* <section className="flex justify-center odd:bg-paperPlain-main even:bg-paperShaded-main "> */}
+        <section
+          id="examples"
+          className={
+            "flex justify-center overflow-x-hidden odd:bg-paperPlain-main even:bg-paperShaded-main" +
+            // allow carousel to stretch to 100vw without creating a horizontal scrollbar for seeing behind the vertical scrollbar
+            " overflow-x-hidden"
+          }
+        >
+          {/* <div className={"w-full max-w-6xl px-4 py-8 sm:p-8" + " h-[calc(100vh-50px)]"}> */}
+          <div className={"w-full max-w-6xl px-4 py-8 sm:p-8" + " max-h-[calc(100vh-50px)]"}>
+            <ExamplesSection />
           </div>
         </section>
 
