@@ -159,6 +159,10 @@ export const deleteComment = (commentId: string) => {
   );
 };
 
+export const resetComment = () => {
+  useCommentStore.setState({ ...initialState }, false, "resetComment");
+};
+
 export const resolveComment = (commentId: string, resolved: boolean) => {
   useCommentStore.setState(
     (state) => ({
