@@ -1,13 +1,5 @@
-import {
-  Camera,
-  CameraOutlined,
-  EmojiObjects,
-  EmojiObjectsOutlined,
-  Lightbulb,
-  LightbulbOutlined,
-} from "@mui/icons-material";
-import { TabContext, TabList } from "@mui/lab";
-import { Divider, Rating, Slider, Tab, Tabs, Typography } from "@mui/material";
+import { EmojiObjects, EmojiObjectsOutlined } from "@mui/icons-material";
+import { Divider, Rating, Slider, Typography } from "@mui/material";
 import Image from "next/image";
 import { useRef, useState } from "react";
 
