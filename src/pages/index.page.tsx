@@ -3,6 +3,7 @@ import Head from "next/head";
 
 import { ConcludingSection } from "@/web/home/ConcludingSection";
 import { CoreIdeasSection } from "@/web/home/CoreIdeasSection";
+import { ExamplesSection } from "@/web/home/ExamplesSection";
 import { FeaturesSection } from "@/web/home/FeaturesSection";
 import { Footer } from "@/web/home/Footer";
 import { Headline } from "@/web/home/Headline";
@@ -34,6 +35,23 @@ const Home: NextPage = () => {
         >
           <div className="w-full max-w-6xl px-4 py-8 sm:p-8">
             <CoreIdeasSection />
+          </div>
+        </section>
+
+        <section
+          id="examples"
+          className="flex justify-center odd:bg-paperPlain-main even:bg-paperShaded-main"
+        >
+          <div
+            className={
+              "w-full max-w-6xl px-4 py-8 sm:p-8" +
+              // This section looks much better if it's all visible at once because it has an image
+              // that's hard to understand if we can't see it all.
+              // 48px is the height of the navbar to exclude.
+              " max-h-[calc(100vh-48px)]"
+            }
+          >
+            <ExamplesSection />
           </div>
         </section>
 
