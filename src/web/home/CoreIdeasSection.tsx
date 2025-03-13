@@ -61,14 +61,38 @@ export const CoreIdeasSection = () => {
           <Tab label={copy.details.title} value="details" />
         </TabList>
 
-        <TabPanel key="diagram" value="diagram" className="flex flex-col items-center gap-2 p-0">
+        <TabPanel
+          key="diagram"
+          // Using `selectedCard` here instead of `diagram` is a hack to keep the panels all mounted, so that
+          // the images don't have to reload every time a tab is clicked.
+          // TODO: after mui v6 upgrade, instead of this hack, can use `keepMounted` https://github.com/mui/material-ui/issues/37398
+          value={selectedCard}
+          // value="diagram"
+          className={
+            "items-center gap-2 p-0" +
+            // `hidden` is specified only because the hack above prevents the panels from knowing when they should be hidden
+            (selectedCard === "diagram" ? " flex flex-col" : " hidden")
+          }
+        >
           <Typography variant="body1" className="pt-3">
             {copy.diagram.description}
           </Typography>
           {copy.diagram.image}
         </TabPanel>
 
-        <TabPanel key="details" value="details" className="flex flex-col items-center gap-2 p-0">
+        <TabPanel
+          key="details"
+          // Using `selectedCard` here instead of `details` is a hack to keep the panels all mounted, so that
+          // the images don't have to reload every time a tab is clicked.
+          // TODO: after mui v6 upgrade, instead of this hack, can use `keepMounted` https://github.com/mui/material-ui/issues/37398
+          value={selectedCard}
+          // value="details"
+          className={
+            "items-center gap-2 p-0" +
+            // `hidden` is specified only because the hack above prevents the panels from knowing when they should be hidden
+            (selectedCard === "details" ? " flex flex-col" : " hidden")
+          }
+        >
           <Typography variant="body1" className="pt-3">
             {copy.details.description}
           </Typography>
