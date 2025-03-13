@@ -3,6 +3,8 @@ import { Tab, Typography } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
 
+import { Link } from "@/web/common/components/Link";
+
 type Tab = "diagram" | "details";
 
 const copy = {
@@ -73,6 +75,14 @@ export const CoreIdeasSection = () => {
           {copy.details.image}
         </TabPanel>
       </TabContext>
+
+      <Typography variant="body2" className="mt-2">
+        See{" "}
+        <Link href="/examples/ontology" target="_blank">
+          ontology
+        </Link>{" "}
+        for an interactive visual of all information types in Ameliorate
+      </Typography>
     </div>
   );
 };
