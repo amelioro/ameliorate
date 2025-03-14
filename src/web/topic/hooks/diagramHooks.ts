@@ -28,7 +28,11 @@ export const useLayoutedDiagram = (diagram: Diagram) => {
   // re-layout if this changes
   const diagramHash = [...diagram.nodes, ...diagram.edges]
     // not 100% sure that it's worth re-laying out when node text changes, but we can easily remove if it doesn't seem like it
-    .map((graphPart) => (isNode(graphPart) ? graphPart.id + graphPart.data.label : graphPart.id))
+    .map((graphPart) =>
+      isNode(graphPart)
+        ? graphPart.id + graphPart.data.label + graphPart.type
+        : graphPart.id + graphPart.label,
+    )
     .concat(
       String(forceNodesIntoLayers),
       String(layerNodeIslandsTogether),
