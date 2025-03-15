@@ -25,6 +25,12 @@
       }
     ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "docs-site/mdx-components.jsx"
+  ],
   "exclude": ["node_modules", "docs-site", "e2e", "mock-auth"]
 }
