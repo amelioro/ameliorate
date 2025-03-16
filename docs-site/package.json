@@ -7,18 +7,19 @@
     "dev": "next -p 3008",
     "//build": "delete .next to prevent netlify from caching and not updating sidebar when page titles change - thanks https://github.com/shuding/nextra/issues/1564#issuecomment-1688460307",
     "build": "npm run clean && next build",
-    "postbuild": "next-sitemap",
+    "//postbuild": "build sitemap and pagefind index (for searching docs)",
+    "postbuild": "next-sitemap && pagefind --site .next/server/app --output-path public/_pagefind",
     "clean": "rm -rf .next",
     "start": "next start -p 3008"
   },
   "/": "dompurify should not be needed here, it's only used indirectly via nextra's mermaid rendering, but there is a dependency issue they need to fix, see https://github.com/mermaid-js/mermaid/issues/6078",
   "dependencies": {
     "dompurify": "^3.2.1",
-    "next": "^14.2.22",
-    "next-plausible": "^3.12.2",
+    "next": "^15.2.2",
+    "next-plausible": "^3.12.4",
     "next-sitemap": "^4.2.3",
-    "nextra": "^3.2.4",
-    "nextra-theme-docs": "^3.2.4",
+    "nextra": "^4.2.16",
+    "nextra-theme-docs": "^4.2.16",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -33,6 +34,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-functional": "^6.0.1",
     "eslint-plugin-import": "2.26.0",
+    "pagefind": "^1.3.0",
     "postcss": "^8.4.39",
     "tailwindcss": "^3.4.6",
     "typescript": "5.3.3"
