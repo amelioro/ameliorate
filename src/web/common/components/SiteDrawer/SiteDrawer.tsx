@@ -56,25 +56,24 @@ export const SiteDrawer = ({ username, isSiteDrawerOpen, setIsSiteDrawerOpen }: 
           </ListItemButton>
         </ListItem>
         {username && (
-          <>
-            <ListItem>
-              <ListItemButton LinkComponent={NextLink} href={`/${username}`}>
-                <ListItemIcon>
-                  <AutoStories />
-                </ListItemIcon>
-                <ListItemText primary="My Topics" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem>
-              <ListItemButton LinkComponent={NextLink} href="/new">
-                <ListItemIcon>
-                  <Add />
-                </ListItemIcon>
-                <ListItemText primary="New Topic" />
-              </ListItemButton>
-            </ListItem>
-          </>
+          <ListItem>
+            <ListItemButton LinkComponent={NextLink} href={`/${username}`}>
+              <ListItemIcon>
+                <AutoStories />
+              </ListItemIcon>
+              <ListItemText primary="My Topics" />
+            </ListItemButton>
+          </ListItem>
         )}
+        {/* this can be shown without being logged in because it'll redirect to the login page if need be */}
+        <ListItem>
+          <ListItemButton LinkComponent={NextLink} href="/new">
+            <ListItemIcon>
+              <Add />
+            </ListItemIcon>
+            <ListItemText primary="New Topic" />
+          </ListItemButton>
+        </ListItem>
 
         <Divider className="my-1" />
 

@@ -37,15 +37,14 @@ export const SiteHeader = () => {
               Playground
             </NavLink>
             {sessionUser && (
-              <>
-                <NavLink href={`/${sessionUser.username}`} className="hidden sm:block">
-                  My Topics
-                </NavLink>
-                <NavLink href={"/new"} className="hidden sm:block">
-                  New Topic
-                </NavLink>
-              </>
+              <NavLink href={`/${sessionUser.username}`} className="hidden sm:block">
+                My Topics
+              </NavLink>
             )}
+            {/* this can be shown without being logged in because it'll redirect to the login page if need be */}
+            <NavLink href={"/new"} className="hidden sm:block">
+              New Topic
+            </NavLink>
           </div>
 
           <div className="flex items-center gap-4">
