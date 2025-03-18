@@ -1,5 +1,5 @@
 import { type ButtonProps, type SxProps, useTheme } from "@mui/material";
-import { memo, useContext, useEffect, useRef } from "react";
+import { memo, useContext, useEffect, useRef, useState } from "react";
 
 import { useSessionUser } from "@/web/common/hooks";
 import { openContextMenu } from "@/web/common/store/contextMenuActions";
@@ -33,6 +33,8 @@ interface Props {
 const EditableNodeBase = ({ node, className = "" }: Props) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
+
+  const [textAreaSelected, setTextAreaSelected] = useState(false);
 
   const unrestrictedEditing = useUnrestrictedEditing();
   const fillNodesWithColor = useFillNodesWithColor();
@@ -133,7 +135,11 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
               if (text && text !== nodeDecoration.title && text !== node.data.customType)
                 setCustomNodeType(node, text);
             }}
-            className="nopan pr-1 text-sm leading-normal"
+            className={
+              "pr-1 text-sm leading-normal" +
+              // without nopan, clicking on the span won't let you edit text
+              (customizable ? " nopan" : "")
+            }
           >
             {typeText}
           </NodeTypeSpan>
@@ -148,13 +154,33 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
           placeholder="Enter text..."
           defaultValue={node.data.label}
           maxRows={3}
-          // Prevent selecting node when we want to just edit text.
-          // Particularly important for enabling text editing in details pane without selecting the node.
-          onClick={(event) => event.stopPropagation()}
+          onClick={(event) => {
+            // Track selection of the textbox separate from node selection so that we can allow operations
+            // like context menu & dragging to be text-specific when interacting with the text (e.g.
+            // highlighting specific words, right-click search-with-google), vs node-specific when
+            // interacting with the node (e.g. panning, right-click delete/show/hide).
+            // It's a bit janky that we're setting this on click and unsetting on blur (as opposed
+            // to onclick/onclickaway or onfocus/onblur), but onclickaway isn't a native thing, and
+            // onfocus doesn't work because context menu events happen based on the focused element,
+            // so we can't conditionally allow custom context menu vs browser context menu based on
+            // whether or not the text area is focused.
+            if (!textAreaSelected) setTextAreaSelected(true);
+            // Prevent selecting node when we want to just edit text.
+            // Particularly important for enabling text editing in details pane without selecting the node.
+            event.stopPropagation();
+          }}
+          onContextMenu={(event) => {
+            if (textAreaSelected) {
+              // use chrome's context menu instead of our custom context menu if we're editing the text area
+              // because in this case, we probably want the context menu to be based on the text
+              event.stopPropagation();
+            }
+          }}
           onBlur={(event) => {
+            if (textAreaSelected) setTextAreaSelected(false);
             if (event.target.value !== node.data.label) setNodeLabel(node, event.target.value);
           }}
-          className="nopan" // allow regular text input drag functionality without using reactflow's pan behavior
+          className={textAreaSelected ? "nopan" : ""} // allow regular text input drag functionality without using reactflow's pan behavior
           // Previously required selecting a node before editing its text, because oftentimes you'll
           // want to select a node to view more details and the editing will be distracting, but
           // "cursor: pointer" on the node box allows selecting the node without clicking the text.

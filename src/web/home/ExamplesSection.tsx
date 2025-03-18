@@ -218,6 +218,15 @@ const examples = [
   },
 ] as const satisfies Example[];
 
+const scrollTabToCenter = (tab: HTMLElement) => {
+  const tabScrollContainer = tab.offsetParent;
+  if (tabScrollContainer === null) return;
+
+  // see this commit's PR for an image explaining this calculation
+  const scrollLeft = tab.offsetLeft - (tabScrollContainer.clientWidth - tab.clientWidth) / 2;
+  tabScrollContainer.scrollTo({ left: scrollLeft, behavior: "smooth" });
+};
+
 type ExampleTab = (typeof examples)[number]["category"];
 const initialSelectedTab: ExampleTab = "State policy";
 
@@ -226,16 +235,11 @@ export const ExamplesSection = () => {
 
   const initialTabRef = useRef<HTMLDivElement>(null);
 
-  // center the active tab on load
+  // center the initial tab on load
   useEffect(() => {
-    const tempScrollY = window.scrollY;
-    initialTabRef.current?.scrollIntoView({
-      behavior: "instant",
-      block: "nearest",
-      inline: "center",
-    });
-    // really janky, but instantly scrolling back to our tempScrollY is a way to appear to avoid vertical scrolling from `scrollIntoView`
-    window.scrollTo({ top: tempScrollY, behavior: "instant" });
+    const initialTab = initialTabRef.current;
+    if (!initialTab) return;
+    scrollTabToCenter(initialTab);
   }, []);
 
   // There's some complexity with sizing here because of a few desired requirements related to the image:
@@ -268,13 +272,7 @@ export const ExamplesSection = () => {
               key={example.category}
               value={example.category}
               label={example.category}
-              onClick={(event) => {
-                event.currentTarget.scrollIntoView({
-                  behavior: "smooth",
-                  block: "nearest",
-                  inline: "center",
-                });
-              }}
+              onClick={(event) => scrollTabToCenter(event.currentTarget)}
               iconPosition="bottom"
               icon={
                 <Rating

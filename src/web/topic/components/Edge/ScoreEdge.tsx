@@ -172,7 +172,8 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
             if (text && text !== lowerCase(edge.label) && text !== edge.data.customLabel)
               setCustomEdgeLabel(edge, text);
           }}
-          className="nopan"
+          // without nopan, clicking on the span won't let you edit text
+          className={userCanEditTopicData && unrestrictedEditing ? "nopan" : ""}
         >
           {labelText}
         </Typography>

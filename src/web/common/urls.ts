@@ -1,5 +1,3 @@
-export const examplesPage = "/examples";
-
 export const docsPage = "https://ameliorate.app/docs";
 // would be nice if there were an easy way to join these; `path.join` doesn't work well with "https://", and `new URL` doesn't allow appending to a basepath with subdirectories
 export const discourseSessionsPage = docsPage + "/discourse-sessions";
