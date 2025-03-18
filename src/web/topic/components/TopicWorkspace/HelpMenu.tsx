@@ -14,7 +14,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { CloseOnClickMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
 import { Menu } from "@/web/common/components/Menu/Menu";
 import { useSessionUser } from "@/web/common/hooks";
-import { docsPage, examplesPage, feedbackPage } from "@/web/common/urls";
+import { docsPage, feedbackPage } from "@/web/common/urls";
 import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { startTutorial } from "@/web/tutorial/tutorial";
 import { useTutorialProgress } from "@/web/tutorial/tutorialStore";
@@ -68,7 +68,7 @@ export const HelpMenu = ({ helpAnchorEl, setHelpAnchorEl }: Props) => {
         <MenuBook />
         Docs
       </MenuItem>
-      <MenuItem component={Link} href={examplesPage} target="_blank">
+      <MenuItem component={Link} href="/#examples" target="_blank">
         <AccountBalance />
         Examples
       </MenuItem>
