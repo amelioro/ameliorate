@@ -160,7 +160,8 @@ export const deleteComment = (commentId: string) => {
 };
 
 export const resetComment = () => {
-  useCommentStore.setState({ ...initialState }, false, "resetComment");
+  const topic = useCommentStore.getState().topic;
+  useCommentStore.setState({ ...initialState, topic }, false, "resetComment");
 };
 
 export const resolveComment = (commentId: string, resolved: boolean) => {
