@@ -196,7 +196,7 @@ const examples = [
         >
           features
         </Link>{" "}
-        are even desirable for global issues.
+        are even more desirable for global issues.
       </span>
     ),
     complexity: 10,
