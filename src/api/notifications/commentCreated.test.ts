@@ -1,7 +1,7 @@
 /* eslint-disable functional/no-let -- let is needed to reuse `before`-initialized variables across tests */
 import { InAppNotification, Topic, User } from "@prisma/client";
 import shortUUID from "short-uuid";
-import { SpyInstance, beforeEach, describe, expect, test, vi } from "vitest";
+import { MockInstance, beforeEach, describe, expect, test, vi } from "vitest";
 
 import * as email from "@/api/email";
 import {
@@ -379,7 +379,7 @@ describe("handleCommentCreated", () => {
   });
 
   describe("email notifications", () => {
-    let sendAllEmailsSpy: SpyInstance;
+    let sendAllEmailsSpy: MockInstance;
 
     beforeEach(() => {
       sendAllEmailsSpy = vi.spyOn(email, "sendAllEmails");
@@ -477,6 +477,7 @@ describe("handleCommentCreated", () => {
             html: `<div style="white-space: pre;">${commentWithCommentParent.content}
 —
 <a href="http://localhost:3000/creatorOfTopic/topicWithoutAllowAnyEdit?comment=${commentWithCommentParent.id}">View comment on Ameliorate</a>.
+
 <a href="http://localhost:3000/unsubscribe/${unsubscribeThreadCode.code}">Unsubscribe from thread</a> | <a href="http://localhost:3000/unsubscribe/${unsubscribeAllCode.code}">Unsubscribe from all Ameliorate notification emails</a>.
 </div>`,
           },
@@ -518,6 +519,7 @@ describe("handleCommentCreated", () => {
             html: `<div style="white-space: pre;">${commentWithTopicParent.content}
 —
 <a href="http://localhost:3000/creatorOfTopic/topicWithoutAllowAnyEdit?comment=${commentWithTopicParent.id}">View comment on Ameliorate</a>.
+
 <a href="http://localhost:3000/unsubscribe/${unsubscribeThreadCode.code}">Unsubscribe from thread</a> | <a href="http://localhost:3000/unsubscribe/${unsubscribeAllCode.code}">Unsubscribe from all Ameliorate notification emails</a>.
 </div>`,
           },

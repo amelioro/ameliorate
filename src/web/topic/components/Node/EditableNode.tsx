@@ -1,19 +1,20 @@
 import { type ButtonProps, type SxProps, useTheme } from "@mui/material";
-import { memo, useContext, useEffect, useRef } from "react";
+import { memo, useContext, useEffect, useRef, useState } from "react";
 
 import { useSessionUser } from "@/web/common/hooks";
 import { openContextMenu } from "@/web/common/store/contextMenuActions";
 import { clearNewlyAddedNode, isNodeNewlyAdded } from "@/web/common/store/ephemeralStore";
-import { CommonIndicators } from "@/web/topic/components/Indicator/CommonIndicators";
+import { CommonIndicatorGroup } from "@/web/topic/components/Indicator/Base/CommonIndicatorGroup";
 import {
+  BottomDiv,
   LeftCornerStatusIndicators,
   MiddleDiv,
   NodeBox,
-  NodeTypeBox,
+  NodeTypeDiv,
   NodeTypeSpan,
   RightCornerContentIndicators,
   StyledTextareaAutosize,
-  YEdgeBox,
+  TopDiv,
 } from "@/web/topic/components/Node/EditableNode.styles";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { setCustomNodeType, setNodeLabel } from "@/web/topic/store/actions";
@@ -21,7 +22,7 @@ import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { Node } from "@/web/topic/utils/graph";
 import { nodeDecorations } from "@/web/topic/utils/node";
 import { useUnrestrictedEditing } from "@/web/view/actionConfigStore";
-import { setSelected, useIsGraphPartSelected } from "@/web/view/currentViewStore/store";
+import { setSelected, useIsGraphPartSelected } from "@/web/view/selectedPartStore";
 import { useFillNodesWithColor } from "@/web/view/userConfigStore";
 
 interface Props {
@@ -32,6 +33,9 @@ interface Props {
 const EditableNodeBase = ({ node, className = "" }: Props) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
+
+  const [textAreaSelected, setTextAreaSelected] = useState(false);
+
   const unrestrictedEditing = useUnrestrictedEditing();
   const fillNodesWithColor = useFillNodesWithColor();
   const selected = useIsGraphPartSelected(node.id);
@@ -70,15 +74,10 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
   const NodeIcon = nodeDecoration.NodeIcon;
   const typeText = node.data.customType ?? nodeDecoration.title;
 
-  // Require selecting a node before editing it, because oftentimes you'll want to select a node to
-  // view more details, and the editing will be distracting. Only edit after clicking when selected.
-  // Details nodes are always editable, because clicking does not select them.
-  const editable = userCanEditTopicData && (context === "details" || selected);
-
   const customizable = userCanEditTopicData && (unrestrictedEditing || node.type === "custom");
 
   const backgroundColorType: ButtonProps["color"] =
-    fillNodesWithColor || node.type === "custom" ? node.type : "paper";
+    fillNodesWithColor || node.type === "custom" ? node.type : "paperPlain";
 
   // TODO: use `fill-node`/`no-fill-node` class, and extract these to styles file; not sure how to use type-specific colors without js though? maybe css vars for type-specific colors, and a var for the node type that's scoped to the current node?
   const nodeStyles: SxProps =
@@ -91,33 +90,43 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
           backgroundColor: "white",
           borderColor: color,
 
-          [NodeTypeBox.toString()]: {
+          [NodeTypeDiv.toString()]: {
             backgroundColor: color,
             // anti-aliasing between white node background and colored border/icon background creates a gray line - add colored shadow to hide this https://stackoverflow.com/a/40100710/8409296
-            boxShadow: `-1px -1px 0px 1px ${color}`,
+            // 0.5px spread instead of 1px because 1px creates a really thin shadow on the bottom/right, which can be seen
+            // more clearly e.g. when selecting a benefit node (black shadow against bright background)
+            boxShadow: `-1px -1px 0px 0.5px ${color}`,
           },
 
-          [`&.selected ${NodeTypeBox.toString()}`]: {
-            boxShadow: "-1px -1px 0px 1px black",
+          [`&.selected ${NodeTypeDiv.toString()}`]: {
+            // Match the shadow size of not-selected nodes
+            boxShadow: `-1px -1px 0px 0.5px black`,
           },
 
-          [`&.spotlight-secondary ${NodeTypeBox.toString()}`]: {
-            boxShadow: `-1px -1px 0px 1px ${theme.palette.info.main}`,
+          [`&.spotlight-secondary ${NodeTypeDiv.toString()}`]: {
+            // Match the shadow size of not-selected nodes
+            boxShadow: `-1px -1px 0px 0.5px ${theme.palette.info.main}`,
           },
         };
 
   return (
     <NodeBox
-      className={className + (selected ? " selected" : "")}
-      onClick={() => {
-        if (context != "details") setSelected(node.id);
-      }}
+      className={
+        className +
+        // allow other components to apply conditional css related to this node, e.g. when it's hovered/selected
+        // separate from react-flow__node because sometimes nodes are rendered outside of react-flow (e.g. details pane), and we still want to style these
+        " diagram-node" +
+        (selected ? " selected" : "")
+      }
+      onClick={() => setSelected(node.id)}
       onContextMenu={(event) => openContextMenu(event, { node })}
+      role="button"
       sx={nodeStyles}
     >
-      <YEdgeBox height="24px">
-        <NodeTypeBox sx={{ borderTopLeftRadius: "4px", borderBottomRightRadius: "4px" }}>
-          <NodeIcon sx={{ width: "0.875rem", height: "0.875rem", marginX: "4px" }} />
+      <TopDiv className="flex h-6 items-center justify-between">
+        {/* pb/pr-0.5 to have 2px of space below/right, to match the 2px border of the node that's above/left of this node type div */}
+        <NodeTypeDiv className="flex h-6 items-center rounded-br rounded-tl pb-0.5 pr-0.5">
+          <NodeIcon className="mx-1 size-3.5" />
           <NodeTypeSpan
             contentEditable={customizable}
             suppressContentEditableWarning // https://stackoverflow.com/a/49639256/8409296
@@ -126,32 +135,70 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
               if (text && text !== nodeDecoration.title && text !== node.data.customType)
                 setCustomNodeType(node, text);
             }}
-            className="nopan"
+            className={
+              "pr-1 text-sm leading-normal" +
+              // without nopan, clicking on the span won't let you edit text
+              (customizable ? " nopan" : "")
+            }
           >
             {typeText}
           </NodeTypeSpan>
-        </NodeTypeBox>
-        <CommonIndicators graphPartId={node.id} notes={node.data.notes} />
-      </YEdgeBox>
-      <MiddleDiv>
+        </NodeTypeDiv>
+        <CommonIndicatorGroup graphPart={node} />
+      </TopDiv>
+      {/* grow to fill out remaining space with this div because it contains the textarea */}
+      <MiddleDiv className="flex grow px-1 pb-2 pt-1">
         <StyledTextareaAutosize
           id={textAreaId}
           ref={textAreaRef}
           placeholder="Enter text..."
           defaultValue={node.data.label}
           maxRows={3}
+          onClick={(event) => {
+            // Track selection of the textbox separate from node selection so that we can allow operations
+            // like context menu & dragging to be text-specific when interacting with the text (e.g.
+            // highlighting specific words, right-click search-with-google), vs node-specific when
+            // interacting with the node (e.g. panning, right-click delete/show/hide).
+            // It's a bit janky that we're setting this on click and unsetting on blur (as opposed
+            // to onclick/onclickaway or onfocus/onblur), but onclickaway isn't a native thing, and
+            // onfocus doesn't work because context menu events happen based on the focused element,
+            // so we can't conditionally allow custom context menu vs browser context menu based on
+            // whether or not the text area is focused.
+            if (!textAreaSelected) setTextAreaSelected(true);
+            // Prevent selecting node when we want to just edit text.
+            // Particularly important for enabling text editing in details pane without selecting the node.
+            event.stopPropagation();
+          }}
+          onContextMenu={(event) => {
+            if (textAreaSelected) {
+              // use chrome's context menu instead of our custom context menu if we're editing the text area
+              // because in this case, we probably want the context menu to be based on the text
+              event.stopPropagation();
+            }
+          }}
           onBlur={(event) => {
+            if (textAreaSelected) setTextAreaSelected(false);
             if (event.target.value !== node.data.label) setNodeLabel(node, event.target.value);
           }}
-          className="nopan" // allow regular text input drag functionality without using reactflow's pan behavior
-          readOnly={!editable}
+          className={textAreaSelected ? "nopan" : ""} // allow regular text input drag functionality without using reactflow's pan behavior
+          // Previously required selecting a node before editing its text, because oftentimes you'll
+          // want to select a node to view more details and the editing will be distracting, but
+          // "cursor: pointer" on the node box allows selecting the node without clicking the text.
+          // We'll want to keep an eye out on if selecting vs editing is annoying on mobile, because
+          // of the lack of hover to convey which one your click will perform.
+          readOnly={!userCanEditTopicData}
+          spellCheck="false" // often may use terms not in dictionary, and we override browser context menu so we can't "add to dictionary"
         />
       </MiddleDiv>
-      <YEdgeBox position="relative">
+      <BottomDiv className="relative">
         {node.type !== "rootClaim" && ( // root claim indicators don't seem very helpful
           <>
             {/* TODO?: how to make corner indicators not look bad in the table? they're cut off */}
-            <LeftCornerStatusIndicators graphPartId={node.id} color={backgroundColorType} />
+            <LeftCornerStatusIndicators
+              graphPartId={node.id}
+              color={backgroundColorType}
+              notes={node.data.notes}
+            />
             <RightCornerContentIndicators
               graphPartId={node.id}
               graphPartType="node"
@@ -159,7 +206,7 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
             />
           </>
         )}
-      </YEdgeBox>
+      </BottomDiv>
     </NodeBox>
   );
 };

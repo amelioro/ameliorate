@@ -16,6 +16,7 @@ export const relationNames = [
   "creates",
   "fulfills",
   "obstacleOf",
+  "mitigates",
 
   // research
   "asksAbout", //question to any node
@@ -66,6 +67,7 @@ export const infoRelationNames: Record<InfoCategory, RelationName[]> = {
     "creates",
     "fulfills",
     "obstacleOf",
+    "mitigates",
     "relatesTo", // is a generic relation but currently only seems worthwhile in topic
   ],
   research: ["asksAbout", "potentialAnswerTo", "relevantFor", "sourceOf", "mentions"],

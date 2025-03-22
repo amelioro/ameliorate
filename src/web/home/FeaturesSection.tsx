@@ -1,61 +1,74 @@
-import { Link, Typography } from "@mui/material";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
+import { Link, Tab, Typography } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
 
-import { Card } from "@/web/home/Card";
+type Tab = "views" | "disagree" | "tradeoffs" | "flashlight";
 
-export const FeaturesSection = () => {
-  const [selectedCard, setSelectedCard] = useState<
-    "tradeoffs" | "views" | "flashlight" | "disagree"
-  >("tradeoffs");
-
-  const cards = (
-    <>
-      <Card
-        title="Summarize tradeoffs between solutions"
-        description="Show how important you think each tradeoff is, and how well each solution fulfills that tradeoff."
-        onClick={() => setSelectedCard("tradeoffs")}
-        selected={selectedCard === "tradeoffs"}
-      />
-      <Card
-        title="Focus on different aspects"
-        description="Create views to highlight specific parts of the diagram."
-        onClick={() => setSelectedCard("views")}
-        selected={selectedCard === "views"}
-      />
-      <Card
-        title="Move through complex diagrams"
-        description="Use flashlight mode to easily explore large diagrams."
-        onClick={() => setSelectedCard("flashlight")}
-        selected={selectedCard === "flashlight"}
-      />
-      <Card
-        title="Quickly identify where you disagree"
-        description="Compare scores to efficiently understand where your opinions lie in relation to others."
-        onClick={() => setSelectedCard("disagree")}
-        selected={selectedCard === "disagree"}
-      />
-    </>
-  );
-
-  const carouselItems = (
-    <>
-      <div className={selectedCard === "tradeoffs" ? "" : "hidden"}>
+const copy = {
+  views: {
+    title: "Focus on different aspects",
+    description: "Create views to highlight specific parts of the diagram.",
+    content: (
+      <div>
         <Image
-          src="https://github.com/user-attachments/assets/6733473d-9122-4199-9e2d-d6d651f4a846"
-          alt="criteria tables of cars-going-too-fast and ORM topics"
-          width={1221}
-          height={787}
+          src="https://github.com/user-attachments/assets/87055acd-debb-45f2-981f-ef511e770222"
+          alt="clicking between views in cars-going-too-fast topic"
+          width={1096}
+          height={847}
+          unoptimized // warning without this - gifs aren't optimized by nextjs apparently
+          // extra padding & bg because spacing seems to look better
+          className="rounded-xl border bg-paperPlain-main p-2 shadow"
         />
         <Typography variant="caption">
-          Top-left:{" "}
-          <Link
-            href="https://ameliorate.app/examples/ORM?view=Tradeoffs+scored+as+important"
-            target="_blank"
-          >
-            ORM
+          Topic:{" "}
+          <Link href="https://ameliorate.app/examples/detailed-cars-going-too-fast" target="_blank">
+            cars-going-too-fast
           </Link>
-          , bottom-right:{" "}
+        </Typography>
+      </div>
+    ),
+  },
+  disagree: {
+    title: "Quickly identify where you disagree",
+    description:
+      "Compare scores to efficiently understand where your opinions lie in relation to others.",
+    content: (
+      <div>
+        <Image
+          src="https://github.com/user-attachments/assets/c1c9043a-4a0f-4af6-a309-ab3574301054"
+          alt="comparing scores in cars-going-too-fast topic"
+          width={756}
+          height={703}
+          unoptimized // warning without this - gifs aren't optimized by nextjs apparently
+          className="rounded-xl border shadow"
+        />
+        <Typography variant="caption">
+          Topic:{" "}
+          <Link href="https://ameliorate.app/examples/detailed-cars-going-too-fast" target="_blank">
+            cars-going-too-fast
+          </Link>
+        </Typography>
+      </div>
+    ),
+  },
+  tradeoffs: {
+    title: "Summarize tradeoffs between solutions",
+    description:
+      "Show how important you think each tradeoff is, and how well each solution fulfills that tradeoff.",
+    content: (
+      <div>
+        <Image
+          src="https://github.com/user-attachments/assets/60ac157d-03f7-4fa5-907b-b8e3abab0e7a"
+          alt="criteria tables of cars-going-too-fast"
+          width={727}
+          height={455}
+          unoptimized
+          // extra padding & bg because spacing seems to look better
+          className="rounded-xl border bg-paperPlain-main p-3 shadow"
+        />
+        <Typography variant="caption">
+          Topic:{" "}
           <Link
             href="https://ameliorate.app/examples/detailed-cars-going-too-fast?view=Tradeoff+table"
             target="_blank"
@@ -64,28 +77,20 @@ export const FeaturesSection = () => {
           </Link>
         </Typography>
       </div>
-      <div className={selectedCard === "views" ? "" : "hidden"}>
-        <Image
-          src="https://github.com/user-attachments/assets/de5d9ebf-1b66-42f7-b1c5-cb0c0f595ee3"
-          alt="clicking between views in cars-going-too-fast topic"
-          width={1018}
-          height={601}
-          unoptimized // warning without this - gifs aren't optimized by nextjs apparently
-        />
-        <Typography variant="caption">
-          Topic:{" "}
-          <Link href="https://ameliorate.app/examples/detailed-cars-going-too-fast" target="_blank">
-            cars-going-too-fast
-          </Link>
-        </Typography>
-      </div>
-      <div className={selectedCard === "flashlight" ? "" : "hidden"}>
+    ),
+  },
+  flashlight: {
+    title: "Move through complex diagrams",
+    description: "Use flashlight mode to easily explore large diagrams.",
+    content: (
+      <div>
         <Image
           src="https://github.com/user-attachments/assets/98d75b2b-6ca4-41cd-9322-314c75126232"
           alt="using flashlight mode in brutality-sugar topic"
           width={1022}
           height={728}
           unoptimized // warning without this - gifs aren't optimized by nextjs apparently
+          className="rounded-xl border shadow"
         />
         <Typography variant="caption">
           Topic:{" "}
@@ -94,47 +99,101 @@ export const FeaturesSection = () => {
           </Link>
         </Typography>
       </div>
-      <div className={selectedCard === "disagree" ? "" : "hidden"}>
-        <Image
-          src="https://github.com/user-attachments/assets/c1c9043a-4a0f-4af6-a309-ab3574301054"
-          alt="comparing scores in cars-going-too-fast topic"
-          width={756}
-          height={703}
-          unoptimized // warning without this - gifs aren't optimized by nextjs apparently
-        />
-        <Typography variant="caption">
-          Topic:{" "}
-          <Link href="https://ameliorate.app/examples/detailed-cars-going-too-fast" target="_blank">
-            cars-going-too-fast
-          </Link>
-        </Typography>
-      </div>
-    </>
-  );
+    ),
+  },
+};
+
+export const FeaturesSection = () => {
+  const [selectedCard, setSelectedCard] = useState<Tab>("views");
 
   return (
     <div className="flex flex-col text-center">
-      <Typography variant="h4">Organize, navigate, and focus discussion</Typography>
-      <Typography variant="body1">
-        Check out the{" "}
-        <Link href="https://ameliorate.app/docs" target="_blank">
-          docs
-        </Link>{" "}
-        for more features.
-      </Typography>
+      <Typography variant="h4">Some cool features</Typography>
 
-      <div className="mt-2 hidden grid-cols-3 items-center gap-3 sm:grid">
-        <div className="flex flex-col gap-2 text-start [&_p]:hidden lg:[&_p]:block">{cards}</div>
-        {/* aspect ratio to keep different-sized images from jumping around */}
-        <div className="col-span-2 flex aspect-square items-center ">{carouselItems}</div>
-      </div>
+      <TabContext value={selectedCard}>
+        <TabList onChange={(_, value: Tab) => setSelectedCard(value)} variant="fullWidth">
+          <Tab label={copy.views.title} value="views" wrapped />
+          <Tab label={copy.disagree.title} value="disagree" wrapped />
+          <Tab label={copy.tradeoffs.title} value="tradeoffs" wrapped />
+          <Tab label={copy.flashlight.title} value="flashlight" wrapped />
+        </TabList>
 
-      <div className="mt-4 flex flex-col gap-3 sm:hidden">
-        <div className="flex h-32 overflow-x-auto text-start *:w-60 *:shrink-0 [&_p]:hidden">
-          {cards}
-        </div>
-        <div className="flex">{carouselItems}</div>
-      </div>
+        <TabPanel
+          key="views"
+          // Using `selectedCard` here instead of `views` is a hack to keep the panels all mounted, so that
+          // the images don't have to reload every time a tab is clicked.
+          // TODO: after mui v6 upgrade, instead of this hack, can use `keepMounted` https://github.com/mui/material-ui/issues/37398
+          value={selectedCard}
+          // value="views"
+          className={
+            "items-center gap-2 p-0" +
+            // `hidden` is specified only because the hack above prevents the panels from knowing when they should be hidden
+            (selectedCard === "views" ? " flex flex-col" : " hidden")
+          }
+        >
+          <Typography variant="body1" className="pt-3">
+            {copy.views.description}
+          </Typography>
+          {copy.views.content}
+        </TabPanel>
+
+        <TabPanel
+          key="disagree"
+          // Using `selectedCard` here instead of `disagree` is a hack to keep the panels all mounted, so that
+          // the images don't have to reload every time a tab is clicked.
+          // TODO: after mui v6 upgrade, instead of this hack, can use `keepMounted` https://github.com/mui/material-ui/issues/37398
+          value={selectedCard}
+          // value="disagree"
+          className={
+            "items-center gap-2 p-0" +
+            // `hidden` is specified only because the hack above prevents the panels from knowing when they should be hidden
+            (selectedCard === "disagree" ? " flex flex-col" : " hidden")
+          }
+        >
+          <Typography variant="body1" className="pt-3">
+            {copy.disagree.description}
+          </Typography>
+          {copy.disagree.content}
+        </TabPanel>
+
+        <TabPanel
+          key="tradeoffs"
+          // Using `selectedCard` here instead of `tradeoffs` is a hack to keep the panels all mounted, so that
+          // the images don't have to reload every time a tab is clicked.
+          // TODO: after mui v6 upgrade, instead of this hack, can use `keepMounted` https://github.com/mui/material-ui/issues/37398
+          value={selectedCard}
+          // value="tradeoffs"
+          className={
+            "items-center gap-2 p-0" +
+            // `hidden` is specified only because the hack above prevents the panels from knowing when they should be hidden
+            (selectedCard === "tradeoffs" ? " flex flex-col" : " hidden")
+          }
+        >
+          <Typography variant="body1" className="pt-3">
+            {copy.tradeoffs.description}
+          </Typography>
+          {copy.tradeoffs.content}
+        </TabPanel>
+
+        <TabPanel
+          key="flashlight"
+          // Using `selectedCard` here instead of `flashlight` is a hack to keep the panels all mounted, so that
+          // the images don't have to reload every time a tab is clicked.
+          // TODO: after mui v6 upgrade, instead of this hack, can use `keepMounted` https://github.com/mui/material-ui/issues/37398
+          value={selectedCard}
+          // value="flashlight"
+          className={
+            "items-center gap-2 p-0" +
+            // `hidden` is specified only because the hack above prevents the panels from knowing when they should be hidden
+            (selectedCard === "flashlight" ? " flex flex-col" : " hidden")
+          }
+        >
+          <Typography variant="body1" className="pt-3">
+            {copy.flashlight.description}
+          </Typography>
+          {copy.flashlight.content}
+        </TabPanel>
+      </TabContext>
     </div>
   );
 };

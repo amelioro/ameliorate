@@ -14,12 +14,18 @@ export const nodeTypes = [
   "cause",
   "problem", // weird for problem not to be first, but subproblems should be to the right of causes for layout - maybe just make a subproblem node so this isn't awkward?
   "criterion",
-  "effect",
-  "benefit",
-  "detriment",
   "solutionComponent",
+  "benefit",
+  "effect",
+  "detriment",
   "solution",
   "obstacle",
+  "mitigationComponent",
+  // Technically solution can act as a mitigation, but a separate node type enables us to treat
+  // mitigations as lesser, not-core nodes like solutions.
+  // Will have to keep an eye out for if this seems worth the separate node type, or if it creates
+  // too much confusion.
+  "mitigation",
 
   // research
   "question",
@@ -67,6 +73,8 @@ export const infoNodeTypes: Record<InfoCategory, NodeType[]> = {
     "solutionComponent",
     "solution",
     "obstacle",
+    "mitigationComponent",
+    "mitigation",
     "custom", // is a generic node but currently only seems worthwhile in topic
   ],
   research: ["question", "answer", "fact", "source"],

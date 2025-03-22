@@ -1,3 +1,4 @@
+import { useTheme } from "@mui/material/styles";
 import { NestedMenuItem } from "mui-nested-menu";
 
 import { getSameCategoryNodeTypes } from "@/common/node";
@@ -17,32 +18,30 @@ export const ChangeNodeTypeMenuItem = ({ node, parentMenuOpen }: Props) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
 
+  const theme = useTheme();
+
   if (!userCanEditTopicData) return <></>;
 
   return (
-    <>
-      <NestedMenuItem
-        label="Change node type"
-        parentMenuOpen={parentMenuOpen}
-        sx={{
-          paddingX: "16px",
-          "& p": {
-            fontSize: "14px", // match default mui menu item text
-            paddingX: 0,
-          },
-        }}
-      >
-        {getSameCategoryNodeTypes(node.type).map((type) => (
-          <ContextMenuItem
-            key={type}
-            onClick={() => {
-              changeNodeType(node, type);
-            }}
-          >
-            {nodeDecorations[type].title}
+    <NestedMenuItem
+      label="Change node type"
+      parentMenuOpen={parentMenuOpen}
+      // match default mui menu padding and size
+      className="px-[16px] [&_p]:px-0 [&_p]:text-sm"
+    >
+      {getSameCategoryNodeTypes(node.type).map((type) => {
+        const { NodeIcon, title } = nodeDecorations[type];
+
+        return (
+          <ContextMenuItem key={type} onClick={() => changeNodeType(node, type)}>
+            <NodeIcon
+              sx={{ backgroundColor: theme.palette[type].main }}
+              className="mr-2 rounded p-0.5"
+            />
+            {title}
           </ContextMenuItem>
-        ))}
-      </NestedMenuItem>
-    </>
+        );
+      })}
+    </NestedMenuItem>
   );
 };

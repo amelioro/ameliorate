@@ -37,6 +37,8 @@ export const breakdownSteps: StepType[] = [
               alt="layout of details via cars-going-too-fast"
               width={1237}
               height={911}
+              unoptimized
+              className="rounded-xl border shadow"
             />
             <Typography variant="caption">
               From:{" "}
@@ -77,6 +79,8 @@ export const breakdownSteps: StepType[] = [
               alt="problem details of climate-change"
               width={711}
               height={572}
+              unoptimized
+              className="rounded-xl border shadow"
             />
             <Typography variant="caption">
               From:{" "}
@@ -115,6 +119,8 @@ export const breakdownSteps: StepType[] = [
               alt="solution details of mta-congestion-pricing"
               width={653}
               height={545}
+              unoptimized
+              className="rounded-xl border shadow"
             />
             <Typography variant="caption">
               From:{" "}
@@ -147,6 +153,7 @@ export const breakdownSteps: StepType[] = [
               width={738}
               height={636}
               unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+              className="rounded-xl border shadow"
             />
             <Typography variant="caption">
               From:{" "}
@@ -185,6 +192,8 @@ export const breakdownSteps: StepType[] = [
               alt="showing a benefit fulfilling a criterion"
               width={627}
               height={547}
+              unoptimized
+              className="rounded-xl border shadow"
             />
             <Typography variant="caption">
               From:{" "}
@@ -207,7 +216,7 @@ export const breakdownSteps: StepType[] = [
         stepTitle='Completed "Breaking down a problem"! 🎉'
         text="Woohoo! Next, learn how to add nuance to your topic."
         actionSlot={
-          <Button variant="contained" onClick={() => startTutorial("addingNuance")}>
+          <Button variant="contained" onClick={() => startTutorial("addingNuance", "builders")}>
             Next: Nuance
           </Button>
         }

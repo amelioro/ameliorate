@@ -4,7 +4,6 @@
     "next/core-web-vitals",
     "eslint:recommended",
     "plugin:import/recommended",
-    "plugin:storybook/recommended",
     "plugin:tailwindcss/recommended",
     "prettier"
   ],
@@ -68,6 +67,8 @@
     "functional/functional-parameters": [
       "error",
       {
+        // want to allow currying with arbitrary arguments e.g. for zustand middleware
+        "allowRestParameter": true,
         "enforceParameterCount": false
       }
     ],
@@ -121,7 +122,15 @@
       "error",
       {
         "cssFiles": [], // don't need this anyway, but the reasonable default causes perf issues https://github.com/francoismassart/eslint-plugin-tailwindcss/issues/276#issuecomment-2076947699
-        "whitelist": ["nopan", "react\\-flow.*", "selected", "flashlight-mode", "spotlight\\-"]
+        "whitelist": [
+          "nopan",
+          "react\\-flow.*",
+          "selected",
+          "flashlight-mode",
+          "spotlight\\-",
+          "diagram-node",
+          "diagram-edge"
+        ]
       }
     ]
   }

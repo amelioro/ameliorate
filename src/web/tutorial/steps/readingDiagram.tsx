@@ -1,3 +1,4 @@
+import { TabUnselected } from "@mui/icons-material";
 import { Button, Typography } from "@mui/material";
 import { StepType } from "@reactour/tour";
 import Image from "next/image";
@@ -7,9 +8,9 @@ import { celebrateGif } from "@/web/common/urls";
 import { NodeTypeText } from "@/web/topic/components/NodeTypeText/NodeTypeText";
 import { StepContent } from "@/web/tutorial/StepContent";
 import { startTutorial } from "@/web/tutorial/tutorial";
-import { Tutorial, tutorialDefaultAnchorClass } from "@/web/tutorial/tutorialUtils";
+import { Track, tutorialDefaultAnchorClass } from "@/web/tutorial/tutorialUtils";
 
-export const getReadingDiagramSteps = (nextTutorial?: Tutorial | null): StepType[] => [
+export const getReadingDiagramSteps = (track?: Track | null): StepType[] => [
   {
     selector: `.${tutorialDefaultAnchorClass}`,
     content: (
@@ -32,6 +33,8 @@ export const getReadingDiagramSteps = (nextTutorial?: Tutorial | null): StepType
             alt="Edges"
             width={273}
             height={324}
+            unoptimized
+            className="rounded-xl border shadow"
           />
         }
       />
@@ -64,6 +67,8 @@ export const getReadingDiagramSteps = (nextTutorial?: Tutorial | null): StepType
               alt="layout of details via cars-going-too-fast"
               width={1237}
               height={911}
+              unoptimized
+              className="rounded-xl border shadow"
             />
             <Typography variant="caption">
               From:{" "}
@@ -87,7 +92,8 @@ export const getReadingDiagramSteps = (nextTutorial?: Tutorial | null): StepType
         text={
           <span>
             Scores convey positive or negative opinion about a node or edge. If you're logged in,
-            you can score other people's topics.
+            you can score other people's topics. Click the "Show indicators" button{" "}
+            <TabUnselected /> in the toolbar to show scores and other indicators.
             <br />
             <br />
             Here we're saying that we think pedestrians getting hit is a big concern, and that
@@ -102,12 +108,13 @@ export const getReadingDiagramSteps = (nextTutorial?: Tutorial | null): StepType
             width={434}
             height={328}
             unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+            className="rounded-xl border shadow"
           />
         }
       />
     ),
   },
-  nextTutorial === undefined
+  track === "diagramViewers"
     ? {
         selector: `.${tutorialDefaultAnchorClass}`,
         content: (
@@ -115,7 +122,7 @@ export const getReadingDiagramSteps = (nextTutorial?: Tutorial | null): StepType
             stepTitle='Completed "Reading a diagram"! 🎉'
             text="Woot woot! Next, learn how to navigate all the information in a topic."
             actionSlot={
-              <Button variant="contained" onClick={() => startTutorial("navigatingTopic")}>
+              <Button variant="contained" onClick={() => startTutorial("navigatingATopic", track)}>
                 Next: Navigating
               </Button>
             }

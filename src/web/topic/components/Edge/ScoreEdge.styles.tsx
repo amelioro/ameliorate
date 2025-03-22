@@ -47,18 +47,7 @@ const divOptions = {
 };
 
 export const StyledDiv = styled("div", divOptions)<DivProps>`
-  pointer-events: all;
-  cursor: default;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  background-color: white;
   border: 1px solid ${edgeColor};
-  border-radius: 15%;
-  padding: 4px;
 
   ${({ labelX, labelY }) => css`
     position: absolute;

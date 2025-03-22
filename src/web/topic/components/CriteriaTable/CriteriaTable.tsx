@@ -29,8 +29,8 @@ import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { getConnectingEdge } from "@/web/topic/utils/edge";
 import { Edge, Node } from "@/web/topic/utils/graph";
 import { useGeneralFilter, useTableFilter } from "@/web/view/currentViewStore/filter";
-import { getSelectedTradeoffNodes } from "@/web/view/utils/diagramFilter";
 import { applyScoreFilter } from "@/web/view/utils/generalFilter";
+import { getSelectedTradeoffNodes } from "@/web/view/utils/infoFilter";
 
 interface RowData {
   rowHeader: HeaderCell;
@@ -213,8 +213,12 @@ export const CriteriaTable = () => {
     tableFilter,
   );
 
-  const filteredSolutions = applyScoreFilter(selectedSolutions, generalFilter, scores);
-  const filteredCriteria = applyScoreFilter(selectedCriteria, generalFilter, scores);
+  const filteredSolutions = applyScoreFilter(selectedSolutions, generalFilter, scores).filter(
+    (node) => !generalFilter.nodesToHide.includes(node.id),
+  );
+  const filteredCriteria = applyScoreFilter(selectedCriteria, generalFilter, scores).filter(
+    (node) => !generalFilter.nodesToHide.includes(node.id),
+  );
 
   const tableData = buildTableCells(problemNode, filteredSolutions, filteredCriteria, edges);
   const [headerRow, ..._bodyRows] = tableData;
@@ -282,12 +286,14 @@ export const CriteriaTable = () => {
         enableStickyHeader={true}
         // not very well documented in the library, but this drop zone takes up space for unknown reasons.
         positionToolbarDropZone="none"
-        muiTablePaperProps={{
-          className: "criteria-table-paper",
-        }}
         muiTableProps={{
           className: tableZoomClasses,
         }}
+        muiTablePaperProps={{
+          // no shadow because that creates lines that don't line up well with the app header
+          className: "criteria-table-paper shadow-none",
+        }}
+        muiTableBodyRowProps={{ hover: false }}
         state={{
           // have to set columnOrder because otherwise new columns are appended to the end, instead of before the last cell in the case of Solution Totals when table is transposed
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- all columns should have an id or accessorKey set

@@ -3,12 +3,12 @@ import { type ButtonProps } from "@mui/material";
 import { useCallback } from "react";
 
 import { emitter } from "@/web/common/event";
-import { Indicator } from "@/web/topic/components/Indicator/Indicator";
+import { ContentIndicator } from "@/web/topic/components/Indicator/Base/ContentIndicator";
 import { useTopLevelJustification } from "@/web/topic/store/graphPartHooks";
 import { useDisplayScores } from "@/web/topic/store/scoreHooks";
 import { Score } from "@/web/topic/utils/graph";
 import { getNumericScore, scoreColors } from "@/web/topic/utils/score";
-import { setSelected } from "@/web/view/currentViewStore/store";
+import { setSelected } from "@/web/view/selectedPartStore";
 
 interface Props {
   graphPartId: string;
@@ -22,7 +22,7 @@ export const JustificationIndicator = ({ graphPartId, partColor }: Props) => {
 
   const onClick = useCallback(() => {
     setSelected(graphPartId);
-    emitter.emit("viewTopicDetails");
+    emitter.emit("viewJustification");
   }, [graphPartId]);
 
   if (justificationNodes.length === 0) return <></>;
@@ -35,31 +35,28 @@ export const JustificationIndicator = ({ graphPartId, partColor }: Props) => {
 
   if (supports.length > 0 && critiques.length > 0)
     return (
-      <Indicator
+      <ContentIndicator
         Icon={ThumbsUpDownOutlined}
         title={`Has ${supports.length} supports and ${critiques.length} critiques`}
         onClick={onClick}
-        iconHasBackground={false}
         color={partColor}
       />
     );
   else if (supports.length > 0)
     return (
-      <Indicator
+      <ContentIndicator
         Icon={ThumbUpOutlined}
         title={`Has ${supports.length} supports`}
         onClick={onClick}
-        iconHasBackground={false}
         color={scoreColor ?? partColor}
       />
     );
   else
     return (
-      <Indicator
+      <ContentIndicator
         Icon={ThumbDownOutlined}
         title={`Has ${critiques.length} critiques`}
         onClick={onClick}
-        iconHasBackground={false}
         color={scoreColor ?? partColor}
       />
     );

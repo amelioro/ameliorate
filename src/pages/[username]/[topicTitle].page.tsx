@@ -38,10 +38,10 @@ const Topic: NextPage = () => {
   const getDiagram = trpc.topic.getData.useQuery(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- `enabled` guarantees non-null before query is run
     { username: username!, title: topicTitle! },
-    // Not using stale time because client-side navigation back to this page fires the useEffect again,
+    // Zero stale time because client-side navigation back to this page fires the useEffect again,
     // repopulating the store with old data (if the client changed data before navigating away & back).
     // So we'll just re-fire on page mount, should be fine.
-    { enabled: !!username && !!topicTitle },
+    { enabled: !!username && !!topicTitle, staleTime: 0 },
   );
 
   const { sessionUser } = useSessionUser();

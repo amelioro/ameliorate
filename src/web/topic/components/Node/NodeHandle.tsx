@@ -1,16 +1,18 @@
 import { Visibility } from "@mui/icons-material";
 import { IconButton, Tooltip, Typography } from "@mui/material";
 import { ReactNode, memo } from "react";
-import { Position } from "reactflow";
+import { Handle, Position, useStore } from "reactflow";
 
 import { nodeTypes } from "@/common/node";
-import { StyledHandle } from "@/web/topic/components/Node/NodeHandle.styles";
+import { useSessionUser } from "@/web/common/hooks";
 import { useHiddenNodes } from "@/web/topic/hooks/flowHooks";
 import { useNeighborsInDirection } from "@/web/topic/store/nodeHooks";
+import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { Node, RelationDirection } from "@/web/topic/utils/graph";
 import { Orientation } from "@/web/topic/utils/layout";
 import { nodeDecorations } from "@/web/topic/utils/node";
 import { showNode } from "@/web/view/currentViewStore/filter";
+import { useShowNeighborIndicators } from "@/web/view/userConfigStore";
 
 const NodeSummary = ({ node, beforeSlot }: { node: Node; beforeSlot?: ReactNode }) => {
   const { NodeIcon, title } = nodeDecorations[node.type];
@@ -33,16 +35,34 @@ interface Props {
 }
 
 const NodeHandleBase = ({ node, direction, orientation }: Props) => {
+  const { sessionUser } = useSessionUser();
+  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
+
+  const showNeighborIndicators = useShowNeighborIndicators();
   const neighborsInDirection = useNeighborsInDirection(node.id, direction);
   const hiddenNeighbors = useHiddenNodes(neighborsInDirection);
+
+  const type = direction === "parent" ? "target" : "source";
+  const isPotentiallyConnectingToThisHandle = useStore(
+    (state) => state.connectionStartHandle !== null && state.connectionStartHandle.type !== type,
+  );
 
   // sort by node type the same way the nodeTypes array is ordered; thanks https://stackoverflow.com/a/44063445
   const sortedHiddenNeighbors: Node[] = hiddenNeighbors.toSorted((a, b) => {
     const diff = nodeTypes.indexOf(a.type) - nodeTypes.indexOf(b.type);
     return diff;
   });
+  const hasHiddenNeighbors = sortedHiddenNeighbors.length > 0;
 
-  const type = direction === "parent" ? "target" : "source";
+  const showHandle =
+    isPotentiallyConnectingToThisHandle || (showNeighborIndicators && hasHiddenNeighbors);
+  // if editing, show handles on-hover/-select so that we can create edges
+  // if there are hidden neighbors, show handle on-hover/-select so that hidden nodes are discoverable for new users
+  const conditionalShowClasses =
+    userCanEditTopicData || hasHiddenNeighbors
+      ? // `String.raw` in order to allow underscores to be escaped for tailwind, so they don't get converted to spaces
+        String.raw` [.react-flow\_\_node:hover_&]:visible [.react-flow\_\_node.selected_&]:visible`
+      : "";
 
   const position =
     direction === "parent"
@@ -56,7 +76,7 @@ const NodeHandleBase = ({ node, direction, orientation }: Props) => {
   return (
     <Tooltip
       title={
-        sortedHiddenNeighbors.length > 0 ? (
+        hasHiddenNeighbors ? (
           <div className="space-y-2">
             {sortedHiddenNeighbors.map((neighbor) => (
               <NodeSummary
@@ -76,10 +96,16 @@ const NodeHandleBase = ({ node, direction, orientation }: Props) => {
       }
       disableFocusListener
     >
-      <StyledHandle
+      <Handle
         type={type}
         position={position}
-        hasHiddenComponents={sortedHiddenNeighbors.length > 0}
+        className={
+          "size-[10px]" +
+          // rely on `visibility` rather than `display` so that invisible handles can still render for react-flow's connection drawing
+          (showHandle ? "" : " invisible") +
+          conditionalShowClasses +
+          (hasHiddenNeighbors ? " bg-info-main" : "")
+        }
       />
     </Tooltip>
   );

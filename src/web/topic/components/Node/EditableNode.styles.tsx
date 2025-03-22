@@ -2,46 +2,27 @@ import styled from "@emotion/styled";
 import { Box, TextareaAutosize } from "@mui/material";
 
 import { htmlDefaultFontSize } from "@/pages/_document.page";
-import { ContentIndicators } from "@/web/topic/components/Indicator/ContentIndicators";
-import { StatusIndicators } from "@/web/topic/components/Indicator/StatusIndicators";
+import { ContentIndicatorGroup } from "@/web/topic/components/Indicator/Base/ContentIndicatorGroup";
+import { StatusIndicatorGroup } from "@/web/topic/components/Indicator/Base/StatusIndicatorGroup";
 
 export const nodeWidthRem = 11;
+const nodeHeightRem = 3.5625; // 1 line of text results in 57px height, / 16px = 3.5625rem
 
 export const nodeWidthPx = nodeWidthRem * htmlDefaultFontSize;
-export const nodeHeightPx = 66;
+export const nodeHeightPx = nodeHeightRem * htmlDefaultFontSize;
 
-export const YEdgeBox = styled(Box)`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
+export const TopDiv = styled.div``;
+export const NodeTypeDiv = styled.div``;
 
-export const NodeTypeBox = styled(Box)`
-  display: flex;
-  height: 24px;
-  align-items: center;
-`;
-
-export const NodeTypeSpan = styled.span`
-  font-size: 0.875rem;
-  line-height: 1;
-  padding-right: 4px;
-`;
+export const NodeTypeSpan = styled.span``;
 
 export const IndicatorDiv = styled.div`
   display: flex;
 `;
 
-export const XEdgeDiv = styled.div`
-  width: 24px;
-`;
-
 // allow handling mouse events for whole node without mouse icon changing to input for textarea
-export const MiddleDiv = styled.div`
-  display: flex;
-  flex-grow: 1; // fill out remaining space with this div because it contains the textarea
-  padding: 4px 4px 8px;
-`;
+export const MiddleDiv = styled.div``;
+export const BottomDiv = styled.div``;
 
 export const StyledTextareaAutosize = styled(TextareaAutosize)`
   padding: 0;
@@ -55,14 +36,6 @@ export const StyledTextareaAutosize = styled(TextareaAutosize)`
   font-size: 1rem;
   line-height: 1;
   font-family: inherit;
-
-  // so that readonly textarea doesn't appear gray
-  color: ${({ theme }) => theme.palette.text.primary};
-
-  &[readonly] {
-    // don't want clicking to select a spot in the input before the node is editable
-    pointer-events: none;
-  }
 `;
 
 /* some copied from https://github.com/wbkd/react-flow/blob/147656b22f577bb4141664d000e62ada9b490473/src/theme-default.css#L42-L77 */
@@ -76,10 +49,6 @@ export const NodeBox = styled(Box)`
   border-radius: 6px;
   border-width: 2px;
   border-style: solid;
-
-  // react-flow sets this to pan hand because nodes can't be moved, so dragging a node will pan, but
-  // we want to indicate that the node is selectable.
-  cursor: default;
 
   // avoid inheriting because flow node will wrap in a motion.div that ignores pointer events
   pointer-events: auto;
@@ -95,18 +64,18 @@ export const NodeBox = styled(Box)`
   }
 `;
 
-export const RightCornerContentIndicators = styled(ContentIndicators)`
+export const RightCornerContentIndicators = styled(ContentIndicatorGroup)`
   position: absolute;
   right: 0;
   bottom: 0;
   // amount that looks decent hanging over the edge of node
-  transform: translate(10px, 65%);
+  transform: translate(0.625rem, 65%);
 `;
 
-export const LeftCornerStatusIndicators = styled(StatusIndicators)`
+export const LeftCornerStatusIndicators = styled(StatusIndicatorGroup)`
   position: absolute;
   left: 0;
   bottom: 0;
   // amount that looks decent hanging over the edge of node
-  transform: translate(-10px, 65%);
+  transform: translate(-0.625rem, 65%);
 `;

@@ -197,6 +197,7 @@ const buildEmails = (
       html: `<div style="white-space: pre;">${encode(comment.content)}
 —
 <a href="${linkToComment}">View comment on Ameliorate</a>.
+
 <a href="${linkToUnsubscribeThread}">Unsubscribe from thread</a> | <a href="${linkToUnsubscribeAll}">Unsubscribe from all Ameliorate notification emails</a>.
 </div>`,
     };

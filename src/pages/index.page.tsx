@@ -3,6 +3,7 @@ import Head from "next/head";
 
 import { ConcludingSection } from "@/web/home/ConcludingSection";
 import { CoreIdeasSection } from "@/web/home/CoreIdeasSection";
+import { ExamplesSection } from "@/web/home/ExamplesSection";
 import { FeaturesSection } from "@/web/home/FeaturesSection";
 import { Footer } from "@/web/home/Footer";
 import { Headline } from "@/web/home/Headline";
@@ -19,49 +20,73 @@ const Home: NextPage = () => {
         <meta property="og:url" content="https://ameliorate.app/" />
       </Head>
 
-      <div className="flex w-full flex-col divide-y">
+      {/* scroll-mt-12 to allow sections, when scrolled to via anchor, to appear below the header (which is 3rem height) */}
+      <div className="flex w-full flex-col divide-y *:scroll-mt-12">
         {/* overflow-hidden to keep the background image from going into other sections */}
-        <div className="flex justify-center overflow-hidden odd:bg-paper-main even:bg-gray-50">
+        <section className="flex justify-center overflow-hidden odd:bg-paperPlain-main even:bg-paperShaded-main">
           <div className="w-full max-w-6xl px-4 py-8 sm:p-8">
             <Headline />
           </div>
-        </div>
+        </section>
 
-        <div className="flex justify-center odd:bg-paper-main even:bg-gray-50">
+        <section
+          id="break-things-down"
+          className="flex justify-center odd:bg-paperPlain-main even:bg-paperShaded-main"
+        >
           <div className="w-full max-w-6xl px-4 py-8 sm:p-8">
             <CoreIdeasSection />
           </div>
-        </div>
+        </section>
 
-        <div className="flex justify-center odd:bg-paper-main even:bg-gray-50">
-          <div className="w-full max-w-6xl px-4 py-8 sm:p-8">
-            <UseCasesSection />
+        <section
+          id="examples"
+          className="flex justify-center odd:bg-paperPlain-main even:bg-paperShaded-main"
+        >
+          <div
+            className={
+              "w-full max-w-6xl px-4 py-8 sm:p-8" +
+              // This section looks much better if it's all visible at once because it has an image
+              // that's hard to understand if we can't see it all.
+              // 48px is the height of the navbar to exclude.
+              " max-h-[calc(100vh-48px)]"
+            }
+          >
+            <ExamplesSection />
           </div>
-        </div>
+        </section>
 
-        <div className="flex justify-center odd:bg-paper-main even:bg-gray-50">
+        <section
+          id="features"
+          className="flex justify-center odd:bg-paperPlain-main even:bg-paperShaded-main"
+        >
           <div className="w-full max-w-6xl px-4 py-8 sm:p-8">
             <FeaturesSection />
           </div>
-        </div>
+        </section>
 
-        <div className="flex justify-center odd:bg-paper-main even:bg-gray-50">
+        <section className="flex justify-center odd:bg-paperPlain-main even:bg-paperShaded-main">
+          <div className="w-full max-w-6xl px-4 py-8 sm:p-8">
+            <UseCasesSection />
+          </div>
+        </section>
+
+        <section className="flex justify-center odd:bg-paperPlain-main even:bg-paperShaded-main">
           <div className="w-full max-w-6xl px-4 py-8 sm:p-8">
             <ImprovingSection />
           </div>
-        </div>
+        </section>
 
-        <div className="flex justify-center odd:bg-paper-main even:bg-gray-50">
+        <section className="flex justify-center odd:bg-paperPlain-main even:bg-paperShaded-main">
           <div className="w-full max-w-6xl px-4 py-8 sm:p-8">
             <ConcludingSection />
           </div>
-        </div>
+        </section>
 
-        <div className="flex justify-center odd:bg-paper-main even:bg-gray-50">
+        <section className="flex justify-center odd:bg-paperPlain-main even:bg-paperShaded-main">
           <div className="w-full max-w-6xl px-4 py-8 sm:p-8">
             <Footer />
           </div>
-        </div>
+        </section>
       </div>
     </>
   );

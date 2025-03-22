@@ -10,12 +10,15 @@
   },
   "//classRegex": "allow variables to use tailwind intellisense https://stackoverflow.com/a/73655079",
   "tailwindCSS.experimental.classRegex": [
-    ["Classes \\=([^;]*);", "'([^']*)'"],
-    ["Classes \\=([^;]*);", "\"([^\"]*)\""],
-    ["Classes \\=([^;]*);", "\\`([^\\`]*)\\`"],
-    ["Class \\=([^;]*);", "'([^']*)'"],
-    ["Class \\=([^;]*);", "\"([^\"]*)\""],
-    ["Class \\=([^;]*);", "\\`([^\\`]*)\\`"]
+    ["(?:Class|Classes|className|ClassName) \\=([^;]*);", "'([^']*)'"],
+    ["(?:Class|Classes|className|ClassName) \\=([^;]*);", "\"([^\"]*)\""],
+    ["(?:Class|Classes|className|ClassName) \\=([^;]*);", "\\`([^\\`]*)\\`"],
+    ["(?:Class|Classes|className|ClassName): '([^']*)'"],
+    ["(?:Class|Classes|className|ClassName): \"([^\"]*)\""],
+    ["(?:Class|Classes|className|ClassName): `([^`]*)`"],
+    ["(?:Class|Classes|className|ClassName)\\='([^']*)'"],
+    ["(?:Class|Classes|className|ClassName)\\=\"([^\"]*)\""],
+    ["(?:Class|Classes|className|ClassName)\\=`([^`]*)`"]
   ],
   "typescript.preferences.importModuleSpecifier": "non-relative",
   "[prisma]": {

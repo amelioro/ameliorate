@@ -1,3 +1,5 @@
+import { Topic as ApiTopic } from "@prisma/client";
+import sortBy from "lodash/sortBy";
 import uniqBy from "lodash/uniqBy";
 import { temporal } from "zundo";
 import { devtools, persist } from "zustand/middleware";
@@ -7,7 +9,6 @@ import { apiSyncer } from "@/web/topic/store/apiSyncerMiddleware";
 import { migrate } from "@/web/topic/store/migrate";
 import { getDisplayScoresByGraphPartId } from "@/web/topic/store/scoreGetters";
 import { Diagram } from "@/web/topic/utils/diagram";
-import { hideImpliedEdges } from "@/web/topic/utils/edge";
 import {
   Edge,
   Node,
@@ -17,26 +18,25 @@ import {
   getSecondaryNeighbors,
 } from "@/web/topic/utils/graph";
 import {
-  useDiagramFilter,
   useGeneralFilter,
+  useInfoFilter,
   useShowImpliedEdges,
+  useShowProblemCriterionSolutionEdges,
 } from "@/web/view/currentViewStore/filter";
 import { usePerspectives } from "@/web/view/perspectiveStore";
-import { applyDiagramFilter } from "@/web/view/utils/diagramFilter";
 import { applyNodeTypeFilter, applyScoreFilter } from "@/web/view/utils/generalFilter";
+import { applyInfoFilter } from "@/web/view/utils/infoFilter";
+import {
+  hideImpliedEdges,
+  hideProblemCriterionSolutionEdges,
+} from "@/web/view/utils/miscDiagramFilters";
 
 export interface PlaygroundTopic {
   id: undefined; // so we can check this to see if the store topic is a playground topic
   description: string;
 }
 
-export type UserTopic = Omit<PlaygroundTopic, "id"> & {
-  id: number;
-  creatorName: string;
-  title: string;
-};
-
-export type StoreTopic = UserTopic | PlaygroundTopic;
+export type StoreTopic = ApiTopic | PlaygroundTopic;
 
 // TODO: probably better to put userScores into a separate store (it doesn't seem necessary to
 // couple scores with the nodes/edges, and we'd be able to avoid triggering score comparators by
@@ -84,16 +84,17 @@ export const useTopicStore = createWithEqualityFn<TopicStoreState>()(
 );
 
 export const useDiagram = (): Diagram => {
-  const diagramFilter = useDiagramFilter();
+  const infoFilter = useInfoFilter();
   const generalFilter = useGeneralFilter();
 
   const showImpliedEdges = useShowImpliedEdges();
+  const showProblemCriterionSolutionEdges = useShowProblemCriterionSolutionEdges();
   const perspectives = usePerspectives();
 
   return useTopicStore((state) => {
     const topicGraph = { nodes: state.nodes, edges: state.edges };
 
-    const nodesAfterDiagramFilter = applyDiagramFilter(topicGraph, diagramFilter);
+    const nodesAfterDiagramFilter = applyInfoFilter(topicGraph, infoFilter);
 
     const nodesAfterTypeFilter = applyNodeTypeFilter(
       nodesAfterDiagramFilter,
@@ -118,10 +119,15 @@ export const useDiagram = (): Diagram => {
     const nodes = uniqBy(nodesAfterHide, "id");
 
     const relevantEdges = getRelevantEdges(nodes, topicGraph);
-    const edges = showImpliedEdges
+    const edgesAfterImplied = showImpliedEdges
       ? relevantEdges
       : hideImpliedEdges(relevantEdges, { nodes, edges: relevantEdges }, topicGraph);
 
-    return { nodes, edges };
+    const edges = showProblemCriterionSolutionEdges
+      ? edgesAfterImplied
+      : hideProblemCriterionSolutionEdges(nodes, edgesAfterImplied);
+
+    // sort nodes/edges to ensure layout doesn't change if nodes/edges occur in a different order
+    return { nodes: sortBy(nodes, "id"), edges: sortBy(edges, "id") };
   });
 };

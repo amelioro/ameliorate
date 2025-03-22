@@ -7,7 +7,6 @@ import { createWithEqualityFn } from "zustand/traditional";
 import { Format, InfoCategory } from "@/common/infoCategory";
 import { withDefaults } from "@/common/object";
 import { emitter } from "@/web/common/event";
-import { getGraphPart, useGraphPart } from "@/web/topic/store/graphPartHooks";
 import { migrate } from "@/web/view/currentViewStore/migrate";
 import { triggerEvent } from "@/web/view/currentViewStore/triggerEventMiddleware";
 import {
@@ -15,12 +14,11 @@ import {
   getQuickViewByTitle,
   selectViewFromState,
 } from "@/web/view/quickViewStore/store";
-import { StandardFilter } from "@/web/view/utils/diagramFilter";
 import { GeneralFilter } from "@/web/view/utils/generalFilter";
+import { StandardFilter } from "@/web/view/utils/infoFilter";
 import { TableFilter } from "@/web/view/utils/tableFilter";
 
 export interface ViewState {
-  selectedGraphPartId: string | null;
   format: Format;
 
   // info category state is flattened (rather than `[category]: state`) for ease of modifying
@@ -32,18 +30,37 @@ export interface ViewState {
   tableFilter: TableFilter;
   generalFilter: GeneralFilter;
 
-  // infrequent options
+  // general show/hide options
   showImpliedEdges: boolean;
+  /**
+   * These can be numerous and get long, making the diagram chaotic, and they're often implied,
+   * so hiding them can be desirable.
+   *
+   * The criteria table can be used to see these relationships more clearly.
+   */
+  showProblemCriterionSolutionEdges: boolean;
 
   // layout
   forceNodesIntoLayers: boolean;
   layerNodeIslandsTogether: boolean;
   minimizeEdgeCrossings: boolean;
+  /**
+   * Ideally we'd always avoid edge label overlap, because the diagram seems more chaotic when
+   * there's overlap, but unfortunately including labels in the layout create a few problems:
+   * 1. spacing between node layers can be consistent,
+   * 2. more node layers can be created than otherwise.
+   *
+   * These problems both result in a layout that often seems even more chaotic than just
+   * accepting edge overlap.
+   *
+   * This ELK ticket exists to address these issues, and if resolved, we should be able to
+   * unconditionally include edge labels in layout: https://github.com/eclipse/elk/issues/1092
+   */
+  avoidEdgeLabelOverlap: boolean;
   layoutThoroughness: number;
 }
 
 export const initialViewState: ViewState = {
-  selectedGraphPartId: null,
   format: "diagram",
 
   categoriesToShow: ["breakdown"],
@@ -67,11 +84,13 @@ export const initialViewState: ViewState = {
   },
 
   showImpliedEdges: false,
+  showProblemCriterionSolutionEdges: true,
 
   forceNodesIntoLayers: true,
   layerNodeIslandsTogether: false,
   minimizeEdgeCrossings: false,
-  layoutThoroughness: 1, // by default, prefer keeping node types together over keeping parents close to children
+  avoidEdgeLabelOverlap: false,
+  layoutThoroughness: 100, // by default, prefer keeping parents close to children over keeping node types together
 };
 
 const persistedNameBase = "navigateStore";
@@ -101,26 +120,6 @@ export const useCurrentViewStore = createWithEqualityFn<ViewState>()(
 const useTemporalStore = () => useStore(useCurrentViewStore.temporal);
 
 // hooks
-export const useSelectedGraphPart = () => {
-  const selectedGraphPartId = useCurrentViewStore((state) => state.selectedGraphPartId);
-
-  return useGraphPart(selectedGraphPartId);
-};
-
-export const useIsGraphPartSelected = (graphPartId: string) => {
-  return useCurrentViewStore((state) => {
-    if (!state.selectedGraphPartId) return false;
-    return state.selectedGraphPartId === graphPartId;
-  });
-};
-
-export const useIsAnyGraphPartSelected = (graphPartIds: string[]) => {
-  return useCurrentViewStore((state) => {
-    if (!state.selectedGraphPartId) return false;
-    return graphPartIds.includes(state.selectedGraphPartId);
-  });
-};
-
 export const useFormat = () => {
   return useCurrentViewStore((state) => state.format);
 };
@@ -134,21 +133,23 @@ export const useCanGoBackForward = () => {
 };
 
 // actions
-export const setSelected = (graphPartId: string | null) => {
-  const { selectedGraphPartId } = useCurrentViewStore.getState();
-  if (selectedGraphPartId === graphPartId) return;
-
-  useCurrentViewStore.setState({ selectedGraphPartId: graphPartId }, false, "setSelected");
-
-  emitter.emit("partSelected", graphPartId);
-};
-
 export const setFormat = (format: Format) => {
   useCurrentViewStore.setState({ format }, false, "setFormat");
 };
 
+/**
+ * Use the initialState to fill in missing values.
+ *
+ * E.g. so that a new non-null value in initialState is non-null in the persisted state,
+ * removing the need to write a migration for every new field.
+ */
+export const withViewDefaults = (viewState?: Partial<ViewState>) => {
+  if (!viewState) return initialViewState;
+  return withDefaults(viewState, initialViewState);
+};
+
 export const setView = (viewState: ViewState) => {
-  useCurrentViewStore.setState(viewState, true, "setView");
+  useCurrentViewStore.setState(withViewDefaults(viewState), true, "setView");
 
   emitter.emit("changedDiagramFilter");
 };
@@ -178,13 +179,13 @@ export const loadView = async (persistId: string) => {
   const quickViewFromParams = titleFromParams ? getQuickViewByTitle(titleFromParams) : undefined;
 
   if (quickViewFromParams) {
-    useCurrentViewStore.setState(quickViewFromParams.viewState, true, "loadView");
+    useCurrentViewStore.setState(withViewDefaults(quickViewFromParams.viewState), true, "loadView");
   } else if (useCurrentViewStore.persist.getOptions().storage?.getItem(builtPersistedName)) {
     // TODO(bug): for some reason, this results in an empty undo action _after_ clear() is run - despite awaiting this promise
     await useCurrentViewStore.persist.rehydrate();
   } else {
     const defaultQuickView = getDefaultQuickView();
-    const defaultViewState = defaultQuickView?.viewState ?? initialViewState;
+    const defaultViewState = withViewDefaults(defaultQuickView?.viewState);
 
     useCurrentViewStore.setState(defaultViewState, true, "loadView");
   }
@@ -200,13 +201,6 @@ export const loadView = async (persistId: string) => {
 // util actions
 export const getView = () => {
   return useCurrentViewStore.getState();
-};
-
-export const getSelectedGraphPart = () => {
-  const selectedGraphPartId = useCurrentViewStore.getState().selectedGraphPartId;
-  if (!selectedGraphPartId) return null;
-
-  return getGraphPart(selectedGraphPartId);
 };
 
 // misc

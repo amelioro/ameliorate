@@ -1,4 +1,5 @@
 import {
+  AutoAwesomeMotion,
   AutoStoriesOutlined,
   Build,
   Close,
@@ -7,6 +8,7 @@ import {
   Engineering,
   FilterAltOutlined,
   FormatColorFill,
+  Grid4x4,
   Highlight,
   Info,
   Layers,
@@ -14,8 +16,8 @@ import {
   PowerInput,
   Route,
   SsidChart,
+  UnfoldMore,
   Upload,
-  WbTwilight,
 } from "@mui/icons-material";
 import {
   Button,
@@ -31,6 +33,8 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  MenuItem,
+  Select,
   ToggleButton,
   Tooltip,
   Typography,
@@ -40,10 +44,8 @@ import { useState } from "react";
 import { getRectOfNodes, getTransformForBounds } from "reactflow";
 
 import { resetComment } from "@/web/comment/store/commentStore";
-import { NumberInput } from "@/web/common/components/NumberInput/NumberInput";
 import { getDisplayNodes } from "@/web/topic/components/Diagram/externalFlowStore";
 import { downloadTopic, uploadTopic } from "@/web/topic/loadStores";
-import { useOnPlayground } from "@/web/topic/store/topicHooks";
 import { resetTopicData } from "@/web/topic/store/utilActions";
 import { hotkeys } from "@/web/topic/utils/hotkeys";
 import {
@@ -54,13 +56,19 @@ import {
   useReadonlyMode,
   useUnrestrictedEditing,
 } from "@/web/view/actionConfigStore";
-import { Perspectives } from "@/web/view/components/Perspectives/Perspectives";
-import { toggleShowImpliedEdges, useShowImpliedEdges } from "@/web/view/currentViewStore/filter";
+import {
+  toggleShowImpliedEdges,
+  toggleShowProblemCriterionSolutionEdges,
+  useShowImpliedEdges,
+  useShowProblemCriterionSolutionEdges,
+} from "@/web/view/currentViewStore/filter";
 import {
   setLayoutThoroughness,
+  toggleAvoidEdgeLabelOverlap,
   toggleForceNodesIntoLayers,
   toggleLayerNodeIslandsTogether,
   toggleMinimizeEdgeCrossings,
+  useAvoidEdgeLabelOverlap,
   useForceNodesIntoLayers,
   useLayerNodeIslandsTogether,
   useLayoutThoroughness,
@@ -69,10 +77,10 @@ import {
 import { resetView, useFormat } from "@/web/view/currentViewStore/store";
 import { resetQuickViews } from "@/web/view/quickViewStore/store";
 import {
+  toggleExpandDetailsTabs,
   toggleFillNodesWithColor,
-  toggleIndicateWhenNodeForcedToShow,
+  useExpandDetailsTabs,
   useFillNodesWithColor,
-  useIndicateWhenNodeForcedToShow,
 } from "@/web/view/userConfigStore";
 
 const imageWidth = 2560;
@@ -83,7 +91,7 @@ const downloadScreenshot = () => {
 
   // thanks react flow example https://reactflow.dev/examples/misc/download-image
   const nodesBounds = getRectOfNodes(nodes);
-  const transform = getTransformForBounds(nodesBounds, imageWidth, imageHeight, 0.5, 2);
+  const transform = getTransformForBounds(nodesBounds, imageWidth, imageHeight, 0.125, 2);
   const viewportElement = document.querySelector(".react-flow__viewport");
   if (!viewportElement) throw new Error("Couldn't find viewport element to take screenshot of");
 
@@ -122,20 +130,24 @@ export const MoreActionsDrawer = ({
   sessionUser,
   userCanEditTopicData,
 }: Props) => {
-  const onPlayground = useOnPlayground();
   const format = useFormat();
   const isTableActive = format === "table";
 
-  const showImpliedEdges = useShowImpliedEdges();
   const unrestrictedEditing = useUnrestrictedEditing();
+  const flashlightMode = useFlashlightMode();
+  const readonlyMode = useReadonlyMode();
+
+  const showImpliedEdges = useShowImpliedEdges();
+  const showProblemCriterionSolutionEdges = useShowProblemCriterionSolutionEdges();
+
   const forceNodesIntoLayers = useForceNodesIntoLayers();
   const layerNodeIslandsTogether = useLayerNodeIslandsTogether();
   const minimizeEdgeCrossings = useMinimizeEdgeCrossings();
-  const flashlightMode = useFlashlightMode();
-  const readonlyMode = useReadonlyMode();
+  const avoidEdgeLabelOverlap = useAvoidEdgeLabelOverlap();
   const layoutThoroughness = useLayoutThoroughness();
+
   const fillNodesWithColor = useFillNodesWithColor();
-  const indicateWhenNodeForcedToShow = useIndicateWhenNodeForcedToShow();
+  const expandDetailsTabs = useExpandDetailsTabs();
 
   const [resetDialogOpen, setResetDialogOpen] = useState(false);
 
@@ -317,21 +329,9 @@ export const MoreActionsDrawer = ({
 
         {!isTableActive && (
           <>
-            <Divider>Diagram Config</Divider>
+            <Divider>Layout Config</Divider>
 
             <ListItem disablePadding={false}>
-              <ToggleButton
-                value={showImpliedEdges}
-                title="Show implied edges"
-                aria-label="Show implied edges"
-                color="primary"
-                size="small"
-                selected={showImpliedEdges}
-                onClick={() => toggleShowImpliedEdges(!showImpliedEdges)}
-                sx={{ borderRadius: "50%", border: "0" }}
-              >
-                <Route />
-              </ToggleButton>
               <ToggleButton
                 value={forceNodesIntoLayers}
                 title="Force nodes into layers"
@@ -368,13 +368,25 @@ export const MoreActionsDrawer = ({
               >
                 <SsidChart />
               </ToggleButton>
+              <ToggleButton
+                value={avoidEdgeLabelOverlap}
+                title="Avoid edge label overlap"
+                aria-label="Avoid edge label overlap"
+                color="primary"
+                size="small"
+                selected={avoidEdgeLabelOverlap}
+                onClick={() => toggleAvoidEdgeLabelOverlap(!avoidEdgeLabelOverlap)}
+                sx={{ borderRadius: "50%", border: "0" }}
+              >
+                <AutoAwesomeMotion />
+              </ToggleButton>
             </ListItem>
 
             <ListItem disablePadding={false}>
-              <Typography variant="body2">Layout Thoroughness</Typography>
+              <Typography variant="body2">Thoroughness</Typography>
               <Tooltip
-                title="Determines how much effort the layout algorithm puts into laying out nodes such that they efficiently use space. 1 = lowest effort, 100 = highest effort."
-                enterTouchDelay={0} // allow touch to immediately trigger
+                title="Determines how much effort the layout algorithm puts into laying out nodes such that they efficiently use space. Low = minimal effort, High = maximum effort."
+                enterTouchDelay={0} // Trigger immediately on touch
                 leaveTouchDelay={Infinity} // touch-away to close on mobile, since message is long
               >
                 <IconButton
@@ -391,24 +403,47 @@ export const MoreActionsDrawer = ({
                   <Info />
                 </IconButton>
               </Tooltip>
-              <NumberInput
-                min={1}
-                max={100}
+              <Select
                 value={layoutThoroughness}
-                onChange={(_event, value) => {
-                  if (value) setLayoutThoroughness(value);
-                }}
-              />
+                onChange={(event) => setLayoutThoroughness(Number(event.target.value))}
+                fullWidth // Use fullWidth for proper alignment
+                size="small" // Smaller size for better fit
+              >
+                <MenuItem value={1}>Low</MenuItem>
+                <MenuItem value={10}>Medium</MenuItem>
+                <MenuItem value={100}>High</MenuItem>
+              </Select>
             </ListItem>
-          </>
-        )}
 
-        {!onPlayground && (
-          <>
-            <Divider>Perspectives</Divider>
+            <Divider>Filter Config</Divider>
 
             <ListItem disablePadding={false}>
-              <Perspectives />
+              <ToggleButton
+                value={showImpliedEdges}
+                title="Show implied edges"
+                aria-label="Show implied edges"
+                color="primary"
+                size="small"
+                selected={showImpliedEdges}
+                onClick={() => toggleShowImpliedEdges(!showImpliedEdges)}
+                sx={{ borderRadius: "50%", border: "0" }}
+              >
+                <Route />
+              </ToggleButton>
+              <ToggleButton
+                value={showProblemCriterionSolutionEdges}
+                title="Show edges between Problems, Criterion, and Solutions"
+                aria-label="Show edges between Problems, Criterion, and Solutions"
+                color="primary"
+                size="small"
+                selected={showProblemCriterionSolutionEdges}
+                onClick={() =>
+                  toggleShowProblemCriterionSolutionEdges(!showProblemCriterionSolutionEdges)
+                }
+                sx={{ borderRadius: "50%", border: "0" }}
+              >
+                <Grid4x4 />
+              </ToggleButton>
             </ListItem>
           </>
         )}
@@ -429,16 +464,16 @@ export const MoreActionsDrawer = ({
             <FormatColorFill />
           </ToggleButton>
           <ToggleButton
-            value={indicateWhenNodeForcedToShow}
-            title="Indicate when node forced to show"
-            aria-label="Indicate when node forced to show"
+            value={expandDetailsTabs}
+            title="Expand details tabs"
+            aria-label="Expand details tabs"
             color="primary"
             size="small"
-            selected={indicateWhenNodeForcedToShow}
-            onClick={() => toggleIndicateWhenNodeForcedToShow(!indicateWhenNodeForcedToShow)}
+            selected={expandDetailsTabs}
+            onClick={() => toggleExpandDetailsTabs()}
             sx={{ borderRadius: "50%", border: "0" }}
           >
-            <WbTwilight />
+            <UnfoldMore />
           </ToggleButton>
         </ListItem>
       </List>

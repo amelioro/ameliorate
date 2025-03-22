@@ -23,13 +23,12 @@ import { PanDirection, panDirections, useViewportUpdater } from "@/web/topic/hoo
 import { connectNodes, reconnectEdge } from "@/web/topic/store/createDeleteActions";
 import { useDiagram } from "@/web/topic/store/store";
 import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
-import { Diagram as DiagramData } from "@/web/topic/utils/diagram";
-import { type Edge, type Node } from "@/web/topic/utils/graph";
+import { Diagram as DiagramData, PositionedEdge, PositionedNode } from "@/web/topic/utils/diagram";
 import { hotkeys } from "@/web/topic/utils/hotkeys";
 import { FlowNodeType } from "@/web/topic/utils/node";
 import { tutorialIsOpen } from "@/web/tutorial/tutorial";
 import { useFlashlightMode } from "@/web/view/actionConfigStore";
-import { setSelected } from "@/web/view/currentViewStore/store";
+import { setSelected } from "@/web/view/selectedPartStore";
 
 const buildNodeComponent = (type: FlowNodeType) => {
   // eslint-disable-next-line react/display-name -- react flow dynamically creates these components without name anyway
@@ -50,6 +49,8 @@ const nodeTypes: Record<FlowNodeType, ComponentType<NodeProps>> = {
   benefit: buildNodeComponent("benefit"),
   detriment: buildNodeComponent("detriment"),
   obstacle: buildNodeComponent("obstacle"),
+  mitigation: buildNodeComponent("mitigation"),
+  mitigationComponent: buildNodeComponent("mitigationComponent"),
 
   // research
   question: buildNodeComponent("question"),
@@ -71,13 +72,13 @@ const edgeTypes: Record<"FlowEdge", ComponentType<EdgeProps>> = { FlowEdge: Flow
 // react-flow passes exactly DefaultNodeProps but data can be customized
 // not sure why, but DefaultNodeProps has xPos and yPos instead of Node's position.x and position.y
 export interface NodeProps extends DefaultNodeProps {
-  data: Node["data"];
+  data: PositionedNode["data"];
 }
 
 export interface EdgeProps extends DefaultEdgeProps {
   // we'll always pass data - why does react-flow make it nullable :(
   // can't figure out how to amend this to make it non-nullable, since react-flow's Edge is defined as a type, not an interface
-  data?: Edge["data"];
+  data?: PositionedEdge["data"];
 }
 
 const onEdgeUpdate: OnEdgeUpdateFunc = (oldEdge, newConnection) => {
@@ -157,7 +158,7 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
         edgeTypes={edgeTypes}
         fitView
         fitViewOptions={{ maxZoom: 1 }}
-        minZoom={0.25}
+        minZoom={0} // is annoying if you can't see the whole diagram... not sure of downsides to allowing further zooming out; maybe you could lose where the diagram is if it's too small? but that doesn't seem like a big deal, since diagram autofits on filter change
         nodesFocusable={false}
         onConnect={
           userCanEditTopicData ? ({ source, target }) => connectNodes(source, target) : undefined
@@ -169,6 +170,7 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
         onPaneClick={() => setSelected(null)}
         deleteKeyCode={null} // was preventing holding ctrl and repeating backspace to delete multiple words from node text
         elevateEdgesOnSelect={true} // this puts selected edges (or neighbor-to-selected-node edges) in a separate svg that is given a higher zindex, so they can be elevated above other nodes
+        zoomOnDoubleClick={false} // idk it seems annoying when accidentally double clicking
       >
         <Background variant={BackgroundVariant.Dots} />
       </StyledReactFlow>

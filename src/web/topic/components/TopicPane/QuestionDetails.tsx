@@ -4,6 +4,7 @@ import { ListItem, ListItemIcon, ListItemText, Stack, Typography } from "@mui/ma
 import { StandaloneEdge } from "@/web/topic/components/Edge/StandaloneEdge";
 import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
 import { EditableNode } from "@/web/topic/components/Node/EditableNode";
+import { NodeList } from "@/web/topic/components/TopicPane/NodeList";
 import { useQuestionDetails } from "@/web/topic/store/nodeTypeHooks";
 import { Node, isNode } from "@/web/topic/utils/graph";
 
@@ -58,21 +59,13 @@ export const QuestionDetails = ({ questionNode }: Props) => {
         />
       </Stack>
 
-      <Stack
-        direction="row"
-        justifyContent="center"
-        alignItems="stretch"
-        flexWrap="wrap"
-        useFlexGap
-        spacing="2px"
-        marginBottom="8px"
-      >
+      <NodeList>
         {answers.length > 0 ? (
           answers.map((answer) => <EditableNode key={answer.id} node={answer} />)
         ) : (
           <Typography variant="body2">No answers yet!</Typography>
         )}
-      </Stack>
+      </NodeList>
     </>
   );
 };

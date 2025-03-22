@@ -7,12 +7,13 @@ import { EditableNode } from "@/web/topic/components/Node/EditableNode";
 import { nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
 import { useNode } from "@/web/topic/store/nodeHooks";
 import { Edge } from "@/web/topic/utils/graph";
-import { useIsGraphPartSelected } from "@/web/view/currentViewStore/store";
+import { useIsGraphPartSelected } from "@/web/view/selectedPartStore";
 
 const convertToStandaloneFlowEdge = (edge: Edge, selected: boolean): EdgeProps => {
   return {
     id: edge.id,
-    data: edge.data,
+    // don't provide a position for the label, so it defaults to being placed between the two nodes
+    data: { ...edge.data, elkSections: [] },
     label: edge.label,
     selected: selected,
     source: edge.source,
@@ -44,9 +45,10 @@ export const StandaloneEdge = ({ edge }: Props) => {
 
   return (
     <Stack>
-      <EditableNode node={sourceNode} />
+      {/* z-index to ensure hanging node indicators don't fall behind the edge svg empty background */}
+      <EditableNode node={sourceNode} className="z-10" />
       <ScoreEdge inReactFlow={false} {...flowEdge} />
-      <EditableNode node={targetNode} />
+      <EditableNode node={targetNode} className="z-10" />
     </Stack>
   );
 };

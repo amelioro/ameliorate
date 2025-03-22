@@ -4,7 +4,6 @@ import { v4 as uuid } from "uuid";
 import { RelationName, justificationRelationNames } from "@/common/edge";
 import { errorWithData } from "@/common/errorHandling";
 import { NodeType, infoNodeTypes, justificationNodeTypes } from "@/common/node";
-import { composedRelations } from "@/web/topic/utils/edge";
 import { FlowNodeType } from "@/web/topic/utils/node";
 import { GeneralFilter } from "@/web/view/utils/generalFilter";
 
@@ -168,22 +167,6 @@ export const isNodeType = <T extends NodeType>(
   type: T,
 ): graphPart is Node & { type: T } => {
   return isNode(graphPart) && graphPart.type === type;
-};
-
-export const getNodesComposedBy = (node: Node, topicGraph: Graph) => {
-  return composedRelations.flatMap((composedRelation) => {
-    const composingEdges = topicGraph.edges.filter((edge) => {
-      return edge.source === node.id && edge.label === composedRelation.name;
-    });
-
-    const potentialComposedNodes = composingEdges.map((edge) =>
-      findNodeOrThrow(edge.target, topicGraph.nodes),
-    );
-
-    return potentialComposedNodes
-      .filter((node) => node.type === composedRelation.child)
-      .map((node) => node);
-  });
 };
 
 const findNodesRecursivelyFrom = (

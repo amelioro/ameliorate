@@ -1,6 +1,30 @@
 import { useTopicStore } from "@/web/topic/store/store";
 import { findGraphPartOrThrow, findNodeOrThrow } from "@/web/topic/utils/graph";
 
+export const useIsMitigatableDetriment = (nodeId: string) => {
+  return useTopicStore((state) => {
+    try {
+      const node = findNodeOrThrow(nodeId, state.nodes);
+      // is mitigatable if it's created by a solution or mitigation
+      return (
+        node.type === "detriment" &&
+        state.edges.find(
+          (edge) =>
+            (edge.source === nodeId && edge.label === "creates") ||
+            // Rare case where detriment is below a solution; this can exist while this discussion is still unresolved https://github.com/amelioro/ameliorate/discussions/579.
+            // This case could technically exist for more situations e.g. detriment created by a solution component,
+            // but not going to spend effort on that until the mentioned discussion determines that such a case is important to cover.
+            (edge.target === nodeId &&
+              edge.label === "createdBy" &&
+              state.nodes.find((node) => node.id === edge.source)?.type === "solution"),
+        ) !== undefined
+      );
+    } catch {
+      return false;
+    }
+  });
+};
+
 export const useQuestionDetails = (questionNodeId: string) => {
   return useTopicStore((state) => {
     try {

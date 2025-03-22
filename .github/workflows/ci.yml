@@ -32,3 +32,66 @@ jobs:
           node-version-file: .nvmrc
       - run: npm ci
       - run: npm run test
+  e2e: # modified from example: https://playwright.dev/docs/ci-intro#setting-up-github-actions
+    runs-on: ubuntu-latest
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push updated snapshots
+      contents: write
+    defaults:
+      run:
+        working-directory: ./e2e
+    container:
+      image: mcr.microsoft.com/playwright:v1.49.1-noble
+      # not sure why, but it seems that the git-auto-commit-action has permission issues without this
+      options: --user 1001
+    steps:
+      # confirmed that the open-sourced v1.0.1 code does not do anything abusive with the GITHUB_TOKEN
+      - uses: autotelic/action-wait-for-status-check@v1.0.1
+        name: Wait for Preview Deploy
+        id: wait-for-status
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          statusName: "netlify/velvety-vacherin-4193fb/deploy-preview"
+      # don't want to show e2e tests as passing if preview failed
+      - name: Fail if Preview didn't deploy
+        if: steps.wait-for-status.outputs.state == 'failure'
+        run: exit 1
+      - name: Begin e2e setup - checkout
+        # If deploy was cancelled, wait-for-status.state is still considered succeeded, and we don't
+        # want to fail the e2e tests in this case, so we need to skip all the following steps.
+        # Unfortunately it seems that we need this `if` duplicated on all steps in order to do skip
+        # without failing https://github.com/orgs/community/discussions/27174
+        if: steps.wait-for-status.outputs.description == 'Deploy Preview ready!'
+        uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        if: steps.wait-for-status.outputs.description == 'Deploy Preview ready!'
+        with:
+          node-version-file: e2e/.nvmrc
+      - name: Install dependencies
+        if: steps.wait-for-status.outputs.description == 'Deploy Preview ready!'
+        run: npm ci
+      # assume that if snapshots fail, that we want to update & commit them (to be reviewed in the PR)
+      - run: npm run update-snapshots
+        if: steps.wait-for-status.outputs.description == 'Deploy Preview ready!'
+        env:
+          DEPLOY_PRIME_URL: ${{  steps.wait-for-status.outputs.target_url }}
+      # TODO: doesn't work with forked PRs, searches for branch in upstream repo...
+      # apparently can use `pull_request_target` to fix this https://github.com/stefanzweifel/git-auto-commit-action/issues/278#issuecomment-1659860125,
+      # but don't want to spend the effort right now.
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        # don't commit if the tests didn't run, but otherwise try to commit in case there are updated screenshots
+        # seems like this doesn't evaluate properly without ${{}}
+        if: ${{ steps.wait-for-status.outputs.description == 'Deploy Preview ready!' && !cancelled() }}
+        with:
+          # skip ci in commit message to prevent triggering GHA or Netlify, since we can trust the previous triggers
+          commit_message: "chore: automated snapshot updates [skip ci]"
+          file_pattern: "e2e/**/*-snapshots/*.png"
+      # tests can still fail for non-snapshot assertions - keep the test-report around in this case
+      - uses: actions/upload-artifact@v4
+        # don't commit if the tests didn't run, but otherwise still run to get the report
+        if: ${{ steps.wait-for-status.outputs.description == 'Deploy Preview ready!' && !cancelled() }}
+        with:
+          name: playwright-report
+          # `uses` isn't affected by the `defaults.run.working-directory`, so we still need to prepend `e2e` https://stackoverflow.com/a/63122434/8409296
+          path: e2e/playwright-report/
+          retention-days: 5

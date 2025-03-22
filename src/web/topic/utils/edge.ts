@@ -52,67 +52,105 @@ export const relations: AddableRelation[] = researchRelations.concat([
   { child: "problem", name: "causes", parent: "problem", addableFrom: "child" },
   { child: "cause", name: "causes", parent: "problem", addableFrom: "both" },
   { child: "problem", name: "subproblemOf", parent: "problem", addableFrom: "parent" },
-  { child: "effect", name: "createdBy", parent: "problem", addableFrom: "parent" },
   { child: "benefit", name: "createdBy", parent: "problem", addableFrom: "parent" },
+  { child: "effect", name: "createdBy", parent: "problem", addableFrom: "parent" },
   { child: "detriment", name: "createdBy", parent: "problem", addableFrom: "parent" },
   { child: "criterion", name: "criterionFor", parent: "problem", addableFrom: "parent" },
   { child: "solutionComponent", name: "addresses", parent: "problem", addableFrom: "child" },
   { child: "solution", name: "addresses", parent: "problem", addableFrom: "both" },
+  { child: "mitigationComponent", name: "addresses", parent: "problem", addableFrom: "neither" },
+  { child: "mitigation", name: "addresses", parent: "problem", addableFrom: "neither" },
 
   { child: "cause", name: "causes", parent: "cause", addableFrom: "parent" },
+  { child: "solutionComponent", name: "addresses", parent: "cause", addableFrom: "neither" },
   { child: "solution", name: "addresses", parent: "cause", addableFrom: "parent" },
+  { child: "mitigationComponent", name: "addresses", parent: "cause", addableFrom: "neither" },
+  { child: "mitigation", name: "addresses", parent: "cause", addableFrom: "neither" },
 
-  { child: "criterion", name: "relatesTo", parent: "effect", addableFrom: "neither" },
   { child: "criterion", name: "relatesTo", parent: "benefit", addableFrom: "neither" },
+  { child: "criterion", name: "relatesTo", parent: "effect", addableFrom: "neither" },
   { child: "criterion", name: "relatesTo", parent: "detriment", addableFrom: "neither" },
+
+  // These relations above `creates` relations so that new edges result in these over `creates`
+  // by default; usually `creates` edges will be the result of an add node button, not a drag-and-drop edge.
+  // This issue would probably be better solved by distinguishing problem effects vs solution effects,
+  // because solution-problem relations would be addresses, and solution-solution/problem-problem
+  // would be creates/createdBy. But that's a bigger change to make.
+  { child: "detriment", name: "causes", parent: "cause", addableFrom: "neither" },
+  { child: "detriment", name: "causes", parent: "detriment", addableFrom: "neither" },
+  { child: "benefit", name: "addresses", parent: "cause", addableFrom: "neither" },
+  { child: "benefit", name: "addresses", parent: "detriment", addableFrom: "neither" },
 
   // effects, benefits, detriments, can each create each other (when coming up from solution)
   // and be created by each other (when going up to problem)
-  { child: "effect", name: "creates", parent: "effect", addableFrom: "child" },
-  { child: "benefit", name: "creates", parent: "effect", addableFrom: "child" },
-  { child: "detriment", name: "creates", parent: "effect", addableFrom: "child" },
-  { child: "effect", name: "creates", parent: "benefit", addableFrom: "child" },
   { child: "benefit", name: "creates", parent: "benefit", addableFrom: "child" },
+  { child: "effect", name: "creates", parent: "benefit", addableFrom: "child" },
   { child: "detriment", name: "creates", parent: "benefit", addableFrom: "child" },
-  { child: "effect", name: "creates", parent: "detriment", addableFrom: "child" },
+  { child: "benefit", name: "creates", parent: "effect", addableFrom: "child" },
+  { child: "effect", name: "creates", parent: "effect", addableFrom: "child" },
+  { child: "detriment", name: "creates", parent: "effect", addableFrom: "child" },
   { child: "benefit", name: "creates", parent: "detriment", addableFrom: "child" },
+  { child: "effect", name: "creates", parent: "detriment", addableFrom: "child" },
   { child: "detriment", name: "creates", parent: "detriment", addableFrom: "child" },
-  { child: "effect", name: "createdBy", parent: "effect", addableFrom: "parent" },
-  { child: "benefit", name: "createdBy", parent: "effect", addableFrom: "parent" },
-  { child: "detriment", name: "createdBy", parent: "effect", addableFrom: "parent" },
-  { child: "effect", name: "createdBy", parent: "benefit", addableFrom: "parent" },
   { child: "benefit", name: "createdBy", parent: "benefit", addableFrom: "parent" },
+  { child: "effect", name: "createdBy", parent: "benefit", addableFrom: "parent" },
   { child: "detriment", name: "createdBy", parent: "benefit", addableFrom: "parent" },
-  { child: "effect", name: "createdBy", parent: "detriment", addableFrom: "parent" },
+  { child: "benefit", name: "createdBy", parent: "effect", addableFrom: "parent" },
+  { child: "effect", name: "createdBy", parent: "effect", addableFrom: "parent" },
+  { child: "detriment", name: "createdBy", parent: "effect", addableFrom: "parent" },
   { child: "benefit", name: "createdBy", parent: "detriment", addableFrom: "parent" },
+  { child: "effect", name: "createdBy", parent: "detriment", addableFrom: "parent" },
   { child: "detriment", name: "createdBy", parent: "detriment", addableFrom: "parent" },
 
-  { child: "benefit", name: "addresses", parent: "cause", addableFrom: "neither" },
+  // below effect-create-effect relations so that Add Solution button is to the right of Add Effect button for Detriment, because effects are expected to be more commonly added than solutions
+  { child: "solutionComponent", name: "addresses", parent: "detriment", addableFrom: "neither" },
+  { child: "solution", name: "addresses", parent: "detriment", addableFrom: "parent" },
+  { child: "mitigationComponent", name: "mitigates", parent: "detriment", addableFrom: "neither" },
+  { child: "mitigation", name: "mitigates", parent: "detriment", addableFrom: "neither" }, // there's a hack to make this relation addable instead of solution for solution detriments
 
-  { child: "effect", name: "fulfills", parent: "criterion", addableFrom: "neither" },
   { child: "benefit", name: "fulfills", parent: "criterion", addableFrom: "neither" },
+  { child: "effect", name: "fulfills", parent: "criterion", addableFrom: "neither" },
   { child: "detriment", name: "relatesTo", parent: "criterion", addableFrom: "neither" },
   { child: "solutionComponent", name: "fulfills", parent: "criterion", addableFrom: "neither" },
   { child: "solution", name: "fulfills", parent: "criterion", addableFrom: "neither" },
+  { child: "mitigationComponent", name: "fulfills", parent: "criterion", addableFrom: "neither" },
+  { child: "mitigation", name: "fulfills", parent: "criterion", addableFrom: "neither" },
 
-  { child: "solutionComponent", name: "creates", parent: "effect", addableFrom: "child" },
-  { child: "solution", name: "creates", parent: "effect", addableFrom: "child" },
   { child: "solutionComponent", name: "creates", parent: "benefit", addableFrom: "child" },
   { child: "solution", name: "creates", parent: "benefit", addableFrom: "child" },
+  { child: "solutionComponent", name: "creates", parent: "effect", addableFrom: "child" },
+  { child: "solution", name: "creates", parent: "effect", addableFrom: "child" },
   { child: "solutionComponent", name: "creates", parent: "detriment", addableFrom: "child" },
   { child: "solution", name: "creates", parent: "detriment", addableFrom: "child" },
+  { child: "mitigationComponent", name: "creates", parent: "benefit", addableFrom: "child" },
+  { child: "mitigation", name: "creates", parent: "benefit", addableFrom: "child" },
+  { child: "mitigationComponent", name: "creates", parent: "effect", addableFrom: "child" },
+  { child: "mitigation", name: "creates", parent: "effect", addableFrom: "child" },
+  { child: "mitigationComponent", name: "creates", parent: "detriment", addableFrom: "child" },
+  { child: "mitigation", name: "creates", parent: "detriment", addableFrom: "child" },
 
-  { child: "solution", name: "addresses", parent: "detriment", addableFrom: "parent" },
-
-  { child: "solution", name: "has", parent: "solutionComponent", addableFrom: "child" },
   { child: "solutionComponent", name: "has", parent: "solutionComponent", addableFrom: "child" },
+  { child: "solution", name: "has", parent: "solutionComponent", addableFrom: "child" },
+  {
+    child: "mitigationComponent",
+    name: "has",
+    parent: "mitigationComponent",
+    addableFrom: "child",
+  },
+  { child: "mitigation", name: "has", parent: "mitigationComponent", addableFrom: "child" },
+
   { child: "obstacle", name: "obstacleOf", parent: "solutionComponent", addableFrom: "parent" },
+  { child: "obstacle", name: "obstacleOf", parent: "solution", addableFrom: "parent" },
+  { child: "obstacle", name: "obstacleOf", parent: "mitigationComponent", addableFrom: "parent" },
+  { child: "obstacle", name: "obstacleOf", parent: "mitigation", addableFrom: "parent" },
+
+  { child: "solutionComponent", name: "addresses", parent: "obstacle", addableFrom: "neither" },
+  { child: "solution", name: "addresses", parent: "obstacle", addableFrom: "neither" },
+  { child: "mitigationComponent", name: "mitigates", parent: "obstacle", addableFrom: "neither" },
+  { child: "mitigation", name: "mitigates", parent: "obstacle", addableFrom: "parent" },
 
   { child: "solution", name: "accomplishes", parent: "solution", addableFrom: "parent" },
   { child: "solution", name: "contingencyFor", parent: "solution", addableFrom: "neither" },
-  { child: "obstacle", name: "obstacleOf", parent: "solution", addableFrom: "parent" },
-
-  { child: "solution", name: "addresses", parent: "obstacle", addableFrom: "parent" },
 
   // justification relations
   { child: "support", name: "supports", parent: "rootClaim", addableFrom: "parent" },
@@ -246,7 +284,7 @@ export const childNode = (edge: Edge, nodes: Node[]) => {
   return findNodeOrThrow(edge.target, nodes);
 };
 
-export const nodes = (edge: Edge, nodes: Node[]) => {
+export const nodes = (edge: Edge, nodes: Node[]): [Node, Node] => {
   return [parentNode(edge, nodes), childNode(edge, nodes)];
 };
 
@@ -338,17 +376,9 @@ export const isEdgeImpliedByComposition = (edge: Edge, topicGraph: Graph) => {
 // We don't want users to apply scores and then never see them again due to an implied edge being
 // hidden. The button to show implied edges should reduce this pain, but maybe we need a better view
 // to reduce the need to hide implied edges?
-const isEdgeImplied = (edge: Edge, graph: Graph, justificationEdges: Edge[]) => {
+export const isEdgeImplied = (edge: Edge, graph: Graph, justificationEdges: Edge[]) => {
   if (justificationRelationNames.includes(edge.label)) return false; // justifications can't be implied
   if (hasJustification(edge, justificationEdges)) return false;
 
   return isEdgeAShortcut(edge, graph) || isEdgeImpliedByComposition(edge, graph);
-};
-
-export const hideImpliedEdges = (edges: Edge[], displayGraph: Graph, topicGraph: Graph) => {
-  const justificationEdges = topicGraph.edges.filter((edge) =>
-    justificationRelationNames.includes(edge.label),
-  );
-
-  return edges.filter((edge) => !isEdgeImplied(edge, displayGraph, justificationEdges));
 };

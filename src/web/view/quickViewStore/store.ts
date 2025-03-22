@@ -1,3 +1,4 @@
+import { Topic as ApiTopic } from "@prisma/client";
 import Router from "next/router";
 import shortUUID from "short-uuid";
 import { temporal } from "zundo";
@@ -9,8 +10,14 @@ import { errorWithData } from "@/common/errorHandling";
 import { withDefaults } from "@/common/object";
 import { deepIsEqual } from "@/common/utils";
 import { emitter } from "@/web/common/event";
-import { StoreTopic, UserTopic } from "@/web/topic/store/store";
-import { ViewState, getView, initialViewState, setView } from "@/web/view/currentViewStore/store";
+import { StoreTopic } from "@/web/topic/store/store";
+import {
+  ViewState,
+  getView,
+  initialViewState,
+  setView,
+  withViewDefaults,
+} from "@/web/view/currentViewStore/store";
 import { apiSyncer } from "@/web/view/quickViewStore/apiSyncerMiddleware";
 import { migrate } from "@/web/view/quickViewStore/migrate";
 
@@ -45,14 +52,14 @@ export const generateBasicViews = (): QuickView[] => {
     {
       id: shortUUID.generate(), // generate UUIDs that are easier to read (shorter, alphanumeric)
       type: "quick",
-      title: "All Breakdown",
+      title: "Breakdown",
       order: 0,
       viewState: initialViewState,
     },
     {
       id: shortUUID.generate(),
       type: "quick",
-      title: "All Research",
+      title: "Research",
       order: 1,
       viewState: withDefaults({ categoriesToShow: ["research"] }, initialViewState),
     },
@@ -129,7 +136,8 @@ export const createView = () => {
     id: newViewId,
     type: "quick",
     title: newTitle,
-    order: Math.max(...state.views.map((view) => view.order)) + 1,
+    // provide -1 by default to `Math.max` because otherwise it returns -Infinity with no arguments
+    order: Math.max(-1, ...state.views.map((view) => view.order)) + 1,
     viewState: currentView,
   };
 
@@ -198,6 +206,33 @@ export const deleteView = (viewId: string) => {
   );
 };
 
+export const moveView = (viewId: string, direction: "up" | "down") => {
+  const views = useQuickViewStore
+    .getState()
+    .views.toSorted((view1, view2) => view1.order - view2.order);
+
+  const indexFrom = views.findIndex((view) => view.id === viewId);
+  if (indexFrom === -1) throw new Error(`No view with id ${viewId}`);
+  if (indexFrom === 0 && direction === "up") return;
+  if (indexFrom === views.length - 1 && direction === "down") return;
+
+  const viewsWithoutMoved = views.toSpliced(indexFrom, 1);
+  const reorderedViews = viewsWithoutMoved.toSpliced(
+    direction === "up" ? indexFrom - 1 : indexFrom + 1,
+    0,
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- we found the index from `views`, we know it exists
+    views[indexFrom]!,
+  );
+
+  useQuickViewStore.setState(
+    {
+      views: reorderedViews.map((view, index) => ({ ...view, order: index })),
+    },
+    false,
+    "moveView",
+  );
+};
+
 /**
  * if deselecting, remove the view param, else set the view param to the view's title
  */
@@ -238,10 +273,33 @@ export const selectView = (viewId: string | null) => {
   selectingView = false;
 };
 
+/**
+ * Different from `selectView` because this just sets the selected view without triggering further
+ * changes based on the selected view i.e. no URL changes, no current view changes.
+ *
+ * This is because these things are unexpected when the selection changes automatically.
+ */
+const recalculateSelectedView = (newView: ViewState) => {
+  const state = useQuickViewStore.getState();
+
+  // If the view changed, and the state matches a Quick View, set that Quick View as selected,
+  // otherwise deselect the selected view.
+  // Doing a deep comparison for each quick view on every current view change is probably a
+  // bit unperformant, but it's nice to have so we know if our view is the same as an existing one.
+  const match = state.views.find((view) => deepIsEqual(withViewDefaults(view.viewState), newView));
+  const newViewId = match ? match.id : null;
+  if (state.selectedViewId === newViewId) return;
+
+  // new recalculated selection shouldn't be undoable because it was automatic
+  useQuickViewStore.temporal.getState().pause();
+  useQuickViewStore.setState({ selectedViewId: newViewId }, false, "recalculateSelectedView");
+  useQuickViewStore.temporal.getState().resume();
+};
+
 export const selectViewFromState = (viewState: ViewState) => {
   const { views } = useQuickViewStore.getState();
 
-  const view = views.find((view) => deepIsEqual(view.viewState, viewState));
+  const view = views.find((view) => deepIsEqual(withViewDefaults(view.viewState), viewState));
   if (view === undefined) return;
 
   useQuickViewStore.temporal.getState().pause();
@@ -265,19 +323,24 @@ export const resetQuickViews = () => {
   useQuickViewStore.setState({ ...initialStateWithBasicViews(), topic }, true, "reset");
 };
 
-export const loadQuickViewsFromApi = (topic: UserTopic, views: QuickView[]) => {
+export const loadQuickViewsFromApi = (topic: ApiTopic, views: QuickView[]) => {
   const builtPersistedName = `${persistedNameBase}-user`;
-
   useQuickViewStore.persist.setOptions({ name: builtPersistedName });
+
+  useQuickViewStore.apiSyncer.pause();
 
   useQuickViewStore.setState(
     {
-      // specify each field because we don't need to store extra data like createdAt etc.
+      // specify each field because we don't need to store extra data like topic's relations if they're passed in
       topic: {
         id: topic.id,
-        creatorName: topic.creatorName,
         title: topic.title,
+        creatorName: topic.creatorName,
         description: topic.description,
+        visibility: topic.visibility,
+        allowAnyoneToEdit: topic.allowAnyoneToEdit,
+        createdAt: topic.createdAt,
+        updatedAt: topic.updatedAt,
       },
       // specify each field because we don't need to store extra data like createdAt etc.
       views: views.map((view) => ({
@@ -293,14 +356,17 @@ export const loadQuickViewsFromApi = (topic: UserTopic, views: QuickView[]) => {
     "loadQuickViewsFromApi",
   );
 
+  useQuickViewStore.apiSyncer.resume();
+
   // it doesn't make sense to want to undo a page load
   useQuickViewStore.temporal.getState().clear();
 };
 
 export const loadQuickViewsFromLocalStorage = async () => {
   const builtPersistedName = `${persistedNameBase}-playground`;
-
   useQuickViewStore.persist.setOptions({ name: builtPersistedName });
+
+  useQuickViewStore.apiSyncer.pause();
 
   if (useQuickViewStore.persist.getOptions().storage?.getItem(builtPersistedName)) {
     // TODO(bug): for some reason, this results in an empty undo action _after_ clear() is run - despite awaiting this promise
@@ -308,6 +374,8 @@ export const loadQuickViewsFromLocalStorage = async () => {
   } else {
     useQuickViewStore.setState(initialStateWithBasicViews(), true, "loadFromLocalStorage");
   }
+
+  useQuickViewStore.apiSyncer.resume();
 
   // it doesn't make sense to want to undo a page load
   useQuickViewStore.temporal.getState().clear();
@@ -340,12 +408,9 @@ export const getPersistState = () => {
 };
 
 // misc
-// if a quick view is selected and the view changes from that, deselect it
-emitter.on("changedView", (_newView) => {
-  if (selectingView) return; // don't deselect the view if this event was triggered by selection
+// ensure selected quick view is updated when the current view changes
+emitter.on("changedView", (newView) => {
+  if (selectingView) return; // don't change selected view if this event was triggered by selection
 
-  const state = useQuickViewStore.getState();
-  if (state.selectedViewId === null) return;
-
-  selectView(null);
+  recalculateSelectedView(newView);
 });

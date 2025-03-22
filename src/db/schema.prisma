@@ -87,12 +87,14 @@ enum NodeType {
   problem
   cause
   criterion
-  effect
   benefit
+  effect
   detriment
   solutionComponent
   solution
   obstacle
+  mitigationComponent
+  mitigation
 
   // research
   question
@@ -143,6 +145,7 @@ enum EdgeType {
   creates
   fulfills
   obstacleOf
+  mitigates
 
   // research
   asksAbout
@@ -229,14 +232,14 @@ model InAppNotification {
   id               Int              @id @default(autoincrement())
   notifiedUsername String           @db.VarChar(39)
   type             NotificationType
-  topicId          Int
+  topicId          Int? // nullable so that notifications can remain if topic is deleted
   data             Json
   message          String           @db.VarChar(500) // arbitrary max that would be close to fitting in a row of a table
   sourceUrl        String           @db.VarChar(1000) // hm how long should a URL reasonably be? likely these will be created by the app, so shouldn't be too long...
   createdAt        DateTime         @default(now())
 
-  notifiedUser User  @relation(fields: [notifiedUsername], references: [username], onDelete: Cascade)
-  topic        Topic @relation(fields: [topicId], references: [id], onDelete: NoAction)
+  notifiedUser User   @relation(fields: [notifiedUsername], references: [username], onDelete: Cascade)
+  topic        Topic? @relation(fields: [topicId], references: [id], onDelete: SetNull)
 
   @@index([notifiedUsername])
   @@map("inAppNotifications")

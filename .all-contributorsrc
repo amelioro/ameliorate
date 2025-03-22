@@ -85,6 +85,34 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "shibv",
+      "name": "Shiv Shankar ",
+      "avatar_url": "https://avatars.githubusercontent.com/u/96898103?v=4",
+      "profile": "https://shiv-iiitk.vercel.app/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "rdubbi",
+      "name": "Roy Badell",
+      "avatar_url": "https://avatars.githubusercontent.com/u/145716905?v=4",
+      "profile": "https://github.com/rdubbi",
+      "contributions": [
+        "code",
+        "design"
+      ]
+    },
+    {
+      "login": "IAmPrem7685",
+      "name": "IAmPrem7685",
+      "avatar_url": "https://avatars.githubusercontent.com/u/86892778?v=4",
+      "profile": "https://github.com/IAmPrem7685",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

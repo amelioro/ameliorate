@@ -17,7 +17,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { Topic, User } from "@prisma/client";
+import { Topic } from "@prisma/client";
 import Router from "next/router";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -25,24 +25,25 @@ import { z } from "zod";
 
 import { topicSchema, visibilityTypes } from "@/common/topic";
 import { trpc } from "@/web/common/trpc";
+import { updateTopic as updateStoreTopic } from "@/web/topic/store/topicActions";
 import { generateBasicViews } from "@/web/view/quickViewStore/store";
 
-export const CreateTopicForm = ({ user }: { user: User }) => {
+export const CreateTopicForm = ({ creatorName }: { creatorName: string }) => {
   const utils = trpc.useContext();
 
   const createTopic = trpc.topic.create.useMutation({
     onSuccess: async (newTopic, variables) => {
       utils.topic.findByUsernameAndTitle.setData(
-        { username: user.username, title: variables.topic.title },
+        { username: creatorName, title: variables.topic.title },
         newTopic,
       );
 
-      utils.user.findByUsername.setData({ username: user.username }, (oldUser) => {
+      utils.user.findByUsername.setData({ username: creatorName }, (oldUser) => {
         if (oldUser) return { ...oldUser, topics: [...oldUser.topics, newTopic] };
         return oldUser;
       });
 
-      await Router.push(`/${user.username}/${variables.topic.title}`);
+      await Router.push(`/${creatorName}/${variables.topic.title}`);
     },
   });
 
@@ -59,19 +60,36 @@ export const CreateTopicForm = ({ user }: { user: User }) => {
     });
   };
 
-  return <TopicForm user={user} onSubmit={onSubmit} />;
+  return <TopicForm creatorName={creatorName} onSubmit={onSubmit} />;
 };
 
-export const EditTopicForm = ({ topic, user }: { topic: Topic; user: User }) => {
+export const EditTopicForm = ({ topic, creatorName }: { topic: Topic; creatorName: string }) => {
   const utils = trpc.useContext();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const updateTopic = trpc.topic.update.useMutation({
-    onSuccess: async (updatedTopic, variables) => {
-      await Router.push(`/${user.username}/${variables.title}/settings`);
+    onSuccess: (updatedTopic) => {
+      // need to update the URL if we're changing from the topic's page in the workspace
+      const url = new URL(window.location.href);
+      const oldPath = `/${creatorName}/${topic.title}`;
+      const newPath = `/${creatorName}/${updatedTopic.title}`;
+      const changingTitleWhileViewingInWorkspace = oldPath != newPath && url.pathname === oldPath;
+
+      if (changingTitleWhileViewingInWorkspace) {
+        // eslint-disable-next-line functional/immutable-data
+        url.pathname = newPath;
+        const newUrl = url.toString();
+        // Tried updating URL without reloading page (via Router `shallow` and also tried `window.history.replaceState` https://github.com/vercel/next.js/discussions/18072#discussioncomment-109059),
+        // but after doing that, when later updating query params e.g. by selecting a view, the page would reload.
+        // So we're just accepting having to reload right away.
+        void Router.push(newUrl);
+      }
+
+      // update topic in store e.g. if changing description and viewing topic details in pane
+      updateStoreTopic(updatedTopic);
 
       // this endpoint returns all topics
-      utils.user.findByUsername.setData({ username: user.username }, (oldUser) => {
+      utils.user.findByUsername.setData({ username: creatorName }, (oldUser) => {
         if (oldUser) {
           return {
             ...oldUser,
@@ -86,13 +104,13 @@ export const EditTopicForm = ({ topic, user }: { topic: Topic; user: User }) => 
 
       // update old title query
       utils.topic.findByUsernameAndTitle.setData(
-        { username: user.username, title: topic.title },
+        { username: creatorName, title: topic.title },
         null,
       );
 
       // update new title query
       utils.topic.findByUsernameAndTitle.setData(
-        { username: user.username, title: updatedTopic.title },
+        { username: creatorName, title: updatedTopic.title },
         updatedTopic,
       );
     },
@@ -100,10 +118,10 @@ export const EditTopicForm = ({ topic, user }: { topic: Topic; user: User }) => 
 
   const deleteTopic = trpc.topic.delete.useMutation({
     onSuccess: async () => {
-      await Router.push(`/${user.username}`);
+      await Router.push(`/${creatorName}`);
 
       // this endpoint returns all topics
-      utils.user.findByUsername.setData({ username: user.username }, (oldUser) => {
+      utils.user.findByUsername.setData({ username: creatorName }, (oldUser) => {
         if (oldUser) {
           return {
             ...oldUser,
@@ -114,7 +132,7 @@ export const EditTopicForm = ({ topic, user }: { topic: Topic; user: User }) => 
       });
 
       utils.topic.findByUsernameAndTitle.setData(
-        { username: user.username, title: topic.title },
+        { username: creatorName, title: topic.title },
         null,
       );
     },
@@ -149,7 +167,7 @@ export const EditTopicForm = ({ topic, user }: { topic: Topic; user: User }) => 
         aria-labelledby="alert-dialog-title"
       >
         <DialogTitle id="alert-dialog-title">
-          Delete topic {user.username}/{topic.title}?
+          Delete topic {creatorName}/{topic.title}?
         </DialogTitle>
         <DialogContent>
           <DialogContentText>This action cannot be undone.</DialogContentText>
@@ -175,12 +193,19 @@ export const EditTopicForm = ({ topic, user }: { topic: Topic; user: User }) => 
     </>
   );
 
-  return <TopicForm topic={topic} user={user} onSubmit={onSubmit} DeleteSection={DeleteSection} />;
+  return (
+    <TopicForm
+      topic={topic}
+      creatorName={creatorName}
+      onSubmit={onSubmit}
+      DeleteSection={DeleteSection}
+    />
+  );
 };
 
 // not sure if extracting the form schema here is a good pattern, but it was
 // really annoying to have so much code to read through in the component
-const formSchema = (utils: ReturnType<typeof trpc.useContext>, user: User, topic?: Topic) => {
+const formSchema = (utils: ReturnType<typeof trpc.useContext>, username: string, topic?: Topic) => {
   return z.object({
     title: topicSchema.shape.title.refine(
       async (title) => {
@@ -189,7 +214,7 @@ const formSchema = (utils: ReturnType<typeof trpc.useContext>, user: User, topic
         if (!topicSchema.shape.title.safeParse(title).success) return true;
 
         const existingTopic = await utils.topic.findByUsernameAndTitle.fetch({
-          username: user.username,
+          username,
           title,
         });
         return !existingTopic;
@@ -205,12 +230,12 @@ type FormData = z.infer<ReturnType<typeof formSchema>>;
 
 interface Props {
   topic?: Topic;
-  user: User;
+  creatorName: string;
   onSubmit: (data: FormData) => void;
   DeleteSection?: JSX.Element;
 }
 
-const TopicForm = ({ topic, user, onSubmit, DeleteSection }: Props) => {
+const TopicForm = ({ topic, creatorName, onSubmit, DeleteSection }: Props) => {
   const utils = trpc.useContext();
 
   const {
@@ -224,7 +249,7 @@ const TopicForm = ({ topic, user, onSubmit, DeleteSection }: Props) => {
   } = useForm<FormData>({
     mode: "onBlur", // onChange seems better but probably would want to debounce api calls, which is annoying
     reValidateMode: "onBlur",
-    resolver: zodResolver(formSchema(utils, user, topic)),
+    resolver: zodResolver(formSchema(utils, creatorName, topic)),
     defaultValues: {
       title: topic?.title,
       description: topic?.description,
@@ -255,13 +280,13 @@ const TopicForm = ({ topic, user, onSubmit, DeleteSection }: Props) => {
           </Typography>
 
           <Stack direction="row" spacing={1} sx={{ width: "100%" }}>
-            {/* TODO: shrink to width of username (this box takes up a lot of space in mobile) */}
+            {/* only use up to 1/3rd for username because the topic title matters more space-wise here */}
             <TextField
               disabled
               required
-              value={user.username}
+              value={creatorName}
               label="Username"
-              sx={{ flexShrink: 0 }}
+              className="max-w-[33%]"
             />
             <Typography variant="h5" sx={{ pt: "0.75rem" }}>
               /
@@ -353,7 +378,7 @@ const TopicForm = ({ topic, user, onSubmit, DeleteSection }: Props) => {
           />
 
           <Typography variant="body2">
-            View your topic at: ameliorate.app/{user.username}/{topicTitle || "{title}"}
+            View your topic at: ameliorate.app/{creatorName}/{topicTitle || "{title}"}
           </Typography>
 
           <Stack direction="row" spacing={1} justifyContent="flex-end">

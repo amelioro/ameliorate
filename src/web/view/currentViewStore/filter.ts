@@ -8,13 +8,18 @@ import { getDefaultNode } from "@/web/topic/store/nodeGetters";
 import { useTopicStore } from "@/web/topic/store/store";
 import { findNodeOrThrow } from "@/web/topic/utils/graph";
 import { neighbors } from "@/web/topic/utils/node";
-import { useCurrentViewStore } from "@/web/view/currentViewStore/store";
+import { initialViewState, useCurrentViewStore } from "@/web/view/currentViewStore/store";
 import {
-  DiagramFilter,
+  getCriterionContextFilter,
+  getFulfillsContextFilter,
+  getSolutionContextFilter,
+} from "@/web/view/utils/contextFilters";
+import { GeneralFilter } from "@/web/view/utils/generalFilter";
+import {
+  InfoFilter,
   StandardFilter,
   StandardFilterWithFallbacks,
-} from "@/web/view/utils/diagramFilter";
-import { GeneralFilter } from "@/web/view/utils/generalFilter";
+} from "@/web/view/utils/infoFilter";
 import { TableFilter } from "@/web/view/utils/tableFilter";
 
 // hooks
@@ -26,7 +31,7 @@ const useStandardFilter = (category: InfoCategory) => {
   return useCurrentViewStore((state) => state[`${category}Filter`], shallow);
 };
 
-export const useDiagramFilter = (): DiagramFilter => {
+export const useInfoFilter = (): InfoFilter => {
   const categoriesToShow = useCategoriesToShow();
   const breakdownFilter = useStandardFilter("breakdown");
   const researchFilter = useStandardFilter("research");
@@ -70,6 +75,10 @@ export const useIsNodeForcedToShow = (nodeId: string) => {
 
 export const useShowImpliedEdges = () => {
   return useCurrentViewStore((state) => state.showImpliedEdges);
+};
+
+export const useShowProblemCriterionSolutionEdges = () => {
+  return useCurrentViewStore((state) => state.showProblemCriterionSolutionEdges);
 };
 
 // actions
@@ -133,6 +142,7 @@ export const viewCriteriaTable = (problemNodeId: string) => {
 export const viewJustification = (arguedDiagramPartId: string) => {
   useCurrentViewStore.setState(
     {
+      ...initialViewState,
       format: "diagram",
       categoriesToShow: ["justification"],
       justificationFilter: { type: "rootClaim", centralRootClaimId: arguedDiagramPartId },
@@ -140,6 +150,59 @@ export const viewJustification = (arguedDiagramPartId: string) => {
     false,
     "viewJustification",
   );
+  emitter.emit("changedDiagramFilter");
+};
+
+export const viewSolutionContext = (solutionId: string) => {
+  const graph = useTopicStore.getState();
+
+  useCurrentViewStore.setState(
+    {
+      ...initialViewState,
+      breakdownFilter: getSolutionContextFilter(graph, solutionId),
+    },
+    false,
+    "viewSolutionContext",
+  );
+  emitter.emit("changedDiagramFilter");
+};
+
+export const viewCriterionContext = (criterionId: string) => {
+  const graph = useTopicStore.getState();
+
+  useCurrentViewStore.setState(
+    {
+      ...initialViewState,
+      breakdownFilter: getCriterionContextFilter(graph, criterionId),
+      // could have the standard filter control this, but this way allows users to use the standard
+      // filter and choose to show the extra edges if they want
+      showProblemCriterionSolutionEdges: false,
+      forceNodesIntoLayers: true, // otherwise hidden edges will scatter nodes
+      layerNodeIslandsTogether: true, // otherwise hidden edges will scatter nodes
+    },
+    false,
+    "viewCriterionContext",
+  );
+  emitter.emit("changedDiagramFilter");
+};
+
+export const viewFulfillsEdgeContext = (fulfillsEdgeId: string) => {
+  const graph = useTopicStore.getState();
+
+  useCurrentViewStore.setState(
+    {
+      ...initialViewState,
+      breakdownFilter: getFulfillsContextFilter(graph, fulfillsEdgeId),
+      // could have the standard filter control this, but this way allows users to use the standard
+      // filter and choose to show the extra edges if they want
+      showProblemCriterionSolutionEdges: false,
+      forceNodesIntoLayers: true, // otherwise hidden edges will scatter nodes
+      layerNodeIslandsTogether: true, // otherwise hidden edges will scatter nodes
+    },
+    false,
+    "viewFulfillsContext",
+  );
+  emitter.emit("changedDiagramFilter");
 };
 
 /**
@@ -210,6 +273,12 @@ export const toggleShowImpliedEdges = (show: boolean) => {
   emitter.emit("changedDiagramFilter");
 };
 
+export const toggleShowProblemCriterionSolutionEdges = (show: boolean) => {
+  useCurrentViewStore.setState({ showProblemCriterionSolutionEdges: show });
+
+  emitter.emit("changedDiagramFilter");
+};
+
 // helpers
 export const getStandardFilterWithFallbacks = (standardFilter: StandardFilter): StandardFilter => {
   const centralProblemId = getDefaultNode("problem")?.id;
@@ -220,6 +289,7 @@ export const getStandardFilterWithFallbacks = (standardFilter: StandardFilter): 
 
   const standardFilterDefaults: StandardFilterWithFallbacks = {
     type: "none",
+    layersDeep: 1,
     centralProblemId,
     problemDetails: ["causes", "effects", "subproblems", "criteria", "solutions"],
     centralSolutionId,

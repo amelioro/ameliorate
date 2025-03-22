@@ -15,6 +15,7 @@ import { useOnPlayground } from "@/web/topic/store/topicHooks";
 import { userCanEditScores } from "@/web/topic/utils/score";
 import { useReadonlyMode } from "@/web/view/actionConfigStore";
 import { usePerspectives } from "@/web/view/perspectiveStore";
+import { useShowScores } from "@/web/view/userConfigStore";
 
 const circleDiameter = 6 * buttonDiameterRem; // no collisions for fitting 10 elements
 
@@ -28,8 +29,10 @@ interface ScoreProps {
 export const Score = ({ graphPartId }: ScoreProps) => {
   const { sessionUser } = useSessionUser();
   const onPlayground = useOnPlayground();
-  const readonlyMode = useReadonlyMode();
   const workspaceContext = useContext(WorkspaceContext);
+
+  const showScores = useShowScores();
+  const readonlyMode = useReadonlyMode();
 
   const myUsername = onPlayground ? playgroundUsername : sessionUser?.username;
   const perspectives = usePerspectives();
@@ -66,8 +69,13 @@ export const Score = ({ graphPartId }: ScoreProps) => {
   ) : undefined;
   const isInteractive = hoverCircle !== undefined;
 
+  // Nice to show scores in details view so there's some way for new users to be exposed to them.
+  // Always show score on table because the main purpose of the table is to compare scores.
+  const showScore = workspaceContext === "table" || workspaceContext === "details" || showScores;
+  const showScoreClasses = showScore ? "" : " hidden";
+
   if (!isInteractive) {
-    return <ScoreButton userScores={userScores} />;
+    return <ScoreButton userScores={userScores} className={showScoreClasses} />;
   }
 
   return (
@@ -80,6 +88,7 @@ export const Score = ({ graphPartId }: ScoreProps) => {
         onMouseEnter={() => setHoverDelayHandler(setTimeout(() => setHovering(true), 100))}
         onMouseLeave={() => clearTimeout(hoverDelayHandler)}
         userScores={userScores}
+        className={showScoreClasses}
       />
 
       <BackdropPopper

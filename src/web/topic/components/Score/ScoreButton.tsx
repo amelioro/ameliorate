@@ -1,4 +1,4 @@
-import { Box, type ButtonProps } from "@mui/material";
+import { type ButtonProps } from "@mui/material";
 import { MutableRefObject } from "react";
 
 import { StyledButton } from "@/web/topic/components/Score/ScoreButton.styles";
@@ -16,6 +16,7 @@ interface ScoreButtonProps {
   onMouseLeave?: () => void;
   zoomRatio?: number;
   userScores: Record<string, ScoreData>;
+  className?: string;
 }
 
 export const ScoreButton = ({
@@ -25,6 +26,7 @@ export const ScoreButton = ({
   onMouseLeave,
   zoomRatio = 1,
   userScores,
+  className = "",
 }: ScoreButtonProps) => {
   const isComparing = Object.keys(userScores).length > 1;
 
@@ -42,27 +44,20 @@ export const ScoreButton = ({
         onMouseLeave={onMouseLeave}
         buttonDiameter={buttonDiameterRem}
         zoomRatio={zoomRatio}
-        sx={
-          onClick
-            ? isComparing
-              ? {
-                  backgroundColor: "rgba(0,0,0,0)", // transparent so that pie appears as a background
-                  zIndex: "0", // allow the pie to show behind the button (while allow the score label to be in front of the pie)
-                  pointerEvents: "none", // prevent score label from taking pointer events; pie can handle hover effects
-                }
-              : {}
-            : { pointerEvents: "none" }
+        className={
+          "shadow-none border border-solid border-neutral-main" +
+          ` ${isComparing ? "pointer-events-none z-0 bg-transparent" : ""}` +
+          ` ${onClick ? "" : "pointer-events-none"}` +
+          ` ${className}`
         }
       >
         {isComparing && (
-          <Box
-            position="absolute"
-            width="100%"
-            height="100%"
-            zIndex="-1" // behind the button so the score shows in front of the pie
+          <div
+            // behind the button so the score shows in front of the pie
+            className="absolute z-[-1] size-full"
           >
             <ScoreCompare userScores={userScores} type="button" />
-          </Box>
+          </div>
         )}
 
         {buttonScore}

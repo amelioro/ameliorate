@@ -5,9 +5,9 @@ import { Link } from "@/web/common/components/Link";
 import { discordInvite } from "@/web/common/urls";
 import { StepContent } from "@/web/tutorial/StepContent";
 import { startTutorial } from "@/web/tutorial/tutorial";
-import { Tutorial } from "@/web/tutorial/tutorialUtils";
+import { Track } from "@/web/tutorial/tutorialUtils";
 
-export const welcomeSteps = (nextTutorial: Tutorial): StepType[] => {
+export const welcomeSteps = (track: Track): StepType[] => {
   return [
     {
       selector: 'button[title="Help"] > svg',
@@ -31,18 +31,24 @@ export const welcomeSteps = (nextTutorial: Tutorial): StepType[] => {
             </>
           }
           actionSlot={
-            nextTutorial === "diagramBasics" ? (
-              <Button variant="contained" onClick={() => startTutorial("diagramBasics")}>
+            track === "builders" ? (
+              <Button
+                variant="contained"
+                onClick={() => startTutorial("diagramBasics", "builders")}
+              >
                 Start: Diagram Basics
               </Button>
-            ) : nextTutorial === "readingDiagram" ? (
-              <Button variant="contained" onClick={() => startTutorial("readingDiagram")}>
+            ) : track === "diagramViewers" ? (
+              <Button
+                variant="contained"
+                onClick={() => startTutorial("readingADiagram", "diagramViewers")}
+              >
                 Start: Reading Diagrams
               </Button>
             ) : (
               <Button
                 variant="contained"
-                onClick={() => startTutorial("evaluatingTradeoffs", "navigatingTopic")}
+                onClick={() => startTutorial("evaluatingTradeoffs", "tableViewers")}
               >
                 Start: Evaluating Tradeoffs
               </Button>
@@ -51,7 +57,6 @@ export const welcomeSteps = (nextTutorial: Tutorial): StepType[] => {
           heightClass="" // override default to let height be based on content size here - we don't care about matching height of other steps because this tutorial only has one step
         />
       ),
-      stepInteraction: false, // don't let users click the help button when it's highlighted, because the popover would awkwardly cover the opened menu
       styles: {
         maskWrapper: (props) => ({ ...props, display: "unset" }), // show the mask to spotlight the help button
       },

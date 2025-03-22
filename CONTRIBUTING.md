@@ -6,6 +6,8 @@ All contributors (with GitHub accounts) will be recognized by being added to the
 
 If you're new to open source, you'll probably find [this open source guide](https://opensource.guide/how-to-contribute) useful.
 
+If you're interested in playing a specific role for the project, check out [Roles to Fill](https://ameliorate.app/docs/roles-to-fill).
+
 ## Code of Conduct
 
 This project adheres to the Contributor Covenant [code of conduct](https://github.com/amelioro/ameliorate/blob/main/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
@@ -46,7 +48,7 @@ Note: be particularly wary of [issues with a "needs [x]" label](https://github.c
 
 ### Non-code contributions
 
-There are many ways to contribute without coding! [Providing feedback](#providing-feedback), building example diagrams, joining [discourse sessions](https://ameliorate.app/docs/discourse-sessions), sharing about the tool, creating/updating docs, etc. Check out the https://github.com/amelioro/ameliorate/labels/non-code issues for some specific tickets.
+There are many ways to contribute without coding! [Providing feedback](#providing-feedback), building example diagrams, joining [discourse sessions](https://ameliorate.app/docs/discourse-sessions), sharing about the tool, creating/updating docs, etc. Check out the https://github.com/amelioro/ameliorate/labels/non-code issues for some specific tickets, and [Roles to Fill](https://ameliorate.app/docs/roles-to-fill) for specific roles you can help fill.
 
 ## Running the project
 
@@ -79,6 +81,39 @@ Update project after pulling new changes:
 ```bash
 # see https://github.com/amelioro/ameliorate/blob/main/scripts/update.sh
 npm run update # run new migrations, install new dependencies
+```
+
+## Running tests
+
+The non-e2e tests run against smaller pieces of the system - they include api tests and unit tests. You can run the non-e2e tests without further setup:
+
+```bash
+npm run test
+```
+
+### E2e tests
+
+E2e tests perform actions via headless browser against a running instance of the app. They require a few steps to properly run:
+
+```bash
+npm run dev # start the app on localhost
+# (you'll need to open a new terminal window because the previous command runs in the foreground)
+npm run e2e:build # build e2e container (includes dependencies for running playwright)
+# Note: the e2e container requires docker desktop version 4.29+ and enabling
+# "Enable host networking" in the Features in Development settings - explanation https://github.com/amelioro/ameliorate/blob/main/e2e/runInContainer.sh#L15-L17
+```
+
+Then you can run e2e tests:
+
+```bash
+npm run e2e:test
+```
+
+And here are some more e2e-specific commands that might be useful:
+
+```bash
+npm run e2e:update-snapshots # run e2e tests and update snapshots if there are visual differences
+npm run e2e:ui # open playwright UI for watching/managing e2e tests
 ```
 
 ## Codebase overview

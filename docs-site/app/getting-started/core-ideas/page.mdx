@@ -1,0 +1,115 @@
+import { Callout } from "nextra/components";
+import Image from "next/image";
+
+# Core Ideas
+
+Ameliorate is centered around Topics. A Topic is something that you care enough about that you'll spend efforts to discuss, investigate, align on, and/or understand better. To make it easier to do these, Ameliorate organizes Topics in a particular way:
+
+- information is broken down into concepts and relations between those concepts - this enables any individual piece to be precisely considered, and the whole can be quickly understood at a high level;
+- the breakdown of a problem and its solutions is distinguished from known opinions and justification, from known unknowns, from information sources and suspected facts - this enables clarity regarding which kind of thing we're talking about, and what kinds of biases to expect for the thing;
+- the concepts and relations used to convey the breakdown of a problem are constrained specifically to the domain of solving problems - this enables a consistent way of representing and understanding them, and enables specialized tooling to be built for viewing and working with the information.
+
+Let's look at an example Topic to understand what this organization looks like - you can follow along in the app here: https://ameliorate.app/examples/detailed-cars-going-too-fast.
+
+## Concepts and Relations
+
+If you open the example, you'll be greeted by something like this:
+
+<Image
+  src="https://github.com/amelioro/ameliorate/assets/13872370/447156bb-b9bb-4f54-8526-ec1fece1f582"
+  alt="cars-going-too-fast diagram"
+  width={995}
+  height={695}
+/>
+
+Here there are a bunch of concepts, represented through boxes called "nodes", and relations between those concepts, represented through lines called "edges".
+
+If we click on a node, its edges and neighboring nodes are highlighted, and we can see some details about the node in the Topic Pane:
+
+<Image
+  src="https://github.com/amelioro/ameliorate/assets/13872370/eb4c4001-bf0e-44b5-91bd-0a1d1e6ba989"
+  alt="diagram with node selected"
+  width={1187}
+  height={539}
+/>
+
+Here, the selected node is a Problem node, with the text "cars going too fast in my neighborhood". In this case, this Problem is the Topic's centerpiece, and we want to address it.
+
+We can see a few edges connecting the Problem to other nodes as well; some "causes" edges indicating nodes that cause this Problem, and some "created by" edges indicating effects that are created by this Problem.
+
+Nodes are the core building blocks of a Topic - their brevity allows a quick high-level overview of the topic, and they enable auxiliary information (notes, opinions, justification, uncertainties, facts) to be organized specifically with the individual node(s) for which they're relevant.
+
+## Problem Breakdown
+
+Ameliorate defines a standard way of breaking down problems and solutions, as seen below:
+
+<Image
+  src="https://github.com/amelioro/ameliorate/assets/13872370/7fed8ba6-75d4-40fe-8e3a-6dccc57ac7ca"
+  alt="diagram with sections highlighted"
+  width={1180}
+  height={695}
+/>
+
+These are:
+
+1. Central Problem - used as a point to organize the other nodes around; there may be multiple Problems in a Topic that are important enough to be "Central", but then the Diagram can get hectic and you'll want to use [Views and Filters](/features/views-and-filters) to better understand your Topic
+2. Problem Causes - these can be individually addressed as ways of preventing the Problem
+3. Problem Effects - these can be positive (Benefits), negative (Detriments), or neutral (Effects); Detriments can be individually addressed as ways of mitigating the Problem
+4. Solution Criteria - these should be worded as a positive thing (e.g. "inexpensive" as opposed to "costly") and indicate why some Solutions may be better than others; you might come up with these by asking "what's good/bad about this Solution?"; you can tie Solutions directly to pieces of Problems, but if you want to compare Solutions, you'll want to relate Solutions to Problems through Criteria
+5. Solution Effects - same as Problem Effects, except are created by Solutions
+6. Solution Components - these exist to break down Solutions; you might make two Solutions that reuse most of the same components
+7. Solutions - these are generally the high-level options for addressing the Problem
+
+Since these nodes are used to defined the Topic's breakdown, they're sometimes referred to as "Breakdown nodes". You should use these as you see fit; if your Topic is simple in some ways, you may not need to use all of these pieces.
+
+<Callout type="info">
+  All possible nodes and their purpose can be seen in the [Ontology
+  Topic](https://ameliorate.app/examples/ontology?view=All+breakdown).
+</Callout>
+
+<Callout type="warning">
+  Sometimes a Topic may not easily fit into the defined breakdown. Tips for a few awkward
+  diagramming situations can be found in [Diagramming Choices](/diagramming-choices). The breakdown
+  is also constantly be refined and improved; if you have ideas for improvements, please feel free
+  to [share your
+  feedback](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md#providing-feedback)!
+</Callout>
+
+## Known Opinions and Justification
+
+Your Topic will inherently be biased by your opinions, but allowing known opinions to be explicitly called out can reduce this bias. Scores accomplish this - they convey how important you think a node is, or how much an edge's relation is believed to be true:
+
+<Image
+  src="https://github.com/amelioro/ameliorate/assets/13872370/ee1dca28-9b65-451e-bedb-48fc17fe8b19"
+  alt="node score"
+  width={496}
+  height={332}
+/>
+
+Scores range from 1 to 9; generally, 1-4 are negative, 5 and unscored ("-") are neutral, and 6-9 are positive. In this case, the Detriment is scored a 9 to convey that we think the risk of pedestrians being hit is a big deal, and we should care about it.
+
+Justification is used to support or critique the importance of a node, or the truth of an edge. You can find these in the node's details:
+
+<Image
+  src="https://github.com/amelioro/ameliorate/assets/13872370/403c9a67-f19f-4163-a174-83693dba5e0b"
+  alt="node justification section"
+  width={732}
+  height={615}
+/>
+
+In this case, the Detriment's importance is justified by saying that it reduces the feeling of safety in the neighborhood.
+
+## Known Unknowns, Information Sources, and Suspected Facts
+
+Oftentimes, there are things we're aware we don't know, things that might be valuable to find out - we can convey these in the Research section of a node's details, through Questions:
+
+<Image
+  src="https://github.com/amelioro/ameliorate/assets/13872370/94c0e6c1-b108-40b7-8961-7549e4ac95f3"
+  alt="node research section"
+  width={434}
+  height={695}
+/>
+
+Here, it's possible that the importance of "pedestrians might get hit" could change based on if there are more-susceptible pedestrians in the neighborhood, so we can note this down as a Question "are there many children, handicapped, elderly, in the area?"
+
+Findings from research can also be put in this section, as Facts and Sources. These might be something like a statistic "25% of families in area have children" from a source "neighborhood census" (with a URL).

@@ -26,6 +26,7 @@
  * 150 answer
  * 160 criterion
  * 200 support
+ * 230 mitigation, component (desaturated)
  * 240 source
  * 300 problem
  * 320 cause
@@ -58,7 +59,8 @@ declare module "@mui/material/styles" {
   interface Palette extends NodeTypePalettes {
     neutral: Palette["primary"];
     neutralContrast: Palette["primary"];
-    paper: Palette["primary"];
+    paperPlain: Palette["primary"];
+    paperShaded: Palette["primary"];
     support1: Palette["primary"];
     support2: Palette["primary"];
     support3: Palette["primary"];
@@ -72,7 +74,8 @@ declare module "@mui/material/styles" {
   interface PaletteOptions extends NodeTypePaletteOptions {
     neutral: PaletteOptions["primary"];
     neutralContrast: PaletteOptions["primary"];
-    paper: PaletteOptions["primary"];
+    paperPlain: PaletteOptions["primary"];
+    paperShaded: PaletteOptions["primary"];
     support1: PaletteOptions["primary"];
     support2: PaletteOptions["primary"];
     support3: PaletteOptions["primary"];
@@ -95,7 +98,8 @@ declare module "@mui/material" {
   interface ButtonPropsColorOverrides extends NodeTypeColors {
     neutral: true;
     neutralContrast: true;
-    paper: true;
+    paperPlain: true;
+    paperShaded: true;
     support1: true;
     support2: true;
     support3: true;
@@ -109,7 +113,8 @@ declare module "@mui/material" {
   interface AppBarPropsColorOverrides extends NodeTypeColors {
     neutral: true;
     neutralContrast: true;
-    paper: true;
+    paperPlain: true;
+    paperShaded: true;
     support1: true;
     support2: true;
     support3: true;
@@ -123,7 +128,8 @@ declare module "@mui/material" {
   interface SvgIconPropsColorOverrides extends NodeTypeColors {
     neutral: true;
     neutralContrast: true;
-    paper: true;
+    paperPlain: true;
+    paperShaded: true;
     support1: true;
     support2: true;
     support3: true;
@@ -173,20 +179,23 @@ const sharedPalette = {
   primary: { main: "#4AB84E" }, // apple (green): good, optimistic, let's solve things; different from solution because this is too dark for contrasting with black small node text, but solution color is too light from using for text on white background
   info: { main: infoColor },
 
-  neutral: augmentColor({ color: { main: "#BDBDBD" } }), // gray is very neutral, somewhat arbitrarily chosen, no particular relation to the other colors
+  neutral: augmentColor({ color: { main: oklchToHex("oklch(91% 0 0)") } }), // gray is very neutral, light-ish to not stand out too much, no particular relation to the other colors
   neutralContrast: augmentColor({ color: { main: "#000000" } }), // black contrasts with gray, separate from neutral.contrastText so that it gets its own augments I guess
-  paper: augmentColor({ color: { main: "#fff" } }), // used for neutral-but-chosen score
+  paperPlain: augmentColor({ color: { main: "#fff" } }), // used for neutral-but-chosen score, plain backgrounds
+  paperShaded: augmentColor({ color: { main: "#f9fafb" } }), // bg-gray-50; more gray-ish to contrast slightly with paperPlain, e.g. for toolbar backgrounds
 
   // topic
   problem: augmentColor({ color: { main: oklchToHex("oklch(75% 0.15 300)") } }), // purple: truth; complementary to solution; no increased saturation because its hue stands out already
-  cause: augmentColor({ color: { main: oklchToHex("oklch(75% 0.15 320)") } }), // light-purple: bad, so similar color to problem
-  solution: augmentColor({ color: { main: oklchToHex("oklch(75% 0.18 138)") } }), // green: good, optimistic, let's solve things; increased saturation to help it stand out
-  solutionComponent: augmentColor({ color: { main: oklchToHex("oklch(75% 0.12 138)") } }), // grey-green: same as solution but with less saturation
+  cause: augmentColor({ color: { main: oklchToHex("oklch(70% 0.15 320)") } }), // light-purple: bad, so similar color to problem, darker to contrast more with detriment
+  solution: augmentColor({ color: { main: oklchToHex("oklch(70% 0.15 140)") } }), // green: good, optimistic, let's solve things; darkened to give it what seems like a nicer color, and distinguish from component.
+  solutionComponent: augmentColor({ color: { main: oklchToHex("oklch(75% 0.09 140)") } }), // grey-green: same as solution but with less saturation
   criterion: augmentColor({ color: { main: oklchToHex("oklch(75% 0.10 160)") } }), // green-blue: between solution & support colors because criteria are kind of like supports for solutions
   effect: augmentColor({ color: { main: oklchToHex("oklch(85% 0.15 100)") } }), // yellow: goes well with lightning icon
-  benefit: augmentColor({ color: { main: oklchToHex("oklch(75% 0.16 130)") } }), // light-green: good thing; slightly more saturated because the color seems nicer
-  detriment: augmentColor({ color: { main: oklchToHex("oklch(75% 0.15 340)") } }), // purple-red: bad thing
+  benefit: augmentColor({ color: { main: oklchToHex("oklch(85% 0.16 130)") } }), // light-green: good thing; slightly more saturated because the color seems nicer, brighter to contrast more with other greens (mainly solution/component)
+  detriment: augmentColor({ color: { main: oklchToHex("oklch(85% 0.15 340)") } }), // purple-red: bad thing; slightly brighter to contrast more with cause
   obstacle: augmentColor({ color: { main: oklchToHex("oklch(75% 0.15 0)") } }), // red: bad thing
+  mitigation: augmentColor({ color: { main: oklchToHex("oklch(75% 0.11 230)") } }), // blue: good but different than solution/support; desaturated because the hue seems to naturally be very saturated
+  mitigationComponent: augmentColor({ color: { main: oklchToHex("oklch(75% 0.07 230)") } }), // grey-blue: same as mitigation but with less saturation
 
   // research
   question: augmentColor({ color: { main: oklchToHex("oklch(75% 0 0)") } }), // grey: ambiguous, uncertain

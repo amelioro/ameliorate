@@ -1,0 +1,35 @@
+name: daily-smoke-tests
+
+on:
+  schedule:
+    # run every day at 5:45am - at the 45th minute because GitHub recommends starting not at the start of an hour to avoid periods of high load https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#schedule
+    - cron: "45 5 * * *"
+
+jobs:
+  smoke: # modified from example: https://playwright.dev/docs/ci-intro#setting-up-github-actions
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./e2e
+    container:
+      image: mcr.microsoft.com/playwright:v1.49.1-noble
+      # need this for ci.yml's job (see comment there), may as well keep it here for consistency
+      options: --user 1001
+    steps:
+      - name: Begin e2e setup - checkout
+        uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: e2e/.nvmrc
+      - name: Install dependencies
+        run: npm ci
+      - run: npm run test:smoke
+        env:
+          DEPLOY_PRIME_URL: https://ameliorate.app
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          # `uses` isn't affected by the `defaults.run.working-directory`, so we still need to prepend `e2e` https://stackoverflow.com/a/63122434/8409296
+          path: e2e/playwright-report/
+          retention-days: 5

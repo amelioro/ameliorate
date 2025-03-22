@@ -2,7 +2,7 @@ import { WbTwilight } from "@mui/icons-material";
 import { type ButtonProps } from "@mui/material";
 import { MouseEventHandler, memo, useCallback } from "react";
 
-import { Indicator } from "@/web/topic/components/Indicator/Indicator";
+import { Indicator } from "@/web/topic/components/Indicator/Base/Indicator";
 import { stopForcingNodeToShow, useIsNodeForcedToShow } from "@/web/view/currentViewStore/filter";
 
 interface Props {
@@ -15,10 +15,7 @@ const ForceShownIndicatorBase = ({ nodeId, partColor }: Props) => {
   const nodeIsForcedToShow = useIsNodeForcedToShow(nodeId);
 
   const onClick: MouseEventHandler<HTMLButtonElement> = useCallback(
-    (event) => {
-      stopForcingNodeToShow(nodeId);
-      event.stopPropagation(); // prevent selecting the node and awkwardly re-showing if flashlight mode is on
-    },
+    () => stopForcingNodeToShow(nodeId),
     [nodeId],
   );
 
@@ -29,7 +26,6 @@ const ForceShownIndicatorBase = ({ nodeId, partColor }: Props) => {
       Icon={WbTwilight}
       title={"Stop forcing node to show"}
       onClick={onClick}
-      iconHasBackground={false}
       color={partColor}
     />
   );

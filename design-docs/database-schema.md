@@ -9,9 +9,18 @@ Diagram notes:
 - 'GraphPart' refers to Node or Edge; it is not actually its own table.
 - Replaced some topic relations with `topicId` attribute to reduce chaotic number of edges.
 
+## Core tables
+
 ```mermaid
 classDiagram
   Topic --> User: creatorName
+
+  Comment --> User: authorName
+  Comment --> GraphPart: parentId
+
+  UserScore --> User: username
+  UserScore --> GraphPart: graphPartId
+
 
   Node ..> GraphPart : is a
   Edge ..> GraphPart : is a
@@ -19,25 +28,7 @@ classDiagram
   Edge --> Node: targetId
   Edge --> Node: sourceId
 
-  UserScore --> User: username
-  UserScore --> GraphPart: graphPartId
-
   View --> Topic: topicId
-
-  Comment --> User: authorName
-  Comment --> GraphPart: parentId
-  Comment --> Comment: parentId
-
-  InAppNotification --> User: notifiedUsername
-
-  Watch --> User: watcherUsername
-  Watch --> Topic: topicId
-
-  Subscription --> User: subscriberUsername
-  Subscription --> Comment: subscriptionSourceId
-
-  UnsubscribeCode --> User: subscriberUsername
-  UnsubscribeCode --> Comment: subscriptionSourceId
 
   class Node {
     topicId
@@ -51,7 +42,28 @@ classDiagram
     topicId
   }
 
+  note for Comment "parentId can also refer to a Comment"
   class Comment {
+    topicId
+  }
+
+```
+
+## Notifications-related tables
+
+```mermaid
+classDiagram
+  InAppNotification --> User: notifiedUsername
+
+  Watch --> User: watcherUsername
+
+  Subscription --> User: subscriberUsername
+  Subscription --> Comment: subscriptionSourceId
+
+  UnsubscribeCode --> User: subscriberUsername
+  UnsubscribeCode --> Comment: subscriptionSourceId
+
+  class Watch {
     topicId
   }
 ```

@@ -1,15 +1,29 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-import { Tutorial } from "@/web/tutorial/tutorialUtils";
+import { plausible } from "@/pages/_app.page";
+import { migrate } from "@/web/tutorial/storeMigrate";
+import { Track, Tutorial } from "@/web/tutorial/tutorialUtils";
 
 interface TutorialStoreState {
+  /**
+   * This is for easy access to display the current progress in a step's header.
+   * Ideally these would just be passed to the step, but requires some refactor to pass around.
+   */
+  lastStartedTutorial: Tutorial | null;
+  /**
+   * This is for easy access to display the current progress in a step's header.
+   * Ideally these would just be passed to the step, but requires some refactor to pass around.
+   */
+  lastStartedTrack: Track | null;
   startedTutorials: Tutorial[];
   completedTutorials: Tutorial[];
   tutorialIsOpening: boolean;
 }
 
 const initialState: TutorialStoreState = {
+  lastStartedTutorial: null,
+  lastStartedTrack: null,
   startedTutorials: [],
   completedTutorials: [],
   tutorialIsOpening: false,
@@ -18,6 +32,8 @@ const initialState: TutorialStoreState = {
 const useTutorialStore = create<TutorialStoreState>()(
   persist(() => initialState, {
     name: "tutorial-storage",
+    version: 2,
+    migrate,
   }),
 );
 
@@ -30,12 +46,19 @@ export const useTutorialProgress = () => {
 };
 
 // actions
-export const setTutorialHasStarted = (tutorial: Tutorial) => {
+export const setTutorialHasStarted = (tutorial: Tutorial, track: Track | null) => {
   const startedTutorials = useTutorialStore.getState().startedTutorials;
 
-  if (startedTutorials.includes(tutorial)) return;
+  if (startedTutorials.includes(tutorial)) {
+    useTutorialStore.setState({ lastStartedTutorial: tutorial, lastStartedTrack: track });
+    return;
+  }
+
+  plausible(`Started tutorial: ${tutorial}`, { props: {} });
 
   useTutorialStore.setState({
+    lastStartedTutorial: tutorial,
+    lastStartedTrack: track,
     startedTutorials: [...startedTutorials, tutorial],
   });
 };
@@ -44,6 +67,8 @@ export const setTutorialHasCompleted = (tutorial: Tutorial) => {
   const completedTutorials = useTutorialStore.getState().completedTutorials;
 
   if (completedTutorials.includes(tutorial)) return;
+
+  plausible(`Completed tutorial: ${tutorial}`, { props: {} });
 
   useTutorialStore.setState({
     completedTutorials: [...completedTutorials, tutorial],
@@ -57,6 +82,14 @@ export const setTutorialIsOpening = (isOpening: boolean) => {
 };
 
 // utils
+export const getLastStartedTutorial = () => {
+  return useTutorialStore.getState().lastStartedTutorial;
+};
+
+export const getLastStartedTrack = () => {
+  return useTutorialStore.getState().lastStartedTrack;
+};
+
 export const getTutorialHasStarted = (tutorial: Tutorial) => {
   return useTutorialStore.getState().startedTutorials.includes(tutorial);
 };

@@ -1,4 +1,4 @@
-import { Close, Logout, Notifications } from "@mui/icons-material";
+import { AutoStories, Close, Logout, Notifications } from "@mui/icons-material";
 import {
   Divider,
   Drawer,
@@ -39,6 +39,14 @@ export const UserDrawer = ({ username, isUserDrawerOpen, setIsUserDrawerOpen }: 
 
         <Divider />
 
+        <ListItem>
+          <ListItemButton LinkComponent={NextLink} href={`/${username}`}>
+            <ListItemIcon>
+              <AutoStories />
+            </ListItemIcon>
+            <ListItemText primary="My Topics" />
+          </ListItemButton>
+        </ListItem>
         <ListItem>
           <ListItemButton LinkComponent={NextLink} href={"/notifications"}>
             <ListItemIcon>

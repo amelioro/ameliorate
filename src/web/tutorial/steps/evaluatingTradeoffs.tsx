@@ -1,3 +1,4 @@
+import { AutoStories } from "@mui/icons-material";
 import { Button, Typography } from "@mui/material";
 import { StepType } from "@reactour/tour";
 import Image from "next/image";
@@ -6,9 +7,9 @@ import { Link } from "@/web/common/components/Link";
 import { celebrateGif } from "@/web/common/urls";
 import { StepContent } from "@/web/tutorial/StepContent";
 import { startTutorial } from "@/web/tutorial/tutorial";
-import { Tutorial, tutorialDefaultAnchorClass } from "@/web/tutorial/tutorialUtils";
+import { Track, tutorialDefaultAnchorClass } from "@/web/tutorial/tutorialUtils";
 
-export const getEvaluatingTradeoffsSteps = (nextTutorial?: Tutorial | null): StepType[] => [
+export const getEvaluatingTradeoffsSteps = (track: Track | null): StepType[] => [
   {
     selector: `.${tutorialDefaultAnchorClass}`,
     content: (
@@ -16,21 +17,23 @@ export const getEvaluatingTradeoffsSteps = (nextTutorial?: Tutorial | null): Ste
         stepTitle="Viewing the table"
         text={
           <span>
-            The Criteria Table can help make it easier to compare tradeoffs of each solution.
+            The Criteria Table can help make it easier to compare tradeoffs of each solution. You
+            can find it by right-clicking on a problem node.
             <br />
             <br />
-            You can find it by clicking on a problem's table button, or changing the format to
-            "table" and selecting a problem in the table filter.
+            If you need to return to the diagram, you can change the format back to "Diagram" under
+            VIEWS {">"} Format in the Topic pane <AutoStories color="primary" />.
           </span>
         }
         imageSlot={
           <Image
-            key="https://github.com/user-attachments/assets/baf22aab-cea0-4e6d-b295-2edb34dd7b44"
-            src="https://github.com/user-attachments/assets/baf22aab-cea0-4e6d-b295-2edb34dd7b44"
+            key="https://github.com/user-attachments/assets/5ccc00a7-a3e9-439f-8e19-4d32106bfdef"
+            src="https://github.com/user-attachments/assets/5ccc00a7-a3e9-439f-8e19-4d32106bfdef"
             alt="viewing criteria table"
-            width={600}
-            height={460}
+            width={677}
+            height={472}
             unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+            className="rounded-xl border shadow"
           />
         }
       />
@@ -60,6 +63,7 @@ export const getEvaluatingTradeoffsSteps = (nextTutorial?: Tutorial | null): Ste
               alt="criteria table scores"
               width={540}
               height={325}
+              className="rounded-xl border shadow"
             />
             <Typography variant="caption">
               From:{" "}
@@ -98,6 +102,7 @@ export const getEvaluatingTradeoffsSteps = (nextTutorial?: Tutorial | null): Ste
               alt="solution totals"
               width={543}
               height={108}
+              className="rounded-xl border shadow"
             />
             <Typography variant="caption">
               From:{" "}
@@ -113,7 +118,7 @@ export const getEvaluatingTradeoffsSteps = (nextTutorial?: Tutorial | null): Ste
       />
     ),
   },
-  nextTutorial === "buildingViews"
+  track === "builders"
     ? {
         selector: `.${tutorialDefaultAnchorClass}`,
         content: (
@@ -121,7 +126,7 @@ export const getEvaluatingTradeoffsSteps = (nextTutorial?: Tutorial | null): Ste
             stepTitle='Completed "Evaluating tradeoffs"! 🎉'
             text="Woot woot! Next and finally, learn how to build views to quickly look at different aspects of your topic."
             actionSlot={
-              <Button variant="contained" onClick={() => startTutorial("buildingViews")}>
+              <Button variant="contained" onClick={() => startTutorial("buildingViews", track)}>
                 Next: Building Views
               </Button>
             }
@@ -137,7 +142,7 @@ export const getEvaluatingTradeoffsSteps = (nextTutorial?: Tutorial | null): Ste
           />
         ),
       }
-    : nextTutorial === "navigatingTopic"
+    : track === "tableViewers"
       ? {
           selector: `.${tutorialDefaultAnchorClass}`,
           content: (
@@ -145,7 +150,10 @@ export const getEvaluatingTradeoffsSteps = (nextTutorial?: Tutorial | null): Ste
               stepTitle='Completed "Evaluating tradeoffs"! 🎉'
               text="Woot woot! Next and finally, learn how to navigate all the information that's in a topic."
               actionSlot={
-                <Button variant="contained" onClick={() => startTutorial("navigatingTopic")}>
+                <Button
+                  variant="contained"
+                  onClick={() => startTutorial("navigatingATopic", track)}
+                >
                   Next: Navigating
                 </Button>
               }

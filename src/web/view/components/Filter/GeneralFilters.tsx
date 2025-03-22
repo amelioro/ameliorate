@@ -75,6 +75,8 @@ export const GeneralFilters = () => {
                 <Select name="scoredComparer" options={scoredComparers} label="" width="50px" />
                 <Select name="scoreToCompare" options={possibleScores} label="" width="50px" />
               </Stack>
+
+              <NodeSelect name="nodesToHide" useNodeOptions={useAllNodes} multiple />
             </Stack>
           )}
         </form>

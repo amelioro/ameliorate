@@ -1,14 +1,14 @@
-import { Code, InfoOutlined, School } from "@mui/icons-material";
+import { Code, InfoOutlined, SchoolOutlined } from "@mui/icons-material";
 import { type ButtonProps } from "@mui/material";
 import { useCallback } from "react";
 
 import { emitter } from "@/web/common/event";
-import { Indicator } from "@/web/topic/components/Indicator/Indicator";
+import { ContentIndicator } from "@/web/topic/components/Indicator/Base/ContentIndicator";
 import { useResearchNodes } from "@/web/topic/store/graphPartHooks";
 import { useDisplayScores } from "@/web/topic/store/scoreHooks";
 import { Score } from "@/web/topic/utils/graph";
 import { getNumericScore, scoreColors } from "@/web/topic/utils/score";
-import { setSelected } from "@/web/view/currentViewStore/store";
+import { setSelected } from "@/web/view/selectedPartStore";
 
 interface Props {
   graphPartId: string;
@@ -22,7 +22,7 @@ export const FoundResearchIndicator = ({ graphPartId, partColor }: Props) => {
 
   const onClick = useCallback(() => {
     setSelected(graphPartId);
-    emitter.emit("viewTopicDetails");
+    emitter.emit("viewResearch");
   }, [graphPartId]);
 
   if (foundResearchNodes.length === 0) return <></>;
@@ -36,31 +36,28 @@ export const FoundResearchIndicator = ({ graphPartId, partColor }: Props) => {
 
   if (facts.length > 0 && sources.length > 0)
     return (
-      <Indicator
-        Icon={School}
+      <ContentIndicator
+        Icon={SchoolOutlined}
         title={`Has ${facts.length} facts and ${sources.length} sources`}
         onClick={onClick}
-        iconHasBackground={false}
         color={color}
       />
     );
   else if (facts.length > 0)
     return (
-      <Indicator
+      <ContentIndicator
         Icon={InfoOutlined}
         title={`Has ${facts.length} facts`}
         onClick={onClick}
-        iconHasBackground={false}
         color={color}
       />
     );
   else
     return (
-      <Indicator
+      <ContentIndicator
         Icon={Code}
         title={`Has ${sources.length} sources`}
         onClick={onClick}
-        iconHasBackground={false}
         color={color}
       />
     );

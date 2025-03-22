@@ -1,13 +1,24 @@
-import ELK, { ElkNode, LayoutOptions } from "elkjs";
+import ELK, { ElkEdgeSection, ElkLabel, ElkNode, LayoutOptions } from "elkjs";
 
+import { throwError } from "@/common/errorHandling";
 import { NodeType, nodeTypes } from "@/common/node";
+import { scalePxViaDefaultFontSize } from "@/pages/_document.page";
 import { nodeHeightPx, nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
 import { Diagram } from "@/web/topic/utils/diagram";
-import { type Edge, type Node } from "@/web/topic/utils/graph";
-import { edges as nodeEdges } from "@/web/topic/utils/node";
+import { type Edge, type Node, ancestors, descendants } from "@/web/topic/utils/graph";
 
 export type Orientation = "DOWN" | "UP" | "RIGHT" | "LEFT";
 export const orientation: Orientation = "DOWN" as Orientation; // not constant to allow potential other orientations in the future, and keeping code that currently exists for handling "LEFT" orientation
+
+/**
+ * Using the highest-width of the common labels ("subproblem of"; excludes "contingency for" because
+ * that's rarely used).
+ *
+ * Could use the average-width to try and balance using too much space vs using too little space,
+ * but it doesn't seem like a big deal to use too much space, whereas labels still overlapping
+ * basically forfeits a lot of the value of trying to avoid overlap.
+ */
+export const labelWidthPx = 115;
 
 const priorities = Object.fromEntries(nodeTypes.map((type, index) => [type, index.toString()])) as {
   [type in NodeType]: string;
@@ -18,6 +29,22 @@ const elk = new ELK();
 // sort nodes by type
 const compareNodes = (node1: Node, node2: Node) => {
   return Number(priorities[node1.type]) - Number(priorities[node2.type]);
+};
+
+// sort by source priority, then target priority
+const compareEdges = (edge1: Edge, edge2: Edge, nodes: Node[]) => {
+  const source1 = nodes.find((node) => node.id === edge1.source);
+  const source2 = nodes.find((node) => node.id === edge2.source);
+  const target1 = nodes.find((node) => node.id === edge1.target);
+  const target2 = nodes.find((node) => node.id === edge2.target);
+
+  if (!source1 || !source2 || !target1 || !target2)
+    throw new Error("Edge source or target not found");
+
+  const sourceCompare = Number(priorities[source1.type]) - Number(priorities[source2.type]);
+  if (sourceCompare !== 0) return sourceCompare;
+
+  return Number(priorities[target1.type]) - Number(priorities[target2.type]);
 };
 
 /**
@@ -33,9 +60,11 @@ const partitionOrders: { [type in NodeType]: string } = {
   effect: "calculated",
   benefit: "calculated",
   detriment: "calculated",
-  solutionComponent: "3",
-  solution: "4",
+  solutionComponent: "2",
+  solution: "3",
   obstacle: "null",
+  mitigationComponent: "null",
+  mitigation: "null",
 
   // research
   question: "null",
@@ -54,63 +83,151 @@ const partitionOrders: { [type in NodeType]: string } = {
   custom: "null",
 };
 
-const calculatePartition = (node: Node, edges: Edge[]) => {
+const calculatePartition = (node: Node, diagram: Diagram) => {
   if (["effect", "benefit", "detriment"].includes(node.type)) {
-    const edgesOfNode = nodeEdges(node, edges);
-    const hasParentCreatedBy = edgesOfNode.some(
-      (edge) => edge.label === "createdBy" && edge.target === node.id,
+    // could rely on just edge "createdBy" vs "creates" rather than traversing relations, but then
+    // mitigation effects wouldn't be distinguishable from solution effects
+    const createdByProblem = ancestors(node, diagram, ["createdBy"]).some(
+      (ancestor) => ancestor.type === "problem",
     );
-    const hasChildCreates = edgesOfNode.some(
-      (edge) => edge.label === "creates" && edge.source === node.id,
+    const createdBySolution = descendants(node, diagram, ["creates"]).some(
+      (descendant) => descendant.type === "solution" || descendant.type === "solutionComponent",
     );
 
-    const shouldBeAboveCriteria = hasParentCreatedBy; // effect createdBy problem
-    const shouldBeBelowCriteria = hasChildCreates; // solution creates effect
-
-    if (shouldBeAboveCriteria && shouldBeBelowCriteria) return "null";
-    else if (shouldBeAboveCriteria) return "0";
-    else return "2";
+    if (createdByProblem && createdBySolution) return "null";
+    else if (createdByProblem) return "0";
+    else if (createdBySolution) return "2";
+    else return "null";
   } else {
     return partitionOrders[node.type];
   }
 };
 
-export interface NodePosition {
+const textAreaWidthPx = 164;
+const textAreaPerRowPx = 16;
+const heightPxOfOneRowDiv = textAreaPerRowPx + 1; // not sure why but a one-row text area seems to have an extra pixel
+const maxRows = 3;
+const maxTextAreaHeightPx = heightPxOfOneRowDiv + textAreaPerRowPx * (maxRows - 1);
+
+/* eslint-disable functional/immutable-data */
+// Create a hidden div to calculate the height of a node based on its text.
+// Reusing this div instead of re-creating for each calculation reduces the average
+// calculation time per node from ~0.125ms to ~0.05ms.
+// Note: using a `div` improved performance over using a `textarea` from ~0.125ms to ~0.05ms
+// (yes a similar additional gain to the gain of reusing the div).
+const div = document.createElement("div");
+div.style.width = `${textAreaWidthPx}px`;
+div.style.fontSize = "16px";
+div.style.lineHeight = "1";
+div.style.fontFamily = "inherit";
+div.style.overflow = "hidden";
+div.style.visibility = "hidden"; // don't show in DOM but still be added to it so height calcs work
+// Don't affect layout (visibility: hidden otherwise still affects layout).
+// Cannot for the life of me figure out why `absolute` still affects layout when tutorial is opened,
+// yet `fixed` doesn't - Mozilla docs suggest the only difference is that `absolute` can be
+// positioned relative to a positioned ancestor, but here there are no positioned ancestors.
+div.style.position = "fixed";
+div.tabIndex = -1;
+div.ariaHidden = "true";
+document.body.appendChild(div);
+/* eslint-enable functional/immutable-data */
+
+/**
+ * Create a hidden div to calculate the height of a node based on its text.
+ */
+const calculateNodeHeight = (label: string) => {
+  // eslint-disable-next-line functional/immutable-data
+  div.textContent = label;
+
+  const additionalHeightPx = Math.min(div.scrollHeight, maxTextAreaHeightPx) - heightPxOfOneRowDiv;
+
+  return nodeHeightPx + scalePxViaDefaultFontSize(additionalHeightPx);
+};
+
+interface LayoutedNode {
   id: string;
   x: number;
   y: number;
 }
 
-// TODO?: feels a little weird to have layout know Ameliorate domain, like DiagramType
+export interface LayoutedEdge {
+  id: string;
+  /**
+   * Will be undefined when edge labels are excluded from the layout calculation
+   */
+  elkLabel?: ElkLabel;
+  elkSections: ElkEdgeSection[];
+}
+
+export interface LayoutedGraph {
+  layoutedNodes: LayoutedNode[];
+  layoutedEdges: LayoutedEdge[];
+}
+
+const parseElkjsOutput = (layoutedGraph: ElkNode): LayoutedGraph => {
+  const { children, edges } = layoutedGraph;
+  if (!children || !edges) {
+    return throwError("layouted graph missing children or edges", layoutedGraph);
+  }
+
+  const layoutedNodes = children.map((node) => {
+    const { x, y } = node;
+    if (x === undefined || y === undefined) {
+      return throwError("node missing x or y in layout", node);
+    }
+    return { id: node.id, x, y };
+  });
+
+  const layoutedEdges = edges.map((edge) => {
+    const elkLabel = edge.labels?.[0]; // allowed to be missing if we're excluding labels from the layout calc
+    const elkSections = edge.sections;
+    if (!elkSections) {
+      return throwError("edge missing sections in layout", edge);
+    }
+    return { id: edge.id, elkLabel, elkSections };
+  });
+
+  return { layoutedNodes, layoutedEdges };
+};
+
 export const layout = async (
   diagram: Diagram,
   partition: boolean,
   layerNodeIslandsTogether: boolean,
   minimizeEdgeCrossings: boolean,
+  avoidEdgeLabelOverlap: boolean,
   thoroughness: number,
-): Promise<NodePosition[]> => {
+): Promise<LayoutedGraph> => {
   const { nodes, edges } = diagram;
 
   // see support layout options at https://www.eclipse.org/elk/reference/algorithms/org-eclipse-elk-layered.html
   const layoutOptions: LayoutOptions = {
     algorithm: "layered",
     "elk.direction": orientation,
-    // results in a more centered layout - seems to moreso ignore edges when laying out
-    "elk.edgeRouting": "POLYLINE",
+    // results in edges curving more around other things
+    "elk.edgeRouting": "SPLINES",
     "elk.spacing.edgeEdge": "0",
     // other placement strategies seem to either spread nodes out too much, or ignore edges between layers
     "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX",
     // allows grouping nodes by type (within a layer) when nodes are sorted by type
     // tried using `position` to do this but it doesn't group nodes near their source node
-    "elk.layered.considerModelOrder.strategy": "PREFER_NODES",
-    // these spacings are just what roughly seem to look good
-    "elk.layered.spacing.nodeNodeBetweenLayers": orientation === "DOWN" ? "130" : "220",
-    "elk.spacing.nodeNode": orientation === "DOWN" ? "20" : "50",
+    "elk.layered.considerModelOrder.strategy": "PREFER_EDGES",
+    // These spacings are just what roughly seem to look good.
+    // Note: Edge labels are given layers like nodes, so we need to halve the spacing between layers
+    // when including labels in the layout, in order to keep the same distance between nodes.
+    "elk.layered.spacing.nodeNodeBetweenLayers":
+      orientation === "DOWN"
+        ? scalePxViaDefaultFontSize(avoidEdgeLabelOverlap ? 65 : 130).toString()
+        : scalePxViaDefaultFontSize(avoidEdgeLabelOverlap ? 55 : 110).toString(),
+    "elk.spacing.nodeNode":
+      orientation === "DOWN"
+        ? scalePxViaDefaultFontSize(20).toString()
+        : scalePxViaDefaultFontSize(50).toString(),
     // allow nodes to be partitioned into layers by type
     "elk.partitioning.activate": partition ? "true" : "false",
     // ensure node islands don't overlap (needed for when node has 3 rows of text)
     // also keep node islands ("components") significantly spaced out, so they can be easily seen as separate
-    "elk.spacing.componentComponent": "150", // default is 20
+    "elk.spacing.componentComponent": scalePxViaDefaultFontSize(150).toString(), // default is 20
     // e.g. if no problem ties solutions together, still put those solutions into the same partition (if partitions are on)
     // want this off for cases when islands are truly unrelated, but on for when we're just hiding edges
     "elk.separateConnectedComponents": layerNodeIslandsTogether ? "false" : "true",
@@ -122,33 +239,59 @@ export const layout = async (
     // perhaps higher thoroughness means it'll find a layout that better uses space,
     // caring less about node order.
     "elk.layered.thoroughness": thoroughness.toString(),
-    // elk defaults to minimizing, but sometimes this makes nodes in the same layer be spread out a lot;
+    // Elk defaults to minimizing, but sometimes this makes nodes in the same layer be spread out a lot;
     // turning this off prioritizes nodes in the same layer being close together at the cost of more edge crossings.
     "crossingMinimization.strategy": minimizeEdgeCrossings ? "LAYER_SWEEP" : "NONE",
+    // Edges should all connect to a node at the same point, rather than different points
+    // this is particularly needed when drawing edge paths based on this layout algorithm's output.
+    mergeEdges: "true",
   };
 
   const graph: ElkNode = {
     id: "elkgraph",
     children: [...nodes]
-      .sort((node1, node2) => compareNodes(node1, node2))
+      .toSorted((node1, node2) => compareNodes(node1, node2))
       .map((node) => {
         return {
           id: node.id,
           width: nodeWidthPx,
-          height: nodeHeightPx,
+          height: calculateNodeHeight(node.data.label),
           layoutOptions: {
+            // Some nodes can be taller than others (based on how long their text is),
+            // so align them all along the center.
+            "elk.alignment": "CENTER",
             // Allow nodes to be partitioned into layers by type.
             // This can get awkward if there are multiple problems with their own sets of criteria,
             // solutions, components, effects; we might be able to improve that situation by modeling
             // each problem within a nested node. Or maybe we could just do partitioning within
             // a special "problem context view" rather than in the main topic diagram view.
-            "elk.partitioning.partition": calculatePartition(node, edges),
+            "elk.partitioning.partition": calculatePartition(node, diagram),
           },
         };
       }),
-    edges: edges.map((edge) => {
-      return { id: edge.id, sources: [edge.source], targets: [edge.target] };
-    }),
+    edges: edges
+      .toSorted((edge1, edge2) => compareEdges(edge1, edge2, nodes))
+      .map((edge) => {
+        return {
+          id: edge.id,
+          sources: [edge.source],
+          targets: [edge.target],
+          labels: avoidEdgeLabelOverlap
+            ? [
+                {
+                  text: edge.label,
+                  layoutOptions: {
+                    "edgeLabels.inline": "true",
+                  },
+                  width: scalePxViaDefaultFontSize(labelWidthPx),
+                  // Give labels 0 height so they don't create more space between node layers;
+                  // layout still avoids overlap with labels based on their widths when they have 0 height.
+                  height: 0,
+                },
+              ]
+            : undefined,
+        };
+      }),
   };
 
   // hack to try laying out without partition if partitions cause error
@@ -156,26 +299,22 @@ export const layout = async (
   try {
     const layoutedGraph = await elk.layout(graph, {
       layoutOptions,
-      logging: true,
-      measureExecutionTime: true,
+      // log-related options throw error with SPLINES edge routing somehow; see https://github.com/kieler/elkjs/issues/309
+      // logging: true,
+      // measureExecutionTime: true,
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return layoutedGraph.children!.map((node) => {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      return { id: node.id, x: node.x!, y: node.y! };
-    });
+    const parsedGraph = parseElkjsOutput(layoutedGraph);
+    return parsedGraph;
   } catch (error) {
     const layoutedGraph = await elk.layout(graph, {
       layoutOptions: { ...layoutOptions, "elk.partitioning.activate": "false" },
-      logging: true,
-      measureExecutionTime: true,
+      // log-related options throw error with SPLINES edge routing somehow; see https://github.com/kieler/elkjs/issues/309
+      // logging: true,
+      // measureExecutionTime: true,
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return layoutedGraph.children!.map((node) => {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      return { id: node.id, x: node.x!, y: node.y! };
-    });
+    const parsedGraph = parseElkjsOutput(layoutedGraph);
+    return parsedGraph;
   }
 };

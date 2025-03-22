@@ -1,24 +1,35 @@
 {
   "name": "docs-site",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "//dev": "port 3008 for docs, to distinguish from deploying app",
     "dev": "next -p 3008",
     "//build": "delete .next to prevent netlify from caching and not updating sidebar when page titles change - thanks https://github.com/shuding/nextra/issues/1564#issuecomment-1688460307",
     "build": "npm run clean && next build",
+    "//sort-sitemap1": "sort lines 3 to n-1 of the sitemap (these are hardcoded where the url tags should be). command is based on the stackoverflow answer here https://stackoverflow.com/a/46018020/8409296",
+    "//sort-sitemap2": "note: avoided using `ex` command for this because that apparently isn't on netlify's default toolchain for building nextjs projects",
+    "//sort-sitemap3": "sitemap is sorted because for some reason after upgrading to nextra 4, order of pages seems to change after each build",
+    "sort-sitemap": "{ head -n 2 public/sitemap.xml; sed '1,2d;$d' public/sitemap.xml | sort; tail -n 1 public/sitemap.xml; } > public/sitemap.tmp && mv public/sitemap.tmp public/sitemap.xml",
+    "//postbuild": "build sitemap (sorted) and pagefind index (for searching docs)",
+    "postbuild": "next-sitemap && npm run sort-sitemap && pagefind --site .next/server/app --output-path public/_pagefind",
     "clean": "rm -rf .next",
     "start": "next start -p 3008"
   },
+  "/": "dompurify should not be needed here, it's only used indirectly via nextra's mermaid rendering, but there is a dependency issue they need to fix, see https://github.com/mermaid-js/mermaid/issues/6078",
   "dependencies": {
-    "next": "^14.1.1",
-    "next-plausible": "^3.12.2",
-    "nextra": "^2.13.3",
-    "nextra-theme-docs": "^2.13.3",
+    "dompurify": "^3.2.1",
+    "next": "^15.2.3",
+    "next-plausible": "^3.12.4",
+    "next-sitemap": "^4.2.3",
+    "nextra": "^4.2.16",
+    "nextra-theme-docs": "^4.2.16",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/node": "20.11.20",
+    "@types/react": "18.3.12",
     "@typescript-eslint/eslint-plugin": "^7.0.2",
     "@typescript-eslint/parser": "^7.0.2",
     "autoprefixer": "^10.4.19",
@@ -27,7 +38,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-functional": "^6.0.1",
     "eslint-plugin-import": "2.26.0",
-    "eslint-plugin-storybook": "^0.8.0",
+    "pagefind": "^1.3.0",
     "postcss": "^8.4.39",
     "tailwindcss": "^3.4.6",
     "typescript": "5.3.3"

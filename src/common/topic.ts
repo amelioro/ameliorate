@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import { reservedSecondLevelEndpointNames } from "@/common/reservedEndpointNames";
 import { userSchema } from "@/common/user";
+import { getBaseUrl } from "@/common/utils";
 
 // not sure how to guarantee that this matches the schema enum
 export const visibilityTypes = ["private", "unlisted", "public"] as const;
@@ -31,3 +32,9 @@ export const topicSchema = z.object({
 });
 
 export type Topic = z.infer<typeof topicSchema>;
+
+export const getLinkToTopic = (topic: Topic) => {
+  const sourceUrl = new URL(`/${topic.creatorName}/${topic.title}`, getBaseUrl());
+
+  return sourceUrl.href;
+};
