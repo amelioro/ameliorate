@@ -43,7 +43,7 @@ import { toPng } from "html-to-image";
 import { useState } from "react";
 import { getRectOfNodes, getTransformForBounds } from "reactflow";
 
-import { resetComment } from "@/web/comment/store/commentStore";
+import { resetComments } from "@/web/comment/store/commentStore";
 import { getDisplayNodes } from "@/web/topic/components/Diagram/externalFlowStore";
 import { downloadTopic, uploadTopic } from "@/web/topic/loadStores";
 import { resetTopicData } from "@/web/topic/store/utilActions";
@@ -151,16 +151,13 @@ export const MoreActionsDrawer = ({
 
   const [resetDialogOpen, setResetDialogOpen] = useState(false);
 
-  const resetComments = (
+  const resetDialog = (
     <Dialog
       open={resetDialogOpen}
       onClose={() => setResetDialogOpen(false)}
       aria-labelledby="alert-dialog-title"
     >
-      <DialogTitle id="alert-dialog-title">
-        {/* {/ Delete topic {user.username}/{topic.title}? /} */}
-        Reset Comments
-      </DialogTitle>
+      <DialogTitle id="alert-dialog-title">Reset Topic</DialogTitle>
       <DialogContent>
         <DialogContentText>
           This topic contains comments that will be removed with this action, and undoing will not
@@ -176,12 +173,12 @@ export const MoreActionsDrawer = ({
           variant="contained"
           onClick={() => {
             setResetDialogOpen(false);
-            resetComment();
+            resetComments();
             resetTopicData();
             resetQuickViews();
           }}
         >
-          RESET COMMENT
+          Reset Topic
         </Button>
       </DialogActions>
     </Dialog>
@@ -249,7 +246,7 @@ export const MoreActionsDrawer = ({
               >
                 <AutoStoriesOutlined />
               </IconButton>
-              {resetDialogOpen ? resetComments : <></>}
+              {resetDialogOpen ? resetDialog : <></>}
             </>
           )}
 
