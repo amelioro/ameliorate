@@ -161,6 +161,12 @@ export const deleteComment = (commentId: string) => {
   );
 };
 
+export const hasComments = () => {
+  const comments = useCommentStore.getState().comments;
+  if (comments.length > 0) return true;
+  else return false;
+};
+
 export const resetComments = () => {
   const topic = useCommentStore.getState().topic;
   useCommentStore.setState({ ...initialState, topic }, false, "resetComment");

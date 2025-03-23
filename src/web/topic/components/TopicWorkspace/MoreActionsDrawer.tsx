@@ -43,7 +43,7 @@ import { toPng } from "html-to-image";
 import { useState } from "react";
 import { getRectOfNodes, getTransformForBounds } from "reactflow";
 
-import { resetComments } from "@/web/comment/store/commentStore";
+import { hasComments, resetComments } from "@/web/comment/store/commentStore";
 import { getDisplayNodes } from "@/web/topic/components/Diagram/externalFlowStore";
 import { downloadTopic, uploadTopic } from "@/web/topic/loadStores";
 import { resetTopicData } from "@/web/topic/store/utilActions";
@@ -237,7 +237,7 @@ export const MoreActionsDrawer = ({
                 title="Reset Topic"
                 aria-label="Reset Topic"
                 onClick={() => {
-                  setResetDialogOpen(true);
+                  hasComments() && setResetDialogOpen(true);
                   // intentionally not resetting comments/drafts, since undoing a reset would be painful if comments were lost,
                   // and it's annoying to try and put these all on the same undo/redo button.
                   // if orphaned comments are really a problem, we should be able to manually clean them up.
