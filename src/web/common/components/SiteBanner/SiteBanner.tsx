@@ -26,7 +26,9 @@ export const SiteBanner = () => {
       onClose={() => hideBanner()}
     >
       🚀 Looking for an easy way to help out? Pilot test Ameliorate!{" "}
-      <Link href="https://ameliorate.app/docs/pilot-testing">Read more</Link>
+      <Link href="https://ameliorate.app/docs/pilot-testing" target="_blank">
+        Read more
+      </Link>
     </Alert>
   );
 };
