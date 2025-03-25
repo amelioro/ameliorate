@@ -28,7 +28,7 @@ export const Footer = () => {
         <NavLink href="/examples" target="_blank">
           Examples
         </NavLink>
-        <NavLink href="https://ameliorate.app/docs#mission--vision" target="_blank">
+        <NavLink href="https://ameliorate.app/docs/mission-vision" target="_blank">
           Mission & Vision
         </NavLink>
         <NavLink href="https://ameliorate.app/docs/release-status" target="_blank">
