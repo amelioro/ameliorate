@@ -10,7 +10,7 @@ type Tab = "diagram" | "details";
 const copy = {
   diagram: {
     title: "Problem-Solving Diagram",
-    description: `Lay out causes and effects, showing exactly how problems can be addressed. This creates a concrete visual in which discussion can be grounded.`,
+    description: `Lay out causes and effects, showing exactly how situations can be improved. This creates a concrete visual in which discussion can be grounded.`,
     image: (
       <Image
         src="https://github.com/user-attachments/assets/4ef151aa-ebd3-4a4d-b2af-259d7a55a285"
