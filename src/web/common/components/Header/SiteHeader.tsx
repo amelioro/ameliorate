@@ -9,7 +9,7 @@ import { Link } from "@/web/common/components/Link";
 import { NavLink } from "@/web/common/components/NavLink";
 import { SiteBanner } from "@/web/common/components/SiteBanner/SiteBanner";
 import { useSessionUser } from "@/web/common/hooks";
-import { discordInvite, githubRepo } from "@/web/common/urls";
+import { discordInvite, feedbackPage, githubRepo } from "@/web/common/urls";
 
 export const SiteHeader = () => {
   const theme = useTheme();
@@ -34,18 +34,18 @@ export const SiteHeader = () => {
       <Toolbar className="h-12 min-h-[auto]">
         <div className="flex flex-1 items-center justify-between gap-4 *:shrink-0">
           <div className="flex items-center gap-4">
-            <SiteMenu className="p-0 sm:hidden" />
+            <SiteMenu className="p-0 md:hidden" />
             <Logo />
             <NavLink href="/playground" className="hidden sm:block">
               Playground
             </NavLink>
             {sessionUser && (
-              <NavLink href={`/${sessionUser.username}`} className="hidden sm:block">
+              <NavLink href={`/${sessionUser.username}`} className="hidden md:block">
                 My Topics
               </NavLink>
             )}
             {/* this can be shown without being logged in because it'll redirect to the login page if need be */}
-            <NavLink href={"/new"} className="hidden sm:block">
+            <NavLink href={"/new"} className="hidden md:block">
               New Topic
             </NavLink>
           </div>
@@ -53,6 +53,9 @@ export const SiteHeader = () => {
           <div className="flex items-center gap-4">
             <NavLink href="https://ameliorate.app/docs" target="_blank" className="hidden sm:block">
               Docs
+            </NavLink>
+            <NavLink href={feedbackPage} target="_blank" className="hidden md:block">
+              Feedback
             </NavLink>
             <Link href={discordInvite} target="_blank" className="hidden sm:flex">
               <Image
@@ -62,7 +65,7 @@ export const SiteHeader = () => {
                 alt="discord link"
               />
             </Link>
-            <Link href={githubRepo} target="_blank" className="hidden sm:flex">
+            <Link href={githubRepo} target="_blank" className="flex">
               <Image
                 src={`/${theme.palette.mode}/GitHub-Mark.png`}
                 height={32}

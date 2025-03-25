@@ -1,4 +1,4 @@
-import { Add, AutoStories, Close, Fort, MenuBook } from "@mui/icons-material";
+import { Add, AutoStories, Campaign, Close, Fort, MenuBook } from "@mui/icons-material";
 import {
   Divider,
   Drawer,
@@ -14,7 +14,7 @@ import {
 import Image from "next/image";
 import NextLink from "next/link";
 
-import { discordInvite, githubRepo } from "@/web/common/urls";
+import { discordInvite, feedbackPage, githubRepo } from "@/web/common/urls";
 import favicon from "~/public/favicon.png";
 
 interface Props {
@@ -87,6 +87,15 @@ export const SiteDrawer = ({ username, isSiteDrawerOpen, setIsSiteDrawerOpen }: 
               <MenuBook />
             </ListItemIcon>
             <ListItemText primary="Docs" />
+          </ListItemButton>
+        </ListItem>
+
+        <ListItem>
+          <ListItemButton LinkComponent={NextLink} href={feedbackPage} target="_blank">
+            <ListItemIcon>
+              <Campaign />
+            </ListItemIcon>
+            <ListItemText primary="Feedback" />
           </ListItemButton>
         </ListItem>
 

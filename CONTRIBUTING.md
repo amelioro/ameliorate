@@ -21,7 +21,7 @@ If you'd like to reach out for any reason, here are a couple possible ways of do
 
 ## Providing feedback
 
-There's plenty of room for improvement in this project, and any ideas, suggestions, concerns, etc, are greatly appreciated! You can reach out through [the mediums above](#reaching-out) or [create a GitHub Issue](https://github.com/amelioro/ameliorate/issues/new/choose) (which is slightly more formal, but this is the system used for managing the project’s work, so if you create an issue, you can track its status).
+There's plenty of room for improvement in this project, and any ideas, suggestions, concerns, etc, are greatly appreciated! You can fill out [this one-way feedback form](https://docs.google.com/forms/d/e/1FAIpQLSe6_7AulrnZuOEV4amXApJs0ohW1Dd-51_no9eAq-MVcHDm1w/viewform), reach out through [the mediums above](#reaching-out), or [create a GitHub Issue](https://github.com/amelioro/ameliorate/issues/new/choose) (which is slightly more formal, but this is the system used for managing the project’s work, so if you create an issue, you can track its status).
 
 And here are some things that come to mind that’d be particularly useful for to share about:
 
