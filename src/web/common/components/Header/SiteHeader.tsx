@@ -7,6 +7,7 @@ import { ProfileButton } from "@/web/common/components/Header/ProfileButton";
 import { SiteMenu } from "@/web/common/components/Header/SiteMenu";
 import { Link } from "@/web/common/components/Link";
 import { NavLink } from "@/web/common/components/NavLink";
+import { SiteBanner } from "@/web/common/components/SiteBanner/SiteBanner";
 import { useSessionUser } from "@/web/common/hooks";
 import { discordInvite, githubRepo } from "@/web/common/urls";
 
@@ -27,7 +28,9 @@ export const SiteHeader = () => {
 
   return (
     <AppBar position="sticky" className="overflow-x-auto border-b bg-paperShaded-main shadow-none">
-      {/* <Toolbar variant="dense"> */}
+      {/* banner within app bar so that it matches stickiness of the toolbar */}
+      <SiteBanner />
+
       <Toolbar className="h-12 min-h-[auto]">
         <div className="flex flex-1 items-center justify-between gap-4 *:shrink-0">
           <div className="flex items-center gap-4">
