@@ -6,7 +6,8 @@ import { Link } from "@/web/common/components/Link";
 
 export const Headline = () => {
   return (
-    <div className="relative flex w-full justify-center sm:justify-normal">
+    // height set so that headline is better-centered regardless of screen height
+    <div className="relative flex h-[80svh] w-full justify-center sm:justify-normal">
       <Image
         src="https://github.com/user-attachments/assets/f61c41ef-0bde-4e03-9a98-98d12695f9d8"
         alt="cars-going-too-fast topic"
@@ -24,33 +25,29 @@ export const Headline = () => {
           cars-going-too-fast
         </Link>
       </Typography>
-      {/* max-w-xl to barely fit the headline on two lines */}
-      <div className="relative my-24 flex max-w-xl flex-col gap-4 rounded-3xl bg-paperPlain-main text-center sm:my-32 sm:border sm:border-primary-main sm:p-8 sm:text-left sm:shadow-xl">
-        <Typography
-          variant="h1"
-          fontWeight="bold"
-          className="flex self-center border-b-4 border-primary-main pb-1 text-3xl sm:self-start sm:border-b-8 sm:text-5xl"
-        >
-          Understand problems.
-          <br />
-          Improve decisions.
+      {/* max-w-xl to have a decent amount of space to the right to show the background image (on most screens) */}
+      <div className="relative flex max-w-xl flex-col self-center rounded-3xl bg-paperPlain-main text-center sm:border sm:border-primary-main sm:p-8 sm:text-left sm:shadow-xl">
+        <Typography variant="h1" className="self-center text-3xl sm:self-start sm:text-5xl">
+          What if it was trivial to understand someone's reasoning, and to add yours to it?
         </Typography>
 
-        <Typography variant="body1">
-          Tackle problems with confidence, working together to ensure that every detail and
-          perspective has been properly considered.
+        <Typography variant="body2" className="text-xs sm:mt-1">
+          <Link href="https://ameliorate.app/docs/mission-vision#vision" target="_blank">
+            here's what the world could look like
+          </Link>
         </Typography>
 
-        <Typography variant="body1" className="-mt-1">
+        <Typography variant="body1" className="mt-5 sm:mt-3">
           <span className="font-bold underline decoration-primary-main decoration-2">
             Ameliorate
           </span>{" "}
-          helps you <Link href="#break-things-down">break down problems</Link> in a way that's easy
-          to understand, refine, and align on, and provides <Link href="#features">tooling</Link>{" "}
-          for navigating and working with that information.
+          aims to make this a reality. It proposes{" "}
+          <Link href="#break-things-down">a way of breaking down problems</Link> that's particularly
+          built for collaborative refinement, and provides <Link href="#features">tooling</Link> for
+          navigating and working with that information.
         </Typography>
 
-        <div className="flex flex-wrap items-center justify-center gap-2 *:shrink-0 sm:justify-normal">
+        <div className="mt-3 flex flex-wrap items-center justify-center gap-2 *:shrink-0 sm:justify-normal">
           <Button variant="contained" LinkComponent={Link} href="/new">
             Start Building
           </Button>
