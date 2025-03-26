@@ -20,6 +20,12 @@ import {
   Upload,
 } from "@mui/icons-material";
 import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Divider,
   Drawer,
   IconButton,
@@ -34,8 +40,10 @@ import {
   Typography,
 } from "@mui/material";
 import { toPng } from "html-to-image";
+import { useState } from "react";
 import { getRectOfNodes, getTransformForBounds } from "reactflow";
 
+import { hasComments, resetComments } from "@/web/comment/store/commentStore";
 import { getDisplayNodes } from "@/web/topic/components/Diagram/externalFlowStore";
 import { downloadTopic, uploadTopic } from "@/web/topic/loadStores";
 import { resetTopicData } from "@/web/topic/store/utilActions";
@@ -141,6 +149,41 @@ export const MoreActionsDrawer = ({
   const fillNodesWithColor = useFillNodesWithColor();
   const expandDetailsTabs = useExpandDetailsTabs();
 
+  const [resetDialogOpen, setResetDialogOpen] = useState(false);
+
+  const resetDialog = (
+    <Dialog
+      open={resetDialogOpen}
+      onClose={() => setResetDialogOpen(false)}
+      aria-labelledby="alert-dialog-title"
+    >
+      <DialogTitle id="alert-dialog-title">Reset Topic</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          This topic contains comments that will be removed with this action, and undoing will not
+          bring them back. Do you want to proceed with the reset?
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button color="inherit" onClick={() => setResetDialogOpen(false)}>
+          Cancel
+        </Button>
+        <Button
+          color="error"
+          variant="contained"
+          onClick={() => {
+            setResetDialogOpen(false);
+            resetComments();
+            resetTopicData();
+            resetQuickViews();
+          }}
+        >
+          Reset Topic
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+
   return (
     <Drawer
       anchor="left"
@@ -194,8 +237,12 @@ export const MoreActionsDrawer = ({
                 title="Reset Topic"
                 aria-label="Reset Topic"
                 onClick={() => {
-                  resetTopicData();
-                  resetQuickViews();
+                  if (hasComments()) {
+                    setResetDialogOpen(true);
+                  } else {
+                    resetTopicData();
+                    resetQuickViews();
+                  }
                   // intentionally not resetting comments/drafts, since undoing a reset would be painful if comments were lost,
                   // and it's annoying to try and put these all on the same undo/redo button.
                   // if orphaned comments are really a problem, we should be able to manually clean them up.
@@ -204,6 +251,7 @@ export const MoreActionsDrawer = ({
               >
                 <AutoStoriesOutlined />
               </IconButton>
+              {resetDialogOpen ? resetDialog : <></>}
             </>
           )}
 
