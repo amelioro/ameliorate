@@ -163,8 +163,7 @@ export const deleteComment = (commentId: string) => {
 
 export const hasComments = () => {
   const comments = useCommentStore.getState().comments;
-  if (comments.length > 0) return true;
-  else return false;
+  return comments.length > 0;
 };
 
 export const resetComments = () => {
