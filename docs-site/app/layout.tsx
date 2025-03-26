@@ -33,7 +33,7 @@ const banner = (
     </Link>
     , it's expected to change a lot; feel free to{" "}
     <Link
-      href="https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md#providing-feedback"
+      href="https://docs.google.com/forms/d/e/1FAIpQLSe6_7AulrnZuOEV4amXApJs0ohW1Dd-51_no9eAq-MVcHDm1w/viewform"
       target="_blank"
       // not sure why this isn't applied to banner, but just took these classes from a link generated from an mdx file
       className="x:focus-visible:nextra-focus x:text-primary-600 x:underline x:hover:no-underline x:decoration-from-font x:[text-underline-position:from-font]"
