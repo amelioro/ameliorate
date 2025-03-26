@@ -84,6 +84,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://shiv-iiitk.vercel.app/"><img src="https://avatars.githubusercontent.com/u/96898103?v=4?s=100" width="100px;" alt="Shiv Shankar "/><br /><sub><b>Shiv Shankar </b></sub></a><br /><a href="https://github.com/amelioro/ameliorate/commits?author=shibv" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/rdubbi"><img src="https://avatars.githubusercontent.com/u/145716905?v=4?s=100" width="100px;" alt="Roy Badell"/><br /><sub><b>Roy Badell</b></sub></a><br /><a href="https://github.com/amelioro/ameliorate/commits?author=rdubbi" title="Code">💻</a> <a href="#design-rdubbi" title="Design">🎨</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/IAmPrem7685"><img src="https://avatars.githubusercontent.com/u/86892778?v=4?s=100" width="100px;" alt="IAmPrem7685"/><br /><sub><b>IAmPrem7685</b></sub></a><br /><a href="https://github.com/amelioro/ameliorate/commits?author=IAmPrem7685" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://mdiv.io"><img src="https://avatars.githubusercontent.com/u/96177680?v=4?s=100" width="100px;" alt="mdiv.io"/><br /><sub><b>mdiv.io</b></sub></a><br /><a href="https://github.com/amelioro/ameliorate/commits?author=2div" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
