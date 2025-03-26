@@ -151,7 +151,12 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
   return (
     <>
       <StyledReactFlow
-        className={flashlightMode ? " flashlight-mode" : ""}
+        className={
+          // annoying way of just relying on css to put the react-flow__panel in the bottom-right for big screens, upper-right for small screens
+          // so that it's opposite of the quick view select, which is sometimes overlayed and can otherwise overlap with the react-flow__panel
+          String.raw`[&_.react-flow\_\_panel]:top-0 [&_.react-flow\_\_panel]:bottom-auto lg:[&_.react-flow\_\_panel]:bottom-0 lg:[&_.react-flow\_\_panel]:top-auto` +
+          (flashlightMode ? " flashlight-mode" : "")
+        }
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}
