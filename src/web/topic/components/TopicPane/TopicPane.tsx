@@ -158,17 +158,7 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
   );
 
   return anchor !== "modal" ? (
-    <div
-      className={
-        // pt-12 to make room for the overlayed header.
-        // Bg with border for the whole div instead of just the Drawer so that it doesn't look like
-        // the diagram will show above the Drawer (for cases where the App Header isn't as wide as
-        // the Drawer, e.g. when screen is big enough for anchoring right).
-        "relative bg-paperShaded-main lg:pt-12 " +
-        (anchor === "left" ? " border-r" : "") +
-        (anchor === "right" ? " border-l" : "")
-      }
-    >
+    <div className="relative">
       <IconButton
         onClick={handlePaneToggle}
         color="primary"
@@ -184,7 +174,7 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
         open={isOpen}
         anchor={anchor}
         // z-auto because Pane should share space with other elements, so doesn't need to be in front
-        PaperProps={{ className: "bg-inherit border-x-0 lg:border-t z-auto" }}
+        PaperProps={{ className: "bg-paperShaded-main z-auto" }}
       >
         {paneContent}
       </StyledDrawer>

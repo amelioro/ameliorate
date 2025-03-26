@@ -220,194 +220,201 @@ export const ContentFooter = ({ overlay }: Props) => {
   return (
     <div
       className={
-        // max-w to keep children from being wide, but also prevent from being wider than screen (e.g. small 320px screen is scrunched without padding on 20rem)
-        "inset-x-0 bottom-0 flex flex-col gap-1.5 p-2 items-center *:max-w-[calc(min(20rem,100%))]" +
-        (overlay
-          ? " absolute z-10 pointer-events-none *:pointer-events-auto"
-          : " bg-paperShaded-main border-t")
+        "inset-x-0 bottom-0 flex flex-col items-center" +
+        // apply border if we're not overlaying
+        // if we're on large screen, the toolbar handles the border (this div doesn't handle border always because quick view select floats inside it sometimes and doesn't need border then)
+        (overlay ? "" : " bg-paperShaded-main border-t lg:border-none")
       }
     >
-      {/* show this in content footer when screens are small and it doesn't fit between AppHeader corners, otherwise put in header */}
-      <div className="block bg-paperShaded-main lg:hidden">
+      {/* show quick view select in footer when screens are small and people are tapping with their finger, since it's easier to reach then - otherwise put in header */}
+      <div
+        className={
+          // max-w to keep children from being wide, but also prevent from being wider than screen (e.g. small 320px screen is scrunched without padding on 20rem)
+          "lg:hidden max-w-[calc(min(20rem,100%))] p-1.5 *:bg-paperShaded-main flex" +
+          (overlay ? " absolute z-10 -translate-y-full" : "")
+        }
+      >
         <QuickViewSelect />
       </div>
 
       {/* Toolbar */}
       {/* Toolbar buttons have square-rounding to fit more snuggly into the toolbar; potentially could make */}
       {/* all icon buttons match this but they seem ok as the default full-rounded. */}
-      <div className="flex rounded border bg-paperShaded-main">
-        <ToggleButton
-          value={false}
-          selected={false}
-          title="Zen mode"
-          aria-label="Zen mode"
-          color="primary"
-          size="small"
-          onClick={() => toggleZenMode()}
-          className="rounded border-none"
-        >
-          <SelfImprovement />
-        </ToggleButton>
+      <div className="flex w-full justify-center border-t bg-paperShaded-main">
+        <div className="flex border-x">
+          <ToggleButton
+            value={false}
+            selected={false}
+            title="Zen mode"
+            aria-label="Zen mode"
+            color="primary"
+            size="small"
+            onClick={() => toggleZenMode()}
+            className="rounded border-none"
+          >
+            <SelfImprovement />
+          </ToggleButton>
 
-        <IconButton
-          title="Show/hide menu"
-          aria-label="Show/hide menu"
-          color="inherit"
-          size="small"
-          onClick={(event) => setShowHideMenuAnchorEl(event.currentTarget)}
-          // pr-0 because the dropdown arrow has a bunch of extra space
-          className="rounded border-none pr-0"
-        >
-          <TabUnselected />
-          <ArrowDropDown fontSize="small" />
-        </IconButton>
-        <ShowHideMenu anchorEl={showHideMenuAnchorEl} setAnchorEl={setShowHideMenuAnchorEl} />
+          <IconButton
+            title="Show/hide menu"
+            aria-label="Show/hide menu"
+            color="inherit"
+            size="small"
+            onClick={(event) => setShowHideMenuAnchorEl(event.currentTarget)}
+            // pr-0 because the dropdown arrow has a bunch of extra space
+            className="rounded border-none pr-0"
+          >
+            <TabUnselected />
+            <ArrowDropDown fontSize="small" />
+          </IconButton>
+          <ShowHideMenu anchorEl={showHideMenuAnchorEl} setAnchorEl={setShowHideMenuAnchorEl} />
 
-        {!onPlayground && (
-          <>
+          {!onPlayground && (
+            <>
+              <ToggleButton
+                value={isComparingPerspectives}
+                title="Compare perspectives"
+                aria-label="Compare perspectives"
+                color="primary"
+                size="small"
+                selected={isComparingPerspectives}
+                onClick={() =>
+                  isComparingPerspectives ? resetPerspectives() : comparePerspectives()
+                }
+                className="rounded border-none"
+              >
+                <Group />
+              </ToggleButton>
+
+              <IconButton
+                color="inherit"
+                title="Perspectives menu"
+                aria-label="Perspectives menu"
+                onClick={(event) => setPerspectivesMenuAnchorEl(event.currentTarget)}
+                // small width to keep the menu button narrow
+                // extra right padding because otherwise icon is too close to right-divider
+                // extra y padding to match other icon buttons with default fontSize="medium"
+                className="w-3 rounded py-2.5 pl-2 pr-2.5"
+              >
+                <ArrowDropDown fontSize="small" />
+              </IconButton>
+              <PerspectivesMenu
+                anchorEl={perspectivesMenuAnchorEl}
+                setAnchorEl={setPerspectivesMenuAnchorEl}
+              />
+            </>
+          )}
+
+          {/* TODO?: seems a bit awkward to only show when flashlight mode is on, but it's more awkward */}
+          {/* if we have no way of telling that it's on when we're clicking around the diagram */}
+          {flashlightMode && (
             <ToggleButton
-              value={isComparingPerspectives}
-              title="Compare perspectives"
-              aria-label="Compare perspectives"
+              value={flashlightMode}
+              title="Flashlight mode"
+              aria-label="Flashlight mode"
               color="primary"
               size="small"
-              selected={isComparingPerspectives}
-              onClick={() =>
-                isComparingPerspectives ? resetPerspectives() : comparePerspectives()
-              }
+              selected={flashlightMode}
+              onClick={() => toggleFlashlightMode(!flashlightMode)}
               className="rounded border-none"
             >
-              <Group />
+              <Highlight />
             </ToggleButton>
+          )}
 
-            <IconButton
-              color="inherit"
-              title="Perspectives menu"
-              aria-label="Perspectives menu"
-              onClick={(event) => setPerspectivesMenuAnchorEl(event.currentTarget)}
-              // small width to keep the menu button narrow
-              // extra right padding because otherwise icon is too close to right-divider
-              // extra y padding to match other icon buttons with default fontSize="medium"
-              className="w-3 rounded py-2.5 pl-2 pr-2.5"
+          {readonlyMode && (
+            <ToggleButton
+              value={readonlyMode}
+              title={`Read-only mode (${hotkeys.readonlyMode})`}
+              aria-label={`Read-only mode (${hotkeys.readonlyMode})`}
+              color="primary"
+              size="small"
+              selected={readonlyMode}
+              onClick={() => toggleReadonlyMode()}
+              className="rounded border-none"
             >
-              <ArrowDropDown fontSize="small" />
-            </IconButton>
-            <PerspectivesMenu
-              anchorEl={perspectivesMenuAnchorEl}
-              setAnchorEl={setPerspectivesMenuAnchorEl}
-            />
-          </>
-        )}
+              <EditOff />
+            </ToggleButton>
+          )}
 
-        {/* TODO?: seems a bit awkward to only show when flashlight mode is on, but it's more awkward */}
-        {/* if we have no way of telling that it's on when we're clicking around the diagram */}
-        {flashlightMode && (
-          <ToggleButton
-            value={flashlightMode}
-            title="Flashlight mode"
-            aria-label="Flashlight mode"
-            color="primary"
-            size="small"
-            selected={flashlightMode}
-            onClick={() => toggleFlashlightMode(!flashlightMode)}
-            className="rounded border-none"
+          {userCanEditTopicData && (
+            <>
+              <Divider orientation="vertical" flexItem />
+
+              <IconButton
+                color="inherit"
+                title="Delete"
+                aria-label="Delete"
+                onClick={() => {
+                  if (selectedGraphPart) {
+                    deleteGraphPart(selectedGraphPart);
+                  }
+                }}
+                // don't allow modifying edges that are part of the table, because they should always exist as long as their nodes do
+                disabled={!selectedGraphPart || partIsTableEdge}
+                className="rounded"
+              >
+                <Delete />
+              </IconButton>
+            </>
+          )}
+
+          <Divider orientation="vertical" flexItem />
+
+          <IconButton
+            color="inherit"
+            title="More actions"
+            aria-label="More actions"
+            onClick={() => setIsMoreActionsDrawerOpen(true)}
+            className="rounded"
           >
-            <Highlight />
-          </ToggleButton>
-        )}
+            <Build />
+          </IconButton>
+          <MoreActionsDrawer
+            isMoreActionsDrawerOpen={isMoreActionsDrawerOpen}
+            setIsMoreActionsDrawerOpen={setIsMoreActionsDrawerOpen}
+            sessionUser={sessionUser}
+            userCanEditTopicData={userCanEditTopicData}
+          />
 
-        {readonlyMode && (
-          <ToggleButton
-            value={readonlyMode}
-            title={`Read-only mode (${hotkeys.readonlyMode})`}
-            aria-label={`Read-only mode (${hotkeys.readonlyMode})`}
-            color="primary"
-            size="small"
-            selected={readonlyMode}
-            onClick={() => toggleReadonlyMode()}
-            className="rounded border-none"
+          <IconButton
+            color="inherit"
+            title="Help"
+            aria-label="Help"
+            onClick={(event) => setHelpAnchorEl(event.currentTarget)}
+            className="rounded"
           >
-            <EditOff />
-          </ToggleButton>
-        )}
+            <QuestionMark />
+          </IconButton>
+          <HelpMenu helpAnchorEl={helpAnchorEl} setHelpAnchorEl={setHelpAnchorEl} />
 
-        {userCanEditTopicData && (
-          <>
-            <Divider orientation="vertical" flexItem />
-
-            <IconButton
-              color="inherit"
-              title="Delete"
-              aria-label="Delete"
-              onClick={() => {
-                if (selectedGraphPart) {
-                  deleteGraphPart(selectedGraphPart);
-                }
-              }}
-              // don't allow modifying edges that are part of the table, because they should always exist as long as their nodes do
-              disabled={!selectedGraphPart || partIsTableEdge}
-              className="rounded"
+          {hasErrored && (
+            <Tooltip
+              title={
+                <span>
+                  Failed to save changes - your changes will be lost after refreshing the page.
+                  <br />
+                  <br />
+                  Please refresh the page and try making your changes again, or download your topic
+                  with your changes and re-upload it after refreshing the page.
+                </span>
+              }
+              enterTouchDelay={0} // allow touch to immediately trigger
+              leaveTouchDelay={Infinity} // touch-away to close on mobile, since message is long
             >
-              <Delete />
-            </IconButton>
-          </>
-        )}
-
-        <Divider orientation="vertical" flexItem />
-
-        <IconButton
-          color="inherit"
-          title="More actions"
-          aria-label="More actions"
-          onClick={() => setIsMoreActionsDrawerOpen(true)}
-          className="rounded"
-        >
-          <Build />
-        </IconButton>
-        <MoreActionsDrawer
-          isMoreActionsDrawerOpen={isMoreActionsDrawerOpen}
-          setIsMoreActionsDrawerOpen={setIsMoreActionsDrawerOpen}
-          sessionUser={sessionUser}
-          userCanEditTopicData={userCanEditTopicData}
-        />
-
-        <IconButton
-          color="inherit"
-          title="Help"
-          aria-label="Help"
-          onClick={(event) => setHelpAnchorEl(event.currentTarget)}
-          className="rounded"
-        >
-          <QuestionMark />
-        </IconButton>
-        <HelpMenu helpAnchorEl={helpAnchorEl} setHelpAnchorEl={setHelpAnchorEl} />
-
-        {hasErrored && (
-          <Tooltip
-            title={
-              <span>
-                Failed to save changes - your changes will be lost after refreshing the page.
-                <br />
-                <br />
-                Please refresh the page and try making your changes again, or download your topic
-                with your changes and re-upload it after refreshing the page.
-              </span>
-            }
-            enterTouchDelay={0} // allow touch to immediately trigger
-            leaveTouchDelay={Infinity} // touch-away to close on mobile, since message is long
-          >
-            <IconButton
-              color="error"
-              aria-label="Error info"
-              // Don't make it look like clicking will do something, since it won't.
-              // Using a button here is an attempt to make it accessible, since the tooltip will show
-              // on focus.
-              className="cursor-default rounded"
-            >
-              <Error />
-            </IconButton>
-          </Tooltip>
-        )}
+              <IconButton
+                color="error"
+                aria-label="Error info"
+                // Don't make it look like clicking will do something, since it won't.
+                // Using a button here is an attempt to make it accessible, since the tooltip will show
+                // on focus.
+                className="cursor-default rounded"
+              >
+                <Error />
+              </IconButton>
+            </Tooltip>
+          )}
+        </div>
       </div>
     </div>
   );

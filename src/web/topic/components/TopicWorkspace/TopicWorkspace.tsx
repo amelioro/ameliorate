@@ -5,6 +5,7 @@ import { ToggleButton, useMediaQuery } from "@mui/material";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import { ContextMenu } from "@/web/common/components/ContextMenu/ContextMenu";
+import { SiteBanner } from "@/web/common/components/SiteBanner/SiteBanner";
 import { useSessionUser } from "@/web/common/hooks";
 import { CriteriaTable } from "@/web/topic/components/CriteriaTable/CriteriaTable";
 import { Diagram } from "@/web/topic/components/Diagram/Diagram";
@@ -78,9 +79,11 @@ export const TopicWorkspace = () => {
   return (
     // h-svh to force workspace to take up full height of screen
     <div className="relative flex h-svh flex-col">
+      <SiteBanner />
+
       {!zenMode && <AppHeader />}
 
-      <div className="relative flex size-full flex-row overflow-auto">
+      <div className="relative flex w-full grow flex-row overflow-auto">
         <WorkspaceContext.Provider value="details">
           <TopicPane
             anchor={usingLgScreen ? "left" : "modal"}
