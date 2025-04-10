@@ -27,3 +27,16 @@ If there are only a couple variations you care to consider, you could treat each
   considered: add an Option node type; allow any node type to be an option for another related node;
   add variables with discrete possible values as a new kind of information that any node can have.
 </Callout>
+
+### Cycles / Circular dependencies
+
+Sometimes two nodes cause each other, e.g. A causes B and B also causes A. This is a bit awkward to model in Ameliorate, because of the following limitations that currently exist:
+
+1. nodes are laid out such that relations always flow in the same direction (i.e. bottom-to-top) (to keep flow consistent and easy-to-see)
+2. nodes cannot have multiple edges between each other (this was an assumption originally for saving coding effort)
+
+The [diagram-choices-cycles](https://ameliorate.app/keyserj/diagram-choices-cycles) topic shows some ways to model this situation:
+
+1. [Indirect cycle](https://ameliorate.app/keyserj/diagram-choices-cycles?view=Indirect+cycle): create an intermediate node X such that A causes B, B causes X, then X can cause A. This is probably the most intuitive, but only works if the cycle is indirect, and one of the edges will look a bit awkward as it rotates around.
+2. [Opposite edge label](https://ameliorate.app/keyserj/diagram-choices-cycles?view=Opposite+edge+label): use an opposite edge label, e.g. A causes B, and A is caused by B. This is a bit awkward because the edges both point the same directions but they mean opposite things.
+3. [Duplicate one node](https://ameliorate.app/keyserj/diagram-choices-cycles?view=Duplicate+one+node): create a second node A2 with the same text as A, such that such that A causes B, and B causes A2. This creates an awkward duplication, and A2 doesn't automatically have all the details that A has (even though it should), but it allows both relations to be considered.
