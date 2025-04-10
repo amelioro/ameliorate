@@ -174,6 +174,10 @@ const findNodesRecursivelyFrom = (
   toDirection: RelationDirection,
   graph: Graph,
   labels?: RelationName[],
+  /**
+   * track if we've seen the node already, so that we avoid infinite recursion if there's a cycle
+   */
+  seenIds: string[] = [fromNode.id],
 ): Node[] => {
   const from = toDirection === "child" ? "source" : "target";
   const to = toDirection === "child" ? "target" : "source";
@@ -181,12 +185,21 @@ const findNodesRecursivelyFrom = (
   const foundEdges = graph.edges.filter(
     (edge) => edge[from] === fromNode.id && (!labels || labels.includes(edge.label)),
   );
-  const foundNodes = foundEdges.map((edge) => findNodeOrThrow(edge[to], graph.nodes));
+  const foundNodes = foundEdges
+    .map((edge) => findNodeOrThrow(edge[to], graph.nodes))
+    .filter((node) => !seenIds.includes(node.id));
 
   if (foundNodes.length === 0) return [];
 
+  const seenIdsWithFound = seenIds.concat(foundNodes.map((node) => node.id));
+
   const furtherNodes = foundNodes.flatMap((node) =>
-    findNodesRecursivelyFrom(node, toDirection, graph, labels),
+    // could update seenIds between furtherNode iterations here, but:
+    // 1. not sure how to do that immutably
+    // 2. the mutation makes it a bit harder to follow
+    // 3. seems like cycles would be created during nested recursions, not sibling recursions,
+    // and those should be prevented via seenIdsWithFound
+    findNodesRecursivelyFrom(node, toDirection, graph, labels, seenIdsWithFound),
   );
 
   return uniqBy(foundNodes.concat(furtherNodes), (node) => node.id);

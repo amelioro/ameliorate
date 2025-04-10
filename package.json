@@ -127,6 +127,7 @@
     "eslint-plugin-tailwindcss": "3.15.1",
     "execa": "7.1.1",
     "husky": "8.0.3",
+    "jest-extended": "4.0.2",
     "lint-staged": "13.2.3",
     "postcss": "8.4.38",
     "prettier": "3.3.2",
