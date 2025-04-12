@@ -1,3 +1,4 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AutoAwesomeMotion,
   AutoStoriesOutlined,
@@ -29,19 +30,23 @@ import {
   Divider,
   Drawer,
   IconButton,
+  InputAdornment,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
   MenuItem,
   Select,
+  TextField,
   ToggleButton,
   Tooltip,
   Typography,
 } from "@mui/material";
 import { toPng } from "html-to-image";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { getRectOfNodes, getTransformForBounds } from "reactflow";
+import { z } from "zod";
 
 import { hasComments, resetComments } from "@/web/comment/store/commentStore";
 import { getDisplayNodes } from "@/web/topic/components/Diagram/externalFlowStore";
@@ -83,39 +88,14 @@ import {
   useFillNodesWithColor,
 } from "@/web/view/userConfigStore";
 
-const imageWidth = 2560;
-const imageHeight = 1440;
+const ScreenshotSchema = z.object({
+  width: z.number().int().positive({ message: "Must be a positive number" }),
+  height: z.number().int().positive({ message: "Must be a positive number" }),
+});
 
-const downloadScreenshot = () => {
-  const nodes = getDisplayNodes();
+type ScreenshotForm = z.infer<typeof ScreenshotSchema>;
 
-  // thanks react flow example https://reactflow.dev/examples/misc/download-image
-  const nodesBounds = getRectOfNodes(nodes);
-  const transform = getTransformForBounds(nodesBounds, imageWidth, imageHeight, 0.125, 2);
-  const viewportElement = document.querySelector(".react-flow__viewport");
-  if (!viewportElement) throw new Error("Couldn't find viewport element to take screenshot of");
-
-  toPng(viewportElement as HTMLElement, {
-    backgroundColor: "#fff",
-    width: imageWidth,
-    height: imageHeight,
-    style: {
-      width: imageWidth.toString(),
-      height: imageHeight.toString(),
-      transform: `translate(${transform[0]}px, ${transform[1]}px) scale(${transform[2]})`,
-    },
-  })
-    .then((dataUrl) => {
-      const a = document.createElement("a");
-
-      a.setAttribute("download", "topic.png");
-      a.setAttribute("href", dataUrl);
-      a.click();
-    })
-    .catch((error: unknown) => {
-      throw error;
-    });
-};
+const defaultResolution = { width: 2560, height: 1440 };
 
 interface Props {
   isMoreActionsDrawerOpen: boolean;
@@ -150,6 +130,46 @@ export const MoreActionsDrawer = ({
   const expandDetailsTabs = useExpandDetailsTabs();
 
   const [resetDialogOpen, setResetDialogOpen] = useState(false);
+  const [screenshotDialogOpen, setScreenshotDialogOpen] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ScreenshotForm>({
+    defaultValues: defaultResolution,
+    resolver: zodResolver(ScreenshotSchema),
+  });
+
+  const onScreenshotSubmit = ({ width, height }: ScreenshotForm) => {
+    const nodes = getDisplayNodes();
+    const nodesBounds = getRectOfNodes(nodes);
+    const transform = getTransformForBounds(nodesBounds, width, height, 0.125, 2);
+    const viewportElement = document.querySelector(".react-flow__viewport");
+    if (!viewportElement) throw new Error("Couldn't find viewport element to screenshot");
+
+    toPng(viewportElement as HTMLElement, {
+      backgroundColor: "#fff",
+      width,
+      height,
+      style: {
+        width: width.toString(),
+        height: height.toString(),
+        transform: `translate(${transform[0]}px, ${transform[1]}px) scale(${transform[2]})`,
+      },
+    })
+      .then((dataUrl) => {
+        const a = document.createElement("a");
+        a.setAttribute("download", "topic.png");
+        a.setAttribute("href", dataUrl);
+        a.click();
+      })
+      .catch((error: unknown) => {
+        console.error("Failed to export PNG:", error);
+      });
+
+    setScreenshotDialogOpen(false);
+  };
 
   const resetDialog = (
     <Dialog
@@ -268,8 +288,7 @@ export const MoreActionsDrawer = ({
             <IconButton
               color="inherit"
               title="Download Screenshot of Diagram"
-              aria-label="Download Screenshot of Diagram"
-              onClick={() => downloadScreenshot()}
+              onClick={() => setScreenshotDialogOpen(true)}
             >
               <PhotoCamera />
             </IconButton>
@@ -479,6 +498,46 @@ export const MoreActionsDrawer = ({
           </ToggleButton>
         </ListItem>
       </List>
+
+      {/* Screenshot Resolution Dialog  */}
+      <Dialog open={screenshotDialogOpen} onClose={() => setScreenshotDialogOpen(false)}>
+        <DialogTitle>Set Screenshot Resolution</DialogTitle>
+        <DialogContent>
+          <TextField
+            fullWidth
+            label="Width"
+            type="number"
+            margin="dense"
+            InputProps={{ endAdornment: <InputAdornment position="end">px</InputAdornment> }}
+            error={!!errors.width}
+            helperText={errors.width?.message}
+            {...register("width", { valueAsNumber: true, min: 1 })}
+          />
+          <TextField
+            fullWidth
+            label="Height"
+            type="number"
+            margin="dense"
+            InputProps={{ endAdornment: <InputAdornment position="end">px</InputAdornment> }}
+            error={!!errors.height}
+            helperText={errors.height?.message}
+            {...register("height", { valueAsNumber: true, min: 1 })}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setScreenshotDialogOpen(false)} color="inherit">
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            variant="contained"
+            onClick={() => void handleSubmit(onScreenshotSubmit)()}
+            color="primary"
+          >
+            Download
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Drawer>
   );
 };
