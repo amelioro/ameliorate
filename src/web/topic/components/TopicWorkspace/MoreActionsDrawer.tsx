@@ -88,12 +88,12 @@ import {
   useFillNodesWithColor,
 } from "@/web/view/userConfigStore";
 
-const ScreenshotSchema = z.object({
-  width: z.number().int().positive({ message: "Must be a positive number" }),
-  height: z.number().int().positive({ message: "Must be a positive number" }),
+const ScreenshotFormSchema = z.object({
+  width: z.number().int().positive(),
+  height: z.number().int().positive(),
 });
 
-type ScreenshotForm = z.infer<typeof ScreenshotSchema>;
+type ScreenshotFormData = z.infer<typeof ScreenshotFormSchema>;
 
 const defaultResolution = { width: 2560, height: 1440 };
 
@@ -136,12 +136,15 @@ export const MoreActionsDrawer = ({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ScreenshotForm>({
+  } = useForm<ScreenshotFormData>({
+    mode: "onBlur",
+    reValidateMode: "onBlur",
     defaultValues: defaultResolution,
-    resolver: zodResolver(ScreenshotSchema),
+    resolver: zodResolver(ScreenshotFormSchema),
   });
 
-  const onScreenshotSubmit = ({ width, height }: ScreenshotForm) => {
+  // thanks react flow example https://reactflow.dev/examples/misc/download-image
+  const onScreenshotSubmit = ({ width, height }: ScreenshotFormData) => {
     const nodes = getDisplayNodes();
     const nodesBounds = getRectOfNodes(nodes);
     const transform = getTransformForBounds(nodesBounds, width, height, 0.125, 2);
@@ -500,40 +503,41 @@ export const MoreActionsDrawer = ({
       </List>
 
       {/* Screenshot Resolution Dialog  */}
-      <Dialog open={screenshotDialogOpen} onClose={() => setScreenshotDialogOpen(false)}>
+      <Dialog
+        open={screenshotDialogOpen}
+        onClose={() => setScreenshotDialogOpen(false)}
+        PaperProps={{
+          component: "form",
+          onSubmit: (event: React.FormEvent<HTMLFormElement>) =>
+            void handleSubmit(onScreenshotSubmit)(event),
+        }}
+      >
         <DialogTitle>Set Screenshot Resolution</DialogTitle>
-        <DialogContent>
+        <DialogContent className="flex flex-col">
           <TextField
-            fullWidth
             label="Width"
             type="number"
             margin="dense"
             InputProps={{ endAdornment: <InputAdornment position="end">px</InputAdornment> }}
             error={!!errors.width}
             helperText={errors.width?.message}
-            {...register("width", { valueAsNumber: true, min: 1 })}
+            {...register("width", { valueAsNumber: true })}
           />
           <TextField
-            fullWidth
             label="Height"
             type="number"
             margin="dense"
             InputProps={{ endAdornment: <InputAdornment position="end">px</InputAdornment> }}
             error={!!errors.height}
             helperText={errors.height?.message}
-            {...register("height", { valueAsNumber: true, min: 1 })}
+            {...register("height", { valueAsNumber: true })}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setScreenshotDialogOpen(false)} color="inherit">
             Cancel
           </Button>
-          <Button
-            type="submit"
-            variant="contained"
-            onClick={() => void handleSubmit(onScreenshotSubmit)()}
-            color="primary"
-          >
+          <Button type="submit" variant="contained" color="primary">
             Download
           </Button>
         </DialogActions>
