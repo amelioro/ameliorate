@@ -97,6 +97,36 @@ type ScreenshotFormData = z.infer<typeof ScreenshotFormSchema>;
 
 const defaultResolution = { width: 2560, height: 1440 };
 
+const onScreenshotSubmit = ({ width, height }: ScreenshotFormData) => {
+  const nodes = getDisplayNodes();
+
+  // thanks react flow example https://reactflow.dev/examples/misc/download-image
+  const nodesBounds = getRectOfNodes(nodes);
+  const transform = getTransformForBounds(nodesBounds, width, height, 0.125, 2);
+  const viewportElement = document.querySelector(".react-flow__viewport");
+  if (!viewportElement) throw new Error("Couldn't find viewport element to screenshot");
+
+  toPng(viewportElement as HTMLElement, {
+    backgroundColor: "#fff",
+    width,
+    height,
+    style: {
+      width: width.toString(),
+      height: height.toString(),
+      transform: `translate(${transform[0]}px, ${transform[1]}px) scale(${transform[2]})`,
+    },
+  })
+    .then((dataUrl) => {
+      const a = document.createElement("a");
+      a.setAttribute("download", "topic.png");
+      a.setAttribute("href", dataUrl);
+      a.click();
+    })
+    .catch((error: unknown) => {
+      console.error("Failed to export PNG:", error);
+    });
+};
+
 interface Props {
   isMoreActionsDrawerOpen: boolean;
   setIsMoreActionsDrawerOpen: (isOpen: boolean) => void;
@@ -142,37 +172,6 @@ export const MoreActionsDrawer = ({
     defaultValues: defaultResolution,
     resolver: zodResolver(ScreenshotFormSchema),
   });
-
-  // thanks react flow example https://reactflow.dev/examples/misc/download-image
-  const onScreenshotSubmit = ({ width, height }: ScreenshotFormData) => {
-    const nodes = getDisplayNodes();
-    const nodesBounds = getRectOfNodes(nodes);
-    const transform = getTransformForBounds(nodesBounds, width, height, 0.125, 2);
-    const viewportElement = document.querySelector(".react-flow__viewport");
-    if (!viewportElement) throw new Error("Couldn't find viewport element to screenshot");
-
-    toPng(viewportElement as HTMLElement, {
-      backgroundColor: "#fff",
-      width,
-      height,
-      style: {
-        width: width.toString(),
-        height: height.toString(),
-        transform: `translate(${transform[0]}px, ${transform[1]}px) scale(${transform[2]})`,
-      },
-    })
-      .then((dataUrl) => {
-        const a = document.createElement("a");
-        a.setAttribute("download", "topic.png");
-        a.setAttribute("href", dataUrl);
-        a.click();
-      })
-      .catch((error: unknown) => {
-        console.error("Failed to export PNG:", error);
-      });
-
-    setScreenshotDialogOpen(false);
-  };
 
   const resetDialog = (
     <Dialog
@@ -508,8 +507,12 @@ export const MoreActionsDrawer = ({
         onClose={() => setScreenshotDialogOpen(false)}
         PaperProps={{
           component: "form",
-          onSubmit: (event: React.FormEvent<HTMLFormElement>) =>
-            void handleSubmit(onScreenshotSubmit)(event),
+          onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
+            void handleSubmit((data) => {
+              onScreenshotSubmit(data);
+              setScreenshotDialogOpen(false);
+            })(event);
+          },
         }}
       >
         <DialogTitle>Set Screenshot Resolution</DialogTitle>
