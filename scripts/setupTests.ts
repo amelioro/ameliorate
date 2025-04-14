@@ -1,8 +1,13 @@
+import * as matchers from "jest-extended";
 import { PrismockClient } from "prismock";
 import { PrismockClientType } from "prismock/build/main/lib/client";
-import { afterEach, vi } from "vitest";
+import { afterEach, expect, vi } from "vitest";
 
 import { xprisma } from "../src/db/extendedPrisma";
+
+// add more matchers, e.g. `toIncludeSameMembers` for array comparison without order
+// set up by following https://jest-extended.jestcommunity.dev/docs/getting-started/setup#use-with-vitest
+expect.extend(matchers);
 
 // for some reason I had a really tough time trying to get vitest to load vars from `.env.test`, so we're just setting them here instead
 /* eslint-disable functional/immutable-data */
