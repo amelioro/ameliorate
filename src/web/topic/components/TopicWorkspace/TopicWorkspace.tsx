@@ -18,7 +18,9 @@ import { TutorialAnchor } from "@/web/topic/components/TopicWorkspace/TutorialAn
 import { TutorialController } from "@/web/topic/components/TopicWorkspace/TutorialController";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { setScore } from "@/web/topic/store/actions";
+import { deleteGraphPart } from "@/web/topic/store/createDeleteActions";
 import { playgroundUsername } from "@/web/topic/store/store";
+import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { isOnPlayground } from "@/web/topic/store/utilActions";
 import { Score, possibleScores } from "@/web/topic/utils/graph";
 import { hotkeys } from "@/web/topic/utils/hotkeys";
@@ -30,19 +32,30 @@ import { getSelectedGraphPart, setSelected } from "@/web/view/selectedPartStore"
 import { toggleZenMode, useZenMode } from "@/web/view/userConfigStore";
 
 const useWorkspaceHotkeys = (user: { username: string } | null | undefined) => {
+  const userCanEditTopicData = useUserCanEditTopicData(user?.username);
   useHotkeys([hotkeys.deselectPart], () => setSelected(null));
   useHotkeys([hotkeys.readonlyMode], () => toggleReadonlyMode());
 
   useHotkeys([hotkeys.score], (_, hotkeysEvent) => {
-    const selectedPart = getSelectedGraphPart();
-    if (!selectedPart || !hotkeysEvent.keys) return;
+    const selectedGraphPart = getSelectedGraphPart();
+    if (!selectedGraphPart || !hotkeysEvent.keys) return;
     const [score] = hotkeysEvent.keys;
     if (!score || !possibleScores.some((s) => score === s)) return;
 
     // seems slightly awkward that there's logic here not reused with the Score component, but hard to reuse that in a clean way
     const myUsername = isOnPlayground() ? playgroundUsername : user?.username;
     if (!userCanEditScores(myUsername, getPerspectives(), getReadonlyMode())) return;
-    setScore(myUsername, selectedPart.id, score as Score);
+    setScore(myUsername, selectedGraphPart.id, score as Score);
+  });
+  //add hotkey for deleting a graph part
+  useHotkeys([hotkeys.delete], () => {
+    const selectedGraphPart = getSelectedGraphPart();
+    if (!selectedGraphPart) return;
+    const myUsername = isOnPlayground() ? playgroundUsername : user?.username;
+    if (!userCanEditScores(myUsername, getPerspectives(), getReadonlyMode())) return;
+
+    if (!userCanEditTopicData) return;
+    deleteGraphPart(selectedGraphPart);
   });
 };
 
