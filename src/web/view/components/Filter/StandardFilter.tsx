@@ -9,6 +9,7 @@ import { FormContext } from "@/web/common/components/Form/FormContext";
 import { NodeSelect } from "@/web/common/components/Form/NodeSelect";
 import { NumberInput } from "@/web/common/components/Form/NumberInput";
 import { Select } from "@/web/common/components/Form/Select";
+import { toSpaceCase } from "@/web/common/utils/stringUtils";
 import { useCriteria, useNodesOfType, useSolutions } from "@/web/topic/store/nodeHooks";
 import {
   getStandardFilterWithFallbacks,
@@ -72,7 +73,11 @@ export const StandardFilter = ({ infoCategory, filter }: Props) => {
       <FormContext.Provider value={{ submit }}>
         <form style={{ padding: "8px" }}>
           <Stack spacing={1.5}>
-            <Select name="type" label="Standard Filter" options={filterTypes} />
+            <Select
+              name="type"
+              label="Standard Filter"
+              options={filterTypes.map((type) => ({ id: type, label: toSpaceCase(type) }))}
+            />
 
             {"layersDeep" in typeSchemaShape && <NumberInput name="layersDeep" min={0} max={10} />}
 
@@ -85,7 +90,14 @@ export const StandardFilter = ({ infoCategory, filter }: Props) => {
             )}
 
             {"problemDetails" in typeSchemaShape && (
-              <Select name="problemDetails" options={problemDetails} multiple />
+              <Select
+                name="problemDetails"
+                options={problemDetails.map((detail) => ({
+                  id: detail,
+                  label: toSpaceCase(detail),
+                }))}
+                multiple
+              />
             )}
 
             {"centralSolutionId" in typeSchemaShape && (
@@ -99,7 +111,10 @@ export const StandardFilter = ({ infoCategory, filter }: Props) => {
               // TODO: build options with Pascal Case
               <Select
                 name="solutionDetail"
-                options={typeSchemaShape.solutionDetail.options.map((option) => option)}
+                options={typeSchemaShape.solutionDetail.options.map((option) => ({
+                  id: option,
+                  label: toSpaceCase(option),
+                }))}
               />
             )}
             {"solutions" in typeSchemaShape && (
