@@ -2,7 +2,6 @@ import { Autocomplete, TextField } from "@mui/material";
 import { startCase } from "lodash";
 import { useContext, useMemo } from "react";
 import { useController } from "react-hook-form";
-
 import { FormContext } from "@/web/common/components/Form/FormContext";
 
 interface Props {
@@ -33,7 +32,7 @@ export const Select = ({
   const optionsObjects = useMemo(
     () =>
       options.map((option) => {
-        return typeof option === "object" ? option : { id: option, label: option };
+        return typeof option === "object" ? option : { id: option, label: startCase(option) };
       }),
     [options],
   );

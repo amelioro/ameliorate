@@ -9,7 +9,6 @@ import { FormContext } from "@/web/common/components/Form/FormContext";
 import { NodeSelect } from "@/web/common/components/Form/NodeSelect";
 import { Select } from "@/web/common/components/Form/Select";
 import { Switch } from "@/web/common/components/Form/Switch";
-import { toSpaceCase } from "@/web/common/utils/stringUtils";
 import { useAllNodes } from "@/web/topic/store/nodeHooks";
 import { possibleScores } from "@/web/topic/utils/graph";
 import { ShowSecondaryNeighborsLabel } from "@/web/view/components/Filter/ShowSecondaryNeighborsLabel";
@@ -48,36 +47,15 @@ export const GeneralFilters = () => {
         <form style={{ padding: "8px" }}>
           {format === "diagram" && (
             <Stack spacing={1}>
-              <Select
-                name="nodeTypes"
-                options={nodeTypes.map((type) => ({ id: type, label: toSpaceCase(type) }))}
-                multiple
-              />
+              <Select name="nodeTypes" options={nodeTypes} multiple />
 
               <Stack direction="row" spacing={1}>
                 <Switch name="showOnlyScored" label="Show only nodes scored" />
-                {/* <Select name="scoredComparer" options={scoredComparers.map((comparer) =>({value: comparer, label: toSpaceCase(comparer) }))}  */}
-                <Select
-                  name="scoredComparer"
-                  options={scoredComparers.map((comparer) => ({
-                    id: comparer,
-                    label: toSpaceCase(comparer),
-                  }))}
-                  label=""
-                  width="50px"
-                />
-                <Select
-                  name="scoreToCompare"
-                  options={possibleScores.map((score) => ({
-                    id: score,
-                    label: toSpaceCase(score),
-                  }))}
-                  label=""
-                  width="50px"
-                />
+                <Select name="scoredComparer" options={scoredComparers} label="" width="50px" />
+                <Select name="scoreToCompare" options={possibleScores} label="" width="50px" />
               </Stack>
 
-              <NodeSelect name="nodeshow" useNodeOptions={useAllNodes} multiple />
+              <NodeSelect name="nodesToShow" useNodeOptions={useAllNodes} multiple />
               <NodeSelect name="nodesToHide" useNodeOptions={useAllNodes} multiple />
 
               <Switch
@@ -94,24 +72,8 @@ export const GeneralFilters = () => {
             <Stack spacing={1}>
               <Stack direction="row" spacing={1}>
                 <Switch name="showOnlyScored" label="Show only nodes scored" />
-                <Select
-                  name="scoredComparer"
-                  options={scoredComparers.map((comparer) => ({
-                    id: comparer,
-                    label: toSpaceCase(comparer),
-                  }))}
-                  label=""
-                  width="50px"
-                />
-                <Select
-                  name="scoreToCompare"
-                  options={possibleScores.map((score) => ({
-                    id: score,
-                    label: toSpaceCase(score),
-                  }))}
-                  label=""
-                  width="50px"
-                />
+                <Select name="scoredComparer" options={scoredComparers} label="" width="50px" />
+                <Select name="scoreToCompare" options={possibleScores} label="" width="50px" />
               </Stack>
 
               <NodeSelect name="nodesToHide" useNodeOptions={useAllNodes} multiple />
