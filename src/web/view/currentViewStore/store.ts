@@ -32,6 +32,7 @@ export interface ViewState {
 
   // general show/hide options
   showImpliedEdges: boolean;
+  useSolutionsForColumns: boolean;
   /**
    * These can be numerous and get long, making the diagram chaotic, and they're often implied,
    * so hiding them can be desirable.
@@ -85,6 +86,7 @@ export const initialViewState: ViewState = {
 
   showImpliedEdges: false,
   showProblemCriterionSolutionEdges: true,
+  useSolutionsForColumns: true,
 
   forceNodesIntoLayers: true,
   layerNodeIslandsTogether: false,
@@ -132,9 +134,21 @@ export const useCanGoBackForward = () => {
   return [canGoBack, canGoForward];
 };
 
+export const useUseSolutionsForColumns = () => {
+  return useCurrentViewStore((state) => state.useSolutionsForColumns);
+};
+
 // actions
 export const setFormat = (format: Format) => {
   useCurrentViewStore.setState({ format }, false, "setFormat");
+};
+
+export const setUseSolutionsForColumns = (value: boolean) => {
+  useCurrentViewStore.setState(
+    { useSolutionsForColumns: value },
+    false,
+    "setUseSolutionsForColumns",
+  );
 };
 
 /**
