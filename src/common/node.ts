@@ -54,7 +54,7 @@ export const nodeSchema = z.object({
   customType: z
     .string()
     .max(30)
-    .regex(/^[a-z ]+$/i)
+    .regex(/^[a-z ]+$/i, "customType should only contain letters and spaces.")
     .nullable(),
   text: z.string().max(200),
   notes: z.string().max(10000),
