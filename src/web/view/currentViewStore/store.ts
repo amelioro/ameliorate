@@ -57,6 +57,7 @@ export interface ViewState {
    * unconditionally include edge labels in layout: https://github.com/eclipse/elk/issues/1092
    */
   avoidEdgeLabelOverlap: boolean;
+  useSolutionsForColumns: boolean;
   layoutThoroughness: number;
 }
 
@@ -85,6 +86,7 @@ export const initialViewState: ViewState = {
 
   showImpliedEdges: false,
   showProblemCriterionSolutionEdges: true,
+  useSolutionsForColumns: true,
 
   forceNodesIntoLayers: true,
   layerNodeIslandsTogether: false,
@@ -130,6 +132,10 @@ export const useCanGoBackForward = () => {
   const canGoBack = temporalStore.pastStates.length > 0;
   const canGoForward = temporalStore.futureStates.length > 0;
   return [canGoBack, canGoForward];
+};
+
+export const useUseSolutionsForColumns = () => {
+  return useCurrentViewStore((state) => state.useSolutionsForColumns);
 };
 
 // actions
@@ -201,6 +207,14 @@ export const loadView = async (persistId: string) => {
 // util actions
 export const getView = () => {
   return useCurrentViewStore.getState();
+};
+
+export const setUseSolutionsForColumns = (value: boolean) => {
+  useCurrentViewStore.setState(
+    { useSolutionsForColumns: value },
+    false,
+    "setUseSolutionsForColumns",
+  );
 };
 
 // misc

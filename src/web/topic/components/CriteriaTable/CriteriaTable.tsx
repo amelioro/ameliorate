@@ -8,7 +8,7 @@ import {
   MRT_ToggleGlobalFilterButton,
   MaterialReactTable,
 } from "material-react-table";
-import React, { useState } from "react";
+import React from "react";
 
 import { errorWithData } from "@/common/errorHandling";
 import { useSessionUser } from "@/web/common/hooks";
@@ -29,6 +29,10 @@ import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { getConnectingEdge } from "@/web/topic/utils/edge";
 import { Edge, Node } from "@/web/topic/utils/graph";
 import { useGeneralFilter, useTableFilter } from "@/web/view/currentViewStore/filter";
+import {
+  setUseSolutionsForColumns,
+  useUseSolutionsForColumns,
+} from "@/web/view/currentViewStore/store";
 import { applyScoreFilter } from "@/web/view/utils/generalFilter";
 import { getSelectedTradeoffNodes } from "@/web/view/utils/infoFilter";
 
@@ -183,7 +187,7 @@ const buildTableDefs = (
  *   b. subsequent rows turn into row objects (`rowData`) that know their row header details (for filtering)
  */
 export const CriteriaTable = () => {
-  const [useSolutionsForColumns, setUseSolutionsForColumns] = useState<boolean>(true);
+  const useSolutionsForColumns = useUseSolutionsForColumns();
 
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
