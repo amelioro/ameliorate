@@ -138,33 +138,9 @@ export const topicRouter = router({
         throw new TRPCError({ code: "FORBIDDEN" });
       }
 
-      const graphPartIdsOfScoresToDelete = opts.input.scoresToDelete.map(
-        (score) => score.graphPartId,
+      const authorizedToDeleteScore = opts.input.scoresToDelete.every(
+        (score) => score.username === opts.ctx.user.username,
       );
-      const nodesOfScoresToDelete = await xprisma.node.findMany({
-        where: { id: { in: graphPartIdsOfScoresToDelete } },
-      });
-      const edgesOfScoresToDelete = await xprisma.edge.findMany({
-        where: { id: { in: graphPartIdsOfScoresToDelete } },
-      });
-      const dbGraphPartsOfScoresToDelete = [...nodesOfScoresToDelete, ...edgesOfScoresToDelete];
-
-      const authorizedToDeleteScore =
-        opts.input.scoresToDelete.every((score) => score.username === opts.ctx.user.username) ||
-        // creator can delete another user's score indirectly, by deleting the score's graphPart
-        opts.input.scoresToDelete.every((score) => {
-          const scoreIsForGraphPartBeingDeleted = [
-            ...opts.input.nodesToDelete,
-            ...opts.input.edgesToDelete,
-          ].some((graphPart) => graphPart.id === score.graphPartId);
-
-          // allow cleaning up orphaned scores from previously-deleted graph parts
-          const scoreIsForAlreadyDeletedGraphPart = !dbGraphPartsOfScoresToDelete.some(
-            (graphPart) => graphPart.id === score.graphPartId,
-          );
-
-          return isEditor && (scoreIsForGraphPartBeingDeleted || scoreIsForAlreadyDeletedGraphPart);
-        });
       const authorizedToUpsertScore = [
         ...opts.input.scoresToCreate,
         ...opts.input.scoresToUpdate,
@@ -213,20 +189,13 @@ export const topicRouter = router({
         }
         /* eslint-enable functional/no-loop-statements */
 
-        // deleting a graph part in the UI will send over deletions for other user's scores;
-        // this should be allowed, and that is why we loop over scores here - deleteMany wouldn't
-        // be able to `where` for multiple user x graph part combinations
-        // eslint-disable-next-line functional/no-loop-statements
-        for (const score of opts.input.scoresToDelete) {
-          await tx.userScore.delete({
-            where: {
-              username_graphPartId: {
-                username: score.username,
-                graphPartId: score.graphPartId,
-              },
-            },
-          });
-        }
+        const scoresToDeletePartIds = opts.input.scoresToDelete.map((score) => score.graphPartId);
+        await tx.userScore.deleteMany({
+          where: {
+            username: opts.ctx.user.username, // authorized earlier that all scores to delete are for this user
+            graphPartId: { in: scoresToDeletePartIds },
+          },
+        });
         const edgeIdsToDelete = opts.input.edgesToDelete.map((edge) => edge.id);
         if (edgeIdsToDelete.length > 0) {
           await tx.edge.deleteMany({
@@ -237,17 +206,6 @@ export const topicRouter = router({
         if (nodeIdsToDelete.length > 0) {
           await tx.node.deleteMany({
             where: { id: { in: nodeIdsToDelete } },
-          });
-        }
-        // We handle deleting scores passed into this route, in case we ever need to actually delete them separate from graph part deletion,
-        // but here we'll also distrust the front-end and ensure all associated scores of deleted graph parts are deleted.
-        // This is because of the scenario where the deleter of a part has not refreshed their page, and someone else has scored the part,
-        // making the part-deletion api call not be able to include the other person's score in the delete parameters.
-        // This scenario caused forbidden errors for future deletions that attempt to clean up the orphaned scores.
-        const graphPartIdsToDelete = edgeIdsToDelete.concat(nodeIdsToDelete);
-        if (graphPartIdsToDelete.length > 0) {
-          await tx.userScore.deleteMany({
-            where: { graphPartId: { in: graphPartIdsToDelete } },
           });
         }
       });

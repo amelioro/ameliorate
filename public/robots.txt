@@ -1,4 +1,9 @@
+# Following google's parsing syntax https://developers.google.com/search/docs/crawling-indexing/robots/robots_txt
+# which allows comments with '#' and using '$' to indicate end of a path
+# '/about' is disallowed because it seems like that path was originally indexed, and now doesn't exist, so headlesschrome keeps going to it and triggering an error.
+
 User-Agent: *
 Allow: /
+Disallow: /about$
 
 Sitemap: https://ameliorate.app/sitemap.xml

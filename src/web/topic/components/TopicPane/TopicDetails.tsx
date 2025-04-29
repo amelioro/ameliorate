@@ -145,8 +145,8 @@ export const TopicDetails = ({ selectedTab, setSelectedTab }: Props) => {
   const showWatch = willShowWatch && findWatch.isSuccess;
 
   return (
-    // flex & max-h to ensure content takes up no more than full height, allowing inner containers to control scrolling
-    <List className="flex max-h-full flex-col py-0">
+    // min-h-0 to ensure content can shrink within parent flex container, allowing inner containers to control scrolling https://stackoverflow.com/a/66689926/8409296
+    <List className="flex min-h-0 flex-col py-0">
       {/* max-w and wrap/break to handle long topic titles */}
       <div className="flex items-center justify-center text-wrap break-all px-4">
         {isPlaygroundTopic ? (

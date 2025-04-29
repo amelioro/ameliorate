@@ -45,7 +45,7 @@ export const edgeSchema = z.object({
   customLabel: z
     .string()
     .max(30)
-    .regex(/^[a-z ]+$/i)
+    .regex(/^[a-z ]+$/i, "customLabel should only contain letters and spaces.")
     .nullable(),
   notes: z.string().max(10000),
   sourceId: z.string().uuid(),

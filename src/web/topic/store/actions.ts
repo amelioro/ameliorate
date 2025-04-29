@@ -67,8 +67,8 @@ export const setNodeLabel = (node: Node, value: string) => {
 export const setCustomNodeType = (node: Node, value: string) => {
   const state = createDraft(useTopicStore.getState());
 
-  if (!nodeSchema.shape.customType.parse(value))
-    throw errorWithData("label should only contain alphaspace", value);
+  const parsed = nodeSchema.shape.customType.safeParse(value);
+  if (!parsed.success) throw parsed.error;
 
   const foundNode = findNodeOrThrow(node.id, state.nodes);
 
@@ -82,8 +82,8 @@ export const setCustomNodeType = (node: Node, value: string) => {
 export const setCustomEdgeLabel = (edge: Edge, value: string) => {
   const state = createDraft(useTopicStore.getState());
 
-  if (!edgeSchema.shape.customLabel.parse(value))
-    throw errorWithData("label should only contain alphaspace", value);
+  const parsed = edgeSchema.shape.customLabel.safeParse(value);
+  if (!parsed.success) throw parsed.error;
 
   const foundEdge = findEdgeOrThrow(edge.id, state.edges);
 
