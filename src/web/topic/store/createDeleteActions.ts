@@ -270,8 +270,11 @@ export const deleteNode = (nodeId: string) => {
   state.nodes = state.nodes.filter((node) => node.id !== nodeId);
   state.edges = state.edges.filter((edge) => !nodeEdges.includes(edge));
   deleteInvalidJustification(state);
-  deleteInvalidScores(state);
   /* eslint-enable functional/immutable-data, no-param-reassign */
+
+  // Don't delete or undo/re-create other users' scores because that's awkward to allow permissions-wise.
+  // Could delete/undo own scores but if we're already orphaning other users' scores, it seems fine to leave own scores as orphaned too.
+  // Long-term should probably have a job to clean up orphaned scores.
 
   useTopicStore.setState(finishDraft(state), false, "deleteNode");
 };
@@ -283,8 +286,11 @@ export const deleteEdge = (edgeId: string) => {
   // delete this edge
   state.edges = state.edges.filter((edge) => edge.id !== edgeId);
   deleteInvalidJustification(state);
-  deleteInvalidScores(state);
   /* eslint-enable functional/immutable-data, no-param-reassign */
+
+  // Don't delete or undo/re-create other users' scores because that's awkward to allow permissions-wise.
+  // Could delete/undo own scores but if we're already orphaning other users' scores, it seems fine to leave own scores as orphaned too.
+  // Long-term should probably have a job to clean up orphaned scores.
 
   useTopicStore.setState(finishDraft(state), false, "deleteEdge");
 };
@@ -304,20 +310,6 @@ const deleteInvalidJustification = (state: TopicStoreState) => {
       graphPartIds.includes(edge.data.arguedDiagramPartId),
   );
   /* eslint-enable functional/immutable-data, no-param-reassign */
-};
-
-const deleteInvalidScores = (state: TopicStoreState) => {
-  const graphPartIds = [...state.nodes, ...state.edges].map((graphPart) => graphPart.id);
-
-  Object.entries(state.userScores).forEach(([_username, scoreByGraphParts]) => {
-    Object.entries(scoreByGraphParts).forEach(([graphPartId, _score]) => {
-      if (!graphPartIds.includes(graphPartId)) {
-        /* eslint-disable functional/immutable-data, no-param-reassign, @typescript-eslint/no-dynamic-delete */
-        delete scoreByGraphParts[graphPartId];
-        /* eslint-enable functional/immutable-data, no-param-reassign, @typescript-eslint/no-dynamic-delete */
-      }
-    });
-  });
 };
 
 export const deleteGraphPart = (graphPart: GraphPart) => {
