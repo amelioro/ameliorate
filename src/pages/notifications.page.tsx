@@ -10,6 +10,7 @@ import { QueryError } from "@/web/common/components/Error/Error";
 import { Link } from "@/web/common/components/Link";
 import { Loading } from "@/web/common/components/Loading/Loading";
 import { useSessionUser } from "@/web/common/hooks";
+import { normalizeTitle } from "@/common/topic";
 import { trpc } from "@/web/common/trpc";
 
 type RowData = InAppNotification & { topic: Topic | null };
@@ -75,7 +76,9 @@ export default withPageAuthRequired(({ user }) => {
               {topic ? (
                 <>
                   <Link href={`/${topic.creatorName}`}>{topic.creatorName}</Link>/
-                  <Link href={`/${topic.creatorName}/${topic.title}`}>{topic.title}</Link>
+                  <Link href={`/${topic.creatorName}/${normalizeTitle(topic.title)}`}>
+                    {topic.title}
+                  </Link>
                 </>
               ) : (
                 "(Topic not found)"

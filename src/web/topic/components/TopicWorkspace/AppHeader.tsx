@@ -16,6 +16,7 @@ import { useUserCanEditTopicData, useUserIsCreator } from "@/web/topic/store/use
 import { redo, undo } from "@/web/topic/store/utilActions";
 import { useTemporalHooks } from "@/web/topic/store/utilHooks";
 import { goBack, goForward, useCanGoBackForward } from "@/web/view/currentViewStore/store";
+import { normalizeTitle } from "@/common/topic";
 
 // TODO: check if need overflow-x-auto to deal with increased html font size
 // h-[calc(3rem + 1 px)] to match SiteHeader's 48px + 1px border
@@ -123,7 +124,7 @@ export const AppHeader = () => {
           <span className="shrink-0 px-1">/</span>
           <Link
             className="overflow-hidden text-ellipsis"
-            href={`/${topic.creatorName}/${topic.title}`}
+            href={`/${topic.creatorName}/${normalizeTitle(topic.title)}`}
             title={topic.title} // allow hovering since it can be truncated
           >
             {topic.title}

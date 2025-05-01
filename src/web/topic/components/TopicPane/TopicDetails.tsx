@@ -27,7 +27,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { topicSchema } from "@/common/topic";
+import { topicSchema, normalizeTitle } from "@/common/topic";
 import { WatchType, watchTypes } from "@/common/watch";
 import { useCommentCount } from "@/web/comment/store/commentStore";
 import { Link } from "@/web/common/components/Link";
@@ -157,7 +157,10 @@ export const TopicDetails = ({ selectedTab, setSelectedTab }: Props) => {
               {topic.creatorName}
             </Link>
             <span className="px-1">/</span>
-            <Link className="max-w-[60%]" href={`/${topic.creatorName}/${topic.title}`}>
+            <Link
+              className="max-w-[60%]"
+              href={`/${topic.creatorName}/${normalizeTitle(topic.title)}`}
+            >
               {topic.title}
             </Link>
           </>

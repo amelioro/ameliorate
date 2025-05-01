@@ -6,7 +6,7 @@ import { isLoggedIn } from "@/api/auth";
 import { procedure, router } from "@/api/trpc";
 import { edgeSchema } from "@/common/edge";
 import { getNewTopicProblemNode, nodeSchema } from "@/common/node";
-import { topicSchema } from "@/common/topic";
+import { normalizeTitle, topicSchema } from "@/common/topic";
 import { userSchema } from "@/common/user";
 import { userScoreSchema } from "@/common/userScore";
 import { quickViewSchema } from "@/common/view";
@@ -22,10 +22,11 @@ export const topicRouter = router({
     )
     .query(async (opts) => {
       const isCreator = opts.input.username === opts.ctx.user?.username;
+      const normalizedTitle = normalizeTitle(decodeURIComponent(opts.input.title));
 
       return await xprisma.topic.findFirst({
         where: {
-          title: opts.input.title,
+          title: { equals: normalizedTitle, mode: "insensitive" },
           creatorName: opts.input.username,
           visibility: isCreator ? undefined : { not: "private" },
         },
@@ -41,15 +42,15 @@ export const topicRouter = router({
     .input(
       z.object({
         username: userSchema.shape.username,
-        title: topicSchema.shape.title,
+        title: z.string(),
       }),
     )
     .query(async (opts) => {
       const isCreator = opts.input.username === opts.ctx.user?.username;
-
+      const normalizedTitle = normalizeTitle(decodeURIComponent(opts.input.title));
       return await xprisma.topic.findFirst({
         where: {
-          title: opts.input.title,
+          title: { equals: normalizedTitle, mode: "insensitive" },
           creatorName: opts.input.username,
           visibility: isCreator ? undefined : { not: "private" },
         },
@@ -268,6 +269,19 @@ export const topicRouter = router({
       }),
     )
     .mutation(async (opts) => {
+      const normalizedTitle = normalizeTitle(opts.input.topic.title);
+      const existingTopic = await xprisma.topic.findFirst({
+        where: {
+          title: { equals: normalizedTitle, mode: "insensitive" },
+          creatorName: opts.ctx.user.username,
+        },
+      });
+      if (existingTopic) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `Title ${opts.input.topic.title} is not available.`,
+        });
+      }
       const newTopic = await xprisma.topic.create({
         data: {
           title: opts.input.topic.title,
@@ -316,6 +330,22 @@ export const topicRouter = router({
     .mutation(async (opts) => {
       const topic = await xprisma.topic.findUniqueOrThrow({ where: { id: opts.input.id } });
       if (opts.ctx.user.username !== topic.creatorName) throw new TRPCError({ code: "FORBIDDEN" });
+
+      const normalizedTitle = normalizeTitle(opts.input.title);
+      if (normalizedTitle !== normalizeTitle(topic.title)) {
+        const existingTopic = await xprisma.topic.findFirst({
+          where: {
+            title: { equals: normalizedTitle, mode: "insensitive" },
+            creatorName: opts.ctx.user.username,
+          },
+        });
+        if (existingTopic) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: `Title ${opts.input.title} is not available.`,
+          });
+        }
+      }
 
       return await xprisma.topic.update({
         where: { id: opts.input.id },

@@ -23,7 +23,7 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { topicSchema, visibilityTypes } from "@/common/topic";
+import { topicSchema, visibilityTypes, normalizeTitle } from "@/common/topic";
 import { trpc } from "@/web/common/trpc";
 import { updateTopic as updateStoreTopic } from "@/web/topic/store/topicActions";
 import { generateBasicViews } from "@/web/view/quickViewStore/store";
@@ -34,7 +34,7 @@ export const CreateTopicForm = ({ creatorName }: { creatorName: string }) => {
   const createTopic = trpc.topic.create.useMutation({
     onSuccess: async (newTopic, variables) => {
       utils.topic.findByUsernameAndTitle.setData(
-        { username: creatorName, title: variables.topic.title },
+        { username: creatorName, title: normalizeTitle(variables.topic.title) },
         newTopic,
       );
 
@@ -43,14 +43,14 @@ export const CreateTopicForm = ({ creatorName }: { creatorName: string }) => {
         return oldUser;
       });
 
-      await Router.push(`/${creatorName}/${variables.topic.title}`);
+      await Router.push(`/${creatorName}/${normalizeTitle(variables.topic.title)}`);
     },
   });
 
   const onSubmit = (data: FormData) => {
     createTopic.mutate({
       topic: {
-        title: data.title,
+        title: normalizeTitle(data.title),
         description: data.description,
         visibility: data.visibility,
         allowAnyoneToEdit: data.allowAnyoneToEdit,
@@ -71,8 +71,8 @@ export const EditTopicForm = ({ topic, creatorName }: { topic: Topic; creatorNam
     onSuccess: (updatedTopic) => {
       // need to update the URL if we're changing from the topic's page in the workspace
       const url = new URL(window.location.href);
-      const oldPath = `/${creatorName}/${topic.title}`;
-      const newPath = `/${creatorName}/${updatedTopic.title}`;
+      const oldPath = `/${creatorName}/${normalizeTitle(topic.title)}`;
+      const newPath = `/${creatorName}/${normalizeTitle(updatedTopic.title)}`;
       const changingTitleWhileViewingInWorkspace = oldPath != newPath && url.pathname === oldPath;
 
       if (changingTitleWhileViewingInWorkspace) {
@@ -104,13 +104,13 @@ export const EditTopicForm = ({ topic, creatorName }: { topic: Topic; creatorNam
 
       // update old title query
       utils.topic.findByUsernameAndTitle.setData(
-        { username: creatorName, title: topic.title },
+        { username: creatorName, title: normalizeTitle(topic.title) },
         null,
       );
 
       // update new title query
       utils.topic.findByUsernameAndTitle.setData(
-        { username: creatorName, title: updatedTopic.title },
+        { username: creatorName, title: normalizeTitle(updatedTopic.title) },
         updatedTopic,
       );
     },
@@ -132,7 +132,7 @@ export const EditTopicForm = ({ topic, creatorName }: { topic: Topic; creatorNam
       });
 
       utils.topic.findByUsernameAndTitle.setData(
-        { username: creatorName, title: topic.title },
+        { username: creatorName, title: normalizeTitle(topic.title) },
         null,
       );
     },
@@ -215,7 +215,7 @@ const formSchema = (utils: ReturnType<typeof trpc.useContext>, username: string,
 
         const existingTopic = await utils.topic.findByUsernameAndTitle.fetch({
           username,
-          title,
+          title: normalizeTitle(title),
         });
         return !existingTopic;
       },
@@ -378,7 +378,8 @@ const TopicForm = ({ topic, creatorName, onSubmit, DeleteSection }: Props) => {
           />
 
           <Typography variant="body2">
-            View your topic at: ameliorate.app/{creatorName}/{topicTitle || "{title}"}
+            View your topic at: ameliorate.app/{creatorName}/
+            {topicTitle ? normalizeTitle(topicTitle) : "{title}"}
           </Typography>
 
           <Stack direction="row" spacing={1} justifyContent="flex-end">
