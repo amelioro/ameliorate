@@ -1,5 +1,5 @@
 import { RelationName, justificationRelationNames } from "@/common/edge";
-import { NodeType, justificationNodeTypes, nodeTypes, researchNodeTypes } from "@/common/node";
+import { NodeType, nodeTypes, researchNodeTypes } from "@/common/node";
 import { Edge, Graph, Node, RelationDirection, findNodeOrThrow } from "@/web/topic/utils/graph";
 import { hasJustification } from "@/web/topic/utils/justification";
 import { children, components, parents } from "@/web/topic/utils/node";
@@ -255,16 +255,6 @@ export const canCreateEdge = (topicGraph: Graph, parent: Node, child: Node) => {
 
   if (existingEdge) {
     console.log("cannot connect nodes: tried dragging between already-connected nodes");
-    return false;
-  }
-
-  const secondParentForJustification =
-    justificationNodeTypes.includes(child.type) &&
-    topicGraph.edges.find((edge) => edge.target === child.id);
-  if (secondParentForJustification) {
-    console.log(
-      "cannot connect nodes: justifications are in a tree so can't have multiple parents",
-    );
     return false;
   }
 
