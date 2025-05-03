@@ -57,8 +57,10 @@ export interface ViewState {
    * unconditionally include edge labels in layout: https://github.com/eclipse/elk/issues/1092
    */
   avoidEdgeLabelOverlap: boolean;
-  useSolutionsForColumns: boolean;
   layoutThoroughness: number;
+
+  //table config
+  transposed: boolean;
 }
 
 export const initialViewState: ViewState = {
@@ -86,13 +88,14 @@ export const initialViewState: ViewState = {
 
   showImpliedEdges: false,
   showProblemCriterionSolutionEdges: true,
-  useSolutionsForColumns: true,
 
   forceNodesIntoLayers: true,
   layerNodeIslandsTogether: false,
   minimizeEdgeCrossings: false,
   avoidEdgeLabelOverlap: false,
   layoutThoroughness: 100, // by default, prefer keeping parents close to children over keeping node types together
+
+  transposed: true,
 };
 
 const persistedNameBase = "navigateStore";
@@ -134,8 +137,8 @@ export const useCanGoBackForward = () => {
   return [canGoBack, canGoForward];
 };
 
-export const useUseSolutionsForColumns = () => {
-  return useCurrentViewStore((state) => state.useSolutionsForColumns);
+export const useTransposed = () => {
+  return useCurrentViewStore((state) => state.transposed);
 };
 
 // actions
@@ -209,12 +212,8 @@ export const getView = () => {
   return useCurrentViewStore.getState();
 };
 
-export const setUseSolutionsForColumns = (value: boolean) => {
-  useCurrentViewStore.setState(
-    { useSolutionsForColumns: value },
-    false,
-    "setUseSolutionsForColumns",
-  );
+export const setTransposed = (value: boolean) => {
+  useCurrentViewStore.setState({ transposed: value }, false, "setUseSolutionsForColumns");
 };
 
 // misc
