@@ -23,7 +23,7 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { topicSchema, visibilityTypes, normalizeTitle } from "@/common/topic";
+import { normalizeTitle, topicSchema, visibilityTypes } from "@/common/topic";
 import { trpc } from "@/web/common/trpc";
 import { updateTopic as updateStoreTopic } from "@/web/topic/store/topicActions";
 import { generateBasicViews } from "@/web/view/quickViewStore/store";
@@ -50,7 +50,7 @@ export const CreateTopicForm = ({ creatorName }: { creatorName: string }) => {
   const onSubmit = (data: FormData) => {
     createTopic.mutate({
       topic: {
-        title: normalizeTitle(data.title),
+        title: data.title,
         description: data.description,
         visibility: data.visibility,
         allowAnyoneToEdit: data.allowAnyoneToEdit,

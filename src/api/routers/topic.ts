@@ -24,13 +24,21 @@ export const topicRouter = router({
       const isCreator = opts.input.username === opts.ctx.user?.username;
       const normalizedTitle = normalizeTitle(decodeURIComponent(opts.input.title));
 
-      return await xprisma.topic.findFirst({
-        where: {
-          title: { equals: normalizedTitle, mode: "insensitive" },
-          creatorName: opts.input.username,
-          visibility: isCreator ? undefined : { not: "private" },
-        },
-      });
+      const topics = await xprisma.$queryRaw<
+        { id: number; title: string; creatorName: string; visibility: string }[]
+      >`
+        SELECT id, title, "creatorName", visibility
+        FROM "topics"
+        WHERE "creatorName" = ${opts.input.username}
+        AND (
+          REPLACE(LOWER(title), ' ', '-') = ${normalizedTitle}
+          OR title = ${normalizedTitle}
+        )
+        AND (${isCreator} OR visibility != 'private')
+        LIMIT 1
+      `;
+
+      return topics[0] ?? null;
     }),
 
   /**
@@ -48,12 +56,34 @@ export const topicRouter = router({
     .query(async (opts) => {
       const isCreator = opts.input.username === opts.ctx.user?.username;
       const normalizedTitle = normalizeTitle(decodeURIComponent(opts.input.title));
+      const topics = await xprisma.$queryRaw<
+        {
+          id: number;
+          title: string;
+          creatorName: string;
+          description: string;
+          visibility: string;
+          allowAnyoneToEdit: boolean;
+          createdAt: Date;
+          updatedAt: Date;
+        }[]
+      >`
+        SELECT id, title, "creatorName", description, visibility, "allowAnyoneToEdit", "createdAt", "updatedAt"
+        FROM "topics"
+        WHERE "creatorName" = ${opts.input.username}
+        AND (
+          REPLACE(LOWER(title), ' ', '-') = ${normalizedTitle}
+          OR title = ${normalizedTitle}
+        )
+        AND (${isCreator} OR visibility != 'private')
+        LIMIT 1
+      `;
+
+      if (!topics[0]) return null;
+
+      // Fetch related data since raw query doesn't support include -- Added to match original behavior
       return await xprisma.topic.findFirst({
-        where: {
-          title: { equals: normalizedTitle, mode: "insensitive" },
-          creatorName: opts.input.username,
-          visibility: isCreator ? undefined : { not: "private" },
-        },
+        where: { id: topics[0].id },
         include: {
           nodes: true,
           edges: true,

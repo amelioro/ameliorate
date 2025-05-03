@@ -3,6 +3,7 @@ import { Dialog, Divider, IconButton, useTheme } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
 
+import { normalizeTitle } from "@/common/topic";
 import { Logo } from "@/web/common/components/Header/Logo";
 import { ProfileButton } from "@/web/common/components/Header/ProfileButton";
 import { SiteMenu } from "@/web/common/components/Header/SiteMenu";
@@ -16,7 +17,6 @@ import { useUserCanEditTopicData, useUserIsCreator } from "@/web/topic/store/use
 import { redo, undo } from "@/web/topic/store/utilActions";
 import { useTemporalHooks } from "@/web/topic/store/utilHooks";
 import { goBack, goForward, useCanGoBackForward } from "@/web/view/currentViewStore/store";
-import { normalizeTitle } from "@/common/topic";
 
 // TODO: check if need overflow-x-auto to deal with increased html font size
 // h-[calc(3rem + 1 px)] to match SiteHeader's 48px + 1px border

@@ -27,7 +27,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { topicSchema, normalizeTitle } from "@/common/topic";
+import { normalizeTitle, topicSchema } from "@/common/topic";
 import { WatchType, watchTypes } from "@/common/watch";
 import { useCommentCount } from "@/web/comment/store/commentStore";
 import { Link } from "@/web/common/components/Link";
