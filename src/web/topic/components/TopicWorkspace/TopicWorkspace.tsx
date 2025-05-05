@@ -31,8 +31,10 @@ import { getPerspectives } from "@/web/view/perspectiveStore";
 import { getSelectedGraphPart, setSelected } from "@/web/view/selectedPartStore";
 import { toggleZenMode, useZenMode } from "@/web/view/userConfigStore";
 
-const useWorkspaceHotkeys = (user: { username: string } | null | undefined) => {
-  const userCanEditTopicData = useUserCanEditTopicData(user?.username);
+const useWorkspaceHotkeys = (
+  userCanEditTopicData: boolean,
+  user: { username: string } | null | undefined,
+) => {
   useHotkeys([hotkeys.deselectPart], () => setSelected(null));
   useHotkeys([hotkeys.readonlyMode], () => toggleReadonlyMode());
 
@@ -78,8 +80,8 @@ const ZenModeButton = () => {
 
 export const TopicWorkspace = () => {
   const { sessionUser } = useSessionUser();
-
-  useWorkspaceHotkeys(sessionUser);
+  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
+  useWorkspaceHotkeys(userCanEditTopicData, sessionUser);
 
   const format = useFormat();
   const theme = useTheme();
