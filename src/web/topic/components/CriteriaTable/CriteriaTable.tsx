@@ -8,7 +8,7 @@ import {
   MRT_ToggleGlobalFilterButton,
   MaterialReactTable,
 } from "material-react-table";
-import React, { useState } from "react";
+import React from "react";
 
 import { errorWithData } from "@/common/errorHandling";
 import { useSessionUser } from "@/web/common/hooks";
@@ -29,6 +29,7 @@ import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
 import { getConnectingEdge } from "@/web/topic/utils/edge";
 import { Edge, Node } from "@/web/topic/utils/graph";
 import { useGeneralFilter, useTableFilter } from "@/web/view/currentViewStore/filter";
+import { setTransposed, useTransposed } from "@/web/view/currentViewStore/store";
 import { applyScoreFilter } from "@/web/view/utils/generalFilter";
 import { getSelectedTradeoffNodes } from "@/web/view/utils/infoFilter";
 
@@ -183,7 +184,7 @@ const buildTableDefs = (
  *   b. subsequent rows turn into row objects (`rowData`) that know their row header details (for filtering)
  */
 export const CriteriaTable = () => {
-  const [useSolutionsForColumns, setUseSolutionsForColumns] = useState<boolean>(true);
+  const transposed = useTransposed();
 
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
@@ -223,14 +224,14 @@ export const CriteriaTable = () => {
   const tableData = buildTableCells(problemNode, filteredSolutions, filteredCriteria, edges);
   const [headerRow, ..._bodyRows] = tableData;
 
-  const transposedTableData = useSolutionsForColumns
+  const transposedTableData = transposed
     ? tableData
     : (headerRow.map((_, columnIndex) =>
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- assume that every row has same number of cells as header row
         tableData.map((row) => row[columnIndex]!),
       ) as typeof tableData);
 
-  const { rowData, columnData } = buildTableDefs(transposedTableData, useSolutionsForColumns);
+  const { rowData, columnData } = buildTableDefs(transposedTableData, transposed);
 
   const ToolBarActions = (table: MRT_TableInstance<RowData>) => {
     return (
@@ -260,7 +261,7 @@ export const CriteriaTable = () => {
             size="small"
             variant="contained"
             color="neutral"
-            onClick={() => setUseSolutionsForColumns(!useSolutionsForColumns)}
+            onClick={() => setTransposed(!transposed)}
           >
             <PivotTableChart />
           </Button>

@@ -58,6 +58,9 @@ export interface ViewState {
    */
   avoidEdgeLabelOverlap: boolean;
   layoutThoroughness: number;
+
+  //table config
+  transposed: boolean;
 }
 
 export const initialViewState: ViewState = {
@@ -91,6 +94,8 @@ export const initialViewState: ViewState = {
   minimizeEdgeCrossings: false,
   avoidEdgeLabelOverlap: false,
   layoutThoroughness: 100, // by default, prefer keeping parents close to children over keeping node types together
+
+  transposed: true,
 };
 
 const persistedNameBase = "navigateStore";
@@ -130,6 +135,10 @@ export const useCanGoBackForward = () => {
   const canGoBack = temporalStore.pastStates.length > 0;
   const canGoForward = temporalStore.futureStates.length > 0;
   return [canGoBack, canGoForward];
+};
+
+export const useTransposed = () => {
+  return useCurrentViewStore((state) => state.transposed);
 };
 
 // actions
@@ -201,6 +210,10 @@ export const loadView = async (persistId: string) => {
 // util actions
 export const getView = () => {
   return useCurrentViewStore.getState();
+};
+
+export const setTransposed = (value: boolean) => {
+  useCurrentViewStore.setState({ transposed: value }, false, "setUseSolutionsForColumns");
 };
 
 // misc
