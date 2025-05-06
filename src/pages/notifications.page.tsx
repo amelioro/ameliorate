@@ -5,7 +5,7 @@ import { type MRT_ColumnDef, MaterialReactTable } from "material-react-table";
 import Head from "next/head";
 
 import { InAppNotification } from "@/common/inAppNotification";
-import { Topic } from "@/common/topic";
+import { Topic, normalizeTitle } from "@/common/topic";
 import { QueryError } from "@/web/common/components/Error/Error";
 import { Link } from "@/web/common/components/Link";
 import { Loading } from "@/web/common/components/Loading/Loading";
@@ -75,7 +75,9 @@ export default withPageAuthRequired(({ user }) => {
               {topic ? (
                 <>
                   <Link href={`/${topic.creatorName}`}>{topic.creatorName}</Link>/
-                  <Link href={`/${topic.creatorName}/${topic.title}`}>{topic.title}</Link>
+                  <Link href={`/${topic.creatorName}/${normalizeTitle(topic.title)}`}>
+                    {topic.title}
+                  </Link>
                 </>
               ) : (
                 "(Topic not found)"

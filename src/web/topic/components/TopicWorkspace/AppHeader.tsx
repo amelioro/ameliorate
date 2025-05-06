@@ -3,6 +3,7 @@ import { Dialog, Divider, IconButton, useTheme } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
 
+import { normalizeTitle } from "@/common/topic";
 import { Logo } from "@/web/common/components/Header/Logo";
 import { ProfileButton } from "@/web/common/components/Header/ProfileButton";
 import { SiteMenu } from "@/web/common/components/Header/SiteMenu";
@@ -123,7 +124,7 @@ export const AppHeader = () => {
           <span className="shrink-0 px-1">/</span>
           <Link
             className="overflow-hidden text-ellipsis"
-            href={`/${topic.creatorName}/${topic.title}`}
+            href={`/${topic.creatorName}/${normalizeTitle(topic.title)}`}
             title={topic.title} // allow hovering since it can be truncated
           >
             {topic.title}
