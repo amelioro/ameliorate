@@ -1,5 +1,5 @@
 import { type ButtonProps, type SxProps, useTheme } from "@mui/material";
-import { memo, useContext, useEffect, useRef, useState } from "react";
+import { memo, useContext, useEffect, useState } from "react";
 
 import { useSessionUser } from "@/web/common/hooks";
 import { openContextMenu } from "@/web/common/store/contextMenuActions";
@@ -42,7 +42,6 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
   const context = useContext(WorkspaceContext);
 
   const theme = useTheme();
-  const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
   const textAreaId = `${node.id}-${context}-textarea`;
 
   useEffect(() => {
@@ -62,12 +61,6 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
     }, 10);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- we don't care about re-focusing after initial render
   }, []);
-
-  // prefer this over binding value={node.data.label} because this allows us to update node.data.label onBlur instead of onChange, creating significantly fewer unnecessary re-renders
-  if (textAreaRef.current && textAreaRef.current.value !== node.data.label) {
-    // eslint-disable-next-line functional/immutable-data
-    textAreaRef.current.value = node.data.label;
-  }
 
   const nodeDecoration = nodeDecorations[node.type];
   const color = theme.palette[node.type].main;
@@ -150,7 +143,10 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
       <MiddleDiv className="flex grow px-1 pb-2 pt-1">
         <StyledTextareaAutosize
           id={textAreaId}
-          ref={textAreaRef}
+          // Change key if `node.data.label` changes so that textarea re-renders with new default value.
+          // This is mainly intended for when the label changes from an external source
+          // e.g. undo/redo, changing from the node in the details pane while this one is in the diagram, etc.
+          key={textAreaId + node.data.label}
           placeholder="Enter text..."
           defaultValue={node.data.label}
           maxRows={3}
