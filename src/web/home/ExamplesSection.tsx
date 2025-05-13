@@ -1,16 +1,17 @@
-import { EmojiObjects, EmojiObjectsOutlined } from "@mui/icons-material";
-import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { Rating, Tab, Typography } from "@mui/material";
+import { Chip, Divider, Typography } from "@mui/material";
 import Image from "next/image";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useRef, useState } from "react";
 
+import { throwError } from "@/common/errorHandling";
+import Carousel from "@/web/common/components/Carousel";
 import { Link } from "@/web/common/components/Link";
 
 interface Example {
   title: string;
   href: string;
   category: string;
-  text: ReactNode;
+  purpose: string;
+  notes: ReactNode;
   complexity: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
   image: ReactNode;
 }
@@ -20,7 +21,8 @@ const examples = [
     title: "mattresses",
     href: "https://ameliorate.app/keyserj/mattresses",
     category: "Personal decision",
-    text: "Determine which mattress to purchase. Ameliorate is great at visualizing many options and their tradeoffs.",
+    purpose: "determine which mattress to buy",
+    notes: "Ameliorate is great at visualizing many options and their tradeoffs.",
     complexity: 2,
     image: (
       <Image
@@ -42,7 +44,8 @@ const examples = [
     title: "ORM",
     href: "https://ameliorate.app/examples/ORM",
     category: "Team decision",
-    text: "Determine which tool to use for a project. Ameliorate is great at visualizing many options and their tradeoffs.",
+    purpose: "determine which tool to use",
+    notes: "Ameliorate is great at visualizing many options and their tradeoffs.",
     complexity: 3,
     image: (
       <Image
@@ -64,7 +67,9 @@ const examples = [
     title: "cars-going-too-fast",
     href: "https://ameliorate.app/examples/detailed-cars-going-too-fast",
     category: "Local policy",
-    text: "Work with local government to improve neighborhood safety. Ameliorate can help keep track of various causes & effects, and scoring allows you to call out what you think matters.",
+    purpose: "improve neighborhood safety",
+    notes:
+      "Ameliorate can help keep track of various causes & effects, and scoring allows you to call out what you think matters.",
     complexity: 3,
     image: (
       <Image
@@ -86,7 +91,9 @@ const examples = [
     title: "10-percent-time",
     href: "https://ameliorate.app/keyserj/10-percent-time",
     category: "Org decision",
-    text: "Discuss a proposal for a change in process. Ameliorate is well-suited for visualizing proposals that have a few pieces, causes, and effects to consider.",
+    purpose: "discuss an initiative proposal",
+    notes:
+      "Ameliorate is well-suited for visualizing proposals that have a few pieces, causes, and effects to consider.",
     complexity: 3,
     image: (
       <Image
@@ -105,10 +112,12 @@ const examples = [
     ),
   },
   {
-    title: "sb74-free-school-meals",
+    title: "free-school-meals",
     href: "https://ameliorate.app/keyserj/fl-2025-sb74-free-school-breakfast-lunch",
     category: "State policy",
-    text: "Critique and improve school legislation. Ameliorate is well-suited for visualizing proposals that have a few pieces, causes, and effects to consider.",
+    purpose: "improve student meal access",
+    notes:
+      "Ameliorate is well-suited for visualizing proposals that have a few pieces, causes, and effects to consider.",
     complexity: 4,
     image: (
       <Image
@@ -130,7 +139,9 @@ const examples = [
     title: "mta-congestion-tax",
     href: "https://ameliorate.app/keyserj/mta-congestion-pricing",
     category: "Big city policy",
-    text: "Critique and improve transit legislation. Ameliorate is well-suited for visualizing proposals that have a few pieces, causes, and effects to consider.",
+    purpose: "improve transit legislation",
+    notes:
+      "Ameliorate is well-suited for visualizing proposals that have a few pieces, causes, and effects to consider.",
     complexity: 5,
     image: (
       <Image
@@ -151,11 +162,12 @@ const examples = [
   {
     title: "california-wildfires",
     href: "https://ameliorate.app/keyserj/california-wildfire-season-worsening",
-    category: "Advocacy",
-    text: (
+    category: "Advocacy (1)",
+    purpose: "prevent & prepare for wildfires",
+    notes: (
       <span>
-        Raise awareness & motivate change. Ameliorate is good for considering the high-level of
-        complex problems, but as you add a lot of detail, you may feel that some{" "}
+        Ameliorate is good for considering the high-level of complex problems, but as you add a lot
+        of detail, you may feel that some{" "}
         <Link
           href="https://github.com/amelioro/ameliorate/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22for%20large%20topics%22%2Cwicked%20"
           target="_blank"
@@ -183,13 +195,49 @@ const examples = [
     ),
   },
   {
+    title: "sugar-brutality",
+    href: "https://ameliorate.app/keyserj/brutality-sugar-article",
+    category: "Advocacy (2)",
+    purpose: "raise awareness & motivate change",
+    notes: (
+      <span>
+        Ameliorate is good for considering the high-level of complex problems, but as you add a lot
+        of detail, you may feel that some{" "}
+        <Link
+          href="https://github.com/amelioro/ameliorate/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22for%20large%20topics%22%2Cwicked%20"
+          target="_blank"
+        >
+          features
+        </Link>{" "}
+        are missing.
+      </span>
+    ),
+    complexity: 8,
+    image: (
+      <Image
+        key="https://github.com/user-attachments/assets/62732e0e-494d-4767-a2ae-09b7056b6c7a"
+        src="https://github.com/user-attachments/assets/62732e0e-494d-4767-a2ae-09b7056b6c7a"
+        alt="sugar-brutality diagram"
+        width={714}
+        height={672}
+        unoptimized
+        className="rounded-xl border shadow"
+        // Only using eager loading to avoid layout shift - don't know how to do this with nextjs Image
+        // component otherwise, since the parent container should shrink if the Image fits, otherwise
+        // the Image should shrink into the max height of the parent.
+        loading="eager"
+      />
+    ),
+  },
+  {
     title: "climate-change",
     href: "https://ameliorate.app/examples/climate-change",
     category: "Global issue",
-    text: (
+    purpose: "consider an overwhelming problem",
+    notes: (
       <span>
-        Grasp and consider an overwhelming problem. Like with other high-complexity issues,
-        Ameliorate can help with considering the high-level, but additional{" "}
+        Like with other high-complexity issues, Ameliorate can help with considering the high-level,
+        but additional{" "}
         <Link
           href="https://github.com/amelioro/ameliorate/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22for%20large%20topics%22%2Cwicked%20"
           target="_blank"
@@ -218,29 +266,17 @@ const examples = [
   },
 ] as const satisfies Example[];
 
-const scrollTabToCenter = (tab: HTMLElement) => {
-  const tabScrollContainer = tab.offsetParent;
-  if (tabScrollContainer === null) return;
-
-  // see this commit's PR for an image explaining this calculation
-  const scrollLeft = tab.offsetLeft - (tabScrollContainer.clientWidth - tab.clientWidth) / 2;
-  tabScrollContainer.scrollTo({ left: scrollLeft, behavior: "smooth" });
-};
-
-type ExampleTab = (typeof examples)[number]["category"];
-const initialSelectedTab: ExampleTab = "State policy";
+const initialSlideIndex = examples.findIndex((example) => example.title === "free-school-meals");
+if (initialSlideIndex === -1) throwError("No example found for initial selected card", examples);
 
 export const ExamplesSection = () => {
-  const [selectedCategoryTab, setSelectedCategoryTab] = useState<ExampleTab>(initialSelectedTab);
+  const [currentExampleIndex, setCurrentExampleIndex] = useState(initialSlideIndex);
+  const carouselRef = useRef<Carousel>(null);
 
-  const initialTabRef = useRef<HTMLDivElement>(null);
+  const currentExample = examples[currentExampleIndex];
 
-  // center the initial tab on load
-  useEffect(() => {
-    const initialTab = initialTabRef.current;
-    if (!initialTab) return;
-    scrollTabToCenter(initialTab);
-  }, []);
+  if (!currentExample)
+    return throwError(`No example found for index ${currentExampleIndex}`, examples);
 
   // There's some complexity with sizing here because of a few desired requirements related to the image:
   // 1. Want the parent section to shrink to fit the current image if the image is smaller
@@ -253,74 +289,101 @@ export const ExamplesSection = () => {
     <div className="flex h-full flex-col text-center">
       <Typography variant="h4">See the potential</Typography>
 
-      <TabContext value={selectedCategoryTab}>
-        <TabList
-          // for some reason without this, the tabs' icons don't take up space
-          className="shrink-0"
-          variant="scrollable"
-          // only using this because tapping a partially-overflowing tab will scroll it flush with the container edge,
-          // making it seem like there aren't other tabs. should remove if centering the active tab is made to work, see https://github.com/mui/material-ui/issues/22319#issuecomment-2722511669
-          allowScrollButtonsMobile={true}
-          // these can auto-show too but using `auto` results in layout shift when scroll buttons are determined to be on
-          scrollButtons={true}
-          onChange={(_, value: ExampleTab) => setSelectedCategoryTab(value)}
-        >
-          {examples.map((example) => (
-            <Tab
-              // need this ref to manually scroll the active tab to center on load
-              ref={example.category === initialSelectedTab ? initialTabRef : undefined}
-              key={example.category}
-              value={example.category}
-              label={example.category}
-              onClick={(event) => scrollTabToCenter(event.currentTarget)}
-              iconPosition="bottom"
-              icon={
-                <Rating
-                  value={example.complexity / 2}
-                  precision={0.5}
-                  readOnly
-                  size="small"
-                  icon={<EmojiObjects fontSize="inherit" />}
-                  emptyIcon={<EmojiObjectsOutlined fontSize="inherit" />}
-                  className="[&_.MuiRating-iconFilled]:text-primary-main"
-                />
-              }
-            />
-          ))}
-        </TabList>
-
-        {examples.map((example) => (
-          <TabPanel
-            key={example.category}
-            // Using `selectedCategoryTab` here instead of `example.category` is a hack to keep the panels all mounted, so that
-            // the images don't have to reload every time a tab is clicked.
-            // TODO: after mui v6 upgrade, instead of this hack, can use `keepMounted` https://github.com/mui/material-ui/issues/37398
-            value={selectedCategoryTab}
+      <Carousel
+        ref={carouselRef}
+        arrows={false}
+        centerMode={true}
+        initialSlide={initialSlideIndex}
+        focusOnSelect={true} // allow clicking on a card to select it
+        variableWidth={true} // allow cards to be different widths based on contents
+        swipeToSlide={true} // allow moving more than one card at a time if swiping far
+        /**
+         * Disable dragging on desktop because:
+         * 1. if mouse moves outside of carousel it stops the drag which is annoying
+         * 2. when drag stops, it triggers onclick, which can select a different card based on where your mouse is on mouseup, which is really stupid
+         *
+         * Note: this doesn't disable dragging on mobile, which is good because I guess these issues don't seem to exist on mobile...?
+         */
+        draggable={false}
+        infinite={false}
+        beforeChange={(_current, next) => setCurrentExampleIndex(next)}
+        className={
+          "w-screen -translate-x-1/2 relative left-1/2 !m-0" +
+          " [&_.slick-slide]:py-1 [&_.slick-slide]:px-1 sm:[&_.slick-slide]:px-2 [&_.slick-slide]:max-w-[100vw] [&_.slick-slide]:!h-auto" +
+          " [&_.slick-slide_>_*]:h-full [&_.slick-slide_>_*]:flex [&_.slick-slide_>_*]:justify-stretch" +
+          // for some reason the track will go into two rows (even with rows={1}) without `flex`
+          " [&_.slick-track]:flex [&_.slick-track]:justify-stretch"
+        }
+      >
+        {examples.map((example, index) => (
+          <div
+            key={example.title}
+            role="button"
             className={
-              "p-0" +
-              // `hidden` is specified only because the hack above prevents the panels from knowing when they should be hidden
-              (selectedCategoryTab === example.category ? " flex min-h-0 flex-col" : " hidden")
+              "flex flex-col rounded-xl h-full border p-3 sm:p-4 max-w-full whitespace-nowrap text-center" +
+              (index === currentExampleIndex
+                ? " border-primary-main bg-primary-light/5 hover:cursor-auto"
+                : " hover:bg-primary-light/5 hover:cursor-pointer *:pointer-events-none [&_a]:no-underline [&_a]:font-normal") // pointer-events-none to prevent accidental link-clicking when trying to select a card
             }
           >
-            <Typography variant="body1" className="mt-3">
-              {example.text}
+            <Typography component="h5" className="text-xl sm:text-2xl">
+              {example.category}
             </Typography>
 
-            {/* Want the parent section to shrink to fit this image if the image is smaller, otherwise */}
-            {/* respect the parent's max height and maintain the image aspect ratio. */}
-            <div className="mt-1 flex min-h-0 flex-col items-center gap-2 [&_>_img]:size-auto [&_>_img]:max-h-full">
-              {example.image}
-            </div>
+            <Divider className="my-1 sm:my-2" />
 
-            <Typography variant="body2" className="mt-2">
-              See in the app:{" "}
+            <Typography variant="body2" className="mt-0 sm:mt-1">
               <Link href={example.href} target="_blank">
                 {example.title}
               </Link>
             </Typography>
-          </TabPanel>
+
+            <Typography variant="body2">{example.purpose}</Typography>
+
+            <Chip
+              label={
+                example.complexity < 3
+                  ? "Low complexity"
+                  : example.complexity < 4
+                    ? "Low-ish complexity"
+                    : example.complexity < 7
+                      ? "Medium complexity"
+                      : "High complexity"
+              }
+              className="mt-0 sm:mt-2"
+              variant="outlined"
+              size="small"
+            />
+          </div>
         ))}
-      </TabContext>
+      </Carousel>
+
+      {examples.map((example) => (
+        <div
+          key={example.title}
+          // rely on `hidden` so that images can stay mounted/don't require reloading when clicking between cards
+          className={
+            "flex-col min-h-0" + (currentExample.title === example.title ? " flex" : " hidden")
+          }
+        >
+          <Typography variant="body1" className="mt-3">
+            {example.notes}
+          </Typography>
+
+          {/* Want the parent section to shrink to fit this image if the image is smaller, otherwise */}
+          {/* respect the parent's max height and maintain the image aspect ratio. */}
+          <div className="mt-1 flex min-h-0 flex-col items-center gap-2 [&_>_img]:size-auto [&_>_img]:max-h-full">
+            {example.image}
+          </div>
+
+          <Typography variant="body2" className="mt-2">
+            See in the app:{" "}
+            <Link href={example.href} target="_blank">
+              {example.title}
+            </Link>
+          </Typography>
+        </div>
+      ))}
     </div>
   );
 };
