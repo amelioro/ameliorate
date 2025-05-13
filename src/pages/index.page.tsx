@@ -46,7 +46,11 @@ const Home: NextPage = () => {
 
         <section
           id="examples"
-          className="flex justify-center odd:bg-paperPlain-main even:bg-paperShaded-main"
+          className={
+            "flex justify-center odd:bg-paperPlain-main even:bg-paperShaded-main" +
+            // allow carousel to stretch to 100vw without creating a horizontal scrollbar for seeing behind the vertical scrollbar
+            " overflow-x-hidden"
+          }
         >
           <div
             className={
