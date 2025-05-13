@@ -27,7 +27,7 @@ export const Headline = () => {
       </Typography>
       {/* max-w-xl to have a decent amount of space to the right to show the background image (on most screens) */}
       <div className="relative flex max-w-xl flex-col self-center rounded-3xl bg-paperPlain-main text-center sm:border sm:border-primary-main sm:p-8 sm:text-left sm:shadow-xl">
-        <Typography variant="h1" className="self-center text-3xl sm:self-start sm:text-5xl">
+        <Typography component="h1" className="self-center text-3xl font-bold sm:self-start">
           What if it was trivial to understand someone's reasoning, and to add yours to it?
         </Typography>
 
