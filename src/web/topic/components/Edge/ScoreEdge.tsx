@@ -122,6 +122,7 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
       markerStart={`url(#${inReactFlow ? flowMarkerId : nonFlowMarkerId}-${spotlight})`}
       spotlight={spotlight}
       onClick={() => setSelected(edge.id)}
+      onContextMenu={(event) => openContextMenu(event, { edge })}
     />
   );
 
@@ -137,6 +138,10 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
       strokeOpacity={0}
       strokeWidth={20}
       onClick={() => setSelected(edge.id)}
+      onContextMenu={(event) => {
+        console.log("Edge context menu:", edge);
+        openContextMenu(event, { edge });
+      }}
     />
   );
 
