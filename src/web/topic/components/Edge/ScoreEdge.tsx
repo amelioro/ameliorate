@@ -223,6 +223,7 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
             height={100}
             style={{ position: "absolute", cursor: "default" }}
             className="react-flow__edge selected"
+            onContextMenu={(event) => openContextMenu(event, { edge })}
           >
             {/* shouldn't need an svg marker def per edge, but it's easiest to just put here */}
             {svgMarkerDef(inReactFlow, spotlight)}
