@@ -2,6 +2,7 @@ import { ArrowBack, ArrowForward, Redo, Settings, Undo } from "@mui/icons-materi
 import { Dialog, Divider, IconButton, useTheme } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
+import { useEffect } from "react";
 
 import { Logo } from "@/web/common/components/Header/Logo";
 import { ProfileButton } from "@/web/common/components/Header/ProfileButton";
@@ -23,6 +24,27 @@ import { goBack, goForward, useCanGoBackForward } from "@/web/view/currentViewSt
 const headerCornerClasses = "h-[calc(3rem_+_1px)] bg-paperShaded-main flex items-center";
 
 export const AppHeader = () => {
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const isMac = navigator.userAgent.includes("Mac");
+      const ctrlKey = isMac ? event.metaKey : event.ctrlKey;
+      const key = event.key.toLowerCase();
+
+      if (ctrlKey && key === "z" && !event.shiftKey) {
+        event.preventDefault();
+        undo();
+      }
+
+      if (ctrlKey && (key === "y" || (key === "z" && event.shiftKey))) {
+        event.preventDefault();
+        redo();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   const [topicFormOpen, setTopicFormOpen] = useState(false);
 
   const theme = useTheme();
