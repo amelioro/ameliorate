@@ -6,8 +6,8 @@ import { Link } from "@/web/common/components/Link";
 
 export const Headline = () => {
   return (
-    // height set so that headline is better-centered regardless of screen height
-    <div className="relative flex h-[80svh] w-full justify-center sm:justify-normal">
+    // height set so that next section is _just_ visible, regardless of screen height (8svh to show part of next section, 96px for header and banner, 4rem for padding)
+    <div className="relative flex h-[calc(100svh-8svh-96px-4rem)] w-full justify-center sm:justify-normal">
       <Image
         src="https://github.com/user-attachments/assets/f61c41ef-0bde-4e03-9a98-98d12695f9d8"
         alt="cars-going-too-fast topic"

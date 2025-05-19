@@ -62,7 +62,7 @@ interface Props {
 }
 
 const TopicPaneBase = ({ anchor, tabs }: Props) => {
-  const defaultOpen = anchor !== "modal" && tabs.includes("Details"); // Views is expected to be used less, so close it by default
+  const defaultOpen = anchor !== "modal";
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
 
