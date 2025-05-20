@@ -86,6 +86,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/IAmPrem7685"><img src="https://avatars.githubusercontent.com/u/86892778?v=4?s=100" width="100px;" alt="IAmPrem7685"/><br /><sub><b>IAmPrem7685</b></sub></a><br /><a href="https://github.com/amelioro/ameliorate/commits?author=IAmPrem7685" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://mdiv.io"><img src="https://avatars.githubusercontent.com/u/96177680?v=4?s=100" width="100px;" alt="mdiv.io"/><br /><sub><b>mdiv.io</b></sub></a><br /><a href="https://github.com/amelioro/ameliorate/commits?author=2div" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/lovelypangotra2003"><img src="https://avatars.githubusercontent.com/u/74448249?v=4?s=100" width="100px;" alt="lovelypangotra2003"/><br /><sub><b>lovelypangotra2003</b></sub></a><br /><a href="https://github.com/amelioro/ameliorate/commits?author=lovelypangotra2003" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/SakshamKaundal"><img src="https://avatars.githubusercontent.com/u/137274099?v=4?s=100" width="100px;" alt="Saksham Kaundal"/><br /><sub><b>Saksham Kaundal</b></sub></a><br /><a href="https://github.com/amelioro/ameliorate/commits?author=SakshamKaundal" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
