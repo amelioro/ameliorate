@@ -1,10 +1,61 @@
 import styled from "@emotion/styled";
 import { TextareaAutosize } from "@mui/material";
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 
+import { htmlDefaultFontSize } from "@/pages/_document.page";
 import { clearNewlyAddedNode, isNodeNewlyAdded } from "@/web/common/store/ephemeralStore";
 import { WorkspaceContextType } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { setNodeLabel } from "@/web/topic/store/actions";
+
+/**
+ * If textarea content goes beyond its max rows, adjust font size below 1rem until text fits.
+ * This should be convenient for making text easy to read without scrolling, particularly when the
+ * text is barely overflowing.
+ *
+ * Because of performance concerns, don't do calcs when text already fits at the default font size.
+ *
+ * Note: The most recent benchmark for this calc was ~1-10ms on "mid-tier mobile".
+ * This is a lot, likely noticeable after 10-100 nodes - this is why we display a warning when
+ * first adding text that requires font resizing, so that users try to avoid it.
+ *
+ * Note: Tried using a `div` similar to how we do in layout.ts (because that spot found `textarea` to be slower),
+ * for this calc but didn't notice a significant performance difference here (presumably the `textarea` savings
+ * was for `.scrollHeight`? since it's the main thing in the layout calc).
+ *
+ * TODO(bug): for some reason the text area gets bigger by 2px when we have to reduce the font size,
+ * but it's not very noticeable, so seems fine to leave for now.
+ */
+/* eslint-disable functional/no-let, functional/no-loop-statements, functional/immutable-data, no-param-reassign -- dom modification is easier without these */
+const fitTextIntoElement = (element: HTMLTextAreaElement) => {
+  // note: `getComputedStyle` seems significantly faster than `element.style.fontSize` for getting fontSize ("mid-tier mobile": 0.01ms vs 0.5ms)
+  const fontIsDefaultSize = getComputedStyle(element).fontSize === `${htmlDefaultFontSize}px`;
+  const textFitsAtDefaultSize = element.scrollHeight <= element.clientHeight && fontIsDefaultSize;
+  if (textFitsAtDefaultSize) return;
+
+  let currentFontSizeRem = 1;
+  element.style.fontSize = `${currentFontSizeRem}rem`; // default, don't go bigger than this
+
+  // `alignContent: center` somehow, for some sets of text, results in a 1px increase in scrollHeight beyond MUI's
+  // calculated height, e.g. scrollHeight might be 52px with clientHeight 51px when our font size
+  // has actually been reduced to fit already; so subtract that 1px out to ensure we don't reduce
+  // font size further than we need.
+  const extraScrollPxFromAligningCenter = 1;
+
+  while (element.scrollHeight - extraScrollPxFromAligningCenter > element.clientHeight) {
+    if (currentFontSizeRem <= 12.0 / 16) break; // 12px at 16px default font size looks really small, so keep this as the minimum
+
+    currentFontSizeRem = currentFontSizeRem - 1.0 / htmlDefaultFontSize; // try 1px smaller
+    element.style.fontSize = `${currentFontSizeRem}rem`;
+  }
+
+  // If we adjust the font size via code, the textarea can be taller than the text in it, so this
+  // ensures the text is vertically centered.
+  if (currentFontSizeRem < 1) element.style.alignContent = "center";
+  // But somehow when we do this, there's a 1px increase in scrollHeight beyond MUI's calculated height,
+  // creating an awkward 1px scroll, so don't center if we're not reducing font size.
+  else element.style.alignContent = "unset";
+};
+/* eslint-enable functional/no-let, functional/no-loop-statements, functional/immutable-data, no-param-reassign */
 
 interface Props {
   nodeId: string;
@@ -15,7 +66,15 @@ interface Props {
 
 const NodeTextAreaBase = ({ nodeId, nodeText, context, editable }: Props) => {
   const [textAreaSelected, setTextAreaSelected] = useState(false);
+  const [prevText, setPrevText] = useState(nodeText);
+
   const textAreaId = `${nodeId}-${context}-textarea`;
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (!textAreaRef.current) return;
+    fitTextIntoElement(textAreaRef.current);
+  }, []);
 
   useEffect(() => {
     if (!isNodeNewlyAdded(nodeId, context)) return;
@@ -35,13 +94,23 @@ const NodeTextAreaBase = ({ nodeId, nodeText, context, editable }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps -- we don't care about re-focusing after initial render
   }, []);
 
+  const textChanged = prevText !== nodeText;
+  if (textChanged) setPrevText(nodeText);
+
+  // e.g. on undo/redo, or if editing text in details pane and the same node is showing in the diagram
+  const textChangedExternally =
+    textChanged && textAreaRef.current && textAreaRef.current.value !== nodeText;
+
+  if (textChangedExternally) {
+    // eslint-disable-next-line functional/immutable-data
+    textAreaRef.current.value = nodeText;
+    fitTextIntoElement(textAreaRef.current);
+  }
+
   return (
     <StyledTextareaAutosize
       id={textAreaId}
-      // Change key if `node.data.label` changes so that textarea re-renders with new default value.
-      // This is mainly intended for when the label changes from an external source
-      // e.g. undo/redo, changing from the node in the details pane while this one is in the diagram, etc.
-      key={textAreaId + nodeText}
+      ref={textAreaRef}
       placeholder="Enter text..."
       defaultValue={nodeText}
       maxRows={3}
@@ -70,6 +139,9 @@ const NodeTextAreaBase = ({ nodeId, nodeText, context, editable }: Props) => {
       onBlur={(event) => {
         if (textAreaSelected) setTextAreaSelected(false);
         if (event.target.value !== nodeText) setNodeLabel(nodeId, event.target.value);
+      }}
+      onChange={(event) => {
+        fitTextIntoElement(event.target);
       }}
       className={textAreaSelected ? "nopan" : ""} // allow regular text input drag functionality without using reactflow's pan behavior
       // Previously required selecting a node before editing its text, because oftentimes you'll
