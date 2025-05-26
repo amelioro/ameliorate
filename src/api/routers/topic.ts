@@ -6,7 +6,7 @@ import { isLoggedIn } from "@/api/auth";
 import { procedure, router } from "@/api/trpc";
 import { edgeSchema } from "@/common/edge";
 import { getNewTopicProblemNode, nodeSchema } from "@/common/node";
-import { topicSchema } from "@/common/topic";
+import { normalizeTitle, topicSchema } from "@/common/topic";
 import { userSchema } from "@/common/user";
 import { userScoreSchema } from "@/common/userScore";
 import { quickViewSchema } from "@/common/view";
@@ -22,14 +22,23 @@ export const topicRouter = router({
     )
     .query(async (opts) => {
       const isCreator = opts.input.username === opts.ctx.user?.username;
+      const normalizedTitle = normalizeTitle(decodeURIComponent(opts.input.title));
 
-      return await xprisma.topic.findFirst({
-        where: {
-          title: opts.input.title,
-          creatorName: opts.input.username,
-          visibility: isCreator ? undefined : { not: "private" },
-        },
-      });
+      const topics = await xprisma.$queryRaw<
+        { id: number; title: string; creatorName: string; visibility: string }[]
+      >`
+        SELECT id, title, "creatorName", visibility
+        FROM "topics"
+        WHERE "creatorName" = ${opts.input.username}
+        AND (
+          REPLACE(LOWER(title), ' ', '-') = ${normalizedTitle}
+          OR title = ${normalizedTitle}
+        )
+        AND (${isCreator} OR visibility != 'private')
+        LIMIT 1
+      `;
+
+      return topics[0] ?? null;
     }),
 
   /**
@@ -41,18 +50,40 @@ export const topicRouter = router({
     .input(
       z.object({
         username: userSchema.shape.username,
-        title: topicSchema.shape.title,
+        title: z.string(),
       }),
     )
     .query(async (opts) => {
       const isCreator = opts.input.username === opts.ctx.user?.username;
+      const normalizedTitle = normalizeTitle(decodeURIComponent(opts.input.title));
+      const topics = await xprisma.$queryRaw<
+        {
+          id: number;
+          title: string;
+          creatorName: string;
+          description: string;
+          visibility: string;
+          allowAnyoneToEdit: boolean;
+          createdAt: Date;
+          updatedAt: Date;
+        }[]
+      >`
+        SELECT id, title, "creatorName", description, visibility, "allowAnyoneToEdit", "createdAt", "updatedAt"
+        FROM "topics"
+        WHERE "creatorName" = ${opts.input.username}
+        AND (
+          REPLACE(LOWER(title), ' ', '-') = ${normalizedTitle}
+          OR title = ${normalizedTitle}
+        )
+        AND (${isCreator} OR visibility != 'private')
+        LIMIT 1
+      `;
 
+      if (!topics[0]) return null;
+
+      // Fetch related data since raw query doesn't support include -- Added to match original behavior
       return await xprisma.topic.findFirst({
-        where: {
-          title: opts.input.title,
-          creatorName: opts.input.username,
-          visibility: isCreator ? undefined : { not: "private" },
-        },
+        where: { id: topics[0].id },
         include: {
           nodes: true,
           edges: true,
@@ -226,6 +257,19 @@ export const topicRouter = router({
       }),
     )
     .mutation(async (opts) => {
+      const normalizedTitle = normalizeTitle(opts.input.topic.title);
+      const existingTopic = await xprisma.topic.findFirst({
+        where: {
+          title: { equals: normalizedTitle, mode: "insensitive" },
+          creatorName: opts.ctx.user.username,
+        },
+      });
+      if (existingTopic) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `Title ${opts.input.topic.title} is not available.`,
+        });
+      }
       const newTopic = await xprisma.topic.create({
         data: {
           title: opts.input.topic.title,
@@ -274,6 +318,22 @@ export const topicRouter = router({
     .mutation(async (opts) => {
       const topic = await xprisma.topic.findUniqueOrThrow({ where: { id: opts.input.id } });
       if (opts.ctx.user.username !== topic.creatorName) throw new TRPCError({ code: "FORBIDDEN" });
+
+      const normalizedTitle = normalizeTitle(opts.input.title);
+      if (normalizedTitle !== normalizeTitle(topic.title)) {
+        const existingTopic = await xprisma.topic.findFirst({
+          where: {
+            title: { equals: normalizedTitle, mode: "insensitive" },
+            creatorName: opts.ctx.user.username,
+          },
+        });
+        if (existingTopic) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: `Title ${opts.input.title} is not available.`,
+          });
+        }
+      }
 
       return await xprisma.topic.update({
         where: { id: opts.input.id },
