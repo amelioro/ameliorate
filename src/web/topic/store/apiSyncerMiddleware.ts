@@ -10,7 +10,8 @@ import diff from "microdiff";
 import { StateCreator, StoreMutatorIdentifier } from "zustand";
 
 import { trpcClient } from "@/pages/_app.page";
-import { emitter } from "@/web/common/event";
+import { buildApiSyncerError } from "@/web/common/components/Error/apiSyncerError";
+import { showError } from "@/web/common/components/InfoDialog/infoEvents";
 import { TopicStoreState } from "@/web/topic/store/store";
 import { isPlaygroundTopic } from "@/web/topic/store/utils";
 import { convertToApi } from "@/web/topic/utils/apiConversion";
@@ -93,7 +94,7 @@ const saveDiffs = (storeBefore: TopicStoreState, storeAfter: TopicStoreState) =>
   trpcClient.topic.setData
     .mutate({ topicId: storeBefore.topic.id, description: newDescription, ...changeLists })
     .catch((e: unknown) => {
-      emitter.emit("errored");
+      showError("changesFailedToSave", buildApiSyncerError(changeLists, e));
       throw e;
     });
 };

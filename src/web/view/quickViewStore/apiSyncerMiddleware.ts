@@ -11,7 +11,8 @@ import { StateCreator, StoreMutatorIdentifier } from "zustand";
 
 import { QuickView } from "@/common/view";
 import { trpcClient } from "@/pages/_app.page";
-import { emitter } from "@/web/common/event";
+import { buildApiSyncerError } from "@/web/common/components/Error/apiSyncerError";
+import { showError } from "@/web/common/components/InfoDialog/infoEvents";
 import { isPlaygroundTopic } from "@/web/topic/store/utils";
 import { QuickViewStoreState } from "@/web/view/quickViewStore/store";
 
@@ -91,7 +92,10 @@ const saveDiffs = (
   trpcClient.view.handleChangesets
     .mutate({ topicId, viewsToCreate, viewsToUpdate, viewsToDelete })
     .catch((e: unknown) => {
-      emitter.emit("errored");
+      showError(
+        "changesFailedToSave",
+        buildApiSyncerError({ viewsToCreate, viewsToUpdate, viewsToDelete }, e),
+      );
       throw e;
     });
 };

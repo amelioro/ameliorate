@@ -4,6 +4,7 @@ import set from "lodash/set";
 import { RelationName, edgeSchema } from "@/common/edge";
 import { errorWithData } from "@/common/errorHandling";
 import { NodeType, nodeSchema } from "@/common/node";
+import { showError } from "@/web/common/components/InfoDialog/infoEvents";
 import { useTopicStore } from "@/web/topic/store/store";
 import {
   Edge,
@@ -68,7 +69,13 @@ export const setCustomNodeType = (node: Node, value: string) => {
   const state = createDraft(useTopicStore.getState());
 
   const parsed = nodeSchema.shape.customType.safeParse(value);
-  if (!parsed.success) throw parsed.error;
+  if (!parsed.success) {
+    showError(
+      "invalidCustomNodeType",
+      parsed.error.errors[0]?.message ?? "Invalid custom node type",
+    );
+    throw parsed.error;
+  }
 
   const foundNode = findNodeOrThrow(node.id, state.nodes);
 
@@ -83,7 +90,13 @@ export const setCustomEdgeLabel = (edge: Edge, value: string) => {
   const state = createDraft(useTopicStore.getState());
 
   const parsed = edgeSchema.shape.customLabel.safeParse(value);
-  if (!parsed.success) throw parsed.error;
+  if (!parsed.success) {
+    showError(
+      "invalidCustomEdgeLabel",
+      parsed.error.errors[0]?.message ?? "Invalid custom edge label",
+    );
+    throw parsed.error;
+  }
 
   const foundEdge = findEdgeOrThrow(edge.id, state.edges);
 
