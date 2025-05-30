@@ -12,7 +12,8 @@ import { StateCreator, StoreMutatorIdentifier } from "zustand";
 import { Comment } from "@/common/comment";
 import { trpcClient } from "@/pages/_app.page";
 import { CommentStoreState } from "@/web/comment/store/commentStore";
-import { emitter } from "@/web/common/event";
+import { buildApiSyncerError } from "@/web/common/components/Error/apiSyncerError";
+import { showError } from "@/web/common/components/InfoDialog/infoEvents";
 import { isPlaygroundTopic } from "@/web/topic/store/utils";
 
 const getCrudDiffs = <T extends object>(
@@ -90,7 +91,10 @@ const saveDiffs = (
   trpcClient.comment.handleChangesets
     .mutate({ topicId, commentsToCreate, commentsToUpdate, commentsToDelete })
     .catch((e: unknown) => {
-      emitter.emit("errored");
+      showError(
+        "changesFailedToSave",
+        buildApiSyncerError({ commentsToCreate, commentsToUpdate, commentsToDelete }, e),
+      );
       throw e;
     });
 };

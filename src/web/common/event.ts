@@ -5,7 +5,6 @@ import { type ViewState } from "@/web/view/currentViewStore/store";
 
 interface Events {
   addNode: (node: Node) => void;
-  errored: () => void;
   overwroteTopicData: () => void;
   changedDiagramFilter: () => void;
   changedLayoutConfig: () => void;

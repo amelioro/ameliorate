@@ -3,7 +3,6 @@ import {
   Build,
   Delete,
   EditOff,
-  Error,
   FiberManualRecord,
   Group,
   Highlight,
@@ -23,12 +22,10 @@ import {
   MenuItem,
   Switch,
   ToggleButton,
-  Tooltip,
 } from "@mui/material";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 import { Menu } from "@/web/common/components/Menu/Menu";
-import { emitter } from "@/web/common/event";
 import { useSessionUser } from "@/web/common/hooks";
 import { HelpMenu } from "@/web/topic/components/TopicWorkspace/HelpMenu";
 import { MoreActionsDrawer } from "@/web/topic/components/TopicWorkspace/MoreActionsDrawer";
@@ -195,7 +192,6 @@ export const ContentFooter = ({ overlay }: Props) => {
   const isComparingPerspectives = useIsComparingPerspectives();
   const flashlightMode = useFlashlightMode();
   const readonlyMode = useReadonlyMode();
-  const [hasErrored, setHasErrored] = useState(false);
 
   const selectedGraphPart = useSelectedGraphPart();
   const partIsTableEdge = useIsTableEdge(selectedGraphPart?.id ?? "");
@@ -206,16 +202,6 @@ export const ContentFooter = ({ overlay }: Props) => {
   );
   const [isMoreActionsDrawerOpen, setIsMoreActionsDrawerOpen] = useState(false);
   const [helpAnchorEl, setHelpAnchorEl] = useState<null | HTMLElement>(null);
-
-  useEffect(() => {
-    const unbindErrored = emitter.on("errored", () => {
-      setHasErrored(true);
-    });
-
-    return () => {
-      unbindErrored();
-    };
-  }, []);
 
   return (
     <div
@@ -387,33 +373,6 @@ export const ContentFooter = ({ overlay }: Props) => {
             <QuestionMark />
           </IconButton>
           <HelpMenu helpAnchorEl={helpAnchorEl} setHelpAnchorEl={setHelpAnchorEl} />
-
-          {hasErrored && (
-            <Tooltip
-              title={
-                <span>
-                  Failed to save changes - your changes will be lost after refreshing the page.
-                  <br />
-                  <br />
-                  Please refresh the page and try making your changes again, or download your topic
-                  with your changes and re-upload it after refreshing the page.
-                </span>
-              }
-              enterTouchDelay={0} // allow touch to immediately trigger
-              leaveTouchDelay={Infinity} // touch-away to close on mobile, since message is long
-            >
-              <IconButton
-                color="error"
-                aria-label="Error info"
-                // Don't make it look like clicking will do something, since it won't.
-                // Using a button here is an attempt to make it accessible, since the tooltip will show
-                // on focus.
-                className="cursor-default rounded"
-              >
-                <Error />
-              </IconButton>
-            </Tooltip>
-          )}
         </div>
       </div>
     </div>
