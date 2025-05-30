@@ -88,6 +88,9 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/lovelypangotra2003"><img src="https://avatars.githubusercontent.com/u/74448249?v=4?s=100" width="100px;" alt="lovelypangotra2003"/><br /><sub><b>lovelypangotra2003</b></sub></a><br /><a href="https://github.com/amelioro/ameliorate/commits?author=lovelypangotra2003" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/SakshamKaundal"><img src="https://avatars.githubusercontent.com/u/137274099?v=4?s=100" width="100px;" alt="Saksham Kaundal"/><br /><sub><b>Saksham Kaundal</b></sub></a><br /><a href="https://github.com/amelioro/ameliorate/commits?author=SakshamKaundal" title="Code">💻</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/qdow"><img src="https://avatars.githubusercontent.com/u/156013833?v=4?s=100" width="100px;" alt="qdow"/><br /><sub><b>qdow</b></sub></a><br /><a href="https://github.com/amelioro/ameliorate/commits?author=qdow" title="Code">💻</a></td>
+    </tr>
   </tbody>
 </table>
 
