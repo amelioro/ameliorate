@@ -2,6 +2,7 @@ import { ArrowBack, ArrowForward, Redo, Settings, Undo } from "@mui/icons-materi
 import { Dialog, Divider, IconButton, useTheme } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
 
 import { Logo } from "@/web/common/components/Header/Logo";
 import { ProfileButton } from "@/web/common/components/Header/ProfileButton";
@@ -37,6 +38,24 @@ export const AppHeader = () => {
 
   const [canGoBack, canGoForward] = useCanGoBackForward();
   const [canUndo, canRedo] = useTemporalHooks();
+
+  useHotkeys(
+    ["ctrl+z"],
+    () => {
+      if (!userCanEditTopicData || !canUndo) return;
+      undo();
+    },
+    { enableOnFormTags: true },
+  );
+
+  useHotkeys(
+    ["ctrl+shift+z"],
+    () => {
+      if (!userCanEditTopicData || !canRedo) return;
+      redo();
+    },
+    { enableOnFormTags: true },
+  );
 
   const leftHeader = (
     // shrink-0 because center header should be the only one shrinking
