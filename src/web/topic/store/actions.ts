@@ -52,10 +52,10 @@ export const setScore = (username: string, graphPartId: string, score: Score) =>
   useTopicStore.setState(finishDraft(state), false, "setScore");
 };
 
-export const setNodeLabel = (node: Node, value: string) => {
+export const setNodeLabel = (nodeId: string, value: string) => {
   const state = createDraft(useTopicStore.getState());
 
-  const foundNode = findNodeOrThrow(node.id, state.nodes);
+  const foundNode = findNodeOrThrow(nodeId, state.nodes);
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   foundNode.data.label = value;

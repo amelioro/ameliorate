@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Box, TextareaAutosize } from "@mui/material";
+import { Box } from "@mui/material";
 
 import { htmlDefaultFontSize } from "@/pages/_document.page";
 import { ContentIndicatorGroup } from "@/web/topic/components/Indicator/Base/ContentIndicatorGroup";
@@ -23,20 +23,6 @@ export const IndicatorDiv = styled.div`
 // allow handling mouse events for whole node without mouse icon changing to input for textarea
 export const MiddleDiv = styled.div``;
 export const BottomDiv = styled.div``;
-
-export const StyledTextareaAutosize = styled(TextareaAutosize)`
-  padding: 0;
-  border: 0;
-  resize: none;
-  outline: none;
-  text-align: center;
-  align-self: center;
-  background-color: transparent;
-  width: 100%;
-  font-size: 1rem;
-  line-height: 1;
-  font-family: inherit;
-`;
 
 /* some copied from https://github.com/wbkd/react-flow/blob/147656b22f577bb4141664d000e62ada9b490473/src/theme-default.css#L42-L77 */
 export const NodeBox = styled(Box)`

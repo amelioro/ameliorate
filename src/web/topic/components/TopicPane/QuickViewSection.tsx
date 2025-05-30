@@ -90,7 +90,7 @@ const QuickViewRow = ({ view, selected, editable, onEdit }: RowProps) => {
           )}
         </ListItemIcon>
 
-        <ListItemText primary={view.title} />
+        <ListItemText primary={view.title} className="[&>span]:truncate" />
 
         {editable && (
           <>
