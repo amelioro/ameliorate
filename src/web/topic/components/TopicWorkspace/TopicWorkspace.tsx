@@ -5,6 +5,7 @@ import { ToggleButton, useMediaQuery } from "@mui/material";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import { ContextMenu } from "@/web/common/components/ContextMenu/ContextMenu";
+import { InfoDialog } from "@/web/common/components/InfoDialog/InfoDialog";
 import { SiteBanner } from "@/web/common/components/SiteBanner/SiteBanner";
 import { useSessionUser } from "@/web/common/hooks";
 import { CriteriaTable } from "@/web/topic/components/CriteriaTable/CriteriaTable";
@@ -118,6 +119,8 @@ export const TopicWorkspace = () => {
       </div>
 
       <ContextMenu />
+
+      <InfoDialog />
 
       <TourSetter />
       <TutorialAnchor />

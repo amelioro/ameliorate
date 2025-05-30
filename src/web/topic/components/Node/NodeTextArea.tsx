@@ -3,9 +3,24 @@ import { TextareaAutosize } from "@mui/material";
 import { memo, useEffect, useRef, useState } from "react";
 
 import { htmlDefaultFontSize } from "@/pages/_document.page";
+import { hasSeenTrigger } from "@/web/common/components/InfoDialog/infoDialogStore";
+import { showInfo } from "@/web/common/components/InfoDialog/infoEvents";
 import { clearNewlyAddedNode, isNodeNewlyAdded } from "@/web/common/store/ephemeralStore";
 import { WorkspaceContextType } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { setNodeLabel } from "@/web/topic/store/actions";
+
+// If we had to resize, make sure the user knows that text should be concise.
+const onFontResize = (textAreaId: string) => {
+  if (hasSeenTrigger("nodeTextSizeReduced")) return;
+
+  showInfo(
+    "nodeTextSizeReduced",
+    `Font size has been reduced to fit your text!
+    
+Ideally node text is concise - a sentence fragment of just one concept, like 'Problem: cars going too fast'. But sometimes it can be hard to make the text more concise, and that's ok.`,
+    `#${CSS.escape(textAreaId)}`, // `escape` because the id can start with a number, which CSS selectors aren't supposed to https://developer.mozilla.org/en-US/docs/Web/API/CSS/escape_static#in_context_uses
+  );
+};
 
 /**
  * If textarea content goes beyond its max rows, adjust font size below 1rem until text fits.
@@ -24,13 +39,15 @@ import { setNodeLabel } from "@/web/topic/store/actions";
  *
  * TODO(bug): for some reason the text area gets bigger by 2px when we have to reduce the font size,
  * but it's not very noticeable, so seems fine to leave for now.
+ *
+ * @returns true if text is resized, false otherwise.
  */
 /* eslint-disable functional/no-let, functional/no-loop-statements, functional/immutable-data, no-param-reassign -- dom modification is easier without these */
 const fitTextIntoElement = (element: HTMLTextAreaElement) => {
   // note: `getComputedStyle` seems significantly faster than `element.style.fontSize` for getting fontSize ("mid-tier mobile": 0.01ms vs 0.5ms)
   const fontIsDefaultSize = getComputedStyle(element).fontSize === `${htmlDefaultFontSize}px`;
   const textFitsAtDefaultSize = element.scrollHeight <= element.clientHeight && fontIsDefaultSize;
-  if (textFitsAtDefaultSize) return;
+  if (textFitsAtDefaultSize) return false;
 
   let currentFontSizeRem = 1;
   element.style.fontSize = `${currentFontSizeRem}rem`; // default, don't go bigger than this
@@ -48,12 +65,19 @@ const fitTextIntoElement = (element: HTMLTextAreaElement) => {
     element.style.fontSize = `${currentFontSizeRem}rem`;
   }
 
-  // If we adjust the font size via code, the textarea can be taller than the text in it, so this
-  // ensures the text is vertically centered.
-  if (currentFontSizeRem < 1) element.style.alignContent = "center";
-  // But somehow when we do this, there's a 1px increase in scrollHeight beyond MUI's calculated height,
-  // creating an awkward 1px scroll, so don't center if we're not reducing font size.
-  else element.style.alignContent = "unset";
+  if (currentFontSizeRem < 1) {
+    // If we adjust the font size via code, the textarea can be taller than the text in it, so this
+    // ensures the text is vertically centered.
+    element.style.alignContent = "center";
+
+    return true;
+  } else {
+    // Somehow when we rely on `alignContent: center`, there's a 1px increase in scrollHeight beyond MUI's calculated height,
+    // creating an awkward 1px scroll... so don't center if we're not reducing font size.
+    element.style.alignContent = "unset";
+
+    return false;
+  }
 };
 /* eslint-enable functional/no-let, functional/no-loop-statements, functional/immutable-data, no-param-reassign */
 
@@ -141,7 +165,8 @@ const NodeTextAreaBase = ({ nodeId, nodeText, context, editable }: Props) => {
         if (event.target.value !== nodeText) setNodeLabel(nodeId, event.target.value);
       }}
       onChange={(event) => {
-        fitTextIntoElement(event.target);
+        const resized = fitTextIntoElement(event.target);
+        if (resized) onFontResize(textAreaId);
       }}
       className={textAreaSelected ? "nopan" : ""} // allow regular text input drag functionality without using reactflow's pan behavior
       // Previously required selecting a node before editing its text, because oftentimes you'll
