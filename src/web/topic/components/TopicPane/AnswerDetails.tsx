@@ -1,5 +1,4 @@
-import { QuestionMark } from "@mui/icons-material";
-import { ListItem, ListItemIcon, ListItemText, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 
 import { EditableNode } from "@/web/topic/components/Node/EditableNode";
 import { useAnswerDetails } from "@/web/topic/store/nodeTypeHooks";
@@ -13,21 +12,16 @@ export const AnswerDetails = ({ answerNode }: Props) => {
   const { question } = useAnswerDetails(answerNode.id);
 
   return (
-    <>
-      <ListItem disablePadding={false}>
-        <ListItemIcon>
-          <QuestionMark />
-        </ListItemIcon>
-        <ListItemText primary="Answer to" />
-      </ListItem>
+    <div className="mt-2 flex flex-col items-center gap-0.5">
+      <Typography variant="body1">Answer to</Typography>
 
-      <Stack direction="row" justifyContent="center" alignItems="center" marginBottom="8px">
+      <Stack direction="row" justifyContent="center" alignItems="center">
         {question ? (
           <EditableNode node={question} />
         ) : (
           <Typography>No question to answer!</Typography>
         )}
       </Stack>
-    </>
+    </div>
   );
 };

@@ -1,5 +1,4 @@
-import { PriorityHigh, Schema } from "@mui/icons-material";
-import { ListItem, ListItemIcon, ListItemText, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 
 import { StandaloneEdge } from "@/web/topic/components/Edge/StandaloneEdge";
 import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
@@ -18,54 +17,46 @@ export const QuestionDetails = ({ questionNode }: Props) => {
   return (
     <>
       {partAskingAbout ? (
-        <>
-          <ListItem disablePadding={false}>
-            <ListItemIcon>
-              <Schema />
-            </ListItemIcon>
-            <ListItemText primary="Asks About" />
-          </ListItem>
+        <div className="mt-2 flex flex-col items-center gap-0.5">
+          <Typography variant="body1">Asks About</Typography>
 
-          <Stack direction="row" justifyContent="center" alignItems="center">
+          <div className="flex items-center justify-center">
             {isNode(partAskingAbout) ? (
               <EditableNode node={partAskingAbout} />
             ) : (
               <StandaloneEdge edge={partAskingAbout} />
             )}
-          </Stack>
-        </>
+          </div>
+        </div>
       ) : (
         <></>
       )}
 
-      <ListItem disablePadding={false}>
-        <ListItemIcon>
-          <PriorityHigh />
-        </ListItemIcon>
-        <ListItemText primary="Potential Answers" />
-      </ListItem>
+      <div className="mt-4 flex flex-col items-center gap-0.5">
+        <Typography variant="body1">Potential Answers</Typography>
 
-      <Stack direction="row" justifyContent="center" alignItems="center" marginBottom="8px">
-        <AddNodeButton
-          fromPartId={questionNode.id}
-          as="child"
-          toNodeType="answer"
-          relation={{
-            child: "answer",
-            name: "potentialAnswerTo",
-            parent: "question",
-          }}
-          selectNewNode={false}
-        />
-      </Stack>
+        <Stack direction="row" justifyContent="center" alignItems="center" marginBottom="8px">
+          <AddNodeButton
+            fromPartId={questionNode.id}
+            as="child"
+            toNodeType="answer"
+            relation={{
+              child: "answer",
+              name: "potentialAnswerTo",
+              parent: "question",
+            }}
+            selectNewNode={false}
+          />
+        </Stack>
 
-      <NodeList>
-        {answers.length > 0 ? (
-          answers.map((answer) => <EditableNode key={answer.id} node={answer} />)
-        ) : (
-          <Typography variant="body2">No answers yet!</Typography>
-        )}
-      </NodeList>
+        <NodeList>
+          {answers.length > 0 ? (
+            answers.map((answer) => <EditableNode key={answer.id} node={answer} />)
+          ) : (
+            <Typography variant="body2">No answers yet!</Typography>
+          )}
+        </NodeList>
+      </div>
     </>
   );
 };

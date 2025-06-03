@@ -1,5 +1,4 @@
-import { Code, Schema } from "@mui/icons-material";
-import { ListItem, ListItemIcon, ListItemText, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 
 import { StandaloneEdge } from "@/web/topic/components/Edge/StandaloneEdge";
 import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
@@ -17,51 +16,45 @@ export const FactDetails = ({ factNode }: Props) => {
 
   return (
     <>
-      <ListItem disablePadding={false}>
-        <ListItemIcon>
-          <Schema />
-        </ListItemIcon>
-        <ListItemText primary="Relevant For" />
-      </ListItem>
+      <div className="mt-2 flex flex-col items-center gap-0.5">
+        <Typography variant="body1">Relevant For</Typography>
 
-      <NodeList>
-        {nodesRelevantFor.length === 0 && edgesRelevantFor.length === 0 && (
-          <Typography variant="body2">No relevant parts yet!</Typography>
-        )}
-        {nodesRelevantFor.length > 0 &&
-          nodesRelevantFor.map((node) => <EditableNode key={node.id} node={node} />)}
-        {edgesRelevantFor.length > 0 &&
-          edgesRelevantFor.map((edge) => <StandaloneEdge key={edge.id} edge={edge} />)}
-      </NodeList>
+        <NodeList>
+          {nodesRelevantFor.length === 0 && edgesRelevantFor.length === 0 && (
+            <Typography variant="body2">No relevant parts yet!</Typography>
+          )}
+          {nodesRelevantFor.length > 0 &&
+            nodesRelevantFor.map((node) => <EditableNode key={node.id} node={node} />)}
+          {edgesRelevantFor.length > 0 &&
+            edgesRelevantFor.map((edge) => <StandaloneEdge key={edge.id} edge={edge} />)}
+        </NodeList>
+      </div>
 
-      <ListItem disablePadding={false}>
-        <ListItemIcon>
-          <Code />
-        </ListItemIcon>
-        <ListItemText primary="Sources" />
-      </ListItem>
+      <div className="mt-4 flex flex-col items-center gap-0.5">
+        <Typography variant="body1">Sources</Typography>
 
-      <Stack direction="row" justifyContent="center" alignItems="center" marginBottom="8px">
-        <AddNodeButton
-          fromPartId={factNode.id}
-          as="child"
-          toNodeType="source"
-          relation={{
-            child: "source",
-            name: "sourceOf",
-            parent: "fact",
-          }}
-          selectNewNode={false}
-        />
-      </Stack>
+        <Stack direction="row" justifyContent="center" alignItems="center" marginBottom="8px">
+          <AddNodeButton
+            fromPartId={factNode.id}
+            as="child"
+            toNodeType="source"
+            relation={{
+              child: "source",
+              name: "sourceOf",
+              parent: "fact",
+            }}
+            selectNewNode={false}
+          />
+        </Stack>
 
-      <NodeList>
-        {sources.length > 0 ? (
-          sources.map((source) => <EditableNode key={source.id} node={source} />)
-        ) : (
-          <Typography variant="body2">No sources yet!</Typography>
-        )}
-      </NodeList>
+        <NodeList>
+          {sources.length > 0 ? (
+            sources.map((source) => <EditableNode key={source.id} node={source} />)
+          ) : (
+            <Typography variant="body2">No sources yet!</Typography>
+          )}
+        </NodeList>
+      </div>
     </>
   );
 };
