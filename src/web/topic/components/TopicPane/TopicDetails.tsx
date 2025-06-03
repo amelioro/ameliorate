@@ -9,20 +9,7 @@ import {
   Settings,
 } from "@mui/icons-material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import {
-  Dialog,
-  Divider,
-  IconButton,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  MenuItem,
-  Tab,
-  TextField,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Dialog, IconButton, MenuItem, Tab, TextField, Tooltip, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -80,21 +67,20 @@ const BasicsSection = ({ topic }: { topic: StoreTopic }) => {
           setTopicDetails(data.description);
         })(event);
       }}
+      className="w-full"
     >
-      <ListItem disablePadding={false} sx={{ paddingTop: 1 }}>
-        <TextField
-          {...register("description")}
-          label="Description"
-          error={!!errors.description}
-          helperText={errors.description?.message}
-          multiline
-          fullWidth
-          size="small"
-          InputProps={{ className: "text-sm", readOnly: !userCanEditTopicData }}
-          InputLabelProps={{ className: "text-sm" }}
-          maxRows={10}
-        />
-      </ListItem>
+      <TextField
+        {...register("description")}
+        label="Description"
+        error={!!errors.description}
+        helperText={errors.description?.message}
+        multiline
+        fullWidth
+        size="small"
+        InputProps={{ className: "text-sm", readOnly: !userCanEditTopicData }}
+        InputLabelProps={{ className: "text-sm" }}
+        maxRows={10}
+      />
     </form>
   );
 };
@@ -146,9 +132,11 @@ export const TopicDetails = ({ selectedTab, setSelectedTab }: Props) => {
 
   return (
     // min-h-0 to ensure content can shrink within parent flex container, allowing inner containers to control scrolling https://stackoverflow.com/a/66689926/8409296
-    <List className="flex min-h-0 flex-col py-0">
+    // grow so that it can take up the full pane's space and not overflow if a node is at the bottom and has an indicator overhanging
+    <div className="flex min-h-0 grow flex-col py-0">
       {/* max-w and wrap/break to handle long topic titles */}
-      <div className="flex items-center justify-center text-wrap break-all px-4">
+      {/* hardcode shadow to be 1px lower than default tailwind shadow so that no shadow appears above the container */}
+      <div className="flex items-center justify-center text-wrap break-all border-b px-4 pb-1 shadow-[0_2px_3px_0_rgba(0,0,0,0.1)]">
         {isPlaygroundTopic ? (
           "Playground Topic"
         ) : (
@@ -184,12 +172,10 @@ export const TopicDetails = ({ selectedTab, setSelectedTab }: Props) => {
         )}
       </div>
 
-      <Divider className="my-1 shadow" />
-
-      <ContentDiv className="overflow-auto">
+      <ContentDiv className="grow overflow-auto">
         {showWatch && (
           <>
-            <ListItem disablePadding={false} sx={{ paddingTop: 1 }}>
+            <div className="flex items-center gap-2 border-b p-2 pt-3">
               <TextField
                 select
                 label="Watch"
@@ -243,20 +229,14 @@ export const TopicDetails = ({ selectedTab, setSelectedTab }: Props) => {
                   <Info />
                 </IconButton>
               </Tooltip>
-            </ListItem>
-
-            <Divider sx={{ my: 1 }} />
+            </div>
           </>
         )}
 
         {!expandDetailsTabs ? (
           <>
             <TabContext value={selectedTab}>
-              <TabList
-                onChange={(_, value: DetailsTab) => setSelectedTab(value)}
-                centered
-                className="px-2"
-              >
+              <TabList onChange={(_, value: DetailsTab) => setSelectedTab(value)} centered>
                 <Tab
                   icon={indicateBasics ? <Article /> : <ArticleOutlined />}
                   value="Basics"
@@ -271,47 +251,43 @@ export const TopicDetails = ({ selectedTab, setSelectedTab }: Props) => {
                 />
               </TabList>
 
-              <TabPanel value="Basics" className="p-2">
-                <ListItem disablePadding={false}>
-                  <Typography variant="body1" className="mx-auto">
+              <TabPanel value="Basics">
+                <section className="flex flex-col items-center p-2">
+                  <Typography variant="h6" component="h2" className="mb-2">
                     Basics
                   </Typography>
-                </ListItem>
-                <BasicsSection topic={topic} />
+                  <BasicsSection topic={topic} />
+                </section>
               </TabPanel>
-              <TabPanel value="Comments" className="p-2">
-                <ListItem disablePadding={false}>
-                  <Typography variant="body1" className="mx-auto">
+              <TabPanel value="Comments">
+                <section className="flex flex-col items-center p-2">
+                  <Typography variant="h6" component="h2" className="mb-2">
                     Comments
                   </Typography>
-                </ListItem>
-                <CommentSection parentId={null} parentType="topic" />
+                  <CommentSection parentId={null} parentType="topic" />
+                </section>
               </TabPanel>
             </TabContext>
           </>
         ) : (
           <>
-            <ListItem disablePadding={false}>
-              <ListItemIcon>
-                <Article />
-              </ListItemIcon>
-              <ListItemText primary="Basics" />
-            </ListItem>
-            <BasicsSection topic={topic} />
+            <section className="flex flex-col items-center border-b p-2">
+              <Typography variant="h6" component="h2" className="mb-2 flex items-center gap-2.5">
+                <Article /> Basics
+              </Typography>
+              <BasicsSection topic={topic} />
+            </section>
 
-            <Divider sx={{ my: 1 }} />
-
-            <ListItem disablePadding={false}>
-              <ListItemIcon>
-                <ChatBubble />
-              </ListItemIcon>
-              <ListItemText primary="Comments" />
-            </ListItem>
-            <CommentSection parentId={null} parentType="topic" />
+            <section className="flex flex-col items-center p-2">
+              <Typography variant="h6" component="h2" className="mb-2 flex items-center gap-2.5">
+                <ChatBubble /> Comments
+              </Typography>
+              <CommentSection parentId={null} parentType="topic" />
+            </section>
           </>
         )}
       </ContentDiv>
-    </List>
+    </div>
   );
 };
 

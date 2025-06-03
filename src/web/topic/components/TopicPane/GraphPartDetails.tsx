@@ -9,16 +9,7 @@ import {
   ThumbsUpDownOutlined,
 } from "@mui/icons-material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import {
-  Divider,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Tab,
-  Typography,
-  styled,
-} from "@mui/material";
+import { Tab, Typography, styled } from "@mui/material";
 
 import { useCommentCount } from "@/web/comment/store/commentStore";
 import { StandaloneEdge } from "@/web/topic/components/Edge/StandaloneEdge";
@@ -69,8 +60,10 @@ export const GraphPartDetails = ({ graphPart, selectedTab, setSelectedTab }: Pro
 
   return (
     // min-h-0 to ensure content can shrink within parent flex container, allowing inner containers to control scrolling https://stackoverflow.com/a/66689926/8409296
-    <List className="flex min-h-0 flex-col py-0">
-      <div className="flex flex-col items-center">
+    // grow so that it can take up the full pane's space and not overflow if a node is at the bottom and has an indicator overhanging
+    <div className="flex min-h-0 grow flex-col py-0">
+      {/* hardcode shadow to be 1px lower than default tailwind shadow so that no shadow appears above the container */}
+      <div className="flex flex-col items-center border-b pb-2 shadow-[0_2px_3px_0_rgba(0,0,0,0.1)]">
         {partIsNode ? (
           // z-index to ensure hanging node indicators don't fall behind the next section's empty background
           <EditableNode node={graphPart} className="z-10" />
@@ -79,18 +72,11 @@ export const GraphPartDetails = ({ graphPart, selectedTab, setSelectedTab }: Pro
         )}
       </div>
 
-      {/* mt-2 to match distance from Tabs look to graph part */}
-      <Divider className="mb-1 mt-2 shadow" />
-
-      <ContentDiv className="overflow-auto">
+      <ContentDiv className="grow overflow-auto">
         {!expandDetailsTabs ? (
           <>
             <TabContext value={!partIsNode && selectedTab === "Research" ? "Basics" : selectedTab}>
-              <TabList
-                onChange={(_, value: DetailsTab) => setSelectedTab(value)}
-                centered
-                className="px-2"
-              >
+              <TabList onChange={(_, value: DetailsTab) => setSelectedTab(value)} centered>
                 <Tab
                   icon={indicateBasics ? <Article /> : <ArticleOutlined />}
                   value="Basics"
@@ -119,90 +105,83 @@ export const GraphPartDetails = ({ graphPart, selectedTab, setSelectedTab }: Pro
                 />
               </TabList>
 
-              <TabPanel value="Basics" className="p-2">
-                <ListItem disablePadding={false}>
-                  <Typography variant="body1" className="mx-auto">
+              <TabPanel value="Basics">
+                <section className="flex flex-col items-center px-0.5 py-2">
+                  <Typography variant="h6" component="h2" className="mb-2">
                     Basics
                   </Typography>
-                </ListItem>
-                <DetailsBasicsSection graphPart={graphPart} />
+                  <DetailsBasicsSection graphPart={graphPart} />
+                </section>
               </TabPanel>
-              <TabPanel value="Justification" className="p-2">
-                <ListItem disablePadding={false}>
-                  <Typography variant="body1" className="mx-auto">
+              <TabPanel value="Justification">
+                <section className="flex flex-col items-center px-0.5 py-2">
+                  <Typography variant="h6" component="h2" className="mb-2">
                     Justification
                   </Typography>
-                </ListItem>
-                <DetailsJustificationSection graphPart={graphPart} />
+                  <DetailsJustificationSection graphPart={graphPart} />
+                </section>
               </TabPanel>
               {partIsNode && (
-                <TabPanel value="Research" className="p-2">
-                  <ListItem disablePadding={false}>
-                    <Typography variant="body1" className="mx-auto">
+                <TabPanel value="Research">
+                  <section className="flex flex-col items-center px-0.5 py-2">
+                    <Typography variant="h6" component="h2" className="mb-2">
                       Research
                     </Typography>
-                  </ListItem>
-                  <DetailsResearchSection node={graphPart} />
+                    <DetailsResearchSection node={graphPart} />
+                  </section>
                 </TabPanel>
               )}
-              <TabPanel value="Comments" className="p-2">
-                <ListItem disablePadding={false}>
-                  <Typography variant="body1" className="mx-auto">
+              <TabPanel value="Comments">
+                <section className="flex flex-col items-center p-2">
+                  <Typography variant="h6" component="h2" className="mb-2">
                     Comments
                   </Typography>
-                </ListItem>
-                <CommentSection parentId={graphPart.id} parentType={partIsNode ? "node" : "edge"} />
+                  <CommentSection
+                    parentId={graphPart.id}
+                    parentType={partIsNode ? "node" : "edge"}
+                  />
+                </section>
               </TabPanel>
             </TabContext>
           </>
         ) : (
           <>
-            <ListItem disablePadding={false}>
-              <ListItemIcon>
-                <Article />
-              </ListItemIcon>
-              <ListItemText primary="Basics" />
-            </ListItem>
-            <DetailsBasicsSection graphPart={graphPart} />
+            {/* Sections use px-0.5 instead of px-2 so that two nodes can fit side-by-side if there's a vertical scrollbar. */}
+            {/* So for sections with nodes, subsections need to manage padding themselves if they need it, e.g. for Notes */}
+            <section className="flex flex-col items-center border-b px-0.5 py-2">
+              <Typography variant="h6" component="h2" className="mb-2 flex items-center gap-2.5">
+                <Article /> Basics
+              </Typography>
+              <DetailsBasicsSection graphPart={graphPart} />
+            </section>
 
-            <Divider className="my-1" />
-
-            <ListItem disablePadding={false}>
-              <ListItemIcon>
-                <ThumbsUpDown />
-              </ListItemIcon>
-              <ListItemText primary="Justification" />
-            </ListItem>
-            <DetailsJustificationSection graphPart={graphPart} />
+            <section className="flex flex-col items-center border-b px-0.5 py-2">
+              <Typography variant="h6" component="h2" className="mb-2 flex items-center gap-2.5">
+                <ThumbsUpDown /> Justification
+              </Typography>
+              <DetailsJustificationSection graphPart={graphPart} />
+            </section>
 
             {/* prevent adding research nodes to edges; not 100% sure that we want to restrict this, but if it continues to seem good, this section can accept node instead of graphPart */}
             {partIsNode && (
-              <>
-                <Divider className="my-1" />
-
-                <ListItem disablePadding={false}>
-                  <ListItemIcon>
-                    <School />
-                  </ListItemIcon>
-                  <ListItemText primary="Research" />
-                </ListItem>
+              <section className="flex flex-col items-center border-b px-0.5 py-2">
+                <Typography variant="h6" component="h2" className="mb-2 flex items-center gap-2.5">
+                  <School /> Research
+                </Typography>
                 <DetailsResearchSection node={graphPart} />
-              </>
+              </section>
             )}
 
-            <Divider className="my-1" />
-
-            <ListItem disablePadding={false}>
-              <ListItemIcon>
-                <ChatBubble />
-              </ListItemIcon>
-              <ListItemText primary="Comments" />
-            </ListItem>
-            <CommentSection parentId={graphPart.id} parentType={partIsNode ? "node" : "edge"} />
+            <section className="flex flex-col items-center p-2">
+              <Typography variant="h6" component="h2" className="mb-2 flex items-center gap-2.5">
+                <ChatBubble /> Comments
+              </Typography>
+              <CommentSection parentId={graphPart.id} parentType={partIsNode ? "node" : "edge"} />
+            </section>
           </>
         )}
       </ContentDiv>
-    </List>
+    </div>
   );
 };
 

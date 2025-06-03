@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ListItem, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -55,21 +55,21 @@ export const DetailsBasicsSection = ({ graphPart }: Props) => {
           setGraphPartNotes(graphPart, data.notes);
         })(event);
       }}
+      className="w-full"
     >
-      <ListItem disablePadding={false}>
-        <TextField
-          {...register("notes")}
-          label="Notes"
-          error={!!errors.notes}
-          helperText={errors.notes?.message}
-          multiline
-          fullWidth
-          size="small"
-          InputProps={{ className: "text-sm", readOnly: !userCanEditTopicData }}
-          InputLabelProps={{ className: "text-sm" }}
-          maxRows={10}
-        />
-      </ListItem>
+      <TextField
+        {...register("notes")}
+        label="Notes"
+        error={!!errors.notes}
+        helperText={errors.notes?.message}
+        multiline
+        fullWidth
+        size="small"
+        InputProps={{ className: "text-sm", readOnly: !userCanEditTopicData }}
+        InputLabelProps={{ className: "text-sm" }}
+        maxRows={10}
+        className="px-1.5"
+      />
 
       {/* Potentially these could be in another tab like "specific for this node type"...? */}
       {/* but these seem low-use anyway and more effort to organize optimally, so we'll just do this for now. */}

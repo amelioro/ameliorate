@@ -60,7 +60,7 @@ export const DetailsJustificationSection = ({ graphPart }: Props) => {
       </Stack>
 
       <Box
-        className="mb-1 flex flex-wrap justify-center gap-0.5 *:shrink-0"
+        className="flex flex-wrap justify-center gap-0.5 *:shrink-0"
         // ensure "No X yet!" takes up the same width as the nodes
         sx={{ "& > div": { width: `${nodeWidthRem}rem` } }}
       >
