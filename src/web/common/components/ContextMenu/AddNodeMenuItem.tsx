@@ -4,8 +4,8 @@ import { NestedMenuItem } from "mui-nested-menu";
 import { breakdownNodeTypes, researchNodeTypes } from "@/common/node";
 import { ContextMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
 import { useSessionUser } from "@/web/common/hooks";
-import { addNodeWithoutParent } from "@/web/topic/store/createDeleteActions";
-import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
+import { addNodeWithoutParent } from "@/web/topic/diagramStore/createDeleteActions";
+import { useUserCanEditTopicData } from "@/web/topic/diagramStore/userHooks";
 import { nodeDecorations } from "@/web/topic/utils/node";
 import { useFormat } from "@/web/view/currentViewStore/store";
 

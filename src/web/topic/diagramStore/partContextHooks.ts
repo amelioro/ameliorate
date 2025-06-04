@@ -1,4 +1,4 @@
-import { useTopicStore } from "@/web/topic/store/store";
+import { useTopicStore } from "@/web/topic/diagramStore/store";
 import { findEdgeOrThrow } from "@/web/topic/utils/graph";
 import {
   getCriterionContextFilter,

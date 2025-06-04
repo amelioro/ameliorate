@@ -3,7 +3,7 @@ import { Stack, Typography } from "@mui/material";
 import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
 import { EditableNode } from "@/web/topic/components/Node/EditableNode";
 import { NodeList } from "@/web/topic/components/TopicPane/NodeList";
-import { useResearchNodes } from "@/web/topic/store/graphPartHooks";
+import { useResearchNodes } from "@/web/topic/diagramStore/graphPartHooks";
 import { Node } from "@/web/topic/utils/graph";
 
 interface Props {

@@ -1,4 +1,8 @@
-import { initialState, topicStorePlaygroundName, useTopicStore } from "@/web/topic/store/store";
+import {
+  initialState,
+  topicStorePlaygroundName,
+  useTopicStore,
+} from "@/web/topic/diagramStore/store";
 import {
   type TopicData,
   convertToStoreEdge,

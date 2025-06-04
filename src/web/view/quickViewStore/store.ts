@@ -10,7 +10,7 @@ import { errorWithData } from "@/common/errorHandling";
 import { withDefaults } from "@/common/object";
 import { deepIsEqual } from "@/common/utils";
 import { emitter } from "@/web/common/event";
-import { StoreTopic } from "@/web/topic/store/store";
+import { StoreTopic } from "@/web/topic/diagramStore/store";
 import {
   ViewState,
   getView,

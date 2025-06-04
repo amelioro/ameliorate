@@ -6,8 +6,8 @@ import { Thread } from "@/web/comment/components/Thread";
 import { useResolvedCount, useThreadStarterComments } from "@/web/comment/store/commentStore";
 import { useDraft } from "@/web/comment/store/draftStore";
 import { useSessionUser } from "@/web/common/hooks";
-import { playgroundUsername } from "@/web/topic/store/store";
-import { useOnPlayground } from "@/web/topic/store/topicHooks";
+import { playgroundUsername } from "@/web/topic/diagramStore/store";
+import { useOnPlayground } from "@/web/topic/diagramStore/topicHooks";
 import {
   toggleShowResolvedComments,
   useShowResolvedComments,

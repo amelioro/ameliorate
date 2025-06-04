@@ -4,8 +4,8 @@ import sum from "lodash/sum";
 import { shallow } from "zustand/shallow";
 
 import { throwError } from "@/common/errorHandling";
-import { getDisplayScoresByGraphPartId } from "@/web/topic/store/scoreGetters";
-import { useTopicStore } from "@/web/topic/store/store";
+import { getDisplayScoresByGraphPartId } from "@/web/topic/diagramStore/scoreGetters";
+import { useTopicStore } from "@/web/topic/diagramStore/store";
 import { Node, Score } from "@/web/topic/utils/graph";
 import { children, edges } from "@/web/topic/utils/node";
 import { getNumericScore } from "@/web/topic/utils/score";

@@ -6,7 +6,7 @@ import { useTour } from "@reactour/tour";
 import { useEffect, useState } from "react";
 
 import { useSessionUser } from "@/web/common/hooks";
-import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
+import { useUserCanEditTopicData } from "@/web/topic/diagramStore/userHooks";
 import { startTutorial, startWelcomeTutorial } from "@/web/tutorial/tutorial";
 import {
   getTutorialHasCompleted,

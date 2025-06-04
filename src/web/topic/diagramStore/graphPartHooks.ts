@@ -3,7 +3,7 @@ import { shallow } from "zustand/shallow";
 import { justificationRelationNames } from "@/common/edge";
 import { NodeType, justificationNodeTypes, researchNodeTypes } from "@/common/node";
 import { deepIsEqual } from "@/common/utils";
-import { TopicStoreState, useTopicStore } from "@/web/topic/store/store";
+import { TopicStoreState, useTopicStore } from "@/web/topic/diagramStore/store";
 import { Node } from "@/web/topic/utils/graph";
 import { isJustificationEdge } from "@/web/topic/utils/justification";
 

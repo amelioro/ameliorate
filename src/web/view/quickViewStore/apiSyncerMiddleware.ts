@@ -13,7 +13,7 @@ import { QuickView } from "@/common/view";
 import { trpcClient } from "@/pages/_app.page";
 import { buildApiSyncerError } from "@/web/common/components/Error/apiSyncerError";
 import { showError } from "@/web/common/components/InfoDialog/infoEvents";
-import { isPlaygroundTopic } from "@/web/topic/store/utils";
+import { isPlaygroundTopic } from "@/web/topic/diagramStore/utils";
 import { QuickViewStoreState } from "@/web/view/quickViewStore/store";
 
 const getCrudDiffs = <T extends object>(

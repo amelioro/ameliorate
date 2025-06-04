@@ -18,7 +18,10 @@ import { CommentSection } from "@/web/topic/components/TopicPane/CommentSection"
 import { DetailsBasicsSection } from "@/web/topic/components/TopicPane/DetailsBasicsSection";
 import { DetailsJustificationSection } from "@/web/topic/components/TopicPane/DetailsJustificationSection";
 import { DetailsResearchSection } from "@/web/topic/components/TopicPane/DetailsResearchSection";
-import { useResearchNodes, useTopLevelJustification } from "@/web/topic/store/graphPartHooks";
+import {
+  useResearchNodes,
+  useTopLevelJustification,
+} from "@/web/topic/diagramStore/graphPartHooks";
 import { GraphPart, isNode } from "@/web/topic/utils/graph";
 import { useShowResolvedComments } from "@/web/view/miscTopicConfigStore";
 import { useExpandDetailsTabs } from "@/web/view/userConfigStore";

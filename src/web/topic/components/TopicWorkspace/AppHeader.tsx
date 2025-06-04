@@ -11,10 +11,10 @@ import { NavLink } from "@/web/common/components/NavLink";
 import { useSessionUser } from "@/web/common/hooks";
 import { discordInvite, githubRepo } from "@/web/common/urls";
 import { EditTopicForm } from "@/web/topic/components/TopicForm/TopicForm";
-import { useTopic } from "@/web/topic/store/topicHooks";
-import { useUserCanEditTopicData, useUserIsCreator } from "@/web/topic/store/userHooks";
-import { redo, undo } from "@/web/topic/store/utilActions";
-import { useTemporalHooks } from "@/web/topic/store/utilHooks";
+import { useTopic } from "@/web/topic/diagramStore/topicHooks";
+import { useUserCanEditTopicData, useUserIsCreator } from "@/web/topic/diagramStore/userHooks";
+import { redo, undo } from "@/web/topic/diagramStore/utilActions";
+import { useTemporalHooks } from "@/web/topic/diagramStore/utilHooks";
 import { goBack, goForward, useCanGoBackForward } from "@/web/view/currentViewStore/store";
 
 // TODO: check if need overflow-x-auto to deal with increased html font size

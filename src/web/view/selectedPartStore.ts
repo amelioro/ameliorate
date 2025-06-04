@@ -3,7 +3,7 @@ import { create, useStore } from "zustand";
 import { persist } from "zustand/middleware";
 
 import { emitter } from "@/web/common/event";
-import { getGraphPart, useGraphPart } from "@/web/topic/store/graphPartHooks";
+import { getGraphPart, useGraphPart } from "@/web/topic/diagramStore/graphPartHooks";
 
 interface SelectedPartStoreState {
   selectedGraphPartId: string | null;

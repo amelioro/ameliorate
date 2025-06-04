@@ -5,7 +5,7 @@ import { JustificationTreeIndicator } from "@/web/topic/components/Indicator/Jus
 import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
 import { EditableNode } from "@/web/topic/components/Node/EditableNode";
 import { nodeWidthRem } from "@/web/topic/components/Node/EditableNode.styles";
-import { useTopLevelJustification } from "@/web/topic/store/graphPartHooks";
+import { useTopLevelJustification } from "@/web/topic/diagramStore/graphPartHooks";
 import { GraphPart, isNode } from "@/web/topic/utils/graph";
 import { isJustificationEdge } from "@/web/topic/utils/justification";
 

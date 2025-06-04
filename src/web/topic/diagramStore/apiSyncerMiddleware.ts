@@ -12,8 +12,8 @@ import { StateCreator, StoreMutatorIdentifier } from "zustand";
 import { trpcClient } from "@/pages/_app.page";
 import { buildApiSyncerError } from "@/web/common/components/Error/apiSyncerError";
 import { showError } from "@/web/common/components/InfoDialog/infoEvents";
-import { TopicStoreState } from "@/web/topic/store/store";
-import { isPlaygroundTopic } from "@/web/topic/store/utils";
+import { TopicStoreState } from "@/web/topic/diagramStore/store";
+import { isPlaygroundTopic } from "@/web/topic/diagramStore/utils";
 import { convertToApi } from "@/web/topic/utils/apiConversion";
 
 const getCrudDiffs = <T>(

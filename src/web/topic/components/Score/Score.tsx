@@ -8,10 +8,10 @@ import { ScoreButton, buttonDiameterRem } from "@/web/topic/components/Score/Sco
 import { ScoreCompare } from "@/web/topic/components/Score/ScoreCompare";
 import { ScoreSelect } from "@/web/topic/components/Score/ScoreSelect";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
+import { useUserScores } from "@/web/topic/diagramStore/scoreHooks";
+import { playgroundUsername } from "@/web/topic/diagramStore/store";
+import { useOnPlayground } from "@/web/topic/diagramStore/topicHooks";
 import { useFlowZoom } from "@/web/topic/hooks/flowHooks";
-import { useUserScores } from "@/web/topic/store/scoreHooks";
-import { playgroundUsername } from "@/web/topic/store/store";
-import { useOnPlayground } from "@/web/topic/store/topicHooks";
 import { userCanEditScores } from "@/web/topic/utils/score";
 import { useReadonlyMode } from "@/web/view/actionConfigStore";
 import { usePerspectives } from "@/web/view/perspectiveStore";

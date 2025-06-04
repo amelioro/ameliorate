@@ -14,7 +14,7 @@ import { trpcClient } from "@/pages/_app.page";
 import { CommentStoreState } from "@/web/comment/store/commentStore";
 import { buildApiSyncerError } from "@/web/common/components/Error/apiSyncerError";
 import { showError } from "@/web/common/components/InfoDialog/infoEvents";
-import { isPlaygroundTopic } from "@/web/topic/store/utils";
+import { isPlaygroundTopic } from "@/web/topic/diagramStore/utils";
 
 const getCrudDiffs = <T extends object>(
   before: T[],

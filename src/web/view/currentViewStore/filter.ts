@@ -4,8 +4,8 @@ import { shallow } from "zustand/shallow";
 
 import { InfoCategory } from "@/common/infoCategory";
 import { emitter } from "@/web/common/event";
-import { getDefaultNode } from "@/web/topic/store/nodeGetters";
-import { useTopicStore } from "@/web/topic/store/store";
+import { getDefaultNode } from "@/web/topic/diagramStore/nodeGetters";
+import { useTopicStore } from "@/web/topic/diagramStore/store";
 import { findNodeOrThrow } from "@/web/topic/utils/graph";
 import { neighbors } from "@/web/topic/utils/node";
 import { initialViewState, useCurrentViewStore } from "@/web/view/currentViewStore/store";

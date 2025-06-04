@@ -16,8 +16,8 @@ import {
 } from "@/web/topic/components/Node/EditableNode.styles";
 import { NodeTextArea } from "@/web/topic/components/Node/NodeTextArea";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
-import { setCustomNodeType } from "@/web/topic/store/actions";
-import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
+import { setCustomNodeType } from "@/web/topic/diagramStore/actions";
+import { useUserCanEditTopicData } from "@/web/topic/diagramStore/userHooks";
 import { Node } from "@/web/topic/utils/graph";
 import { nodeDecorations } from "@/web/topic/utils/node";
 import { useUnrestrictedEditing } from "@/web/view/actionConfigStore";

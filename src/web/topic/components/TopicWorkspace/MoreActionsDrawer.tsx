@@ -50,8 +50,8 @@ import { z } from "zod";
 
 import { hasComments, resetComments } from "@/web/comment/store/commentStore";
 import { getDisplayNodes } from "@/web/topic/components/Diagram/externalFlowStore";
+import { resetTopicData } from "@/web/topic/diagramStore/utilActions";
 import { downloadTopic, uploadTopic } from "@/web/topic/loadStores";
-import { resetTopicData } from "@/web/topic/store/utilActions";
 import { hotkeys } from "@/web/topic/utils/hotkeys";
 import {
   toggleFlashlightMode,

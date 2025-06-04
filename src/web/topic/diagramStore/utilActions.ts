@@ -7,8 +7,8 @@ import {
   initialState,
   playgroundUsername,
   useTopicStore,
-} from "@/web/topic/store/store";
-import { isPlaygroundTopic } from "@/web/topic/store/utils";
+} from "@/web/topic/diagramStore/store";
+import { isPlaygroundTopic } from "@/web/topic/diagramStore/utils";
 
 export const getPersistState = () => {
   const persistOptions = useTopicStore.persist.getOptions();

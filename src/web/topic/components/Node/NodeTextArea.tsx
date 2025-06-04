@@ -7,7 +7,7 @@ import { hasSeenTrigger } from "@/web/common/components/InfoDialog/infoDialogSto
 import { showInfo } from "@/web/common/components/InfoDialog/infoEvents";
 import { clearNewlyAddedNode, isNodeNewlyAdded } from "@/web/common/store/ephemeralStore";
 import { WorkspaceContextType } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
-import { setNodeLabel } from "@/web/topic/store/actions";
+import { setNodeLabel } from "@/web/topic/diagramStore/actions";
 
 // If we had to resize, make sure the user knows that text should be concise.
 const onFontResize = (textAreaId: string) => {

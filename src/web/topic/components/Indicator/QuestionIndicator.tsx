@@ -4,8 +4,8 @@ import { useCallback } from "react";
 
 import { emitter } from "@/web/common/event";
 import { ContentIndicator } from "@/web/topic/components/Indicator/Base/ContentIndicator";
-import { useResearchNodes } from "@/web/topic/store/graphPartHooks";
-import { useDisplayScores } from "@/web/topic/store/scoreHooks";
+import { useResearchNodes } from "@/web/topic/diagramStore/graphPartHooks";
+import { useDisplayScores } from "@/web/topic/diagramStore/scoreHooks";
 import { Score } from "@/web/topic/utils/graph";
 import { getNumericScore, scoreColors } from "@/web/topic/utils/score";
 import { setSelected } from "@/web/view/selectedPartStore";

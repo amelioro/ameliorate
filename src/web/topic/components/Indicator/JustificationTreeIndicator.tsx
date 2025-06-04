@@ -6,7 +6,7 @@ import {
   useJustificationCount,
   useNonTopLevelJustificationCount,
   useRootClaim,
-} from "@/web/topic/store/graphPartHooks";
+} from "@/web/topic/diagramStore/graphPartHooks";
 import { viewJustification } from "@/web/view/currentViewStore/filter";
 
 interface Props {

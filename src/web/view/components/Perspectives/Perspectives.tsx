@@ -1,7 +1,7 @@
 import { Autocomplete, TextField } from "@mui/material";
 
 import { useSessionUser } from "@/web/common/hooks";
-import { useScoringUsernames } from "@/web/topic/store/scoreHooks";
+import { useScoringUsernames } from "@/web/topic/diagramStore/scoreHooks";
 import { setPerspectives, usePerspectives } from "@/web/view/perspectiveStore";
 
 export const Perspectives = () => {

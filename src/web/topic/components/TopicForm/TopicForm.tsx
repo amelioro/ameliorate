@@ -25,7 +25,7 @@ import { z } from "zod";
 
 import { topicSchema, visibilityTypes } from "@/common/topic";
 import { trpc } from "@/web/common/trpc";
-import { updateTopic as updateStoreTopic } from "@/web/topic/store/topicActions";
+import { updateTopic as updateStoreTopic } from "@/web/topic/diagramStore/topicActions";
 import { generateBasicViews } from "@/web/view/quickViewStore/store";
 
 export const CreateTopicForm = ({ creatorName }: { creatorName: string }) => {

@@ -6,8 +6,8 @@ import { AppRouter } from "@/api/routers/_app";
 import { Edge as ApiEdge, Edge } from "@/common/edge";
 import { Node as ApiNode, Node } from "@/common/node";
 import { UserScore as ApiScore } from "@/common/userScore";
-import { UserScores as StoreScores, TopicStoreState } from "@/web/topic/store/store";
-import { isPlaygroundTopic } from "@/web/topic/store/utils";
+import { UserScores as StoreScores, TopicStoreState } from "@/web/topic/diagramStore/store";
+import { isPlaygroundTopic } from "@/web/topic/diagramStore/utils";
 import {
   Score,
   Edge as StoreEdge,

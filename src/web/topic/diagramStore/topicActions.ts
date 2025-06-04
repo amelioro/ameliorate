@@ -1,7 +1,7 @@
 import { Topic as ApiTopic } from "@prisma/client";
 import { createDraft, finishDraft } from "immer";
 
-import { useTopicStore } from "@/web/topic/store/store";
+import { useTopicStore } from "@/web/topic/diagramStore/store";
 
 export const setTopicDetails = (description: string) => {
   const state = createDraft(useTopicStore.getState());

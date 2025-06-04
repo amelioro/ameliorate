@@ -4,9 +4,9 @@ import { NestedMenuItem } from "mui-nested-menu";
 import { getSameCategoryEdgeTypes } from "@/common/edge";
 import { ContextMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
 import { useSessionUser } from "@/web/common/hooks";
-import { changeEdgeType } from "@/web/topic/store/actions";
-import { useIsTableEdge } from "@/web/topic/store/edgeHooks";
-import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
+import { changeEdgeType } from "@/web/topic/diagramStore/actions";
+import { useIsTableEdge } from "@/web/topic/diagramStore/edgeHooks";
+import { useUserCanEditTopicData } from "@/web/topic/diagramStore/userHooks";
 import { Edge } from "@/web/topic/utils/graph";
 
 interface Props {

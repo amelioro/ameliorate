@@ -1,7 +1,7 @@
 import { shallow } from "zustand/shallow";
 
-import { useTopicStore } from "@/web/topic/store/store";
-import { isPlaygroundTopic } from "@/web/topic/store/utils";
+import { useTopicStore } from "@/web/topic/diagramStore/store";
+import { isPlaygroundTopic } from "@/web/topic/diagramStore/utils";
 import { useReadonlyMode } from "@/web/view/actionConfigStore";
 
 // TODO: for security, this should probably get the session user rather than assume the username is from the session user

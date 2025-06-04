@@ -1,5 +1,5 @@
 import { NodeType } from "@/common/node";
-import { useTopicStore } from "@/web/topic/store/store";
+import { useTopicStore } from "@/web/topic/diagramStore/store";
 
 export const getDefaultNode = (nodeType: NodeType) => {
   const state = useTopicStore.getState();

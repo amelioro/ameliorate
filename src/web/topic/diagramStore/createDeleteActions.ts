@@ -5,8 +5,8 @@ import { justificationNodeTypes } from "@/common/node";
 import { emitter } from "@/web/common/event";
 import { setNewlyAddedNode } from "@/web/common/store/ephemeralStore";
 import { WorkspaceContextType } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
-import { getJustificationCount } from "@/web/topic/store/graphPartHooks";
-import { TopicStoreState, useTopicStore } from "@/web/topic/store/store";
+import { getJustificationCount } from "@/web/topic/diagramStore/graphPartHooks";
+import { TopicStoreState, useTopicStore } from "@/web/topic/diagramStore/store";
 import { Relation, canCreateEdge, getRelation } from "@/web/topic/utils/edge";
 import {
   Graph,

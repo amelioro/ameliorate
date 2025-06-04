@@ -5,7 +5,7 @@ import { RelationName, edgeSchema } from "@/common/edge";
 import { errorWithData } from "@/common/errorHandling";
 import { NodeType, nodeSchema } from "@/common/node";
 import { showError } from "@/web/common/components/InfoDialog/infoEvents";
-import { useTopicStore } from "@/web/topic/store/store";
+import { useTopicStore } from "@/web/topic/diagramStore/store";
 import {
   Edge,
   GraphPart,

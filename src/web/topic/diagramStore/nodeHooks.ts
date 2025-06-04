@@ -2,8 +2,8 @@ import { shallow } from "zustand/shallow";
 
 import { errorWithData } from "@/common/errorHandling";
 import { NodeType } from "@/common/node";
-import { getDefaultNode } from "@/web/topic/store/nodeGetters";
-import { useTopicStore } from "@/web/topic/store/store";
+import { getDefaultNode } from "@/web/topic/diagramStore/nodeGetters";
+import { useTopicStore } from "@/web/topic/diagramStore/store";
 import { RelationDirection, findNodeOrThrow } from "@/web/topic/utils/graph";
 import { children, edges, neighbors, parents } from "@/web/topic/utils/node";
 import { useIsAnyGraphPartSelected } from "@/web/view/selectedPartStore";

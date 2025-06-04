@@ -9,7 +9,7 @@ import { withDefaults } from "@/common/object";
 import { apiSyncer } from "@/web/comment/store/apiSyncerMiddleware";
 import { emitter } from "@/web/common/event";
 import { storageWithDates } from "@/web/common/store/utils";
-import { StoreTopic } from "@/web/topic/store/store";
+import { StoreTopic } from "@/web/topic/diagramStore/store";
 import { toggleShowResolvedComments } from "@/web/view/miscTopicConfigStore";
 import { setSelected } from "@/web/view/selectedPartStore";
 

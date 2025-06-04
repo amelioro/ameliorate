@@ -5,9 +5,9 @@ import { temporal } from "zundo";
 import { devtools, persist } from "zustand/middleware";
 import { createWithEqualityFn } from "zustand/traditional";
 
-import { apiSyncer } from "@/web/topic/store/apiSyncerMiddleware";
-import { migrate } from "@/web/topic/store/migrate";
-import { getDisplayScoresByGraphPartId } from "@/web/topic/store/scoreGetters";
+import { apiSyncer } from "@/web/topic/diagramStore/apiSyncerMiddleware";
+import { migrate } from "@/web/topic/diagramStore/migrate";
+import { getDisplayScoresByGraphPartId } from "@/web/topic/diagramStore/scoreGetters";
 import { Diagram } from "@/web/topic/utils/diagram";
 import {
   Edge,

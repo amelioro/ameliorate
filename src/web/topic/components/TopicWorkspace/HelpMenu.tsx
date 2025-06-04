@@ -15,7 +15,7 @@ import { CloseOnClickMenuItem } from "@/web/common/components/ContextMenu/CloseO
 import { Menu } from "@/web/common/components/Menu/Menu";
 import { useSessionUser } from "@/web/common/hooks";
 import { docsPage, feedbackPage } from "@/web/common/urls";
-import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
+import { useUserCanEditTopicData } from "@/web/topic/diagramStore/userHooks";
 import { startTutorial } from "@/web/tutorial/tutorial";
 import { useTutorialProgress } from "@/web/tutorial/tutorialStore";
 import { Tutorial } from "@/web/tutorial/tutorialUtils";

@@ -22,11 +22,11 @@ import { loadDraftsFromLocalStorage } from "@/web/comment/store/draftStore";
 import {
   populateDiagramFromApi,
   populateDiagramFromLocalStorage,
-} from "@/web/topic/store/loadActions";
-import { migrate } from "@/web/topic/store/migrate";
-import { TopicStoreState } from "@/web/topic/store/store";
-import { getPersistState, setTopicData } from "@/web/topic/store/utilActions";
-import { getTopicTitle } from "@/web/topic/store/utils";
+} from "@/web/topic/diagramStore/loadActions";
+import { migrate } from "@/web/topic/diagramStore/migrate";
+import { TopicStoreState } from "@/web/topic/diagramStore/store";
+import { getPersistState, setTopicData } from "@/web/topic/diagramStore/utilActions";
+import { getTopicTitle } from "@/web/topic/diagramStore/utils";
 import { TopicData } from "@/web/topic/utils/apiConversion";
 import { loadActionConfig } from "@/web/view/actionConfigStore";
 import { loadView } from "@/web/view/currentViewStore/store";
