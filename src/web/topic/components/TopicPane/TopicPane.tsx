@@ -130,7 +130,12 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
       {/* flex flex-col to put details toolbar above the content */}
       {/* overflow-auto to allow tab content to scroll */}
       {/* p-0 to allow tab content to manage its own padding, since e.g. dividers prefer not to be padded */}
-      <TabPanel key="Details" value="Details" className="flex flex-col overflow-auto p-0">
+      <TabPanel
+        key="Details"
+        value="Details"
+        // flex to allow details to grow & fill up available space... but only if this tab is selected, because otherwise we override `TabPanel`'s default `display: hidden`
+        className={"flex-col grow overflow-auto p-0" + (selectedTab === "Details" ? " flex" : "")}
+      >
         {/* Toolbar centered above content to be near content's title, in hopes of implying that the */}
         {/* back/forward buttons are to navigate to previous/next content. */}
         <DetailsToolbar />
@@ -174,7 +179,8 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
         open={isOpen}
         anchor={anchor}
         // z-auto because Pane should share space with other elements, so doesn't need to be in front
-        PaperProps={{ className: "bg-paperShaded-main z-auto" }}
+        // border-r-inherit to use tailwind default border color over MUI's drawer border color, for consistency
+        PaperProps={{ className: "bg-paperShaded-main z-auto border-r-inherit" }}
       >
         {paneContent}
       </StyledDrawer>

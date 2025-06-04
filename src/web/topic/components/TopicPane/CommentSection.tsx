@@ -1,4 +1,4 @@
-import { Link, ListItem } from "@mui/material";
+import { Link } from "@mui/material";
 
 import { CommentParentType } from "@/common/comment";
 import { Draft } from "@/web/comment/components/Draft";
@@ -32,8 +32,8 @@ export const CommentSection = ({ parentId, parentType }: Props) => {
     <>
       {resolvedCount > 0 && (
         // extra space to the left feels a little awkward, but this can't be on the same line as the header
-        // because the header can be within a list of tabs
-        <ListItem disablePadding={false} className="justify-end">
+        // because the header can be within a group of tabs
+        <div className="flex self-end">
           <Link
             component="button"
             variant="body2"
@@ -44,27 +44,25 @@ export const CommentSection = ({ parentId, parentType }: Props) => {
           >
             {showResolved ? "Hide resolved" : "Show resolved"}
           </Link>
-        </ListItem>
+        </div>
       )}
 
-      <ListItem disablePadding={false}>
-        <div className="w-full space-y-2 text-wrap text-sm">
-          {threadStarterComments.map((comment) => (
-            <Thread key={comment.id} myUsername={myUsername} threadStarterComment={comment} />
-          ))}
+      <div className="w-full space-y-2 text-wrap text-sm">
+        {threadStarterComments.map((comment) => (
+          <Thread key={comment.id} myUsername={myUsername} threadStarterComment={comment} />
+        ))}
 
-          {threadStarterComments.length === 0 && <p className="text-center">No comments yet!</p>}
+        {threadStarterComments.length === 0 && <p className="text-center">No comments yet!</p>}
 
-          {myUsername && (
-            <Draft
-              authorName={myUsername}
-              parentId={parentId}
-              parentType={parentType}
-              startingText={threadStarterDraft?.content}
-            />
-          )}
-        </div>
-      </ListItem>
+        {myUsername && (
+          <Draft
+            authorName={myUsername}
+            parentId={parentId}
+            parentType={parentType}
+            startingText={threadStarterDraft?.content}
+          />
+        )}
+      </div>
     </>
   );
 };
