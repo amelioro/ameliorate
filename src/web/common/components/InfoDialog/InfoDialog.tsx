@@ -68,7 +68,7 @@ export const InfoDialog = () => {
           // push Popper down/up by 26px from the anchor
           { name: "offset", options: { offset: [0, 26] } },
           // enable arrow positioning, using our arrowRef
-          { name: "arrow", options: { element: arrowRef, padding: 5 } },
+          { name: "arrow", options: { element: arrowRef, padding: 10 } },
           {
             name: "preventOverflow",
             options: {
