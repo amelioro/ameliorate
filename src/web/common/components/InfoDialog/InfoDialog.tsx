@@ -23,10 +23,11 @@ export const InfoDialog = () => {
   const [infoType, setInfoType] = useState<InfoType>("info");
   const [message, setMessage] = useState<ReactNode>("");
   const [anchor, setAnchor] = useState<Anchor | null>(null);
+  const [arrowRef, setArrowRef] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
     // seems a little awkward to rely on an event to set all this state, but what's nice about it is
-    // that the state doesn't need to be accesssible from outside the component.
+    // that the state doesn't need to be accessible from outside the component.
     const unbindInfoToShow = emitter.on("infoToShow", (infoType, message, anchor) => {
       setInfoType(infoType);
       setMessage(message);
@@ -60,27 +61,84 @@ export const InfoDialog = () => {
       <Popper
         open={open}
         anchorEl={anchorEl}
-        modifiers={[{ name: "offset", options: { offset: [0, 12] } }]}
-        // z-index to match the mask's so that popper is above the mask
+        placement="bottom"
+        modifiers={[
+          // allow Popper to flip between bottom and top if there's not enough space
+          { name: "flip", options: { fallbackPlacements: ["bottom", "top"] } },
+          // push Popper down/up by 26px from the anchor
+          { name: "offset", options: { offset: [0, 26] } },
+          // enable arrow positioning, using our arrowRef
+          { name: "arrow", options: { element: arrowRef, padding: 5 } },
+          {
+            name: "preventOverflow",
+            options: {
+              altAxis: true,
+              altBoundary: true,
+              tether: true,
+              rootBoundary: "document",
+              padding: 12,
+            },
+          },
+        ]}
+        // z-index to match the mask's so that Popper is above the mask
         className={
-          "z-[99999] max-w-[min(80svw,36rem)] rounded-lg bg-white" +
+          "overflow-visible z-[99999] max-w-[min(80svw,36rem)] rounded-lg bg-white" +
           (anchorEl ? "" : " !left-1/2 !top-1/2 !-translate-x-1/2 !-translate-y-1/2")
         }
         aria-label="Info Dialog"
       >
-        <div className="flex items-center justify-between rounded-t-lg bg-paperShaded-main px-2 py-1">
-          <InfoTypeIcon color={infoType} fontSize="small" />
+        {({ placement }) => {
+          const isBelow = placement.startsWith("bottom");
 
-          <Typography className="font-bold">{startCase(infoType)}</Typography>
+          return (
+            <>
+              <span
+                ref={setArrowRef}
+                data-popper-arrow
+                className={`
+                  absolute
+                  w-3
+                  h-3
+                  overflow-visible
+                  ${isBelow ? "top-[-6px]" : "bottom-[-6px]"}
+                  before:content-['']
+                  before:absolute
+                  before:top-1/2
+                  before:left-1/2
+                  before:w-3
+                  before:h-3
+                  ${isBelow ? "before:bg-paperShaded-main" : "before:bg-white"}
+                  before:translate-x-[-50%]
+                  before:translate-y-[-50%]
+                  before:rotate-45
+                `}
+                style={{ zIndex: 99999 }}
+              />
 
-          <IconButton size="small" title="Close" aria-label="Close" onClick={() => setOpen(false)}>
-            <Close fontSize="small" />
-          </IconButton>
-        </div>
+              <div className="flex items-center justify-between rounded-t-lg bg-paperShaded-main px-2 py-1">
+                <InfoTypeIcon color={infoType} fontSize="small" />
 
-        <Typography variant="body2" className="max-h-[70svh] overflow-auto whitespace-pre-wrap p-2">
-          {message}
-        </Typography>
+                <Typography className="font-bold">{startCase(infoType)}</Typography>
+
+                <IconButton
+                  size="small"
+                  title="Close"
+                  aria-label="Close"
+                  onClick={() => setOpen(false)}
+                >
+                  <Close fontSize="small" />
+                </IconButton>
+              </div>
+
+              <Typography
+                variant="body2"
+                className="max-h-[70svh] overflow-auto whitespace-pre-wrap p-2"
+              >
+                {message}
+              </Typography>
+            </>
+          );
+        }}
       </Popper>
     </>
   );
