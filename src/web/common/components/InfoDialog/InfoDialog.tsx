@@ -64,7 +64,7 @@ export const InfoDialog = () => {
         placement="bottom"
         modifiers={[
           // allow Popper to flip between bottom and top if there's not enough space
-          { name: "flip", options: { fallbackPlacements: ["bottom", "top"] } },
+          { name: "flip", options: { fallbackPlacements: ["bottom", "top", "left"] } },
           // push Popper down/up by 26px from the anchor
           { name: "offset", options: { offset: [0, 26] } },
           // enable arrow positioning, using our arrowRef

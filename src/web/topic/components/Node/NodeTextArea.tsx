@@ -11,7 +11,7 @@ import { setNodeLabel } from "@/web/topic/store/actions";
 
 // If we had to resize, make sure the user knows that text should be concise.
 const onFontResize = (textAreaId: string) => {
-  // if (hasSeenTrigger("nodeTextSizeReduced")) return;
+  if (hasSeenTrigger("nodeTextSizeReduced")) return;
 
   showInfo(
     "nodeTextSizeReduced",
