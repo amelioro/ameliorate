@@ -1,7 +1,7 @@
 import { ContextMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
 import { useSessionUser } from "@/web/common/hooks";
-import { deleteNode } from "@/web/topic/store/createDeleteActions";
-import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
+import { deleteNode } from "@/web/topic/diagramStore/createDeleteActions";
+import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { Node } from "@/web/topic/utils/graph";
 
 export const DeleteNodeMenuItem = ({ node }: { node: Node }) => {

@@ -4,8 +4,8 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 
 import { Loading } from "@/web/common/components/Loading/Loading";
+import { playgroundUsername } from "@/web/topic/diagramStore/store";
 import { loadStores } from "@/web/topic/loadStores";
-import { playgroundUsername } from "@/web/topic/store/store";
 import { setInitialPerspective } from "@/web/view/perspectiveStore";
 
 // Don't render the workspace server-side.

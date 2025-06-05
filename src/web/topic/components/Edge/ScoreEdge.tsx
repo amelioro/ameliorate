@@ -19,9 +19,9 @@ import { CommonIndicatorGroup } from "@/web/topic/components/Indicator/Base/Comm
 import { ContentIndicatorGroup } from "@/web/topic/components/Indicator/Base/ContentIndicatorGroup";
 import { StatusIndicatorGroup } from "@/web/topic/components/Indicator/Base/StatusIndicatorGroup";
 import { nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
-import { setCustomEdgeLabel } from "@/web/topic/store/actions";
-import { useIsNodeSelected } from "@/web/topic/store/edgeHooks";
-import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
+import { setCustomEdgeLabel } from "@/web/topic/diagramStore/actions";
+import { useIsNodeSelected } from "@/web/topic/diagramStore/edgeHooks";
+import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { Edge } from "@/web/topic/utils/graph";
 import { useUnrestrictedEditing } from "@/web/view/actionConfigStore";
 import { useAvoidEdgeLabelOverlap } from "@/web/view/currentViewStore/layout";

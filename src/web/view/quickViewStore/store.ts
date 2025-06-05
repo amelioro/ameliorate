@@ -1,4 +1,3 @@
-import { Topic as ApiTopic } from "@prisma/client";
 import Router from "next/router";
 import shortUUID from "short-uuid";
 import { temporal } from "zundo";
@@ -10,7 +9,6 @@ import { errorWithData } from "@/common/errorHandling";
 import { withDefaults } from "@/common/object";
 import { deepIsEqual } from "@/common/utils";
 import { emitter } from "@/web/common/event";
-import { StoreTopic } from "@/web/topic/store/store";
 import {
   ViewState,
   getView,
@@ -24,10 +22,6 @@ import { migrate } from "@/web/view/quickViewStore/migrate";
 type QuickViewType = "quick"; // eventually maybe separate "recommended" vs "personal"
 
 export interface QuickViewStoreState {
-  /**
-   * The page's current topic. This is a bit of a hack to give us a way to prevent api-syncing the quick views when the topic changes.
-   */
-  topic: StoreTopic;
   views: QuickView[];
   selectedViewId: string | null;
 }
@@ -42,7 +36,6 @@ export interface QuickView {
 }
 
 const initialState: QuickViewStoreState = {
-  topic: { id: undefined, description: "" },
   views: [],
   selectedViewId: null,
 };
@@ -71,7 +64,7 @@ export const initialStateWithBasicViews = () => {
 };
 
 const persistedNameBase = "quickViewStore";
-export const currentVersion = 2;
+export const currentVersion = 3;
 
 export const useQuickViewStore = createWithEqualityFn<QuickViewStoreState>()(
   apiSyncer(
@@ -319,11 +312,10 @@ export const redo = () => {
 };
 
 export const resetQuickViews = () => {
-  const topic = useQuickViewStore.getState().topic;
-  useQuickViewStore.setState({ ...initialStateWithBasicViews(), topic }, true, "reset");
+  useQuickViewStore.setState(initialStateWithBasicViews(), true, "reset");
 };
 
-export const loadQuickViewsFromApi = (topic: ApiTopic, views: QuickView[]) => {
+export const loadQuickViewsFromApi = (views: QuickView[]) => {
   const builtPersistedName = `${persistedNameBase}-user`;
   useQuickViewStore.persist.setOptions({ name: builtPersistedName });
 
@@ -331,17 +323,6 @@ export const loadQuickViewsFromApi = (topic: ApiTopic, views: QuickView[]) => {
 
   useQuickViewStore.setState(
     {
-      // specify each field because we don't need to store extra data like topic's relations if they're passed in
-      topic: {
-        id: topic.id,
-        title: topic.title,
-        creatorName: topic.creatorName,
-        description: topic.description,
-        visibility: topic.visibility,
-        allowAnyoneToEdit: topic.allowAnyoneToEdit,
-        createdAt: topic.createdAt,
-        updatedAt: topic.updatedAt,
-      },
       // specify each field because we don't need to store extra data like createdAt etc.
       views: views.map((view) => ({
         id: view.id,
@@ -382,8 +363,7 @@ export const loadQuickViewsFromLocalStorage = async () => {
 };
 
 export const loadQuickViewsFromDownloaded = (json: QuickViewStoreState) => {
-  const topic = useQuickViewStore.getState().topic;
-  useQuickViewStore.setState({ ...json, topic }, true, "loadQuickViewsFromJson");
+  useQuickViewStore.setState(json, true, "loadQuickViewsFromJson");
 };
 
 // utils

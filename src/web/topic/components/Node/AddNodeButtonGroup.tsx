@@ -3,7 +3,7 @@ import { memo } from "react";
 
 import { NodeType, breakdownNodeTypes } from "@/common/node";
 import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
-import { useIsMitigatableDetriment } from "@/web/topic/store/nodeTypeHooks";
+import { useIsMitigatableDetriment } from "@/web/topic/diagramStore/nodeTypeHooks";
 import { Relation, addableRelationsFrom } from "@/web/topic/utils/edge";
 import { type RelationDirection } from "@/web/topic/utils/graph";
 import { Orientation } from "@/web/topic/utils/layout";

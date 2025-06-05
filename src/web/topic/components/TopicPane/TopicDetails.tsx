@@ -22,10 +22,13 @@ import { useSessionUser } from "@/web/common/hooks";
 import { trpc } from "@/web/common/trpc";
 import { EditTopicForm } from "@/web/topic/components/TopicForm/TopicForm";
 import { CommentSection } from "@/web/topic/components/TopicPane/CommentSection";
-import { StoreTopic } from "@/web/topic/store/store";
-import { setTopicDetails } from "@/web/topic/store/topicActions";
-import { useTopic } from "@/web/topic/store/topicHooks";
-import { useUserCanEditTopicData, useUserIsCreator } from "@/web/topic/store/userHooks";
+import {
+  StoreTopic,
+  setTopicDetails,
+  useTopic,
+  useUserCanEditTopicData,
+  useUserIsCreator,
+} from "@/web/topic/topicStore/store";
 import { useShowResolvedComments } from "@/web/view/miscTopicConfigStore";
 import { useExpandDetailsTabs } from "@/web/view/userConfigStore";
 

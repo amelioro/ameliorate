@@ -1,6 +1,6 @@
 import get from "lodash/get";
 
-import { UserScores } from "@/web/topic/store/store";
+import { UserScores } from "@/web/topic/diagramStore/store";
 import { Score } from "@/web/topic/utils/graph";
 import { getAverageScore } from "@/web/topic/utils/score";
 

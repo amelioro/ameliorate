@@ -5,9 +5,9 @@ import { Handle, Position, useStore } from "reactflow";
 
 import { nodeTypes } from "@/common/node";
 import { useSessionUser } from "@/web/common/hooks";
+import { useNeighborsInDirection } from "@/web/topic/diagramStore/nodeHooks";
 import { useHiddenNodes } from "@/web/topic/hooks/flowHooks";
-import { useNeighborsInDirection } from "@/web/topic/store/nodeHooks";
-import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
+import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { Node, RelationDirection } from "@/web/topic/utils/graph";
 import { Orientation } from "@/web/topic/utils/layout";
 import { nodeDecorations } from "@/web/topic/utils/node";

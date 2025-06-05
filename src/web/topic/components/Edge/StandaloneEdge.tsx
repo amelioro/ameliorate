@@ -5,7 +5,7 @@ import { EdgeProps } from "@/web/topic/components/Diagram/Diagram";
 import { ScoreEdge } from "@/web/topic/components/Edge/ScoreEdge";
 import { EditableNode } from "@/web/topic/components/Node/EditableNode";
 import { nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
-import { useNode } from "@/web/topic/store/nodeHooks";
+import { useNode } from "@/web/topic/diagramStore/nodeHooks";
 import { Edge } from "@/web/topic/utils/graph";
 import { useIsGraphPartSelected } from "@/web/view/selectedPartStore";
 

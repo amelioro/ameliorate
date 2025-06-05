@@ -12,8 +12,8 @@ import {
   nodeStyles,
 } from "@/web/topic/components/Node/FlowNode.styles";
 import { NodeHandle } from "@/web/topic/components/Node/NodeHandle";
-import { useIsEdgeSelected, useIsNeighborSelected } from "@/web/topic/store/nodeHooks";
-import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
+import { useIsEdgeSelected, useIsNeighborSelected } from "@/web/topic/diagramStore/nodeHooks";
+import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { Node } from "@/web/topic/utils/graph";
 import { orientation } from "@/web/topic/utils/layout";
 import { FlowNodeType } from "@/web/topic/utils/node";

@@ -9,7 +9,7 @@ import { FormContext } from "@/web/common/components/Form/FormContext";
 import { NodeSelect } from "@/web/common/components/Form/NodeSelect";
 import { Select } from "@/web/common/components/Form/Select";
 import { Switch } from "@/web/common/components/Form/Switch";
-import { useAllNodes } from "@/web/topic/store/nodeHooks";
+import { useAllNodes } from "@/web/topic/diagramStore/nodeHooks";
 import { possibleScores } from "@/web/topic/utils/graph";
 import { ShowSecondaryNeighborsLabel } from "@/web/view/components/Filter/ShowSecondaryNeighborsLabel";
 import { setGeneralFilter, useGeneralFilter } from "@/web/view/currentViewStore/filter";

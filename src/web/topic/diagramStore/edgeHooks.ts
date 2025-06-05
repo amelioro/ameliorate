@@ -1,12 +1,12 @@
 import { shallow } from "zustand/shallow";
 
-import { useTopicStore } from "@/web/topic/store/store";
+import { useDiagramStore } from "@/web/topic/diagramStore/store";
 import { nodes } from "@/web/topic/utils/edge";
 import { findEdgeOrThrow } from "@/web/topic/utils/graph";
 import { useIsAnyGraphPartSelected } from "@/web/view/selectedPartStore";
 
 export const useIsNodeSelected = (edgeId: string) => {
-  const neighborNodes = useTopicStore((state) => {
+  const neighborNodes = useDiagramStore((state) => {
     try {
       const edge = findEdgeOrThrow(edgeId, state.edges);
       return nodes(edge, state.nodes);
@@ -19,7 +19,7 @@ export const useIsNodeSelected = (edgeId: string) => {
 };
 
 export const useIsTableEdge = (edgeId: string) => {
-  return useTopicStore((state) => {
+  return useDiagramStore((state) => {
     try {
       const edge = findEdgeOrThrow(edgeId, state.edges);
       if (edge.label !== "fulfills") return false;

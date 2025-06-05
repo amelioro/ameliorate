@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import { getScoringUsernames } from "@/web/topic/store/utilActions";
+import { getScoringUsernames } from "@/web/topic/diagramStore/utilActions";
 
 interface PerspectiveStoreState {
   myPerspective: string;

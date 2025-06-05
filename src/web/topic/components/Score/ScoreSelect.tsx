@@ -3,7 +3,7 @@ import { type PaletteColor } from "@mui/material";
 import { Data } from "react-minimal-pie-chart/types/commonTypes";
 
 import { CustomDataEntry, PieChart } from "@/web/topic/components/Score/PieChart";
-import { setScore } from "@/web/topic/store/actions";
+import { setScore } from "@/web/topic/diagramStore/actions";
 import { Score, possibleScores } from "@/web/topic/utils/graph";
 import { scoreColors } from "@/web/topic/utils/score";
 

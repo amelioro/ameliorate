@@ -9,7 +9,7 @@ import { FormContext } from "@/web/common/components/Form/FormContext";
 import { NodeSelect } from "@/web/common/components/Form/NodeSelect";
 import { NumberInput } from "@/web/common/components/Form/NumberInput";
 import { Select } from "@/web/common/components/Form/Select";
-import { useCriteria, useNodesOfType, useSolutions } from "@/web/topic/store/nodeHooks";
+import { useCriteria, useNodesOfType, useSolutions } from "@/web/topic/diagramStore/nodeHooks";
 import {
   getStandardFilterWithFallbacks,
   setStandardFilter,

@@ -6,7 +6,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { deepIsEqual } from "@/common/utils";
 import { FormContext } from "@/web/common/components/Form/FormContext";
 import { NodeSelect } from "@/web/common/components/Form/NodeSelect";
-import { useCriteria, useNodesOfType, useSolutions } from "@/web/topic/store/nodeHooks";
+import { useCriteria, useNodesOfType, useSolutions } from "@/web/topic/diagramStore/nodeHooks";
 import { setTableFilter, useTableFilterWithFallbacks } from "@/web/view/currentViewStore/filter";
 import { TableFilter, tableFilterSchema } from "@/web/view/utils/tableFilter";
 

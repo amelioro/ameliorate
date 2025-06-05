@@ -22,12 +22,21 @@ import { loadDraftsFromLocalStorage } from "@/web/comment/store/draftStore";
 import {
   populateDiagramFromApi,
   populateDiagramFromLocalStorage,
-} from "@/web/topic/store/loadActions";
-import { migrate } from "@/web/topic/store/migrate";
-import { TopicStoreState } from "@/web/topic/store/store";
-import { getPersistState, setTopicData } from "@/web/topic/store/utilActions";
-import { getTopicTitle } from "@/web/topic/store/utils";
+} from "@/web/topic/diagramStore/loadActions";
+import { migrate } from "@/web/topic/diagramStore/migrate";
+import { DiagramStoreState } from "@/web/topic/diagramStore/store";
+import { getPersistState, setDiagramData } from "@/web/topic/diagramStore/utilActions";
+import { getTopicTitleFromNodes } from "@/web/topic/diagramStore/utils";
+import { migrate as migrateTopic } from "@/web/topic/topicStore/migrate";
+import {
+  TopicStoreState,
+  getPersistState as getTopicPersistState,
+  loadTopicFromApi,
+  loadTopicFromLocalStorage,
+  setTopicDetails,
+} from "@/web/topic/topicStore/store";
 import { TopicData } from "@/web/topic/utils/apiConversion";
+import { isPlaygroundTopic } from "@/web/topic/utils/topic";
 import { loadActionConfig } from "@/web/view/actionConfigStore";
 import { loadView } from "@/web/view/currentViewStore/store";
 import { loadMiscTopicConfig } from "@/web/view/miscTopicConfigStore";
@@ -44,22 +53,58 @@ import {
 } from "@/web/view/quickViewStore/store";
 
 const oldDownloadSchema1 = z.object({
-  state: z.record(z.any()),
+  state: z
+    .object({
+      topic: z.record(z.any()),
+    })
+    .and(z.record(z.any())),
   version: z.number(),
+});
+
+const oldDownloadSchema2 = z.object({
+  topic: z.object({
+    state: z
+      .object({
+        topic: z.record(z.any()),
+      })
+      .and(z.record(z.any())), // z.record() because without it will result in optional `state`, see https://github.com/colinhacks/zod/issues/1628
+    version: z.number(),
+  }),
+  views: z.object({
+    state: z.record(z.any()),
+    version: z.number(),
+  }),
 });
 
 const downloadJsonSchema = z.preprocess(
   (val) => {
-    if (oldDownloadSchema1.safeParse(val).success) {
+    const parsedSchema1 = oldDownloadSchema1.safeParse(val);
+    if (parsedSchema1.success) {
       return {
-        topic: val,
+        topic: { state: { topic: parsedSchema1.data.state.topic }, version: 1 },
+        diagram: parsedSchema1.data,
         views: { state: initialStateWithBasicViews(), version: currentViewsVersion },
       };
-    } else return val;
+    }
+
+    const parsedSchema2 = oldDownloadSchema2.safeParse(val);
+    if (parsedSchema2.success) {
+      return {
+        topic: { state: { topic: parsedSchema2.data.topic.state.topic }, version: 1 },
+        diagram: parsedSchema2.data.topic,
+        views: parsedSchema2.data.views,
+      };
+    }
+
+    return val;
   },
   z.object({
     topic: z.object({
-      state: z.record(z.any()), // z.record() because without it will result in optional `state`, see https://github.com/colinhacks/zod/issues/1628
+      state: z.object({ topic: z.record(z.any()) }), // z.record() because without it will result in optional `state`, see https://github.com/colinhacks/zod/issues/1628
+      version: z.number(),
+    }),
+    diagram: z.object({
+      state: z.record(z.any()),
       version: z.number(),
     }),
     views: z.object({
@@ -71,20 +116,26 @@ const downloadJsonSchema = z.preprocess(
 
 interface DownloadJson {
   topic: StorageValue<TopicStoreState>;
+  diagram: StorageValue<DiagramStoreState>;
   views: StorageValue<QuickViewStoreState>;
 }
 
-// TODO: might be useful to have downloaded state be more human editable;
-// for this, probably should prettify the JSON, and remove position values (we can re-layout on import)
 export const downloadTopic = () => {
-  const topicPersistState = getPersistState();
+  const topicPersistState = getTopicPersistState();
+  const diagramPersistState = getPersistState();
   const viewsPersistState = getViewsPersistState();
 
-  const topicState = topicPersistState.state;
-  const topicTitle = getTopicTitle(topicState);
+  const topic = topicPersistState.state.topic;
+  const topicTitle = !isPlaygroundTopic(topic)
+    ? topic.title
+    : getTopicTitleFromNodes(diagramPersistState.state);
   const sanitizedFileName = topicTitle.replace(/[^a-z0-9]/gi, "_").toLowerCase(); // thanks https://stackoverflow.com/a/8485137
 
-  const downloadJson = { topic: topicPersistState, views: viewsPersistState };
+  const downloadJson = {
+    topic: topicPersistState,
+    diagram: diagramPersistState,
+    views: viewsPersistState,
+  };
 
   fileDownload(JSON.stringify(downloadJson), `${sanitizedFileName}.json`);
 };
@@ -96,15 +147,15 @@ export const downloadTopic = () => {
  * Also, ensure that related scores, justifications, edges, and views are updated accordingly.
  */
 const ensureUnique = (
-  topicStoreState: TopicStoreState,
+  diagramStoreState: DiagramStoreState,
   quickViewStoreState: QuickViewStoreState,
 ) => {
-  const { nodes, edges } = topicStoreState;
+  const { nodes, edges } = diagramStoreState;
   const { views } = quickViewStoreState;
 
   // much easier to ensure all uuids are replaced this way, rather than replacing uuids for each specifically-relevant property
   // eslint-disable-next-line functional/no-let
-  let stringifiedTopic = JSON.stringify(topicStoreState);
+  let stringifiedTopic = JSON.stringify(diagramStoreState);
   // eslint-disable-next-line functional/no-let
   let stringifiedViews = JSON.stringify(quickViewStoreState);
 
@@ -123,7 +174,7 @@ const ensureUnique = (
   });
 
   return {
-    uniqueTopic: JSON.parse(stringifiedTopic) as TopicStoreState,
+    uniqueDiagram: JSON.parse(stringifiedTopic) as DiagramStoreState,
     uniqueViews: JSON.parse(stringifiedViews) as QuickViewStoreState,
   };
 };
@@ -143,6 +194,18 @@ export const uploadTopic = (
       const downloadJson = downloadJsonSchema.parse(JSON.parse(text)) as DownloadJson;
 
       // migrations
+      const diagramPersistState = downloadJson.diagram;
+      if (!diagramPersistState.version) {
+        throw errorWithData(
+          "No version found in file, cannot migrate old state",
+          diagramPersistState,
+        );
+      }
+      const migratedDiagramState = migrate(
+        diagramPersistState.state,
+        diagramPersistState.version,
+      ) as DiagramStoreState;
+
       const topicPersistState = downloadJson.topic;
       if (!topicPersistState.version) {
         throw errorWithData(
@@ -150,7 +213,7 @@ export const uploadTopic = (
           topicPersistState,
         );
       }
-      const migratedTopicState = migrate(
+      const migratedTopicState = migrateTopic(
         topicPersistState.state,
         topicPersistState.version,
       ) as TopicStoreState;
@@ -168,10 +231,11 @@ export const uploadTopic = (
       ) as QuickViewStoreState;
 
       // avoid conflicts with existing topics
-      const { uniqueTopic, uniqueViews } = ensureUnique(migratedTopicState, migratedViewsState);
+      const { uniqueDiagram, uniqueViews } = ensureUnique(migratedDiagramState, migratedViewsState);
 
       // populate stores
-      setTopicData(uniqueTopic, sessionUsername);
+      setTopicDetails(migratedTopicState.topic.description);
+      setDiagramData(uniqueDiagram, sessionUsername);
       loadQuickViewsFromDownloaded(uniqueViews);
     })
     .catch((error: unknown) => {
@@ -184,6 +248,7 @@ export const loadStores = async (diagramData?: TopicData) => {
 
   // might be cleaner to have one `load` interface per store, that knows to use passed-in data vs storage?
   if (onPlayground) {
+    await loadTopicFromLocalStorage();
     await populateDiagramFromLocalStorage();
     await loadQuickViewsFromLocalStorage();
     await loadView("playground");
@@ -192,12 +257,13 @@ export const loadStores = async (diagramData?: TopicData) => {
     await loadCommentsFromLocalStorage();
     await loadDraftsFromLocalStorage();
   } else {
+    loadTopicFromApi(diagramData);
     populateDiagramFromApi(diagramData);
-    loadQuickViewsFromApi(diagramData, diagramData.views as unknown as QuickView[]); // unknown cast is awkward but need until the viewState is shared with backend
+    loadQuickViewsFromApi(diagramData.views as unknown as QuickView[]); // unknown cast is awkward but need until the viewState is shared with backend
     await loadView(`${diagramData.creatorName}/${diagramData.title}`);
     await loadActionConfig(`${diagramData.creatorName}/${diagramData.title}`);
     await loadMiscTopicConfig(`${diagramData.creatorName}/${diagramData.title}`);
-    loadCommentsFromApi(diagramData, diagramData.comments);
+    loadCommentsFromApi(diagramData.comments);
     await loadDraftsFromLocalStorage(`${diagramData.creatorName}/${diagramData.title}`);
   }
 

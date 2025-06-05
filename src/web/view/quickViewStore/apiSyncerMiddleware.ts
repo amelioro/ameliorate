@@ -13,7 +13,8 @@ import { QuickView } from "@/common/view";
 import { trpcClient } from "@/pages/_app.page";
 import { buildApiSyncerError } from "@/web/common/components/Error/apiSyncerError";
 import { showError } from "@/web/common/components/InfoDialog/infoEvents";
-import { isPlaygroundTopic } from "@/web/topic/store/utils";
+import { getTopic } from "@/web/topic/topicStore/store";
+import { isPlaygroundTopic } from "@/web/topic/utils/topic";
 import { QuickViewStoreState } from "@/web/view/quickViewStore/store";
 
 const getCrudDiffs = <T extends object>(
@@ -163,10 +164,11 @@ const apiSyncerImpl: ApiSyncerImpl = (create) => (set, get, api) => {
     set(...args);
     const storeAfter = get();
 
-    if (isPlaygroundTopic(storeAfter.topic)) return;
+    const currentTopic = getTopic();
+    if (isPlaygroundTopic(currentTopic)) return;
     if (!syncing) return;
 
-    saveDiffs(storeAfter.topic.id, storeBefore, storeAfter);
+    saveDiffs(currentTopic.id, storeBefore, storeAfter);
   };
 
   const origSetState = api.setState;
@@ -176,10 +178,11 @@ const apiSyncerImpl: ApiSyncerImpl = (create) => (set, get, api) => {
     origSetState(...args);
     const storeAfter = api.getState();
 
-    if (isPlaygroundTopic(storeAfter.topic)) return;
+    const currentTopic = getTopic();
+    if (isPlaygroundTopic(currentTopic)) return;
     if (!syncing) return;
 
-    saveDiffs(storeAfter.topic.id, storeBefore, storeAfter);
+    saveDiffs(currentTopic.id, storeBefore, storeAfter);
   };
 
   // add methods to pause and resume syncing

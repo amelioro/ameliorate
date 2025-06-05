@@ -4,7 +4,7 @@ import {
   useCriterionHasContext,
   useFulfillsHasContext,
   useSolutionHasContext,
-} from "@/web/topic/store/partContextHooks";
+} from "@/web/topic/diagramStore/partContextHooks";
 import {
   viewCriterionContext,
   viewFulfillsEdgeContext,

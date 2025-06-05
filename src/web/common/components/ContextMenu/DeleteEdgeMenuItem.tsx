@@ -1,8 +1,8 @@
 import { ContextMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
 import { useSessionUser } from "@/web/common/hooks";
-import { deleteEdge } from "@/web/topic/store/createDeleteActions";
-import { useIsTableEdge } from "@/web/topic/store/edgeHooks";
-import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
+import { deleteEdge } from "@/web/topic/diagramStore/createDeleteActions";
+import { useIsTableEdge } from "@/web/topic/diagramStore/edgeHooks";
+import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { Edge } from "@/web/topic/utils/graph";
 
 export const DeleteEdgeMenuItem = ({ edge }: { edge: Edge }) => {

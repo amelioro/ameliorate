@@ -1,7 +1,7 @@
 import { Stack, Typography } from "@mui/material";
 
 import { EditableNode } from "@/web/topic/components/Node/EditableNode";
-import { useAnswerDetails } from "@/web/topic/store/nodeTypeHooks";
+import { useAnswerDetails } from "@/web/topic/diagramStore/nodeTypeHooks";
 import { Node } from "@/web/topic/utils/graph";
 
 interface Props {

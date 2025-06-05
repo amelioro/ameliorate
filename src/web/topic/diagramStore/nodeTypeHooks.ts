@@ -1,8 +1,8 @@
-import { useTopicStore } from "@/web/topic/store/store";
+import { useDiagramStore } from "@/web/topic/diagramStore/store";
 import { findGraphPartOrThrow, findNodeOrThrow } from "@/web/topic/utils/graph";
 
 export const useIsMitigatableDetriment = (nodeId: string) => {
-  return useTopicStore((state) => {
+  return useDiagramStore((state) => {
     try {
       const node = findNodeOrThrow(nodeId, state.nodes);
       // is mitigatable if it's created by a solution or mitigation
@@ -26,7 +26,7 @@ export const useIsMitigatableDetriment = (nodeId: string) => {
 };
 
 export const useQuestionDetails = (questionNodeId: string) => {
-  return useTopicStore((state) => {
+  return useDiagramStore((state) => {
     try {
       const asksAboutEdge = state.edges.find(
         (edge) => edge.target === questionNodeId && edge.label === "asksAbout",
@@ -50,7 +50,7 @@ export const useQuestionDetails = (questionNodeId: string) => {
 };
 
 export const useAnswerDetails = (answerNodeId: string) => {
-  return useTopicStore((state) => {
+  return useDiagramStore((state) => {
     try {
       const answerToEdge = state.edges.find(
         (edge) => edge.target === answerNodeId && edge.label === "potentialAnswerTo",
@@ -64,7 +64,7 @@ export const useAnswerDetails = (answerNodeId: string) => {
 };
 
 export const useFactDetails = (factNodeId: string) => {
-  return useTopicStore((state) => {
+  return useDiagramStore((state) => {
     const relevantForEdges = state.edges.filter(
       (edge) => edge.target === factNodeId && edge.label === "relevantFor",
     );
@@ -88,7 +88,7 @@ export const useFactDetails = (factNodeId: string) => {
 };
 
 export const useSourceDetails = (sourceNodeId: string) => {
-  return useTopicStore((state) => {
+  return useDiagramStore((state) => {
     const relevantForEdges = state.edges.filter(
       (edge) => edge.target === sourceNodeId && edge.label === "relevantFor",
     );

@@ -12,9 +12,10 @@ import { StateCreator, StoreMutatorIdentifier } from "zustand";
 import { trpcClient } from "@/pages/_app.page";
 import { buildApiSyncerError } from "@/web/common/components/Error/apiSyncerError";
 import { showError } from "@/web/common/components/InfoDialog/infoEvents";
-import { TopicStoreState } from "@/web/topic/store/store";
-import { isPlaygroundTopic } from "@/web/topic/store/utils";
+import { DiagramStoreState } from "@/web/topic/diagramStore/store";
+import { getTopic } from "@/web/topic/topicStore/store";
 import { convertToApi } from "@/web/topic/utils/apiConversion";
+import { isPlaygroundTopic } from "@/web/topic/utils/topic";
 
 const getCrudDiffs = <T>(
   before: T[],
@@ -44,16 +45,13 @@ const getCrudDiffs = <T>(
   return [created, updated, deleted];
 };
 
-const saveDiffs = (storeBefore: TopicStoreState, storeAfter: TopicStoreState) => {
-  if (isPlaygroundTopic(storeBefore.topic)) return;
-
-  const newDescription =
-    storeAfter.topic.description !== storeBefore.topic.description
-      ? storeAfter.topic.description
-      : undefined;
-
-  const apiBefore = convertToApi(storeBefore);
-  const apiAfter = convertToApi(storeAfter);
+const saveDiffs = (
+  topicId: number,
+  storeBefore: DiagramStoreState,
+  storeAfter: DiagramStoreState,
+) => {
+  const apiBefore = convertToApi(topicId, storeBefore);
+  const apiAfter = convertToApi(topicId, storeAfter);
 
   const [nodesToCreate, nodesToUpdate, nodesToDelete] = getCrudDiffs(
     apiBefore.nodes,
@@ -85,18 +83,14 @@ const saveDiffs = (storeBefore: TopicStoreState, storeAfter: TopicStoreState) =>
     scoresToDelete,
   };
 
-  const anyChanges =
-    Object.values(changeLists).some((changes) => changes.length > 0) ||
-    newDescription !== undefined;
+  const anyChanges = Object.values(changeLists).some((changes) => changes.length > 0);
   if (!anyChanges) return;
 
   // TODO: is there a way to compress this data? when uploading a new topic, the payload appears to be 30% larger than the file being uploaded
-  trpcClient.topic.setData
-    .mutate({ topicId: storeBefore.topic.id, description: newDescription, ...changeLists })
-    .catch((e: unknown) => {
-      showError("changesFailedToSave", buildApiSyncerError(changeLists, e));
-      throw e;
-    });
+  trpcClient.topic.updateDiagram.mutate({ topicId, ...changeLists }).catch((e: unknown) => {
+    showError("changesFailedToSave", buildApiSyncerError(changeLists, e));
+    throw e;
+  });
 };
 
 /**
@@ -142,7 +136,7 @@ declare module "zustand/vanilla" {
 type Write<T, U> = Omit<T, keyof U> & U;
 
 // use specific store's state instead of `T` because we're being lazy with typing for now
-type ApiSyncerImpl = (create: StateCreator<TopicStoreState>) => StateCreator<TopicStoreState>;
+type ApiSyncerImpl = (create: StateCreator<DiagramStoreState>) => StateCreator<DiagramStoreState>;
 
 // types taken from https://github.com/pmndrs/zustand/blob/main/docs/guides/typescript.md#middleware-that-doesnt-change-the-store-type
 const apiSyncerImpl: ApiSyncerImpl = (create) => (set, get, api) => {
@@ -160,10 +154,11 @@ const apiSyncerImpl: ApiSyncerImpl = (create) => (set, get, api) => {
     set(...args);
     const storeAfter = get();
 
-    if (isPlaygroundTopic(storeAfter.topic)) return;
+    const currentTopic = getTopic();
+    if (isPlaygroundTopic(currentTopic)) return;
     if (!syncing) return;
 
-    saveDiffs(storeBefore, storeAfter);
+    saveDiffs(currentTopic.id, storeBefore, storeAfter);
   };
 
   const origSetState = api.setState;
@@ -173,10 +168,11 @@ const apiSyncerImpl: ApiSyncerImpl = (create) => (set, get, api) => {
     origSetState(...args);
     const storeAfter = api.getState();
 
-    if (isPlaygroundTopic(storeAfter.topic)) return;
+    const currentTopic = getTopic();
+    if (isPlaygroundTopic(currentTopic)) return;
     if (!syncing) return;
 
-    saveDiffs(storeBefore, storeAfter);
+    saveDiffs(currentTopic.id, storeBefore, storeAfter);
   };
 
   // add methods to pause and resume syncing

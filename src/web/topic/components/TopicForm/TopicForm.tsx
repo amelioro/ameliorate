@@ -25,7 +25,7 @@ import { z } from "zod";
 
 import { topicSchema, visibilityTypes } from "@/common/topic";
 import { trpc } from "@/web/common/trpc";
-import { updateTopic as updateStoreTopic } from "@/web/topic/store/topicActions";
+import { updateTopicWithoutSyncingToApi } from "@/web/topic/topicStore/store";
 import { generateBasicViews } from "@/web/view/quickViewStore/store";
 
 export const CreateTopicForm = ({ creatorName }: { creatorName: string }) => {
@@ -86,7 +86,7 @@ export const EditTopicForm = ({ topic, creatorName }: { topic: Topic; creatorNam
       }
 
       // update topic in store e.g. if changing description and viewing topic details in pane
-      updateStoreTopic(updatedTopic);
+      updateTopicWithoutSyncingToApi(updatedTopic);
 
       // this endpoint returns all topics
       utils.user.findByUsername.setData({ username: creatorName }, (oldUser) => {

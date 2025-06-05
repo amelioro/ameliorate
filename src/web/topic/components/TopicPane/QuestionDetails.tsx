@@ -4,7 +4,7 @@ import { StandaloneEdge } from "@/web/topic/components/Edge/StandaloneEdge";
 import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
 import { EditableNode } from "@/web/topic/components/Node/EditableNode";
 import { NodeList } from "@/web/topic/components/TopicPane/NodeList";
-import { useQuestionDetails } from "@/web/topic/store/nodeTypeHooks";
+import { useQuestionDetails } from "@/web/topic/diagramStore/nodeTypeHooks";
 import { Node, isNode } from "@/web/topic/utils/graph";
 
 interface Props {

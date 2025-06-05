@@ -5,8 +5,8 @@ import { justificationNodeTypes } from "@/common/node";
 import { emitter } from "@/web/common/event";
 import { setNewlyAddedNode } from "@/web/common/store/ephemeralStore";
 import { WorkspaceContextType } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
-import { getJustificationCount } from "@/web/topic/store/graphPartHooks";
-import { TopicStoreState, useTopicStore } from "@/web/topic/store/store";
+import { getJustificationCount } from "@/web/topic/diagramStore/graphPartHooks";
+import { DiagramStoreState, useDiagramStore } from "@/web/topic/diagramStore/store";
 import { Relation, canCreateEdge, getRelation } from "@/web/topic/utils/edge";
 import {
   Graph,
@@ -25,7 +25,7 @@ import { getUnrestrictedEditing } from "@/web/view/actionConfigStore";
 import { setSelected } from "@/web/view/selectedPartStore";
 
 const createNode = (
-  state: TopicStoreState,
+  state: DiagramStoreState,
   toNodeType: FlowNodeType,
   arguedDiagramPartId?: string,
   selectNewNode = true,
@@ -45,7 +45,7 @@ const createNode = (
 
 // if adding a criterion, connect to solutions
 // if adding a solution, connect to criteria
-const connectCriteriaToSolutions = (state: TopicStoreState, newNode: Node, problemNode: Node) => {
+const connectCriteriaToSolutions = (state: DiagramStoreState, newNode: Node, problemNode: Node) => {
   const targetRelation: Relation =
     newNode.type === "criterion"
       ? { child: "solution", name: "addresses", parent: "problem" }
@@ -94,7 +94,7 @@ export const addNode = ({
   if (!getUnrestrictedEditing() && !getRelation(relation.parent, relation.child, relation.name))
     throw errorWithData("invalid relation to add", relation);
 
-  const state = createDraft(useTopicStore.getState());
+  const state = createDraft(useDiagramStore.getState());
 
   const topicGraph = { nodes: state.nodes, edges: state.edges };
 
@@ -150,7 +150,7 @@ export const addNode = ({
   emitter.emit("addNode", newNode);
 
   // TODO: can we infer the action name from the method name?
-  useTopicStore.setState(finishDraft(state), false, "addNode");
+  useDiagramStore.setState(finishDraft(state), false, "addNode");
 };
 
 export const addNodeWithoutParent = (
@@ -158,7 +158,7 @@ export const addNodeWithoutParent = (
   context: WorkspaceContextType,
   selectNewNode = true,
 ) => {
-  const state = createDraft(useTopicStore.getState());
+  const state = createDraft(useDiagramStore.getState());
 
   const newNode = createNode(state, nodeType, undefined, selectNewNode);
 
@@ -168,7 +168,7 @@ export const addNodeWithoutParent = (
   // seems like there should be a cleaner way to do this - perhaps custom zustand middleware to emit for any action
   emitter.emit("addNode", newNode);
 
-  useTopicStore.setState(finishDraft(state), false, "addNodeWithoutParent");
+  useDiagramStore.setState(finishDraft(state), false, "addNodeWithoutParent");
 };
 
 // see algorithm pseudocode & example at https://github.com/amelioro/ameliorate/issues/66#issuecomment-1465078133
@@ -212,13 +212,13 @@ const createConnection = (topicGraph: Graph, parentId: string | null, childId: s
 };
 
 export const connectNodes = (parentId: string | null, childId: string | null) => {
-  const state = createDraft(useTopicStore.getState());
+  const state = createDraft(useDiagramStore.getState());
 
   const topicGraph = { nodes: state.nodes, edges: state.edges };
   const created = createConnection(topicGraph, parentId, childId);
   if (!created) return;
 
-  useTopicStore.setState(finishDraft(state), false, "connectNodes");
+  useDiagramStore.setState(finishDraft(state), false, "connectNodes");
 };
 
 export const reconnectEdge = (
@@ -228,7 +228,7 @@ export const reconnectEdge = (
 ) => {
   if (oldEdge.source === newParentId && oldEdge.target === newChildId) return;
 
-  const state = createDraft(useTopicStore.getState());
+  const state = createDraft(useDiagramStore.getState());
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   state.edges = state.edges.filter((edge) => edge.id !== oldEdge.id);
@@ -238,11 +238,11 @@ export const reconnectEdge = (
   const created = createConnection(topicGraph, newParentId, newChildId);
   if (!created) return;
 
-  useTopicStore.setState(finishDraft(state), false, "reconnectEdge");
+  useDiagramStore.setState(finishDraft(state), false, "reconnectEdge");
 };
 
 export const deleteNode = (nodeId: string) => {
-  const state = createDraft(useTopicStore.getState());
+  const state = createDraft(useDiagramStore.getState());
 
   const deletedNode = findNodeOrThrow(nodeId, state.nodes);
 
@@ -276,11 +276,11 @@ export const deleteNode = (nodeId: string) => {
   // Could delete/undo own scores but if we're already orphaning other users' scores, it seems fine to leave own scores as orphaned too.
   // Long-term should probably have a job to clean up orphaned scores.
 
-  useTopicStore.setState(finishDraft(state), false, "deleteNode");
+  useDiagramStore.setState(finishDraft(state), false, "deleteNode");
 };
 
 export const deleteEdge = (edgeId: string) => {
-  const state = createDraft(useTopicStore.getState());
+  const state = createDraft(useDiagramStore.getState());
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   // delete this edge
@@ -292,10 +292,10 @@ export const deleteEdge = (edgeId: string) => {
   // Could delete/undo own scores but if we're already orphaning other users' scores, it seems fine to leave own scores as orphaned too.
   // Long-term should probably have a job to clean up orphaned scores.
 
-  useTopicStore.setState(finishDraft(state), false, "deleteEdge");
+  useDiagramStore.setState(finishDraft(state), false, "deleteEdge");
 };
 
-const deleteInvalidJustification = (state: TopicStoreState) => {
+const deleteInvalidJustification = (state: DiagramStoreState) => {
   const graphPartIds = [...state.nodes, ...state.edges].map((graphPart) => graphPart.id);
 
   /* eslint-disable functional/immutable-data, no-param-reassign */

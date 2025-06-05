@@ -30,10 +30,9 @@ import { useSessionUser } from "@/web/common/hooks";
 import { HelpMenu } from "@/web/topic/components/TopicWorkspace/HelpMenu";
 import { MoreActionsDrawer } from "@/web/topic/components/TopicWorkspace/MoreActionsDrawer";
 import { QuickViewSelect } from "@/web/topic/components/TopicWorkspace/QuickViewSelect";
-import { deleteGraphPart } from "@/web/topic/store/createDeleteActions";
-import { useIsTableEdge } from "@/web/topic/store/edgeHooks";
-import { useTopic } from "@/web/topic/store/topicHooks";
-import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
+import { deleteGraphPart } from "@/web/topic/diagramStore/createDeleteActions";
+import { useIsTableEdge } from "@/web/topic/diagramStore/edgeHooks";
+import { useTopic, useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { hotkeys } from "@/web/topic/utils/hotkeys";
 import {
   toggleFlashlightMode,

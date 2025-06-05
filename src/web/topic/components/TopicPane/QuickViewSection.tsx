@@ -14,7 +14,7 @@ import { useState } from "react";
 import { CloseOnClickMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
 import { useSessionUser } from "@/web/common/hooks";
 import { QuickViewForm } from "@/web/topic/components/TopicPane/QuickViewForm";
-import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
+import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import {
   QuickView,
   createView,

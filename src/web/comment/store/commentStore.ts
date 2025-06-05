@@ -1,4 +1,3 @@
-import { Topic as ApiTopic } from "@prisma/client";
 import shortUUID from "short-uuid";
 import { devtools, persist } from "zustand/middleware";
 import { createWithEqualityFn } from "zustand/traditional";
@@ -9,22 +8,16 @@ import { withDefaults } from "@/common/object";
 import { apiSyncer } from "@/web/comment/store/apiSyncerMiddleware";
 import { emitter } from "@/web/common/event";
 import { storageWithDates } from "@/web/common/store/utils";
-import { StoreTopic } from "@/web/topic/store/store";
 import { toggleShowResolvedComments } from "@/web/view/miscTopicConfigStore";
 import { setSelected } from "@/web/view/selectedPartStore";
 
 export type StoreComment = Omit<Comment, "topicId">;
 
 export interface CommentStoreState {
-  /**
-   * The page's current topic. This is a bit of a hack to give us a way to prevent api-syncing the comments when the topic changes.
-   */
-  topic: StoreTopic;
   comments: StoreComment[];
 }
 
 const initialState: CommentStoreState = {
-  topic: { id: undefined, description: "" },
   comments: [],
 };
 
@@ -36,7 +29,7 @@ const useCommentStore = createWithEqualityFn<CommentStoreState>()(
       devtools(() => initialState, { name: persistedNameBase }),
       {
         name: persistedNameBase,
-        version: 1,
+        version: 2,
         skipHydration: true,
         // don't merge persisted state with current state when rehydrating - instead, use the initialState to fill in missing values
         // e.g. so that a new non-null value in initialState is non-null in the persisted state,
@@ -167,8 +160,7 @@ export const hasComments = () => {
 };
 
 export const resetComments = () => {
-  const topic = useCommentStore.getState().topic;
-  useCommentStore.setState({ ...initialState, topic }, false, "resetComment");
+  useCommentStore.setState(initialState, true, "resetComment");
 };
 
 export const resolveComment = (commentId: string, resolved: boolean) => {
@@ -183,7 +175,7 @@ export const resolveComment = (commentId: string, resolved: boolean) => {
   );
 };
 
-export const loadCommentsFromApi = (topic: ApiTopic, comments: StoreComment[]) => {
+export const loadCommentsFromApi = (comments: StoreComment[]) => {
   const builtPersistedName = `${persistedNameBase}-user`;
   useCommentStore.persist.setOptions({ name: builtPersistedName });
 
@@ -191,17 +183,6 @@ export const loadCommentsFromApi = (topic: ApiTopic, comments: StoreComment[]) =
 
   useCommentStore.setState(
     {
-      // specify each field because we don't need to store extra data like topic's relations if they're passed in
-      topic: {
-        id: topic.id,
-        title: topic.title,
-        creatorName: topic.creatorName,
-        description: topic.description,
-        visibility: topic.visibility,
-        allowAnyoneToEdit: topic.allowAnyoneToEdit,
-        createdAt: topic.createdAt,
-        updatedAt: topic.updatedAt,
-      },
       // specify each field because we don't need to store extra data like topicId etc.
       comments: comments.map((comment) => ({
         id: comment.id,

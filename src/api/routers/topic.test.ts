@@ -186,7 +186,7 @@ describe("setData", () => {
         : {},
     );
 
-    await trpc.topic.setData({
+    await trpc.topic.updateDiagram({
       topicId: topic.id,
       nodesToCreate: [
         {

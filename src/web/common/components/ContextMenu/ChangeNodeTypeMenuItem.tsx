@@ -4,8 +4,8 @@ import { NestedMenuItem } from "mui-nested-menu";
 import { getSameCategoryNodeTypes } from "@/common/node";
 import { ContextMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
 import { useSessionUser } from "@/web/common/hooks";
-import { changeNodeType } from "@/web/topic/store/actions";
-import { useUserCanEditTopicData } from "@/web/topic/store/userHooks";
+import { changeNodeType } from "@/web/topic/diagramStore/actions";
+import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { Node } from "@/web/topic/utils/graph";
 import { nodeDecorations } from "@/web/topic/utils/node";
 

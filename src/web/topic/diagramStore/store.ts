@@ -1,13 +1,12 @@
-import { Topic as ApiTopic } from "@prisma/client";
 import sortBy from "lodash/sortBy";
 import uniqBy from "lodash/uniqBy";
 import { temporal } from "zundo";
 import { devtools, persist } from "zustand/middleware";
 import { createWithEqualityFn } from "zustand/traditional";
 
-import { apiSyncer } from "@/web/topic/store/apiSyncerMiddleware";
-import { migrate } from "@/web/topic/store/migrate";
-import { getDisplayScoresByGraphPartId } from "@/web/topic/store/scoreGetters";
+import { apiSyncer } from "@/web/topic/diagramStore/apiSyncerMiddleware";
+import { migrate } from "@/web/topic/diagramStore/migrate";
+import { getDisplayScoresByGraphPartId } from "@/web/topic/diagramStore/scoreGetters";
 import { Diagram } from "@/web/topic/utils/diagram";
 import {
   Edge,
@@ -31,13 +30,6 @@ import {
   hideProblemCriterionSolutionEdges,
 } from "@/web/view/utils/miscDiagramFilters";
 
-export interface PlaygroundTopic {
-  id: undefined; // so we can check this to see if the store topic is a playground topic
-  description: string;
-}
-
-export type StoreTopic = ApiTopic | PlaygroundTopic;
-
 // TODO: probably better to put userScores into a separate store (it doesn't seem necessary to
 // couple scores with the nodes/edges, and we'd be able to avoid triggering score comparators by
 // non-score-related changes), but a separate store will create the problem of separate undos/redos,
@@ -52,30 +44,27 @@ export type UserScores = Record<string, Record<string, Score>>; // userScores[:u
  */
 export const playgroundUsername = "playground.user";
 
-export interface TopicStoreState {
-  topic: StoreTopic;
+export interface DiagramStoreState {
   nodes: Node[];
   edges: Edge[];
   userScores: UserScores;
 }
 
-export const initialState: TopicStoreState = {
-  topic: { id: undefined, description: "" },
+export const initialState: DiagramStoreState = {
   nodes: [buildNode({ type: "problem" })],
   edges: [],
   userScores: {},
 };
 
-// should probably be "topic-playground-storage" but don't know how to migrate
-export const topicStorePlaygroundName = "diagram-storage";
+export const diagramStorePlaygroundName = "diagram-storage";
 
 // create atomic selectors for usage outside of store/ dir
 // this is only exported to allow actions to be extracted to a separate file
-export const useTopicStore = createWithEqualityFn<TopicStoreState>()(
+export const useDiagramStore = createWithEqualityFn<DiagramStoreState>()(
   apiSyncer(
-    persist(temporal(devtools(() => initialState, { name: topicStorePlaygroundName })), {
-      name: topicStorePlaygroundName,
-      version: 24,
+    persist(temporal(devtools(() => initialState, { name: diagramStorePlaygroundName })), {
+      name: diagramStorePlaygroundName,
+      version: 25,
       migrate: migrate,
       skipHydration: true,
     }),
@@ -91,7 +80,7 @@ export const useDiagram = (): Diagram => {
   const showProblemCriterionSolutionEdges = useShowProblemCriterionSolutionEdges();
   const perspectives = usePerspectives();
 
-  return useTopicStore((state) => {
+  return useDiagramStore((state) => {
     const topicGraph = { nodes: state.nodes, edges: state.edges };
 
     const nodesAfterDiagramFilter = applyInfoFilter(topicGraph, infoFilter);

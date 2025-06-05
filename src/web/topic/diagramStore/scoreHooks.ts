@@ -4,8 +4,8 @@ import sum from "lodash/sum";
 import { shallow } from "zustand/shallow";
 
 import { throwError } from "@/common/errorHandling";
-import { getDisplayScoresByGraphPartId } from "@/web/topic/store/scoreGetters";
-import { useTopicStore } from "@/web/topic/store/store";
+import { getDisplayScoresByGraphPartId } from "@/web/topic/diagramStore/scoreGetters";
+import { useDiagramStore } from "@/web/topic/diagramStore/store";
 import { Node, Score } from "@/web/topic/utils/graph";
 import { children, edges } from "@/web/topic/utils/node";
 import { getNumericScore } from "@/web/topic/utils/score";
@@ -14,14 +14,14 @@ import { usePerspectives } from "@/web/view/perspectiveStore";
 export const useDisplayScores = (graphPartIds: string[]): Record<string, Score> => {
   const perspectives = usePerspectives();
 
-  return useTopicStore(
+  return useDiagramStore(
     (state) => getDisplayScoresByGraphPartId(graphPartIds, perspectives, state.userScores),
     shallow,
   );
 };
 
 export const useUserScores = (graphPartId: string, perspectives: string[]) => {
-  return useTopicStore((state) => {
+  return useDiagramStore((state) => {
     const userScores: [string, Score][] = perspectives.map((perspective) => [
       perspective,
       get(state.userScores, [perspective, graphPartId], "-"),
@@ -32,13 +32,13 @@ export const useUserScores = (graphPartId: string, perspectives: string[]) => {
 };
 
 export const useScoringUsernames = () => {
-  return useTopicStore((state) => {
+  return useDiagramStore((state) => {
     return Object.keys(state.userScores);
   });
 };
 
 export const useSolutionTotal = (solution: Node, problem: Node) => {
-  const criteriaSolutionEdges = useTopicStore((state) => {
+  const criteriaSolutionEdges = useDiagramStore((state) => {
     const topicGraph = { nodes: state.nodes, edges: state.edges };
     const criteriaForProblem = children(problem, topicGraph).filter(
       (node) => node.type === "criterion",

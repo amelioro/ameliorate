@@ -6,98 +6,36 @@
  * long-term with some CRDT approach for real-time syncing.
  */
 
-import diff from "microdiff";
 import { StateCreator, StoreMutatorIdentifier } from "zustand";
 
-import { Comment } from "@/common/comment";
 import { trpcClient } from "@/pages/_app.page";
-import { CommentStoreState } from "@/web/comment/store/commentStore";
 import { buildApiSyncerError } from "@/web/common/components/Error/apiSyncerError";
 import { showError } from "@/web/common/components/InfoDialog/infoEvents";
-import { getTopic } from "@/web/topic/topicStore/store";
+import { TopicStoreState, getTopic } from "@/web/topic/topicStore/store";
 import { isPlaygroundTopic } from "@/web/topic/utils/topic";
 
-const getCrudDiffs = <T extends object>(
-  before: T[],
-  after: T[],
-  identifierFn: (element: T) => string,
-): [T[], T[], T[]] => {
-  // use keyed objects instead of array of objects because array diffs vary based on element ordering
-  const keyedBefore = Object.fromEntries(before.map((item) => [identifierFn(item), item]));
-  const keyedAfter = Object.fromEntries(after.map((item) => [identifierFn(item), item]));
+const saveDiffs = (storeBefore: TopicStoreState, storeAfter: TopicStoreState) => {
+  const oldTopic = storeBefore.topic;
+  const newTopic = storeAfter.topic;
+  if (isPlaygroundTopic(oldTopic) || isPlaygroundTopic(newTopic)) return;
 
-  // Stringify nested paths because A.B -> A.B.C, A.B.C -> A.B.D, or A.B.C -> A.B should all be
-  // calculated as an update to A, rather than (respectively) a create to A.B, an update to A.B,
-  // or a delete to A.B.C.
-  const stringifiedBefore = Object.fromEntries(
-    Object.entries(keyedBefore).map(([key, value]) => [
-      key,
-      Object.fromEntries(Object.entries(value).map(([k, v]) => [k, JSON.stringify(v)])),
-    ]),
-  );
-  const stringifiedAfter = Object.fromEntries(
-    Object.entries(keyedAfter).map(([key, value]) => [
-      key,
-      Object.fromEntries(Object.entries(value).map(([k, v]) => [k, JSON.stringify(v)])),
-    ]),
-  );
-
-  const diffs = diff(stringifiedBefore, stringifiedAfter);
-
-  /* eslint-disable @typescript-eslint/no-non-null-assertion -- the diff library is supposed to
-     output the path to the diff, and we know our objects being diff'd are only one path deep (no
-     nesting), so the values at the path's key should be present */
-  const created = diffs
-    .filter((diff) => diff.type === "CREATE")
-    .map((diff) => keyedAfter[diff.path[0]!]!);
-  const updated = diffs
-    .filter((diff) => diff.type === "CHANGE")
-    .map((diff) => keyedAfter[diff.path[0]!]!);
-  const deleted = diffs
-    .filter((diff) => diff.type === "REMOVE")
-    .map((diff) => keyedBefore[diff.path[0]!]!);
-  /* eslint-enable @typescript-eslint/no-non-null-assertion */
-
-  return [created, updated, deleted];
-};
-
-const getApiComments = (topicId: number, store: CommentStoreState): Comment[] => {
-  const comments: Comment[] = store.comments.map((comment) => ({
-    ...comment,
-    topicId,
-  }));
-
-  return comments;
-};
-
-const saveDiffs = (
-  topicId: number,
-  storeBefore: CommentStoreState,
-  storeAfter: CommentStoreState,
-) => {
-  const apiBefore = getApiComments(topicId, storeBefore);
-  const apiAfter = getApiComments(topicId, storeAfter);
-
-  const [commentsToCreate, commentsToUpdate, commentsToDelete] = getCrudDiffs(
-    apiBefore,
-    apiAfter,
-    (comment) => comment.id,
-  );
-
-  const anyChanges = [commentsToCreate, commentsToUpdate, commentsToDelete].some(
-    (changes) => changes.length > 0,
-  );
+  // Only use this syncer for changes to description, since it can be changed from the workspace and
+  // may want to be included in undo/redo functionality.
+  // Changes to other fields are handled by direct calls to the topic API, since they don't need undo/redo.
+  const anyChanges = newTopic.description !== oldTopic.description;
   if (!anyChanges) return;
 
-  trpcClient.comment.handleChangesets
-    .mutate({ topicId, commentsToCreate, commentsToUpdate, commentsToDelete })
-    .catch((e: unknown) => {
-      showError(
-        "changesFailedToSave",
-        buildApiSyncerError({ commentsToCreate, commentsToUpdate, commentsToDelete }, e),
-      );
-      throw e;
-    });
+  const topicChange = { id: newTopic.id, description: newTopic.description };
+
+  // not really necessary but easier to follow the pattern in other apiSyncers
+  const changeLists = {
+    topicChange: [topicChange],
+  };
+
+  trpcClient.topic.update.mutate(topicChange).catch((e: unknown) => {
+    showError("changesFailedToSave", buildApiSyncerError(changeLists, e));
+    throw e;
+  });
 };
 
 /**
@@ -143,7 +81,7 @@ declare module "zustand/vanilla" {
 type Write<T, U> = Omit<T, keyof U> & U;
 
 // use specific store's state instead of `T` because we're being lazy with typing for now
-type ApiSyncerImpl = (create: StateCreator<CommentStoreState>) => StateCreator<CommentStoreState>;
+type ApiSyncerImpl = (create: StateCreator<TopicStoreState>) => StateCreator<TopicStoreState>;
 
 // types taken from https://github.com/pmndrs/zustand/blob/main/docs/guides/typescript.md#middleware-that-doesnt-change-the-store-type
 const apiSyncerImpl: ApiSyncerImpl = (create) => (set, get, api) => {
@@ -165,7 +103,7 @@ const apiSyncerImpl: ApiSyncerImpl = (create) => (set, get, api) => {
     if (isPlaygroundTopic(currentTopic)) return;
     if (!syncing) return;
 
-    saveDiffs(currentTopic.id, storeBefore, storeAfter);
+    saveDiffs(storeBefore, storeAfter);
   };
 
   const origSetState = api.setState;
@@ -179,7 +117,7 @@ const apiSyncerImpl: ApiSyncerImpl = (create) => (set, get, api) => {
     if (isPlaygroundTopic(currentTopic)) return;
     if (!syncing) return;
 
-    saveDiffs(currentTopic.id, storeBefore, storeAfter);
+    saveDiffs(storeBefore, storeAfter);
   };
 
   // add methods to pause and resume syncing
