@@ -5,7 +5,7 @@ import { useSessionUser } from "@/web/common/hooks";
 import { StyledButton } from "@/web/topic/components/Node/AddNodeButton.styles";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { addNode } from "@/web/topic/diagramStore/createDeleteActions";
-import { useUserCanEditTopicData } from "@/web/topic/diagramStore/userHooks";
+import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { Relation } from "@/web/topic/utils/edge";
 import { type RelationDirection } from "@/web/topic/utils/graph";
 import { nodeDecorations } from "@/web/topic/utils/node";

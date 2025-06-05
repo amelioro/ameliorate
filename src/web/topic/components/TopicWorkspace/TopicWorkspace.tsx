@@ -20,7 +20,7 @@ import { TutorialController } from "@/web/topic/components/TopicWorkspace/Tutori
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { setScore } from "@/web/topic/diagramStore/actions";
 import { playgroundUsername } from "@/web/topic/diagramStore/store";
-import { isOnPlayground } from "@/web/topic/diagramStore/utilActions";
+import { isOnPlayground } from "@/web/topic/topicStore/store";
 import { Score, possibleScores } from "@/web/topic/utils/graph";
 import { hotkeys } from "@/web/topic/utils/hotkeys";
 import { userCanEditScores } from "@/web/topic/utils/score";

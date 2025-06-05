@@ -7,7 +7,7 @@ import { useResolvedCount, useThreadStarterComments } from "@/web/comment/store/
 import { useDraft } from "@/web/comment/store/draftStore";
 import { useSessionUser } from "@/web/common/hooks";
 import { playgroundUsername } from "@/web/topic/diagramStore/store";
-import { useOnPlayground } from "@/web/topic/diagramStore/topicHooks";
+import { useOnPlayground } from "@/web/topic/topicStore/store";
 import {
   toggleShowResolvedComments,
   useShowResolvedComments,

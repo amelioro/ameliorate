@@ -217,6 +217,6 @@ export const setTransposed = (value: boolean) => {
 };
 
 // misc
-emitter.on("overwroteTopicData", () => {
+emitter.on("overwroteDiagramData", () => {
   resetView();
 });

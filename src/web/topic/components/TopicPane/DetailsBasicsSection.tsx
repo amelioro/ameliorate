@@ -11,7 +11,7 @@ import { FactDetails } from "@/web/topic/components/TopicPane/FactDetails";
 import { QuestionDetails } from "@/web/topic/components/TopicPane/QuestionDetails";
 import { SourceDetails } from "@/web/topic/components/TopicPane/SourceDetails";
 import { setGraphPartNotes } from "@/web/topic/diagramStore/actions";
-import { useUserCanEditTopicData } from "@/web/topic/diagramStore/userHooks";
+import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { GraphPart, isNodeType } from "@/web/topic/utils/graph";
 
 const formSchema = z.object({

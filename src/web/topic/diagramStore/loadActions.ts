@@ -1,7 +1,7 @@
 import {
+  diagramStorePlaygroundName,
   initialState,
-  topicStorePlaygroundName,
-  useTopicStore,
+  useDiagramStore,
 } from "@/web/topic/diagramStore/store";
 import {
   type TopicData,
@@ -13,27 +13,17 @@ import {
 export const populateDiagramFromApi = (topicData: TopicData) => {
   // Ensure we use distinct persistence for topic page compared to playground.
   // Persisting saved-to-db topics allows us to use upload/download with persist migrations.
-  useTopicStore.persist.setOptions({ name: "diagram-storage-saved-to-db" });
+  useDiagramStore.persist.setOptions({ name: "diagram-storage-saved-to-db" });
 
-  useTopicStore.apiSyncer.pause();
+  useDiagramStore.apiSyncer.pause();
 
   const topicGraphNodes = topicData.nodes.map((node) => convertToStoreNode(node));
   const topicGraphEdges = topicData.edges.map((edge) => convertToStoreEdge(edge));
 
   const userScores = convertToStoreScores(topicData.userScores);
 
-  useTopicStore.setState(
+  useDiagramStore.setState(
     {
-      topic: {
-        id: topicData.id,
-        title: topicData.title,
-        creatorName: topicData.creatorName,
-        description: topicData.description,
-        visibility: topicData.visibility,
-        allowAnyoneToEdit: topicData.allowAnyoneToEdit,
-        createdAt: topicData.createdAt,
-        updatedAt: topicData.updatedAt,
-      },
       nodes: topicGraphNodes,
       edges: topicGraphEdges,
       userScores,
@@ -42,27 +32,27 @@ export const populateDiagramFromApi = (topicData: TopicData) => {
     "populateFromApi",
   );
 
-  useTopicStore.apiSyncer.resume();
+  useDiagramStore.apiSyncer.resume();
 
   // it doesn't make sense to want to undo a page load
-  useTopicStore.temporal.getState().clear();
+  useDiagramStore.temporal.getState().clear();
 };
 
 export const populateDiagramFromLocalStorage = async () => {
   // Ensure we use distinct persistence for topic page compared to playground.
-  useTopicStore.persist.setOptions({ name: topicStorePlaygroundName });
+  useDiagramStore.persist.setOptions({ name: diagramStorePlaygroundName });
 
-  useTopicStore.apiSyncer.pause();
+  useDiagramStore.apiSyncer.pause();
 
-  if (useTopicStore.persist.getOptions().storage?.getItem(topicStorePlaygroundName)) {
+  if (useDiagramStore.persist.getOptions().storage?.getItem(diagramStorePlaygroundName)) {
     // TODO(bug): for some reason, this results in an empty undo action _after_ clear() is run - despite awaiting this promise
-    await useTopicStore.persist.rehydrate();
+    await useDiagramStore.persist.rehydrate();
   } else {
-    useTopicStore.setState(initialState, true, "populateFromLocalStorage");
+    useDiagramStore.setState(initialState, true, "populateFromLocalStorage");
   }
 
-  useTopicStore.apiSyncer.resume();
+  useDiagramStore.apiSyncer.resume();
 
   // it doesn't make sense to want to undo a page load
-  useTopicStore.temporal.getState().clear();
+  useDiagramStore.temporal.getState().clear();
 };

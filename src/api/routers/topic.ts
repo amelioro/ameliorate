@@ -64,7 +64,7 @@ export const topicRouter = router({
     }),
 
   /**
-   * Set topic data.
+   * Set topic diagram data.
    *
    * The intent is to generically mass-create, -update, -delete, based on diffs to state changed in the UI.
    *
@@ -82,12 +82,11 @@ export const topicRouter = router({
    * - needing logic that's very specific to one action (e.g. allow deleting other users' scores if deleting a graph part)
    * - refactoring the topic store into multiple stores, to separate undo/redo from view back/forward
    */
-  setData: procedure
+  updateDiagram: procedure
     .use(isLoggedIn)
     .input(
       z.object({
         topicId: topicSchema.shape.id,
-        description: topicSchema.shape.description.optional(),
         nodesToCreate: z.array(nodeSchema),
         nodesToUpdate: z.array(nodeSchema.partial().required({ id: true, topicId: true })),
         nodesToDelete: z.array(nodeSchema.pick({ id: true, topicId: true })),
@@ -126,8 +125,7 @@ export const topicRouter = router({
 
       const graphPartsChanged = graphPartLists.some((graphParts) => graphParts.length > 0);
       const isEditor = topic.allowAnyoneToEdit || isCreator;
-      const nonCreatorMadeRestrictedChanges =
-        !isEditor && (graphPartsChanged || opts.input.description !== undefined);
+      const nonCreatorMadeRestrictedChanges = !isEditor && graphPartsChanged;
 
       // ensure requests don't try changing nodes/edges/scores from other topics
       const onlyChangingObjectsFromThisTopic = topicObjectLists.every((topicObjects) =>
@@ -156,13 +154,6 @@ export const topicRouter = router({
           await tx.topic.update({
             where: { id: opts.input.topicId },
             data: { updatedAt: new Date() },
-          });
-        }
-
-        if (opts.input.description !== undefined) {
-          await tx.topic.update({
-            where: { id: opts.input.topicId },
-            data: { description: opts.input.description },
           });
         }
 
@@ -263,13 +254,16 @@ export const topicRouter = router({
   update: procedure
     .use(isLoggedIn)
     .input(
-      topicSchema.pick({
-        id: true,
-        title: true,
-        description: true,
-        visibility: true,
-        allowAnyoneToEdit: true,
-      }),
+      topicSchema
+        .pick({
+          id: true,
+          title: true,
+          description: true,
+          visibility: true,
+          allowAnyoneToEdit: true,
+        })
+        // allow updating only some fields, e.g. description from the topic workspace
+        .partial({ title: true, description: true, visibility: true, allowAnyoneToEdit: true }),
     )
     .mutation(async (opts) => {
       const topic = await xprisma.topic.findUniqueOrThrow({ where: { id: opts.input.id } });

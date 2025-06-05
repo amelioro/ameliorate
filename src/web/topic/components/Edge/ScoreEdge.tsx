@@ -21,7 +21,7 @@ import { StatusIndicatorGroup } from "@/web/topic/components/Indicator/Base/Stat
 import { nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
 import { setCustomEdgeLabel } from "@/web/topic/diagramStore/actions";
 import { useIsNodeSelected } from "@/web/topic/diagramStore/edgeHooks";
-import { useUserCanEditTopicData } from "@/web/topic/diagramStore/userHooks";
+import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { Edge } from "@/web/topic/utils/graph";
 import { useUnrestrictedEditing } from "@/web/view/actionConfigStore";
 import { useAvoidEdgeLabelOverlap } from "@/web/view/currentViewStore/layout";

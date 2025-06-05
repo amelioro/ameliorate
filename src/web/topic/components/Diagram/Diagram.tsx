@@ -20,9 +20,9 @@ import { FlowEdge } from "@/web/topic/components/Edge/FlowEdge";
 import { FlowNode } from "@/web/topic/components/Node/FlowNode";
 import { connectNodes, reconnectEdge } from "@/web/topic/diagramStore/createDeleteActions";
 import { useDiagram } from "@/web/topic/diagramStore/store";
-import { useUserCanEditTopicData } from "@/web/topic/diagramStore/userHooks";
 import { useLayoutedDiagram } from "@/web/topic/hooks/diagramHooks";
 import { PanDirection, panDirections, useViewportUpdater } from "@/web/topic/hooks/flowHooks";
+import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { Diagram as DiagramData, PositionedEdge, PositionedNode } from "@/web/topic/utils/diagram";
 import { hotkeys } from "@/web/topic/utils/hotkeys";
 import { FlowNodeType } from "@/web/topic/utils/node";
@@ -115,7 +115,7 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
 
   useEffect(() => {
     const unbindAdd = emitter.on("addNode", (node) => setNewNodeId(node.id));
-    const unbindLoad = emitter.on("overwroteTopicData", () => setTopicViewUpdated(true));
+    const unbindLoad = emitter.on("overwroteDiagramData", () => setTopicViewUpdated(true));
     const unbindFilter = emitter.on("changedDiagramFilter", () => setTopicViewUpdated(true));
     const unbindLayoutConfig = emitter.on("changedLayoutConfig", () => setTopicViewUpdated(true));
 

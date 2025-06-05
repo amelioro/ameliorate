@@ -3,6 +3,7 @@
 import set from "lodash/set";
 import camelCase from "lodash/camelCase";
 import { v4 as uuid } from "uuid";
+import { updateTopicWithoutSyncingToApi } from "@/web/topic/topicStore/store";
 
 export const migrate = (persistedState: any, version: number) => {
   const migrations = [
@@ -30,6 +31,7 @@ export const migrate = (persistedState: any, version: number) => {
     migrate_21_to_22,
     migrate_22_to_23,
     migrate_23_to_24,
+    migrate_24_to_25,
   ];
 
   let state = persistedState;
@@ -507,7 +509,7 @@ interface Edge22 {
   };
 }
 
-// don't remember when notes was added, but we never defaulted it via migration, and we really on notes.length,
+// don't remember when notes was added, but we never defaulted it via migration, and we rely on notes.length,
 // so we're migrating it now
 const migrate_21_to_22 = (state: FromState21) => {
   state.nodes.forEach((node) => ((node as unknown as Node22).data.notes = ""));
@@ -544,4 +546,57 @@ const migrate_23_to_24 = (state: FromState23) => {
   });
 
   return state;
+};
+
+interface FromState24 {
+  topic?:
+    | {
+        id: undefined;
+        description: string;
+      }
+    | {
+        id: number;
+        title: string;
+        creatorName: string;
+        description: string;
+        visibility: "private" | "public" | "unlisted";
+        allowAnyoneToEdit: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+      };
+  nodes: { data: { customType?: string | null } }[];
+  edges: { data: { customLabel?: string | null } }[];
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface ToState25 {
+  nodes: { data: { customType?: string | null } }[];
+  edges: { data: { customLabel?: string | null } }[];
+}
+
+// remove topic state from this store; put it into topic store if we're on the playground (mainly to preserve description)
+const migrate_24_to_25 = (state: FromState24) => {
+  const topic = state.topic;
+
+  delete state.topic;
+
+  if (topic && topic.id === undefined) {
+    updateTopicWithoutSyncingToApi(topic);
+  }
+
+  // Also add `customType: null` to all nodes' data if it's not there yet, since we never migrated to add that, and zod validation requires it to exist.
+  // Same for `customLabel` on edges.
+  // Should've done it around version 21 of the store https://github.com/amelioro/ameliorate/commit/9ef55fd5fa241eb74c576b5b759b43398bc9090c.
+  state.nodes.forEach((node) => {
+    if (node.data.customType === undefined) {
+      node.data.customType = null;
+    }
+  });
+  state.edges.forEach((edge) => {
+    if (edge.data.customLabel === undefined) {
+      edge.data.customLabel = null;
+    }
+  });
+
+  return state as ToState25;
 };

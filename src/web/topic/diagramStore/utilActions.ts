@@ -3,66 +3,57 @@ import { StorageValue } from "zustand/middleware";
 import { errorWithData } from "@/common/errorHandling";
 import { emitter } from "@/web/common/event";
 import {
-  TopicStoreState,
+  DiagramStoreState,
   initialState,
   playgroundUsername,
-  useTopicStore,
+  useDiagramStore,
 } from "@/web/topic/diagramStore/store";
-import { isPlaygroundTopic } from "@/web/topic/diagramStore/utils";
+import { getTopic } from "@/web/topic/topicStore/store";
+import { isPlaygroundTopic } from "@/web/topic/utils/topic";
 
 export const getPersistState = () => {
-  const persistOptions = useTopicStore.persist.getOptions();
+  const persistOptions = useDiagramStore.persist.getOptions();
   if (!persistOptions.storage || !persistOptions.name) {
     throw errorWithData("Store persist options missing storage or name", persistOptions);
   }
 
-  return persistOptions.storage.getItem(persistOptions.name) as StorageValue<TopicStoreState>;
+  return persistOptions.storage.getItem(persistOptions.name) as StorageValue<DiagramStoreState>;
 };
 
 export const getScoringUsernames = () => {
-  const userScores = useTopicStore.getState().userScores;
+  const userScores = useDiagramStore.getState().userScores;
   return Object.keys(userScores);
 };
 
-export const isOnPlayground = () => {
-  return isPlaygroundTopic(useTopicStore.getState().topic);
-};
-
-export const setTopicData = (state: TopicStoreState, sessionUsername?: string) => {
-  // Don't override topic - this way, topic data from playground can be downloaded and uploaded as
-  // a means of saving playground data to the db.
-  // This also allows starting a new, separate topic from an existing topic's data.
-  // TODO?: allow topic description to be overridden, since it's editable from the playground
-  const topic = useTopicStore.getState().topic;
+export const setDiagramData = (state: DiagramStoreState, sessionUsername?: string) => {
+  const currentTopic = getTopic();
 
   // Manually specify scores for only the uploading user, since a user shouldn't be able to create
   // scores for other users.
   const sessionScores = sessionUsername ? state.userScores[sessionUsername] : undefined;
   const myScores = sessionScores ?? state.userScores[playgroundUsername]; // state should only have one of these at most
-  const myUsername = isPlaygroundTopic(topic) ? playgroundUsername : sessionUsername;
+  const myUsername = isPlaygroundTopic(currentTopic) ? playgroundUsername : sessionUsername;
   const userScores = myScores && myUsername ? { [myUsername]: myScores } : {};
 
-  useTopicStore.setState({ ...state, topic, userScores }, false, "setTopicData");
+  useDiagramStore.setState({ ...state, userScores }, false, "setDiagramData");
 
-  emitter.emit("overwroteTopicData");
+  emitter.emit("overwroteDiagramData");
 };
 
 /**
- * Maintain topic details; expectation is that you may want to start over with nodes/edges, but
+ * Expectation is that you may want to start over with nodes/edges, but
  * topic title and settings aren't changing, and you can go to topic details to change those.
  */
-export const resetTopicData = () => {
-  // TODO?: allow topic description to be reset, since it's editable from the playground
-  const topic = useTopicStore.getState().topic;
-  useTopicStore.setState({ ...initialState, topic }, false, "resetTopicData");
+export const resetDiagramData = () => {
+  useDiagramStore.setState(initialState, false, "resetDiagramData");
 
-  emitter.emit("overwroteTopicData");
+  emitter.emit("overwroteDiagramData");
 };
 
 export const undo = () => {
-  useTopicStore.temporal.getState().undo();
+  useDiagramStore.temporal.getState().undo();
 };
 
 export const redo = () => {
-  useTopicStore.temporal.getState().redo();
+  useDiagramStore.temporal.getState().redo();
 };

@@ -1,9 +1,9 @@
 import { useStore } from "zustand";
 
-import { useTopicStore } from "@/web/topic/diagramStore/store";
+import { useDiagramStore } from "@/web/topic/diagramStore/store";
 
 // temporal store is a vanilla store, we need to wrap it to use it as a hook and be able to react to changes
-const useTopicTemporalStore = () => useStore(useTopicStore.temporal);
+const useTopicTemporalStore = () => useStore(useDiagramStore.temporal);
 
 export const useTemporalHooks = () => {
   const temporalStore = useTopicTemporalStore();

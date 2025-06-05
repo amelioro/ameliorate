@@ -3,19 +3,19 @@ import { shallow } from "zustand/shallow";
 import { justificationRelationNames } from "@/common/edge";
 import { NodeType, justificationNodeTypes, researchNodeTypes } from "@/common/node";
 import { deepIsEqual } from "@/common/utils";
-import { TopicStoreState, useTopicStore } from "@/web/topic/diagramStore/store";
+import { DiagramStoreState, useDiagramStore } from "@/web/topic/diagramStore/store";
 import { Node } from "@/web/topic/utils/graph";
 import { isJustificationEdge } from "@/web/topic/utils/justification";
 
 export const useRootClaim = (graphPartId: string) => {
-  return useTopicStore((state) => {
+  return useDiagramStore((state) => {
     return state.nodes.find(
       (node) => node.type === "rootClaim" && node.data.arguedDiagramPartId === graphPartId,
     );
   }, shallow);
 };
 
-export const getJustificationCount = (state: TopicStoreState, graphPartId: string) => {
+export const getJustificationCount = (state: DiagramStoreState, graphPartId: string) => {
   return state.nodes.filter(
     (node) =>
       justificationNodeTypes.includes(node.type) &&
@@ -25,11 +25,11 @@ export const getJustificationCount = (state: TopicStoreState, graphPartId: strin
 };
 
 export const useJustificationCount = (graphPartId: string) => {
-  return useTopicStore((state) => getJustificationCount(state, graphPartId));
+  return useDiagramStore((state) => getJustificationCount(state, graphPartId));
 };
 
 export const useTopLevelJustification = (graphPartId: string) => {
-  return useTopicStore((state) => {
+  return useDiagramStore((state) => {
     const graphPart = [...state.nodes, ...state.edges].find((part) => part.id === graphPartId);
     if (!graphPart || isJustificationEdge(graphPart)) return { supports: [], critiques: [] };
 
@@ -62,7 +62,7 @@ export const useTopLevelJustification = (graphPartId: string) => {
 };
 
 export const useNonTopLevelJustificationCount = (graphPartId: string) => {
-  return useTopicStore((state) => {
+  return useDiagramStore((state) => {
     const rootClaim = state.nodes.find(
       (node) => node.type === "rootClaim" && node.data.arguedDiagramPartId === graphPartId,
     );
@@ -75,7 +75,7 @@ export const useNonTopLevelJustificationCount = (graphPartId: string) => {
 };
 
 export const useResearchNodes = (graphPartId: string) => {
-  return useTopicStore((state) => {
+  return useDiagramStore((state) => {
     const researchNodes = state.nodes.filter(
       (node) =>
         researchNodeTypes.includes(node.type) &&
@@ -91,15 +91,15 @@ export const useResearchNodes = (graphPartId: string) => {
 };
 
 export const useGraphPart = (graphPartId: string | null) => {
-  return useTopicStore((state) => {
+  return useDiagramStore((state) => {
     if (!graphPartId) return null;
 
     return getGraphPart(graphPartId, state);
   });
 };
 
-export const getGraphPart = (graphPartId: string, storeState?: TopicStoreState) => {
-  const state = storeState ?? useTopicStore.getState();
+export const getGraphPart = (graphPartId: string, storeState?: DiagramStoreState) => {
+  const state = storeState ?? useDiagramStore.getState();
 
   return (
     state.edges.find((edge) => edge.id === graphPartId) ??

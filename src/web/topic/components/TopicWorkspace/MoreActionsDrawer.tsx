@@ -50,7 +50,7 @@ import { z } from "zod";
 
 import { hasComments, resetComments } from "@/web/comment/store/commentStore";
 import { getDisplayNodes } from "@/web/topic/components/Diagram/externalFlowStore";
-import { resetTopicData } from "@/web/topic/diagramStore/utilActions";
+import { resetDiagramData } from "@/web/topic/diagramStore/utilActions";
 import { downloadTopic, uploadTopic } from "@/web/topic/loadStores";
 import { hotkeys } from "@/web/topic/utils/hotkeys";
 import {
@@ -196,7 +196,7 @@ export const MoreActionsDrawer = ({
           onClick={() => {
             setResetDialogOpen(false);
             resetComments();
-            resetTopicData();
+            resetDiagramData();
             resetQuickViews();
           }}
         >
@@ -262,7 +262,7 @@ export const MoreActionsDrawer = ({
                   if (hasComments()) {
                     setResetDialogOpen(true);
                   } else {
-                    resetTopicData();
+                    resetDiagramData();
                     resetQuickViews();
                   }
                   // intentionally not resetting comments/drafts, since undoing a reset would be painful if comments were lost,

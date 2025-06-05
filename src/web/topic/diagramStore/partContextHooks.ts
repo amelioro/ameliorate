@@ -1,4 +1,4 @@
-import { useTopicStore } from "@/web/topic/diagramStore/store";
+import { useDiagramStore } from "@/web/topic/diagramStore/store";
 import { findEdgeOrThrow } from "@/web/topic/utils/graph";
 import {
   getCriterionContextFilter,
@@ -8,7 +8,7 @@ import {
 import { applySolutionFilter, applyTradeoffsFilter } from "@/web/view/utils/infoFilter";
 
 export const useSolutionHasContext = (solutionId: string) => {
-  return useTopicStore((state) => {
+  return useDiagramStore((state) => {
     const topicGraph = { nodes: state.nodes, edges: state.edges };
 
     try {
@@ -29,7 +29,7 @@ export const useSolutionHasContext = (solutionId: string) => {
 };
 
 export const useCriterionHasContext = (criterionId: string) => {
-  return useTopicStore((state) => {
+  return useDiagramStore((state) => {
     const topicGraph = { nodes: state.nodes, edges: state.edges };
 
     try {
@@ -52,7 +52,7 @@ export const useCriterionHasContext = (criterionId: string) => {
 };
 
 export const useFulfillsHasContext = (fulfillsEdgeId: string) => {
-  return useTopicStore((state) => {
+  return useDiagramStore((state) => {
     const topicGraph = { nodes: state.nodes, edges: state.edges };
 
     try {

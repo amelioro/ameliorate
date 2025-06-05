@@ -25,7 +25,7 @@ import {
   useNodeChildren,
 } from "@/web/topic/diagramStore/nodeHooks";
 import { useDisplayScores } from "@/web/topic/diagramStore/scoreHooks";
-import { useUserCanEditTopicData } from "@/web/topic/diagramStore/userHooks";
+import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { getConnectingEdge } from "@/web/topic/utils/edge";
 import { Edge, Node } from "@/web/topic/utils/graph";
 import { useGeneralFilter, useTableFilter } from "@/web/view/currentViewStore/filter";

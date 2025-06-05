@@ -32,8 +32,7 @@ import { MoreActionsDrawer } from "@/web/topic/components/TopicWorkspace/MoreAct
 import { QuickViewSelect } from "@/web/topic/components/TopicWorkspace/QuickViewSelect";
 import { deleteGraphPart } from "@/web/topic/diagramStore/createDeleteActions";
 import { useIsTableEdge } from "@/web/topic/diagramStore/edgeHooks";
-import { useTopic } from "@/web/topic/diagramStore/topicHooks";
-import { useUserCanEditTopicData } from "@/web/topic/diagramStore/userHooks";
+import { useTopic, useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { hotkeys } from "@/web/topic/utils/hotkeys";
 import {
   toggleFlashlightMode,

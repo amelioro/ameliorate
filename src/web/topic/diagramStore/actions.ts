@@ -5,7 +5,7 @@ import { RelationName, edgeSchema } from "@/common/edge";
 import { errorWithData } from "@/common/errorHandling";
 import { NodeType, nodeSchema } from "@/common/node";
 import { showError } from "@/web/common/components/InfoDialog/infoEvents";
-import { useTopicStore } from "@/web/topic/diagramStore/store";
+import { useDiagramStore } from "@/web/topic/diagramStore/store";
 import {
   Edge,
   GraphPart,
@@ -23,7 +23,7 @@ import {
 // keeping this in sync manually ain't great.
 // TODO: store scores in one place
 export const setScore = (username: string, graphPartId: string, score: Score) => {
-  const state = createDraft(useTopicStore.getState());
+  const state = createDraft(useDiagramStore.getState());
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
   set(state.userScores, [username, graphPartId], score);
@@ -50,11 +50,11 @@ export const setScore = (username: string, graphPartId: string, score: Score) =>
     /* eslint-enable functional/immutable-data, no-param-reassign */
   }
 
-  useTopicStore.setState(finishDraft(state), false, "setScore");
+  useDiagramStore.setState(finishDraft(state), false, "setScore");
 };
 
 export const setNodeLabel = (nodeId: string, value: string) => {
-  const state = createDraft(useTopicStore.getState());
+  const state = createDraft(useDiagramStore.getState());
 
   const foundNode = findNodeOrThrow(nodeId, state.nodes);
 
@@ -62,11 +62,11 @@ export const setNodeLabel = (nodeId: string, value: string) => {
   foundNode.data.label = value;
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  useTopicStore.setState(finishDraft(state), false, "setNodeLabel");
+  useDiagramStore.setState(finishDraft(state), false, "setNodeLabel");
 };
 
 export const setCustomNodeType = (node: Node, value: string) => {
-  const state = createDraft(useTopicStore.getState());
+  const state = createDraft(useDiagramStore.getState());
 
   const parsed = nodeSchema.shape.customType.safeParse(value);
   if (!parsed.success) {
@@ -83,11 +83,11 @@ export const setCustomNodeType = (node: Node, value: string) => {
   foundNode.data.customType = value;
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  useTopicStore.setState(finishDraft(state), false, "setCustomEdgeLabel");
+  useDiagramStore.setState(finishDraft(state), false, "setCustomEdgeLabel");
 };
 
 export const setCustomEdgeLabel = (edge: Edge, value: string) => {
-  const state = createDraft(useTopicStore.getState());
+  const state = createDraft(useDiagramStore.getState());
 
   const parsed = edgeSchema.shape.customLabel.safeParse(value);
   if (!parsed.success) {
@@ -104,11 +104,11 @@ export const setCustomEdgeLabel = (edge: Edge, value: string) => {
   foundEdge.data.customLabel = value;
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  useTopicStore.setState(finishDraft(state), false, "setCustomEdgeLabel");
+  useDiagramStore.setState(finishDraft(state), false, "setCustomEdgeLabel");
 };
 
 export const changeNodeType = (node: Node, newType: NodeType) => {
-  const state = createDraft(useTopicStore.getState());
+  const state = createDraft(useDiagramStore.getState());
 
   const foundNode = findNodeOrThrow(node.id, state.nodes);
 
@@ -117,11 +117,11 @@ export const changeNodeType = (node: Node, newType: NodeType) => {
   foundNode.data.customType = null; // reset custom type so new type is used for label
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  useTopicStore.setState(finishDraft(state), false, "changeNodeType");
+  useDiagramStore.setState(finishDraft(state), false, "changeNodeType");
 };
 
 export const changeEdgeType = (edge: Edge, newType: RelationName) => {
-  const state = createDraft(useTopicStore.getState());
+  const state = createDraft(useDiagramStore.getState());
 
   const foundEdge = findEdgeOrThrow(edge.id, state.edges);
 
@@ -130,11 +130,11 @@ export const changeEdgeType = (edge: Edge, newType: RelationName) => {
   foundEdge.data.customLabel = null; // reset custom label so new type is used for label
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  useTopicStore.setState(finishDraft(state), false, "changeEdgeType");
+  useDiagramStore.setState(finishDraft(state), false, "changeEdgeType");
 };
 
 export const setGraphPartNotes = (graphPart: GraphPart, value: string) => {
-  const state = createDraft(useTopicStore.getState());
+  const state = createDraft(useDiagramStore.getState());
 
   const foundGraphPart = findGraphPartOrThrow(graphPart.id, state.nodes, state.edges);
 
@@ -142,5 +142,5 @@ export const setGraphPartNotes = (graphPart: GraphPart, value: string) => {
   foundGraphPart.data.notes = value;
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
-  useTopicStore.setState(finishDraft(state), false, "setGraphPartNotes");
+  useDiagramStore.setState(finishDraft(state), false, "setGraphPartNotes");
 };

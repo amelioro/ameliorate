@@ -6,88 +6,33 @@
  * long-term with some CRDT approach for real-time syncing.
  */
 
-import diff from "microdiff";
 import { StateCreator, StoreMutatorIdentifier } from "zustand";
 
 import { trpcClient } from "@/pages/_app.page";
 import { buildApiSyncerError } from "@/web/common/components/Error/apiSyncerError";
 import { showError } from "@/web/common/components/InfoDialog/infoEvents";
-import { DiagramStoreState } from "@/web/topic/diagramStore/store";
-import { getTopic } from "@/web/topic/topicStore/store";
-import { convertToApi } from "@/web/topic/utils/apiConversion";
+import { TopicStoreState, getTopic } from "@/web/topic/topicStore/store";
 import { isPlaygroundTopic } from "@/web/topic/utils/topic";
 
-const getCrudDiffs = <T>(
-  before: T[],
-  after: T[],
-  identifierFn: (element: T) => string,
-): [T[], T[], T[]] => {
-  // use keyed objects instead of array of objects because array diffs vary based on element ordering
-  const keyedBefore = Object.fromEntries(before.map((item) => [identifierFn(item), item]));
-  const keyedAfter = Object.fromEntries(after.map((item) => [identifierFn(item), item]));
+const saveDiffs = (storeBefore: TopicStoreState, storeAfter: TopicStoreState) => {
+  const oldTopic = storeBefore.topic;
+  const newTopic = storeAfter.topic;
+  if (isPlaygroundTopic(oldTopic) || isPlaygroundTopic(newTopic)) return;
 
-  const diffs = diff(keyedBefore, keyedAfter);
-
-  /* eslint-disable @typescript-eslint/no-non-null-assertion -- the diff library is supposed to
-     output the path to the diff, and we know our objects being diff'd are only one path deep (no
-     nesting), so the values at the path's key should be present */
-  const created = diffs
-    .filter((diff) => diff.type === "CREATE")
-    .map((diff) => keyedAfter[diff.path[0]!]!);
-  const updated = diffs
-    .filter((diff) => diff.type === "CHANGE")
-    .map((diff) => keyedAfter[diff.path[0]!]!);
-  const deleted = diffs
-    .filter((diff) => diff.type === "REMOVE")
-    .map((diff) => keyedBefore[diff.path[0]!]!);
-  /* eslint-enable @typescript-eslint/no-non-null-assertion */
-
-  return [created, updated, deleted];
-};
-
-const saveDiffs = (
-  topicId: number,
-  storeBefore: DiagramStoreState,
-  storeAfter: DiagramStoreState,
-) => {
-  const apiBefore = convertToApi(topicId, storeBefore);
-  const apiAfter = convertToApi(topicId, storeAfter);
-
-  const [nodesToCreate, nodesToUpdate, nodesToDelete] = getCrudDiffs(
-    apiBefore.nodes,
-    apiAfter.nodes,
-    (node) => node.id,
-  );
-
-  const [edgesToCreate, edgesToUpdate, edgesToDelete] = getCrudDiffs(
-    apiBefore.edges,
-    apiAfter.edges,
-    (edge) => edge.id,
-  );
-
-  const [scoresToCreate, scoresToUpdate, scoresToDelete] = getCrudDiffs(
-    apiBefore.userScores,
-    apiAfter.userScores,
-    (score) => score.username.toString() + score.graphPartId,
-  );
-
-  const changeLists = {
-    nodesToCreate,
-    nodesToUpdate,
-    nodesToDelete,
-    edgesToCreate,
-    edgesToUpdate,
-    edgesToDelete,
-    scoresToCreate,
-    scoresToUpdate,
-    scoresToDelete,
-  };
-
-  const anyChanges = Object.values(changeLists).some((changes) => changes.length > 0);
+  // Only use this syncer for changes to description, since it can be changed from the workspace and
+  // may want to be included in undo/redo functionality.
+  // Changes to other fields are handled by direct calls to the topic API, since they don't need undo/redo.
+  const anyChanges = newTopic.description !== oldTopic.description;
   if (!anyChanges) return;
 
-  // TODO: is there a way to compress this data? when uploading a new topic, the payload appears to be 30% larger than the file being uploaded
-  trpcClient.topic.updateDiagram.mutate({ topicId, ...changeLists }).catch((e: unknown) => {
+  const topicChange = { id: newTopic.id, description: newTopic.description };
+
+  // not really necessary but easier to follow the pattern in other apiSyncers
+  const changeLists = {
+    topicChange: [topicChange],
+  };
+
+  trpcClient.topic.update.mutate(topicChange).catch((e: unknown) => {
     showError("changesFailedToSave", buildApiSyncerError(changeLists, e));
     throw e;
   });
@@ -136,7 +81,7 @@ declare module "zustand/vanilla" {
 type Write<T, U> = Omit<T, keyof U> & U;
 
 // use specific store's state instead of `T` because we're being lazy with typing for now
-type ApiSyncerImpl = (create: StateCreator<DiagramStoreState>) => StateCreator<DiagramStoreState>;
+type ApiSyncerImpl = (create: StateCreator<TopicStoreState>) => StateCreator<TopicStoreState>;
 
 // types taken from https://github.com/pmndrs/zustand/blob/main/docs/guides/typescript.md#middleware-that-doesnt-change-the-store-type
 const apiSyncerImpl: ApiSyncerImpl = (create) => (set, get, api) => {
@@ -158,7 +103,7 @@ const apiSyncerImpl: ApiSyncerImpl = (create) => (set, get, api) => {
     if (isPlaygroundTopic(currentTopic)) return;
     if (!syncing) return;
 
-    saveDiffs(currentTopic.id, storeBefore, storeAfter);
+    saveDiffs(storeBefore, storeAfter);
   };
 
   const origSetState = api.setState;
@@ -172,7 +117,7 @@ const apiSyncerImpl: ApiSyncerImpl = (create) => (set, get, api) => {
     if (isPlaygroundTopic(currentTopic)) return;
     if (!syncing) return;
 
-    saveDiffs(currentTopic.id, storeBefore, storeAfter);
+    saveDiffs(storeBefore, storeAfter);
   };
 
   // add methods to pause and resume syncing

@@ -6,8 +6,7 @@ import { AppRouter } from "@/api/routers/_app";
 import { Edge as ApiEdge, Edge } from "@/common/edge";
 import { Node as ApiNode, Node } from "@/common/node";
 import { UserScore as ApiScore } from "@/common/userScore";
-import { UserScores as StoreScores, TopicStoreState } from "@/web/topic/diagramStore/store";
-import { isPlaygroundTopic } from "@/web/topic/diagramStore/utils";
+import { DiagramStoreState, UserScores as StoreScores } from "@/web/topic/diagramStore/store";
 import {
   Score,
   Edge as StoreEdge,
@@ -105,14 +104,10 @@ interface ApiData {
   userScores: ApiScore[];
 }
 
-export const convertToApi = (topicStore: TopicStoreState): ApiData => {
-  if (isPlaygroundTopic(topicStore.topic))
-    throw new Error("must create topic before saving topic data");
-  const topicId = topicStore.topic.id;
-
-  const nodes = topicStore.nodes.map((node) => convertToApiNode(node, topicId));
-  const edges = topicStore.edges.map((edge) => convertToApiEdge(edge, topicId));
-  const userScores = convertToApiUserScores(topicStore.userScores, topicId);
+export const convertToApi = (topicId: number, diagramStore: DiagramStoreState): ApiData => {
+  const nodes = diagramStore.nodes.map((node) => convertToApiNode(node, topicId));
+  const edges = diagramStore.edges.map((edge) => convertToApiEdge(edge, topicId));
+  const userScores = convertToApiUserScores(diagramStore.userScores, topicId);
 
   return { nodes, edges, userScores };
 };

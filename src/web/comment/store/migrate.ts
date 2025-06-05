@@ -1,13 +1,7 @@
 /* eslint-disable -- don't really care to make this file meet eslint standards, since store type is changing between each migration */
 
-import {
-  FromViewState1,
-  renameStructureToBreakdown,
-  ToViewState2,
-} from "@/common/tsMigrations/20240926155659_rename_structure_to_breakdown";
-
 export const migrate = (persistedState: any, version: number) => {
-  const migrations = [migrate_1_to_2, migrate_2_to_3];
+  const migrations = [migrate_1_to_2];
 
   let state = persistedState;
 
@@ -23,27 +17,6 @@ export const migrate = (persistedState: any, version: number) => {
 };
 
 interface FromState1 {
-  views: {
-    viewState: FromViewState1;
-  }[];
-}
-
-interface ToState2 {
-  views: {
-    viewState: ToViewState2;
-  }[];
-}
-
-// rename structure -> breakdown
-const migrate_1_to_2 = (state: FromState1) => {
-  state.views.forEach((view) => {
-    renameStructureToBreakdown(view.viewState);
-  });
-
-  return state;
-};
-
-interface FromState2 {
   topic?:
     | {
         id: undefined;
@@ -62,13 +35,13 @@ interface FromState2 {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface ToState3 {}
+interface ToState2 {}
 
 // remove topic state from this store; diagram store migration will handle putting it into topic store if we're on the playground (to preserve description)
-const migrate_2_to_3 = (state: FromState2) => {
+const migrate_1_to_2 = (state: FromState1) => {
   const topic = state.topic;
 
   delete state.topic;
 
-  return state as ToState3;
+  return state as ToState2;
 };

@@ -11,8 +11,7 @@ import { Menu } from "@/web/common/components/Menu/Menu";
 import { ProfileIcon } from "@/web/common/components/ProfileIcon/ProfileIcon";
 import { useSessionUser } from "@/web/common/hooks";
 import { trpc } from "@/web/common/trpc";
-import { useOnPlayground } from "@/web/topic/diagramStore/topicHooks";
-import { useUserCanEditTopicData } from "@/web/topic/diagramStore/userHooks";
+import { useOnPlayground, useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 
 const getLinkToComment = (comment: StoreComment) => {
   const { origin, pathname } = window.location;

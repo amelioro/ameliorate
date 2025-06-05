@@ -5,7 +5,7 @@ import { shallow } from "zustand/shallow";
 import { InfoCategory } from "@/common/infoCategory";
 import { emitter } from "@/web/common/event";
 import { getDefaultNode } from "@/web/topic/diagramStore/nodeGetters";
-import { useTopicStore } from "@/web/topic/diagramStore/store";
+import { useDiagramStore } from "@/web/topic/diagramStore/store";
 import { findNodeOrThrow } from "@/web/topic/utils/graph";
 import { neighbors } from "@/web/topic/utils/node";
 import { initialViewState, useCurrentViewStore } from "@/web/view/currentViewStore/store";
@@ -154,7 +154,7 @@ export const viewJustification = (arguedDiagramPartId: string) => {
 };
 
 export const viewSolutionContext = (solutionId: string) => {
-  const graph = useTopicStore.getState();
+  const graph = useDiagramStore.getState();
 
   useCurrentViewStore.setState(
     {
@@ -168,7 +168,7 @@ export const viewSolutionContext = (solutionId: string) => {
 };
 
 export const viewCriterionContext = (criterionId: string) => {
-  const graph = useTopicStore.getState();
+  const graph = useDiagramStore.getState();
 
   useCurrentViewStore.setState(
     {
@@ -187,7 +187,7 @@ export const viewCriterionContext = (criterionId: string) => {
 };
 
 export const viewFulfillsEdgeContext = (fulfillsEdgeId: string) => {
-  const graph = useTopicStore.getState();
+  const graph = useDiagramStore.getState();
 
   useCurrentViewStore.setState(
     {
@@ -210,7 +210,7 @@ export const viewFulfillsEdgeContext = (fulfillsEdgeId: string) => {
  */
 export const showNodeAndNeighbors = (nodeId: string, also: boolean) => {
   const { categoriesToShow, generalFilter } = useCurrentViewStore.getState();
-  const graph = useTopicStore.getState();
+  const graph = useDiagramStore.getState();
   const node = findNodeOrThrow(nodeId, graph.nodes);
 
   const nodeAndNeighbors = [nodeId, ...neighbors(node, graph).map((neighbor) => neighbor.id)];

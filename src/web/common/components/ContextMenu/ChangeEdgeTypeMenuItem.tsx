@@ -6,7 +6,7 @@ import { ContextMenuItem } from "@/web/common/components/ContextMenu/CloseOnClic
 import { useSessionUser } from "@/web/common/hooks";
 import { changeEdgeType } from "@/web/topic/diagramStore/actions";
 import { useIsTableEdge } from "@/web/topic/diagramStore/edgeHooks";
-import { useUserCanEditTopicData } from "@/web/topic/diagramStore/userHooks";
+import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { Edge } from "@/web/topic/utils/graph";
 
 interface Props {

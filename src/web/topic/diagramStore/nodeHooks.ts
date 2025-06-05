@@ -3,13 +3,13 @@ import { shallow } from "zustand/shallow";
 import { errorWithData } from "@/common/errorHandling";
 import { NodeType } from "@/common/node";
 import { getDefaultNode } from "@/web/topic/diagramStore/nodeGetters";
-import { useTopicStore } from "@/web/topic/diagramStore/store";
+import { useDiagramStore } from "@/web/topic/diagramStore/store";
 import { RelationDirection, findNodeOrThrow } from "@/web/topic/utils/graph";
 import { children, edges, neighbors, parents } from "@/web/topic/utils/node";
 import { useIsAnyGraphPartSelected } from "@/web/view/selectedPartStore";
 
 export const useNode = (nodeId: string | null) => {
-  return useTopicStore((state) => {
+  return useDiagramStore((state) => {
     if (!nodeId) return null;
 
     try {
@@ -21,14 +21,14 @@ export const useNode = (nodeId: string | null) => {
 };
 
 export const useAllNodes = (nodeIds?: string[]) => {
-  return useTopicStore((state) => {
+  return useDiagramStore((state) => {
     if (!nodeIds) return state.nodes;
     return state.nodes.filter((node) => nodeIds.includes(node.id));
   }, shallow);
 };
 
 export const useNodeChildren = (nodeId: string | undefined) => {
-  return useTopicStore((state) => {
+  return useDiagramStore((state) => {
     if (!nodeId) return [];
 
     try {
@@ -42,7 +42,7 @@ export const useNodeChildren = (nodeId: string | undefined) => {
 };
 
 export const useNodeParents = (nodeId: string) => {
-  return useTopicStore((state) => {
+  return useDiagramStore((state) => {
     try {
       const node = findNodeOrThrow(nodeId, state.nodes);
       const topicGraph = { nodes: state.nodes, edges: state.edges };
@@ -54,7 +54,7 @@ export const useNodeParents = (nodeId: string) => {
 };
 
 export const useCriterionSolutionEdges = (problemNodeId: string | undefined) => {
-  return useTopicStore((state) => {
+  return useDiagramStore((state) => {
     if (!problemNodeId) return [];
 
     try {
@@ -80,7 +80,7 @@ export const useCriterionSolutionEdges = (problemNodeId: string | undefined) => 
 };
 
 export const useNeighborsInDirection = (nodeId: string, direction: RelationDirection) => {
-  return useTopicStore((state) => {
+  return useDiagramStore((state) => {
     try {
       const node = findNodeOrThrow(nodeId, state.nodes);
       const topicGraph = { nodes: state.nodes, edges: state.edges };
@@ -92,7 +92,7 @@ export const useNeighborsInDirection = (nodeId: string, direction: RelationDirec
 };
 
 export const useIsNeighborSelected = (nodeId: string) => {
-  const neighborNodes = useTopicStore((state) => {
+  const neighborNodes = useDiagramStore((state) => {
     try {
       const node = findNodeOrThrow(nodeId, state.nodes);
       const topicGraph = { nodes: state.nodes, edges: state.edges };
@@ -106,7 +106,7 @@ export const useIsNeighborSelected = (nodeId: string) => {
 };
 
 export const useIsEdgeSelected = (nodeId: string) => {
-  const neighborEdges = useTopicStore((state) => {
+  const neighborEdges = useDiagramStore((state) => {
     try {
       const node = findNodeOrThrow(nodeId, state.nodes);
       return edges(node, state.edges);
@@ -123,7 +123,7 @@ export const useIsEdgeSelected = (nodeId: string) => {
  * @param nodeId id of node to return if exists
  */
 export const useDefaultNode = (nodeType: NodeType, nodeId?: string) => {
-  return useTopicStore((state) => {
+  return useDiagramStore((state) => {
     const defaultNode = getDefaultNode(nodeType);
     if (!nodeId) return defaultNode;
 
@@ -133,11 +133,11 @@ export const useDefaultNode = (nodeType: NodeType, nodeId?: string) => {
 };
 
 export const useNodesOfType = (type: NodeType) => {
-  return useTopicStore((state) => state.nodes.filter((node) => node.type === type), shallow);
+  return useDiagramStore((state) => state.nodes.filter((node) => node.type === type), shallow);
 };
 
 export const useSolutions = (problemId?: string) => {
-  return useTopicStore((state) => {
+  return useDiagramStore((state) => {
     const solutions = state.nodes.filter((node) => node.type === "solution");
     if (!problemId) return solutions;
 
@@ -153,7 +153,7 @@ export const useSolutions = (problemId?: string) => {
 };
 
 export const useCriteria = (problemId?: string) => {
-  return useTopicStore((state) => {
+  return useDiagramStore((state) => {
     const criteria = state.nodes.filter((node) => node.type === "criterion");
     if (!problemId) return criteria;
 
