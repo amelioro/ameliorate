@@ -61,10 +61,7 @@ export const InfoDialog = () => {
       <Popper
         open={open}
         anchorEl={anchorEl}
-        placement="bottom"
         modifiers={[
-          // allow Popper to flip between bottom and top if there's not enough space
-          { name: "flip", options: { fallbackPlacements: ["bottom", "top", "left"] } },
           // push Popper down/up by 26px from the anchor
           { name: "offset", options: { offset: [0, 26] } },
           // enable arrow positioning, using our arrowRef
@@ -82,38 +79,33 @@ export const InfoDialog = () => {
         ]}
         // z-index to match the mask's so that Popper is above the mask
         className={
-          "overflow-visible z-[99999] max-w-[min(80svw,36rem)] rounded-lg bg-white" +
+          "z-[99999] max-w-[min(80svw,36rem)] rounded-lg bg-white" +
           (anchorEl ? "" : " !left-1/2 !top-1/2 !-translate-x-1/2 !-translate-y-1/2")
         }
         aria-label="Info Dialog"
       >
         {({ placement }) => {
           const isBelow = placement.startsWith("bottom");
-
           return (
             <>
-              <span
-                ref={setArrowRef}
-                data-popper-arrow
-                className={`
+              {/* functionality to only show the arrow when there's an anchorEl */}
+              {anchorEl && (
+                <span
+                  ref={setArrowRef}
+                  data-popper-arrow
+                  className={`
                   absolute
-                  w-3
-                  h-3
-                  overflow-visible
-                  ${isBelow ? "top-[-6px]" : "bottom-[-6px]"}
+                  size-3
+                  ${isBelow ? "-top-1.5" : "-bottom-1.5"}
                   before:content-['']
                   before:absolute
-                  before:top-1/2
-                  before:left-1/2
                   before:w-3
                   before:h-3
                   ${isBelow ? "before:bg-paperShaded-main" : "before:bg-white"}
-                  before:translate-x-[-50%]
-                  before:translate-y-[-50%]
                   before:rotate-45
                 `}
-                style={{ zIndex: 99999 }}
-              />
+                />
+              )}
 
               <div className="flex items-center justify-between rounded-t-lg bg-paperShaded-main px-2 py-1">
                 <InfoTypeIcon color={infoType} fontSize="small" />
