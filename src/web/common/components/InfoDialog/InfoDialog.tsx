@@ -66,16 +66,6 @@ export const InfoDialog = () => {
           { name: "offset", options: { offset: [0, 26] } },
           // enable arrow positioning, using our arrowRef
           { name: "arrow", options: { element: arrowRef, padding: 10 } },
-          {
-            name: "preventOverflow",
-            options: {
-              altAxis: true,
-              altBoundary: true,
-              tether: true,
-              rootBoundary: "document",
-              padding: 12,
-            },
-          },
         ]}
         // z-index to match the mask's so that Popper is above the mask
         className={
@@ -97,10 +87,9 @@ export const InfoDialog = () => {
                   absolute
                   size-3
                   ${isBelow ? "-top-1.5" : "-bottom-1.5"}
-                  before:content-['']
                   before:absolute
-                  before:w-3
-                  before:h-3
+                  before:size-3
+                  before:content-['']
                   ${isBelow ? "before:bg-paperShaded-main" : "before:bg-white"}
                   before:rotate-45
                 `}
