@@ -18,7 +18,7 @@ const initialState: UserConfigStoreState = {
   fillNodesWithColor: false,
   expandDetailsTabs: true,
 
-  showScores: false,
+  showScores: true,
   showContentIndicators: true,
   showNeighborIndicators: false,
   showViewIndicators: false,
