@@ -23,10 +23,11 @@ export const InfoDialog = () => {
   const [infoType, setInfoType] = useState<InfoType>("info");
   const [message, setMessage] = useState<ReactNode>("");
   const [anchor, setAnchor] = useState<Anchor | null>(null);
+  const [arrowRef, setArrowRef] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
     // seems a little awkward to rely on an event to set all this state, but what's nice about it is
-    // that the state doesn't need to be accesssible from outside the component.
+    // that the state doesn't need to be accessible from outside the component.
     const unbindInfoToShow = emitter.on("infoToShow", (infoType, message, anchor) => {
       setInfoType(infoType);
       setMessage(message);
@@ -60,27 +61,65 @@ export const InfoDialog = () => {
       <Popper
         open={open}
         anchorEl={anchorEl}
-        modifiers={[{ name: "offset", options: { offset: [0, 12] } }]}
-        // z-index to match the mask's so that popper is above the mask
+        modifiers={[
+          // push Popper down/up by 26px from the anchor
+          { name: "offset", options: { offset: [0, 26] } },
+          // enable arrow positioning, using our arrowRef
+          { name: "arrow", options: { element: arrowRef, padding: 10 } },
+        ]}
+        // z-index to match the mask's so that Popper is above the mask
         className={
           "z-[99999] max-w-[min(80svw,36rem)] rounded-lg bg-white" +
           (anchorEl ? "" : " !left-1/2 !top-1/2 !-translate-x-1/2 !-translate-y-1/2")
         }
         aria-label="Info Dialog"
       >
-        <div className="flex items-center justify-between rounded-t-lg bg-paperShaded-main px-2 py-1">
-          <InfoTypeIcon color={infoType} fontSize="small" />
+        {({ placement }) => {
+          const isBelow = placement.startsWith("bottom");
+          return (
+            <>
+              {/* functionality to only show the arrow when there's an anchorEl */}
+              {anchorEl && (
+                <span
+                  ref={setArrowRef}
+                  data-popper-arrow
+                  className={`
+                  absolute
+                  size-3
+                  ${isBelow ? "-top-1.5" : "-bottom-1.5"}
+                  before:absolute
+                  before:size-3
+                  before:content-['']
+                  ${isBelow ? "before:bg-paperShaded-main" : "before:bg-white"}
+                  before:rotate-45
+                `}
+                />
+              )}
 
-          <Typography className="font-bold">{startCase(infoType)}</Typography>
+              <div className="flex items-center justify-between rounded-t-lg bg-paperShaded-main px-2 py-1">
+                <InfoTypeIcon color={infoType} fontSize="small" />
 
-          <IconButton size="small" title="Close" aria-label="Close" onClick={() => setOpen(false)}>
-            <Close fontSize="small" />
-          </IconButton>
-        </div>
+                <Typography className="font-bold">{startCase(infoType)}</Typography>
 
-        <Typography variant="body2" className="max-h-[70svh] overflow-auto whitespace-pre-wrap p-2">
-          {message}
-        </Typography>
+                <IconButton
+                  size="small"
+                  title="Close"
+                  aria-label="Close"
+                  onClick={() => setOpen(false)}
+                >
+                  <Close fontSize="small" />
+                </IconButton>
+              </div>
+
+              <Typography
+                variant="body2"
+                className="max-h-[70svh] overflow-auto whitespace-pre-wrap p-2"
+              >
+                {message}
+              </Typography>
+            </>
+          );
+        }}
       </Popper>
     </>
   );
