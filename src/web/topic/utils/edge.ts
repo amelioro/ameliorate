@@ -1,5 +1,5 @@
 import { RelationName, justificationRelationNames } from "@/common/edge";
-import { NodeType, nodeTypes, researchNodeTypes } from "@/common/node";
+import { NodeType, getSameCategoryNodeTypes, nodeTypes, researchNodeTypes } from "@/common/node";
 import { Edge, Graph, Node, RelationDirection, findNodeOrThrow } from "@/web/topic/utils/graph";
 import { hasJustification } from "@/web/topic/utils/justification";
 import { children, components, parents } from "@/web/topic/utils/node";
@@ -177,7 +177,7 @@ export const getRelation = (
   parent: NodeType,
   child: NodeType,
   relationName?: RelationName,
-): Relation | undefined => {
+): Relation => {
   const relation = relationName
     ? relations.find(
         (relation) =>
@@ -221,14 +221,54 @@ export const shortcutRelations: ShortcutRelation[] = [
   },
 ];
 
-export const addableRelationsFrom = (nodeType: NodeType, addingAs: RelationDirection) => {
+export const addableRelationsFrom = (
+  nodeType: NodeType,
+  addingAs: RelationDirection,
+  unrestrictedAddingFrom: boolean,
+  isMitigatableDetriment: boolean,
+): { toNodeType: NodeType; relation: Relation }[] => {
   const fromDirection = addingAs === "parent" ? "child" : "parent";
+  const toDirection = addingAs === "parent" ? "parent" : "child";
 
-  const addableRelations = relations.filter(
-    (relation) =>
-      relation[fromDirection] === nodeType &&
-      ["both", fromDirection].includes(relation.addableFrom),
-  );
+  const addableRelations: Relation[] = getSameCategoryNodeTypes(nodeType)
+    .map((toNodeType) => {
+      // hack to ensure that problem detriments can't be mitigated (and can be solved), and solution detriments can be mitigated (but not solved);
+      // this is really awkward but keeps detriment nodes from being able to have both solutions and mitigations added, which could be really confusing for users
+      // note1: also not doing this when we're unrestricted, since that should result in being able to add both mitigations and solutions in both cases anyway.
+      // note2: maybe ideal to have different node types for problemDetriment vs solutionDetriment? then these could just have their own addableFrom relations.
+      if (
+        isMitigatableDetriment &&
+        addingAs === "child" &&
+        toNodeType === "solution" &&
+        !unrestrictedAddingFrom
+      ) {
+        return {
+          child: "mitigation",
+          name: "mitigates",
+          parent: nodeType,
+        } satisfies Relation;
+      }
+
+      // use an addableFrom relation if it exists
+      const addableRelationFrom = relations.find(
+        (relation) =>
+          relation[fromDirection] === nodeType &&
+          relation[toDirection] === toNodeType &&
+          ["both", fromDirection].includes(relation.addableFrom),
+      );
+      if (addableRelationFrom) return addableRelationFrom;
+
+      // otherwise, if unrestricted, allow adding any same-category node as parent or child
+      if (unrestrictedAddingFrom) {
+        return fromDirection === "parent"
+          ? getRelation(nodeType, toNodeType)
+          : getRelation(toNodeType, nodeType);
+      }
+
+      // otherwise we have no addable relation from/to these node types
+      return null;
+    })
+    .filter((relation) => relation !== null);
 
   const formattedRelations = addableRelations.map((relation) => ({
     toNodeType: relation[addingAs],
@@ -239,8 +279,6 @@ export const addableRelationsFrom = (nodeType: NodeType, addingAs: RelationDirec
 };
 
 export const canCreateEdge = (topicGraph: Graph, parent: Node, child: Node) => {
-  const relation = getRelation(parent.type, child.type);
-
   const existingEdge = topicGraph.edges.find((edge) => {
     return (
       (edge.source === parent.id && edge.target === child.id) ||
@@ -255,11 +293,6 @@ export const canCreateEdge = (topicGraph: Graph, parent: Node, child: Node) => {
 
   if (existingEdge) {
     console.log("cannot connect nodes: tried dragging between already-connected nodes");
-    return false;
-  }
-
-  if (!relation) {
-    console.log("cannot connect nodes: nodes don't form a valid relation");
     return false;
   }
 
