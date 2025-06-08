@@ -105,6 +105,12 @@ export const TopicDetails = ({ selectedTab, setSelectedTab }: Props) => {
   const { sessionUser } = useSessionUser();
   const userIsCreator = useUserIsCreator(sessionUser?.username);
 
+  const watchTypeObject = {
+    participatingOrMentions: "Participating Or Mentions",
+    all: "All",
+    ignore: "Ignore",
+  };
+
   const topic = useTopic();
   const isPlaygroundTopic = topic.id === undefined;
   const expandDetailsTabs = useExpandDetailsTabs();
@@ -191,7 +197,7 @@ export const TopicDetails = ({ selectedTab, setSelectedTab }: Props) => {
               >
                 {watchTypes.map((type) => (
                   <MenuItem key={type} value={type}>
-                    {type}
+                    {watchTypeObject[type]}
                   </MenuItem>
                 ))}
               </TextField>
