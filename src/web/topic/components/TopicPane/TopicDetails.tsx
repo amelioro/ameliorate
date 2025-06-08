@@ -10,6 +10,7 @@ import {
 } from "@mui/icons-material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Dialog, IconButton, MenuItem, Tab, TextField, Tooltip, Typography } from "@mui/material";
+import { startCase } from "lodash";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -105,12 +106,6 @@ export const TopicDetails = ({ selectedTab, setSelectedTab }: Props) => {
   const { sessionUser } = useSessionUser();
   const userIsCreator = useUserIsCreator(sessionUser?.username);
 
-  const watchTypeObject = {
-    participatingOrMentions: "Participating Or Mentions",
-    all: "All",
-    ignore: "Ignore",
-  };
-
   const topic = useTopic();
   const isPlaygroundTopic = topic.id === undefined;
   const expandDetailsTabs = useExpandDetailsTabs();
@@ -197,7 +192,7 @@ export const TopicDetails = ({ selectedTab, setSelectedTab }: Props) => {
               >
                 {watchTypes.map((type) => (
                   <MenuItem key={type} value={type}>
-                    {watchTypeObject[type]}
+                    {startCase(type)}
                   </MenuItem>
                 ))}
               </TextField>
