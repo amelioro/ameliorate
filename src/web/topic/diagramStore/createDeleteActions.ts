@@ -21,7 +21,6 @@ import {
 } from "@/web/topic/utils/graph";
 import { getImplicitLabel } from "@/web/topic/utils/justification";
 import { FlowNodeType, edges } from "@/web/topic/utils/node";
-import { getUnrestrictedEditing } from "@/web/view/actionConfigStore";
 import { setSelected } from "@/web/view/selectedPartStore";
 
 const createNode = (
@@ -91,9 +90,6 @@ export const addNode = ({
   context,
   selectNewNode,
 }: AddNodeProps) => {
-  if (!getUnrestrictedEditing() && !getRelation(relation.parent, relation.child, relation.name))
-    throw errorWithData("invalid relation to add", relation);
-
   const state = createDraft(useDiagramStore.getState());
 
   const topicGraph = { nodes: state.nodes, edges: state.edges };
@@ -202,8 +198,7 @@ const createConnection = (topicGraph: Graph, parentId: string | null, childId: s
 
   if (!canCreateEdge(topicGraph, parent, child)) return false;
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- canCreateEdge ensures relation is valid
-  const relation = getRelation(parent.type, child.type)!;
+  const relation = getRelation(parent.type, child.type);
 
   // modifies topicGraph.edges through `state`
   createEdge(topicGraph, parent, child, relation);

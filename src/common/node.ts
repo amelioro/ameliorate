@@ -64,13 +64,13 @@ export type Node = z.infer<typeof nodeSchema>;
 
 export const infoNodeTypes: Record<InfoCategory, NodeType[]> = {
   breakdown: [
-    "problem",
     "cause",
+    "problem",
     "criterion",
-    "effect",
-    "benefit",
-    "detriment",
     "solutionComponent",
+    "benefit",
+    "effect",
+    "detriment",
     "solution",
     "obstacle",
     "mitigationComponent",
