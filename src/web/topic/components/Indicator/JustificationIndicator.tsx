@@ -6,8 +6,7 @@ import { emitter } from "@/web/common/event";
 import { ContentIndicator } from "@/web/topic/components/Indicator/Base/ContentIndicator";
 import { useTopLevelJustification } from "@/web/topic/diagramStore/graphPartHooks";
 import { useDisplayScores } from "@/web/topic/diagramStore/scoreHooks";
-import { Score } from "@/web/topic/utils/graph";
-import { getNumericScore, scoreColors } from "@/web/topic/utils/score";
+import { getHighestScore, getScoreColor } from "@/web/topic/utils/score";
 import { setSelected } from "@/web/view/selectedPartStore";
 
 interface Props {
@@ -18,7 +17,9 @@ interface Props {
 export const JustificationIndicator = ({ graphPartId, partColor }: Props) => {
   const { supports, critiques } = useTopLevelJustification(graphPartId);
   const justificationNodes = supports.concat(critiques);
-  const scoresByGraphPart = useDisplayScores(justificationNodes.map((node) => node.id));
+  const { scoresByGraphPartId, scoreMeaning } = useDisplayScores(
+    justificationNodes.map((node) => node.id),
+  );
 
   const onClick = useCallback(() => {
     setSelected(graphPartId);
@@ -27,11 +28,9 @@ export const JustificationIndicator = ({ graphPartId, partColor }: Props) => {
 
   if (justificationNodes.length === 0) return <></>;
 
-  const nodeScores = Object.values(scoresByGraphPart).map((score) => getNumericScore(score));
-  const highestScore = Math.max(...nodeScores);
-
+  const highestScore = getHighestScore(Object.values(scoresByGraphPartId));
   // could just color if score is > 5, to avoid bringing attention to unimportant things, but it seems nice to have the visual indication of a low score too
-  const scoreColor = scoreColors[highestScore.toString() as Score] as ButtonProps["color"];
+  const scoreColor = getScoreColor(highestScore, scoreMeaning) as ButtonProps["color"];
 
   if (supports.length > 0 && critiques.length > 0)
     return (

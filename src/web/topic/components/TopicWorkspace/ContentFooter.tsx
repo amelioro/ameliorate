@@ -1,9 +1,11 @@
 import {
+  AlignVerticalCenter,
   ArrowDropDown,
   Build,
   Delete,
   EditOff,
   FiberManualRecord,
+  FormatLineSpacing,
   Group,
   Highlight,
   Looks6,
@@ -20,12 +22,16 @@ import {
   ListItemIcon,
   ListItemText,
   MenuItem,
+  Radio,
+  RadioGroup,
   Switch,
   ToggleButton,
 } from "@mui/material";
-import { Dispatch, SetStateAction, useState } from "react";
+import { startCase } from "lodash";
+import { Dispatch, ReactNode, SetStateAction, useState } from "react";
 
 import { Menu } from "@/web/common/components/Menu/Menu";
+import { NestedMenuItem } from "@/web/common/components/Menu/NestedMenuItem";
 import { useSessionUser } from "@/web/common/hooks";
 import { HelpMenu } from "@/web/topic/components/TopicWorkspace/HelpMenu";
 import { MoreActionsDrawer } from "@/web/topic/components/TopicWorkspace/MoreActionsDrawer";
@@ -34,6 +40,7 @@ import { deleteGraphPart } from "@/web/topic/diagramStore/createDeleteActions";
 import { useIsTableEdge } from "@/web/topic/diagramStore/edgeHooks";
 import { useTopic, useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { hotkeys } from "@/web/topic/utils/hotkeys";
+import { AggregationMode, aggregationModes } from "@/web/topic/utils/score";
 import {
   toggleFlashlightMode,
   toggleReadonlyMode,
@@ -44,6 +51,8 @@ import { Perspectives } from "@/web/view/components/Perspectives/Perspectives";
 import {
   comparePerspectives,
   resetPerspectives,
+  setAggregationMode,
+  useAggregationMode,
   useIsComparingPerspectives,
 } from "@/web/view/perspectiveStore";
 import { useSelectedGraphPart } from "@/web/view/selectedPartStore";
@@ -61,12 +70,19 @@ import {
   useShowViewIndicators,
 } from "@/web/view/userConfigStore";
 
+const aggregationModeIcons: Record<AggregationMode, ReactNode> = {
+  average: <AlignVerticalCenter />,
+  disagreement: <FormatLineSpacing />,
+};
+
 interface PerspectivesMenuProps {
   anchorEl: HTMLElement | null;
   setAnchorEl: Dispatch<SetStateAction<HTMLElement | null>>;
 }
 
 const PerspectivesMenu = ({ anchorEl, setAnchorEl }: PerspectivesMenuProps) => {
+  const aggregationMode = useAggregationMode();
+
   const menuOpen = Boolean(anchorEl);
   if (!menuOpen) return;
 
@@ -79,6 +95,20 @@ const PerspectivesMenu = ({ anchorEl, setAnchorEl }: PerspectivesMenuProps) => {
       // match the ~300px width of drawer
       className="w-[18.75rem] px-2"
     >
+      <NestedMenuItem label="Aggregation mode" parentMenuOpen={menuOpen} className="mb-2">
+        <RadioGroup name="aggregation mode">
+          {aggregationModes.map((mode) => {
+            return (
+              <MenuItem key={mode} onClick={() => setAggregationMode(mode)}>
+                <ListItemIcon>{aggregationModeIcons[mode]}</ListItemIcon>
+                <ListItemText primary={startCase(mode)} />
+                <Radio checked={aggregationMode === mode} value={mode} name="aggregation mode" />
+              </MenuItem>
+            );
+          })}
+        </RadioGroup>
+      </NestedMenuItem>
+
       <Perspectives />
     </Menu>
   );

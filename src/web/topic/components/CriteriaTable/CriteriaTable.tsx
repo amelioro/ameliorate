@@ -196,7 +196,7 @@ export const CriteriaTable = () => {
   const problemNode = useDefaultNode("problem", tableFilter.centralProblemId);
   const nodeChildren = useNodeChildren(problemNode?.id);
   const edges = useCriterionSolutionEdges(problemNode?.id);
-  const scores = useDisplayScores(nodeChildren.map((node) => node.id));
+  const { scoresByGraphPartId: scores } = useDisplayScores(nodeChildren.map((node) => node.id));
 
   if (!problemNode)
     return (

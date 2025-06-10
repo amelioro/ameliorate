@@ -1,8 +1,8 @@
 import { useTheme } from "@mui/material/styles";
-import { NestedMenuItem } from "mui-nested-menu";
 
 import { breakdownNodeTypes, researchNodeTypes } from "@/common/node";
 import { ContextMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
+import { NestedMenuItem } from "@/web/common/components/Menu/NestedMenuItem";
 import { useSessionUser } from "@/web/common/hooks";
 import { addNodeWithoutParent } from "@/web/topic/diagramStore/createDeleteActions";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
@@ -30,12 +30,7 @@ export const AddNodeMenuItem = ({ parentMenuOpen }: Props) => {
 
   return (
     <>
-      <NestedMenuItem
-        label="Add node"
-        parentMenuOpen={parentMenuOpen}
-        // match default mui menu padding and size
-        className="px-[16px] [&_p]:px-0 [&_p]:text-sm"
-      >
+      <NestedMenuItem label="Add node" parentMenuOpen={parentMenuOpen}>
         {shownNodeTypes.map((type) => {
           const { NodeIcon, title } = nodeDecorations[type];
           return (

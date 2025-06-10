@@ -6,8 +6,7 @@ import { emitter } from "@/web/common/event";
 import { ContentIndicator } from "@/web/topic/components/Indicator/Base/ContentIndicator";
 import { useResearchNodes } from "@/web/topic/diagramStore/graphPartHooks";
 import { useDisplayScores } from "@/web/topic/diagramStore/scoreHooks";
-import { Score } from "@/web/topic/utils/graph";
-import { getNumericScore, scoreColors } from "@/web/topic/utils/score";
+import { getHighestScore, getScoreColor } from "@/web/topic/utils/score";
 import { setSelected } from "@/web/view/selectedPartStore";
 
 interface Props {
@@ -18,7 +17,9 @@ interface Props {
 export const FoundResearchIndicator = ({ graphPartId, partColor }: Props) => {
   const { facts, sources } = useResearchNodes(graphPartId);
   const foundResearchNodes = facts.concat(sources);
-  const scoresByGraphPart = useDisplayScores(foundResearchNodes.map((node) => node.id));
+  const { scoresByGraphPartId, scoreMeaning } = useDisplayScores(
+    foundResearchNodes.map((node) => node.id),
+  );
 
   const onClick = useCallback(() => {
     setSelected(graphPartId);
@@ -27,11 +28,9 @@ export const FoundResearchIndicator = ({ graphPartId, partColor }: Props) => {
 
   if (foundResearchNodes.length === 0) return <></>;
 
-  const nodeScores = Object.values(scoresByGraphPart).map((score) => getNumericScore(score));
-  const highestScore = Math.max(...nodeScores);
-
+  const highestScore = getHighestScore(Object.values(scoresByGraphPartId));
   // could just color if score is > 5, to avoid bringing attention to unimportant things, but it seems nice to have the visual indication of a low score too
-  const scoreColor = scoreColors[highestScore.toString() as Score] as ButtonProps["color"];
+  const scoreColor = getScoreColor(highestScore, scoreMeaning) as ButtonProps["color"];
   const color = scoreColor ?? partColor;
 
   if (facts.length > 0 && sources.length > 0)
