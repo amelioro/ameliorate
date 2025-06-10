@@ -15,9 +15,18 @@ const onFontResize = (textAreaId: string) => {
 
   showInfo(
     "nodeTextSizeReduced",
-    `Font size has been reduced to fit your text!
-    
-Ideally node text is concise - a sentence fragment of just one concept, like 'Problem: cars going too fast'. But sometimes it can be hard to make the text more concise, and that's ok.`,
+    <>
+      <span>
+        Long node text can make your diagram harder to read.
+        <br />
+        <br />
+        Consider:
+      </span>
+      <ul className="list-inside !list-disc">
+        <li>using a sentence fragment of just one concept, like 'Problem: cars going too fast'</li>
+        <li>using a title for the node and putting an explanation in the node's notes</li>
+      </ul>
+    </>,
     `#${CSS.escape(textAreaId)}`, // `escape` because the id can start with a number, which CSS selectors aren't supposed to https://developer.mozilla.org/en-US/docs/Web/API/CSS/escape_static#in_context_uses
   );
 };
