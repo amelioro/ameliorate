@@ -14,7 +14,7 @@ import { useFlowZoom } from "@/web/topic/hooks/flowHooks";
 import { useOnPlayground } from "@/web/topic/topicStore/store";
 import { userCanEditScores } from "@/web/topic/utils/score";
 import { useReadonlyMode } from "@/web/view/actionConfigStore";
-import { usePerspectives } from "@/web/view/perspectiveStore";
+import { useAggregationMode, usePerspectives } from "@/web/view/perspectiveStore";
 import { useShowScores } from "@/web/view/userConfigStore";
 
 const circleDiameter = 6 * buttonDiameterRem; // no collisions for fitting 10 elements
@@ -36,6 +36,7 @@ export const Score = ({ graphPartId }: ScoreProps) => {
 
   const myUsername = onPlayground ? playgroundUsername : sessionUser?.username;
   const perspectives = usePerspectives();
+  const aggregationMode = useAggregationMode();
   const canEdit = userCanEditScores(myUsername, perspectives, readonlyMode);
 
   const [selected, setSelected] = useState(false);
@@ -75,7 +76,13 @@ export const Score = ({ graphPartId }: ScoreProps) => {
   const showScoreClasses = showScore ? "" : " hidden";
 
   if (!isInteractive) {
-    return <ScoreButton userScores={userScores} className={showScoreClasses} />;
+    return (
+      <ScoreButton
+        userScores={userScores}
+        aggregationMode={aggregationMode}
+        className={showScoreClasses}
+      />
+    );
   }
 
   return (
@@ -88,6 +95,7 @@ export const Score = ({ graphPartId }: ScoreProps) => {
         onMouseEnter={() => setHoverDelayHandler(setTimeout(() => setHovering(true), 100))}
         onMouseLeave={() => clearTimeout(hoverDelayHandler)}
         userScores={userScores}
+        aggregationMode={aggregationMode}
         className={showScoreClasses}
       />
 
@@ -141,6 +149,7 @@ export const Score = ({ graphPartId }: ScoreProps) => {
         <ScoreButton
           onClick={() => setSelected(!selected)}
           userScores={userScores}
+          aggregationMode={aggregationMode}
           zoomRatio={zoomRatio}
         />
       </ScorePopper>

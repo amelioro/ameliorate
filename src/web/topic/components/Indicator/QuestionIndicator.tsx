@@ -6,8 +6,7 @@ import { emitter } from "@/web/common/event";
 import { ContentIndicator } from "@/web/topic/components/Indicator/Base/ContentIndicator";
 import { useResearchNodes } from "@/web/topic/diagramStore/graphPartHooks";
 import { useDisplayScores } from "@/web/topic/diagramStore/scoreHooks";
-import { Score } from "@/web/topic/utils/graph";
-import { getNumericScore, scoreColors } from "@/web/topic/utils/score";
+import { getHighestScore, getScoreColor } from "@/web/topic/utils/score";
 import { setSelected } from "@/web/view/selectedPartStore";
 
 interface Props {
@@ -17,7 +16,9 @@ interface Props {
 
 export const QuestionIndicator = ({ graphPartId, partColor }: Props) => {
   const { questions } = useResearchNodes(graphPartId);
-  const scoresByGraphPart = useDisplayScores(questions.map((question) => question.id));
+  const { scoresByGraphPartId, scoreMeaning } = useDisplayScores(
+    questions.map((question) => question.id),
+  );
 
   const onClick = useCallback(() => {
     setSelected(graphPartId);
@@ -26,11 +27,9 @@ export const QuestionIndicator = ({ graphPartId, partColor }: Props) => {
 
   if (questions.length === 0) return <></>;
 
-  const questionScores = Object.values(scoresByGraphPart).map((score) => getNumericScore(score));
-  const highestScore = Math.max(...questionScores);
-
+  const highestScore = getHighestScore(Object.values(scoresByGraphPartId));
   // could just color if score is > 5, to avoid bringing attention to unimportant things, but it seems nice to have the visual indication of a low score too
-  const scoreColor = scoreColors[highestScore.toString() as Score] as ButtonProps["color"];
+  const scoreColor = getScoreColor(highestScore, scoreMeaning) as ButtonProps["color"];
 
   const Icon = QuestionMark;
 

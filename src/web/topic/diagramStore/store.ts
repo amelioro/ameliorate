@@ -22,7 +22,7 @@ import {
   useShowImpliedEdges,
   useShowProblemCriterionSolutionEdges,
 } from "@/web/view/currentViewStore/filter";
-import { usePerspectives } from "@/web/view/perspectiveStore";
+import { useAggregationMode, usePerspectives } from "@/web/view/perspectiveStore";
 import { applyNodeTypeFilter, applyScoreFilter } from "@/web/view/utils/generalFilter";
 import { applyInfoFilter } from "@/web/view/utils/infoFilter";
 import {
@@ -79,6 +79,7 @@ export const useDiagram = (): Diagram => {
   const showImpliedEdges = useShowImpliedEdges();
   const showProblemCriterionSolutionEdges = useShowProblemCriterionSolutionEdges();
   const perspectives = usePerspectives();
+  const aggregationMode = useAggregationMode();
 
   return useDiagramStore((state) => {
     const topicGraph = { nodes: state.nodes, edges: state.edges };
@@ -92,7 +93,12 @@ export const useDiagram = (): Diagram => {
 
     // don't filter edges because hard to prevent awkwardness when edge doesn't pass filter and suddenly nodes are scattered
     const partIdsForScores = state.nodes.map((part) => part.id);
-    const scores = getDisplayScoresByGraphPartId(partIdsForScores, perspectives, state.userScores);
+    const scores = getDisplayScoresByGraphPartId(
+      partIdsForScores,
+      perspectives,
+      state.userScores,
+      aggregationMode,
+    );
     const nodesAfterScoreFilter = applyScoreFilter(nodesAfterTypeFilter, generalFilter, scores);
 
     const nodesToShow = state.nodes.filter((node) => generalFilter.nodesToShow.includes(node.id));

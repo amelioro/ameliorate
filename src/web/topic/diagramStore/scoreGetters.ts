@@ -2,12 +2,13 @@ import get from "lodash/get";
 
 import { UserScores } from "@/web/topic/diagramStore/store";
 import { Score } from "@/web/topic/utils/graph";
-import { getAverageScore } from "@/web/topic/utils/score";
+import { AggregationMode, getDisplayScore } from "@/web/topic/utils/score";
 
 export const getDisplayScoresByGraphPartId = (
   graphPartIds: string[],
   perspectives: string[],
   userScores: UserScores,
+  aggregationMode: AggregationMode,
 ): Record<string, Score> => {
   const perspectiveScoresByGraphPart = getPerspectiveScoresByGraphPart(
     graphPartIds,
@@ -15,10 +16,11 @@ export const getDisplayScoresByGraphPartId = (
     userScores,
   );
 
-  const averagedScoreWithGraphPart = Object.entries(perspectiveScoresByGraphPart).map(
-    ([graphPartId, scores]) => [graphPartId, getAverageScore(scores)] as [string, Score],
+  const displayScoresWithGraphParts = Object.entries(perspectiveScoresByGraphPart).map(
+    ([graphPartId, scores]) =>
+      [graphPartId, getDisplayScore(scores, aggregationMode)] as [string, Score],
   );
-  return Object.fromEntries(averagedScoreWithGraphPart);
+  return Object.fromEntries(displayScoresWithGraphParts);
 };
 
 const getPerspectiveScoresByGraphPart = (

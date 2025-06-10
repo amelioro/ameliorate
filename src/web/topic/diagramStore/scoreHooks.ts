@@ -8,14 +8,26 @@ import { getDisplayScoresByGraphPartId } from "@/web/topic/diagramStore/scoreGet
 import { useDiagramStore } from "@/web/topic/diagramStore/store";
 import { Node, Score } from "@/web/topic/utils/graph";
 import { children, edges } from "@/web/topic/utils/node";
-import { getNumericScore } from "@/web/topic/utils/score";
-import { usePerspectives } from "@/web/view/perspectiveStore";
+import { ScoreMeaning, getNumericScore, getScoreMeaning } from "@/web/topic/utils/score";
+import { useAggregationMode, usePerspectives } from "@/web/view/perspectiveStore";
 
-export const useDisplayScores = (graphPartIds: string[]): Record<string, Score> => {
+export const useDisplayScores = (
+  graphPartIds: string[],
+): { scoresByGraphPartId: Record<string, Score>; scoreMeaning: ScoreMeaning } => {
   const perspectives = usePerspectives();
+  const aggregationMode = useAggregationMode();
+  const scoreMeaning = getScoreMeaning(perspectives.length, aggregationMode);
 
   return useDiagramStore(
-    (state) => getDisplayScoresByGraphPartId(graphPartIds, perspectives, state.userScores),
+    (state) => ({
+      scoresByGraphPartId: getDisplayScoresByGraphPartId(
+        graphPartIds,
+        perspectives,
+        state.userScores,
+        aggregationMode,
+      ),
+      scoreMeaning,
+    }),
     shallow,
   );
 };
@@ -53,7 +65,7 @@ export const useSolutionTotal = (solution: Node, problem: Node) => {
   });
 
   const graphPartIds = criteriaSolutionEdges.flatMap((edge) => [edge.id, edge.source]);
-  const scores = useDisplayScores(graphPartIds);
+  const { scoresByGraphPartId: scores } = useDisplayScores(graphPartIds);
 
   return sum(
     criteriaSolutionEdges.map((edge) => {
