@@ -1,4 +1,4 @@
-import uniqBy from "lodash/uniqBy";
+import { uniqBy } from "es-toolkit";
 import { v4 as uuid } from "uuid";
 
 import { RelationName, justificationRelationNames } from "@/common/edge";

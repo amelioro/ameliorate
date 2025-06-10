@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import startCase from "lodash/startCase";
+import { startCase } from "es-toolkit";
 import { useContext } from "react";
 import { useController } from "react-hook-form";
 

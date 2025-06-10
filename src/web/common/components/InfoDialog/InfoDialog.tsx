@@ -1,7 +1,7 @@
 import { Close, Error, Info, Warning } from "@mui/icons-material";
 import { IconButton, Popper, Typography } from "@mui/material";
 import { Mask } from "@reactour/mask";
-import { startCase } from "lodash";
+import { startCase } from "es-toolkit";
 import { ReactNode, useEffect, useState } from "react";
 
 import { Anchor, InfoType, emitter } from "@/web/common/components/InfoDialog/infoEvents";

@@ -1,4 +1,4 @@
-import lowerCase from "lodash/lowerCase";
+import { lowerCase } from "es-toolkit";
 
 import { justificationRelationNames } from "@/common/edge";
 import { errorWithData } from "@/common/errorHandling";

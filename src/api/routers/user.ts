@@ -1,5 +1,4 @@
 import { TRPCError } from "@trpc/server";
-import _ from "lodash";
 
 import { isAuthenticated, isEmailVerified } from "@/api/auth";
 import { procedure, router } from "@/api/trpc";

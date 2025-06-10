@@ -1,5 +1,5 @@
-import capitalize from "lodash/capitalize";
-import startCase from "lodash/startCase";
+import { capitalize } from "es-toolkit";
+import { startCase } from "es-toolkit/compat";
 
 /**
  * Separate file for this const because Workspace and steps both need to reference it, and want to

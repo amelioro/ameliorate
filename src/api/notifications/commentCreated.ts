@@ -1,6 +1,6 @@
 import { Topic, UnsubscribeCode, User } from "@prisma/client";
+import { truncate } from "es-toolkit/compat";
 import { encode } from "he";
-import truncate from "lodash/truncate";
 
 import { Email, canSendEmails, sendAllEmails } from "@/api/email";
 import { Comment, getLinkToComment, isThreadStarterComment } from "@/common/comment";

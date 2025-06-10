@@ -1,4 +1,4 @@
-import lowerCase from "lodash/lowerCase";
+import { lowerCase } from "es-toolkit";
 import { NestedMenuItem } from "mui-nested-menu";
 
 import { getSameCategoryEdgeTypes } from "@/common/edge";

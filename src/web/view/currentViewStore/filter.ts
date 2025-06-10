@@ -1,5 +1,4 @@
-import union from "lodash/union";
-import without from "lodash/without";
+import { union, without } from "es-toolkit";
 import { shallow } from "zustand/shallow";
 
 import { InfoCategory } from "@/common/infoCategory";

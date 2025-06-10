@@ -1,7 +1,7 @@
 /* eslint-disable -- don't really care to make this file meet eslint standards, since store type is changing between each migration */
 
-import set from "lodash/set";
-import camelCase from "lodash/camelCase";
+import { set } from "es-toolkit/compat";
+import { camelCase } from "es-toolkit";
 import { v4 as uuid } from "uuid";
 import { updateTopicWithoutSyncingToApi } from "@/web/topic/topicStore/store";
 
