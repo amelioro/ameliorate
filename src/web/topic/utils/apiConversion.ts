@@ -1,6 +1,6 @@
 import { inferRouterOutputs } from "@trpc/server";
-import compact from "lodash/compact";
-import set from "lodash/set";
+import { compact } from "es-toolkit";
+import { set } from "es-toolkit/compat";
 
 import { AppRouter } from "@/api/routers/_app";
 import { Edge as ApiEdge, Edge } from "@/common/edge";

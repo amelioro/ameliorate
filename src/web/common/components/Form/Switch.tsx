@@ -1,5 +1,5 @@
 import { FormControlLabel, Switch as MuiSwitch } from "@mui/material";
-import startCase from "lodash/startCase";
+import { startCase } from "es-toolkit";
 import { ReactNode, useContext } from "react";
 import { useController } from "react-hook-form";
 

@@ -1,8 +1,5 @@
 import { type Palette } from "@mui/material";
-import { maxBy } from "lodash";
-import mean from "lodash/mean";
-import meanBy from "lodash/meanBy";
-import round from "lodash/round";
+import { maxBy, mean, meanBy, round } from "es-toolkit";
 
 import { Score } from "@/web/topic/utils/graph";
 

@@ -1,4 +1,4 @@
-import lowerCase from "lodash/lowerCase";
+import { lowerCase } from "es-toolkit";
 import { v4 as uuid } from "uuid";
 import { z } from "zod";
 

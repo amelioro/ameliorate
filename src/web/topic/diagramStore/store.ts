@@ -1,5 +1,4 @@
-import sortBy from "lodash/sortBy";
-import uniqBy from "lodash/uniqBy";
+import { sortBy, uniqBy } from "es-toolkit/compat";
 import { temporal } from "zundo";
 import { devtools, persist } from "zustand/middleware";
 import { createWithEqualityFn } from "zustand/traditional";

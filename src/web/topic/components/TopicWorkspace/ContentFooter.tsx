@@ -27,7 +27,7 @@ import {
   Switch,
   ToggleButton,
 } from "@mui/material";
-import { startCase } from "lodash";
+import { startCase } from "es-toolkit";
 import { Dispatch, ReactNode, SetStateAction, useState } from "react";
 
 import { Menu } from "@/web/common/components/Menu/Menu";

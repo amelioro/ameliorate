@@ -1,6 +1,5 @@
-import compact from "lodash/compact";
-import get from "lodash/get";
-import sum from "lodash/sum";
+import { compact, sum } from "es-toolkit";
+import { get } from "es-toolkit/compat";
 import { shallow } from "zustand/shallow";
 
 import { throwError } from "@/common/errorHandling";

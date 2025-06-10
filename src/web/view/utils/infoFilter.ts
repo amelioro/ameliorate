@@ -1,4 +1,4 @@
-import uniqBy from "lodash/uniqBy";
+import { uniqBy } from "es-toolkit";
 import { z } from "zod";
 
 import { RelationName, researchRelationNames } from "@/common/edge";

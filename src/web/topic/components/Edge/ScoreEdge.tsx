@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import lowerCase from "lodash/lowerCase";
+import { lowerCase } from "es-toolkit";
 import { EdgeLabelRenderer } from "reactflow";
 
 import { RelationName } from "@/common/edge";

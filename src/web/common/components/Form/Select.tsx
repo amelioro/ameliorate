@@ -1,5 +1,5 @@
 import { Autocomplete, TextField } from "@mui/material";
-import { startCase } from "lodash";
+import { startCase } from "es-toolkit";
 import { useContext, useMemo } from "react";
 import { useController } from "react-hook-form";
 

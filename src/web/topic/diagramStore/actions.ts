@@ -1,5 +1,5 @@
+import { set } from "es-toolkit/compat";
 import { createDraft, finishDraft } from "immer";
-import set from "lodash/set";
 
 import { RelationName, edgeSchema } from "@/common/edge";
 import { errorWithData } from "@/common/errorHandling";

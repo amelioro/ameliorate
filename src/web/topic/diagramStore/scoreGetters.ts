@@ -1,4 +1,4 @@
-import get from "lodash/get";
+import { get } from "es-toolkit/compat";
 
 import { UserScores } from "@/web/topic/diagramStore/store";
 import { Score } from "@/web/topic/utils/graph";

@@ -10,7 +10,7 @@ import {
 } from "@mui/icons-material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Dialog, IconButton, MenuItem, Tab, TextField, Tooltip, Typography } from "@mui/material";
-import { startCase } from "lodash";
+import { startCase } from "es-toolkit";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";

@@ -1,8 +1,6 @@
 import { useTheme } from "@emotion/react";
 import { type PaletteColor } from "@mui/material";
-import get from "lodash/get";
-import reduce from "lodash/reduce";
-import set from "lodash/set";
+import { get, reduce, set } from "es-toolkit/compat";
 import { Data } from "react-minimal-pie-chart/types/commonTypes";
 
 import { CustomDataEntry, PieChart } from "@/web/topic/components/Score/PieChart";

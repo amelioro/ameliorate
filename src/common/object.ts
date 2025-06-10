@@ -1,4 +1,4 @@
-import mergeWith from "lodash/mergeWith";
+import { mergeWith } from "es-toolkit/compat";
 
 export const withDefaults = <T>(value: Partial<T>, defaultValue: T): T => {
   // thanks https://stackoverflow.com/a/66247134/8409296
