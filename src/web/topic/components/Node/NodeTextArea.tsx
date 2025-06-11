@@ -60,6 +60,7 @@ const fitTextIntoElement = (element: HTMLTextAreaElement) => {
 
   let currentFontSizeRem = 1;
   element.style.fontSize = `${currentFontSizeRem}rem`; // default, don't go bigger than this
+  element.style.overflowY = "hidden"; // calcs should fit text without scrollbars
 
   // `alignContent: center` somehow, for some sets of text, results in a 1px increase in scrollHeight beyond MUI's
   // calculated height, e.g. scrollHeight might be 52px with clientHeight 51px when our font size
@@ -73,6 +74,8 @@ const fitTextIntoElement = (element: HTMLTextAreaElement) => {
     currentFontSizeRem = currentFontSizeRem - 1.0 / htmlDefaultFontSize; // try 1px smaller
     element.style.fontSize = `${currentFontSizeRem}rem`;
   }
+
+  element.style.overflowY = "unset"; // allow scrolling in case font reduction wasn't enough
 
   if (currentFontSizeRem < 1) {
     // If we adjust the font size via code, the textarea can be taller than the text in it, so this
@@ -201,11 +204,6 @@ const StyledTextareaAutosize = styled(TextareaAutosize)`
   font-size: 1rem;
   line-height: 1;
   font-family: inherit;
-
-  // We're fitting text by changing fontsize, so we shouldn't need scrollbars.
-  // If we conditionally show them, and they're currently showing, we'd need to remove them in order
-  // for the fontsize calc to check if text would fit without them (because there's more space for text without a scrollbar).
-  overflow-y: hidden;
 `;
 
 export const NodeTextArea = memo(NodeTextAreaBase);
