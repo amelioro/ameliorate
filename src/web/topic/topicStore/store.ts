@@ -4,15 +4,13 @@ import { shallow } from "zustand/shallow";
 import { createWithEqualityFn } from "zustand/traditional";
 
 import { errorWithData } from "@/common/errorHandling";
+import { PlaygroundTopic } from "@/common/topic";
 import { apiSyncer } from "@/web/topic/topicStore/apiSyncerMiddleware";
 import { isPlaygroundTopic } from "@/web/topic/utils/topic";
 import { useReadonlyMode } from "@/web/view/actionConfigStore";
 
-export interface PlaygroundTopic {
-  id: undefined; // so we can check this to see if the store topic is a playground topic
-  description: string;
-}
-
+// TODO?: maybe UserTopic can replace ApiTopic everywhere? Not certain. Right now ApiTopic
+// additionally has createdAt and updatedAt - need to check if UserTopic can have those without issue
 export type StoreTopic = ApiTopic | PlaygroundTopic;
 
 export interface TopicStoreState {

@@ -19,6 +19,8 @@ import {
   viewComment,
 } from "@/web/comment/store/commentStore";
 import { loadDraftsFromLocalStorage } from "@/web/comment/store/draftStore";
+import { setPartIdToCentralize } from "@/web/common/store/ephemeralStore";
+import { getGraphPart } from "@/web/topic/diagramStore/graphPartHooks";
 import {
   populateDiagramFromApi,
   populateDiagramFromLocalStorage,
@@ -51,30 +53,35 @@ import {
   loadQuickViewsFromDownloaded,
   loadQuickViewsFromLocalStorage,
 } from "@/web/view/quickViewStore/store";
+import { setSelected } from "@/web/view/selectedPartStore";
 
-const oldDownloadSchema1 = z.object({
-  state: z
-    .object({
-      topic: z.record(z.any()),
-    })
-    .and(z.record(z.any())),
-  version: z.number(),
-});
-
-const oldDownloadSchema2 = z.object({
-  topic: z.object({
+const oldDownloadSchema1 = z
+  .object({
     state: z
       .object({
         topic: z.record(z.any()),
       })
-      .and(z.record(z.any())), // z.record() because without it will result in optional `state`, see https://github.com/colinhacks/zod/issues/1628
+      .and(z.record(z.any())),
     version: z.number(),
-  }),
-  views: z.object({
-    state: z.record(z.any()),
-    version: z.number(),
-  }),
-});
+  })
+  .strict(); // strict because we shouldn't have additional properties (in case new properties are the main difference with new schema)
+
+const oldDownloadSchema2 = z
+  .object({
+    topic: z.object({
+      state: z
+        .object({
+          topic: z.record(z.any()),
+        })
+        .and(z.record(z.any())), // z.record() because without it will result in optional `state`, see https://github.com/colinhacks/zod/issues/1628
+      version: z.number(),
+    }),
+    views: z.object({
+      state: z.record(z.any()),
+      version: z.number(),
+    }),
+  })
+  .strict(); // strict because we shouldn't have additional properties (in this case schema 3 is only different because `diagram` is added)
 
 const downloadJsonSchema = z.preprocess(
   (val) => {
@@ -267,8 +274,18 @@ export const loadStores = async (diagramData?: TopicData) => {
     await loadDraftsFromLocalStorage(`${diagramData.creatorName}/${diagramData.title}`);
   }
 
-  // load comment from URL
+  // process URL params
   const urlParams = new URLSearchParams(window.location.search);
+
+  const selectedId = urlParams.get("selected");
+  if (selectedId) {
+    const fullPartId = getGraphPart(selectedId)?.id;
+    if (fullPartId) {
+      setSelected(fullPartId);
+      setPartIdToCentralize(fullPartId);
+    }
+  }
+
   const commentId = urlParams.get("comment");
   if (commentId) viewComment(commentId);
 };

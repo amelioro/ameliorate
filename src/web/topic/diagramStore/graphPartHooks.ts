@@ -98,12 +98,16 @@ export const useGraphPart = (graphPartId: string | null) => {
   });
 };
 
-export const getGraphPart = (graphPartId: string, storeState?: DiagramStoreState) => {
+/**
+ * @param graphPartIdBeginning can be less than the full id - we'll find it if the part's id starts with this
+ * value. We do this particularly so that a shorter id can be used in the URL to select a part.
+ */
+export const getGraphPart = (graphPartIdBeginning: string, storeState?: DiagramStoreState) => {
   const state = storeState ?? useDiagramStore.getState();
 
   return (
-    state.edges.find((edge) => edge.id === graphPartId) ??
-    state.nodes.find((node) => node.id === graphPartId) ??
+    state.edges.find((edge) => edge.id.startsWith(graphPartIdBeginning)) ??
+    state.nodes.find((node) => node.id.startsWith(graphPartIdBeginning)) ??
     null
   );
 };

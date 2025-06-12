@@ -31,10 +31,22 @@ export const topicSchema = z.object({
   allowAnyoneToEdit: z.boolean(),
 });
 
-export type Topic = z.infer<typeof topicSchema>;
+export type UserTopic = z.infer<typeof topicSchema>;
 
-export const getLinkToTopic = (topic: Topic) => {
-  const sourceUrl = new URL(`/${topic.creatorName}/${topic.title}`, getBaseUrl());
+export interface PlaygroundTopic {
+  id: undefined; // so we can check to see if the topic is a playground topic
+  description: string;
+}
 
-  return sourceUrl.href;
+/**
+ * @param topic can be a playground topic so that we can get URLs on the playground if we want to... not super useful but could be convenient at times
+ */
+export const getLinkToTopic = (topic: PlaygroundTopic | UserTopic) => {
+  const baseUrl = getBaseUrl();
+
+  if (topic.id === undefined) {
+    return new URL("/playground", baseUrl).href;
+  } else {
+    return new URL(`/${topic.creatorName}/${topic.title}`, baseUrl).href;
+  }
 };

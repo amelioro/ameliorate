@@ -1,7 +1,10 @@
 import { isEqual } from "es-toolkit";
 
-export const getBaseUrl = () => {
-  if (typeof window !== "undefined")
+/**
+ * @param allowRelative motivated by trpc example which uses relative paths in the browser https://trpc.io/docs/client/nextjs/setup#4-create-trpc-hooks
+ */
+export const getBaseUrl = (allowRelative = false) => {
+  if (allowRelative && typeof window !== "undefined")
     // browser should use relative path
     return "";
 

@@ -5,14 +5,14 @@ import { type MRT_ColumnDef, MaterialReactTable } from "material-react-table";
 import Head from "next/head";
 
 import { InAppNotification } from "@/common/inAppNotification";
-import { Topic } from "@/common/topic";
+import { UserTopic } from "@/common/topic";
 import { QueryError } from "@/web/common/components/Error/Error";
 import { Link } from "@/web/common/components/Link";
 import { Loading } from "@/web/common/components/Loading/Loading";
 import { useSessionUser } from "@/web/common/hooks";
 import { trpc } from "@/web/common/trpc";
 
-type RowData = InAppNotification & { topic: Topic | null };
+type RowData = InAppNotification & { topic: UserTopic | null };
 
 export default withPageAuthRequired(({ user }) => {
   const utils = trpc.useContext();

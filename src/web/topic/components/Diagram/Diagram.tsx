@@ -7,6 +7,7 @@ import {
   type NodeProps as DefaultNodeProps,
   OnEdgeUpdateFunc,
   ReactFlowProvider,
+  useReactFlow,
   useStore,
 } from "reactflow";
 
@@ -14,6 +15,7 @@ import { Loading } from "@/web/common/components/Loading/Loading";
 import { emitter } from "@/web/common/event";
 import { useSessionUser } from "@/web/common/hooks";
 import { openContextMenu } from "@/web/common/store/contextMenuActions";
+import { clearPartIdToCentralize, usePartIdToCentralize } from "@/web/common/store/ephemeralStore";
 import { StyledReactFlow } from "@/web/topic/components/Diagram/Diagram.styles";
 import { setDisplayNodesGetter } from "@/web/topic/components/Diagram/externalFlowStore";
 import { FlowEdge } from "@/web/topic/components/Edge/FlowEdge";
@@ -92,10 +94,12 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const { fitViewForNodes, moveViewportToIncludeNode, pan, zoomIn, zoomOut } = useViewportUpdater();
+  const { viewportInitialized } = useReactFlow();
   const { layoutedDiagram, hasNewLayout, setHasNewLayout } = useLayoutedDiagram(diagram);
   const getNodes = useStore((state) => state.getNodes);
 
   const flashlightMode = useFlashlightMode();
+  const partIdToCentralize = usePartIdToCentralize();
 
   useHotkeys(hotkeys.zoomIn, (e) => {
     e.preventDefault(); // don't use browser's zoom
@@ -130,6 +134,21 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
   useEffect(() => {
     setDisplayNodesGetter(getNodes);
   }, [getNodes]);
+
+  // centralize part via `useEffect` because `viewBasics` event can directly cause `TopicPane` re-render, which throws a React error if it happens during the `Diagram` render
+  useEffect(() => {
+    if (!partIdToCentralize || !layoutedDiagram || !viewportInitialized) return;
+
+    const nodeToCentralize = layoutedDiagram.nodes.find((node) => node.id === partIdToCentralize);
+    const edgeToCentralize = layoutedDiagram.edges.find((edge) => edge.id === partIdToCentralize);
+    const partIsDisplayed = nodeToCentralize ?? edgeToCentralize;
+
+    // apparently timeout is needed to actually move the viewport? not sure why, since we know viewport is already initialized
+    if (nodeToCentralize) setTimeout(() => fitViewForNodes([nodeToCentralize], true), 0);
+    else if (!partIsDisplayed) emitter.emit("viewBasics");
+
+    clearPartIdToCentralize();
+  }, [fitViewForNodes, layoutedDiagram, partIdToCentralize, viewportInitialized]);
 
   if (!layoutedDiagram) return <Loading />;
 

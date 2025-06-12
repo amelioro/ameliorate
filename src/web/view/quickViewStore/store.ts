@@ -372,6 +372,15 @@ export const getQuickViewByTitle = (title: string) => {
   return views.find((view) => view.title === title);
 };
 
+export const getSelectedViewTitle = () => {
+  const state = useQuickViewStore.getState();
+
+  const selectedView = state.views.find((view) => view.id === state.selectedViewId);
+  if (!selectedView) return null;
+
+  return selectedView.title;
+};
+
 export const getDefaultQuickView = () => {
   const { views } = useQuickViewStore.getState();
   const orderedViews = views.toSorted((view1, view2) => view1.order - view2.order);

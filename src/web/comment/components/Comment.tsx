@@ -3,7 +3,10 @@ import { Check, MoreHoriz, Notifications, NotificationsOff, RemoveDone } from "@
 import { Button, IconButton, MenuItem } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 
-import { isThreadStarterComment as checkIsThreadStarterComment } from "@/common/comment";
+import {
+  isThreadStarterComment as checkIsThreadStarterComment,
+  getLinkToComment,
+} from "@/common/comment";
 import { Draft } from "@/web/comment/components/Draft";
 import { StoreComment, deleteComment, resolveComment } from "@/web/comment/store/commentStore";
 import { deleteDraft, useDraft } from "@/web/comment/store/draftStore";
@@ -11,16 +14,7 @@ import { Menu } from "@/web/common/components/Menu/Menu";
 import { ProfileIcon } from "@/web/common/components/ProfileIcon/ProfileIcon";
 import { useSessionUser } from "@/web/common/hooks";
 import { trpc } from "@/web/common/trpc";
-import { useOnPlayground, useUserCanEditTopicData } from "@/web/topic/topicStore/store";
-
-const getLinkToComment = (comment: StoreComment) => {
-  const { origin, pathname } = window.location;
-
-  const url = new URL(pathname, origin); // assumes we're copying the comment from its topic page
-  url.searchParams.set("comment", comment.id);
-
-  return url.href;
-};
+import { getTopic, useOnPlayground, useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 
 interface Props {
   comment: StoreComment;
@@ -144,7 +138,11 @@ export const Comment = ({ comment }: Props) => {
             {userCanDeleteComment && (
               <MenuItem onClick={() => setShowConfirmDelete(true)}>Delete</MenuItem>
             )}
-            <MenuItem onClick={() => void navigator.clipboard.writeText(getLinkToComment(comment))}>
+            <MenuItem
+              onClick={() =>
+                void navigator.clipboard.writeText(getLinkToComment(comment.id, getTopic()))
+              }
+            >
               Copy link to comment
             </MenuItem>
           </Menu>
