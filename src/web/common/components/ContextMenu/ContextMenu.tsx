@@ -5,6 +5,7 @@ import { AlsoShowNodeAndNeighborsMenuItem } from "@/web/common/components/Contex
 import { ChangeEdgeTypeMenuItem } from "@/web/common/components/ContextMenu/ChangeEdgeTypeMenuItem";
 import { ChangeNodeTypeMenuItem } from "@/web/common/components/ContextMenu/ChangeNodeTypeMenuItem";
 import { ContextMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
+import { CopyLinkToPartMenuItem } from "@/web/common/components/ContextMenu/CopyLinkToPart";
 import { DeleteEdgeMenuItem } from "@/web/common/components/ContextMenu/DeleteEdgeMenuItem";
 import { DeleteNodeMenuItem } from "@/web/common/components/ContextMenu/DeleteNodeMenuItem";
 import { HideMenuItem } from "@/web/common/components/ContextMenu/HideMenuItem";
@@ -45,6 +46,9 @@ export const ContextMenu = () => {
     contextNode && <AlsoShowNodeAndNeighborsMenuItem node={contextNode} key={11} />,
     contextNode && <OnlyShowNodeAndNeighborsMenuItem node={contextNode} key={12} />,
     contextNode && <HideMenuItem node={contextNode} key={13} />,
+
+    // misc? actions
+    contextPart && <CopyLinkToPartMenuItem graphPart={contextPart} key={14} />,
 
     // ensure there's never an empty context menu; that shows an empty bubble and feels awkward
     <ContextMenuItem key={10}>Cancel</ContextMenuItem>,
