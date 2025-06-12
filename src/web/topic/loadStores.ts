@@ -19,6 +19,8 @@ import {
   viewComment,
 } from "@/web/comment/store/commentStore";
 import { loadDraftsFromLocalStorage } from "@/web/comment/store/draftStore";
+import { setPartIdToCentralize } from "@/web/common/store/ephemeralStore";
+import { getGraphPart } from "@/web/topic/diagramStore/graphPartHooks";
 import {
   populateDiagramFromApi,
   populateDiagramFromLocalStorage,
@@ -51,6 +53,7 @@ import {
   loadQuickViewsFromDownloaded,
   loadQuickViewsFromLocalStorage,
 } from "@/web/view/quickViewStore/store";
+import { setSelected } from "@/web/view/selectedPartStore";
 
 const oldDownloadSchema1 = z
   .object({
@@ -271,8 +274,18 @@ export const loadStores = async (diagramData?: TopicData) => {
     await loadDraftsFromLocalStorage(`${diagramData.creatorName}/${diagramData.title}`);
   }
 
-  // load comment from URL
+  // process URL params
   const urlParams = new URLSearchParams(window.location.search);
+
+  const selectedId = urlParams.get("selected");
+  if (selectedId) {
+    const fullPartId = getGraphPart(selectedId)?.id;
+    if (fullPartId) {
+      setSelected(fullPartId);
+      setPartIdToCentralize(fullPartId);
+    }
+  }
+
   const commentId = urlParams.get("comment");
   if (commentId) viewComment(commentId);
 };

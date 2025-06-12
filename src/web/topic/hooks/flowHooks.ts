@@ -71,7 +71,7 @@ export const useViewportUpdater = () => {
    * the flow; we want to be able to invoke this after a store action, which means we may not have
    * re-rendered the flow yet.
    */
-  const fitViewForNodes = (nodes: PositionedNode[]) => {
+  const fitViewForNodes = (nodes: PositionedNode[], smoothTransition = false) => {
     // roughly figured the code here by referencing the fitView implementation https://github.com/wbkd/react-flow/blob/9dba3c5e7fb0d7edb6a3015bf65282f7030ca929/packages/core/src/store/utils.ts#L128
     const rect = getRectOfNodes(nodes);
     const adjustedRect = {
@@ -92,7 +92,7 @@ export const useViewportUpdater = () => {
     );
 
     const viewport = { x: transform[0], y: transform[1], zoom: transform[2] };
-    setViewport(viewport);
+    setViewport(viewport, smoothTransition ? { duration: 500 } : undefined);
   };
 
   const moveViewportToIncludeNode = (node: PositionedNode) => {
