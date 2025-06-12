@@ -40,6 +40,7 @@ export const Draft = ({
     deleteDraft(parentId, parentType, commentId);
     // eslint-disable-next-line functional/immutable-data
     if (inputRef.current) inputRef.current.value = "";
+    setDraftHasText(false);
     setShowActionButtons(false);
     if (onDone) onDone();
   };
