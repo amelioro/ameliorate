@@ -2,9 +2,8 @@ import { z } from "zod";
 
 import { Edge } from "@/common/edge";
 import { Node } from "@/common/node";
-import { Topic, topicSchema } from "@/common/topic";
+import { PlaygroundTopic, UserTopic, getLinkToTopic, topicSchema } from "@/common/topic";
 import { userSchema } from "@/common/user";
-import { getBaseUrl } from "@/common/utils";
 
 export const commentParentTypes = ["topic", "node", "edge", "comment"] as const;
 export const zCommentParentTypes = z.enum(commentParentTypes);
@@ -58,11 +57,13 @@ export const userCanDeleteComment = (
   return deletingAsResultOfPermittedThreadDeletion;
 };
 
-export const getLinkToComment = (comment: Comment, commentTopic: Topic) => {
-  // duplicate of getLinkToTopic because we want to add the comment param before returning the `href`
-  const sourceUrl = new URL(`/${commentTopic.creatorName}/${commentTopic.title}`, getBaseUrl());
+/**
+ * @param commentTopic can be a playground topic so that we can get URLs on the playground if we want to... not super useful but could be convenient at times
+ */
+export const getLinkToComment = (commentId: string, commentTopic: PlaygroundTopic | UserTopic) => {
+  const sourceUrl = new URL(getLinkToTopic(commentTopic));
 
-  sourceUrl.searchParams.set("comment", comment.id);
+  sourceUrl.searchParams.set("comment", commentId);
 
   return sourceUrl.href;
 };

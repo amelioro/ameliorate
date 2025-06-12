@@ -63,7 +63,7 @@ const createInAppNotifications = async (
         commentId: comment.id,
       },
       message,
-      sourceUrl: getLinkToComment(comment, commentTopic),
+      sourceUrl: getLinkToComment(comment.id, commentTopic),
     };
     return notification;
   });
@@ -182,7 +182,7 @@ const buildEmails = (
   commentTopic: Topic,
   usersToEmail: UserWithUnsubscribeCodes[],
 ): Email[] => {
-  const linkToComment = getLinkToComment(comment, commentTopic);
+  const linkToComment = getLinkToComment(comment.id, commentTopic);
 
   return usersToEmail.map((user) => {
     const linkToUnsubscribeThread = `${getBaseUrl()}/unsubscribe/${user.unsubscribeThreadCode.code}`;
