@@ -74,19 +74,28 @@ const Home: NextPage = () => {
           </div>
         </section>
 
-        <section className="flex justify-center odd:bg-paperPlain-main even:bg-paperShaded-main">
+        <section
+          id="use-cases"
+          className="flex justify-center odd:bg-paperPlain-main even:bg-paperShaded-main"
+        >
           <div className="w-full max-w-6xl px-4 py-8 sm:p-8">
             <UseCasesSection />
           </div>
         </section>
 
-        <section className="flex justify-center odd:bg-paperPlain-main even:bg-paperShaded-main">
+        <section
+          id="improving"
+          className="flex justify-center odd:bg-paperPlain-main even:bg-paperShaded-main"
+        >
           <div className="w-full max-w-6xl px-4 py-8 sm:p-8">
             <ImprovingSection />
           </div>
         </section>
 
-        <section className="flex justify-center odd:bg-paperPlain-main even:bg-paperShaded-main">
+        <section
+          id="concluding"
+          className="flex justify-center odd:bg-paperPlain-main even:bg-paperShaded-main"
+        >
           <div className="w-full max-w-6xl px-4 py-8 sm:p-8">
             <ConcludingSection />
           </div>
