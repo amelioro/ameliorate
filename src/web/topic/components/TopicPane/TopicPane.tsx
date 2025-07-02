@@ -1,10 +1,4 @@
-import {
-  ArrowBack,
-  ArrowForward,
-  AutoStories,
-  ChevronLeft,
-  ChevronRight,
-} from "@mui/icons-material";
+import { ArrowBack, ArrowForward, VerticalSplit } from "@mui/icons-material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { IconButton, Modal, Tab } from "@mui/material";
 import { memo, useEffect, useState } from "react";
@@ -165,14 +159,16 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
   return anchor !== "modal" ? (
     <div className="relative">
       <IconButton
-        onClick={handlePaneToggle}
         color="primary"
+        title="View Topic Pane"
+        aria-label="View Topic Pane"
+        onClick={handlePaneToggle}
         className={
           "absolute z-10" +
           (anchor === "left" ? " right-0 translate-x-full" : " left-0 -translate-x-full")
         }
       >
-        {isOpen ? anchor === "left" ? <ChevronLeft /> : <ChevronRight /> : <AutoStories />}
+        <VerticalSplit />
       </IconButton>
       <StyledDrawer
         variant="permanent"
@@ -188,11 +184,13 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
   ) : (
     <div className="absolute inset-0">
       <IconButton
-        onClick={handlePaneToggle}
         color="primary"
+        title="View Topic Pane"
+        aria-label="View Topic Pane"
+        onClick={handlePaneToggle}
         className={"absolute bottom-0 right-0 z-10"}
       >
-        <AutoStories />
+        <VerticalSplit />
       </IconButton>
       <Modal
         open={isOpen}

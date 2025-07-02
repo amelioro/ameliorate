@@ -1,4 +1,4 @@
-import { AutoStories, TabUnselected } from "@mui/icons-material";
+import { TabUnselected, VerticalSplit } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import { StepType } from "@reactour/tour";
 import Image from "next/image";
@@ -77,7 +77,7 @@ export const addingNuanceSteps: StepType[] = [
           <span>
             You can add <NodeTypeText type="support" /> or <NodeTypeText type="critique" /> nodes to
             justify positive or negative opinions. Details like these can be found in the Details
-            Pane <AutoStories color="primary" /> after selecting a node or edge.
+            Pane <VerticalSplit color="primary" /> after selecting a node or edge.
             <br />
             <br />
             Here we're supporting that "pedestrians might get hit" is concerning because it reduces

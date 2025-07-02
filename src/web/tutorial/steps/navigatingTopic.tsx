@@ -1,4 +1,4 @@
-import { AutoStories, Build, Group } from "@mui/icons-material";
+import { Build, Group, VerticalSplit } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import { StepType } from "@reactour/tour";
 import Image from "next/image";
@@ -57,7 +57,7 @@ export const navigatingTopicSteps: StepType[] = [
             <br />
             <br />
             Details can be found by selecting the piece and looking at the Details Pane{" "}
-            <AutoStories color="primary" />.
+            <VerticalSplit color="primary" />.
           </span>
         }
         imageSlot={
