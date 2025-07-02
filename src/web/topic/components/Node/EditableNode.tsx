@@ -1,6 +1,7 @@
 import { type ButtonProps, type SxProps, useTheme } from "@mui/material";
 import { memo, useContext } from "react";
 
+import { isDefaultCoreNodeType } from "@/common/node";
 import { useSessionUser } from "@/web/common/hooks";
 import { openContextMenu } from "@/web/common/store/contextMenuActions";
 import { CommonIndicatorGroup } from "@/web/topic/components/Indicator/Base/CommonIndicatorGroup";
@@ -56,10 +57,12 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
       ? {
           backgroundColor: color,
           borderColor: "black",
+          outlineColor: "black",
         }
       : {
           backgroundColor: "white",
           borderColor: color,
+          outlineColor: color,
 
           [NodeTypeDiv.toString()]: {
             backgroundColor: color,
@@ -87,7 +90,8 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
         // allow other components to apply conditional css related to this node, e.g. when it's hovered/selected
         // separate from react-flow__node because sometimes nodes are rendered outside of react-flow (e.g. details pane), and we still want to style these
         " diagram-node" +
-        (selected ? " selected" : "")
+        (selected ? " selected" : "") +
+        (isDefaultCoreNodeType(node.type) ? " outline" : "")
       }
       onClick={() => setSelected(node.id)}
       onContextMenu={(event) => openContextMenu(event, { node })}
