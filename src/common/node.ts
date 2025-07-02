@@ -107,3 +107,7 @@ export const getSameCategoryNodeTypes = (nodeType: NodeType): NodeType[] => {
 export const areSameCategoryNodes = (node1Type: NodeType, node2Type: NodeType): boolean => {
   return getSameCategoryNodeTypes(node1Type).includes(node2Type);
 };
+
+export const isDefaultCoreNodeType = (nodeType: NodeType): boolean => {
+  return nodeType === "problem" || nodeType === "solution";
+};

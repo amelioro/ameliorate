@@ -59,7 +59,7 @@ export interface ViewState {
   avoidEdgeLabelOverlap: boolean;
   layoutThoroughness: number;
 
-  //table config
+  // table
   transposed: boolean;
 }
 

@@ -26,6 +26,7 @@ export const StyledEditableNode = styled(EditableNode)`
     return css`
       &.spotlight-secondary {
         border-color: ${theme.palette.info.main};
+        outline-color: ${theme.palette.info.main};
         z-index: ${zIndex.secondary};
       }
     `;

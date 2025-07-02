@@ -36,6 +36,10 @@ export const NodeBox = styled(Box)`
   border-width: 2px;
   border-style: solid;
 
+  // for core nodes
+  outline-offset: 4px;
+  outline-width: 2px;
+
   // avoid inheriting because flow node will wrap in a motion.div that ignores pointer events
   pointer-events: auto;
 
@@ -46,6 +50,7 @@ export const NodeBox = styled(Box)`
   // TODO: make this work for table nodes as well; need to manage node.selected within EditableNode instead of letting reactflow handle it
   &.selected {
     border-color: black;
+    outline-color: black;
     box-shadow: 0 0 0 1px black;
   }
 `;
