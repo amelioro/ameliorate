@@ -1,4 +1,4 @@
-import { QuickViewSelect } from "@/web/topic/components/TopicWorkspace/QuickViewSelect";
+import { ViewToolbar } from "@/web/topic/components/TopicWorkspace/ViewToolbar";
 
 interface Props {
   /**
@@ -12,13 +12,6 @@ interface Props {
 
 export const ContentHeader = ({ overlay }: Props) => {
   return (
-    <div
-      className={
-        "hidden max-w-[calc(min(20rem,100%))] self-center p-2 *:bg-paperShaded-main lg:flex" +
-        (overlay ? " absolute z-10" : "")
-      }
-    >
-      <QuickViewSelect />
-    </div>
+    <ViewToolbar className={"hidden self-center lg:flex" + (overlay ? " absolute z-10" : "")} />
   );
 };

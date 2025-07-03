@@ -35,7 +35,7 @@ import { NestedMenuItem } from "@/web/common/components/Menu/NestedMenuItem";
 import { useSessionUser } from "@/web/common/hooks";
 import { HelpMenu } from "@/web/topic/components/TopicWorkspace/HelpMenu";
 import { MoreActionsDrawer } from "@/web/topic/components/TopicWorkspace/MoreActionsDrawer";
-import { QuickViewSelect } from "@/web/topic/components/TopicWorkspace/QuickViewSelect";
+import { ViewToolbar } from "@/web/topic/components/TopicWorkspace/ViewToolbar";
 import { deleteGraphPart } from "@/web/topic/diagramStore/createDeleteActions";
 import { useIsTableEdge } from "@/web/topic/diagramStore/edgeHooks";
 import { useTopic, useUserCanEditTopicData } from "@/web/topic/topicStore/store";
@@ -241,16 +241,10 @@ export const ContentFooter = ({ overlay }: Props) => {
         (overlay ? "" : " bg-paperShaded-main border-t lg:border-none")
       }
     >
-      {/* show quick view select in footer when screens are small and people are tapping with their finger, since it's easier to reach then - otherwise put in header */}
-      <div
-        className={
-          // max-w to keep children from being wide, but also prevent from being wider than screen (e.g. small 320px screen is scrunched without padding on 20rem)
-          "lg:hidden max-w-[calc(min(20rem,100%))] p-1.5 *:bg-paperShaded-main flex" +
-          (overlay ? " absolute z-10 -translate-y-full" : "")
-        }
-      >
-        <QuickViewSelect />
-      </div>
+      {/* show view toolbar in footer when screens are small and people are tapping with their finger, since it's easier to reach then - otherwise put in header */}
+      <ViewToolbar
+        className={"lg:hidden flex" + (overlay ? " absolute z-10 -translate-y-full" : "")}
+      />
 
       {/* Toolbar */}
       {/* Toolbar buttons have square-rounding to fit more snuggly into the toolbar; potentially could make */}
