@@ -88,7 +88,10 @@ export const Score = ({ graphPartId }: ScoreProps) => {
     <>
       <ScoreButton
         buttonRef={mainButtonRef}
-        onClick={() => setSelected(true)}
+        onClick={(event) => {
+          event.stopPropagation(); // don't select the graph part when clicking
+          setSelected(true);
+        }}
         // delay hover so that the score pie doesn't get in the way when you're not intending to score
         // 100 ms matches the default for MUI tooltips https://mui.com/material-ui/api/tooltip/#Tooltip-prop-enterDelay
         onMouseEnter={() => setHoverDelayHandler(setTimeout(() => setHovering(true), 100))}

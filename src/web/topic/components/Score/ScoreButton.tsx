@@ -1,5 +1,5 @@
 import { type ButtonProps } from "@mui/material";
-import { MutableRefObject } from "react";
+import { MouseEventHandler, MutableRefObject } from "react";
 
 import { StyledButton } from "@/web/topic/components/Score/ScoreButton.styles";
 import { ScoreCompare } from "@/web/topic/components/Score/ScoreCompare";
@@ -16,7 +16,7 @@ export const buttonDiameterRem = indicatorLengthRem; //rem
 
 interface ScoreButtonProps {
   buttonRef?: MutableRefObject<HTMLButtonElement | null>;
-  onClick?: () => void;
+  onClick?: MouseEventHandler;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
   zoomRatio?: number;
