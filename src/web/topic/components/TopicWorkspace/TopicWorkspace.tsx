@@ -12,11 +12,11 @@ import { CriteriaTable } from "@/web/topic/components/CriteriaTable/CriteriaTabl
 import { Diagram } from "@/web/topic/components/Diagram/Diagram";
 import { TopicPane } from "@/web/topic/components/TopicPane/TopicPane";
 import { AppHeader } from "@/web/topic/components/TopicWorkspace/AppHeader";
-import { ContentFooter } from "@/web/topic/components/TopicWorkspace/ContentFooter";
-import { ContentHeader } from "@/web/topic/components/TopicWorkspace/ContentHeader";
+import { MainToolbar } from "@/web/topic/components/TopicWorkspace/MainToolbar";
 import { TourSetter } from "@/web/topic/components/TopicWorkspace/TourSetter";
 import { TutorialAnchor } from "@/web/topic/components/TopicWorkspace/TutorialAnchor";
 import { TutorialController } from "@/web/topic/components/TopicWorkspace/TutorialController";
+import { ViewToolbar } from "@/web/topic/components/TopicWorkspace/ViewToolbar";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { setScore } from "@/web/topic/diagramStore/actions";
 import { playgroundUsername } from "@/web/topic/diagramStore/store";
@@ -93,7 +93,9 @@ export const TopicWorkspace = () => {
         </WorkspaceContext.Provider>
 
         <ContentDiv className="relative flex h-full flex-1 flex-col overflow-auto">
-          {!zenMode && <ContentHeader overlay={format === "diagram"} />}
+          {!zenMode && usingLgScreen && (
+            <ViewToolbar overlay={format === "diagram"} position="top" />
+          )}
           {zenMode && <ZenModeButton />}
 
           {format === "table" && (
@@ -108,7 +110,10 @@ export const TopicWorkspace = () => {
             </WorkspaceContext.Provider>
           )}
 
-          {!zenMode && <ContentFooter overlay={format === "diagram"} />}
+          {!zenMode && !usingLgScreen && (
+            <ViewToolbar overlay={format === "diagram"} position="bottom" />
+          )}
+          {!zenMode && <MainToolbar />}
         </ContentDiv>
 
         {useSplitPanes && (
