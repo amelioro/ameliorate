@@ -29,7 +29,7 @@ import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { getConnectingEdge } from "@/web/topic/utils/edge";
 import { Edge, Node } from "@/web/topic/utils/graph";
 import { useGeneralFilter, useTableFilter } from "@/web/view/currentViewStore/filter";
-import { setTransposed, useTransposed } from "@/web/view/currentViewStore/store";
+import { setTransposed, useTransposed } from "@/web/view/currentViewStore/table";
 import { applyScoreFilter } from "@/web/view/utils/generalFilter";
 import { getSelectedTradeoffNodes } from "@/web/view/utils/infoFilter";
 

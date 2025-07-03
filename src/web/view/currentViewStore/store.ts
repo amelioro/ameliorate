@@ -137,10 +137,6 @@ export const useCanGoBackForward = () => {
   return [canGoBack, canGoForward];
 };
 
-export const useTransposed = () => {
-  return useCurrentViewStore((state) => state.transposed);
-};
-
 // actions
 export const setFormat = (format: Format) => {
   useCurrentViewStore.setState({ format }, false, "setFormat");
@@ -210,10 +206,6 @@ export const loadView = async (persistId: string) => {
 // util actions
 export const getView = () => {
   return useCurrentViewStore.getState();
-};
-
-export const setTransposed = (value: boolean) => {
-  useCurrentViewStore.setState({ transposed: value }, false, "setUseSolutionsForColumns");
 };
 
 // misc
