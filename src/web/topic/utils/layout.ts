@@ -1,7 +1,7 @@
 import ELK, { ElkEdgeSection, ElkLabel, ElkNode, LayoutOptions } from "elkjs";
 
 import { throwError } from "@/common/errorHandling";
-import { NodeType, nodeTypes } from "@/common/node";
+import { NodeType, compareNodesByType } from "@/common/node";
 import { scalePxViaDefaultFontSize } from "@/pages/_document.page";
 import { nodeHeightPx, nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
 import { Diagram } from "@/web/topic/utils/diagram";
@@ -20,16 +20,7 @@ export const orientation: Orientation = "DOWN" as Orientation; // not constant t
  */
 export const labelWidthPx = 115;
 
-const priorities = Object.fromEntries(nodeTypes.map((type, index) => [type, index.toString()])) as {
-  [type in NodeType]: string;
-};
-
 const elk = new ELK();
-
-// sort nodes by type
-const compareNodes = (node1: Node, node2: Node) => {
-  return Number(priorities[node1.type]) - Number(priorities[node2.type]);
-};
 
 // sort by source priority, then target priority
 const compareEdges = (edge1: Edge, edge2: Edge, nodes: Node[]) => {
@@ -41,10 +32,10 @@ const compareEdges = (edge1: Edge, edge2: Edge, nodes: Node[]) => {
   if (!source1 || !source2 || !target1 || !target2)
     throw new Error("Edge source or target not found");
 
-  const sourceCompare = Number(priorities[source1.type]) - Number(priorities[source2.type]);
+  const sourceCompare = compareNodesByType(source1, source2);
   if (sourceCompare !== 0) return sourceCompare;
 
-  return Number(priorities[target1.type]) - Number(priorities[target2.type]);
+  return compareNodesByType(target1, target2);
 };
 
 /**
@@ -250,7 +241,7 @@ export const layout = async (
   const graph: ElkNode = {
     id: "elkgraph",
     children: [...nodes]
-      .toSorted((node1, node2) => compareNodes(node1, node2))
+      .toSorted((node1, node2) => compareNodesByType(node1, node2))
       .map((node) => {
         return {
           id: node.id,
