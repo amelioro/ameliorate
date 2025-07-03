@@ -8,6 +8,7 @@ import { ContextMenu } from "@/web/common/components/ContextMenu/ContextMenu";
 import { InfoDialog } from "@/web/common/components/InfoDialog/InfoDialog";
 import { SiteBanner } from "@/web/common/components/SiteBanner/SiteBanner";
 import { useSessionUser } from "@/web/common/hooks";
+import { Summary } from "@/web/summary/components/Summary";
 import { CriteriaTable } from "@/web/topic/components/CriteriaTable/CriteriaTable";
 import { Diagram } from "@/web/topic/components/Diagram/Diagram";
 import { TopicPane } from "@/web/topic/components/TopicPane/TopicPane";
@@ -107,6 +108,12 @@ export const TopicWorkspace = () => {
           {format === "diagram" && (
             <WorkspaceContext.Provider value="diagram">
               <Diagram />
+            </WorkspaceContext.Provider>
+          )}
+
+          {format === "summary" && (
+            <WorkspaceContext.Provider value="summary">
+              <Summary />
             </WorkspaceContext.Provider>
           )}
 

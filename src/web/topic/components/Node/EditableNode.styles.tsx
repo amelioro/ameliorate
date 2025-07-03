@@ -7,6 +7,7 @@ import { StatusIndicatorGroup } from "@/web/topic/components/Indicator/Base/Stat
 
 export const nodeWidthRem = 11;
 const nodeHeightRem = 3.5625; // 1 line of text results in 57px height, / 16px = 3.5625rem
+export const maxNodeHeightRem = 5.5625; // 3 lines of text results in 89px height, / 16px = 5.5625rem
 
 export const nodeWidthPx = nodeWidthRem * htmlDefaultFontSize;
 export const nodeHeightPx = nodeHeightRem * htmlDefaultFontSize;

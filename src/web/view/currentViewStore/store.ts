@@ -7,6 +7,7 @@ import { createWithEqualityFn } from "zustand/traditional";
 import { Format, InfoCategory } from "@/common/infoCategory";
 import { withDefaults } from "@/common/object";
 import { emitter } from "@/web/common/event";
+import { Category } from "@/web/summary/summary";
 import { migrate } from "@/web/view/currentViewStore/migrate";
 import { triggerEvent } from "@/web/view/currentViewStore/triggerEventMiddleware";
 import {
@@ -61,6 +62,10 @@ export interface ViewState {
 
   // table
   transposed: boolean;
+
+  // summary
+  summaryNodeId: string | null;
+  selectedSummaryTab: Category;
 }
 
 export const initialViewState: ViewState = {
@@ -96,6 +101,9 @@ export const initialViewState: ViewState = {
   layoutThoroughness: 100, // by default, prefer keeping parents close to children over keeping node types together
 
   transposed: true,
+
+  summaryNodeId: null,
+  selectedSummaryTab: "coreNodes",
 };
 
 const persistedNameBase = "navigateStore";
