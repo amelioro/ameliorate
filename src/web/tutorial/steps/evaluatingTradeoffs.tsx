@@ -1,4 +1,4 @@
-import { AutoStories } from "@mui/icons-material";
+import { VerticalSplit } from "@mui/icons-material";
 import { Button, Typography } from "@mui/material";
 import { StepType } from "@reactour/tour";
 import Image from "next/image";
@@ -22,7 +22,7 @@ export const getEvaluatingTradeoffsSteps = (track: Track | null): StepType[] => 
             <br />
             <br />
             If you need to return to the diagram, you can change the format back to "Diagram" under
-            VIEWS {">"} Format in the Topic pane <AutoStories color="primary" />.
+            VIEWS {">"} Format in the Topic Pane <VerticalSplit color="primary" />.
           </span>
         }
         imageSlot={

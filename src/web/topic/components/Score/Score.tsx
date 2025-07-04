@@ -2,7 +2,6 @@ import { useContext, useRef, useState } from "react";
 
 import { htmlDefaultFontSize } from "@/pages/_document.page";
 import { useSessionUser } from "@/web/common/hooks";
-import { tableZoomClasses } from "@/web/topic/components/CriteriaTable/tableZoom";
 import { BackdropPopper, CircleDiv, ScorePopper } from "@/web/topic/components/Score/Score.styles";
 import { ScoreButton, buttonDiameterRem } from "@/web/topic/components/Score/ScoreButton";
 import { ScoreCompare } from "@/web/topic/components/Score/ScoreCompare";
@@ -49,7 +48,7 @@ export const Score = ({ graphPartId }: ScoreProps) => {
 
   // Not reactive, but zoom is currently only used when hovering/selected change, which triggers a
   // re-render, so we'll still get an updated zoom value.
-  const zoomRatio = useFlowZoom();
+  const zoomRatio = useFlowZoom(); // TODO?: create a "zoomContext" so that criteria table and summary can also affect score pie's zoom
 
   const buttonDiameterPx =
     mainButtonRef.current?.clientHeight ?? buttonDiameterRem * htmlDefaultFontSize;
@@ -89,7 +88,10 @@ export const Score = ({ graphPartId }: ScoreProps) => {
     <>
       <ScoreButton
         buttonRef={mainButtonRef}
-        onClick={() => setSelected(true)}
+        onClick={(event) => {
+          event.stopPropagation(); // don't select the graph part when clicking
+          setSelected(true);
+        }}
         // delay hover so that the score pie doesn't get in the way when you're not intending to score
         // 100 ms matches the default for MUI tooltips https://mui.com/material-ui/api/tooltip/#Tooltip-prop-enterDelay
         onMouseEnter={() => setHoverDelayHandler(setTimeout(() => setHovering(true), 100))}
@@ -141,7 +143,6 @@ export const Score = ({ graphPartId }: ScoreProps) => {
             },
           },
         ]}
-        className={workspaceContext === "table" ? tableZoomClasses : ""}
       >
         <CircleDiv circleDiameter={circleDiameter * zoomRatio}>{hoverCircle}</CircleDiv>
 

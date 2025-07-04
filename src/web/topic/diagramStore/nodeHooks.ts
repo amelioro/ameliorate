@@ -1,7 +1,7 @@
 import { shallow } from "zustand/shallow";
 
 import { errorWithData } from "@/common/errorHandling";
-import { NodeType } from "@/common/node";
+import { NodeType, isDefaultCoreNodeType } from "@/common/node";
 import { getDefaultNode } from "@/web/topic/diagramStore/nodeGetters";
 import { useDiagramStore } from "@/web/topic/diagramStore/store";
 import { RelationDirection, findNodeOrThrow } from "@/web/topic/utils/graph";
@@ -25,6 +25,12 @@ export const useAllNodes = (nodeIds?: string[]) => {
     if (!nodeIds) return state.nodes;
     return state.nodes.filter((node) => nodeIds.includes(node.id));
   }, shallow);
+};
+
+export const useCoreNodes = () => {
+  return useDiagramStore((state) => {
+    return state.nodes.filter((node) => isDefaultCoreNodeType(node.type));
+  });
 };
 
 export const useNodeChildren = (nodeId: string | undefined) => {

@@ -1,4 +1,4 @@
-import { ExpandLess, ExpandMore, Schema, TableChart } from "@mui/icons-material";
+import { ExpandLess, ExpandMore, Schema, TableChart, ViewCarousel } from "@mui/icons-material";
 import {
   Collapse,
   Divider,
@@ -52,6 +52,14 @@ export const TopicViews = () => {
                 <TableChart />
               </ListItemIcon>
               <ListItemText primary="Tradeoffs Table" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem key="7">
+            <ListItemButton selected={format === "summary"} onClick={() => setFormat("summary")}>
+              <ListItemIcon>
+                <ViewCarousel />
+              </ListItemIcon>
+              <ListItemText primary="Summary" />
             </ListItemButton>
           </ListItem>
         </Collapse>

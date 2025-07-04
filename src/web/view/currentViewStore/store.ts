@@ -7,6 +7,7 @@ import { createWithEqualityFn } from "zustand/traditional";
 import { Format, InfoCategory } from "@/common/infoCategory";
 import { withDefaults } from "@/common/object";
 import { emitter } from "@/web/common/event";
+import { Category } from "@/web/summary/summary";
 import { migrate } from "@/web/view/currentViewStore/migrate";
 import { triggerEvent } from "@/web/view/currentViewStore/triggerEventMiddleware";
 import {
@@ -61,6 +62,10 @@ export interface ViewState {
 
   // table
   transposed: boolean;
+
+  // summary
+  summaryNodeId: string | null;
+  selectedSummaryTab: Category;
 }
 
 export const initialViewState: ViewState = {
@@ -96,6 +101,9 @@ export const initialViewState: ViewState = {
   layoutThoroughness: 100, // by default, prefer keeping parents close to children over keeping node types together
 
   transposed: true,
+
+  summaryNodeId: null,
+  selectedSummaryTab: "coreNodes",
 };
 
 const persistedNameBase = "navigateStore";
@@ -135,10 +143,6 @@ export const useCanGoBackForward = () => {
   const canGoBack = temporalStore.pastStates.length > 0;
   const canGoForward = temporalStore.futureStates.length > 0;
   return [canGoBack, canGoForward];
-};
-
-export const useTransposed = () => {
-  return useCurrentViewStore((state) => state.transposed);
 };
 
 // actions
@@ -210,10 +214,6 @@ export const loadView = async (persistId: string) => {
 // util actions
 export const getView = () => {
   return useCurrentViewStore.getState();
-};
-
-export const setTransposed = (value: boolean) => {
-  useCurrentViewStore.setState({ transposed: value }, false, "setUseSolutionsForColumns");
 };
 
 // misc
