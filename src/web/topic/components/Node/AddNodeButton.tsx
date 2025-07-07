@@ -1,3 +1,5 @@
+import { Typography } from "@mui/material";
+import { lowerCase, startCase } from "es-toolkit";
 import { useContext } from "react";
 
 import { NodeType } from "@/common/node";
@@ -41,7 +43,8 @@ export const AddNodeButton = ({
 
   return (
     <StyledButton
-      className={className}
+      // hide overflow because the "+" can overflow a little at the edge"
+      className={"overflow-hidden" + (className ? ` ${className}` : "")}
       color={toNodeType}
       size="small"
       variant="contained"
@@ -53,10 +56,22 @@ export const AddNodeButton = ({
       // after hovering it. Think we'd have to pass `show` into this component in order to hide
       // the tooltip at the same time as the button, rather than relying on css from the FlowNode,
       // but that'd be slightly annoying to do.
-      title={`Add new ${decoration.title}`}
+      title={
+        `Add new ${decoration.title} (` +
+        (as === "parent"
+          ? `this ${startCase(relation.child)} '${lowerCase(relation.name)}'`
+          : `'${lowerCase(relation.name)}' this ${startCase(relation.parent)}`) +
+        `)`
+      }
       aria-label={`Add new ${decoration.title}`}
     >
       <decoration.NodeIcon />
+      <Typography
+        className="absolute bottom-[-10%] right-[5%] text-sm font-bold"
+        aria-hidden="true"
+      >
+        +
+      </Typography>
     </StyledButton>
   );
 };
