@@ -52,7 +52,7 @@ export const Summary = () => {
       </NavDiv>
 
       <HeaderDiv
-        className="flex items-center justify-center border-y p-2"
+        className="flex shrink-0 items-center justify-center border-y p-2"
         sx={{ height: `${maxNodeHeightRem}rem` }}
       >
         <Typography variant="body1">Click on a core node to see its summary</Typography>
