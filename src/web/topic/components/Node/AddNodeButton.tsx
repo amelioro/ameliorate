@@ -60,7 +60,7 @@ export const AddNodeButton = ({
       ? ""
       : as === "parent"
         ? ` (this ${startCase(relation.child)} '${lowerCase(relation.name)}')`
-        : ` '${lowerCase(relation.name)}' this ${startCase(relation.parent)}`;
+        : ` ('${lowerCase(relation.name)}' this ${startCase(relation.parent)})`;
 
   return (
     <StyledButton
