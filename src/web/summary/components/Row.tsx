@@ -43,7 +43,7 @@ export const Row = ({ title, Icon, nodes, addButtonsSlot, actionSlot }: Props) =
 
       <ContentDiv className="flex flex-wrap justify-center gap-2.5 p-0.5 lg:gap-4">
         {nodes.length === 0 ? (
-          <Typography variant="body2">No core nodes, try adding some!</Typography>
+          <Typography variant="body2">No nodes yet!</Typography>
         ) : (
           nodesSortedByScoreThenType.map((node) => (
             <EditableNode key={node.id} node={node} className="[zoom:80%] lg:[zoom:normal]" />

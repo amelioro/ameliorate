@@ -1,4 +1,5 @@
 import { NorthEast } from "@mui/icons-material";
+import { Typography } from "@mui/material";
 
 import { Row } from "@/web/summary/components/Row";
 import { useNeighborsByRelationDescription } from "@/web/topic/diagramStore/summary";
@@ -13,6 +14,12 @@ export const AllColumn = ({ summaryNode }: Props) => {
 
   return (
     <div className="flex flex-col gap-2">
+      {Object.keys(neighborsByRelation).length === 0 && (
+        <Typography variant="body2" className="self-center">
+          No nodes yet!
+        </Typography>
+      )}
+
       {Object.entries(neighborsByRelation).map(([relationDescription, nodes]) => (
         <Row key={relationDescription} title={relationDescription} Icon={NorthEast} nodes={nodes} />
       ))}
