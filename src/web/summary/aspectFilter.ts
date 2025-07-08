@@ -1,7 +1,19 @@
 import { getEdgeInfoCategory } from "@/common/edge";
 import { getNodeInfoCategory } from "@/common/node";
 import { getDirectedRelationDescription } from "@/web/topic/utils/edge";
-import { Graph, Node, findNodeOrThrow } from "@/web/topic/utils/graph";
+import {
+  Graph,
+  Node,
+  ancestors,
+  findNodeOrThrow,
+  splitNodesByDirectAndIndirect,
+} from "@/web/topic/utils/graph";
+
+export const getSolutionBenefits = (summaryNode: Node, graph: Graph) => {
+  const benefits = ancestors(summaryNode, graph, ["has", "creates"], ["creates"], ["benefit"]);
+
+  return splitNodesByDirectAndIndirect(summaryNode, graph, ["creates"], benefits);
+};
 
 export const getNeighborsByRelationDescription = (summaryNode: Node, graph: Graph) => {
   const nodeInfoCategory = getNodeInfoCategory(summaryNode.type);

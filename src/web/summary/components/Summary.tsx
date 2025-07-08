@@ -5,6 +5,7 @@ import { startCase } from "es-toolkit";
 import { ComponentType } from "react";
 
 import { AllColumn } from "@/web/summary/components/AllColumn";
+import { BenefitsColumn } from "@/web/summary/components/BenefitsColumn";
 import { CoreNodesColumn } from "@/web/summary/components/CoreNodesColumn";
 import {
   Category,
@@ -28,6 +29,7 @@ interface NodeColumnProps {
   summaryNode: Node;
 }
 const columnComponentsByAspect: Record<NodeAspect, ComponentType<NodeColumnProps>> = {
+  benefits: BenefitsColumn,
   all: AllColumn,
 };
 

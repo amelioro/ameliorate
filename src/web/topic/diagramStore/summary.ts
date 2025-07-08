@@ -1,4 +1,4 @@
-import { getNeighborsByRelationDescription } from "@/web/summary/aspectFilter";
+import { getNeighborsByRelationDescription, getSolutionBenefits } from "@/web/summary/aspectFilter";
 import { useDiagramStore } from "@/web/topic/diagramStore/store";
 import { Node } from "@/web/topic/utils/graph";
 
@@ -7,6 +7,12 @@ import { Node } from "@/web/topic/utils/graph";
 // - diagramStore/summary.ts with hook `useX` for each aspect filter, e.g. `useNeighborsByRelationDescription`
 // - summary/aspectFilter.ts for individual `getX` e.g. `getNeighborsByRelationDescription`
 // - future: focusedFilter.ts? has if-else to invoke the right `getX` from aspectFilter.ts, similar to infoFilter's `applyStandardFilter`
+
+export const useBenefits = (summaryNode: Node) => {
+  return useDiagramStore((state) => {
+    return getSolutionBenefits(summaryNode, state);
+  });
+};
 
 export const useNeighborsByRelationDescription = (summaryNode: Node) => {
   return useDiagramStore((state) => {

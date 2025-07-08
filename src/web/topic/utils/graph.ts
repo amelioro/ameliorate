@@ -1,9 +1,9 @@
 import { uniqBy } from "es-toolkit";
 import { v4 as uuid } from "uuid";
 
-import { RelationName, justificationRelationNames } from "@/common/edge";
+import { RelationName, justificationRelationNames, relationNames } from "@/common/edge";
 import { errorWithData } from "@/common/errorHandling";
-import { NodeType, infoNodeTypes, justificationNodeTypes } from "@/common/node";
+import { NodeType, infoNodeTypes, justificationNodeTypes, nodeTypes } from "@/common/node";
 import { FlowNodeType } from "@/web/topic/utils/node";
 import { GeneralFilter } from "@/web/view/utils/generalFilter";
 
@@ -173,7 +173,9 @@ const findNodesRecursivelyFrom = (
   fromNode: Node,
   toDirection: RelationDirection,
   graph: Graph,
-  labels?: RelationName[],
+  labelsToTraverse: readonly RelationName[] = relationNames,
+  labelsToKeep: readonly RelationName[] = relationNames,
+  nodeTypesToKeep: readonly NodeType[] = nodeTypes,
   /**
    * track if we've seen the node already, so that we avoid infinite recursion if there's a cycle
    */
@@ -183,34 +185,80 @@ const findNodesRecursivelyFrom = (
   const to = toDirection === "child" ? "target" : "source";
 
   const foundEdges = graph.edges.filter(
-    (edge) => edge[from] === fromNode.id && (!labels || labels.includes(edge.label)),
+    (edge) => edge[from] === fromNode.id && labelsToTraverse.includes(edge.label),
   );
-  const foundNodes = foundEdges
-    .map((edge) => findNodeOrThrow(edge[to], graph.nodes))
-    .filter((node) => !seenIds.includes(node.id));
 
-  if (foundNodes.length === 0) return [];
+  /* eslint-disable functional/immutable-data -- seems easier to do this mutably, building up two arrays at the same time */
+  const foundNodes = foundEdges.reduce(
+    (acc, edge) => {
+      const node = findNodeOrThrow(edge[to], graph.nodes);
+      if (seenIds.includes(node.id)) return acc;
+      acc.traverse.push(node); // `keep` is merely a subset of `traverse`
+      if (labelsToKeep.includes(edge.label) && nodeTypesToKeep.includes(node.type)) {
+        acc.keep.push(node);
+      }
+      return acc;
+    },
+    { keep: [] as Node[], traverse: [] as Node[] },
+  );
+  /* eslint-enable functional/immutable-data */
 
-  const seenIdsWithFound = seenIds.concat(foundNodes.map((node) => node.id));
+  if (foundNodes.traverse.length === 0) return [];
 
-  const furtherNodes = foundNodes.flatMap((node) =>
+  const seenIdsWithFound = seenIds.concat(foundNodes.traverse.map((node) => node.id));
+
+  const furtherNodesToKeep = foundNodes.traverse.flatMap((node) =>
     // could update seenIds between furtherNode iterations here, but:
     // 1. not sure how to do that immutably
     // 2. the mutation makes it a bit harder to follow
     // 3. seems like cycles would be created during nested recursions, not sibling recursions,
     // and those should be prevented via seenIdsWithFound
-    findNodesRecursivelyFrom(node, toDirection, graph, labels, seenIdsWithFound),
+    findNodesRecursivelyFrom(
+      node,
+      toDirection,
+      graph,
+      labelsToTraverse,
+      labelsToKeep,
+      nodeTypesToKeep,
+      seenIdsWithFound,
+    ),
   );
 
-  return uniqBy(foundNodes.concat(furtherNodes), (node) => node.id);
+  return uniqBy(foundNodes.keep.concat(furtherNodesToKeep), (node) => node.id);
 };
 
-export const ancestors = (fromNode: Node, graph: Graph, labels?: RelationName[]) => {
-  return findNodesRecursivelyFrom(fromNode, "parent", graph, labels);
+export const ancestors = (
+  fromNode: Node,
+  graph: Graph,
+  labelsToTraverse?: RelationName[],
+  labelsToKeep?: RelationName[],
+  nodeTypesToKeep?: NodeType[],
+) => {
+  return findNodesRecursivelyFrom(
+    fromNode,
+    "parent",
+    graph,
+    labelsToTraverse,
+    labelsToKeep,
+    nodeTypesToKeep,
+  );
 };
 
-export const descendants = (fromNode: Node, graph: Graph, labels?: RelationName[]) => {
-  return findNodesRecursivelyFrom(fromNode, "child", graph, labels);
+export const descendants = (
+  fromNode: Node,
+  graph: Graph,
+  labelsToTraverse?: RelationName[],
+  labelsToKeep?: RelationName[],
+  nodeTypesToKeep?: NodeType[],
+) => {
+  return findNodesRecursivelyFrom(
+    fromNode,
+    "child",
+    graph,
+    labelsToTraverse,
+    labelsToKeep,
+    nodeTypesToKeep,
+  );
 };
 
 export const getRelevantEdges = (nodes: Node[], graph: Graph) => {
@@ -277,4 +325,47 @@ export const getSecondaryNeighbors = (
   }
 
   return secondaryNeighbors;
+};
+
+/**
+ * NOTE: This uses an implementation which does not consider the direction of the relations.
+ * For example, if we're from an effect E1 to a benefit B, and there's intermediate effect E2,
+ * B will be considered as "direct" if E1 - creates -> E2 - creates -> B, and B - creates -> E1.
+ *
+ * Considering direction seems like it would complicate the implementation in a way that isn't
+ * currently worth handling such a rare edge case, so we aren't.
+ *
+ * We could also do this splitting when finding the `toNodes` in the first place, but that isn't
+ * needed for many use cases of e.g. the `ancesors` function, and it'd complicate the implementation
+ * more there as well, so we don't.
+ */
+export const splitNodesByDirectAndIndirect = (
+  fromNode: Node,
+  graph: Graph,
+  relations: RelationName[],
+  toNodes: Node[],
+) => {
+  /* eslint-disable functional/immutable-data -- seems easiest to do this mutably, splitting into two arrays via same iteration */
+  const directAndIndirect = toNodes.reduce(
+    (acc, toNode) => {
+      const isDirect = graph.edges.some((edge) => {
+        const directConnection =
+          (edge.source === fromNode.id && edge.target === toNode.id) ||
+          (edge.target === fromNode.id && edge.source === toNode.id);
+        const correctRelation = relations.includes(edge.label);
+
+        if (directConnection && correctRelation) return true;
+        return false;
+      });
+
+      if (isDirect) acc.directNodes.push(toNode);
+      else acc.indirectNodes.push(toNode);
+
+      return acc;
+    },
+    { directNodes: [] as Node[], indirectNodes: [] as Node[] },
+  );
+  /* eslint-enable functional/immutable-data */
+
+  return directAndIndirect;
 };

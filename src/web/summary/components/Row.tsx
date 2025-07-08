@@ -13,10 +13,11 @@ interface Props {
   Icon: MuiIcon;
   nodes: Node[];
   addButtonsSlot?: ReactNode;
+  endHeaderSlot?: ReactNode;
   actionSlot?: ReactNode;
 }
 
-export const Row = ({ title, Icon, nodes, addButtonsSlot, actionSlot }: Props) => {
+export const Row = ({ title, Icon, nodes, addButtonsSlot, endHeaderSlot, actionSlot }: Props) => {
   const { scoresByGraphPartId } = useDisplayScores(nodes.map((node) => node.id));
 
   const nodesSortedByScoreThenType = nodes.toSorted((node1, node2) => {
@@ -34,6 +35,7 @@ export const Row = ({ title, Icon, nodes, addButtonsSlot, actionSlot }: Props) =
         <LeftHeaderDiv className="flex gap-1">
           <Icon fontSize="small" />
           <Typography variant="body2">{title}</Typography>
+          {endHeaderSlot}
         </LeftHeaderDiv>
 
         {actionSlot && <RightHeaderDiv>{actionSlot}</RightHeaderDiv>}
