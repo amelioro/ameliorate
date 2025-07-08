@@ -22,6 +22,7 @@ import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { Node } from "@/web/topic/utils/graph";
 import { nodeDecorations } from "@/web/topic/utils/node";
 import { useUnrestrictedEditing } from "@/web/view/actionConfigStore";
+import { setSummaryNodeId } from "@/web/view/currentViewStore/summary";
 import { setSelected, useIsGraphPartSelected } from "@/web/view/selectedPartStore";
 import { useFillNodesWithColor } from "@/web/view/userConfigStore";
 
@@ -91,9 +92,15 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
         // separate from react-flow__node because sometimes nodes are rendered outside of react-flow (e.g. details pane), and we still want to style these
         " diagram-node" +
         (selected ? " selected" : "") +
-        (isDefaultCoreNodeType(node.type) ? " outline" : "")
+        (context === "diagram" && isDefaultCoreNodeType(node.type) ? " outline" : "")
       }
-      onClick={() => setSelected(node.id)}
+      // when nodes get swapped out e.g. summary node, this ensures the textarea is re-rendered to the right size before font size is reduced, avoiding over-reducing font
+      // also, this ensures e.g. EditableNode doesn't try re-using ContextIndicator from one component to another, since that has hooks that are based on node type, and therefore would otherwise change creating a hook order-changed error
+      key={node.id}
+      onClick={() => {
+        setSelected(node.id);
+        if (context === "summary") setSummaryNodeId(node.id);
+      }}
       onContextMenu={(event) => openContextMenu(event, { node })}
       role="button"
       sx={nodeStyles}

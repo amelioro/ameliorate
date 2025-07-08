@@ -78,9 +78,14 @@ export const breakdownRelationNames = infoRelationNames.breakdown;
 export const researchRelationNames = infoRelationNames.research;
 export const justificationRelationNames = infoRelationNames.justification;
 
+export const getEdgeInfoCategory = (edgeType: RelationName): InfoCategory => {
+  if (breakdownRelationNames.includes(edgeType)) return "breakdown";
+  else if (researchRelationNames.includes(edgeType)) return "research";
+  else if (justificationRelationNames.includes(edgeType)) return "justification";
+  else throw new Error(`Unknown edge type: ${edgeType}`);
+};
+
 export const getSameCategoryEdgeTypes = (edgeType: RelationName): RelationName[] => {
-  if (breakdownRelationNames.includes(edgeType)) return breakdownRelationNames;
-  else if (researchRelationNames.includes(edgeType)) return researchRelationNames;
-  else if (justificationRelationNames.includes(edgeType)) return justificationRelationNames;
-  else return [];
+  const infoCategory = getEdgeInfoCategory(edgeType);
+  return infoRelationNames[infoCategory];
 };

@@ -1,5 +1,4 @@
 import { Typography } from "@mui/material";
-import { lowerCase, startCase } from "es-toolkit";
 import { useContext } from "react";
 
 import { NodeType } from "@/common/node";
@@ -8,7 +7,7 @@ import { StyledButton } from "@/web/topic/components/Node/AddNodeButton.styles";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { addNode, addNodeWithoutParent } from "@/web/topic/diagramStore/createDeleteActions";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
-import { Relation } from "@/web/topic/utils/edge";
+import { Relation, getDirectedRelationDescription } from "@/web/topic/utils/edge";
 import { type RelationDirection } from "@/web/topic/utils/graph";
 import { nodeDecorations } from "@/web/topic/utils/node";
 
@@ -55,12 +54,11 @@ export const AddNodeButton = ({
   if (!userCanEditTopicData) return <></>;
 
   const decoration = nodeDecorations[toNodeType];
+  const fromDirection = as === "parent" ? "child" : "parent";
   const titleSuffix =
     relation === undefined
       ? ""
-      : as === "parent"
-        ? ` (this ${startCase(relation.child)} '${lowerCase(relation.name)}')`
-        : ` '${lowerCase(relation.name)}' this ${startCase(relation.parent)}`;
+      : ` (${getDirectedRelationDescription({ ...relation, this: fromDirection })})`;
 
   return (
     <StyledButton

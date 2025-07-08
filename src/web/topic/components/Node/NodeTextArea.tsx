@@ -140,7 +140,9 @@ const NodeTextAreaBase = ({ nodeId, nodeText, context, editable }: Props) => {
   if (textChangedExternally) {
     // eslint-disable-next-line functional/immutable-data
     textAreaRef.current.value = nodeText;
-    fitTextIntoElement(textAreaRef.current);
+
+    const textArea = textAreaRef.current;
+    setTimeout(() => fitTextIntoElement(textArea), 0); // timeout so that text area is time to adjust size (i.e. increase rows) before trying to fit text
   }
 
   return (

@@ -97,11 +97,16 @@ export const getNewTopicProblemNode = (topicId: number, topicTitle: string): Nod
   };
 };
 
+export const getNodeInfoCategory = (nodeType: NodeType): InfoCategory => {
+  if (breakdownNodeTypes.includes(nodeType)) return "breakdown";
+  else if (researchNodeTypes.includes(nodeType)) return "research";
+  else if (justificationNodeTypes.includes(nodeType)) return "justification";
+  else throw new Error(`Unknown node type: ${nodeType}`);
+};
+
 export const getSameCategoryNodeTypes = (nodeType: NodeType): NodeType[] => {
-  if (breakdownNodeTypes.includes(nodeType)) return breakdownNodeTypes;
-  else if (researchNodeTypes.includes(nodeType)) return researchNodeTypes;
-  else if (justificationNodeTypes.includes(nodeType)) return justificationNodeTypes;
-  else return [];
+  const infoCategory = getNodeInfoCategory(nodeType);
+  return infoNodeTypes[infoCategory];
 };
 
 export const areSameCategoryNodes = (node1Type: NodeType, node2Type: NodeType): boolean => {

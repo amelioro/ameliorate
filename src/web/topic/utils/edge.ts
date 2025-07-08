@@ -1,3 +1,5 @@
+import { lowerCase, startCase } from "es-toolkit";
+
 import { RelationName, justificationRelationNames } from "@/common/edge";
 import { NodeType, getSameCategoryNodeTypes, nodeTypes, researchNodeTypes } from "@/common/node";
 import { Edge, Graph, Node, RelationDirection, findNodeOrThrow } from "@/web/topic/utils/graph";
@@ -168,6 +170,19 @@ export interface Relation {
   name: RelationName;
   parent: NodeType;
 }
+
+/**
+ * e.g. for when we're using a relation from the perspective of one of the nodes
+ */
+interface DirectedRelation extends Relation {
+  this: RelationDirection;
+}
+
+export const getDirectedRelationDescription = (relation: DirectedRelation): string => {
+  return relation.this === "child"
+    ? `this ${startCase(relation.child)} '${lowerCase(relation.name)}'` // e.g. this Problem causes
+    : `'${lowerCase(relation.name)}' this ${startCase(relation.parent)}`; // e.g. causes this Problem
+};
 
 interface AddableRelation extends Relation {
   addableFrom: RelationDirection | "both" | "neither";
