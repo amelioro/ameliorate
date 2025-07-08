@@ -91,7 +91,7 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
         // separate from react-flow__node because sometimes nodes are rendered outside of react-flow (e.g. details pane), and we still want to style these
         " diagram-node" +
         (selected ? " selected" : "") +
-        (isDefaultCoreNodeType(node.type) ? " outline" : "")
+        (context === "diagram" && isDefaultCoreNodeType(node.type) ? " outline" : "")
       }
       onClick={() => setSelected(node.id)}
       onContextMenu={(event) => openContextMenu(event, { node })}
