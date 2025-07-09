@@ -10,6 +10,7 @@ import {
   splitNodesByDirectAndIndirect,
 } from "@/web/topic/utils/graph";
 
+// TODO: test this
 export const getComponents = (summaryNode: Node, graph: Graph) => {
   const components = ancestors(summaryNode, graph, ["has"]);
 
@@ -28,12 +29,14 @@ export const getAddressed = (summaryNode: Node, graph: Graph) => {
   return splitNodesByDirectAndIndirect(summaryNode, graph, ["addresses"], addressed);
 };
 
+// TODO: test this
 export const getDetriments = (summaryNode: Node, graph: Graph) => {
   const detriments = ancestors(summaryNode, graph, ["has", "creates"], ["creates"], ["detriment"]);
 
   return splitNodesByDirectAndIndirect(summaryNode, graph, ["creates"], detriments);
 };
 
+// TODO: test this
 export const getObstacles = (summaryNode: Node, graph: Graph) => {
   const directObstacles = descendants(summaryNode, graph, [], ["obstacleOf"]); // empty edgesToTraverse because we only want direct obstacles
   const directObstaclesIds = directObstacles.map((node) => node.id);

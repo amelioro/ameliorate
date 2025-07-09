@@ -204,6 +204,34 @@ export const viewFulfillsEdgeContext = (fulfillsEdgeId: string) => {
   emitter.emit("changedDiagramFilter");
 };
 
+export const viewNodeInDiagram = (nodeId: string) => {
+  // TODO: invoke some method from diagram store rather than getting its whole state... maybe util method for getNeighbors?
+  const diagramState = useDiagramStore.getState();
+  const viewState = useCurrentViewStore.getState();
+
+  const node = findNodeOrThrow(nodeId, diagramState.nodes);
+
+  // TODO: use better filtering than just picking explicit neighbors to show - probably add a focused filter of some kind
+  const nodeNeighbors = neighbors(node, diagramState);
+
+  useCurrentViewStore.setState(
+    {
+      format: "diagram",
+      categoriesToShow: [],
+      generalFilter: {
+        ...viewState.generalFilter,
+        nodesToShow: [node.id, ...nodeNeighbors.map((n) => n.id)],
+        nodesToHide: [],
+      },
+    },
+    false,
+    "viewNodeInDiagram",
+  );
+
+  // TODO(bug): for some reason back button needs to be pressed twice to go back - is this emitting causing another view state change?
+  emitter.emit("changedDiagramFilter");
+};
+
 /**
  * @param also true if these nodes should be added to the current filter, false if they should be the only nodes displayed
  */

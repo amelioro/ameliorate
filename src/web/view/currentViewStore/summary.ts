@@ -20,3 +20,14 @@ export const setSummaryNodeId = (nodeId: string | null) => {
 export const setSelectedSummaryTab = (tab: Category) => {
   useCurrentViewStore.setState({ selectedSummaryTab: tab }, false, "setSelectedSummaryTab");
 };
+
+export const viewNodeInSummary = (nodeId: string) => {
+  useCurrentViewStore.setState(
+    {
+      format: "summary",
+      summaryNodeId: nodeId,
+    },
+    false,
+    "viewNodeInSummary",
+  );
+};
