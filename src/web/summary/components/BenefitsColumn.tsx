@@ -1,4 +1,5 @@
 import { Timeline } from "@mui/icons-material";
+import { Divider } from "@mui/material";
 
 import { IndirectHelpIcon } from "@/web/summary/components/IndirectHelpIcon";
 import { Row } from "@/web/summary/components/Row";
@@ -26,13 +27,15 @@ export const BenefitsColumn = ({ summaryNode }: Props) => {
   );
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col">
       <Row
         title="Benefits"
         Icon={nodeDecorations.benefit.NodeIcon}
         addButtonsSlot={AddButtons}
         nodes={directNodes}
       />
+
+      <Divider className="mx-2 my-1" />
 
       <Row
         title="Indirect"
