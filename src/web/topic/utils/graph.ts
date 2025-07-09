@@ -174,7 +174,7 @@ const findNodesRecursivelyFrom = (
   toDirection: RelationDirection,
   graph: Graph,
   labelsToTraverse: readonly RelationName[] = relationNames,
-  labelsToKeep: readonly RelationName[] = relationNames,
+  labelsToKeep: readonly RelationName[] = labelsToTraverse, // if we don't have labelsToKeep, assume we want to narrow via labelsToTraverse (we don't generally want to keep nodes through all edge types, unless we're traversing all edge types)
   nodeTypesToKeep: readonly NodeType[] = nodeTypes,
   /**
    * track if we've seen the node already, so that we avoid infinite recursion if there's a cycle
@@ -184,26 +184,34 @@ const findNodesRecursivelyFrom = (
   const from = toDirection === "child" ? "source" : "target";
   const to = toDirection === "child" ? "target" : "source";
 
-  const foundEdges = graph.edges.filter(
-    (edge) => edge[from] === fromNode.id && labelsToTraverse.includes(edge.label),
-  );
+  const foundEdges = {
+    traverse: graph.edges.filter(
+      (edge) =>
+        edge[from] === fromNode.id &&
+        labelsToTraverse.includes(edge.label) &&
+        !seenIds.includes(edge[to]),
+    ),
+    keep: graph.edges.filter(
+      (edge) =>
+        edge[from] === fromNode.id &&
+        labelsToKeep.includes(edge.label) &&
+        !seenIds.includes(edge[to]),
+    ),
+  };
 
-  /* eslint-disable functional/immutable-data -- seems easier to do this mutably, building up two arrays at the same time */
-  const foundNodes = foundEdges.reduce(
-    (acc, edge) => {
-      const node = findNodeOrThrow(edge[to], graph.nodes);
-      if (seenIds.includes(node.id)) return acc;
-      acc.traverse.push(node); // `keep` is merely a subset of `traverse`
-      if (labelsToKeep.includes(edge.label) && nodeTypesToKeep.includes(node.type)) {
-        acc.keep.push(node);
-      }
-      return acc;
-    },
-    { keep: [] as Node[], traverse: [] as Node[] },
-  );
-  /* eslint-enable functional/immutable-data */
+  const foundNodes = {
+    traverse: foundEdges.traverse.map((edge) => findNodeOrThrow(edge[to], graph.nodes)),
 
-  if (foundNodes.traverse.length === 0) return [];
+    keep: foundEdges.keep
+      .map((edge) => {
+        const node = findNodeOrThrow(edge[to], graph.nodes);
+        if (!nodeTypesToKeep.includes(node.type)) return null;
+        return node;
+      })
+      .filter((node) => node !== null),
+  };
+
+  if (foundNodes.traverse.length === 0) return foundNodes.keep;
 
   const seenIdsWithFound = seenIds.concat(foundNodes.traverse.map((node) => node.id));
 

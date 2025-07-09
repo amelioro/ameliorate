@@ -15,6 +15,12 @@ export const getSolutionBenefits = (summaryNode: Node, graph: Graph) => {
   return splitNodesByDirectAndIndirect(summaryNode, graph, ["creates"], benefits);
 };
 
+export const getAddressed = (summaryNode: Node, graph: Graph) => {
+  const addressed = ancestors(summaryNode, graph, ["has", "creates"], ["addresses"]);
+
+  return splitNodesByDirectAndIndirect(summaryNode, graph, ["addresses"], addressed);
+};
+
 export const getNeighborsByRelationDescription = (summaryNode: Node, graph: Graph) => {
   const nodeInfoCategory = getNodeInfoCategory(summaryNode.type);
 

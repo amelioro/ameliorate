@@ -4,6 +4,7 @@ import { IconButton, Tab, Typography, styled } from "@mui/material";
 import { startCase } from "es-toolkit";
 import { ComponentType } from "react";
 
+import { AddressedColumn } from "@/web/summary/components/AddressedColumn";
 import { AllColumn } from "@/web/summary/components/AllColumn";
 import { BenefitsColumn } from "@/web/summary/components/BenefitsColumn";
 import { CoreNodesColumn } from "@/web/summary/components/CoreNodesColumn";
@@ -30,6 +31,7 @@ interface NodeColumnProps {
 }
 const columnComponentsByAspect: Record<NodeAspect, ComponentType<NodeColumnProps>> = {
   benefits: BenefitsColumn,
+  addressed: AddressedColumn,
   all: AllColumn,
 };
 
@@ -102,7 +104,15 @@ export const Summary = () => {
                 });
 
           return (
-            <TabPanel key={category} value={category} className="grow overflow-y-auto p-1">
+            <TabPanel
+              key={category}
+              value={category}
+              className={
+                "grow *:grow *:basis-0 divide-x overflow-y-auto p-0" +
+                " [&>div>div]:p-1" +
+                (selectedTabOrFallback === category ? " flex" : " hidden")
+              }
+            >
               {columns}
             </TabPanel>
           );

@@ -40,7 +40,7 @@ export const categoriesBySummary: Record<Summary, [Category, ...Category[]]> = {
 
 // aspects are used as columns with a summary view's tab
 const topicAspects = ["coreNodes"] as const;
-const nodeAspects = ["benefits", "all"] as const;
+const nodeAspects = ["benefits", "addressed", "all"] as const;
 
 export type TopicAspect = (typeof topicAspects)[number];
 export type NodeAspect = (typeof nodeAspects)[number];
@@ -48,6 +48,6 @@ export type Aspect = TopicAspect | NodeAspect;
 
 export const aspectsByCategory: Record<Category, [Aspect, Aspect?]> = {
   coreNodes: ["coreNodes"],
-  motivation: ["benefits"],
+  motivation: ["benefits", "addressed"],
   all: ["all"],
 };

@@ -1,4 +1,8 @@
-import { getNeighborsByRelationDescription, getSolutionBenefits } from "@/web/summary/aspectFilter";
+import {
+  getAddressed,
+  getNeighborsByRelationDescription,
+  getSolutionBenefits,
+} from "@/web/summary/aspectFilter";
 import { useDiagramStore } from "@/web/topic/diagramStore/store";
 import { Node } from "@/web/topic/utils/graph";
 
@@ -11,6 +15,12 @@ import { Node } from "@/web/topic/utils/graph";
 export const useBenefits = (summaryNode: Node) => {
   return useDiagramStore((state) => {
     return getSolutionBenefits(summaryNode, state);
+  });
+};
+
+export const useAddressed = (summaryNode: Node) => {
+  return useDiagramStore((state) => {
+    return getAddressed(summaryNode, state);
   });
 };
 
