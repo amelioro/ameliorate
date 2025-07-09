@@ -31,6 +31,8 @@ export const JustificationIndicator = ({ graphPartId, partColor }: Props) => {
   const highestScore = getHighestScore(Object.values(scoresByGraphPartId));
   // could just color if score is > 5, to avoid bringing attention to unimportant things, but it seems nice to have the visual indication of a low score too
   const scoreColor = getScoreColor(highestScore, scoreMeaning) as ButtonProps["color"];
+  // paperPlain is a color intended to not stand out here - use the part's color in this case so it blends in with the part better
+  const color = scoreColor === "paperPlain" ? partColor : scoreColor ?? partColor;
 
   if (supports.length > 0 && critiques.length > 0)
     return (
@@ -47,7 +49,7 @@ export const JustificationIndicator = ({ graphPartId, partColor }: Props) => {
         Icon={ThumbUpOutlined}
         title={`Has ${supports.length} supports`}
         onClick={onClick}
-        color={scoreColor ?? partColor}
+        color={color}
       />
     );
   else
@@ -56,7 +58,7 @@ export const JustificationIndicator = ({ graphPartId, partColor }: Props) => {
         Icon={ThumbDownOutlined}
         title={`Has ${critiques.length} critiques`}
         onClick={onClick}
-        color={scoreColor ?? partColor}
+        color={color}
       />
     );
 };

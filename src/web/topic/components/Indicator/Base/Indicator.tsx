@@ -3,6 +3,7 @@ import { MouseEventHandler } from "react";
 
 import { StyledButton } from "@/web/topic/components/Indicator/Base/Indicator.styles";
 import { MuiIcon } from "@/web/topic/utils/node";
+import { useFillNodesWithColor } from "@/web/view/userConfigStore";
 
 export interface IndicatorProps {
   Icon: MuiIcon;
@@ -21,6 +22,8 @@ export const Indicator = ({
   filled = true,
   className,
 }: IndicatorProps) => {
+  const nodesFilled = useFillNodesWithColor();
+
   const onClickHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (onClick) {
       // In most cases, we don't want the click to result in selecting the parent node.
@@ -40,7 +43,8 @@ export const Indicator = ({
         onClick={onClickHandler}
         className={
           // text-base seems to fit more snuggly than the default 14px
-          "border border-solid border-neutral-main text-base shadow-none" +
+          "border border-solid text-base shadow-none" +
+          (nodesFilled ? " border-gray-500" : " border-neutral-main") +
           (!onClick ? " pointer-events-none" : "") +
           (className ? ` ${className}` : "")
         }

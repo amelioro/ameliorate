@@ -1,6 +1,7 @@
-import { Info } from "@mui/icons-material";
-import { Box, IconButton, Stack, Tooltip, Typography } from "@mui/material";
+import { Box, Link, Stack, Typography } from "@mui/material";
 import { useState } from "react";
+
+import { HelpIcon } from "@/web/common/components/HelpIcon";
 
 export const TotalsHeaderCell = () => {
   const [showExactDetails, setShowExactDetails] = useState(false);
@@ -8,8 +9,10 @@ export const TotalsHeaderCell = () => {
   return (
     <Stack direction="row" justifyContent="center" alignItems="center" height="100%">
       <Typography variant="body1">Solution Totals</Typography>
-      <Tooltip
-        title={
+      <HelpIcon
+        tooltipHeading="Solution Totals"
+        iconClassName="p-2"
+        tooltipBody={
           <Box
             sx={{
               table: { borderCollapse: "collapse" },
@@ -17,20 +20,21 @@ export const TotalsHeaderCell = () => {
             }}
           >
             <span>
-              A Solution's Total is an estimate of good the solution is. The total is positive if
-              scores indicate that it fulfills the criteria, and negative if it doesn't. The
+              A Solution's Total is an estimate of how good the solution is. The total is positive
+              if scores indicate that it fulfills the criteria, and negative if it doesn't. The
               importance scores of each criteria emphasize how positive or negative the total is.
-              <br />
-              <br />
-              <button
-                className="rounded border bg-gray-600 p-1 hover:bg-gray-700"
-                onClick={() => setShowExactDetails(!showExactDetails)}
-              >
-                {!showExactDetails ? "Show exact details" : "Hide exact details"}
-              </button>
-              <br />
-              <br />
             </span>
+
+            <Link
+              component="button"
+              className="block p-1"
+              onClick={(e) => {
+                setShowExactDetails(!showExactDetails);
+                e.preventDefault();
+              }}
+            >
+              {!showExactDetails ? "Show exact details" : "Hide exact details"}
+            </Link>
 
             {showExactDetails && (
               <>
@@ -90,23 +94,7 @@ export const TotalsHeaderCell = () => {
             )}
           </Box>
         }
-        enterTouchDelay={0} // allow touch to immediately trigger
-        leaveTouchDelay={Infinity} // touch-away to close on mobile, since message is long
-      >
-        <IconButton
-          color="info"
-          aria-label="Solution Totals info"
-          sx={{
-            // Don't make it look like clicking will do something, since it won't.
-            // Using a button here is an attempt to make it accessible, since the tooltip will show
-            // on focus.
-            cursor: "default",
-            alignSelf: "center",
-          }}
-        >
-          <Info />
-        </IconButton>
-      </Tooltip>
+      />
     </Stack>
   );
 };

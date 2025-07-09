@@ -16,6 +16,7 @@ import {
   TopDiv,
 } from "@/web/topic/components/Node/EditableNode.styles";
 import { NodeTextArea } from "@/web/topic/components/Node/NodeTextArea";
+import { NodeToolbar } from "@/web/topic/components/Node/NodeToolbar";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { setCustomNodeType } from "@/web/topic/diagramStore/actions";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
@@ -90,7 +91,7 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
         className +
         // allow other components to apply conditional css related to this node, e.g. when it's hovered/selected
         // separate from react-flow__node because sometimes nodes are rendered outside of react-flow (e.g. details pane), and we still want to style these
-        " diagram-node" +
+        " diagram-node relative" +
         (selected ? " selected" : "") +
         (context === "diagram" && isDefaultCoreNodeType(node.type) ? " outline" : "")
       }
@@ -105,6 +106,9 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
       role="button"
       sx={nodeStyles}
     >
+      {/* TODO: move to parent of node so that it can use popper to avoid positioning off screen? */}
+      {selected && <NodeToolbar node={node} />}
+
       <TopDiv className="flex h-6 items-center justify-between">
         {/* pb/pr-0.5 to have 2px of space below/right, to match the 2px border of the node that's above/left of this node type div */}
         <NodeTypeDiv className="flex h-6 items-center rounded-br rounded-tl pb-0.5 pr-0.5">

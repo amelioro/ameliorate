@@ -5,7 +5,6 @@ import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
 import { useCoreNodes } from "@/web/topic/diagramStore/nodeHooks";
 
 const AddButtons = (
-  // extra padding-bottom because core nodes have outline decoration that make them look closer to the buttons
   <div className="pb-1.5">
     <AddNodeButton toNodeType="problem" />
     <AddNodeButton toNodeType="solution" />
