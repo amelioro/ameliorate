@@ -1,6 +1,9 @@
 import {
   getAddressed,
+  getComponents,
+  getDetriments,
   getNeighborsByRelationDescription,
+  getObstacles,
   getSolutionBenefits,
 } from "@/web/summary/aspectFilter";
 import { useDiagramStore } from "@/web/topic/diagramStore/store";
@@ -12,6 +15,12 @@ import { Node } from "@/web/topic/utils/graph";
 // - summary/aspectFilter.ts for individual `getX` e.g. `getNeighborsByRelationDescription`
 // - future: focusedFilter.ts? has if-else to invoke the right `getX` from aspectFilter.ts, similar to infoFilter's `applyStandardFilter`
 
+export const useComponents = (summaryNode: Node) => {
+  return useDiagramStore((state) => {
+    return getComponents(summaryNode, state);
+  });
+};
+
 export const useBenefits = (summaryNode: Node) => {
   return useDiagramStore((state) => {
     return getSolutionBenefits(summaryNode, state);
@@ -21,6 +30,18 @@ export const useBenefits = (summaryNode: Node) => {
 export const useAddressed = (summaryNode: Node) => {
   return useDiagramStore((state) => {
     return getAddressed(summaryNode, state);
+  });
+};
+
+export const useDetriments = (summaryNode: Node) => {
+  return useDiagramStore((state) => {
+    return getDetriments(summaryNode, state);
+  });
+};
+
+export const useObstacles = (summaryNode: Node) => {
+  return useDiagramStore((state) => {
+    return getObstacles(summaryNode, state);
   });
 };
 

@@ -7,7 +7,10 @@ import { ComponentType } from "react";
 import { AddressedColumn } from "@/web/summary/components/AddressedColumn";
 import { AllColumn } from "@/web/summary/components/AllColumn";
 import { BenefitsColumn } from "@/web/summary/components/BenefitsColumn";
+import { ComponentsColumn } from "@/web/summary/components/ComponentsColumn";
 import { CoreNodesColumn } from "@/web/summary/components/CoreNodesColumn";
+import { DetrimentsColumn } from "@/web/summary/components/DetrimentsColumn";
+import { ObstaclesColumn } from "@/web/summary/components/ObstaclesColumn";
 import {
   Category,
   NodeAspect,
@@ -30,8 +33,11 @@ interface NodeColumnProps {
   summaryNode: Node;
 }
 const columnComponentsByAspect: Record<NodeAspect, ComponentType<NodeColumnProps>> = {
+  components: ComponentsColumn,
   benefits: BenefitsColumn,
   addressed: AddressedColumn,
+  detriments: DetrimentsColumn,
+  obstacles: ObstaclesColumn,
   all: AllColumn,
 };
 
@@ -84,8 +90,10 @@ export const Summary = () => {
         <TabList
           onChange={(_, value: Category) => setSelectedSummaryTab(value)}
           aria-label="Summary Tabs"
-          className="border-b"
-          centered
+          className="[&_.MuiTab-root]:min-w-[auto] [&_.MuiTab-root]:px-2 [&_.MuiTabScrollButton-root]:w-6"
+          variant="scrollable"
+          scrollButtons="auto"
+          allowScrollButtonsMobile
         >
           {summaryCategories.map((category) => (
             <Tab key={category} value={category} label={startCase(category)} />
@@ -110,6 +118,8 @@ export const Summary = () => {
               className={
                 "grow *:grow *:basis-0 divide-x overflow-y-auto p-0" +
                 " [&>div>div]:p-1" +
+                // need to use border-t here because for some reason the TabList itself has issues with border-b, where when TabPanel has a vertical scrollbar, the tab arrows will _always_ show, rather than conditionally based on horizontal scroll position
+                " border-t" +
                 (selectedTabOrFallback === category ? " flex" : " hidden")
               }
             >
