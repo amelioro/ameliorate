@@ -100,7 +100,8 @@ const NodeHandleBase = ({ node, direction, orientation }: Props) => {
         type={type}
         position={position}
         className={
-          "size-[10px]" +
+          // z-index to show in front of EditableNode, which is otherwise in the same stacking context (since it's set to relative positioning now)
+          "size-[10px] z-10" +
           // rely on `visibility` rather than `display` so that invisible handles can still render for react-flow's connection drawing
           (showHandle ? "" : " invisible") +
           conditionalShowClasses +
