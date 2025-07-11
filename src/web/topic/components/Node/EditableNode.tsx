@@ -207,7 +207,7 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
             {...floatingToolbarProps.getFloatingProps()}
             className="z-10"
           >
-            <NodeToolbar node={node} />
+            <NodeToolbar node={node} context={context} />
           </div>
         )}
       </NodeBox>
