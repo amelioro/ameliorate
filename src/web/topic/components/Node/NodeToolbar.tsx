@@ -14,7 +14,7 @@ export const NodeToolbar = ({ node }: Props) => {
   const format = useFormat();
 
   return (
-    <div className="absolute -right-3 top-1/2 -translate-y-1/2 translate-x-full flex-col rounded border shadow">
+    <div className="flex flex-col rounded border bg-paperShaded-main shadow">
       {format === "diagram" && (
         <IconButton
           title="View node in summary"
@@ -23,6 +23,7 @@ export const NodeToolbar = ({ node }: Props) => {
           onClick={() => {
             viewNodeInSummary(node.id);
           }}
+          className="rounded"
         >
           <ViewCarousel fontSize="inherit" />
         </IconButton>
@@ -36,6 +37,7 @@ export const NodeToolbar = ({ node }: Props) => {
           onClick={() => {
             viewNodeInDiagram(node.id);
           }}
+          className="rounded"
         >
           <Schema fontSize="inherit" />
         </IconButton>

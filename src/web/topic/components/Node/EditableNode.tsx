@@ -1,5 +1,14 @@
+import {
+  autoUpdate,
+  flip,
+  offset,
+  safePolygon,
+  useFloating,
+  useHover,
+  useInteractions,
+} from "@floating-ui/react";
 import { type ButtonProps, type SxProps, useTheme } from "@mui/material";
-import { memo, useContext } from "react";
+import { memo, useContext, useState } from "react";
 
 import { isDefaultCoreNodeType } from "@/common/node";
 import { useSessionUser } from "@/web/common/hooks";
@@ -27,12 +36,39 @@ import { setSummaryNodeId } from "@/web/view/currentViewStore/summary";
 import { setSelected, useIsGraphPartSelected } from "@/web/view/selectedPartStore";
 import { useFillNodesWithColor } from "@/web/view/userConfigStore";
 
+const useFloatingToolbar = (nodeRef: HTMLDivElement | null, selected: boolean) => {
+  const [isOpenViaHover, setIsOpenViaHover] = useState(false);
+
+  const { refs, floatingStyles, context } = useFloating({
+    open: isOpenViaHover || selected, // `isOpen` is controlled via floating-ui's interactions i.e. hover, and we want to show on hover and on selection
+    onOpenChange: setIsOpenViaHover,
+    placement: "right",
+    middleware: [offset(8), flip()],
+    elements: { reference: nodeRef },
+    whileElementsMounted: autoUpdate, // couldn't get MUI Popper to update positioning when a node is added to the criteria table, so we're using floating-ui
+  });
+
+  const hover = useHover(context, { handleClose: safePolygon() });
+
+  const { getReferenceProps, getFloatingProps } = useInteractions([hover]);
+
+  return {
+    isOpenViaHover,
+    refs,
+    floatingStyles,
+    getReferenceProps,
+    getFloatingProps,
+  };
+};
+
 interface Props {
   node: Node;
   className?: string;
 }
 
 const EditableNodeBase = ({ node, className = "" }: Props) => {
+  const [nodeRef, setNodeRef] = useState<HTMLDivElement | null>(null); // useState so that setting ref triggers re-render for floating ui https://floating-ui.com/docs/useFloating#elements
+
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
 
@@ -40,6 +76,8 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
   const fillNodesWithColor = useFillNodesWithColor();
   const selected = useIsGraphPartSelected(node.id);
   const context = useContext(WorkspaceContext);
+
+  const floatingToolbarProps = useFloatingToolbar(nodeRef, selected);
 
   const theme = useTheme();
 
@@ -86,79 +124,94 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
         };
 
   return (
-    <NodeBox
-      className={
-        className +
-        // allow other components to apply conditional css related to this node, e.g. when it's hovered/selected
-        // separate from react-flow__node because sometimes nodes are rendered outside of react-flow (e.g. details pane), and we still want to style these
-        " diagram-node relative" +
-        (selected ? " selected" : "") +
-        (context === "diagram" && isDefaultCoreNodeType(node.type) ? " outline" : "")
-      }
-      // when nodes get swapped out e.g. summary node, this ensures the textarea is re-rendered to the right size before font size is reduced, avoiding over-reducing font
-      // also, this ensures e.g. EditableNode doesn't try re-using ContextIndicator from one component to another, since that has hooks that are based on node type, and therefore would otherwise change creating a hook order-changed error
-      key={node.id}
-      onClick={() => {
-        setSelected(node.id);
-        if (context === "summary") setSummaryNodeId(node.id);
-      }}
-      onContextMenu={(event) => openContextMenu(event, { node })}
-      role="button"
-      sx={nodeStyles}
-    >
-      {/* TODO: move to parent of node so that it can use popper to avoid positioning off screen? */}
-      {selected && <NodeToolbar node={node} />}
+    <>
+      <NodeBox
+        // when nodes get swapped out e.g. summary node, this ensures the textarea is re-rendered to the right size before font size is reduced, avoiding over-reducing font
+        // also, this ensures e.g. EditableNode doesn't try re-using ContextIndicator from one component to another, since that has hooks that are based on node type, and therefore would otherwise change creating a hook order-changed error
+        key={node.id}
+        ref={setNodeRef}
+        onClick={() => {
+          setSelected(node.id);
+          if (context === "summary") setSummaryNodeId(node.id);
+        }}
+        onContextMenu={(event) => openContextMenu(event, { node })}
+        role="button"
+        sx={nodeStyles}
+        className={
+          className +
+          // allow other components to apply conditional css related to this node, e.g. when it's hovered/selected
+          // separate from react-flow__node because sometimes nodes are rendered outside of react-flow (e.g. details pane), and we still want to style these
+          " diagram-node relative" +
+          (selected ? " selected" : "") +
+          (context === "diagram" && isDefaultCoreNodeType(node.type) ? " outline" : "")
+        }
+        {...floatingToolbarProps.getReferenceProps()} // for floating toolbar
+      >
+        <TopDiv className="flex h-6 items-center justify-between">
+          {/* pb/pr-0.5 to have 2px of space below/right, to match the 2px border of the node that's above/left of this node type div */}
+          <NodeTypeDiv className="flex h-6 items-center rounded-br rounded-tl pb-0.5 pr-0.5">
+            <NodeIcon className="mx-1 size-3.5" />
+            <NodeTypeSpan
+              contentEditable={customizable}
+              suppressContentEditableWarning // https://stackoverflow.com/a/49639256/8409296
+              onBlur={(event) => {
+                const text = event.target.textContent?.trim();
+                if (text && text !== nodeDecoration.title && text !== node.data.customType)
+                  setCustomNodeType(node, text);
+              }}
+              className={
+                "pr-1 text-sm leading-normal" +
+                // without nopan, clicking on the span won't let you edit text
+                (customizable ? " nopan" : "")
+              }
+            >
+              {typeText}
+            </NodeTypeSpan>
+          </NodeTypeDiv>
+          <CommonIndicatorGroup graphPart={node} />
+        </TopDiv>
+        {/* grow to fill out remaining space with this div because it contains the textarea */}
+        <MiddleDiv className="flex grow px-1 pb-2 pt-1">
+          <NodeTextArea
+            nodeId={node.id}
+            nodeText={node.data.label}
+            context={context}
+            editable={userCanEditTopicData}
+          />
+        </MiddleDiv>
+        <BottomDiv className="relative">
+          {node.type !== "rootClaim" && ( // root claim indicators don't seem very helpful
+            <>
+              {/* TODO?: how to make corner indicators not look bad in the table? they're cut off */}
+              <LeftCornerStatusIndicators
+                graphPartId={node.id}
+                color={backgroundColorType}
+                notes={node.data.notes}
+              />
+              <RightCornerContentIndicators
+                graphPartId={node.id}
+                graphPartType="node"
+                color={backgroundColorType}
+              />
+            </>
+          )}
+        </BottomDiv>
 
-      <TopDiv className="flex h-6 items-center justify-between">
-        {/* pb/pr-0.5 to have 2px of space below/right, to match the 2px border of the node that's above/left of this node type div */}
-        <NodeTypeDiv className="flex h-6 items-center rounded-br rounded-tl pb-0.5 pr-0.5">
-          <NodeIcon className="mx-1 size-3.5" />
-          <NodeTypeSpan
-            contentEditable={customizable}
-            suppressContentEditableWarning // https://stackoverflow.com/a/49639256/8409296
-            onBlur={(event) => {
-              const text = event.target.textContent?.trim();
-              if (text && text !== nodeDecoration.title && text !== node.data.customType)
-                setCustomNodeType(node, text);
-            }}
-            className={
-              "pr-1 text-sm leading-normal" +
-              // without nopan, clicking on the span won't let you edit text
-              (customizable ? " nopan" : "")
-            }
+        {/* within node div so we can guarantee that the container div has relative positioning */}
+        {/* TODO(bug): toolbar doesn't display in problem header cell? html/css looks identical to other header cells... */}
+        {/* TODO?: toolbar disappears sooner than add node buttons, and shadow disappears faster than either of these; ideally they'd probably disappear at the same time? */}
+        {(selected || floatingToolbarProps.isOpenViaHover) && (
+          <div
+            ref={floatingToolbarProps.refs.setFloating}
+            style={floatingToolbarProps.floatingStyles}
+            {...floatingToolbarProps.getFloatingProps()}
+            className="z-10"
           >
-            {typeText}
-          </NodeTypeSpan>
-        </NodeTypeDiv>
-        <CommonIndicatorGroup graphPart={node} />
-      </TopDiv>
-      {/* grow to fill out remaining space with this div because it contains the textarea */}
-      <MiddleDiv className="flex grow px-1 pb-2 pt-1">
-        <NodeTextArea
-          nodeId={node.id}
-          nodeText={node.data.label}
-          context={context}
-          editable={userCanEditTopicData}
-        />
-      </MiddleDiv>
-      <BottomDiv className="relative">
-        {node.type !== "rootClaim" && ( // root claim indicators don't seem very helpful
-          <>
-            {/* TODO?: how to make corner indicators not look bad in the table? they're cut off */}
-            <LeftCornerStatusIndicators
-              graphPartId={node.id}
-              color={backgroundColorType}
-              notes={node.data.notes}
-            />
-            <RightCornerContentIndicators
-              graphPartId={node.id}
-              graphPartType="node"
-              color={backgroundColorType}
-            />
-          </>
+            <NodeToolbar node={node} />
+          </div>
         )}
-      </BottomDiv>
-    </NodeBox>
+      </NodeBox>
+    </>
   );
 };
 
