@@ -47,5 +47,10 @@ export const nodeStyles = (node: Node, spotlight: Spotlight) => {
           ? zIndex.secondary
           : 0} !important; // !important to override because reactflow sets z-index via style attribute
     }
+
+    .react-flow__node[data-id="${node.id}"]:hover {
+      // ensure hovered node and its e.g. toolbar can be in front of other nodes
+      z-index: ${zIndex.primary + 1} !important;
+    }
   `;
 };
