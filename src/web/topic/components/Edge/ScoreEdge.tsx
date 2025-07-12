@@ -5,15 +5,13 @@ import { EdgeLabelRenderer } from "reactflow";
 import { RelationName } from "@/common/edge";
 import { useSessionUser } from "@/web/common/hooks";
 import { openContextMenu } from "@/web/common/store/contextMenuActions";
-import { infoColor } from "@/web/common/theme";
 import { EdgeProps } from "@/web/topic/components/Diagram/Diagram";
-import { Spotlight } from "@/web/topic/components/Diagram/Diagram.styles";
 import {
-  StyledDiv,
-  StyledPath,
-  edgeColor,
-  highlightedEdgeColor,
-} from "@/web/topic/components/Edge/ScoreEdge.styles";
+  Spotlight,
+  primarySpotlightColor,
+  secondarySpotlightColor,
+} from "@/web/topic/components/Diagram/Diagram.styles";
+import { StyledDiv, StyledPath, edgeColor } from "@/web/topic/components/Edge/ScoreEdge.styles";
 import { getPathDefinitionForEdge } from "@/web/topic/components/Edge/svgPathDrawer";
 import { CommonIndicatorGroup } from "@/web/topic/components/Indicator/Base/CommonIndicatorGroup";
 import { ContentIndicatorGroup } from "@/web/topic/components/Indicator/Base/ContentIndicatorGroup";
@@ -36,9 +34,9 @@ const svgMarkerDef = (inReactFlow: boolean, spotlight: Spotlight) => {
   const id = `${inReactFlow ? flowMarkerId : nonFlowMarkerId}-${spotlight}`;
   const color =
     spotlight === "primary"
-      ? highlightedEdgeColor
+      ? primarySpotlightColor
       : spotlight === "secondary"
-        ? infoColor
+        ? secondarySpotlightColor
         : edgeColor;
 
   return (

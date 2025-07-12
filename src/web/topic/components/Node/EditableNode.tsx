@@ -14,6 +14,10 @@ import { memo, useContext, useState } from "react";
 import { isDefaultCoreNodeType } from "@/common/node";
 import { useSessionUser } from "@/web/common/hooks";
 import { openContextMenu } from "@/web/common/store/contextMenuActions";
+import {
+  primarySpotlightColor,
+  secondarySpotlightColor,
+} from "@/web/topic/components/Diagram/Diagram.styles";
 import { CommonIndicatorGroup } from "@/web/topic/components/Indicator/Base/CommonIndicatorGroup";
 import {
   BottomDiv,
@@ -109,12 +113,12 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
 
         [`&.selected ${NodeTypeDiv.toString()}`]: {
           // Match the shadow size of not-selected nodes
-          boxShadow: `-1px -1px 0px 0.5px black`,
+          boxShadow: `-1px -1px 0px 0.5px ${primarySpotlightColor}`,
         },
 
         [`&.spotlight-secondary ${NodeTypeDiv.toString()}`]: {
           // Match the shadow size of not-selected nodes
-          boxShadow: `-1px -1px 0px 0.5px ${theme.palette.info.main}`,
+          boxShadow: `-1px -1px 0px 0.5px ${secondarySpotlightColor}`,
         },
       };
 
@@ -149,7 +153,7 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
           // separate from react-flow__node because sometimes nodes are rendered outside of react-flow (e.g. details pane), and we still want to style these
           " diagram-node relative" +
           (!fillNodesWithColor ? " shadow shadow-gray-400" : "") +
-          (selected ? " selected" : "")
+          (selected ? " selected border-info-main shadow-info-main shadow-[0_0_0_1px]" : "")
         }
         {...floatingToolbarProps.getReferenceProps()} // for floating toolbar
       >

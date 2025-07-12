@@ -1,12 +1,15 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
-import { infoColor } from "@/web/common/theme";
-import { Spotlight, zIndex } from "@/web/topic/components/Diagram/Diagram.styles";
+import {
+  Spotlight,
+  primarySpotlightColor,
+  secondarySpotlightColor,
+  zIndex,
+} from "@/web/topic/components/Diagram/Diagram.styles";
 
 const highlightedEdgeWidth = "2px";
 export const edgeColor = "#b1b1b7"; // react flow default
-export const highlightedEdgeColor = "#555"; // darker than react flow default
 
 interface PathProps {
   spotlight: Spotlight;
@@ -24,11 +27,12 @@ export const StyledPath = styled("path", pathOptions)<PathProps>`
       if (spotlight === "primary") {
         return css`
           opacity: 1;
+          stroke: ${primarySpotlightColor} !important;
           stroke-width: ${highlightedEdgeWidth};
         `;
       } else if (spotlight === "secondary") {
         return css`
-          stroke: ${infoColor};
+          stroke: ${secondarySpotlightColor};
           stroke-width: ${highlightedEdgeWidth};
         `;
       }
@@ -57,13 +61,13 @@ export const StyledDiv = styled("div", divOptions)<DivProps>`
   ${({ spotlight }) => {
     if (spotlight === "primary") {
       return css`
-        border-color: ${highlightedEdgeColor};
+        border-color: ${primarySpotlightColor};
         border-width: ${highlightedEdgeWidth};
         z-index: ${zIndex.primary};
       `;
     } else if (spotlight === "secondary") {
       return css`
-        border-color: ${infoColor};
+        border-color: ${secondarySpotlightColor};
         border-width: ${highlightedEdgeWidth};
         z-index: ${zIndex.secondary};
       `;

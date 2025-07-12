@@ -47,13 +47,6 @@ export const NodeBox = styled(Box)`
   &:hover {
     box-shadow: 0 2px 8px 2px rgba(0, 0, 0, 0.08);
   }
-
-  // TODO: make this work for table nodes as well; need to manage node.selected within EditableNode instead of letting reactflow handle it
-  &.selected {
-    border-color: black;
-    outline-color: black;
-    box-shadow: 0 0 0 1px black;
-  }
 `;
 
 export const RightCornerContentIndicators = styled(ContentIndicatorGroup)`
