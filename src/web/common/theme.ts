@@ -223,7 +223,7 @@ const sharedPalette = {
   critique4: augmentColor({ color: { main: oklchToHex("oklch(97% 0.014 20)") } }),
 
   // generic
-  custom: augmentColor({ color: { main: "#ffffff" } }), // neutral white
+  custom: augmentColor({ color: { main: oklchToHex("oklch(90% 0 0)") } }), // neutral gray for customizable, darker than white to have some contrast, lighter than question-gray to distinguish
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- document won't be defined when rendered server-side

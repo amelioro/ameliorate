@@ -1,5 +1,4 @@
 import { WbTwilight } from "@mui/icons-material";
-import { type ButtonProps } from "@mui/material";
 import { MouseEventHandler, memo, useCallback } from "react";
 
 import { Indicator } from "@/web/topic/components/Indicator/Base/Indicator";
@@ -7,11 +6,11 @@ import { stopForcingNodeToShow, useIsNodeForcedToShow } from "@/web/view/current
 
 interface Props {
   nodeId: string;
-  partColor: ButtonProps["color"];
+  bgColor: string;
 }
 
 // TODO: only show if we're a FlowNode
-const ForceShownIndicatorBase = ({ nodeId, partColor }: Props) => {
+const ForceShownIndicatorBase = ({ nodeId, bgColor }: Props) => {
   const nodeIsForcedToShow = useIsNodeForcedToShow(nodeId);
 
   const onClick: MouseEventHandler<HTMLButtonElement> = useCallback(
@@ -26,7 +25,7 @@ const ForceShownIndicatorBase = ({ nodeId, partColor }: Props) => {
       Icon={WbTwilight}
       title={"Stop forcing node to show"}
       onClick={onClick}
-      color={partColor}
+      bgColor={bgColor}
     />
   );
 };

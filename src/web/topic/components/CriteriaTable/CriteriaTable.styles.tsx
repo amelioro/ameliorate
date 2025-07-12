@@ -35,6 +35,9 @@ export const tableStyles = css`
       .MuiTableCell-root {
         padding: 0;
         border-right: 1px solid #ddd; // honestly not sure where this color comes from, but it matches the MUI table row border
+
+        overflow: visible; // not sure why hidden by default, but we want to allow node toolbars to show beyond the cell bounds
+        position: static; // not sure why relative by default, but we want to allow node toolbars to z-index above nodes in other cells
       }
 
       .Mui-TableHeadCell-Content,
@@ -43,6 +46,8 @@ export const tableStyles = css`
         // also pretty troll, to allow head cells to expand to row height and col width - non-head cells don't have wrappers like these so don't need this
         height: 100%;
         width: 100%;
+
+        overflow: visible; // not sure why hidden by default, but we want to allow node toolbars to show beyond the cell bounds
       }
 
       .Mui-TableHeadCell-Content-Labels > span {

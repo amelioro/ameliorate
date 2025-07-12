@@ -23,7 +23,7 @@ export const EdgeCell = ({ edge }: { edge: Edge }) => {
       <div className="flex">
         <StatusIndicatorGroup
           graphPartId={edge.id}
-          color="paperPlain"
+          bgColor="white"
           notes={edge.data.notes}
           className="my-0 ml-0"
         />
@@ -31,7 +31,7 @@ export const EdgeCell = ({ edge }: { edge: Edge }) => {
           className="m-0"
           graphPartId={edge.id}
           graphPartType="edge"
-          color="paperPlain"
+          bgColor="white"
         />
       </div>
     </div>

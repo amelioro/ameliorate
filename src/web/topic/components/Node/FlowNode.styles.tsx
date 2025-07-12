@@ -1,7 +1,11 @@
 import styled from "@emotion/styled";
 import { css } from "@mui/material";
 
-import { Spotlight, zIndex } from "@/web/topic/components/Diagram/Diagram.styles";
+import {
+  Spotlight,
+  secondarySpotlightColor,
+  zIndex,
+} from "@/web/topic/components/Diagram/Diagram.styles";
 import { EditableNode } from "@/web/topic/components/Node/EditableNode";
 import { Node } from "@/web/topic/utils/graph";
 
@@ -22,15 +26,10 @@ export const HoverBridgeDiv = styled.div`
 `;
 
 export const StyledEditableNode = styled(EditableNode)`
-  ${({ theme }) => {
-    return css`
-      &.spotlight-secondary {
-        border-color: ${theme.palette.info.main};
-        outline-color: ${theme.palette.info.main};
-        z-index: ${zIndex.secondary};
-      }
-    `;
-  }};
+  &.spotlight-secondary {
+    border-color: ${secondarySpotlightColor};
+    z-index: ${zIndex.secondary};
+  }
 
   .react-flow.flashlight-mode & {
     cursor: copy; // TODO?: use a flashlight for the cursor
@@ -46,6 +45,11 @@ export const nodeStyles = (node: Node, spotlight: Spotlight) => {
         : spotlight === "secondary"
           ? zIndex.secondary
           : 0} !important; // !important to override because reactflow sets z-index via style attribute
+    }
+
+    .react-flow__node[data-id="${node.id}"]:hover {
+      // ensure hovered node and its e.g. toolbar can be in front of other nodes
+      z-index: ${zIndex.primary + 1} !important;
     }
   `;
 };

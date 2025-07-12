@@ -117,7 +117,7 @@ export const Summary = () => {
               value={category}
               className={
                 "grow *:grow *:basis-0 divide-x overflow-y-auto p-0" +
-                " [&>div>div]:p-1" +
+                " [&>div>*]:p-1" +
                 // need to use border-t here because for some reason the TabList itself has issues with border-b, where when TabPanel has a vertical scrollbar, the tab arrows will _always_ show, rather than conditionally based on horizontal scroll position
                 " border-t" +
                 (selectedTabOrFallback === category ? " flex" : " hidden")

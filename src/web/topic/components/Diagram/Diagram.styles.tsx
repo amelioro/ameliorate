@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
 import { ReactFlow } from "reactflow";
+
+import { infoColor } from "@/web/common/theme";
 import "reactflow/dist/style.css";
 
 /**
@@ -16,6 +18,9 @@ export const zIndex = {
 };
 
 export type Spotlight = "primary" | "secondary" | "normal" | "background";
+
+export const primarySpotlightColor = infoColor;
+export const secondarySpotlightColor = "#555"; // darker than react flow edge default
 
 export const StyledReactFlow = styled(ReactFlow)`
   display: flex;

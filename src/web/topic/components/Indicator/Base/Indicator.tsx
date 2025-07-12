@@ -1,15 +1,13 @@
-import { type ButtonProps } from "@mui/material";
+import { Button } from "@mui/material";
 import { MouseEventHandler } from "react";
 
-import { StyledButton } from "@/web/topic/components/Indicator/Base/Indicator.styles";
-import { MuiIcon } from "@/web/topic/utils/node";
-import { useFillNodesWithColor } from "@/web/view/userConfigStore";
+import { MuiIcon, indicatorLengthRem } from "@/web/topic/utils/node";
 
 export interface IndicatorProps {
   Icon: MuiIcon;
   title: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
-  color?: ButtonProps["color"];
+  bgColor?: string;
   filled?: boolean;
   className?: string;
 }
@@ -18,12 +16,10 @@ export const Indicator = ({
   Icon,
   title,
   onClick,
-  color = "neutral",
-  filled = true,
+  bgColor = "white",
+  filled = false,
   className,
 }: IndicatorProps) => {
-  const nodesFilled = useFillNodesWithColor();
-
   const onClickHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (onClick) {
       // In most cases, we don't want the click to result in selecting the parent node.
@@ -32,25 +28,35 @@ export const Indicator = ({
       onClick(event);
     }
   };
+  const calculatedBgColor = filled ? `color-mix(in oklch, ${bgColor}, #000 10%)` : bgColor;
 
   return (
     <>
-      <StyledButton
+      <Button
         title={title}
         aria-label={title}
         variant="contained"
-        color={filled ? color : "paperPlain"}
         onClick={onClickHandler}
         className={
           // text-base seems to fit more snuggly than the default 14px
-          "border border-solid text-base shadow-none" +
-          (nodesFilled ? " border-gray-500" : " border-neutral-main") +
+          "border border-solid border-gray-400 text-base shadow-none" +
           (!onClick ? " pointer-events-none" : "") +
           (className ? ` ${className}` : "")
         }
+        sx={{
+          backgroundColor: calculatedBgColor,
+          width: `${indicatorLengthRem}rem`,
+          minWidth: `${indicatorLengthRem}rem`,
+          height: `${indicatorLengthRem}rem`,
+          padding: "0px",
+
+          "&:hover": {
+            backgroundColor: `color-mix(in oklch, ${calculatedBgColor}, #000 10%)`,
+          },
+        }}
       >
-        <Icon color="neutralContrast" fontSize="inherit" />
-      </StyledButton>
+        <Icon fontSize="inherit" />
+      </Button>
     </>
   );
 };

@@ -8,8 +8,8 @@ export const ContentIndicator = ({
   Icon,
   title,
   onClick,
-  color = "neutral",
-  filled = true,
+  bgColor,
+  filled = false,
 }: Omit<IndicatorProps, "className">) => {
   const workspaceContext = useContext(WorkspaceContext);
   const showContentIndicators = useShowContentIndicators();
@@ -22,7 +22,7 @@ export const ContentIndicator = ({
       Icon={Icon}
       title={title}
       onClick={onClick}
-      color={color}
+      bgColor={bgColor}
       filled={filled}
       className={showIndicator ? "" : "hidden"}
     />

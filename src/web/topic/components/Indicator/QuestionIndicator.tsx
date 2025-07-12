@@ -1,5 +1,5 @@
 import { QuestionMark } from "@mui/icons-material";
-import { type ButtonProps } from "@mui/material";
+import { PaletteColor, useTheme } from "@mui/material";
 import { useCallback } from "react";
 
 import { emitter } from "@/web/common/event";
@@ -11,10 +11,12 @@ import { setSelected } from "@/web/view/selectedPartStore";
 
 interface Props {
   graphPartId: string;
-  partColor: ButtonProps["color"];
+  bgColor: string;
 }
 
-export const QuestionIndicator = ({ graphPartId, partColor }: Props) => {
+export const QuestionIndicator = ({ graphPartId, bgColor }: Props) => {
+  const theme = useTheme();
+
   const { questions } = useResearchNodes(graphPartId);
   const { scoresByGraphPartId, scoreMeaning } = useDisplayScores(
     questions.map((question) => question.id),
@@ -29,9 +31,10 @@ export const QuestionIndicator = ({ graphPartId, partColor }: Props) => {
 
   const highestScore = getHighestScore(Object.values(scoresByGraphPartId));
   // could just color if score is > 5, to avoid bringing attention to unimportant things, but it seems nice to have the visual indication of a low score too
-  const scoreColor = getScoreColor(highestScore, scoreMeaning) as ButtonProps["color"];
+  const scoreColor = getScoreColor(highestScore, scoreMeaning);
   // paperPlain is a color intended to not stand out here - use the part's color in this case so it blends in with the part better
-  const color = scoreColor === "paperPlain" ? partColor : scoreColor ?? partColor;
+  const color =
+    scoreColor === "paperPlain" ? bgColor : (theme.palette[scoreColor] as PaletteColor).main;
 
   const Icon = QuestionMark;
 
@@ -40,7 +43,7 @@ export const QuestionIndicator = ({ graphPartId, partColor }: Props) => {
       Icon={Icon}
       title={`Has ${questions.length} questions`}
       onClick={onClick}
-      color={color}
+      bgColor={color}
     />
   );
 };
