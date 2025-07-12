@@ -1,4 +1,5 @@
 import {
+  FloatingPortal,
   autoUpdate,
   flip,
   offset,
@@ -123,6 +124,17 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
           },
         };
 
+  const nodeToolbar = (
+    <div
+      ref={floatingToolbarProps.refs.setFloating}
+      style={floatingToolbarProps.floatingStyles}
+      {...floatingToolbarProps.getFloatingProps()}
+      className="z-10"
+    >
+      <NodeToolbar node={node} context={context} />
+    </div>
+  );
+
   return (
     <>
       <NodeBox
@@ -198,18 +210,19 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
         </BottomDiv>
 
         {/* within node div so we can guarantee that the container div has relative positioning */}
-        {/* TODO(bug): toolbar doesn't display in problem header cell? html/css looks identical to other header cells... */}
         {/* TODO?: toolbar disappears sooner than add node buttons, and shadow disappears faster than either of these; ideally they'd probably disappear at the same time? */}
-        {(selected || floatingToolbarProps.isOpenViaHover) && (
-          <div
-            ref={floatingToolbarProps.refs.setFloating}
-            style={floatingToolbarProps.floatingStyles}
-            {...floatingToolbarProps.getFloatingProps()}
-            className="z-10"
-          >
-            <NodeToolbar node={node} context={context} />
-          </div>
-        )}
+        {(selected || floatingToolbarProps.isOpenViaHover) &&
+          (context === "table" ? (
+            // TODO?: hmm can't seem to portal to `criteria-table-paper` and get the zoom for the portal, because the zoom is being applied to the table itself to avoid applying to header,
+            // but we want to portal the toolbar in order to avoid clipping by the table's `overflow: auto` that's required for scrolling to see more nodes.
+            // Potentially we could add a div above the table (that's sibling to the header) and portal there to get the zoom on the toolbar.
+            // For now we're just portaling to a good root location, since there doesn't seem to be much benefit to portaling closer to the table.
+            // Note: maybe not having zoom applied to the toolbar is ok so that the buttons are easier to click anyway.
+            <FloatingPortal id="__next">{nodeToolbar}</FloatingPortal>
+          ) : (
+            // not portaling this, so that zoom applies e.g. in the diagram
+            nodeToolbar
+          ))}
       </NodeBox>
     </>
   );
