@@ -83,7 +83,8 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
   const theme = useTheme();
 
   const nodeDecoration = nodeDecorations[node.type];
-  const color = theme.palette[node.type].main;
+  const nodeColor = theme.palette[node.type].main;
+  const nodeLightColor = `color-mix(in oklch, ${nodeColor}, #fff 80%)`;
   const NodeIcon = nodeDecoration.NodeIcon;
   const typeText = node.data.customType ?? nodeDecoration.title;
 
@@ -93,36 +94,32 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
     fillNodesWithColor || node.type === "custom" ? node.type : "paperPlain";
 
   // TODO: use `fill-node`/`no-fill-node` class, and extract these to styles file; not sure how to use type-specific colors without js though? maybe css vars for type-specific colors, and a var for the node type that's scoped to the current node?
-  const nodeStyles: SxProps =
-    fillNodesWithColor || node.type === "custom" // since custom is white, it can't be used as the border color because it doesn't contrast against the white background; so just treat custom as if it's filled with color
-      ? {
-          backgroundColor: color,
-          borderColor: "black",
-          outlineColor: "black",
-        }
-      : {
-          backgroundColor: "white",
-          borderColor: color,
-          outlineColor: color,
+  const nodeStyles: SxProps = fillNodesWithColor
+    ? {
+        backgroundColor: nodeColor,
+        borderColor: "black",
+      }
+    : {
+        backgroundColor: nodeLightColor,
+        borderColor: isDefaultCoreNodeType(node.type) ? nodeColor : "transparent",
 
-          [NodeTypeDiv.toString()]: {
-            backgroundColor: color,
-            // anti-aliasing between white node background and colored border/icon background creates a gray line - add colored shadow to hide this https://stackoverflow.com/a/40100710/8409296
-            // 0.5px spread instead of 1px because 1px creates a really thin shadow on the bottom/right, which can be seen
-            // more clearly e.g. when selecting a benefit node (black shadow against bright background)
-            boxShadow: `-1px -1px 0px 0.5px ${color}`,
-          },
+        [NodeTypeDiv.toString()]: {
+          backgroundColor: nodeColor,
+          // anti-aliasing between light node background and colored border/icon background creates a gray line - add colored shadow to hide this https://stackoverflow.com/a/40100710/8409296
+          // also for nodes without borders, this helps the label color go to the edge of the node
+          boxShadow: `-1px -1px 0px 1px ${nodeColor}`,
+        },
 
-          [`&.selected ${NodeTypeDiv.toString()}`]: {
-            // Match the shadow size of not-selected nodes
-            boxShadow: `-1px -1px 0px 0.5px black`,
-          },
+        [`&.selected ${NodeTypeDiv.toString()}`]: {
+          // Match the shadow size of not-selected nodes
+          boxShadow: `-1px -1px 0px 0.5px black`,
+        },
 
-          [`&.spotlight-secondary ${NodeTypeDiv.toString()}`]: {
-            // Match the shadow size of not-selected nodes
-            boxShadow: `-1px -1px 0px 0.5px ${theme.palette.info.main}`,
-          },
-        };
+        [`&.spotlight-secondary ${NodeTypeDiv.toString()}`]: {
+          // Match the shadow size of not-selected nodes
+          boxShadow: `-1px -1px 0px 0.5px ${theme.palette.info.main}`,
+        },
+      };
 
   const nodeToolbar = (
     <div
@@ -154,8 +151,8 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
           // allow other components to apply conditional css related to this node, e.g. when it's hovered/selected
           // separate from react-flow__node because sometimes nodes are rendered outside of react-flow (e.g. details pane), and we still want to style these
           " diagram-node relative" +
-          (selected ? " selected" : "") +
-          (context === "diagram" && isDefaultCoreNodeType(node.type) ? " outline" : "")
+          (!fillNodesWithColor ? " shadow shadow-gray-400" : "") +
+          (selected ? " selected" : "")
         }
         {...floatingToolbarProps.getReferenceProps()} // for floating toolbar
       >
