@@ -79,6 +79,8 @@ export const TopicViews = () => {
             <Collapse in={isInformationFiltersSectionOpen} timeout="auto" unmountOnExit>
               <InformationFilters />
             </Collapse>
+
+            <Divider sx={{ marginY: 1 }} />
           </>
         )}
 
@@ -95,10 +97,10 @@ export const TopicViews = () => {
             <Collapse in={isTableFiltersSectionOpen} timeout="auto" unmountOnExit>
               <TableFilters />
             </Collapse>
+
+            <Divider sx={{ marginY: 1 }} />
           </>
         )}
-
-        <Divider sx={{ marginY: 1 }} />
 
         <ListItem key="6">
           <ListItemButton

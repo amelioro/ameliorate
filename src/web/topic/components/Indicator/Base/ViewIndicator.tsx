@@ -5,7 +5,7 @@ export const ViewIndicator = ({
   Icon,
   title,
   onClick,
-  color = "neutral",
+  bgColor,
   filled = true,
 }: Omit<IndicatorProps, "className">) => {
   const showViewIndicators = useShowViewIndicators();
@@ -17,7 +17,7 @@ export const ViewIndicator = ({
       Icon={Icon}
       title={title}
       onClick={onClick}
-      color={color}
+      bgColor={bgColor}
       filled={filled}
       className={showIndicator ? "" : "hidden"}
     />
