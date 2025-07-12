@@ -183,11 +183,11 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
         <CommonIndicatorGroup graphPart={edge} className="mx-0 *:ml-0.5" />
       </div>
       <div className="absolute bottom-0 flex translate-y-4">
-        <StatusIndicatorGroup graphPartId={edge.id} color="paperPlain" notes={edge.data.notes} />
+        <StatusIndicatorGroup graphPartId={edge.id} bgColor="white" notes={edge.data.notes} />
         <ContentIndicatorGroup
           graphPartId={edge.id}
           graphPartType="edge"
-          color="paperPlain"
+          bgColor="white"
           className="ml-0"
         />
       </div>

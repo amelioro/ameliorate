@@ -8,7 +8,7 @@ import {
   useHover,
   useInteractions,
 } from "@floating-ui/react";
-import { type ButtonProps, type SxProps, useTheme } from "@mui/material";
+import { type SxProps, useTheme } from "@mui/material";
 import { memo, useContext, useState } from "react";
 
 import { isDefaultCoreNodeType } from "@/common/node";
@@ -90,9 +90,6 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
 
   const customizable = userCanEditTopicData && (unrestrictedEditing || node.type === "custom");
 
-  const backgroundColorType: ButtonProps["color"] =
-    fillNodesWithColor || node.type === "custom" ? node.type : "paperPlain";
-
   // TODO: use `fill-node`/`no-fill-node` class, and extract these to styles file; not sure how to use type-specific colors without js though? maybe css vars for type-specific colors, and a var for the node type that's scoped to the current node?
   const nodeStyles: SxProps = fillNodesWithColor
     ? {
@@ -101,7 +98,7 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
       }
     : {
         backgroundColor: nodeLightColor,
-        borderColor: isDefaultCoreNodeType(node.type) ? nodeColor : "transparent",
+        borderColor: isDefaultCoreNodeType(node.type) ? nodeColor : nodeLightColor,
 
         [NodeTypeDiv.toString()]: {
           backgroundColor: nodeColor,
@@ -194,13 +191,13 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
               {/* TODO?: how to make corner indicators not look bad in the table? they're cut off */}
               <LeftCornerStatusIndicators
                 graphPartId={node.id}
-                color={backgroundColorType}
+                bgColor={nodeStyles.backgroundColor as string}
                 notes={node.data.notes}
               />
               <RightCornerContentIndicators
                 graphPartId={node.id}
                 graphPartType="node"
-                color={backgroundColorType}
+                bgColor={nodeStyles.backgroundColor as string}
               />
             </>
           )}

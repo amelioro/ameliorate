@@ -1,5 +1,4 @@
 import { Notes } from "@mui/icons-material";
-import { ButtonProps } from "@mui/material";
 import { useCallback } from "react";
 
 import { emitter } from "@/web/common/event";
@@ -9,10 +8,10 @@ import { setSelected } from "@/web/view/selectedPartStore";
 interface Props {
   graphPartId: string;
   notes: string;
-  partColor: ButtonProps["color"];
+  bgColor: string;
 }
 
-export const NotesIndicator = ({ graphPartId, notes, partColor }: Props) => {
+export const NotesIndicator = ({ graphPartId, notes, bgColor }: Props) => {
   const hasNotes = notes.length > 0;
 
   const onClick = useCallback(() => {
@@ -22,5 +21,5 @@ export const NotesIndicator = ({ graphPartId, notes, partColor }: Props) => {
 
   if (!hasNotes) return <></>;
 
-  return <ContentIndicator Icon={Notes} title={"View notes"} onClick={onClick} color={partColor} />;
+  return <ContentIndicator Icon={Notes} title={"View notes"} onClick={onClick} bgColor={bgColor} />;
 };
