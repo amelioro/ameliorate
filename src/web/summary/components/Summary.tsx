@@ -60,6 +60,7 @@ export const Summary = () => {
       // max-w because the left/right-corner things (i.e. row header, row action, home button) become pretty far away on big screens otherwise.
       // Ideally we would probably position on big screens differently? not sure.
       className="flex min-h-0 w-full max-w-2xl grow flex-col self-center"
+      onClick={() => setSelected(null)} // want an easy way to deselect nodes, since the node toolbar can be annoying (e.g. if you click "back" and the toolbar shows on a node in a column)
     >
       <NavDiv>
         <IconButton
@@ -96,7 +97,12 @@ export const Summary = () => {
           allowScrollButtonsMobile
         >
           {summaryCategories.map((category) => (
-            <Tab key={category} value={category} label={startCase(category)} />
+            <Tab
+              key={category}
+              value={category}
+              label={startCase(category)}
+              onClick={(event) => event.stopPropagation()} // e.g. prevent triggering node deselect from summary background click
+            />
           ))}
         </TabList>
 

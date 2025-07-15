@@ -145,6 +145,7 @@ const EditableNodeBase = ({ node, className = "", onClick }: Props) => {
           setSelected(node.id);
           if (context === "summary") setSummaryNodeId(node.id);
           if (onClick) onClick(event); // e.g. allow flownodes to trigger flashlight mode
+          event.stopPropagation(); // prevent triggering node deselect from summary background click
         }}
         onContextMenu={(event) => openContextMenu(event, { node })}
         role="button"
