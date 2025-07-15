@@ -3,8 +3,14 @@ import { shallow } from "zustand/shallow";
 import { errorWithData } from "@/common/errorHandling";
 import { NodeType, isDefaultCoreNodeType } from "@/common/node";
 import { getDefaultNode } from "@/web/topic/diagramStore/nodeGetters";
-import { useDiagramStore } from "@/web/topic/diagramStore/store";
-import { RelationDirection, findNodeOrThrow } from "@/web/topic/utils/graph";
+import { DiagramStoreState, useDiagramStore } from "@/web/topic/diagramStore/store";
+import {
+  Node,
+  RelationDirection,
+  ancestors,
+  descendants,
+  findNodeOrThrow,
+} from "@/web/topic/utils/graph";
 import { children, edges, neighbors, parents } from "@/web/topic/utils/node";
 import { useIsAnyGraphPartSelected } from "@/web/view/selectedPartStore";
 
@@ -27,10 +33,42 @@ export const useAllNodes = (nodeIds?: string[]) => {
   }, shallow);
 };
 
+const getCoreNodes = (state: DiagramStoreState): Node[] => {
+  return state.nodes.filter((node) => isDefaultCoreNodeType(node.type));
+};
+
 export const useCoreNodes = () => {
   return useDiagramStore((state) => {
-    return state.nodes.filter((node) => isDefaultCoreNodeType(node.type));
+    return getCoreNodes(state);
+  }, shallow);
+};
+
+export const useIsCoreNode = (nodeId: string) => {
+  return useDiagramStore((state) => {
+    return getCoreNodes(state).some((node) => node.id === nodeId);
   });
+};
+
+export const useRelatedUnrelatedCoreNodes = (
+  summaryNode: Node | null,
+): (Node & { related: boolean })[] => {
+  return useDiagramStore((state) => {
+    const coreNodes = getCoreNodes(state);
+
+    if (!summaryNode) return coreNodes.map((node) => ({ ...node, related: true })); // say it's related because if there's no summary node, we're looking at core nodes
+
+    const graph = { nodes: state.nodes, edges: state.edges };
+
+    return coreNodes.map((node) => {
+      if (node.id === summaryNode.id) return { ...node, related: true };
+
+      const related =
+        ancestors(node, graph).some((ancestor) => ancestor.id === summaryNode.id) ||
+        descendants(node, graph).some((descendant) => descendant.id === summaryNode.id);
+
+      return { ...node, related };
+    });
+  }, shallow);
 };
 
 export const useNodeChildren = (nodeId: string | undefined) => {
