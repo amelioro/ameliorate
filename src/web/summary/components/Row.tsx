@@ -2,8 +2,10 @@ import { Typography, styled } from "@mui/material";
 import { ReactNode } from "react";
 
 import { compareNodesByType } from "@/common/node";
+import { useSessionUser } from "@/web/common/hooks";
 import { EditableNode } from "@/web/topic/components/Node/EditableNode";
 import { useDisplayScores } from "@/web/topic/diagramStore/scoreHooks";
+import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { Node } from "@/web/topic/utils/graph";
 import { MuiIcon } from "@/web/topic/utils/node";
 import { getNumericScore } from "@/web/topic/utils/score";
@@ -18,6 +20,9 @@ interface Props {
 }
 
 export const Row = ({ title, Icon, nodes, addButtonsSlot, endHeaderSlot, actionSlot }: Props) => {
+  const { sessionUser } = useSessionUser();
+  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
+
   const { scoresByGraphPartId } = useDisplayScores(nodes.map((node) => node.id));
 
   const nodesSortedByScoreThenType = nodes.toSorted((node1, node2) => {
@@ -41,7 +46,9 @@ export const Row = ({ title, Icon, nodes, addButtonsSlot, endHeaderSlot, actionS
         {actionSlot && <RightHeaderDiv>{actionSlot}</RightHeaderDiv>}
       </HeaderDiv>
 
-      {addButtonsSlot && <div className="flex justify-center">{addButtonsSlot}</div>}
+      {addButtonsSlot && userCanEditTopicData && (
+        <div className="flex justify-center">{addButtonsSlot}</div>
+      )}
 
       <ContentDiv className="flex flex-wrap justify-center gap-2.5 p-0.5 lg:gap-4">
         {nodes.length === 0 ? (

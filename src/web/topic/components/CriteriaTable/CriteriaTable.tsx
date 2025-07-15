@@ -30,6 +30,7 @@ import { getConnectingEdge } from "@/web/topic/utils/edge";
 import { Edge, Node } from "@/web/topic/utils/graph";
 import { useGeneralFilter, useTableFilter } from "@/web/view/currentViewStore/filter";
 import { setTransposed, useTransposed } from "@/web/view/currentViewStore/table";
+import { setSelected } from "@/web/view/selectedPartStore";
 import { applyScoreFilter } from "@/web/view/utils/generalFilter";
 import { getSelectedTradeoffNodes } from "@/web/view/utils/infoFilter";
 
@@ -235,7 +236,10 @@ export const CriteriaTable = () => {
 
   const ToolBarActions = (table: MRT_TableInstance<RowData>) => {
     return (
-      <div className="pr-12">
+      <div
+        className="mr-12" // margin instead of padding so that onClick isn't triggered (and can deselect the current node)
+        onClick={(event) => event.stopPropagation()} // prevent triggering node deselect from table paper click
+      >
         <MRT_ToggleGlobalFilterButton table={table} />
 
         {userCanEditTopicData && (
@@ -289,10 +293,12 @@ export const CriteriaTable = () => {
         positionToolbarDropZone="none"
         muiTableProps={{
           className: tableZoomClasses,
+          onClick: (event) => event.stopPropagation(), // prevent triggering node deselect from table paper click
         }}
         muiTablePaperProps={{
           // no shadow because that creates lines that don't line up well with the app header
           className: "criteria-table-paper shadow-none",
+          onClick: () => setSelected(null), // want an easy way to deselect nodes on the table, since the node toolbar shows on select and can be annoying
         }}
         muiTableBodyRowProps={{ hover: false }}
         state={{

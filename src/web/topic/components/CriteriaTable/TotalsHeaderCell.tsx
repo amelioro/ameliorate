@@ -1,7 +1,8 @@
+import { HelpOutline } from "@mui/icons-material";
 import { Box, Link, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 
-import { HelpIcon } from "@/web/common/components/HelpIcon";
+import { IconWithTooltip } from "@/web/common/components/Tooltip/IconWithTooltip";
 
 export const TotalsHeaderCell = () => {
   const [showExactDetails, setShowExactDetails] = useState(false);
@@ -9,9 +10,10 @@ export const TotalsHeaderCell = () => {
   return (
     <Stack direction="row" justifyContent="center" alignItems="center" height="100%">
       <Typography variant="body1">Solution Totals</Typography>
-      <HelpIcon
+      <IconWithTooltip
         tooltipHeading="Solution Totals"
-        iconClassName="p-2"
+        iconButtonClassName="p-2"
+        icon={<HelpOutline fontSize="small" />}
         tooltipBody={
           <Box
             sx={{

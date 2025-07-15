@@ -89,12 +89,15 @@ export const FlowNode = (flowNode: NodeProps) => {
         key={node.id.concat(animated.toString())}
         layout={animated}
         style={{ pointerEvents: "none" }}
-        onClick={() => {
-          if (getFlashlightMode()) showNodeAndNeighbors(node.id, true);
-        }}
       >
         <NodeHandle node={node} direction="parent" orientation={orientation} />
-        <StyledEditableNode node={node} className={`spotlight-${spotlight}`} />
+        <StyledEditableNode
+          node={node}
+          className={`spotlight-${spotlight}`}
+          onClick={() => {
+            if (getFlashlightMode()) showNodeAndNeighbors(node.id, true);
+          }}
+        />
         <NodeHandle node={node} direction="child" orientation={orientation} />
       </motion.div>
 
