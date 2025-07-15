@@ -9,7 +9,7 @@ import {
   useInteractions,
 } from "@floating-ui/react";
 import { type SxProps, useTheme } from "@mui/material";
-import { memo, useContext, useState } from "react";
+import { MouseEvent, memo, useContext, useState } from "react";
 
 import { isDefaultCoreNodeType } from "@/common/node";
 import { useSessionUser } from "@/web/common/hooks";
@@ -69,9 +69,10 @@ const useFloatingToolbar = (nodeRef: HTMLDivElement | null, selected: boolean) =
 interface Props {
   node: Node;
   className?: string;
+  onClick?: (event: MouseEvent<HTMLDivElement>) => void;
 }
 
-const EditableNodeBase = ({ node, className = "" }: Props) => {
+const EditableNodeBase = ({ node, className = "", onClick }: Props) => {
   const [nodeRef, setNodeRef] = useState<HTMLDivElement | null>(null); // useState so that setting ref triggers re-render for floating ui https://floating-ui.com/docs/useFloating#elements
 
   const { sessionUser } = useSessionUser();
@@ -140,9 +141,10 @@ const EditableNodeBase = ({ node, className = "" }: Props) => {
         // also, this ensures e.g. EditableNode doesn't try re-using ContextIndicator from one component to another, since that has hooks that are based on node type, and therefore would otherwise change creating a hook order-changed error
         key={node.id}
         ref={setNodeRef}
-        onClick={() => {
+        onClick={(event) => {
           setSelected(node.id);
           if (context === "summary") setSummaryNodeId(node.id);
+          if (onClick) onClick(event); // e.g. allow flownodes to trigger flashlight mode
         }}
         onContextMenu={(event) => openContextMenu(event, { node })}
         role="button"
