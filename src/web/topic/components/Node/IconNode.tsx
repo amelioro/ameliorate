@@ -1,4 +1,5 @@
 import { useTheme } from "@mui/material";
+import { LayoutGroup } from "framer-motion";
 import { MouseEvent } from "react";
 
 import { Tooltip } from "@/web/common/components/Tooltip/Tooltip";
@@ -30,10 +31,14 @@ export const IconNode = ({ node, className, onClick }: Props) => {
   const nodeDescription = `${typeText}: ${node.data.label}`;
 
   const tooltipBody = (
-    // lots of padding as a small hack to ensure the node toolbar doesn't flicker to reposition when the tooltip opens
-    <div className="flex p-10">
-      <EditableNode node={node} />
-    </div>
+    // Slight hack to ensure that the tooltip node doesn't animate towards/from a currently-showing node, which would cause that node to disappear.
+    // Doing this hack because didn't want to create a separate Workspace Context for the tooltip (which is how we prevent animating in other undesirable spots).
+    <LayoutGroup id="tooltip">
+      {/* lots of padding as a small hack to ensure the node toolbar doesn't flicker to reposition when the tooltip opens */}
+      <div className="flex p-10">
+        <EditableNode node={node} />
+      </div>
+    </LayoutGroup>
   );
 
   const nodeIcon = (

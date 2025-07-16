@@ -143,6 +143,11 @@ const EditableNodeBase = ({ node, className = "", onClick }: Props) => {
         // also, this ensures e.g. EditableNode doesn't try re-using ContextIndicator from one component to another, since that has hooks that are based on node type, and therefore would otherwise change creating a hook order-changed error
         key={node.id}
         ref={setNodeRef}
+        // TODO?: not sure why summary nodes sometimes animate from height that's slightly off
+        // don't animate in diagram because FlowNode already animates for diagram (with Handles)
+        // don't animate in table because animation doesn't go over rows/cols - probably need to change overflows/positions/z-indexes in table, something like this https://github.com/amelioro/ameliorate/pull/771/files#diff-41880963d81eba31b5d0de56b7d1c84335078e0472037158b6a18b970da4d102
+        // don't animate between contexts because if the node shows up in two spots at once, animation will remove it from one of the spots
+        layoutId={context === "details" || context == "summary" ? node.id + context : undefined}
         onClick={(event) => {
           setSelected(node.id);
           if (context === "summary") setSummaryNodeId(node.id, true);

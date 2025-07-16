@@ -84,6 +84,7 @@ export const FlowNode = (flowNode: NodeProps) => {
         />
       )}
 
+      {/* using this motion.div separately from EditableNode's specifically for animating node handles with the node */}
       <motion.div
         // create new component when animated changes, see issue workaround https://github.com/framer/motion/issues/2238#issue-1809290539
         key={node.id.concat(animated.toString())}
