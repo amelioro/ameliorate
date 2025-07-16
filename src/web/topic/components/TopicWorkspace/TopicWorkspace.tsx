@@ -65,6 +65,8 @@ const ZenModeButton = () => {
   );
 };
 
+export const workspaceId = "workspace";
+
 export const TopicWorkspace = () => {
   const { sessionUser } = useSessionUser();
 
@@ -79,8 +81,10 @@ export const TopicWorkspace = () => {
   const zenMode = useZenMode();
 
   return (
-    // h-svh to force workspace to take up full height of screen
-    <div className="relative flex h-svh flex-col">
+    // h-svh to force workspace to take up full height of screen.
+    // overflow-hidden to prevent scrollbars when showing e.g. tooltips/poppers (e.g. node toolbar/score pie)
+    // because there can be infinite flickering where hover creates scrollbars which create shift which stop hover which stop shift which moves element back under mouse and starts hover again
+    <div id={workspaceId} className="relative flex h-svh flex-col overflow-hidden">
       <SiteBanner />
 
       {!zenMode && <AppHeader />}

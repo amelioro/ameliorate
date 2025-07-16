@@ -6,6 +6,7 @@ import { BackdropPopper, CircleDiv, ScorePopper } from "@/web/topic/components/S
 import { ScoreButton, buttonDiameterRem } from "@/web/topic/components/Score/ScoreButton";
 import { ScoreCompare } from "@/web/topic/components/Score/ScoreCompare";
 import { ScoreSelect } from "@/web/topic/components/Score/ScoreSelect";
+import { workspaceId } from "@/web/topic/components/TopicWorkspace/TopicWorkspace";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { useUserScores } from "@/web/topic/diagramStore/scoreHooks";
 import { playgroundUsername } from "@/web/topic/diagramStore/store";
@@ -105,6 +106,7 @@ export const Score = ({ graphPartId }: ScoreProps) => {
         id="backdrop-popper"
         open={hovering || selected}
         isPieSelected={selected}
+        container={() => document.getElementById(workspaceId)} // workspace sets overflow-hidden so we don't have to worry about poppers going off page and creating scroll
         // Not used, since size is stretched to screen, but without this MUI will throw really
         // annoying errors. This is an easier fix than converting the popper to a modal, which
         // would probably be a more correct solution (per MUI's intentions for the components).
@@ -133,6 +135,7 @@ export const Score = ({ graphPartId }: ScoreProps) => {
           // prevents parent node from being selected
           e.stopPropagation()
         }
+        container={() => document.getElementById(workspaceId)} // workspace sets overflow-hidden so we don't have to worry about poppers going off page and creating scroll
         anchorEl={mainButtonRef.current}
         modifiers={[
           {
