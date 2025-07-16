@@ -4,7 +4,14 @@ const summaries = ["topic", ...nodeTypes] as const;
 export type Summary = (typeof summaries)[number];
 
 // categories are used as tabs in the summary view
-const categories = ["coreNodes", "components", "motivation", "concerns", "all"] as const;
+const categories = [
+  "coreNodes",
+  "components",
+  "motivation",
+  "concerns",
+  "tradeoffs",
+  "all",
+] as const;
 export type Category = (typeof categories)[number];
 
 export const categoriesBySummary: Record<Summary, [Category, ...Category[]]> = {
@@ -14,14 +21,15 @@ export const categoriesBySummary: Record<Summary, [Category, ...Category[]]> = {
   cause: ["all"],
   problem: ["all"],
   criterion: ["all"],
-  solutionComponent: ["components", "motivation", "concerns", "all"],
+  solutionComponent: ["components", "tradeoffs", "motivation", "concerns", "all"],
   benefit: ["all"],
   effect: ["all"],
   detriment: ["all"],
-  solution: ["components", "motivation", "concerns", "all"],
+  // tradeoffs seems like it's pretty good actually, not sure if there's need to keep motivation and concerns separately
+  solution: ["components", "tradeoffs", "motivation", "concerns", "all"],
   obstacle: ["all"],
-  mitigationComponent: ["components", "motivation", "concerns", "all"],
-  mitigation: ["components", "motivation", "concerns", "all"],
+  mitigationComponent: ["components", "tradeoffs", "motivation", "concerns", "all"],
+  mitigation: ["components", "tradeoffs", "motivation", "concerns", "all"],
 
   // research
   question: ["all"],
@@ -46,6 +54,8 @@ const nodeAspects = [
   "addressed",
   "detriments",
   "obstacles",
+  "motivation",
+  "concerns",
   "all",
 ] as const;
 
@@ -58,5 +68,6 @@ export const aspectsByCategory: Record<Category, [Aspect, Aspect?]> = {
   components: ["components"],
   motivation: ["benefits", "addressed"],
   concerns: ["detriments", "obstacles"],
+  tradeoffs: ["motivation", "concerns"],
   all: ["all"],
 };

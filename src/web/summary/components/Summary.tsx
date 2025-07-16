@@ -7,9 +7,11 @@ import { AddressedColumn } from "@/web/summary/components/AddressedColumn";
 import { AllColumn } from "@/web/summary/components/AllColumn";
 import { BenefitsColumn } from "@/web/summary/components/BenefitsColumn";
 import { ComponentsColumn } from "@/web/summary/components/ComponentsColumn";
+import { ConcernsColumn } from "@/web/summary/components/ConcernsColumn";
 import { CoreNodesColumn } from "@/web/summary/components/CoreNodesColumn";
 import { CoreNodesHeading } from "@/web/summary/components/CoreNodesHeading";
 import { DetrimentsColumn } from "@/web/summary/components/DetrimentsColumn";
+import { MotivationColumn } from "@/web/summary/components/MotivationColumn";
 import { ObstaclesColumn } from "@/web/summary/components/ObstaclesColumn";
 import { SummaryBreadcrumbs } from "@/web/summary/components/SummaryBreadcrumbs";
 import {
@@ -38,6 +40,8 @@ const columnComponentsByAspect: Record<NodeAspect, ComponentType<NodeColumnProps
   addressed: AddressedColumn,
   detriments: DetrimentsColumn,
   obstacles: ObstaclesColumn,
+  motivation: MotivationColumn,
+  concerns: ConcernsColumn,
   all: AllColumn,
 };
 
