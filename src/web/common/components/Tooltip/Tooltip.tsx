@@ -11,6 +11,7 @@ interface Props {
   tooltipHeading?: string;
   // TODO?: could make header or body required, but this makes types a bit complicated, particularly in combination with IconWithTooltip
   tooltipBody?: ReactNode;
+  immediatelyOpenOnTouch?: boolean;
   tooltipPopperClassName?: string;
 }
 
@@ -25,6 +26,11 @@ export const Tooltip = ({
   children,
   tooltipHeading,
   tooltipBody,
+  /**
+   * e.g. true for help icon tooltips, but false for node icon where tap actually performs an action
+   * (sets the node as summary and selects it) - in these cases, hold-tap-to-open seems fine.
+   */
+  immediatelyOpenOnTouch = true,
   tooltipPopperClassName,
 }: Props) => {
   return (
@@ -39,8 +45,8 @@ export const Tooltip = ({
           tooltipHeading
         )
       }
-      enterTouchDelay={0} // allow touch to immediately trigger
-      leaveTouchDelay={Infinity} // touch-away to close on mobile, since message is long
+      enterTouchDelay={immediatelyOpenOnTouch ? 0 : undefined}
+      leaveTouchDelay={immediatelyOpenOnTouch ? Infinity : undefined} // touch-away to close on mobile, since message is long
       slotProps={{
         tooltip: {
           className: tooltipBody

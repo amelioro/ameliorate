@@ -1,7 +1,6 @@
 import { useTheme } from "@mui/material";
 import { MouseEvent } from "react";
 
-import { IconWithTooltip } from "@/web/common/components/Tooltip/IconWithTooltip";
 import { Tooltip } from "@/web/common/components/Tooltip/Tooltip";
 import { primarySpotlightColor } from "@/web/topic/components/Diagram/Diagram.styles";
 import { EditableNode } from "@/web/topic/components/Node/EditableNode";
@@ -51,20 +50,20 @@ export const IconNode = ({ node, className, onClick }: Props) => {
     />
   );
 
-  return onClick ? (
-    <Tooltip tooltipBody={tooltipBody}>
-      <button className="flex" onClick={onClick} aria-label={nodeDescription}>
+  return (
+    <Tooltip
+      tooltipBody={tooltipBody}
+      immediatelyOpenOnTouch={false}
+      // set zIndex to MuiMenu - 1 as a hack to allow context menu to show in front
+      tooltipPopperClassName="z-[1299]"
+    >
+      <button
+        className={"flex" + (onClick ? "" : " cursor-default")}
+        onClick={onClick}
+        aria-label={nodeDescription}
+      >
         {nodeIcon}
       </button>
     </Tooltip>
-  ) : (
-    // if we don't have an onClick, this component wraps this node in a button for accessibility
-    <IconWithTooltip
-      ariaLabel={nodeDescription}
-      tooltipBody={tooltipBody}
-      icon={nodeIcon}
-      // set zIndex to MuiMenu - 1 as a hack to allow context menu to show in front
-      tooltipPopperClassName="z-[1299]"
-    />
   );
 };
