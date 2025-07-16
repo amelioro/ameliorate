@@ -8,7 +8,8 @@ import {
   useHover,
   useInteractions,
 } from "@floating-ui/react";
-import { type SxProps, useTheme } from "@mui/material";
+import { type SxProps, styled, useTheme } from "@mui/material";
+import { motion } from "framer-motion";
 import { MouseEvent, memo, useContext, useState } from "react";
 
 import { isDefaultCoreNodeType } from "@/common/node";
@@ -23,11 +24,11 @@ import {
   BottomDiv,
   LeftCornerStatusIndicators,
   MiddleDiv,
-  NodeBox,
   NodeTypeDiv,
   NodeTypeSpan,
   RightCornerContentIndicators,
   TopDiv,
+  nodeWidthRem,
 } from "@/web/topic/components/Node/EditableNode.styles";
 import { NodeTextArea } from "@/web/topic/components/Node/NodeTextArea";
 import { NodeToolbar } from "@/web/topic/components/Node/NodeToolbar";
@@ -137,7 +138,7 @@ const EditableNodeBase = ({ node, className = "", onClick }: Props) => {
 
   return (
     <>
-      <NodeBox
+      <NodeMotionDiv
         // when nodes get swapped out e.g. summary node, this ensures the textarea is re-rendered to the right size before font size is reduced, avoiding over-reducing font
         // also, this ensures e.g. EditableNode doesn't try re-using ContextIndicator from one component to another, since that has hooks that are based on node type, and therefore would otherwise change creating a hook order-changed error
         key={node.id}
@@ -150,12 +151,15 @@ const EditableNodeBase = ({ node, className = "", onClick }: Props) => {
         }}
         onContextMenu={(event) => openContextMenu(event, { node })}
         role="button"
-        sx={nodeStyles}
+        sx={{ ...nodeStyles, width: `${nodeWidthRem}rem` }}
         className={
           className +
           // allow other components to apply conditional css related to this node, e.g. when it's hovered/selected
           // separate from react-flow__node because sometimes nodes are rendered outside of react-flow (e.g. details pane), and we still want to style these
-          " diagram-node relative" +
+          " diagram-node" +
+          " relative p-0 flex flex-col rounded-md border-2" +
+          // avoid inheriting pointer-events because flow node will wrap in a motion.div that ignores pointer events
+          " pointer-events-auto" +
           (!fillNodesWithColor ? " shadow shadow-gray-400" : "") +
           (selected ? " selected border-info-main shadow-info-main shadow-[0_0_0_1px]" : "")
         }
@@ -225,9 +229,11 @@ const EditableNodeBase = ({ node, className = "", onClick }: Props) => {
             // not portaling this, so that zoom applies e.g. in the diagram
             nodeToolbar
           ))}
-      </NodeBox>
+      </NodeMotionDiv>
     </>
   );
 };
+
+const NodeMotionDiv = styled(motion.div)``;
 
 export const EditableNode = memo(EditableNodeBase);
