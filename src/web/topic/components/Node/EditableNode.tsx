@@ -144,7 +144,7 @@ const EditableNodeBase = ({ node, className = "", onClick }: Props) => {
         ref={setNodeRef}
         onClick={(event) => {
           setSelected(node.id);
-          if (context === "summary") setSummaryNodeId(node.id);
+          if (context === "summary") setSummaryNodeId(node.id, true);
           if (onClick) onClick(event); // e.g. allow flownodes to trigger flashlight mode
           event.stopPropagation(); // prevent triggering node deselect from summary background click
         }}

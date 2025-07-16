@@ -7,6 +7,8 @@ import { useRelatedUnrelatedCoreNodes } from "@/web/topic/diagramStore/nodeHooks
 import { useDisplayScores } from "@/web/topic/diagramStore/scoreHooks";
 import { Node } from "@/web/topic/utils/graph";
 import { getNumericScore } from "@/web/topic/utils/score";
+import { setSummaryNodeId } from "@/web/view/currentViewStore/summary";
+import { setSelected } from "@/web/view/selectedPartStore";
 
 export const CoreNodesHeading = ({ summaryNode }: { summaryNode: Node | null }) => {
   const coreNodes = useRelatedUnrelatedCoreNodes(summaryNode);
@@ -23,11 +25,23 @@ export const CoreNodesHeading = ({ summaryNode }: { summaryNode: Node | null }) 
   });
 
   return (
-    <div className="flex max-w-[50%] items-center gap-1 overflow-x-auto p-1">
+    <div
+      // 0.6 alpha to match breadcrumb default - seems kind of nice for making it stand out less
+      className="flex items-center gap-1 p-1 text-[rgba(0,0,0,0.6)]"
+      onClick={(event) => event.stopPropagation()} // e.g. prevent triggering node deselect from summary background click
+    >
       <IconWithTooltip tooltipHeading="Core nodes" icon={<Star fontSize="small" />} />
 
       {coreNodesSortedByScoreThenType.map((node) => (
-        <IconNode key={node.id} node={node} className={node.related ? "" : "opacity-30"} />
+        <IconNode
+          key={node.id}
+          node={node}
+          onClick={() => {
+            setSelected(node.id);
+            setSummaryNodeId(node.id, true);
+          }}
+          className={node.related ? "" : "opacity-30"}
+        />
       ))}
     </div>
   );
