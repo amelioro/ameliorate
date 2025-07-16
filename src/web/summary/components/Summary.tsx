@@ -6,6 +6,7 @@ import { ComponentType } from "react";
 import { AddressedColumn } from "@/web/summary/components/Columns/AddressedColumn";
 import { AllColumn } from "@/web/summary/components/Columns/AllColumn";
 import { BenefitsColumn } from "@/web/summary/components/Columns/BenefitsColumn";
+import { CausesColumn } from "@/web/summary/components/Columns/CausesColumn";
 import { ComponentsColumn } from "@/web/summary/components/Columns/ComponentsColumn";
 import { CoreNodesColumn } from "@/web/summary/components/Columns/CoreNodesColumn";
 import { DetrimentsColumn } from "@/web/summary/components/Columns/DetrimentsColumn";
@@ -35,14 +36,18 @@ interface NodeColumnProps {
   summaryNode: Node;
 }
 const columnComponentsByAspect: Record<NodeAspect, ComponentType<NodeColumnProps>> = {
+  all: AllColumn,
+  // solution
   components: ComponentsColumn,
-  benefits: BenefitsColumn,
   addressed: AddressedColumn,
-  detriments: DetrimentsColumn,
   obstacles: ObstaclesColumn,
   motivation: MotivationColumn,
   solutionConcerns: SolutionConcernsColumn,
-  all: AllColumn,
+  // problem
+  // effect
+  benefits: BenefitsColumn,
+  detriments: DetrimentsColumn,
+  causes: CausesColumn,
 };
 
 export const Summary = () => {
@@ -101,7 +106,11 @@ export const Summary = () => {
               value={category}
               // hack because we want to distinguish the variable naming of solution concerns vs problem concerns
               // maybe ideally there'd be an optional `label` prop associated with the category?
-              label={category === "solutionConcerns" ? "Concerns" : startCase(category)}
+              label={
+                category === "solutionConcerns" || category === "problemConcerns"
+                  ? "Concerns"
+                  : startCase(category)
+              }
               onClick={(event) => event.stopPropagation()} // e.g. prevent triggering node deselect from summary background click
             />
           ))}

@@ -1,5 +1,6 @@
 import {
   getAddressed,
+  getCauses,
   getComponents,
   getDetriments,
   getNeighborsByRelationDescription,
@@ -15,15 +16,16 @@ import { Node } from "@/web/topic/utils/graph";
 // - summary/aspectFilter.ts for individual `getX` e.g. `getNeighborsByRelationDescription`
 // - future: focusedFilter.ts? has if-else to invoke the right `getX` from aspectFilter.ts, similar to infoFilter's `applyStandardFilter`
 
+export const useNeighborsByRelationDescription = (summaryNode: Node) => {
+  return useDiagramStore((state) => {
+    return getNeighborsByRelationDescription(summaryNode, state);
+  }); // could use shallow/deep-compare to avoid re-rendering summary tabs unless these lists change
+};
+
+// solution
 export const useComponents = (summaryNode: Node) => {
   return useDiagramStore((state) => {
     return getComponents(summaryNode, state);
-  });
-};
-
-export const useBenefits = (summaryNode: Node) => {
-  return useDiagramStore((state) => {
-    return getSolutionBenefits(summaryNode, state);
   });
 };
 
@@ -33,20 +35,27 @@ export const useAddressed = (summaryNode: Node) => {
   });
 };
 
-export const useDetriments = (summaryNode: Node) => {
-  return useDiagramStore((state) => {
-    return getDetriments(summaryNode, state);
-  });
-};
-
 export const useObstacles = (summaryNode: Node) => {
   return useDiagramStore((state) => {
     return getObstacles(summaryNode, state);
   });
 };
 
-export const useNeighborsByRelationDescription = (summaryNode: Node) => {
+// effect
+export const useBenefits = (summaryNode: Node) => {
   return useDiagramStore((state) => {
-    return getNeighborsByRelationDescription(summaryNode, state);
-  }); // could use shallow/deep-compare to avoid re-rendering summary tabs unless these lists change
+    return getSolutionBenefits(summaryNode, state);
+  });
+};
+
+export const useDetriments = (summaryNode: Node) => {
+  return useDiagramStore((state) => {
+    return getDetriments(summaryNode, state);
+  });
+};
+
+export const useCauses = (summaryNode: Node) => {
+  return useDiagramStore((state) => {
+    return getCauses(summaryNode, state);
+  });
 };

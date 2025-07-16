@@ -62,6 +62,16 @@ export const nodeSchema = z.object({
 
 export type Node = z.infer<typeof nodeSchema>;
 
+export const goodNodeTypes: NodeType[] = [
+  "solutionComponent",
+  "benefit",
+  "solution",
+  "mitigationComponent",
+  "mitigation",
+];
+
+export const badNodeTypes: NodeType[] = ["cause", "problem", "detriment", "obstacle"];
+
 export const infoNodeTypes: Record<InfoCategory, NodeType[]> = {
   breakdown: [
     "cause",
