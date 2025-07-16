@@ -36,7 +36,7 @@ export const Row = ({ title, Icon, nodes, addButtonsSlot, endHeaderSlot, actionS
 
   return (
     <div className="flex flex-col gap-1">
-      <HeaderDiv className="flex justify-between">
+      <HeaderDiv className="flex items-center justify-between">
         <LeftHeaderDiv className="flex gap-1">
           <Icon fontSize="small" />
           <Typography variant="body2">{title}</Typography>

@@ -13,6 +13,7 @@ import { DetrimentsColumn } from "@/web/summary/components/Columns/DetrimentsCol
 import { MotivationColumn } from "@/web/summary/components/Columns/MotivationColumn";
 import { ObstaclesColumn } from "@/web/summary/components/Columns/ObstaclesColumn";
 import { SolutionConcernsColumn } from "@/web/summary/components/Columns/SolutionConcernsColumn";
+import { SolutionsColumn } from "@/web/summary/components/Columns/SolutionsColumn";
 import { CoreNodesHeading } from "@/web/summary/components/CoreNodesHeading";
 import { SummaryBreadcrumbs } from "@/web/summary/components/SummaryBreadcrumbs";
 import {
@@ -44,6 +45,7 @@ const columnComponentsByAspect: Record<NodeAspect, ComponentType<NodeColumnProps
   motivation: MotivationColumn,
   solutionConcerns: SolutionConcernsColumn,
   // problem
+  solutions: SolutionsColumn,
   // effect
   benefits: BenefitsColumn,
   detriments: DetrimentsColumn,

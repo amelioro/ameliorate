@@ -14,6 +14,7 @@ const categories = [
   "tradeoffs",
   // problem
   "problemConcerns",
+  "solutions",
   // effects
 ] as const;
 export type Category = (typeof categories)[number];
@@ -22,17 +23,17 @@ export const categoriesBySummary: Record<Summary, [Category, ...Category[]]> = {
   topic: ["coreNodes"],
 
   // breakdown
-  cause: ["problemConcerns", "all"],
-  problem: ["problemConcerns", "all"],
+  cause: ["problemConcerns", "solutions", "all"],
+  problem: ["problemConcerns", "solutions", "all"],
   criterion: ["all"],
   solutionComponent: ["components", "tradeoffs", "all"],
   benefit: ["all"],
   effect: ["all"],
-  detriment: ["problemConcerns", "all"],
+  detriment: ["problemConcerns", "solutions", "all"],
   // tradeoffs seems like it's pretty good actually, not sure if there's need to keep motivation and concerns separately
   // solution: ["components", "tradeoffs", "motivation", "solutionConcerns", "all"],
   solution: ["components", "tradeoffs", "all"],
-  obstacle: ["all"],
+  obstacle: ["solutions", "all"],
   mitigationComponent: ["components", "tradeoffs", "all"],
   mitigation: ["components", "tradeoffs", "all"],
 
@@ -62,6 +63,7 @@ const nodeAspects = [
   "motivation",
   "solutionConcerns",
   // problem
+  "solutions",
   // effect
   "benefits",
   "detriments",
@@ -82,5 +84,6 @@ export const aspectsByCategory: Record<Category, [Aspect, Aspect?]> = {
   tradeoffs: ["motivation", "solutionConcerns"],
   // problem
   problemConcerns: ["causes", "detriments"],
+  solutions: ["solutions"],
   // effect
 };

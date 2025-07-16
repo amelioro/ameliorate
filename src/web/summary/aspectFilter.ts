@@ -1,3 +1,5 @@
+import { uniqBy } from "es-toolkit";
+
 import { getEdgeInfoCategory } from "@/common/edge";
 import { badNodeTypes, getNodeInfoCategory } from "@/common/node";
 import { getDirectedRelationDescription } from "@/web/topic/utils/edge";
@@ -97,6 +99,31 @@ export const getObstacles = (summaryNode: Node, graph: Graph) => {
     .filter((node) => !directObstaclesIds.includes(node.id));
 
   return { directNodes: directObstacles, indirectNodes: indirectObstacles };
+};
+
+// problem
+export const getSolutions = (summaryNode: Node, graph: Graph) => {
+  const concerns = descendants(
+    summaryNode,
+    graph,
+    ["causes", "subproblemOf", "createdBy"],
+    undefined,
+    badNodeTypes,
+  );
+  const concernSolutions = concerns.flatMap((concern) =>
+    descendants(concern, graph, ["addresses"], ["addresses"]),
+  );
+
+  const solutions = uniqBy(
+    [
+      // not sure if these are worth including but seems fine for now
+      ...concernSolutions,
+      ...descendants(summaryNode, graph, ["has", "creates"], ["addresses"]),
+    ],
+    (node) => node.id,
+  );
+
+  return splitNodesByDirectAndIndirect(summaryNode, graph, ["addresses"], solutions);
 };
 
 // effect

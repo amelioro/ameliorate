@@ -6,6 +6,7 @@ import {
   getNeighborsByRelationDescription,
   getObstacles,
   getSolutionBenefits,
+  getSolutions,
 } from "@/web/summary/aspectFilter";
 import { useDiagramStore } from "@/web/topic/diagramStore/store";
 import { Node } from "@/web/topic/utils/graph";
@@ -38,6 +39,13 @@ export const useAddressed = (summaryNode: Node) => {
 export const useObstacles = (summaryNode: Node) => {
   return useDiagramStore((state) => {
     return getObstacles(summaryNode, state);
+  });
+};
+
+// problem
+export const useSolutions = (summaryNode: Node) => {
+  return useDiagramStore((state) => {
+    return getSolutions(summaryNode, state);
   });
 };
 
