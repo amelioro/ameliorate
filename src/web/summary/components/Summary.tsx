@@ -7,11 +7,11 @@ import { AddressedColumn } from "@/web/summary/components/Columns/AddressedColum
 import { AllColumn } from "@/web/summary/components/Columns/AllColumn";
 import { BenefitsColumn } from "@/web/summary/components/Columns/BenefitsColumn";
 import { ComponentsColumn } from "@/web/summary/components/Columns/ComponentsColumn";
-import { ConcernsColumn } from "@/web/summary/components/Columns/ConcernsColumn";
 import { CoreNodesColumn } from "@/web/summary/components/Columns/CoreNodesColumn";
 import { DetrimentsColumn } from "@/web/summary/components/Columns/DetrimentsColumn";
 import { MotivationColumn } from "@/web/summary/components/Columns/MotivationColumn";
 import { ObstaclesColumn } from "@/web/summary/components/Columns/ObstaclesColumn";
+import { SolutionConcernsColumn } from "@/web/summary/components/Columns/SolutionConcernsColumn";
 import { CoreNodesHeading } from "@/web/summary/components/CoreNodesHeading";
 import { SummaryBreadcrumbs } from "@/web/summary/components/SummaryBreadcrumbs";
 import {
@@ -41,7 +41,7 @@ const columnComponentsByAspect: Record<NodeAspect, ComponentType<NodeColumnProps
   detriments: DetrimentsColumn,
   obstacles: ObstaclesColumn,
   motivation: MotivationColumn,
-  concerns: ConcernsColumn,
+  solutionConcerns: SolutionConcernsColumn,
   all: AllColumn,
 };
 
@@ -99,7 +99,9 @@ export const Summary = () => {
             <Tab
               key={category}
               value={category}
-              label={startCase(category)}
+              // hack because we want to distinguish the variable naming of solution concerns vs problem concerns
+              // maybe ideally there'd be an optional `label` prop associated with the category?
+              label={category === "solutionConcerns" ? "Concerns" : startCase(category)}
               onClick={(event) => event.stopPropagation()} // e.g. prevent triggering node deselect from summary background click
             />
           ))}

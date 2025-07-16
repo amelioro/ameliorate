@@ -8,7 +8,7 @@ const categories = [
   "coreNodes",
   "components",
   "motivation",
-  "concerns",
+  "solutionConcerns",
   "tradeoffs",
   "all",
 ] as const;
@@ -21,15 +21,15 @@ export const categoriesBySummary: Record<Summary, [Category, ...Category[]]> = {
   cause: ["all"],
   problem: ["all"],
   criterion: ["all"],
-  solutionComponent: ["components", "tradeoffs", "motivation", "concerns", "all"],
+  solutionComponent: ["components", "tradeoffs", "motivation", "solutionConcerns", "all"],
   benefit: ["all"],
   effect: ["all"],
   detriment: ["all"],
   // tradeoffs seems like it's pretty good actually, not sure if there's need to keep motivation and concerns separately
-  solution: ["components", "tradeoffs", "motivation", "concerns", "all"],
+  solution: ["components", "tradeoffs", "motivation", "solutionConcerns", "all"],
   obstacle: ["all"],
-  mitigationComponent: ["components", "tradeoffs", "motivation", "concerns", "all"],
-  mitigation: ["components", "tradeoffs", "motivation", "concerns", "all"],
+  mitigationComponent: ["components", "tradeoffs", "motivation", "solutionConcerns", "all"],
+  mitigation: ["components", "tradeoffs", "motivation", "solutionConcerns", "all"],
 
   // research
   question: ["all"],
@@ -55,7 +55,7 @@ const nodeAspects = [
   "detriments",
   "obstacles",
   "motivation",
-  "concerns",
+  "solutionConcerns",
   "all",
 ] as const;
 
@@ -67,7 +67,7 @@ export const aspectsByCategory: Record<Category, [Aspect, Aspect?]> = {
   coreNodes: ["coreNodes"],
   components: ["components"],
   motivation: ["benefits", "addressed"],
-  concerns: ["detriments", "obstacles"],
-  tradeoffs: ["motivation", "concerns"],
+  solutionConcerns: ["detriments", "obstacles"],
+  tradeoffs: ["motivation", "solutionConcerns"],
   all: ["all"],
 };
