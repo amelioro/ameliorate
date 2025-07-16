@@ -9,7 +9,7 @@ import {
   useInteractions,
 } from "@floating-ui/react";
 import { type SxProps, styled, useTheme } from "@mui/material";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { MouseEvent, memo, useContext, useState } from "react";
 
 import { isDefaultCoreNodeType } from "@/common/node";
