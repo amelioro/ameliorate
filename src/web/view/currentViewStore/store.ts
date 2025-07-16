@@ -65,6 +65,7 @@ export interface ViewState {
 
   // summary
   summaryNodeId: string | null;
+  summaryBreadcrumbNodeIds: string[]; // make it easy to navigate back to recent summary nodes
   selectedSummaryTab: Category;
 }
 
@@ -103,6 +104,7 @@ export const initialViewState: ViewState = {
   transposed: true,
 
   summaryNodeId: null,
+  summaryBreadcrumbNodeIds: [],
   selectedSummaryTab: "coreNodes",
 };
 

@@ -1,17 +1,19 @@
-import { Home } from "@mui/icons-material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { IconButton, Tab, Typography, styled } from "@mui/material";
+import { Tab, Typography, styled } from "@mui/material";
 import { startCase } from "es-toolkit";
 import { ComponentType } from "react";
 
-import { AddressedColumn } from "@/web/summary/components/AddressedColumn";
-import { AllColumn } from "@/web/summary/components/AllColumn";
-import { BenefitsColumn } from "@/web/summary/components/BenefitsColumn";
-import { ComponentsColumn } from "@/web/summary/components/ComponentsColumn";
-import { CoreNodesColumn } from "@/web/summary/components/CoreNodesColumn";
+import { AddressedColumn } from "@/web/summary/components/Columns/AddressedColumn";
+import { AllColumn } from "@/web/summary/components/Columns/AllColumn";
+import { BenefitsColumn } from "@/web/summary/components/Columns/BenefitsColumn";
+import { ComponentsColumn } from "@/web/summary/components/Columns/ComponentsColumn";
+import { ConcernsColumn } from "@/web/summary/components/Columns/ConcernsColumn";
+import { CoreNodesColumn } from "@/web/summary/components/Columns/CoreNodesColumn";
+import { DetrimentsColumn } from "@/web/summary/components/Columns/DetrimentsColumn";
+import { MotivationColumn } from "@/web/summary/components/Columns/MotivationColumn";
+import { ObstaclesColumn } from "@/web/summary/components/Columns/ObstaclesColumn";
 import { CoreNodesHeading } from "@/web/summary/components/CoreNodesHeading";
-import { DetrimentsColumn } from "@/web/summary/components/DetrimentsColumn";
-import { ObstaclesColumn } from "@/web/summary/components/ObstaclesColumn";
+import { SummaryBreadcrumbs } from "@/web/summary/components/SummaryBreadcrumbs";
 import {
   Category,
   NodeAspect,
@@ -24,7 +26,6 @@ import { maxNodeHeightRem } from "@/web/topic/components/Node/EditableNode.style
 import { Node } from "@/web/topic/utils/graph";
 import {
   setSelectedSummaryTab,
-  setSummaryNodeId,
   useSelectedSummaryTab,
   useSummaryNode,
 } from "@/web/view/currentViewStore/summary";
@@ -39,6 +40,8 @@ const columnComponentsByAspect: Record<NodeAspect, ComponentType<NodeColumnProps
   addressed: AddressedColumn,
   detriments: DetrimentsColumn,
   obstacles: ObstaclesColumn,
+  motivation: MotivationColumn,
+  concerns: ConcernsColumn,
   all: AllColumn,
 };
 
@@ -63,19 +66,12 @@ export const Summary = () => {
       className="flex min-h-0 w-full max-w-2xl grow flex-col self-center"
       onClick={() => setSelected(null)} // want an easy way to deselect nodes, since the node toolbar can be annoying (e.g. if you click "back" and the toolbar shows on a node in a column)
     >
-      <NavDiv className="flex items-center justify-between">
-        <IconButton
-          title="Summary Home"
-          aria-label="Summary Home"
-          size="small"
-          onClick={() => {
-            setSelected(null);
-            setSummaryNodeId(null);
-          }}
-        >
-          <Home fontSize="inherit" />
-        </IconButton>
-
+      {/* bg-gray to make it stand out less, since the page seems a little cluttered, */}
+      {/* but notably this makes it seem like the navdiv should be in the TopicWorkspace, not this Summary component. */}
+      {/* One awkward thing keeping it here is that clicking on it will deselect the current node, but clicking on */}
+      {/* the App Header doesn't do the same. */}
+      <NavDiv className="flex items-center justify-between gap-1 bg-paperShaded-main *:max-w-[50%] *:overflow-x-auto *:px-2">
+        <SummaryBreadcrumbs />
         <CoreNodesHeading summaryNode={summaryNode} />
       </NavDiv>
 

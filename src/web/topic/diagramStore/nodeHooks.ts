@@ -29,7 +29,11 @@ export const useNode = (nodeId: string | null) => {
 export const useAllNodes = (nodeIds?: string[]) => {
   return useDiagramStore((state) => {
     if (!nodeIds) return state.nodes;
-    return state.nodes.filter((node) => nodeIds.includes(node.id));
+
+    // start from nodeIds so that order and duplicates are preserved (e.g. for core node header) (as opposed to just filtering state.nodes for matches)
+    return nodeIds
+      .map((nodeId) => state.nodes.find((node) => node.id === nodeId))
+      .filter((node) => node !== undefined);
   }, shallow);
 };
 

@@ -31,6 +31,7 @@ import {
 } from "@/web/topic/components/Node/EditableNode.styles";
 import { NodeTextArea } from "@/web/topic/components/Node/NodeTextArea";
 import { NodeToolbar } from "@/web/topic/components/Node/NodeToolbar";
+import { workspaceId } from "@/web/topic/components/TopicWorkspace/TopicWorkspace";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { setCustomNodeType } from "@/web/topic/diagramStore/actions";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
@@ -143,7 +144,7 @@ const EditableNodeBase = ({ node, className = "", onClick }: Props) => {
         ref={setNodeRef}
         onClick={(event) => {
           setSelected(node.id);
-          if (context === "summary") setSummaryNodeId(node.id);
+          if (context === "summary") setSummaryNodeId(node.id, true);
           if (onClick) onClick(event); // e.g. allow flownodes to trigger flashlight mode
           event.stopPropagation(); // prevent triggering node deselect from summary background click
         }}
@@ -219,7 +220,7 @@ const EditableNodeBase = ({ node, className = "", onClick }: Props) => {
             // Potentially we could add a div above the table (that's sibling to the header) and portal there to get the zoom on the toolbar.
             // For now we're just portaling to a good root location, since there doesn't seem to be much benefit to portaling closer to the table.
             // Note: maybe not having zoom applied to the toolbar is ok so that the buttons are easier to click anyway.
-            <FloatingPortal id="__next">{nodeToolbar}</FloatingPortal>
+            <FloatingPortal id={workspaceId}>{nodeToolbar}</FloatingPortal>
           ) : (
             // not portaling this, so that zoom applies e.g. in the diagram
             nodeToolbar

@@ -1,6 +1,8 @@
 import { useTheme } from "@mui/material";
+import { MouseEvent } from "react";
 
 import { IconWithTooltip } from "@/web/common/components/Tooltip/IconWithTooltip";
+import { Tooltip } from "@/web/common/components/Tooltip/Tooltip";
 import { primarySpotlightColor } from "@/web/topic/components/Diagram/Diagram.styles";
 import { EditableNode } from "@/web/topic/components/Node/EditableNode";
 import { useIsCoreNode } from "@/web/topic/diagramStore/nodeHooks";
@@ -11,9 +13,10 @@ import { useIsGraphPartSelected } from "@/web/view/selectedPartStore";
 interface Props {
   node: Node;
   className?: string;
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
 }
 
-export const IconNode = ({ node, className }: Props) => {
+export const IconNode = ({ node, className, onClick }: Props) => {
   const theme = useTheme();
 
   const isSelected = useIsGraphPartSelected(node.id);
@@ -36,7 +39,6 @@ export const IconNode = ({ node, className }: Props) => {
 
   const nodeIcon = (
     <NodeIcon
-      aria-label={nodeDescription}
       fontSize="small"
       sx={{
         backgroundColor: nodeLightColor,
@@ -49,7 +51,14 @@ export const IconNode = ({ node, className }: Props) => {
     />
   );
 
-  return (
+  return onClick ? (
+    <Tooltip tooltipBody={tooltipBody}>
+      <button className="flex" onClick={onClick} aria-label={nodeDescription}>
+        {nodeIcon}
+      </button>
+    </Tooltip>
+  ) : (
+    // if we don't have an onClick, this component wraps this node in a button for accessibility
     <IconWithTooltip
       ariaLabel={nodeDescription}
       tooltipBody={tooltipBody}
