@@ -3,16 +3,16 @@ import { Tab, Typography, styled } from "@mui/material";
 import { startCase } from "es-toolkit";
 import { ComponentType } from "react";
 
-import { AddressedColumn } from "@/web/summary/components/AddressedColumn";
-import { AllColumn } from "@/web/summary/components/AllColumn";
-import { BenefitsColumn } from "@/web/summary/components/BenefitsColumn";
-import { ComponentsColumn } from "@/web/summary/components/ComponentsColumn";
-import { ConcernsColumn } from "@/web/summary/components/ConcernsColumn";
-import { CoreNodesColumn } from "@/web/summary/components/CoreNodesColumn";
+import { AddressedColumn } from "@/web/summary/components/Columns/AddressedColumn";
+import { AllColumn } from "@/web/summary/components/Columns/AllColumn";
+import { BenefitsColumn } from "@/web/summary/components/Columns/BenefitsColumn";
+import { ComponentsColumn } from "@/web/summary/components/Columns/ComponentsColumn";
+import { ConcernsColumn } from "@/web/summary/components/Columns/ConcernsColumn";
+import { CoreNodesColumn } from "@/web/summary/components/Columns/CoreNodesColumn";
+import { DetrimentsColumn } from "@/web/summary/components/Columns/DetrimentsColumn";
+import { MotivationColumn } from "@/web/summary/components/Columns/MotivationColumn";
+import { ObstaclesColumn } from "@/web/summary/components/Columns/ObstaclesColumn";
 import { CoreNodesHeading } from "@/web/summary/components/CoreNodesHeading";
-import { DetrimentsColumn } from "@/web/summary/components/DetrimentsColumn";
-import { MotivationColumn } from "@/web/summary/components/MotivationColumn";
-import { ObstaclesColumn } from "@/web/summary/components/ObstaclesColumn";
 import { SummaryBreadcrumbs } from "@/web/summary/components/SummaryBreadcrumbs";
 import {
   Category,
