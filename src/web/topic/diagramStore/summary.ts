@@ -3,6 +3,7 @@ import {
   getCauses,
   getComponents,
   getDetriments,
+  getEffects,
   getNeighborsByRelationDescription,
   getObstacles,
   getSolutionBenefits,
@@ -59,6 +60,12 @@ export const useBenefits = (summaryNode: Node) => {
 export const useDetriments = (summaryNode: Node) => {
   return useDiagramStore((state) => {
     return getDetriments(summaryNode, state);
+  });
+};
+
+export const useEffects = (summaryNode: Node) => {
+  return useDiagramStore((state) => {
+    return getEffects(summaryNode, state);
   });
 };
 

@@ -111,19 +111,19 @@ export const getSolutions = (summaryNode: Node, graph: Graph) => {
     badNodeTypes,
   );
   const concernSolutions = concerns.flatMap((concern) =>
-    descendants(concern, graph, ["addresses"], ["addresses"]),
+    descendants(concern, graph, ["addresses", "mitigates"], ["addresses", "mitigates"]),
   );
 
   const solutions = uniqBy(
     [
       // not sure if these are worth including but seems fine for now
       ...concernSolutions,
-      ...descendants(summaryNode, graph, ["has", "creates"], ["addresses"]),
+      ...descendants(summaryNode, graph, ["has", "creates"], ["addresses", "mitigates"]),
     ],
     (node) => node.id,
   );
 
-  return splitNodesByDirectAndIndirect(summaryNode, graph, ["addresses"], solutions);
+  return splitNodesByDirectAndIndirect(summaryNode, graph, ["addresses", "mitigates"], solutions);
 };
 
 // effect
@@ -143,7 +143,7 @@ export const getDetriments = (summaryNode: Node, graph: Graph) => {
       ["creates", "causes"],
       badNodeTypes,
     ),
-    ...descendants(summaryNode, graph, ["subproblemOf", "createdBy"], ["createdBy"], badNodeTypes),
+    ...descendants(summaryNode, graph, ["createdBy"], ["createdBy"], badNodeTypes),
   ];
 
   return splitNodesByDirectAndIndirect(
@@ -155,16 +155,31 @@ export const getDetriments = (summaryNode: Node, graph: Graph) => {
 };
 
 // TODO: test this
-export const getCauses = (summaryNode: Node, graph: Graph) => {
-  const causes = [
-    ...ancestors(summaryNode, graph, ["createdBy"], ["createdBy"]),
-    ...descendants(summaryNode, graph, ["has", "causes", "creates"], ["causes", "creates"]),
+export const getEffects = (summaryNode: Node, graph: Graph) => {
+  const effects = [
+    ...ancestors(summaryNode, graph, ["has", "creates", "causes"], ["creates", "causes"]),
+    ...descendants(summaryNode, graph, ["createdBy"], ["createdBy"]),
   ];
 
   return splitNodesByDirectAndIndirect(
     summaryNode,
     graph,
-    ["causes", "creates", "createdBy"],
+    ["creates", "causes", "createdBy"],
+    effects,
+  );
+};
+
+// TODO: test this
+export const getCauses = (summaryNode: Node, graph: Graph) => {
+  const causes = [
+    ...ancestors(summaryNode, graph, ["createdBy"], ["createdBy"]),
+    ...descendants(summaryNode, graph, ["has", "causes", "creates"], ["has", "causes", "creates"]),
+  ];
+
+  return splitNodesByDirectAndIndirect(
+    summaryNode,
+    graph,
+    ["has", "causes", "creates", "createdBy"],
     causes,
   );
 };

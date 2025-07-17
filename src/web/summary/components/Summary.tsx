@@ -10,6 +10,7 @@ import { CausesColumn } from "@/web/summary/components/Columns/CausesColumn";
 import { ComponentsColumn } from "@/web/summary/components/Columns/ComponentsColumn";
 import { CoreNodesColumn } from "@/web/summary/components/Columns/CoreNodesColumn";
 import { DetrimentsColumn } from "@/web/summary/components/Columns/DetrimentsColumn";
+import { EffectsColumn } from "@/web/summary/components/Columns/EffectsColumn";
 import { MotivationColumn } from "@/web/summary/components/Columns/MotivationColumn";
 import { ObstaclesColumn } from "@/web/summary/components/Columns/ObstaclesColumn";
 import { SolutionConcernsColumn } from "@/web/summary/components/Columns/SolutionConcernsColumn";
@@ -49,6 +50,7 @@ const columnComponentsByAspect: Record<NodeAspect, ComponentType<NodeColumnProps
   // effect
   benefits: BenefitsColumn,
   detriments: DetrimentsColumn,
+  effects: EffectsColumn,
   causes: CausesColumn,
 };
 
