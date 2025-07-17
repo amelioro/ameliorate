@@ -3,7 +3,7 @@ import { Divider } from "@mui/material";
 
 import { IndirectHelpIcon } from "@/web/summary/components/IndirectHelpIcon";
 import { Row } from "@/web/summary/components/Row";
-import { useDetriments } from "@/web/topic/diagramStore/summary";
+import { useEffects } from "@/web/topic/diagramStore/summary";
 import { Node } from "@/web/topic/utils/graph";
 import { nodeDecorations } from "@/web/topic/utils/node";
 
@@ -11,8 +11,8 @@ interface Props {
   summaryNode: Node;
 }
 
-export const DetrimentsColumn = ({ summaryNode }: Props) => {
-  const { directNodes, indirectNodes } = useDetriments(summaryNode);
+export const EffectsColumn = ({ summaryNode }: Props) => {
+  const { directNodes, indirectNodes } = useEffects(summaryNode);
 
   const AddButtons = (
     <></>
@@ -30,8 +30,8 @@ export const DetrimentsColumn = ({ summaryNode }: Props) => {
   return (
     <div className="flex flex-col">
       <Row
-        title="Detriments"
-        Icon={nodeDecorations.detriment.NodeIcon}
+        title="Effects"
+        Icon={nodeDecorations.effect.NodeIcon}
         addButtonsSlot={AddButtons}
         nodes={directNodes}
       />

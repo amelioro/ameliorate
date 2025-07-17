@@ -6,11 +6,17 @@ export type Summary = (typeof summaries)[number];
 // categories are used as tabs in the summary view
 const categories = [
   "coreNodes",
+  "all",
+  // solution
   "components",
   "motivation",
-  "concerns",
+  "solutionConcerns",
   "tradeoffs",
-  "all",
+  // problem
+  "problemConcerns",
+  "solutions",
+  // effects
+  "causeAndEffect",
 ] as const;
 export type Category = (typeof categories)[number];
 
@@ -18,18 +24,19 @@ export const categoriesBySummary: Record<Summary, [Category, ...Category[]]> = {
   topic: ["coreNodes"],
 
   // breakdown
-  cause: ["all"],
-  problem: ["all"],
+  cause: ["causeAndEffect", "solutions", "all"],
+  problem: ["problemConcerns", "solutions", "all"],
   criterion: ["all"],
-  solutionComponent: ["components", "tradeoffs", "motivation", "concerns", "all"],
-  benefit: ["all"],
-  effect: ["all"],
-  detriment: ["all"],
+  solutionComponent: ["components", "tradeoffs", "all"],
+  benefit: ["causeAndEffect", "motivation", "all"],
+  effect: ["causeAndEffect", "all"],
+  detriment: ["causeAndEffect", "solutions", "all"],
   // tradeoffs seems like it's pretty good actually, not sure if there's need to keep motivation and concerns separately
-  solution: ["components", "tradeoffs", "motivation", "concerns", "all"],
-  obstacle: ["all"],
-  mitigationComponent: ["components", "tradeoffs", "motivation", "concerns", "all"],
-  mitigation: ["components", "tradeoffs", "motivation", "concerns", "all"],
+  // solution: ["components", "tradeoffs", "motivation", "solutionConcerns", "all"],
+  solution: ["components", "tradeoffs", "all"],
+  obstacle: ["solutions", "all"],
+  mitigationComponent: ["components", "tradeoffs", "all"],
+  mitigation: ["components", "tradeoffs", "all"],
 
   // research
   question: ["all"],
@@ -49,14 +56,21 @@ export const categoriesBySummary: Record<Summary, [Category, ...Category[]]> = {
 // aspects are used as columns with a summary view's tab
 const topicAspects = ["coreNodes"] as const;
 const nodeAspects = [
+  "incoming",
+  "outgoing",
+  // solution
   "components",
-  "benefits",
   "addressed",
-  "detriments",
   "obstacles",
   "motivation",
-  "concerns",
-  "all",
+  "solutionConcerns",
+  // problem
+  "solutions",
+  // effect
+  "benefits",
+  "detriments",
+  "effects",
+  "causes",
 ] as const;
 
 export type TopicAspect = (typeof topicAspects)[number];
@@ -65,9 +79,15 @@ export type Aspect = TopicAspect | NodeAspect;
 
 export const aspectsByCategory: Record<Category, [Aspect, Aspect?]> = {
   coreNodes: ["coreNodes"],
+  all: ["incoming", "outgoing"],
+  // solution
   components: ["components"],
   motivation: ["benefits", "addressed"],
-  concerns: ["detriments", "obstacles"],
-  tradeoffs: ["motivation", "concerns"],
-  all: ["all"],
+  solutionConcerns: ["detriments", "obstacles"],
+  tradeoffs: ["motivation", "solutionConcerns"],
+  // problem
+  problemConcerns: ["causes", "detriments"],
+  solutions: ["solutions"],
+  // effect
+  causeAndEffect: ["causes", "effects"],
 };

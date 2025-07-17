@@ -4,14 +4,18 @@ import { startCase } from "es-toolkit";
 import { ComponentType } from "react";
 
 import { AddressedColumn } from "@/web/summary/components/Columns/AddressedColumn";
-import { AllColumn } from "@/web/summary/components/Columns/AllColumn";
 import { BenefitsColumn } from "@/web/summary/components/Columns/BenefitsColumn";
+import { CausesColumn } from "@/web/summary/components/Columns/CausesColumn";
 import { ComponentsColumn } from "@/web/summary/components/Columns/ComponentsColumn";
-import { ConcernsColumn } from "@/web/summary/components/Columns/ConcernsColumn";
 import { CoreNodesColumn } from "@/web/summary/components/Columns/CoreNodesColumn";
 import { DetrimentsColumn } from "@/web/summary/components/Columns/DetrimentsColumn";
+import { EffectsColumn } from "@/web/summary/components/Columns/EffectsColumn";
+import { IncomingColumn } from "@/web/summary/components/Columns/IncomingColumn";
 import { MotivationColumn } from "@/web/summary/components/Columns/MotivationColumn";
 import { ObstaclesColumn } from "@/web/summary/components/Columns/ObstaclesColumn";
+import { OutgoingColumn } from "@/web/summary/components/Columns/OutgoingColumn";
+import { SolutionConcernsColumn } from "@/web/summary/components/Columns/SolutionConcernsColumn";
+import { SolutionsColumn } from "@/web/summary/components/Columns/SolutionsColumn";
 import { CoreNodesHeading } from "@/web/summary/components/CoreNodesHeading";
 import { SummaryBreadcrumbs } from "@/web/summary/components/SummaryBreadcrumbs";
 import {
@@ -35,14 +39,21 @@ interface NodeColumnProps {
   summaryNode: Node;
 }
 const columnComponentsByAspect: Record<NodeAspect, ComponentType<NodeColumnProps>> = {
+  incoming: IncomingColumn,
+  outgoing: OutgoingColumn,
+  // solution
   components: ComponentsColumn,
-  benefits: BenefitsColumn,
   addressed: AddressedColumn,
-  detriments: DetrimentsColumn,
   obstacles: ObstaclesColumn,
   motivation: MotivationColumn,
-  concerns: ConcernsColumn,
-  all: AllColumn,
+  solutionConcerns: SolutionConcernsColumn,
+  // problem
+  solutions: SolutionsColumn,
+  // effect
+  benefits: BenefitsColumn,
+  detriments: DetrimentsColumn,
+  effects: EffectsColumn,
+  causes: CausesColumn,
 };
 
 export const Summary = () => {
@@ -99,7 +110,13 @@ export const Summary = () => {
             <Tab
               key={category}
               value={category}
-              label={startCase(category)}
+              // hack because we want to distinguish the variable naming of solution concerns vs problem concerns
+              // maybe ideally there'd be an optional `label` prop associated with the category?
+              label={
+                category === "solutionConcerns" || category === "problemConcerns"
+                  ? "Concerns"
+                  : startCase(category)
+              }
               onClick={(event) => event.stopPropagation()} // e.g. prevent triggering node deselect from summary background click
             />
           ))}
@@ -121,7 +138,7 @@ export const Summary = () => {
               key={category}
               value={category}
               className={
-                "grow *:grow *:basis-0 divide-x overflow-y-auto p-0" +
+                "grow *:grow *:basis-0 divide-x overflow-y-auto p-0 *:min-w-0" +
                 " [&>div>*]:p-1" +
                 // need to use border-t here because for some reason the TabList itself has issues with border-b, where when TabPanel has a vertical scrollbar, the tab arrows will _always_ show, rather than conditionally based on horizontal scroll position
                 " border-t" +

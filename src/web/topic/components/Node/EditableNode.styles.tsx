@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { Box } from "@mui/material";
 
 import { htmlDefaultFontSize } from "@/pages/_document.page";
 import { ContentIndicatorGroup } from "@/web/topic/components/Indicator/Base/ContentIndicatorGroup";
@@ -24,30 +23,6 @@ export const IndicatorDiv = styled.div`
 // allow handling mouse events for whole node without mouse icon changing to input for textarea
 export const MiddleDiv = styled.div``;
 export const BottomDiv = styled.div``;
-
-/* some copied from https://github.com/wbkd/react-flow/blob/147656b22f577bb4141664d000e62ada9b490473/src/theme-default.css#L42-L77 */
-export const NodeBox = styled(Box)`
-  width: ${nodeWidthRem}rem;
-
-  padding: 0px;
-  display: flex;
-  flex-direction: column;
-
-  border-radius: 6px;
-  border-width: 2px;
-  border-style: solid;
-
-  // for core nodes
-  outline-offset: 4px;
-  outline-width: 2px;
-
-  // avoid inheriting because flow node will wrap in a motion.div that ignores pointer events
-  pointer-events: auto;
-
-  &:hover {
-    box-shadow: 0 2px 8px 2px rgba(0, 0, 0, 0.08);
-  }
-`;
 
 export const RightCornerContentIndicators = styled(ContentIndicatorGroup)`
   position: absolute;

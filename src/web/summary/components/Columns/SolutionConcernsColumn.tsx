@@ -12,7 +12,7 @@ interface Props {
   summaryNode: Node;
 }
 
-export const ConcernsColumn = ({ summaryNode }: Props) => {
+export const SolutionConcernsColumn = ({ summaryNode }: Props) => {
   const { directNodes: directDetriments, indirectNodes: indirectDetriments } =
     useDetriments(summaryNode);
   const { directNodes: directObstacles, indirectNodes: indirectObstacles } =

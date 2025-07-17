@@ -1,5 +1,7 @@
+import { uniqBy } from "es-toolkit";
+
 import { getEdgeInfoCategory } from "@/common/edge";
-import { getNodeInfoCategory } from "@/common/node";
+import { badNodeTypes, getNodeInfoCategory } from "@/common/node";
 import { getDirectedRelationDescription } from "@/web/topic/utils/edge";
 import {
   Graph,
@@ -10,6 +12,63 @@ import {
   splitNodesByDirectAndIndirect,
 } from "@/web/topic/utils/graph";
 
+// TODO?: this and "getOutgoing..." could be refactored to be one function that takes a direction
+export const getIncomingNodesByRelationDescription = (summaryNode: Node, graph: Graph) => {
+  const nodeInfoCategory = getNodeInfoCategory(summaryNode.type);
+
+  /* eslint-disable functional/immutable-data, no-param-reassign, functional/immutable-data -- seems easiest to do this mutably */
+  const childrenByRelationDescription = graph.edges
+    .filter(
+      (edge) =>
+        edge.source === summaryNode.id && getEdgeInfoCategory(edge.label) === nodeInfoCategory,
+    )
+    .reduce<Record<string, Node[]>>((acc, childEdge) => {
+      const childNode = findNodeOrThrow(childEdge.target, graph.nodes);
+      const relationDescription = getDirectedRelationDescription({
+        child: childNode.type,
+        name: childEdge.label,
+        parent: summaryNode.type,
+        this: "parent",
+      });
+      if (acc[relationDescription] === undefined) acc[relationDescription] = [];
+      acc[relationDescription].push(childNode);
+
+      return acc;
+    }, {});
+  /* eslint-disable functional/immutable-data, no-param-reassign, functional/immutable-data */
+
+  return childrenByRelationDescription;
+};
+
+export const getOutgoingNodesByRelationDescription = (summaryNode: Node, graph: Graph) => {
+  const nodeInfoCategory = getNodeInfoCategory(summaryNode.type);
+
+  /* eslint-disable functional/immutable-data, no-param-reassign, functional/immutable-data -- seems easiest to do this mutably */
+  const parentsByRelationDescription = graph.edges
+    .filter(
+      (edge) =>
+        edge.target === summaryNode.id && getEdgeInfoCategory(edge.label) === nodeInfoCategory,
+    )
+    .reduce<Record<string, Node[]>>((acc, parentEdge) => {
+      const parentNode = findNodeOrThrow(parentEdge.source, graph.nodes);
+      const relationDescription = getDirectedRelationDescription({
+        child: summaryNode.type,
+        name: parentEdge.label,
+        parent: parentNode.type,
+        this: "child",
+      });
+
+      if (acc[relationDescription] === undefined) acc[relationDescription] = [];
+      acc[relationDescription].push(parentNode);
+
+      return acc;
+    }, {});
+  /* eslint-disable functional/immutable-data, no-param-reassign, functional/immutable-data */
+
+  return parentsByRelationDescription;
+};
+
+// solution
 // TODO: test this
 export const getComponents = (summaryNode: Node, graph: Graph) => {
   const components = ancestors(summaryNode, graph, ["has"]);
@@ -17,23 +76,10 @@ export const getComponents = (summaryNode: Node, graph: Graph) => {
   return splitNodesByDirectAndIndirect(summaryNode, graph, ["has"], components);
 };
 
-export const getSolutionBenefits = (summaryNode: Node, graph: Graph) => {
-  const benefits = ancestors(summaryNode, graph, ["has", "creates"], ["creates"], ["benefit"]);
-
-  return splitNodesByDirectAndIndirect(summaryNode, graph, ["creates"], benefits);
-};
-
 export const getAddressed = (summaryNode: Node, graph: Graph) => {
   const addressed = ancestors(summaryNode, graph, ["has", "creates"], ["addresses"]);
 
   return splitNodesByDirectAndIndirect(summaryNode, graph, ["addresses"], addressed);
-};
-
-// TODO: test this
-export const getDetriments = (summaryNode: Node, graph: Graph) => {
-  const detriments = ancestors(summaryNode, graph, ["has", "creates"], ["creates"], ["detriment"]);
-
-  return splitNodesByDirectAndIndirect(summaryNode, graph, ["creates"], detriments);
 };
 
 // TODO: test this
@@ -53,60 +99,85 @@ export const getObstacles = (summaryNode: Node, graph: Graph) => {
   return { directNodes: directObstacles, indirectNodes: indirectObstacles };
 };
 
-export const getNeighborsByRelationDescription = (summaryNode: Node, graph: Graph) => {
-  const nodeInfoCategory = getNodeInfoCategory(summaryNode.type);
-
-  // parents
-  const parentsWithRelationDescription = graph.edges
-    .filter(
-      (edge) =>
-        edge.target === summaryNode.id && getEdgeInfoCategory(edge.label) === nodeInfoCategory,
-    )
-    .map((parentEdge) => {
-      const parentNode = findNodeOrThrow(parentEdge.source, graph.nodes);
-      return {
-        node: parentNode,
-        relationDescription: getDirectedRelationDescription({
-          child: summaryNode.type,
-          name: parentEdge.label,
-          parent: parentNode.type,
-          this: "child",
-        }),
-      };
-    });
-
-  const childrenWithRelationDescription = graph.edges
-    .filter(
-      (edge) =>
-        edge.source === summaryNode.id && getEdgeInfoCategory(edge.label) === nodeInfoCategory,
-    )
-    .map((childEdge) => {
-      const childNode = findNodeOrThrow(childEdge.target, graph.nodes);
-      return {
-        node: childNode,
-        relationDescription: getDirectedRelationDescription({
-          child: childNode.type,
-          name: childEdge.label,
-          parent: summaryNode.type,
-          this: "parent",
-        }),
-      };
-    });
-
-  // arbitrarily put parents first, for consistency when iterating over these neighbors
-  const neighbors = [...parentsWithRelationDescription, ...childrenWithRelationDescription];
-
-  /* eslint-disable functional/immutable-data, no-param-reassign, functional/immutable-data -- seems easiest to do this mutably */
-  const neighborsByRelationDescription = neighbors.reduce<Record<string, Node[]>>(
-    (acc, { node, relationDescription }) => {
-      if (acc[relationDescription] === undefined) acc[relationDescription] = [];
-      acc[relationDescription].push(node);
-
-      return acc;
-    },
-    {},
+// problem
+export const getSolutions = (summaryNode: Node, graph: Graph) => {
+  const concerns = descendants(
+    summaryNode,
+    graph,
+    ["causes", "subproblemOf", "createdBy"],
+    undefined,
+    badNodeTypes,
   );
-  /* eslint-disable functional/immutable-data, no-param-reassign, functional/immutable-data */
+  const concernSolutions = concerns.flatMap((concern) =>
+    descendants(concern, graph, ["addresses", "mitigates"], ["addresses", "mitigates"]),
+  );
 
-  return neighborsByRelationDescription;
+  const solutions = uniqBy(
+    [
+      // not sure if these are worth including but seems fine for now
+      ...concernSolutions,
+      ...descendants(summaryNode, graph, ["has", "creates"], ["addresses", "mitigates"]),
+    ],
+    (node) => node.id,
+  );
+
+  return splitNodesByDirectAndIndirect(summaryNode, graph, ["addresses", "mitigates"], solutions);
+};
+
+// effect
+export const getSolutionBenefits = (summaryNode: Node, graph: Graph) => {
+  const benefits = ancestors(summaryNode, graph, ["has", "creates"], ["creates"], ["benefit"]);
+
+  return splitNodesByDirectAndIndirect(summaryNode, graph, ["creates"], benefits);
+};
+
+// TODO: test this
+export const getDetriments = (summaryNode: Node, graph: Graph) => {
+  const detriments = [
+    ...ancestors(
+      summaryNode,
+      graph,
+      ["has", "creates", "causes"],
+      ["creates", "causes"],
+      badNodeTypes,
+    ),
+    ...descendants(summaryNode, graph, ["createdBy"], ["createdBy"], badNodeTypes),
+  ];
+
+  return splitNodesByDirectAndIndirect(
+    summaryNode,
+    graph,
+    ["creates", "causes", "createdBy"],
+    detriments,
+  );
+};
+
+// TODO: test this
+export const getEffects = (summaryNode: Node, graph: Graph) => {
+  const effects = [
+    ...ancestors(summaryNode, graph, ["has", "creates", "causes"], ["creates", "causes"]),
+    ...descendants(summaryNode, graph, ["createdBy"], ["createdBy"]),
+  ];
+
+  return splitNodesByDirectAndIndirect(
+    summaryNode,
+    graph,
+    ["creates", "causes", "createdBy"],
+    effects,
+  );
+};
+
+// TODO: test this
+export const getCauses = (summaryNode: Node, graph: Graph) => {
+  const causes = [
+    ...ancestors(summaryNode, graph, ["createdBy"], ["createdBy"]),
+    ...descendants(summaryNode, graph, ["has", "causes", "creates"], ["has", "causes", "creates"]),
+  ];
+
+  return splitNodesByDirectAndIndirect(
+    summaryNode,
+    graph,
+    ["has", "causes", "creates", "createdBy"],
+    causes,
+  );
 };
