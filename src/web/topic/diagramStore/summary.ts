@@ -4,8 +4,9 @@ import {
   getComponents,
   getDetriments,
   getEffects,
-  getNeighborsByRelationDescription,
+  getIncomingNodesByRelationDescription,
   getObstacles,
+  getOutgoingNodesByRelationDescription,
   getSolutionBenefits,
   getSolutions,
 } from "@/web/summary/aspectFilter";
@@ -18,10 +19,16 @@ import { Node } from "@/web/topic/utils/graph";
 // - summary/aspectFilter.ts for individual `getX` e.g. `getNeighborsByRelationDescription`
 // - future: focusedFilter.ts? has if-else to invoke the right `getX` from aspectFilter.ts, similar to infoFilter's `applyStandardFilter`
 
-export const useNeighborsByRelationDescription = (summaryNode: Node) => {
+export const useIncomingNodesByRelationDescription = (summaryNode: Node) => {
   return useDiagramStore((state) => {
-    return getNeighborsByRelationDescription(summaryNode, state);
+    return getIncomingNodesByRelationDescription(summaryNode, state);
   }); // could use shallow/deep-compare to avoid re-rendering summary tabs unless these lists change
+};
+
+export const useOutgoingNodesByRelationDescription = (summaryNode: Node) => {
+  return useDiagramStore((state) => {
+    return getOutgoingNodesByRelationDescription(summaryNode, state);
+  });
 };
 
 // solution

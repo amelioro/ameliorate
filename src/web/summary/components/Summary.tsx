@@ -4,15 +4,16 @@ import { startCase } from "es-toolkit";
 import { ComponentType } from "react";
 
 import { AddressedColumn } from "@/web/summary/components/Columns/AddressedColumn";
-import { AllColumn } from "@/web/summary/components/Columns/AllColumn";
 import { BenefitsColumn } from "@/web/summary/components/Columns/BenefitsColumn";
 import { CausesColumn } from "@/web/summary/components/Columns/CausesColumn";
 import { ComponentsColumn } from "@/web/summary/components/Columns/ComponentsColumn";
 import { CoreNodesColumn } from "@/web/summary/components/Columns/CoreNodesColumn";
 import { DetrimentsColumn } from "@/web/summary/components/Columns/DetrimentsColumn";
 import { EffectsColumn } from "@/web/summary/components/Columns/EffectsColumn";
+import { IncomingColumn } from "@/web/summary/components/Columns/IncomingColumn";
 import { MotivationColumn } from "@/web/summary/components/Columns/MotivationColumn";
 import { ObstaclesColumn } from "@/web/summary/components/Columns/ObstaclesColumn";
+import { OutgoingColumn } from "@/web/summary/components/Columns/OutgoingColumn";
 import { SolutionConcernsColumn } from "@/web/summary/components/Columns/SolutionConcernsColumn";
 import { SolutionsColumn } from "@/web/summary/components/Columns/SolutionsColumn";
 import { CoreNodesHeading } from "@/web/summary/components/CoreNodesHeading";
@@ -38,7 +39,8 @@ interface NodeColumnProps {
   summaryNode: Node;
 }
 const columnComponentsByAspect: Record<NodeAspect, ComponentType<NodeColumnProps>> = {
-  all: AllColumn,
+  incoming: IncomingColumn,
+  outgoing: OutgoingColumn,
   // solution
   components: ComponentsColumn,
   addressed: AddressedColumn,

@@ -12,62 +12,60 @@ import {
   splitNodesByDirectAndIndirect,
 } from "@/web/topic/utils/graph";
 
-export const getNeighborsByRelationDescription = (summaryNode: Node, graph: Graph) => {
+// TODO?: this and "getOutgoing..." could be refactored to be one function that takes a direction
+export const getIncomingNodesByRelationDescription = (summaryNode: Node, graph: Graph) => {
   const nodeInfoCategory = getNodeInfoCategory(summaryNode.type);
 
-  // parents
-  const parentsWithRelationDescription = graph.edges
-    .filter(
-      (edge) =>
-        edge.target === summaryNode.id && getEdgeInfoCategory(edge.label) === nodeInfoCategory,
-    )
-    .map((parentEdge) => {
-      const parentNode = findNodeOrThrow(parentEdge.source, graph.nodes);
-      return {
-        node: parentNode,
-        relationDescription: getDirectedRelationDescription({
-          child: summaryNode.type,
-          name: parentEdge.label,
-          parent: parentNode.type,
-          this: "child",
-        }),
-      };
-    });
-
-  const childrenWithRelationDescription = graph.edges
+  /* eslint-disable functional/immutable-data, no-param-reassign, functional/immutable-data -- seems easiest to do this mutably */
+  const childrenByRelationDescription = graph.edges
     .filter(
       (edge) =>
         edge.source === summaryNode.id && getEdgeInfoCategory(edge.label) === nodeInfoCategory,
     )
-    .map((childEdge) => {
+    .reduce<Record<string, Node[]>>((acc, childEdge) => {
       const childNode = findNodeOrThrow(childEdge.target, graph.nodes);
-      return {
-        node: childNode,
-        relationDescription: getDirectedRelationDescription({
-          child: childNode.type,
-          name: childEdge.label,
-          parent: summaryNode.type,
-          this: "parent",
-        }),
-      };
-    });
-
-  // arbitrarily put parents first, for consistency when iterating over these neighbors
-  const neighbors = [...parentsWithRelationDescription, ...childrenWithRelationDescription];
-
-  /* eslint-disable functional/immutable-data, no-param-reassign, functional/immutable-data -- seems easiest to do this mutably */
-  const neighborsByRelationDescription = neighbors.reduce<Record<string, Node[]>>(
-    (acc, { node, relationDescription }) => {
+      const relationDescription = getDirectedRelationDescription({
+        child: childNode.type,
+        name: childEdge.label,
+        parent: summaryNode.type,
+        this: "parent",
+      });
       if (acc[relationDescription] === undefined) acc[relationDescription] = [];
-      acc[relationDescription].push(node);
+      acc[relationDescription].push(childNode);
 
       return acc;
-    },
-    {},
-  );
+    }, {});
   /* eslint-disable functional/immutable-data, no-param-reassign, functional/immutable-data */
 
-  return neighborsByRelationDescription;
+  return childrenByRelationDescription;
+};
+
+export const getOutgoingNodesByRelationDescription = (summaryNode: Node, graph: Graph) => {
+  const nodeInfoCategory = getNodeInfoCategory(summaryNode.type);
+
+  /* eslint-disable functional/immutable-data, no-param-reassign, functional/immutable-data -- seems easiest to do this mutably */
+  const parentsByRelationDescription = graph.edges
+    .filter(
+      (edge) =>
+        edge.target === summaryNode.id && getEdgeInfoCategory(edge.label) === nodeInfoCategory,
+    )
+    .reduce<Record<string, Node[]>>((acc, parentEdge) => {
+      const parentNode = findNodeOrThrow(parentEdge.source, graph.nodes);
+      const relationDescription = getDirectedRelationDescription({
+        child: summaryNode.type,
+        name: parentEdge.label,
+        parent: parentNode.type,
+        this: "child",
+      });
+
+      if (acc[relationDescription] === undefined) acc[relationDescription] = [];
+      acc[relationDescription].push(parentNode);
+
+      return acc;
+    }, {});
+  /* eslint-disable functional/immutable-data, no-param-reassign, functional/immutable-data */
+
+  return parentsByRelationDescription;
 };
 
 // solution
