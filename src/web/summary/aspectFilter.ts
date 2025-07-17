@@ -112,11 +112,17 @@ export const getSolutions = (summaryNode: Node, graph: Graph) => {
     descendants(concern, graph, ["addresses", "mitigates"], ["addresses", "mitigates"]),
   );
 
+  const immediateSolutions = descendants(summaryNode, graph, [], ["addresses", "mitigates"]);
+  const indirectSolutions = immediateSolutions.flatMap((solution) =>
+    descendants(solution, graph, ["has", "creates"]),
+  );
+
   const solutions = uniqBy(
     [
       // not sure if these are worth including but seems fine for now
       ...concernSolutions,
-      ...descendants(summaryNode, graph, ["has", "creates"], ["addresses", "mitigates"]),
+      ...immediateSolutions,
+      ...indirectSolutions,
     ],
     (node) => node.id,
   );

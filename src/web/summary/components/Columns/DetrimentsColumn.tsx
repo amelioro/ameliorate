@@ -3,6 +3,7 @@ import { Divider } from "@mui/material";
 
 import { IndirectHelpIcon } from "@/web/summary/components/IndirectHelpIcon";
 import { Row } from "@/web/summary/components/Row";
+import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
 import { useDetriments } from "@/web/topic/diagramStore/summary";
 import { Node } from "@/web/topic/utils/graph";
 import { nodeDecorations } from "@/web/topic/utils/node";
@@ -15,16 +16,24 @@ export const DetrimentsColumn = ({ summaryNode }: Props) => {
   const { directNodes, indirectNodes } = useDetriments(summaryNode);
 
   const AddButtons = (
-    <></>
-    // TODO: implement this based on where we're a problem-like node or a solution-like node
-    // <div className="pb-1.5">
-    //   <AddNodeButton
-    //     fromPartId={summaryNode.id}
-    //     toNodeType="detriment"
-    //     as="parent"
-    //     relation={{ child: summaryNode.type, name: "creates", parent: "detriment" }}
-    //   />
-    // </div>
+    <div className="pb-1.5">
+      {/* TODO: this path should run if it's any problem-like node, including problem effects */}
+      {summaryNode.type === "problem" ? (
+        <AddNodeButton
+          fromPartId={summaryNode.id}
+          toNodeType="detriment"
+          as="child"
+          relation={{ child: "detriment", name: "createdBy", parent: summaryNode.type }}
+        />
+      ) : (
+        <AddNodeButton
+          fromPartId={summaryNode.id}
+          toNodeType="detriment"
+          as="parent"
+          relation={{ child: summaryNode.type, name: "creates", parent: "detriment" }}
+        />
+      )}
+    </div>
   );
 
   return (
