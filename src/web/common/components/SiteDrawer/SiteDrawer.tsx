@@ -30,19 +30,20 @@ export const SiteDrawer = ({ username, isSiteDrawerOpen, setIsSiteDrawerOpen }: 
     <Drawer anchor="left" open={isSiteDrawerOpen} onClose={() => setIsSiteDrawerOpen(false)}>
       <List>
         <ListItem
-          disablePadding={false}
           secondaryAction={
             <IconButton edge="end" aria-label="close" onClick={() => setIsSiteDrawerOpen(false)}>
               <Close />
             </IconButton>
           }
         >
-          <ListItemIcon>
-            {/* use styling to set width and height instead of Image props because otherwise this throws a warning about only having height or width set */}
-            {/* no idea why specifically this favicon throws this warning, and other Image-links in Header don't. */}
-            <Image src={favicon} alt="home" className="size-8" />
-          </ListItemIcon>
-          <ListItemText primary="Ameliorate" />
+          <ListItemButton LinkComponent={NextLink} href="/">
+            <ListItemIcon>
+              {/* use styling to set width and height instead of Image props because otherwise this throws a warning about only having height or width set */}
+              {/* no idea why specifically this favicon throws this warning, and other Image-links in Header don't. */}
+              <Image src={favicon} alt="home" className="size-8" />
+            </ListItemIcon>
+            <ListItemText primary="Ameliorate" />
+          </ListItemButton>
         </ListItem>
 
         <Divider className="my-1" />
