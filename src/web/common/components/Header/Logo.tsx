@@ -1,4 +1,4 @@
-import { Link as MuiLink } from "@mui/material";
+import { Typography } from "@mui/material";
 import Image from "next/image";
 
 import { Link } from "@/web/common/components/Link";
@@ -24,14 +24,12 @@ export const Logo = ({ className, titleClassName }: Props) => {
           Ameliorate
         </span>
       </Link>
-      <MuiLink
-        href="https://ameliorate.app/docs/release-status"
+      <Typography
         variant="caption"
-        underline="hover"
-        className="absolute -top-0.5 left-0.5 rotate-12 text-text-primary"
+        className="pointer-events-none absolute -top-0.5 left-0.5 rotate-12 text-text-primary"
       >
         Alpha
-      </MuiLink>
+      </Typography>
     </div>
   );
 };
