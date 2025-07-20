@@ -3,9 +3,8 @@ import {
   autoUpdate,
   flip,
   offset,
-  safePolygon,
   useFloating,
-  useHover,
+  useFocus,
   useInteractions,
 } from "@floating-ui/react";
 import { type SxProps, styled, useTheme } from "@mui/material";
@@ -44,23 +43,23 @@ import { setSelected, useIsGraphPartSelected } from "@/web/view/selectedPartStor
 import { useFillNodesWithColor } from "@/web/view/userConfigStore";
 
 const useFloatingToolbar = (nodeRef: HTMLDivElement | null, selected: boolean) => {
-  const [isOpenViaHover, setIsOpenViaHover] = useState(false);
+  const [isOpenViaFocus, setIsOpenViaFocus] = useState(false);
 
   const { refs, floatingStyles, context } = useFloating({
-    open: isOpenViaHover || selected, // `isOpen` is controlled via floating-ui's interactions i.e. hover, and we want to show on hover and on selection
-    onOpenChange: setIsOpenViaHover,
+    open: isOpenViaFocus || selected, // `isOpen` is controlled via floating-ui's interactions i.e. focus, and we want to show on focus and on selection
+    onOpenChange: setIsOpenViaFocus,
     placement: "right",
     middleware: [offset(8), flip()],
     elements: { reference: nodeRef },
     whileElementsMounted: autoUpdate, // couldn't get MUI Popper to update positioning when a node is added to the criteria table, so we're using floating-ui
   });
 
-  const hover = useHover(context, { handleClose: safePolygon() });
+  const focus = useFocus(context);
 
-  const { getReferenceProps, getFloatingProps } = useInteractions([hover]);
+  const { getReferenceProps, getFloatingProps } = useInteractions([focus]);
 
   return {
-    isOpenViaHover,
+    isOpenViaFocus,
     refs,
     floatingStyles,
     getReferenceProps,
@@ -156,6 +155,7 @@ const EditableNodeBase = ({ node, className = "", onClick }: Props) => {
         }}
         onContextMenu={(event) => openContextMenu(event, { node })}
         role="button"
+        tabIndex={0}
         sx={{ ...nodeStyles, width: `${nodeWidthRem}rem` }}
         className={
           className +
@@ -222,7 +222,7 @@ const EditableNodeBase = ({ node, className = "", onClick }: Props) => {
 
         {/* within node div so we can guarantee that the container div has relative positioning */}
         {/* TODO?: toolbar disappears sooner than add node buttons, and shadow disappears faster than either of these; ideally they'd probably disappear at the same time? */}
-        {(selected || floatingToolbarProps.isOpenViaHover) &&
+        {(selected || floatingToolbarProps.isOpenViaFocus) &&
           (context === "table" ? (
             // TODO?: hmm can't seem to portal to `criteria-table-paper` and get the zoom for the portal, because the zoom is being applied to the table itself to avoid applying to header,
             // but we want to portal the toolbar in order to avoid clipping by the table's `overflow: auto` that's required for scrolling to see more nodes.
