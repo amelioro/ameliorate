@@ -1,4 +1,5 @@
 import { useContext, useRef, useState } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
 
 import { htmlDefaultFontSize } from "@/pages/_document.page";
 import { useSessionUser } from "@/web/common/hooks";
@@ -12,6 +13,7 @@ import { useUserScores } from "@/web/topic/diagramStore/scoreHooks";
 import { playgroundUsername } from "@/web/topic/diagramStore/store";
 import { useFlowZoom } from "@/web/topic/hooks/flowHooks";
 import { useOnPlayground } from "@/web/topic/topicStore/store";
+import { hotkeys } from "@/web/topic/utils/hotkeys";
 import { userCanEditScores } from "@/web/topic/utils/score";
 import { useReadonlyMode } from "@/web/view/actionConfigStore";
 import { useAggregationMode, usePerspectives } from "@/web/view/perspectiveStore";
@@ -50,6 +52,11 @@ export const Score = ({ graphPartId }: ScoreProps) => {
   // Not reactive, but zoom is currently only used when hovering/selected change, which triggers a
   // re-render, so we'll still get an updated zoom value.
   const zoomRatio = useFlowZoom(); // TODO?: create a "zoomContext" so that criteria table and summary can also affect score pie's zoom
+
+  useHotkeys(hotkeys.closeScore, () => {
+    setSelected(false);
+    setHovering(false);
+  });
 
   const buttonDiameterPx =
     mainButtonRef.current?.clientHeight ?? buttonDiameterRem * htmlDefaultFontSize;
