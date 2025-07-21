@@ -17,7 +17,7 @@ import { hotkeys } from "@/web/topic/utils/hotkeys";
 import { userCanEditScores } from "@/web/topic/utils/score";
 import { useReadonlyMode } from "@/web/view/actionConfigStore";
 import { useAggregationMode, usePerspectives } from "@/web/view/perspectiveStore";
-import { useShowScores } from "@/web/view/userConfigStore";
+import { useQuickScoring, useShowScores } from "@/web/view/userConfigStore";
 
 const circleDiameter = 6 * buttonDiameterRem; // no collisions for fitting 10 elements
 
@@ -38,6 +38,7 @@ export const Score = ({ graphPartId }: ScoreProps) => {
 
   const myUsername = onPlayground ? playgroundUsername : sessionUser?.username;
   const perspectives = usePerspectives();
+  const quickScoring = useQuickScoring();
   const aggregationMode = useAggregationMode();
   const canEdit = userCanEditScores(myUsername, perspectives, readonlyMode);
 
@@ -102,7 +103,9 @@ export const Score = ({ graphPartId }: ScoreProps) => {
         }}
         // delay hover so that the score pie doesn't get in the way when you're not intending to score
         // 100 ms matches the default for MUI tooltips https://mui.com/material-ui/api/tooltip/#Tooltip-prop-enterDelay
-        onMouseEnter={() => setHoverDelayHandler(setTimeout(() => setHovering(true), 100))}
+        onMouseEnter={() => {
+          if (quickScoring) setHoverDelayHandler(setTimeout(() => setHovering(true), 100));
+        }}
         onMouseLeave={() => clearTimeout(hoverDelayHandler)}
         userScores={userScores}
         aggregationMode={aggregationMode}

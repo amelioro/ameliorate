@@ -5,6 +5,12 @@ interface UserConfigStoreState {
   zenMode: boolean;
   fillNodesWithColor: boolean;
   expandDetailsTabs: boolean;
+  /**
+   * When true, show score pies by hovering rather than just via click. Can be nice to score many
+   * nodes quickly on desktop. Don't want this on all the time because it's pretty annoying for
+   * pies to show when you're not intending to set scores.
+   */
+  quickScoring: boolean;
 
   showScores: boolean;
   showContentIndicators: boolean;
@@ -17,6 +23,7 @@ const initialState: UserConfigStoreState = {
   zenMode: false,
   fillNodesWithColor: false,
   expandDetailsTabs: true,
+  quickScoring: false,
 
   showScores: true,
   showContentIndicators: true,
@@ -42,6 +49,10 @@ export const useFillNodesWithColor = () => {
 
 export const useExpandDetailsTabs = () => {
   return useUserConfigStore((state) => state.expandDetailsTabs);
+};
+
+export const useQuickScoring = () => {
+  return useUserConfigStore((state) => state.quickScoring);
 };
 
 export const useShowScores = () => {
@@ -75,6 +86,10 @@ export const toggleFillNodesWithColor = (fill: boolean) => {
 
 export const toggleExpandDetailsTabs = () => {
   useUserConfigStore.setState((state) => ({ expandDetailsTabs: !state.expandDetailsTabs }));
+};
+
+export const toggleQuickScoring = () => {
+  useUserConfigStore.setState((state) => ({ quickScoring: !state.quickScoring }));
 };
 
 export const toggleShowScores = () => {
