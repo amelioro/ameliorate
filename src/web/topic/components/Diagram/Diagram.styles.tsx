@@ -20,7 +20,7 @@ export const zIndex = {
 export type Spotlight = "primary" | "secondary" | "normal" | "background";
 
 export const primarySpotlightColor = infoColor;
-export const secondarySpotlightColor = "#555"; // darker than react flow edge default
+export const secondarySpotlightColor = "#6b7280"; // text-gray-500, darker than react flow edge default
 
 export const StyledReactFlow = styled(ReactFlow)`
   display: flex;
