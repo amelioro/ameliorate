@@ -1,9 +1,10 @@
 import { Visibility } from "@mui/icons-material";
-import { IconButton, Tooltip, Typography } from "@mui/material";
+import { IconButton, Typography } from "@mui/material";
 import { ReactNode, memo } from "react";
 import { Handle, Position, useStore } from "reactflow";
 
 import { nodeTypes } from "@/common/node";
+import { Tooltip } from "@/web/common/components/Tooltip/Tooltip";
 import { useSessionUser } from "@/web/common/hooks";
 import { useNeighborsInDirection } from "@/web/topic/diagramStore/nodeHooks";
 import { useHiddenNodes } from "@/web/topic/hooks/flowHooks";
@@ -74,8 +75,11 @@ const NodeHandleBase = ({ node, direction, orientation }: Props) => {
         : Position.Right;
 
   return (
+    // bug?: seems like on mobile sometimes when a neighbor is hidden, this tooltip just starts showing
+    // without tapping. seems to happen inconsistently. seems maybe related to what is focused when
+    // the neighbor is hidden?
     <Tooltip
-      title={
+      tooltipBody={
         hasHiddenNeighbors ? (
           <div className="space-y-2">
             {sortedHiddenNeighbors.map((neighbor) => (
@@ -94,11 +98,11 @@ const NodeHandleBase = ({ node, direction, orientation }: Props) => {
           ""
         )
       }
-      disableFocusListener
     >
       <Handle
         type={type}
         position={position}
+        role={hasHiddenNeighbors ? "button" : undefined}
         className={
           // z-index to show in front of EditableNode, which is otherwise in the same stacking context (since it's set to relative positioning now)
           "size-[10px] z-10" +
