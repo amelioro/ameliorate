@@ -19,7 +19,10 @@ export const NodeToolbar = ({ node, context }: Props) => {
   const format = useFormat();
 
   return (
-    <div className="flex flex-col rounded border bg-paperShaded-main shadow">
+    <div
+      className="flex flex-col rounded border bg-paperShaded-main shadow"
+      onClick={(event) => event.stopPropagation()} // prevent triggering a click of the node e.g. invoking setSummaryNodeId
+    >
       {format === "diagram" && (
         <IconButton
           title="View node in summary"
