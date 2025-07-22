@@ -1,13 +1,19 @@
 import { shallow } from "zustand/shallow";
 
 import { Category } from "@/web/summary/summary";
-import { useNode } from "@/web/topic/diagramStore/nodeHooks";
+import { useAllNodes } from "@/web/topic/diagramStore/nodeHooks";
 import { useCurrentViewStore } from "@/web/view/currentViewStore/store";
 
 // hooks
 export const useSummaryNode = () => {
-  const summaryNodeId = useCurrentViewStore((state) => state.summaryNodeId);
-  return useNode(summaryNodeId);
+  // note: this'll re-render when breadcrumbs change, but I'm not sure how to avoid this while also
+  // re-rendering when a node is deleted
+  const breadcrumbNodeIds = useSummaryBreadcrumbNodeIds();
+  const breadcrumbNodes = useAllNodes(breadcrumbNodeIds);
+
+  // Use the last breadcrumb node as the summary node, because breadcrumbs' last should always be the summary node.
+  // e.g. if the summary node is deleted, we should be falling back to display the next breadcrumb node as the summary node.
+  return breadcrumbNodes.at(-1) ?? null;
 };
 
 export const useSelectedSummaryTab = () => {
@@ -25,17 +31,18 @@ export const useSummaryBreadcrumbNodeIds = () => {
 export const setSummaryNodeId = (nodeId: string | null, appendBreadcrumb = false) => {
   const state = useCurrentViewStore.getState();
 
-  if (state.summaryNodeId === nodeId) return;
-
-  const newSummaryBreadcrumbNodeIds =
-    nodeId === null
-      ? []
-      : appendBreadcrumb
-        ? [...state.summaryBreadcrumbNodeIds, nodeId]
-        : [nodeId];
+  const currentSummaryNodeId = state.summaryBreadcrumbNodeIds.at(-1) ?? null;
+  if (currentSummaryNodeId === nodeId) return;
 
   useCurrentViewStore.setState(
-    { summaryNodeId: nodeId, summaryBreadcrumbNodeIds: newSummaryBreadcrumbNodeIds },
+    {
+      summaryBreadcrumbNodeIds:
+        nodeId === null
+          ? []
+          : appendBreadcrumb
+            ? [...state.summaryBreadcrumbNodeIds, nodeId]
+            : [nodeId],
+    },
     false,
     "setSummaryNodeId",
   );
@@ -49,7 +56,6 @@ export const viewNodeInSummary = (nodeId: string) => {
   useCurrentViewStore.setState(
     {
       format: "summary",
-      summaryNodeId: nodeId,
       summaryBreadcrumbNodeIds: [nodeId], // reset these because if we're setting the format to summary, we're navigating to the summary from a different view
     },
     false,
@@ -60,12 +66,12 @@ export const viewNodeInSummary = (nodeId: string) => {
 export const viewSummaryBreadcrumb = (index: number) => {
   const state = useCurrentViewStore.getState();
 
-  const summaryNodeId = state.summaryBreadcrumbNodeIds[index] ?? null;
+  // keep the breadcrumb trail up to the clicked node
+  const newSummaryBreadcrumbNodeIds = state.summaryBreadcrumbNodeIds.slice(0, index + 1);
 
   useCurrentViewStore.setState(
     {
-      summaryNodeId,
-      summaryBreadcrumbNodeIds: state.summaryBreadcrumbNodeIds.slice(0, index + 1), // keep the breadcrumb trail up to the clicked node
+      summaryBreadcrumbNodeIds: newSummaryBreadcrumbNodeIds,
     },
     false,
     "viewSummaryBreadcrumb",
