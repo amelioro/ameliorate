@@ -18,12 +18,15 @@ import { useShowNeighborIndicators } from "@/web/view/userConfigStore";
 const NodeSummary = ({ node, beforeSlot }: { node: Node; beforeSlot?: ReactNode }) => {
   const { NodeIcon, title } = nodeDecorations[node.type];
 
+  const summary = `${title}: ${node.data.label}`;
+
   return (
     <div className="flex items-center text-nowrap">
       {beforeSlot}
       <NodeIcon color={node.type} sx={{ marginX: "2px" }} />
-      <Typography variant="body1" display="flex" alignItems="center">
-        {title}: {node.data.label}
+      {/* title set so that hover can show the full text if truncated */}
+      <Typography title={summary} variant="body1" className="items-center truncate">
+        {summary}
       </Typography>
     </div>
   );
