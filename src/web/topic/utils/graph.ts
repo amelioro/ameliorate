@@ -180,7 +180,18 @@ const findNodesRecursivelyFrom = (
    * track if we've seen the node already, so that we avoid infinite recursion if there's a cycle
    */
   seenIds: string[] = [fromNode.id],
-): Node[] => {
+  /**
+   * track the current depth so that we can return nodes based on how far away they are.
+   * for now we let other functions do what they want with the depth, but potentially this function
+   * could accept a max depth and do the filtering itself.
+   */
+  depth = 1,
+): (Node & {
+  /**
+   * how far away the node is from the `fromNode`. e.g. 1 if it's a direct neighbor, 2 if it's a neighbor's neighbor, etc.
+   */
+  layersAway: number;
+})[] => {
   const from = toDirection === "child" ? "source" : "target";
   const to = toDirection === "child" ? "target" : "source";
 
@@ -206,7 +217,7 @@ const findNodesRecursivelyFrom = (
       .map((edge) => {
         const node = findNodeOrThrow(edge[to], graph.nodes);
         if (!nodeTypesToKeep.includes(node.type)) return null;
-        return node;
+        return { ...node, layersAway: depth };
       })
       .filter((node) => node !== null),
   };
@@ -229,6 +240,7 @@ const findNodesRecursivelyFrom = (
       labelsToKeep,
       nodeTypesToKeep,
       seenIdsWithFound,
+      depth + 1,
     ),
   );
 
@@ -336,44 +348,15 @@ export const getSecondaryNeighbors = (
 };
 
 /**
- * NOTE: This uses an implementation which does not consider the direction of the relations.
- * For example, if we're from an effect E1 to a benefit B, and there's intermediate effect E2,
- * B will be considered as "direct" if E1 - creates -> E2 - creates -> B, and B - creates -> E1.
+ * Relies on `layersAway` to identify which nodes are direct.
  *
- * Considering direction seems like it would complicate the implementation in a way that isn't
- * currently worth handling such a rare edge case, so we aren't.
- *
- * We could also do this splitting when finding the `toNodes` in the first place, but that isn't
- * needed for many use cases of e.g. the `ancesors` function, and it'd complicate the implementation
- * more there as well, so we don't.
+ * Also sorts indirect nodes by how far away they are, for convenience.
  */
-export const splitNodesByDirectAndIndirect = (
-  fromNode: Node,
-  graph: Graph,
-  relations: RelationName[],
-  toNodes: Node[],
-) => {
-  /* eslint-disable functional/immutable-data -- seems easiest to do this mutably, splitting into two arrays via same iteration */
-  const directAndIndirect = toNodes.reduce(
-    (acc, toNode) => {
-      const isDirect = graph.edges.some((edge) => {
-        const directConnection =
-          (edge.source === fromNode.id && edge.target === toNode.id) ||
-          (edge.target === fromNode.id && edge.source === toNode.id);
-        const correctRelation = relations.includes(edge.label);
-
-        if (directConnection && correctRelation) return true;
-        return false;
-      });
-
-      if (isDirect) acc.directNodes.push(toNode);
-      else acc.indirectNodes.push(toNode);
-
-      return acc;
-    },
-    { directNodes: [] as Node[], indirectNodes: [] as Node[] },
-  );
-  /* eslint-enable functional/immutable-data */
-
-  return directAndIndirect;
+export const splitNodesByDirectAndIndirect = (nodes: (Node & { layersAway: number })[]) => {
+  return {
+    directNodes: nodes.filter((node) => node.layersAway === 1),
+    indirectNodes: nodes
+      .filter((node) => node.layersAway > 1)
+      .sort((node1, node2) => node1.layersAway - node2.layersAway),
+  };
 };

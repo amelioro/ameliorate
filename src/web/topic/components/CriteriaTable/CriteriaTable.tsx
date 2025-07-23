@@ -237,7 +237,6 @@ export const CriteriaTable = () => {
   const ToolBarActions = (table: MRT_TableInstance<RowData>) => {
     return (
       <div
-        className="mr-12" // margin instead of padding so that onClick isn't triggered (and can deselect the current node)
         onClick={(event) => event.stopPropagation()} // prevent triggering node deselect from table paper click
       >
         <MRT_ToggleGlobalFilterButton table={table} />

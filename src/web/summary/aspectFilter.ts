@@ -73,13 +73,13 @@ export const getOutgoingNodesByRelationDescription = (summaryNode: Node, graph: 
 export const getComponents = (summaryNode: Node, graph: Graph) => {
   const components = ancestors(summaryNode, graph, ["has"]);
 
-  return splitNodesByDirectAndIndirect(summaryNode, graph, ["has"], components);
+  return splitNodesByDirectAndIndirect(components);
 };
 
 export const getAddressed = (summaryNode: Node, graph: Graph) => {
   const addressed = ancestors(summaryNode, graph, ["has", "creates"], ["addresses"]);
 
-  return splitNodesByDirectAndIndirect(summaryNode, graph, ["addresses"], addressed);
+  return splitNodesByDirectAndIndirect(addressed);
 };
 
 // TODO: test this
@@ -90,7 +90,7 @@ export const getObstacles = (summaryNode: Node, graph: Graph) => {
   const componentsAndDetriments = ancestors(summaryNode, graph, ["has", "creates"], undefined, [
     "solutionComponent",
     "detriment",
-  ]);
+  ]).sort((node1, node2) => node1.layersAway - node2.layersAway); // ensure indirect obstacles are sorted by how far away they are, for convenience
 
   const indirectObstacles = componentsAndDetriments
     .flatMap((node) => descendants(node, graph, [], ["obstacleOf"]))
@@ -127,14 +127,14 @@ export const getSolutions = (summaryNode: Node, graph: Graph) => {
     (node) => node.id,
   );
 
-  return splitNodesByDirectAndIndirect(summaryNode, graph, ["addresses", "mitigates"], solutions);
+  return splitNodesByDirectAndIndirect(solutions);
 };
 
 // effect
 export const getSolutionBenefits = (summaryNode: Node, graph: Graph) => {
   const benefits = ancestors(summaryNode, graph, ["has", "creates"], ["creates"], ["benefit"]);
 
-  return splitNodesByDirectAndIndirect(summaryNode, graph, ["creates"], benefits);
+  return splitNodesByDirectAndIndirect(benefits);
 };
 
 // TODO: test this
@@ -150,12 +150,7 @@ export const getDetriments = (summaryNode: Node, graph: Graph) => {
     ...descendants(summaryNode, graph, ["createdBy"], ["createdBy"], badNodeTypes),
   ];
 
-  return splitNodesByDirectAndIndirect(
-    summaryNode,
-    graph,
-    ["creates", "causes", "createdBy"],
-    detriments,
-  );
+  return splitNodesByDirectAndIndirect(detriments);
 };
 
 // TODO: test this
@@ -165,12 +160,7 @@ export const getEffects = (summaryNode: Node, graph: Graph) => {
     ...descendants(summaryNode, graph, ["createdBy"], ["createdBy"]),
   ];
 
-  return splitNodesByDirectAndIndirect(
-    summaryNode,
-    graph,
-    ["creates", "causes", "createdBy"],
-    effects,
-  );
+  return splitNodesByDirectAndIndirect(effects);
 };
 
 // TODO: test this
@@ -180,10 +170,5 @@ export const getCauses = (summaryNode: Node, graph: Graph) => {
     ...descendants(summaryNode, graph, ["has", "causes", "creates"], ["has", "causes", "creates"]),
   ];
 
-  return splitNodesByDirectAndIndirect(
-    summaryNode,
-    graph,
-    ["has", "causes", "creates", "createdBy"],
-    causes,
-  );
+  return splitNodesByDirectAndIndirect(causes);
 };

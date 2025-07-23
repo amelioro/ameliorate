@@ -39,7 +39,10 @@ describe("ancestors", () => {
 
     const found = ancestors(fromNode, graph);
 
-    expect(found).toIncludeSameMembers([indirectAncestor, directAncestor]);
+    expect(found).toIncludeSameMembers([
+      { ...indirectAncestor, layersAway: 2 },
+      { ...directAncestor, layersAway: 1 },
+    ]);
   });
 
   test("finds ancestors even if there is a cycle", () => {
@@ -66,7 +69,10 @@ describe("ancestors", () => {
 
     const found = ancestors(fromNode, graph);
 
-    expect(found).toIncludeSameMembers([indirectAncestor, directAncestor]);
+    expect(found).toIncludeSameMembers([
+      { ...indirectAncestor, layersAway: 2 },
+      { ...directAncestor, layersAway: 1 },
+    ]);
   });
 
   test("finds only ancestors through edges with labels if labels are passed", () => {
@@ -106,7 +112,10 @@ describe("ancestors", () => {
 
     const found = ancestors(fromNode, graph, ["causes", "creates"]);
 
-    expect(found).toIncludeSameMembers([label1DirectAncestor, label2IndirectAncestor]);
+    expect(found).toIncludeSameMembers([
+      { ...label1DirectAncestor, layersAway: 1 },
+      { ...label2IndirectAncestor, layersAway: 2 },
+    ]);
   });
 });
 
@@ -147,7 +156,10 @@ describe("descendants", () => {
 
     const found = descendants(fromNode, graph);
 
-    expect(found).toIncludeSameMembers([directDescendant, indirectDescendant]);
+    expect(found).toIncludeSameMembers([
+      { ...directDescendant, layersAway: 1 },
+      { ...indirectDescendant, layersAway: 2 },
+    ]);
   });
 
   test("finds descendants even if there is a cycle", () => {
@@ -174,7 +186,10 @@ describe("descendants", () => {
 
     const found = descendants(fromNode, graph);
 
-    expect(found).toIncludeSameMembers([indirectDescendant, directDescendant]);
+    expect(found).toIncludeSameMembers([
+      { ...indirectDescendant, layersAway: 2 },
+      { ...directDescendant, layersAway: 1 },
+    ]);
   });
 
   test("finds only descendants through edges with labels if labels are passed", () => {
@@ -218,6 +233,9 @@ describe("descendants", () => {
 
     const found = descendants(fromNode, graph, ["causes", "creates"]);
 
-    expect(found).toIncludeSameMembers([label1DirectDescendant, label2IndirectDescendant]);
+    expect(found).toIncludeSameMembers([
+      { ...label1DirectDescendant, layersAway: 1 },
+      { ...label2IndirectDescendant, layersAway: 2 },
+    ]);
   });
 });

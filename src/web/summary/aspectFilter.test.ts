@@ -75,10 +75,10 @@ describe("getSolutionBenefits", () => {
 
     const { directNodes, indirectNodes } = getSolutionBenefits(fromSolution, graph);
 
-    expect(directNodes).toEqual([parentBenefit]);
+    expect(directNodes).toEqual([{ ...parentBenefit, layersAway: 1 }]);
     expect(indirectNodes).toIncludeSameMembers([
-      ancestorBenefitViaBenefit,
-      ancestorBenefitViaComponent,
+      { ...ancestorBenefitViaBenefit, layersAway: 2 },
+      { ...ancestorBenefitViaComponent, layersAway: 2 },
     ]);
   });
 });
@@ -159,10 +159,10 @@ describe("getAddressed", () => {
 
     const { directNodes, indirectNodes } = getAddressed(fromSolution, graph);
 
-    expect(directNodes).toEqual([addressedProblem]);
+    expect(directNodes).toEqual([{ ...addressedProblem, layersAway: 1 }]);
     expect(indirectNodes).toIncludeSameMembers([
-      addressedCauseViaEffect,
-      addressedDetrimentViaComponent,
+      { ...addressedCauseViaEffect, layersAway: 2 },
+      { ...addressedDetrimentViaComponent, layersAway: 2 },
     ]);
   });
 });

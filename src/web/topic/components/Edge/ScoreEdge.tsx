@@ -154,7 +154,7 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
         // pointer-events is set because this div is within an SVG and doesn't handle pointer-events properly by default
         "[pointer-events:all] flex flex-col items-center justify-center bg-white p-1 rounded-xl" +
         // border adds a lot of clutter so only show it if we're highlighting the edge
-        (spotlight === "normal" ? " border-none" : "") +
+        (spotlight === "primary" ? "" : " border-none") +
         // allow other components to apply conditional css related to this edge, e.g. when it's hovered/selected
         // separate from react-flow__edge because sometimes edges are rendered outside of react-flow (e.g. details pane), and we still want to style these
         " diagram-edge" +

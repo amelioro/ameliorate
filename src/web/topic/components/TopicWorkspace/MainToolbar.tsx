@@ -7,6 +7,7 @@ import {
   FiberManualRecord,
   FormatLineSpacing,
   Group,
+  HelpOutline,
   Highlight,
   Looks6,
   QuestionMark,
@@ -32,6 +33,7 @@ import { Dispatch, ReactNode, SetStateAction, useState } from "react";
 
 import { Menu } from "@/web/common/components/Menu/Menu";
 import { NestedMenuItem } from "@/web/common/components/Menu/NestedMenuItem";
+import { IconWithTooltip } from "@/web/common/components/Tooltip/IconWithTooltip";
 import { useSessionUser } from "@/web/common/hooks";
 import { HelpMenu } from "@/web/topic/components/TopicWorkspace/HelpMenu";
 import { MoreActionsDrawer } from "@/web/topic/components/TopicWorkspace/MoreActionsDrawer";
@@ -57,12 +59,14 @@ import {
 import { useSelectedGraphPart } from "@/web/view/selectedPartStore";
 import {
   toggleIndicateWhenNodeForcedToShow,
+  toggleQuickScoring,
   toggleShowContentIndicators,
   toggleShowNeighborIndicators,
   toggleShowScores,
   toggleShowViewIndicators,
   toggleZenMode,
   useIndicateWhenNodeForcedToShow,
+  useQuickScoring,
   useShowContentIndicators,
   useShowNeighborIndicators,
   useShowScores,
@@ -74,12 +78,22 @@ const aggregationModeIcons: Record<AggregationMode, ReactNode> = {
   disagreement: <FormatLineSpacing />,
 };
 
+const QuickScoringHelpIcon = () => {
+  return (
+    <IconWithTooltip
+      tooltipHeading="Quick scoring allows you to set scores more quickly by showing score pies when hovering a score. This isn't on all the time because it can be annoying to see the score pies when you're not intending to score."
+      icon={<HelpOutline className="text-[rgba(0,0,0,0.6)]" />}
+    />
+  );
+};
+
 interface PerspectivesMenuProps {
   anchorEl: HTMLElement | null;
   setAnchorEl: Dispatch<SetStateAction<HTMLElement | null>>;
 }
 
 const PerspectivesMenu = ({ anchorEl, setAnchorEl }: PerspectivesMenuProps) => {
+  const quickScoring = useQuickScoring();
   const aggregationMode = useAggregationMode();
 
   const menuOpen = Boolean(anchorEl);
@@ -90,10 +104,27 @@ const PerspectivesMenu = ({ anchorEl, setAnchorEl }: PerspectivesMenuProps) => {
       anchorEl={anchorEl}
       isOpen={menuOpen}
       closeMenu={() => setAnchorEl(null)}
+      closeOnClick={false}
       openDirection="top"
       // match the ~300px width of drawer
       className="w-[18.75rem] px-2"
     >
+      <MenuItem onClick={() => toggleQuickScoring()}>
+        <ListItemText
+          primary={
+            <span className="flex items-center gap-1">
+              Quick scoring <QuickScoringHelpIcon />
+            </span>
+          }
+        />
+        <Switch
+          checked={quickScoring}
+          // for some reason the parent MenuItem click gets doubled if we don't stopPropagation
+          onClick={(e) => e.stopPropagation()}
+          className="pointer-events-none"
+        />
+      </MenuItem>
+
       <NestedMenuItem label="Aggregation mode" parentMenuOpen={menuOpen} className="mb-2">
         <RadioGroup name="aggregation mode">
           {aggregationModes.map((mode) => {
