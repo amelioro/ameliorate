@@ -12,6 +12,7 @@ import { Summary } from "@/web/summary/components/Summary";
 import { CriteriaTable } from "@/web/topic/components/CriteriaTable/CriteriaTable";
 import { Diagram } from "@/web/topic/components/Diagram/Diagram";
 import { TopicPane } from "@/web/topic/components/TopicPane/TopicPane";
+import { drawerMinWidthRem } from "@/web/topic/components/TopicPane/TopicPane.styles";
 import { AppHeader } from "@/web/topic/components/TopicWorkspace/AppHeader";
 import { MainToolbar } from "@/web/topic/components/TopicWorkspace/MainToolbar";
 import { TourSetter } from "@/web/topic/components/TopicWorkspace/TourSetter";
@@ -89,15 +90,38 @@ export const TopicWorkspace = () => {
 
       {!zenMode && <AppHeader />}
 
-      <div className="relative flex w-full grow flex-row overflow-auto">
+      <div
+        className={
+          "relative flex w-full grow flex-row overflow-hidden" +
+          /**
+           * Somewhat-jank way to add margin to the content div when the pane is open, so that it
+           * looks like the pane is in-line with the content.
+           * Pane is not actually in-line because it's hard to animate in/out without squishing
+           * content from its width reducing/expanding.
+           *
+           * Ideally we wouldn't hardcode the id's here, but tailwind can't use dynamic values
+           * (unless we wanted to use css variables for them).
+           */
+          " [&:has(>#pane-left.pane-open)>#workspace-content]:ml-[--drawer-min-width-rem]" +
+          " [&:has(>#pane-right.pane-open)>#workspace-content]:mr-[--drawer-min-width-rem]"
+        }
+        style={{ "--drawer-min-width-rem": `${drawerMinWidthRem}rem` } as React.CSSProperties}
+      >
         <WorkspaceContext.Provider value="details">
           <TopicPane
-            anchor={usingLgScreen ? "left" : "modal"}
+            anchor={usingLgScreen ? "left" : "bottom"}
             tabs={useSplitPanes ? ["Details"] : ["Details", "Views"]}
           />
         </WorkspaceContext.Provider>
 
-        <ContentDiv className="relative flex h-full flex-1 flex-col overflow-auto">
+        <ContentDiv
+          id="workspace-content"
+          className={
+            "relative flex h-full flex-1 flex-col overflow-auto" +
+            // match transition of the pane's transforms
+            " transition-[margin-left,margin-right] duration-300"
+          }
+        >
           {!zenMode && usingLgScreen && (
             <ViewToolbar overlay={format === "diagram"} position="top" />
           )}

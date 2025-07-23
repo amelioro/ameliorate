@@ -1,6 +1,6 @@
-import { ArrowBack, ArrowForward, VerticalSplit } from "@mui/icons-material";
+import { ArrowBack, ArrowForward, Close, VerticalSplit } from "@mui/icons-material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { IconButton, Modal, Tab } from "@mui/material";
+import { IconButton, Tab } from "@mui/material";
 import { memo, useEffect, useState } from "react";
 
 import { deepIsEqual } from "@/common/utils";
@@ -13,7 +13,6 @@ import {
   TopicDetails,
   DetailsTab as TopicDetailsTab,
 } from "@/web/topic/components/TopicPane/TopicDetails";
-import { StyledDrawer, drawerMinWidthRem } from "@/web/topic/components/TopicPane/TopicPane.styles";
 import { TopicViews } from "@/web/topic/components/TopicPane/TopicViews";
 import {
   goBack,
@@ -51,12 +50,12 @@ const DetailsToolbar = () => {
 
 type TopicTab = "Details" | "Views";
 interface Props {
-  anchor: "left" | "right" | "modal";
+  anchor: "left" | "right" | "bottom";
   tabs: [TopicTab, ...TopicTab[]];
 }
 
 const TopicPaneBase = ({ anchor, tabs }: Props) => {
-  const defaultOpen = anchor !== "modal";
+  const defaultOpen = anchor !== "bottom"; // don't open by default if we're on mobile because it takes up the whole screen
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
 
@@ -156,58 +155,45 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
     </TabContext>
   );
 
-  return anchor !== "modal" ? (
-    <div className="relative">
+  return (
+    /**
+     * If we're anchored at the bottom, we're on mobile, and we want to show in front of the workspace content,
+     * otherwise we want to appear in-line with workspace content.
+     *
+     * Note that we use `absolute` positioning with transform for animation regardless, because
+     * animating the pane in/out, without squishing content due to width reducing/expanding, is hard
+     * when actually positioning in-line.
+     *
+     * TODO?: could use `display: none` when not open, but also be aware that only 87% of users' browsers support @starting-style and transition-behavior
+     */
+    <div
+      id={anchor === "left" ? "pane-left" : anchor === "right" ? "pane-right" : "pane-bottom"}
+      className={
+        // z-20 to be in front of node toolbar's z-10 in case we're viewing the summary and the summary node's toolbar is open
+        "z-20 h-full absolute bg-paperShaded-main transition-transform duration-300" +
+        (anchor !== "bottom" ? " w-[--drawer-min-width-rem]" : " w-full") +
+        (anchor === "left" ? " border-r left-0" + (isOpen ? "" : " -translate-x-full") : "") +
+        (anchor === "right" ? " border-l right-0" + (isOpen ? "" : " translate-x-full") : "") +
+        (anchor === "bottom" ? " border-t bottom-0" + (isOpen ? "" : " translate-y-full") : "") +
+        (isOpen ? " pane-open" : "")
+      }
+    >
       <IconButton
         color="primary"
-        title="View Topic Pane"
-        aria-label="View Topic Pane"
+        title={isOpen ? "Close Topic Pane" : "View Topic Pane"}
+        aria-label={isOpen ? "Close Topic Pane" : "View Topic Pane"}
         onClick={handlePaneToggle}
         className={
           "absolute z-10" +
-          (anchor === "left" ? " right-0 translate-x-full" : " left-0 -translate-x-full")
+          (anchor === "left" ? " right-0" + (isOpen ? "" : " translate-x-full") : "") +
+          (anchor === "right" ? " left-0" + (isOpen ? "" : " -translate-x-full") : "") +
+          (anchor === "bottom" ? " top-0 right-0" + (isOpen ? "" : " -translate-y-full") : "")
         }
       >
-        <VerticalSplit />
+        {isOpen ? <Close /> : <VerticalSplit />}
       </IconButton>
-      <StyledDrawer
-        variant="permanent"
-        open={isOpen}
-        anchor={anchor}
-        // z-auto because Pane should share space with other elements, so doesn't need to be in front
-        // border-r-inherit to use tailwind default border color over MUI's drawer border color, for consistency
-        PaperProps={{ className: "bg-paperShaded-main z-auto border-r-inherit" }}
-      >
-        {paneContent}
-      </StyledDrawer>
-    </div>
-  ) : (
-    <div className="absolute inset-0">
-      <IconButton
-        color="primary"
-        title="View Topic Pane"
-        aria-label="View Topic Pane"
-        onClick={handlePaneToggle}
-        className={"absolute bottom-0 right-0 z-10"}
-      >
-        <VerticalSplit />
-      </IconButton>
-      <Modal
-        open={isOpen}
-        onClose={() => setIsOpen(false)}
-        aria-label="Topic pane"
-        className="flex items-center justify-center"
-      >
-        <div
-          // flex to ensure content takes up no more than full height, allowing inner containers to control scrolling
-          // h-[90%] to allow modal to take up more space than default, also to have a max height
-          className="flex h-[90%] flex-col bg-paperPlain-main"
-          // try to fit 2 cols of nodes, but ensure space is left on side of screen so that it's obvious we're in a modal
-          style={{ width: `${drawerMinWidthRem}rem`, maxWidth: "90%" }}
-        >
-          {paneContent}
-        </div>
-      </Modal>
+
+      <div className="flex size-full flex-col">{paneContent}</div>
     </div>
   );
 };
