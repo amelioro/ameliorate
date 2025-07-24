@@ -14,6 +14,7 @@ interface Events {
   viewJustification: () => void;
   viewResearch: () => void;
   viewComments: () => void;
+  seeViewSettings: () => void;
   partSelected: (partId: string | null) => void;
 }
 

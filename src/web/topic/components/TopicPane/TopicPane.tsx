@@ -126,6 +126,10 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
       setTabs("Details", "Comments");
     });
 
+    const unbindSeeViewSettings = emitter.on("seeViewSettings", () => {
+      setTabs("Views");
+    });
+
     const unbindSelectedPart = emitter.on("partSelected", (partId) => {
       if (partId) setTabs("Details"); // convenient to show details when clicking a node, but don't open the pane if it's not open, because that can be jarring
     });
@@ -136,6 +140,7 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
       unbindSelectJustification();
       unbindSelectResearch();
       unbindSelectComments();
+      unbindSeeViewSettings();
       unbindSelectedPart();
     };
   }, [tabs]);
