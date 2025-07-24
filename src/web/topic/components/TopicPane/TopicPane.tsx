@@ -179,7 +179,7 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
       }
     >
       <IconButton
-        color="primary"
+        color={isOpen ? undefined : "primary"} // stand out if pane is closed so it's easy to find, but if pane is open, the X doesn't really need to stand out
         title={isOpen ? "Close Topic Pane" : "View Topic Pane"}
         aria-label={isOpen ? "Close Topic Pane" : "View Topic Pane"}
         onClick={handlePaneToggle}
