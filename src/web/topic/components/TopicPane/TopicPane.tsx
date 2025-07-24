@@ -106,6 +106,10 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
       flashOutlineIfElementDoesntChange(paneContentDivRef.current);
     };
 
+    const unbindSelectTopic = emitter.on("viewTopic", () => {
+      setTabs("Details");
+    });
+
     const unbindSelectBasics = emitter.on("viewBasics", () => {
       setTabs("Details", "Basics");
     });
@@ -127,6 +131,7 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
     });
 
     return () => {
+      unbindSelectTopic();
       unbindSelectBasics();
       unbindSelectJustification();
       unbindSelectResearch();
