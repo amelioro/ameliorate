@@ -20,6 +20,7 @@ import { useCommentCount } from "@/web/comment/store/commentStore";
 import { HelpIcon } from "@/web/common/components/HelpIcon";
 import { Link } from "@/web/common/components/Link";
 import { IconWithTooltip } from "@/web/common/components/Tooltip/IconWithTooltip";
+import { Tooltip } from "@/web/common/components/Tooltip/Tooltip";
 import { useSessionUser } from "@/web/common/hooks";
 import { trpc } from "@/web/common/trpc";
 import { EditTopicForm } from "@/web/topic/components/TopicForm/TopicForm";
@@ -158,14 +159,11 @@ export const TopicDetails = ({ selectedTab, setSelectedTab }: Props) => {
 
         {!isPlaygroundTopic && sessionUser && userIsCreator && (
           <>
-            <IconButton
-              size="small"
-              title="Settings"
-              aria-label="Settings"
-              onClick={() => setTopicFormOpen(true)}
-            >
-              <Settings fontSize="inherit" />
-            </IconButton>
+            <Tooltip tooltipHeading="Open Topic Settings">
+              <IconButton size="small" onClick={() => setTopicFormOpen(true)}>
+                <Settings fontSize="inherit" />
+              </IconButton>
+            </Tooltip>
             <Dialog
               open={topicFormOpen}
               onClose={() => setTopicFormOpen(false)}
