@@ -1,7 +1,7 @@
-import { HelpOutline } from "@mui/icons-material";
 import { Box, Link, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 
+import { HelpIcon } from "@/web/common/components/HelpIcon";
 import { IconWithTooltip } from "@/web/common/components/Tooltip/IconWithTooltip";
 
 export const TotalsHeaderCell = () => {
@@ -13,7 +13,7 @@ export const TotalsHeaderCell = () => {
       <IconWithTooltip
         tooltipHeading="Solution Totals"
         iconButtonClassName="p-2"
-        icon={<HelpOutline fontSize="small" />}
+        icon={<HelpIcon />}
         tooltipBody={
           <Box
             sx={{
