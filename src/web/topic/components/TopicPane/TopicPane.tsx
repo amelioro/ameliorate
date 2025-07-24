@@ -1,7 +1,7 @@
 import { ArrowBack, ArrowForward, Close, VerticalSplit } from "@mui/icons-material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { IconButton, Tab } from "@mui/material";
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 
 import { deepIsEqual } from "@/common/utils";
 import { emitter } from "@/web/common/event";
@@ -48,6 +48,28 @@ const DetailsToolbar = () => {
   );
 };
 
+/**
+ * call attention to the pane if an action was expected to change it, but it didn't change (because it was already in the expected state)
+ */
+const flashOutlineIfElementDoesntChange = (element: HTMLElement | null) => {
+  if (!element) return;
+
+  // eslint-disable-next-line functional/no-let
+  let elementChanged = false;
+  const observer = new MutationObserver(() => (elementChanged = true));
+  observer.observe(element, { attributes: true, childList: true, subtree: true });
+
+  setTimeout(() => {
+    if (!elementChanged) {
+      element.classList.add("!outline-yellow-400");
+      setTimeout(() => {
+        element.classList.remove("!outline-yellow-400");
+      }, 500);
+    }
+    observer.disconnect();
+  }, 0); // 0s timeout makes this check async so that renderer can process state changes first if there are any
+};
+
 type TopicTab = "Details" | "Views";
 interface Props {
   anchor: "left" | "right" | "bottom";
@@ -58,41 +80,50 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
   const defaultOpen = anchor !== "bottom"; // don't open by default if we're on mobile because it takes up the whole screen
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
+  const paneContentDivRef = useRef<HTMLDivElement>(null);
 
   const [selectedTopicDetailsTab, setSelectedTopicDetailsTab] = useState<TopicDetailsTab>("Basics");
   const [selectedPartDetailsTab, setSelectedPartDetailsTab] = useState<PartDetailsTab>("Basics");
 
   const selectedGraphPart = useSelectedGraphPart();
 
+  // set up handlers for changing tabs
   useEffect(() => {
     if (!tabs.includes("Details")) return;
 
-    const unbindSelectBasics = emitter.on("viewBasics", () => {
-      setSelectedTab("Details");
-      setSelectedPartDetailsTab("Basics");
+    // helper
+    const setTabs = (
+      topicTab: TopicTab,
+      partDetailsTab?: PartDetailsTab,
+      topicDetailsTab?: TopicDetailsTab,
+    ) => {
+      if (partDetailsTab) setSelectedPartDetailsTab(partDetailsTab);
+      if (topicDetailsTab) setSelectedTopicDetailsTab(topicDetailsTab);
+
+      setSelectedTab(topicTab);
       setIsOpen(true);
+
+      flashOutlineIfElementDoesntChange(paneContentDivRef.current);
+    };
+
+    const unbindSelectBasics = emitter.on("viewBasics", () => {
+      setTabs("Details", "Basics");
     });
 
     const unbindSelectJustification = emitter.on("viewJustification", () => {
-      setSelectedTab("Details");
-      setSelectedPartDetailsTab("Justification");
-      setIsOpen(true);
+      setTabs("Details", "Justification");
     });
 
     const unbindSelectResearch = emitter.on("viewResearch", () => {
-      setSelectedTab("Details");
-      setSelectedPartDetailsTab("Research");
-      setIsOpen(true);
+      setTabs("Details", "Research");
     });
 
     const unbindSelectComments = emitter.on("viewComments", () => {
-      setSelectedTab("Details");
-      setSelectedPartDetailsTab("Comments");
-      setIsOpen(true);
+      setTabs("Details", "Comments");
     });
 
     const unbindSelectedPart = emitter.on("partSelected", (partId) => {
-      if (partId) setSelectedTab("Details"); // convenient to show details when clicking a node, but don't open the pane if it's not open, because that can be jarring
+      if (partId) setTabs("Details"); // convenient to show details when clicking a node, but don't open the pane if it's not open, because that can be jarring
     });
 
     return () => {
@@ -193,7 +224,16 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
         {isOpen ? <Close /> : <VerticalSplit />}
       </IconButton>
 
-      <div className="flex size-full flex-col">{paneContent}</div>
+      <div
+        ref={paneContentDivRef}
+        className={
+          "flex size-full flex-col" +
+          // allow drawing user attention to the pane e.g. if they click to open the pane but it's already open
+          " outline-transparent outline -outline-offset-4 transition-[outline-color] duration-500"
+        }
+      >
+        {paneContent}
+      </div>
     </div>
   );
 };
