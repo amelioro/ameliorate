@@ -7,7 +7,6 @@ import {
   FiberManualRecord,
   FormatLineSpacing,
   Group,
-  HelpOutline,
   Highlight,
   Looks6,
   QuestionMark,
@@ -31,6 +30,7 @@ import {
 import { startCase } from "es-toolkit";
 import { Dispatch, ReactNode, SetStateAction, useState } from "react";
 
+import { HelpIcon } from "@/web/common/components/HelpIcon";
 import { Menu } from "@/web/common/components/Menu/Menu";
 import { NestedMenuItem } from "@/web/common/components/Menu/NestedMenuItem";
 import { IconWithTooltip } from "@/web/common/components/Tooltip/IconWithTooltip";
@@ -81,8 +81,9 @@ const aggregationModeIcons: Record<AggregationMode, ReactNode> = {
 const QuickScoringHelpIcon = () => {
   return (
     <IconWithTooltip
-      tooltipHeading="Quick scoring allows you to set scores more quickly by showing score pies when hovering a score. This isn't on all the time because it can be annoying to see the score pies when you're not intending to score."
-      icon={<HelpOutline className="text-[rgba(0,0,0,0.6)]" />}
+      tooltipHeading="Quick Scoring"
+      tooltipBody="Quick scoring allows you to set scores more quickly by showing score pies when hovering a score. This isn't on all the time because it can be annoying to see the score pies when you're not intending to score."
+      icon={<HelpIcon />}
     />
   );
 };

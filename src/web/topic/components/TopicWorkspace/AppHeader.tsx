@@ -1,20 +1,21 @@
-import { ArrowBack, ArrowForward, Redo, Settings, Undo } from "@mui/icons-material";
-import { Dialog, Divider, IconButton, useTheme } from "@mui/material";
+import { ArrowBack, ArrowForward, InfoOutlined, Redo, Undo } from "@mui/icons-material";
+import { Divider, IconButton, useTheme } from "@mui/material";
 import Image from "next/image";
-import { useState } from "react";
 
 import { Logo } from "@/web/common/components/Header/Logo";
 import { ProfileButton } from "@/web/common/components/Header/ProfileButton";
 import { SiteMenu } from "@/web/common/components/Header/SiteMenu";
 import { Link } from "@/web/common/components/Link";
 import { NavLink } from "@/web/common/components/NavLink";
+import { Tooltip } from "@/web/common/components/Tooltip/Tooltip";
+import { emitter } from "@/web/common/event";
 import { useSessionUser } from "@/web/common/hooks";
 import { discordInvite, githubRepo } from "@/web/common/urls";
-import { EditTopicForm } from "@/web/topic/components/TopicForm/TopicForm";
 import { redo, undo } from "@/web/topic/diagramStore/utilActions";
 import { useTemporalHooks } from "@/web/topic/diagramStore/utilHooks";
 import { useTopic, useUserCanEditTopicData, useUserIsCreator } from "@/web/topic/topicStore/store";
 import { goBack, goForward, useCanGoBackForward } from "@/web/view/currentViewStore/store";
+import { setSelected } from "@/web/view/selectedPartStore";
 
 // TODO: check if need overflow-x-auto to deal with increased html font size
 // h-[calc(3rem + 1 px)] to match SiteHeader's 48px + 1px border
@@ -22,8 +23,6 @@ import { goBack, goForward, useCanGoBackForward } from "@/web/view/currentViewSt
 const headerCornerClasses = "h-[calc(3rem_+_1px)] bg-paperShaded-main flex items-center";
 
 export const AppHeader = () => {
-  const [topicFormOpen, setTopicFormOpen] = useState(false);
-
   const theme = useTheme();
 
   const { sessionUser } = useSessionUser();
@@ -130,25 +129,17 @@ export const AppHeader = () => {
         </>
       )}
 
-      {showSettings && (
-        <>
-          <IconButton
-            size="small"
-            title="Settings"
-            aria-label="Settings"
-            onClick={() => setTopicFormOpen(true)}
-          >
-            <Settings fontSize="inherit" />
-          </IconButton>
-          <Dialog
-            open={topicFormOpen}
-            onClose={() => setTopicFormOpen(false)}
-            aria-label="Topic Settings"
-          >
-            <EditTopicForm topic={topic} creatorName={sessionUser.username} />
-          </Dialog>
-        </>
-      )}
+      <Tooltip tooltipHeading="View Topic Details">
+        <IconButton
+          size="small"
+          onClick={() => {
+            setSelected(null);
+            emitter.emit("viewTopic");
+          }}
+        >
+          <InfoOutlined fontSize="inherit" />
+        </IconButton>
+      </Tooltip>
     </div>
   );
 

@@ -9,10 +9,12 @@ interface Events {
   changedDiagramFilter: () => void;
   changedLayoutConfig: () => void;
   changedView: (newView: ViewState) => void;
+  viewTopic: () => void;
   viewBasics: () => void;
   viewJustification: () => void;
   viewResearch: () => void;
   viewComments: () => void;
+  seeViewSettings: () => void;
   partSelected: (partId: string | null) => void;
 }
 

@@ -1,6 +1,8 @@
-import { Schema, ViewCarousel } from "@mui/icons-material";
+import { Schema, Settings, ViewCarousel } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 
+import { Tooltip } from "@/web/common/components/Tooltip/Tooltip";
+import { emitter } from "@/web/common/event";
 import { QuickViewSelect } from "@/web/topic/components/TopicWorkspace/QuickViewSelect";
 import { setFormat, useFormat } from "@/web/view/currentViewStore/store";
 
@@ -61,6 +63,12 @@ export const ViewToolbar = ({ overlay, position }: Props) => {
         )}
 
         <QuickViewSelect />
+
+        <Tooltip tooltipHeading="Open View Settings">
+          <IconButton size="small" onClick={() => emitter.emit("seeViewSettings")}>
+            <Settings fontSize="inherit" className="text-gray-400" />
+          </IconButton>
+        </Tooltip>
       </div>
     </div>
   );

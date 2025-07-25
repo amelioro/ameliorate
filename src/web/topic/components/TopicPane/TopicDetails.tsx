@@ -5,11 +5,10 @@ import {
   ArticleOutlined,
   ChatBubble,
   ChatBubbleOutline,
-  Info,
   Settings,
 } from "@mui/icons-material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { Dialog, IconButton, MenuItem, Tab, TextField, Tooltip, Typography } from "@mui/material";
+import { Dialog, IconButton, MenuItem, Tab, TextField, Typography } from "@mui/material";
 import { startCase } from "es-toolkit";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -18,7 +17,10 @@ import { z } from "zod";
 import { topicSchema } from "@/common/topic";
 import { WatchType, watchTypes } from "@/common/watch";
 import { useCommentCount } from "@/web/comment/store/commentStore";
+import { HelpIcon } from "@/web/common/components/HelpIcon";
 import { Link } from "@/web/common/components/Link";
+import { IconWithTooltip } from "@/web/common/components/Tooltip/IconWithTooltip";
+import { Tooltip } from "@/web/common/components/Tooltip/Tooltip";
 import { useSessionUser } from "@/web/common/hooks";
 import { trpc } from "@/web/common/trpc";
 import { EditTopicForm } from "@/web/topic/components/TopicForm/TopicForm";
@@ -157,14 +159,11 @@ export const TopicDetails = ({ selectedTab, setSelectedTab }: Props) => {
 
         {!isPlaygroundTopic && sessionUser && userIsCreator && (
           <>
-            <IconButton
-              size="small"
-              title="Settings"
-              aria-label="Settings"
-              onClick={() => setTopicFormOpen(true)}
-            >
-              <Settings fontSize="inherit" />
-            </IconButton>
+            <Tooltip tooltipHeading="Open Topic Settings">
+              <IconButton size="small" onClick={() => setTopicFormOpen(true)}>
+                <Settings fontSize="inherit" />
+              </IconButton>
+            </Tooltip>
             <Dialog
               open={topicFormOpen}
               onClose={() => setTopicFormOpen(false)}
@@ -196,8 +195,9 @@ export const TopicDetails = ({ selectedTab, setSelectedTab }: Props) => {
                   </MenuItem>
                 ))}
               </TextField>
-              <Tooltip
-                title={
+              <IconWithTooltip
+                tooltipHeading="Notifications: Watches and Subscriptions"
+                tooltipBody={
                   <span>
                     You will receive notifications if you're subscribed to a thread.
                     <br />
@@ -216,23 +216,8 @@ export const TopicDetails = ({ selectedTab, setSelectedTab }: Props) => {
                     "ignore" will not subscribe you to any new threads.
                   </span>
                 }
-                enterTouchDelay={0} // allow touch to immediately trigger
-                leaveTouchDelay={Infinity} // touch-away to close on mobile, since message is long
-              >
-                <IconButton
-                  color="info"
-                  aria-label="Watch info"
-                  sx={{
-                    // Don't make it look like clicking will do something, since it won't.
-                    // Using a button here is an attempt to make it accessible, since the tooltip will show
-                    // on focus.
-                    cursor: "default",
-                    alignSelf: "center",
-                  }}
-                >
-                  <Info />
-                </IconButton>
-              </Tooltip>
+                icon={<HelpIcon />}
+              />
             </div>
           </>
         )}
