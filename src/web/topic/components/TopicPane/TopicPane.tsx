@@ -87,7 +87,7 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
 
   const selectedGraphPart = useSelectedGraphPart();
 
-  // set up handlers for changing tabs
+  // set up handlers for opening pane and/or tabs for topic details
   useEffect(() => {
     if (!tabs.includes("Details")) return;
 
@@ -126,10 +126,6 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
       setTabs("Details", "Comments");
     });
 
-    const unbindSeeViewSettings = emitter.on("seeViewSettings", () => {
-      setTabs("Views");
-    });
-
     const unbindSelectedPart = emitter.on("partSelected", (partId) => {
       if (partId) setTabs("Details"); // convenient to show details when clicking a node, but don't open the pane if it's not open, because that can be jarring
     });
@@ -140,8 +136,23 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
       unbindSelectJustification();
       unbindSelectResearch();
       unbindSelectComments();
-      unbindSeeViewSettings();
       unbindSelectedPart();
+    };
+  }, [tabs]);
+
+  // set up handlers for opening pane and/or tabs for topic views
+  useEffect(() => {
+    if (!tabs.includes("Views")) return;
+
+    const unbindSeeViewSettings = emitter.on("seeViewSettings", () => {
+      setSelectedTab("Views");
+      setIsOpen(true);
+
+      flashOutlineIfElementDoesntChange(paneContentDivRef.current);
+    });
+
+    return () => {
+      unbindSeeViewSettings();
     };
   }, [tabs]);
 
