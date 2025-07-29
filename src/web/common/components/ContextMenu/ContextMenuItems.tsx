@@ -24,31 +24,30 @@ export const ContextMenuItems = ({
 }: Context & { isOpen: boolean }) => {
   const contextPart = contextNode ?? contextEdge;
 
-  // create these based on what's set in the context
-  const menuItems = [
-    // view actions (so that this functionality is still available if indicators are hidden)
-    contextPart && <ViewDetailsMenuItem graphPart={contextPart} key={1} />,
-    contextNode?.type === "problem" && <ViewTableMenuItem node={contextNode} key={2} />,
-    contextPart && <ViewContextInDiagramMenuItem graphPart={contextPart} key={3} />,
+  return (
+    <>
+      {/* view actions (so that this functionality is still available if indicators are hidden) */}
+      {contextPart && <ViewDetailsMenuItem graphPart={contextPart} />}
+      {contextNode?.type === "problem" && <ViewTableMenuItem node={contextNode} />}
+      {contextPart && <ViewContextInDiagramMenuItem graphPart={contextPart} />}
 
-    // CRUD actions
-    contextPart === undefined && <AddNodeMenuItem parentMenuOpen={isOpen} key={9} />,
-    contextNode && <ChangeNodeTypeMenuItem node={contextNode} parentMenuOpen={isOpen} key={7} />,
-    contextEdge && <ChangeEdgeTypeMenuItem edge={contextEdge} parentMenuOpen={isOpen} key={8} />,
-    contextNode && <DeleteNodeMenuItem node={contextNode} key={5} />,
-    contextEdge && <DeleteEdgeMenuItem edge={contextEdge} key={6} />,
+      {/* CRUD actions */}
+      {contextPart === undefined && <AddNodeMenuItem parentMenuOpen={isOpen} />}
+      {contextNode && <ChangeNodeTypeMenuItem node={contextNode} parentMenuOpen={isOpen} />}
+      {contextEdge && <ChangeEdgeTypeMenuItem edge={contextEdge} parentMenuOpen={isOpen} />}
+      {contextNode && <DeleteNodeMenuItem node={contextNode} />}
+      {contextEdge && <DeleteEdgeMenuItem edge={contextEdge} />}
 
-    // show/hide actions
-    contextNode && <AlsoShowNodeAndNeighborsMenuItem node={contextNode} key={11} />,
-    contextNode && <OnlyShowNodeAndNeighborsMenuItem node={contextNode} key={12} />,
-    contextNode && <HideMenuItem node={contextNode} key={13} />,
+      {/* show/hide actions */}
+      {contextNode && <AlsoShowNodeAndNeighborsMenuItem node={contextNode} />}
+      {contextNode && <OnlyShowNodeAndNeighborsMenuItem node={contextNode} />}
+      {contextNode && <HideMenuItem node={contextNode} />}
 
-    // misc? actions
-    contextPart && <CopyLinkToPartMenuItem graphPart={contextPart} key={14} />,
+      {/* misc? actions */}
+      {contextPart && <CopyLinkToPartMenuItem graphPart={contextPart} />}
 
-    // ensure there's never an empty context menu; that shows an empty bubble and feels awkward
-    <ContextMenuItem key={10}>Cancel</ContextMenuItem>,
-  ].filter((item): item is JSX.Element => !!item);
-
-  return <>{menuItems}</>;
+      {/* ensure there's never an empty context menu; that shows an empty bubble and feels awkward */}
+      <ContextMenuItem>Cancel</ContextMenuItem>
+    </>
+  );
 };
