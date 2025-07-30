@@ -87,7 +87,7 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
 
   const selectedGraphPart = useSelectedGraphPart();
 
-  // set up handlers for changing tabs
+  // set up handlers for opening pane and/or tabs for topic details
   useEffect(() => {
     if (!tabs.includes("Details")) return;
 
@@ -126,10 +126,6 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
       setTabs("Details", "Comments");
     });
 
-    const unbindSeeViewSettings = emitter.on("seeViewSettings", () => {
-      setTabs("Views");
-    });
-
     const unbindSelectedPart = emitter.on("partSelected", (partId) => {
       if (partId) setTabs("Details"); // convenient to show details when clicking a node, but don't open the pane if it's not open, because that can be jarring
     });
@@ -140,8 +136,23 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
       unbindSelectJustification();
       unbindSelectResearch();
       unbindSelectComments();
-      unbindSeeViewSettings();
       unbindSelectedPart();
+    };
+  }, [tabs]);
+
+  // set up handlers for opening pane and/or tabs for topic views
+  useEffect(() => {
+    if (!tabs.includes("Views")) return;
+
+    const unbindSeeViewSettings = emitter.on("seeViewSettings", () => {
+      setSelectedTab("Views");
+      setIsOpen(true);
+
+      flashOutlineIfElementDoesntChange(paneContentDivRef.current);
+    });
+
+    return () => {
+      unbindSeeViewSettings();
     };
   }, [tabs]);
 
@@ -161,38 +172,42 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
         ))}
       </TabList>
 
-      {/* flex flex-col to put details toolbar above the content */}
       {/* overflow-auto to allow tab content to scroll */}
       {/* p-0 to allow tab content to manage its own padding, since e.g. dividers prefer not to be padded */}
-      <TabPanel
-        key="Details"
-        value="Details"
-        // flex to allow details to grow & fill up available space... but only if this tab is selected, because otherwise we override `TabPanel`'s default `display: hidden`
-        className={"flex-col grow overflow-auto p-0" + (selectedTab === "Details" ? " flex" : "")}
-      >
-        {/* Toolbar centered above content to be near content's title, in hopes of implying that the */}
-        {/* back/forward buttons are to navigate to previous/next content. */}
-        <DetailsToolbar />
+      {tabs.includes("Details") && (
+        <TabPanel
+          key="Details"
+          value="Details"
+          // flex to allow details to grow & fill up available space... but only if this tab is selected, because otherwise we override `TabPanel`'s default `display: hidden`
+          // flex flex-col to put details toolbar above the content
+          className={"flex-col grow overflow-auto p-0" + (selectedTab === "Details" ? " flex" : "")}
+        >
+          {/* Toolbar centered above content to be near content's title, in hopes of implying that the */}
+          {/* back/forward buttons are to navigate to previous/next content. */}
+          <DetailsToolbar />
 
-        {selectedGraphPart !== null ? (
-          <GraphPartDetails
-            graphPart={selectedGraphPart}
-            selectedTab={selectedPartDetailsTab}
-            setSelectedTab={setSelectedPartDetailsTab}
-            // use `key` to prevent details from being reused from previous part when a new one is selected
-            key={selectedGraphPart.id}
-          />
-        ) : (
-          <TopicDetails
-            selectedTab={selectedTopicDetailsTab}
-            setSelectedTab={setSelectedTopicDetailsTab}
-          />
-        )}
-      </TabPanel>
+          {selectedGraphPart !== null ? (
+            <GraphPartDetails
+              graphPart={selectedGraphPart}
+              selectedTab={selectedPartDetailsTab}
+              setSelectedTab={setSelectedPartDetailsTab}
+              // use `key` to prevent details from being reused from previous part when a new one is selected
+              key={selectedGraphPart.id}
+            />
+          ) : (
+            <TopicDetails
+              selectedTab={selectedTopicDetailsTab}
+              setSelectedTab={setSelectedTopicDetailsTab}
+            />
+          )}
+        </TabPanel>
+      )}
 
-      <TabPanel key="Views" value="Views" className="overflow-auto p-0">
-        <TopicViews />
-      </TabPanel>
+      {tabs.includes("Views") && (
+        <TabPanel key="Views" value="Views" className="overflow-auto p-0">
+          <TopicViews />
+        </TabPanel>
+      )}
     </TabContext>
   );
 

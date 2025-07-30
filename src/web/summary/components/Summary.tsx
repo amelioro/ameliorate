@@ -74,7 +74,7 @@ export const Summary = () => {
     <div
       // max-w because the left/right-corner things (i.e. row header, row action, home button) become pretty far away on big screens otherwise.
       // Ideally we would probably position on big screens differently? not sure.
-      className="flex min-h-0 w-full max-w-2xl grow flex-col self-center"
+      className="flex min-h-0 w-full max-w-4xl grow flex-col self-center"
       onClick={() => setSelected(null)} // want an easy way to deselect nodes, since the node toolbar can be annoying (e.g. if you click "back" and the toolbar shows on a node in a column)
     >
       {/* bg-gray to make it stand out less, since the page seems a little cluttered, */}

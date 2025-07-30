@@ -3,7 +3,7 @@ import { shallow } from "zustand/shallow";
 
 import { InfoCategory } from "@/common/infoCategory";
 import { emitter } from "@/web/common/event";
-import { getDefaultNode } from "@/web/topic/diagramStore/nodeGetters";
+import { getDefaultNode, getNeighbors } from "@/web/topic/diagramStore/nodeGetters";
 import { useDiagramStore } from "@/web/topic/diagramStore/store";
 import { findNodeOrThrow } from "@/web/topic/utils/graph";
 import { neighbors } from "@/web/topic/utils/node";
@@ -205,14 +205,10 @@ export const viewFulfillsEdgeContext = (fulfillsEdgeId: string) => {
 };
 
 export const viewNodeInDiagram = (nodeId: string) => {
-  // TODO: invoke some method from diagram store rather than getting its whole state... maybe util method for getNeighbors?
-  const diagramState = useDiagramStore.getState();
   const viewState = useCurrentViewStore.getState();
 
-  const node = findNodeOrThrow(nodeId, diagramState.nodes);
-
   // TODO: use better filtering than just picking explicit neighbors to show - probably add a focused filter of some kind
-  const nodeNeighbors = neighbors(node, diagramState);
+  const nodeNeighbors = getNeighbors(nodeId);
 
   useCurrentViewStore.setState(
     {
@@ -220,7 +216,7 @@ export const viewNodeInDiagram = (nodeId: string) => {
       categoriesToShow: [],
       generalFilter: {
         ...viewState.generalFilter,
-        nodesToShow: [node.id, ...nodeNeighbors.map((n) => n.id)],
+        nodesToShow: [nodeId, ...nodeNeighbors.map((n) => n.id)],
         nodesToHide: [],
       },
     },
@@ -228,7 +224,6 @@ export const viewNodeInDiagram = (nodeId: string) => {
     "viewNodeInDiagram",
   );
 
-  // TODO(bug): for some reason back button needs to be pressed twice to go back - is this emitting causing another view state change?
   emitter.emit("changedDiagramFilter");
 };
 
