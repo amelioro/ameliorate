@@ -13,11 +13,13 @@ import {
 } from "@/web/topic/components/Node/FlowNode.styles";
 import { NodeHandle } from "@/web/topic/components/Node/NodeHandle";
 import { useIsEdgeSelected, useIsNeighborSelected } from "@/web/topic/diagramStore/nodeHooks";
+import { useIsMitigatableDetriment } from "@/web/topic/diagramStore/nodeTypeHooks";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
+import { addableRelationsFrom } from "@/web/topic/utils/edge";
 import { Node } from "@/web/topic/utils/graph";
 import { orientation } from "@/web/topic/utils/layout";
 import { FlowNodeType } from "@/web/topic/utils/node";
-import { getFlashlightMode } from "@/web/view/actionConfigStore";
+import { getFlashlightMode, useUnrestrictedEditing } from "@/web/view/actionConfigStore";
 import { showNodeAndNeighbors } from "@/web/view/currentViewStore/filter";
 
 const convertToNode = (flowNode: NodeProps): Node => {
@@ -36,6 +38,9 @@ export const FlowNode = (flowNode: NodeProps) => {
   const isNeighborSelected = useIsNeighborSelected(flowNode.id);
   const isEdgeSelected = useIsEdgeSelected(flowNode.id);
 
+  const unrestrictedEditing = useUnrestrictedEditing();
+  const isMitigatableDetriment = useIsMitigatableDetriment(flowNode.id);
+
   const node = useMemo(() => {
     return convertToNode(flowNode);
   }, [flowNode]);
@@ -51,6 +56,20 @@ export const FlowNode = (flowNode: NodeProps) => {
     // to their initial position
     setAnimated(true);
   }, []);
+
+  const unrestrictedAddingFrom = node.type === "custom" || unrestrictedEditing;
+  const addableParentRelations = addableRelationsFrom(
+    node.type,
+    "parent",
+    unrestrictedAddingFrom,
+    isMitigatableDetriment,
+  );
+  const addableChildRelations = addableRelationsFrom(
+    node.type,
+    "child",
+    unrestrictedAddingFrom,
+    isMitigatableDetriment,
+  );
 
   const showAddButtonsClasses =
     "[.selectable:hover_>_&]:flex [.selectable:has(>_div_>_.selected)_>_&]:flex";
@@ -77,9 +96,7 @@ export const FlowNode = (flowNode: NodeProps) => {
       {userCanEditTopicData && (
         <AddNodeButtonGroup
           fromNodeId={flowNode.id}
-          fromNodeType={node.type}
-          as="parent"
-          orientation={orientation}
+          addableRelations={addableParentRelations}
           className={`absolute hidden ${showAddButtonsClasses} ${positionParentButtonsClasses}`}
         />
       )}
@@ -105,9 +122,7 @@ export const FlowNode = (flowNode: NodeProps) => {
       {userCanEditTopicData && (
         <AddNodeButtonGroup
           fromNodeId={flowNode.id}
-          fromNodeType={node.type}
-          as="child"
-          orientation={orientation}
+          addableRelations={addableChildRelations}
           className={`absolute hidden ${showAddButtonsClasses} ${positionChildButtonsClasses}`}
         />
       )}

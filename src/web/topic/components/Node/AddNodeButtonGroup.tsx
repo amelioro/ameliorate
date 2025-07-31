@@ -3,49 +3,49 @@ import { memo } from "react";
 
 import { NodeType } from "@/common/node";
 import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
-import { useIsMitigatableDetriment } from "@/web/topic/diagramStore/nodeTypeHooks";
-import { addableRelationsFrom } from "@/web/topic/utils/edge";
-import { type RelationDirection } from "@/web/topic/utils/graph";
-import { Orientation } from "@/web/topic/utils/layout";
-import { useUnrestrictedEditing } from "@/web/view/actionConfigStore";
+import { DirectedToRelation } from "@/web/topic/utils/edge";
+
+type AddableProps =
+  | {
+      fromNodeId: string;
+      addableRelations: DirectedToRelation[];
+      addableNodeTypes?: undefined;
+    }
+  | {
+      fromNodeId?: undefined;
+      addableRelations?: undefined;
+      addableNodeTypes: NodeType[];
+    };
 
 interface Props {
+  selectNewNode?: boolean;
   className?: string;
-  fromNodeId: string;
-  fromNodeType: NodeType;
-  as: RelationDirection;
-  orientation: Orientation;
 }
 
 const AddNodeButtonGroup = memo(
-  ({ className, fromNodeId, fromNodeType, as, orientation }: Props) => {
-    const unrestrictedEditing = useUnrestrictedEditing();
-    const isMitigatableDetriment = useIsMitigatableDetriment(fromNodeId);
-
-    const unrestrictedAddingFrom = fromNodeType === "custom" || unrestrictedEditing;
-    const addableRelations = addableRelationsFrom(
-      fromNodeType,
-      as,
-      unrestrictedAddingFrom,
-      isMitigatableDetriment,
-    );
-
-    if (addableRelations.length === 0) return <></>;
-
+  ({
+    fromNodeId,
+    addableRelations,
+    addableNodeTypes,
+    selectNewNode,
+    className,
+  }: Props & AddableProps) => {
     return (
-      <ButtonGroup
-        variant="contained"
-        aria-label="add node button group"
-        className={className}
-        orientation={orientation === "DOWN" ? "horizontal" : "vertical"}
-      >
-        {addableRelations.map(({ toNodeType, relation }) => (
+      <ButtonGroup variant="contained" aria-label="add node button group" className={className}>
+        {addableRelations?.map((addableRelation) => (
           <AddNodeButton
-            key={toNodeType}
-            fromPartId={fromNodeId}
-            as={as}
-            toNodeType={toNodeType}
-            relation={relation}
+            key={addableRelation[addableRelation.as]}
+            fromNodeId={fromNodeId}
+            addableRelation={addableRelation}
+            selectNewNode={selectNewNode}
+          />
+        ))}
+
+        {addableNodeTypes?.map((addableNodeType) => (
+          <AddNodeButton
+            key={addableNodeType}
+            addableNodeType={addableNodeType}
+            selectNewNode={selectNewNode}
           />
         ))}
       </ButtonGroup>

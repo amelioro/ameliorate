@@ -31,14 +31,13 @@ export const DetailsJustificationSection = ({ graphPart }: Props) => {
         spacing={6}
       >
         <AddNodeButton
-          fromPartId={graphPart.id}
-          as="child"
-          toNodeType="support"
+          fromNodeId={graphPart.id}
           // TODO: remove root claims with edge directly to argued part
-          relation={{
+          addableRelation={{
             child: "support",
             name: "supports",
             parent: isJustificationNode ? graphPart.type : "rootClaim",
+            as: "child",
           }}
           selectNewNode={false}
         />
@@ -46,14 +45,13 @@ export const DetailsJustificationSection = ({ graphPart }: Props) => {
           graphPartId={graphPart.data.arguedDiagramPartId ?? graphPart.id}
         />
         <AddNodeButton
-          fromPartId={graphPart.id}
-          as="child"
-          toNodeType="critique"
+          fromNodeId={graphPart.id}
           // TODO: remove root claims with edge directly to argued part
-          relation={{
+          addableRelation={{
             child: "critique",
             name: "critiques",
             parent: isJustificationNode ? graphPart.type : "rootClaim",
+            as: "child",
           }}
           selectNewNode={false}
         />

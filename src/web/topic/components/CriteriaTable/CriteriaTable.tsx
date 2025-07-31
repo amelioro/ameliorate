@@ -18,7 +18,7 @@ import { NodeCell } from "@/web/topic/components/CriteriaTable/NodeCell";
 import { SolutionTotalCell } from "@/web/topic/components/CriteriaTable/SolutionTotalCell";
 import { TotalsHeaderCell } from "@/web/topic/components/CriteriaTable/TotalsHeaderCell";
 import { tableZoomClasses } from "@/web/topic/components/CriteriaTable/tableZoom";
-import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
+import { AddNodeButtonGroup } from "@/web/topic/components/Node/AddNodeButtonGroup";
 import {
   useCriterionSolutionEdges,
   useDefaultNode,
@@ -238,23 +238,18 @@ export const CriteriaTable = () => {
     return (
       <div
         onClick={(event) => event.stopPropagation()} // prevent triggering node deselect from table paper click
+        className="flex items-center"
       >
         <MRT_ToggleGlobalFilterButton table={table} />
 
         {userCanEditTopicData && (
           <>
-            <AddNodeButton
-              fromPartId={problemNode.id}
-              as="child"
-              toNodeType="solution"
-              relation={{ child: "solution", name: "addresses", parent: "problem" }}
-            />
-
-            <AddNodeButton
-              fromPartId={problemNode.id}
-              as="child"
-              toNodeType="criterion"
-              relation={{ child: "criterion", name: "criterionFor", parent: "problem" }}
+            <AddNodeButtonGroup
+              fromNodeId={problemNode.id}
+              addableRelations={[
+                { as: "child", child: "solution", name: "addresses", parent: "problem" },
+                { as: "child", child: "criterion", name: "criterionFor", parent: "problem" },
+              ]}
             />
           </>
         )}

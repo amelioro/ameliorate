@@ -1,4 +1,3 @@
-import { Typography } from "@mui/material";
 import { useContext } from "react";
 
 import { NodeType } from "@/common/node";
@@ -7,30 +6,25 @@ import { StyledButton } from "@/web/topic/components/Node/AddNodeButton.styles";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { addNode, addNodeWithoutParent } from "@/web/topic/diagramStore/createDeleteActions";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
-import { Relation, getDirectedRelationDescription } from "@/web/topic/utils/edge";
-import { type RelationDirection } from "@/web/topic/utils/graph";
+import { DirectedToRelation, getDirectedRelationDescription } from "@/web/topic/utils/edge";
 import { nodeDecorations } from "@/web/topic/utils/node";
 
 /**
  * Either we add a node with a relation to an existing node, or we add a node without a parent.
- *
- * This is a little awkward, but I think we'll end up changing the UX of how we add nodes anyway
- * (using a single plus button that opens a menu to each type to add) so this'll hopefully get refactored.
  */
-type RelationProps =
+type AddableProps =
   | {
-      fromPartId: string;
-      as: RelationDirection;
-      relation: Relation;
+      fromNodeId: string;
+      addableRelation: DirectedToRelation;
+      addableNodeType?: undefined;
     }
   | {
-      fromPartId?: undefined;
-      as?: undefined;
-      relation?: undefined;
+      fromNodeId?: undefined;
+      addableRelation?: undefined;
+      addableNodeType: NodeType;
     };
 
-interface NonRelationProps {
-  toNodeType: NodeType;
+interface Props {
   /**
    * Generally want to select the new node to highlight it in the view, but some cases we want to
    * avoid changing selection so that the view isn't impacted as much (e.g. from the details pane)
@@ -40,38 +34,45 @@ interface NonRelationProps {
 }
 
 export const AddNodeButton = ({
-  fromPartId,
-  as,
-  toNodeType,
-  relation,
+  fromNodeId,
+  addableRelation,
+  addableNodeType,
   selectNewNode,
   className,
-}: NonRelationProps & RelationProps) => {
+}: Props & AddableProps) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const context = useContext(WorkspaceContext);
 
   if (!userCanEditTopicData) return <></>;
 
+  const toNodeType = addableRelation ? addableRelation[addableRelation.as] : addableNodeType;
+
   const decoration = nodeDecorations[toNodeType];
-  const fromDirection = as === "parent" ? "child" : "parent";
+  const fromDirection = addableRelation?.as === "parent" ? "child" : "parent";
   const titleSuffix =
-    relation === undefined
+    addableRelation === undefined
       ? ""
-      : ` (${getDirectedRelationDescription({ ...relation, this: fromDirection })})`;
+      : ` (${getDirectedRelationDescription({ ...addableRelation, this: fromDirection })})`;
 
   return (
     <StyledButton
-      // hide overflow because the "+" can overflow a little at the edge"
-      className={"overflow-hidden" + (className ? ` ${className}` : "")}
+      className={className}
       color={toNodeType}
       size="small"
       variant="contained"
       onClick={(event) => {
         event.stopPropagation(); // don't trigger selection of node
 
-        if (fromPartId === undefined) addNodeWithoutParent(toNodeType, context, selectNewNode);
-        else addNode({ fromPartId, as, toNodeType, relation, context, selectNewNode });
+        if (fromNodeId === undefined) addNodeWithoutParent(toNodeType, context, selectNewNode);
+        else {
+          addNode({
+            fromPartId: fromNodeId,
+            directedRelation: addableRelation,
+            context,
+            selectNewNode,
+          });
+        }
       }}
       // Not using MUI Tooltip because it throws anchorEl missing error when the button is hidden
       // after hovering it. Think we'd have to pass `show` into this component in order to hide
@@ -81,12 +82,6 @@ export const AddNodeButton = ({
       aria-label={`Add new ${decoration.title}`}
     >
       <decoration.NodeIcon />
-      <Typography
-        className="absolute bottom-[-10%] right-[5%] text-sm font-bold"
-        aria-hidden="true"
-      >
-        +
-      </Typography>
     </StyledButton>
   );
 };

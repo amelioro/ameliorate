@@ -3,7 +3,7 @@ import { Divider } from "@mui/material";
 
 import { IndirectHelpIcon } from "@/web/summary/components/IndirectHelpIcon";
 import { Row } from "@/web/summary/components/Row";
-import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
+import { AddNodeButtonGroup } from "@/web/topic/components/Node/AddNodeButtonGroup";
 import { useObstacles } from "@/web/topic/diagramStore/summary";
 import { Node } from "@/web/topic/utils/graph";
 import { nodeDecorations } from "@/web/topic/utils/node";
@@ -17,11 +17,11 @@ export const ObstaclesColumn = ({ summaryNode }: Props) => {
 
   const AddButtons = (
     <div className="pb-1.5">
-      <AddNodeButton
-        fromPartId={summaryNode.id}
-        toNodeType="obstacle"
-        as="child"
-        relation={{ child: "obstacle", name: "obstacleOf", parent: summaryNode.type }}
+      <AddNodeButtonGroup
+        fromNodeId={summaryNode.id}
+        addableRelations={[
+          { child: "obstacle", name: "obstacleOf", parent: summaryNode.type, as: "child" },
+        ]}
       />
     </div>
   );

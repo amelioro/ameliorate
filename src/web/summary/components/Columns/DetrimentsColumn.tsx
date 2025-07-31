@@ -3,7 +3,7 @@ import { Divider } from "@mui/material";
 
 import { IndirectHelpIcon } from "@/web/summary/components/IndirectHelpIcon";
 import { Row } from "@/web/summary/components/Row";
-import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
+import { AddNodeButtonGroup } from "@/web/topic/components/Node/AddNodeButtonGroup";
 import { useDetriments } from "@/web/topic/diagramStore/summary";
 import { Node } from "@/web/topic/utils/graph";
 import { nodeDecorations } from "@/web/topic/utils/node";
@@ -19,18 +19,18 @@ export const DetrimentsColumn = ({ summaryNode }: Props) => {
     <div className="pb-1.5">
       {/* TODO: this path should run if it's any problem-like node, including problem effects */}
       {summaryNode.type === "problem" ? (
-        <AddNodeButton
-          fromPartId={summaryNode.id}
-          toNodeType="detriment"
-          as="child"
-          relation={{ child: "detriment", name: "createdBy", parent: summaryNode.type }}
+        <AddNodeButtonGroup
+          fromNodeId={summaryNode.id}
+          addableRelations={[
+            { child: "detriment", name: "createdBy", parent: summaryNode.type, as: "child" },
+          ]}
         />
       ) : (
-        <AddNodeButton
-          fromPartId={summaryNode.id}
-          toNodeType="detriment"
-          as="parent"
-          relation={{ child: summaryNode.type, name: "creates", parent: "detriment" }}
+        <AddNodeButtonGroup
+          fromNodeId={summaryNode.id}
+          addableRelations={[
+            { child: summaryNode.type, name: "creates", parent: "detriment", as: "parent" },
+          ]}
         />
       )}
     </div>

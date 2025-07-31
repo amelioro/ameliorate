@@ -35,13 +35,12 @@ export const FactDetails = ({ factNode }: Props) => {
 
         <Stack direction="row" justifyContent="center" alignItems="center" marginBottom="8px">
           <AddNodeButton
-            fromPartId={factNode.id}
-            as="child"
-            toNodeType="source"
-            relation={{
+            fromNodeId={factNode.id}
+            addableRelation={{
               child: "source",
               name: "sourceOf",
               parent: "fact",
+              as: "child",
             }}
             selectNewNode={false}
           />
