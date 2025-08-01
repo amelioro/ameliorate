@@ -127,7 +127,7 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
     });
 
     const unbindSelectedPart = emitter.on("partSelected", (partId) => {
-      if (partId) setTabs("Details"); // convenient to show details when clicking a node, but don't open the pane if it's not open, because that can be jarring
+      if (partId) setSelectedTab("Details"); // convenient to show details when clicking a node, but don't open the pane if it's not open, because that can be jarring
     });
 
     return () => {
