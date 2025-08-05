@@ -1,7 +1,7 @@
-import { Stack, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 
 import { StandaloneEdge } from "@/web/topic/components/Edge/StandaloneEdge";
-import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
+import { AddNodeButtonGroup } from "@/web/topic/components/Node/AddNodeButtonGroup";
 import { EditableNode } from "@/web/topic/components/Node/EditableNode";
 import { NodeList } from "@/web/topic/components/TopicPane/NodeList";
 import { useSourceDetails } from "@/web/topic/diagramStore/nodeTypeHooks";
@@ -34,30 +34,15 @@ export const SourceDetails = ({ sourceNode }: Props) => {
       <div className="mt-4 flex flex-col items-center gap-0.5">
         <Typography variant="body1">Mentions</Typography>
 
-        <Stack direction="row" justifyContent="center" alignItems="center" marginBottom="8px">
-          <AddNodeButton
-            fromPartId={sourceNode.id}
-            as="parent"
-            toNodeType="fact"
-            relation={{
-              child: "source",
-              name: "sourceOf",
-              parent: "fact",
-            }}
-            selectNewNode={false}
-          />
-          <AddNodeButton
-            fromPartId={sourceNode.id}
-            as="parent"
-            toNodeType="source"
-            relation={{
-              child: "source",
-              name: "mentions",
-              parent: "source",
-            }}
-            selectNewNode={false}
-          />
-        </Stack>
+        <AddNodeButtonGroup
+          fromNodeId={sourceNode.id}
+          addableRelations={[
+            { child: "source", name: "sourceOf", parent: "fact", as: "parent" },
+            { child: "source", name: "mentions", parent: "source", as: "parent" },
+          ]}
+          selectNewNode={false}
+          className="mb-2"
+        />
 
         <NodeList>
           {mentions.length > 0 ? (

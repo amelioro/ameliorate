@@ -1,6 +1,11 @@
 // custom Menu component that closes the menu on click of any of its children
 
-import { MenuItem, type MenuItemProps, Menu as MuiMenu } from "@mui/material";
+import {
+  MenuItem,
+  type MenuItemProps,
+  Menu as MuiMenu,
+  MenuProps as MuiMenuProps,
+} from "@mui/material";
 import { Children, isValidElement } from "react";
 
 export const addCloseOnClick = (closeMenu: () => void, children: React.ReactNode) => {
@@ -25,35 +30,29 @@ export const addCloseOnClick = (closeMenu: () => void, children: React.ReactNode
   });
 };
 
-interface MenuProps {
-  anchorEl: HTMLElement | null;
-  isOpen: boolean;
-  closeMenu: () => void;
-  children: React.ReactNode;
+interface MenuProps extends MuiMenuProps {
+  onClose: () => void;
   closeOnClick?: boolean;
   openDirection?: "top" | "bottom";
-  className?: string;
 }
 
 export const Menu = ({
-  anchorEl,
-  isOpen,
-  closeMenu,
-  children,
+  onClose,
   closeOnClick = true,
   openDirection = "bottom",
-  className,
+  ...muiProps
 }: MenuProps) => {
-  const menuItems = closeOnClick ? addCloseOnClick(closeMenu, children) : children;
+  const { children, className, ...rest } = muiProps;
+
+  const menuItems = closeOnClick ? addCloseOnClick(onClose, children) : children;
 
   return (
     <MuiMenu
       PopoverClasses={{ paper: className }}
-      anchorEl={anchorEl}
-      open={isOpen}
-      onClose={closeMenu}
+      onClose={onClose}
       anchorOrigin={{ vertical: openDirection === "top" ? "top" : "bottom", horizontal: "left" }}
       transformOrigin={{ vertical: openDirection === "top" ? "bottom" : "top", horizontal: "left" }}
+      {...rest}
     >
       {menuItems}
     </MuiMenu>

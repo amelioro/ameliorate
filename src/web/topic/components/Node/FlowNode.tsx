@@ -13,12 +13,15 @@ import {
 } from "@/web/topic/components/Node/FlowNode.styles";
 import { NodeHandle } from "@/web/topic/components/Node/NodeHandle";
 import { useIsEdgeSelected, useIsNeighborSelected } from "@/web/topic/diagramStore/nodeHooks";
+import { useIsMitigatableDetriment } from "@/web/topic/diagramStore/nodeTypeHooks";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
+import { addableRelationsFrom } from "@/web/topic/utils/edge";
 import { Node } from "@/web/topic/utils/graph";
 import { orientation } from "@/web/topic/utils/layout";
 import { FlowNodeType } from "@/web/topic/utils/node";
-import { getFlashlightMode } from "@/web/view/actionConfigStore";
+import { getFlashlightMode, useUnrestrictedEditing } from "@/web/view/actionConfigStore";
 import { showNodeAndNeighbors } from "@/web/view/currentViewStore/filter";
+import { useIsGraphPartSelected } from "@/web/view/selectedPartStore";
 
 const convertToNode = (flowNode: NodeProps): Node => {
   return {
@@ -33,14 +36,18 @@ export const FlowNode = (flowNode: NodeProps) => {
 
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
+  const isSelected = useIsGraphPartSelected(flowNode.id);
   const isNeighborSelected = useIsNeighborSelected(flowNode.id);
   const isEdgeSelected = useIsEdgeSelected(flowNode.id);
+
+  const unrestrictedEditing = useUnrestrictedEditing();
+  const isMitigatableDetriment = useIsMitigatableDetriment(flowNode.id);
 
   const node = useMemo(() => {
     return convertToNode(flowNode);
   }, [flowNode]);
 
-  const spotlight: Spotlight = flowNode.selected
+  const spotlight: Spotlight = isSelected
     ? "primary"
     : isNeighborSelected || isEdgeSelected
       ? "secondary"
@@ -52,8 +59,26 @@ export const FlowNode = (flowNode: NodeProps) => {
     setAnimated(true);
   }, []);
 
+  const unrestrictedAddingFrom = node.type === "custom" || unrestrictedEditing;
+  const addableParentRelations = addableRelationsFrom(
+    node.type,
+    "parent",
+    unrestrictedAddingFrom,
+    isMitigatableDetriment,
+  );
+  const addableChildRelations = addableRelationsFrom(
+    node.type,
+    "child",
+    unrestrictedAddingFrom,
+    isMitigatableDetriment,
+  );
+
   const showAddButtonsClasses =
     "[.selectable:hover_>_&]:flex [.selectable:has(>_div_>_.selected)_>_&]:flex";
+
+  // not sure if this is ideal or not, but we're using a darker shadow so that the button
+  // stands out when in front of a bunch of edges (Mui's default shadow doesn't stand out much)
+  const addButtonDecorationClasses = "shadow shadow-gray-500";
 
   const positionParentButtonsClasses =
     orientation === "DOWN"
@@ -77,10 +102,10 @@ export const FlowNode = (flowNode: NodeProps) => {
       {userCanEditTopicData && (
         <AddNodeButtonGroup
           fromNodeId={flowNode.id}
-          fromNodeType={node.type}
-          as="parent"
-          orientation={orientation}
-          className={`absolute hidden ${showAddButtonsClasses} ${positionParentButtonsClasses}`}
+          addableRelations={addableParentRelations}
+          title="Add node above"
+          openDirection="top"
+          className={`absolute hidden ${showAddButtonsClasses} ${positionParentButtonsClasses} ${addButtonDecorationClasses}`}
         />
       )}
 
@@ -105,10 +130,10 @@ export const FlowNode = (flowNode: NodeProps) => {
       {userCanEditTopicData && (
         <AddNodeButtonGroup
           fromNodeId={flowNode.id}
-          fromNodeType={node.type}
-          as="child"
-          orientation={orientation}
-          className={`absolute hidden ${showAddButtonsClasses} ${positionChildButtonsClasses}`}
+          addableRelations={addableChildRelations}
+          title="Add node below"
+          openDirection="bottom"
+          className={`absolute hidden ${showAddButtonsClasses} ${positionChildButtonsClasses} ${addButtonDecorationClasses}`}
         />
       )}
     </>

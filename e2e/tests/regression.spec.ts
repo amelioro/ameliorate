@@ -30,7 +30,8 @@ test("can play around", async ({ page }) => {
   await page.getByRole("link", { name: "Play Around" }).first().click();
   await page.getByLabel("Close Tour").click();
   await getNode(page, "Problem").click();
-  await page.getByRole("button", { name: "Add new Solution" }).click();
+  await page.getByRole("button", { name: "Add node below" }).click();
+  await page.getByRole("menuitem", { name: "Add Solution" }).click();
   await page.reload();
   await page.getByLabel("Close Tour").click(); // make sure page is done reloading, and get the tour out of the screenshot so we can see the diagram
   await expect(page).toHaveScreenshot("playground-with-solution.png");

@@ -19,6 +19,7 @@ import {
   SsidChart,
   UnfoldMore,
   Upload,
+  WebStories,
 } from "@mui/icons-material";
 import {
   Button,
@@ -82,8 +83,10 @@ import {
 import { resetView, useFormat } from "@/web/view/currentViewStore/store";
 import { resetQuickViews } from "@/web/view/quickViewStore/store";
 import {
+  toggleExpandAddNodeButtons,
   toggleExpandDetailsTabs,
   toggleFillNodesWithColor,
+  useExpandAddNodeButtons,
   useExpandDetailsTabs,
   useFillNodesWithColor,
 } from "@/web/view/userConfigStore";
@@ -158,6 +161,7 @@ export const MoreActionsDrawer = ({
 
   const fillNodesWithColor = useFillNodesWithColor();
   const expandDetailsTabs = useExpandDetailsTabs();
+  const expandAddNodeButtons = useExpandAddNodeButtons();
 
   const [resetDialogOpen, setResetDialogOpen] = useState(false);
   const [screenshotDialogOpen, setScreenshotDialogOpen] = useState(false);
@@ -497,6 +501,18 @@ export const MoreActionsDrawer = ({
             sx={{ borderRadius: "50%", border: "0" }}
           >
             <UnfoldMore />
+          </ToggleButton>
+          <ToggleButton
+            value={expandAddNodeButtons}
+            title="Expand add node buttons"
+            aria-label="Expand add node buttons"
+            color="primary"
+            size="small"
+            selected={expandAddNodeButtons}
+            onClick={() => toggleExpandAddNodeButtons()}
+            sx={{ borderRadius: "50%", border: "0" }}
+          >
+            <WebStories />
           </ToggleButton>
         </ListItem>
       </List>

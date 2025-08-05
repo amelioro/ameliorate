@@ -6,6 +6,14 @@ interface UserConfigStoreState {
   fillNodesWithColor: boolean;
   expandDetailsTabs: boolean;
   /**
+   * Use a group of AddNodeButtons instead of a menu.
+   *
+   * Menu is clearer and more friendly for beginners. Keeping the buttons around for power users in
+   * case it seems very convenient to have quicker ways to add nodes. Might remove the option to
+   * expand buttons if that doesn't seem very worthwhile.
+   */
+  expandAddNodeButtons: boolean;
+  /**
    * When true, show score pies by hovering rather than just via click. Can be nice to score many
    * nodes quickly on desktop. Don't want this on all the time because it's pretty annoying for
    * pies to show when you're not intending to set scores.
@@ -23,6 +31,7 @@ const initialState: UserConfigStoreState = {
   zenMode: false,
   fillNodesWithColor: false,
   expandDetailsTabs: true,
+  expandAddNodeButtons: false,
   quickScoring: false,
 
   showScores: true,
@@ -49,6 +58,10 @@ export const useFillNodesWithColor = () => {
 
 export const useExpandDetailsTabs = () => {
   return useUserConfigStore((state) => state.expandDetailsTabs);
+};
+
+export const useExpandAddNodeButtons = () => {
+  return useUserConfigStore((state) => state.expandAddNodeButtons);
 };
 
 export const useQuickScoring = () => {
@@ -86,6 +99,10 @@ export const toggleFillNodesWithColor = (fill: boolean) => {
 
 export const toggleExpandDetailsTabs = () => {
   useUserConfigStore.setState((state) => ({ expandDetailsTabs: !state.expandDetailsTabs }));
+};
+
+export const toggleExpandAddNodeButtons = () => {
+  useUserConfigStore.setState((state) => ({ expandAddNodeButtons: !state.expandAddNodeButtons }));
 };
 
 export const toggleQuickScoring = () => {

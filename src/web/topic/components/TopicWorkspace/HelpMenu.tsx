@@ -58,8 +58,8 @@ export const HelpMenu = ({ helpAnchorEl, setHelpAnchorEl }: Props) => {
     <Menu
       className="[&_>_ul_>_*]:gap-x-2"
       anchorEl={helpAnchorEl}
-      isOpen={helpMenuOpen}
-      closeMenu={() => setHelpAnchorEl(null)}
+      open={helpMenuOpen}
+      onClose={() => setHelpAnchorEl(null)}
       openDirection="top"
     >
       <Divider>Help</Divider>

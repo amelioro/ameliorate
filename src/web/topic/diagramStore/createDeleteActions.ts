@@ -1,5 +1,6 @@
 import { createDraft, finishDraft } from "immer";
 
+import { RelationName } from "@/common/edge";
 import { errorWithData } from "@/common/errorHandling";
 import { justificationNodeTypes } from "@/common/node";
 import { emitter } from "@/web/common/event";
@@ -7,12 +8,11 @@ import { setNewlyAddedNode } from "@/web/common/store/ephemeralStore";
 import { WorkspaceContextType } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { getJustificationCount } from "@/web/topic/diagramStore/graphPartHooks";
 import { DiagramStoreState, useDiagramStore } from "@/web/topic/diagramStore/store";
-import { Relation, canCreateEdge, getRelation } from "@/web/topic/utils/edge";
+import { DirectedToRelation, Relation, canCreateEdge, getRelation } from "@/web/topic/utils/edge";
 import {
   Graph,
   type GraphPart,
   Node,
-  RelationDirection,
   buildEdge,
   buildNode,
   findGraphPartOrThrow,
@@ -75,24 +75,16 @@ const connectCriteriaToSolutions = (state: DiagramStoreState, newNode: Node, pro
 
 interface AddNodeProps {
   fromPartId: string;
-  as: RelationDirection;
-  toNodeType: FlowNodeType;
-  relation: Relation;
+  directedRelation: DirectedToRelation;
   context: WorkspaceContextType;
   selectNewNode?: boolean;
 }
 
-export const addNode = ({
-  fromPartId,
-  as,
-  toNodeType,
-  relation,
-  context,
-  selectNewNode,
-}: AddNodeProps) => {
+export const addNode = ({ fromPartId, directedRelation, context, selectNewNode }: AddNodeProps) => {
   const state = createDraft(useDiagramStore.getState());
 
   const topicGraph = { nodes: state.nodes, edges: state.edges };
+  const toNodeType = directedRelation[directedRelation.as];
 
   // TODO: replace root claim hackery with direct edge from justification to argued diagram part
   // e.g. instead of support -> supports -> root claim, which requires this creation of a root claim
@@ -100,7 +92,7 @@ export const addNode = ({
   // root claim has existed because edges could not previously point to other edges, but they will
   // be able to soon.
   if (
-    relation.parent === "rootClaim" &&
+    directedRelation.parent === "rootClaim" &&
     !topicGraph.nodes.find(
       (node) =>
         node.type === "rootClaim" &&
@@ -113,7 +105,7 @@ export const addNode = ({
   }
 
   const rootClaim =
-    relation.parent === "rootClaim"
+    directedRelation.parent === "rootClaim"
       ? topicGraph.nodes.find(
           (node) =>
             node.type === "rootClaim" &&
@@ -126,15 +118,15 @@ export const addNode = ({
   // create and connect node
   const newNode = createNode(state, toNodeType, fromPart.data.arguedDiagramPartId, selectNewNode);
 
-  const parent = as === "parent" ? newNode : fromPart;
-  const child = as === "parent" ? fromPart : newNode;
-  createEdge(topicGraph, parent, child, relation);
+  const parent = directedRelation.as === "parent" ? newNode : fromPart;
+  const child = directedRelation.as === "parent" ? fromPart : newNode;
+  createEdge(topicGraph, parent, child, directedRelation.name);
 
   // connect criteria
   if (
     ["criterion", "solution"].includes(newNode.type) &&
     fromPart.type === "problem" &&
-    as === "child"
+    directedRelation.as === "child"
   ) {
     connectCriteriaToSolutions(state, newNode, fromPart);
   }
@@ -168,7 +160,12 @@ export const addNodeWithoutParent = (
 };
 
 // see algorithm pseudocode & example at https://github.com/amelioro/ameliorate/issues/66#issuecomment-1465078133
-const createEdge = (topicGraph: Graph, parent: GraphPart, child: GraphPart, relation: Relation) => {
+const createEdge = (
+  topicGraph: Graph,
+  parent: GraphPart,
+  child: GraphPart,
+  relationName: RelationName,
+) => {
   // We aren't yet fully supporting edges pointing to other edges.
   // It's not clear at this time whether completely adding or removing support for edges to edges is better,
   // so here's a hack assuming we won't use it for now.,
@@ -178,7 +175,7 @@ const createEdge = (topicGraph: Graph, parent: GraphPart, child: GraphPart, rela
   const newEdge = buildEdge({
     sourceId: parent.id,
     targetId: child.id,
-    relation: relation.name,
+    relation: relationName,
     arguedDiagramPartId: parent.data.arguedDiagramPartId,
   });
 
@@ -201,7 +198,7 @@ const createConnection = (topicGraph: Graph, parentId: string | null, childId: s
   const relation = getRelation(parent.type, child.type);
 
   // modifies topicGraph.edges through `state`
-  createEdge(topicGraph, parent, child, relation);
+  createEdge(topicGraph, parent, child, relation.name);
 
   return true;
 };

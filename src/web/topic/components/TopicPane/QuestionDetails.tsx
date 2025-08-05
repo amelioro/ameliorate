@@ -37,13 +37,12 @@ export const QuestionDetails = ({ questionNode }: Props) => {
 
         <Stack direction="row" justifyContent="center" alignItems="center" marginBottom="8px">
           <AddNodeButton
-            fromPartId={questionNode.id}
-            as="child"
-            toNodeType="answer"
-            relation={{
+            fromNodeId={questionNode.id}
+            addableRelation={{
               child: "answer",
               name: "potentialAnswerTo",
               parent: "question",
+              as: "child",
             }}
             selectNewNode={false}
           />

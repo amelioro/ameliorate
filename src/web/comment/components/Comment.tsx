@@ -129,11 +129,7 @@ export const Comment = ({ comment }: Props) => {
           >
             <MoreHoriz />
           </IconButton>
-          <Menu
-            anchorEl={moreAnchorEl}
-            isOpen={moreMenuOpen}
-            closeMenu={() => setMoreAnchorEl(null)}
-          >
+          <Menu anchorEl={moreAnchorEl} open={moreMenuOpen} onClose={() => setMoreAnchorEl(null)}>
             {userCanEditComment && <MenuItem onClick={() => setEditing(true)}>Edit</MenuItem>}
             {userCanDeleteComment && (
               <MenuItem onClick={() => setShowConfirmDelete(true)}>Delete</MenuItem>

@@ -1,9 +1,10 @@
-import { Stack, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 
-import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
+import { AddNodeButtonGroup } from "@/web/topic/components/Node/AddNodeButtonGroup";
 import { EditableNode } from "@/web/topic/components/Node/EditableNode";
 import { NodeList } from "@/web/topic/components/TopicPane/NodeList";
 import { useResearchNodes } from "@/web/topic/diagramStore/graphPartHooks";
+import { DirectedToRelation } from "@/web/topic/utils/edge";
 import { Node } from "@/web/topic/utils/graph";
 
 interface Props {
@@ -18,50 +19,28 @@ export const DetailsResearchSection = ({ node }: Props) => {
   const researchNodes =
     node.type !== "fact" ? [...questions, ...facts, ...sources] : [...questions, ...facts];
 
+  const addableRelations: DirectedToRelation[] = (
+    [
+      { child: "question", name: "asksAbout", parent: node.type, as: "child" },
+    ] as DirectedToRelation[]
+  ).concat(
+    // disallow facts and sources as relevant for other facts and sources, because that gets confusing
+    node.type !== "fact" && node.type !== "source"
+      ? [
+          { child: "fact", name: "relevantFor", parent: node.type, as: "child" },
+          { child: "source", name: "relevantFor", parent: node.type, as: "child" },
+        ]
+      : [],
+  );
+
   return (
     <>
-      {/* spacing is the amount that centers the add buttons above the columns */}
-      <Stack direction="row" justifyContent="center" alignItems="center" marginBottom="8px">
-        <AddNodeButton
-          fromPartId={node.id}
-          as="child"
-          toNodeType="question"
-          relation={{
-            child: "question",
-            name: "asksAbout",
-            parent: node.type,
-          }}
-          selectNewNode={false}
-        />
-
-        {/* disallow facts and sources as relevant for other facts and sources, because that gets confusing */}
-        {node.type !== "fact" && node.type !== "source" && (
-          <>
-            <AddNodeButton
-              fromPartId={node.id}
-              as="child"
-              toNodeType="fact"
-              relation={{
-                child: "fact",
-                name: "relevantFor",
-                parent: node.type,
-              }}
-              selectNewNode={false}
-            />
-            <AddNodeButton
-              fromPartId={node.id}
-              as="child"
-              toNodeType="source"
-              relation={{
-                child: "source",
-                name: "relevantFor",
-                parent: node.type,
-              }}
-              selectNewNode={false}
-            />
-          </>
-        )}
-      </Stack>
+      <AddNodeButtonGroup
+        fromNodeId={node.id}
+        addableRelations={addableRelations}
+        selectNewNode={false}
+        className="mb-2"
+      />
 
       <NodeList>
         {researchNodes.length > 0 ? (

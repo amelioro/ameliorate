@@ -1,13 +1,12 @@
 import { Star } from "@mui/icons-material";
 
 import { Row } from "@/web/summary/components/Row";
-import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
+import { AddNodeButtonGroup } from "@/web/topic/components/Node/AddNodeButtonGroup";
 import { useCoreNodes } from "@/web/topic/diagramStore/nodeHooks";
 
 const AddButtons = (
   <div className="pb-1.5">
-    <AddNodeButton toNodeType="problem" />
-    <AddNodeButton toNodeType="solution" />
+    <AddNodeButtonGroup addableNodeTypes={["problem", "solution"]} />
   </div>
 );
 

@@ -103,8 +103,8 @@ const PerspectivesMenu = ({ anchorEl, setAnchorEl }: PerspectivesMenuProps) => {
   return (
     <Menu
       anchorEl={anchorEl}
-      isOpen={menuOpen}
-      closeMenu={() => setAnchorEl(null)}
+      open={menuOpen}
+      onClose={() => setAnchorEl(null)}
       closeOnClick={false}
       openDirection="top"
       // match the ~300px width of drawer
@@ -163,8 +163,8 @@ const ShowHideMenu = ({ anchorEl, setAnchorEl }: ShowHideMenuProps) => {
   return (
     <Menu
       anchorEl={anchorEl}
-      isOpen={menuOpen}
-      closeMenu={() => setAnchorEl(null)}
+      open={menuOpen}
+      onClose={() => setAnchorEl(null)}
       closeOnClick={false}
       openDirection="top"
     >

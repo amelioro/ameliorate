@@ -172,13 +172,30 @@ export interface Relation {
 }
 
 /**
+ * TODO: need to identify better naming between:
+ * - DirectedToRelation: `as` is easy to think of when we're adding a node
+ * - DirectedFromRelation: `this` is easy to think of when we're describing relations from a node
+ * - AddableRelation: `addableFrom` seems to make sense for specifying which relations can be added from a node, along with how common they are
+ *
+ * Concerns:
+ * - `getDirectedFromRelationDescription` is very ambiguous to read
+ * - doesn't seem like there's much difference between `DirectedFromRelation` and `AddableRelation`
+ */
+export interface DirectedToRelation extends Relation {
+  /**
+   * "as" because `DirectionTo` is usually used in the case of adding nodes, "as" parent or child
+   */
+  as: RelationDirection;
+}
+
+/**
  * e.g. for when we're using a relation from the perspective of one of the nodes
  */
-interface DirectedRelation extends Relation {
+interface DirectedFromRelation extends Relation {
   this: RelationDirection;
 }
 
-export const getDirectedRelationDescription = (relation: DirectedRelation): string => {
+export const getDirectedRelationDescription = (relation: DirectedFromRelation): string => {
   return relation.this === "child"
     ? `this ${startCase(relation.child)} '${lowerCase(relation.name)}'` // e.g. this Problem causes
     : `'${lowerCase(relation.name)}' this ${startCase(relation.parent)}`; // e.g. causes this Problem
@@ -241,7 +258,7 @@ export const addableRelationsFrom = (
   addingAs: RelationDirection,
   unrestrictedAddingFrom: boolean,
   isMitigatableDetriment: boolean,
-): { toNodeType: NodeType; relation: Relation }[] => {
+): DirectedToRelation[] => {
   const fromDirection = addingAs === "parent" ? "child" : "parent";
   const toDirection = addingAs === "parent" ? "parent" : "child";
 
@@ -286,8 +303,8 @@ export const addableRelationsFrom = (
     .filter((relation) => relation !== null);
 
   const formattedRelations = addableRelations.map((relation) => ({
-    toNodeType: relation[addingAs],
-    relation,
+    ...relation,
+    as: addingAs,
   }));
 
   return formattedRelations;

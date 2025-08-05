@@ -174,7 +174,35 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
           // annoying way of just relying on css to put the react-flow__panel in the bottom-right for big screens, upper-right for small screens
           // so that it's opposite of the quick view select, which is sometimes overlayed and can otherwise overlap with the react-flow__panel
           String.raw`[&_.react-flow\_\_panel]:top-0 [&_.react-flow\_\_panel]:bottom-auto lg:[&_.react-flow\_\_panel]:bottom-0 lg:[&_.react-flow\_\_panel]:top-auto` +
-          (flashlightMode ? " flashlight-mode" : "")
+          (flashlightMode ? " flashlight-mode" : "") +
+          /**
+           * Somewhat janky way to blur not-selected/not-neighboring nodes, edge labels, and edge
+           * paths when a node or edge is selected.
+           *
+           * Notes:
+           * - `has(.spotlight-primary)` is used so that blur only applies when a part currently
+           * being spotlighted (rather than based on node selection, which if the selected node was
+           * deleted, would blur all parts without focusing any)
+           * - `not(:hover)` so that hovering unblurs a node/edge, so that you know what you're clicking,
+           * and that a blurred node doesn't appear in front of an unblurred node (not doing this on
+           * the path itself because unblurring just the path doesn't seem useful).
+           *
+           * - Performance: with a very rough test of selecting a node and counting how many
+           * frames of a video it takes before the selection is rendered (with 58 nodes showing),
+           * without this code, it takes 7-9 frames; with this code it takes 7-8 frames (each frame is ~66ms).
+           * So it seems like the performance isn't significantly impacted by this.
+           *
+           * - TODO(bug?): for some reason, path/label blurring doesn't animate when a node is already
+           * selected and you select another node; I think this might be because the current react-flow
+           * version _moves_ edges in the DOM based on whether or not they're selected. The latest
+           * version of react-flow doesn't seem to do this, so upgrading might fix.
+           */
+          String.raw` [&:has(.spotlight-primary)_.react-flow\_\_node:has(.spotlight-normal):not(:hover)]:blur` +
+          String.raw` [&:has(.spotlight-primary)_.diagram-edge.spotlight-normal:not(:hover)]:blur` +
+          String.raw` [&:has(.spotlight-primary)_.react-flow\_\_edge-path.spotlight-normal]:blur` +
+          String.raw` [&_.react-flow\_\_node]:transition-[filter] [&_.react-flow\_\_node]:duration-300` +
+          String.raw` [&_.diagram-edge]:transition-[filter] [&_.diagram-edge]:duration-300` +
+          String.raw` [&_.react-flow\_\_edge-path]:transition-[filter] [&_.react-flow\_\_edge-path]:duration-300`
         }
         nodes={nodes}
         edges={edges}

@@ -3,7 +3,7 @@ import { Divider } from "@mui/material";
 
 import { IndirectHelpIcon } from "@/web/summary/components/IndirectHelpIcon";
 import { Row } from "@/web/summary/components/Row";
-import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
+import { AddNodeButtonGroup } from "@/web/topic/components/Node/AddNodeButtonGroup";
 import { useEffects } from "@/web/topic/diagramStore/summary";
 import { Node } from "@/web/topic/utils/graph";
 import { nodeDecorations } from "@/web/topic/utils/node";
@@ -19,17 +19,12 @@ export const EffectsColumn = ({ summaryNode }: Props) => {
   // TODO: should also be able to add plain effect nodes
   const AddButtons = (
     <div className="pb-1.5">
-      <AddNodeButton
-        fromPartId={summaryNode.id}
-        toNodeType="benefit"
-        as="parent"
-        relation={{ child: summaryNode.type, name: "creates", parent: "benefit" }}
-      />
-      <AddNodeButton
-        fromPartId={summaryNode.id}
-        toNodeType="detriment"
-        as="parent"
-        relation={{ child: summaryNode.type, name: "creates", parent: "detriment" }}
+      <AddNodeButtonGroup
+        fromNodeId={summaryNode.id}
+        addableRelations={[
+          { child: summaryNode.type, name: "creates", parent: "benefit", as: "parent" },
+          { child: summaryNode.type, name: "creates", parent: "detriment", as: "parent" },
+        ]}
       />
     </div>
   );

@@ -3,7 +3,7 @@ import { Divider } from "@mui/material";
 
 import { IndirectHelpIcon } from "@/web/summary/components/IndirectHelpIcon";
 import { Row } from "@/web/summary/components/Row";
-import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
+import { AddNodeButtonGroup } from "@/web/topic/components/Node/AddNodeButtonGroup";
 import { useCauses } from "@/web/topic/diagramStore/summary";
 import { Node } from "@/web/topic/utils/graph";
 import { nodeDecorations } from "@/web/topic/utils/node";
@@ -18,11 +18,11 @@ export const CausesColumn = ({ summaryNode }: Props) => {
   // TODO: implement this based on where we're a problem-like node or a solution-like node
   const AddButtons = (
     <div className="pb-1.5">
-      <AddNodeButton
-        fromPartId={summaryNode.id}
-        toNodeType="cause"
-        as="child"
-        relation={{ child: "cause", name: "causes", parent: summaryNode.type }}
+      <AddNodeButtonGroup
+        fromNodeId={summaryNode.id}
+        addableRelations={[
+          { child: "cause", name: "causes", parent: summaryNode.type, as: "child" },
+        ]}
       />
     </div>
   );

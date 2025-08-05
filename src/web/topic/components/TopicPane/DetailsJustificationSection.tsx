@@ -1,6 +1,7 @@
 import { Box, Stack, Typography } from "@mui/material";
 
 import { justificationNodeTypes } from "@/common/node";
+import { ImpliedClaimText } from "@/web/topic/components/ImpliedClaimText";
 import { JustificationTreeIndicator } from "@/web/topic/components/Indicator/JustificationTreeIndicator";
 import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
 import { EditableNode } from "@/web/topic/components/Node/EditableNode";
@@ -22,6 +23,13 @@ export const DetailsJustificationSection = ({ graphPart }: Props) => {
 
   return (
     <>
+      {/* `-mt-2` is to make this look like a subheading of the Justification section. */}
+      {/* Ideally it'd probably be significantly cleaner to just remove the mb-2 on the heading, and/or */}
+      {/* to move this subheading to be next to the heading, but didn't want to deal with refactoring right now. */}
+      <Typography className="-mt-2 mb-2 px-2 pb-1 text-center text-sm text-slate-500">
+        Claim: <ImpliedClaimText graphPart={graphPart} />
+      </Typography>
+
       {/* spacing is the amount that centers the add buttons above the columns */}
       <Stack
         direction="row"
@@ -31,14 +39,13 @@ export const DetailsJustificationSection = ({ graphPart }: Props) => {
         spacing={6}
       >
         <AddNodeButton
-          fromPartId={graphPart.id}
-          as="child"
-          toNodeType="support"
+          fromNodeId={graphPart.id}
           // TODO: remove root claims with edge directly to argued part
-          relation={{
+          addableRelation={{
             child: "support",
             name: "supports",
             parent: isJustificationNode ? graphPart.type : "rootClaim",
+            as: "child",
           }}
           selectNewNode={false}
         />
@@ -46,14 +53,13 @@ export const DetailsJustificationSection = ({ graphPart }: Props) => {
           graphPartId={graphPart.data.arguedDiagramPartId ?? graphPart.id}
         />
         <AddNodeButton
-          fromPartId={graphPart.id}
-          as="child"
-          toNodeType="critique"
+          fromNodeId={graphPart.id}
           // TODO: remove root claims with edge directly to argued part
-          relation={{
+          addableRelation={{
             child: "critique",
             name: "critiques",
             parent: isJustificationNode ? graphPart.type : "rootClaim",
+            as: "child",
           }}
           selectNewNode={false}
         />
