@@ -183,6 +183,8 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
            * - `has(.spotlight-primary)` is used so that blur only applies when a part currently
            * being spotlighted (rather than based on node selection, which if the selected node was
            * deleted, would blur all parts without focusing any)
+           * - `not(:has(.react-flow__connectionline))` so that nodes aren't blurred when trying to
+           * create an edge to one
            * - `not(:hover)` so that hovering unblurs a node/edge, so that you know what you're clicking,
            * and that a blurred node doesn't appear in front of an unblurred node (not doing this on
            * the path itself because unblurring just the path doesn't seem useful).
@@ -197,7 +199,7 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
            * version _moves_ edges in the DOM based on whether or not they're selected. The latest
            * version of react-flow doesn't seem to do this, so upgrading might fix.
            */
-          String.raw` [&:has(.spotlight-primary)_.react-flow\_\_node:has(.spotlight-normal):not(:hover)]:blur` +
+          String.raw` [&:has(.spotlight-primary):not(:has(.react-flow\_\_connectionline))_.react-flow\_\_node:has(.spotlight-normal):not(:hover)]:blur` +
           String.raw` [&:has(.spotlight-primary)_.diagram-edge.spotlight-normal:not(:hover)]:blur` +
           String.raw` [&:has(.spotlight-primary)_.react-flow\_\_edge-path.spotlight-normal]:blur` +
           String.raw` [&_.react-flow\_\_node]:transition-[filter] [&_.react-flow\_\_node]:duration-300` +
