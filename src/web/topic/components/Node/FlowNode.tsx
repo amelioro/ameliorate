@@ -97,6 +97,8 @@ export const FlowNode = (flowNode: NodeProps) => {
         <AddNodeButtonGroup
           fromNodeId={flowNode.id}
           addableRelations={addableParentRelations}
+          title="Add node above"
+          openDirection="top"
           className={`absolute hidden ${showAddButtonsClasses} ${positionParentButtonsClasses}`}
         />
       )}
@@ -123,6 +125,8 @@ export const FlowNode = (flowNode: NodeProps) => {
         <AddNodeButtonGroup
           fromNodeId={flowNode.id}
           addableRelations={addableChildRelations}
+          title="Add node below"
+          openDirection="bottom"
           className={`absolute hidden ${showAddButtonsClasses} ${positionChildButtonsClasses}`}
         />
       )}
