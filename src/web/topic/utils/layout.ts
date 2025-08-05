@@ -203,12 +203,13 @@ export const layout = async (
     // allows grouping nodes by type (within a layer) when nodes are sorted by type
     // tried using `position` to do this but it doesn't group nodes near their source node
     "elk.layered.considerModelOrder.strategy": "PREFER_EDGES",
-    // These spacings are just what roughly seem to look good.
+    // These spacings are just what roughly seem to look good, avoiding add buttons from overlapping
+    // with edge labels.
     // Note: Edge labels are given layers like nodes, so we need to halve the spacing between layers
     // when including labels in the layout, in order to keep the same distance between nodes.
     "elk.layered.spacing.nodeNodeBetweenLayers":
       orientation === "DOWN"
-        ? scalePxViaDefaultFontSize(avoidEdgeLabelOverlap ? 65 : 130).toString()
+        ? scalePxViaDefaultFontSize(avoidEdgeLabelOverlap ? 75 : 150).toString()
         : scalePxViaDefaultFontSize(avoidEdgeLabelOverlap ? 55 : 110).toString(),
     "elk.spacing.nodeNode":
       orientation === "DOWN"
