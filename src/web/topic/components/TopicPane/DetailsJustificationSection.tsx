@@ -1,6 +1,7 @@
 import { Box, Stack, Typography } from "@mui/material";
 
 import { justificationNodeTypes } from "@/common/node";
+import { ImpliedClaimText } from "@/web/topic/components/ImpliedClaimText";
 import { JustificationTreeIndicator } from "@/web/topic/components/Indicator/JustificationTreeIndicator";
 import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
 import { EditableNode } from "@/web/topic/components/Node/EditableNode";
@@ -22,6 +23,13 @@ export const DetailsJustificationSection = ({ graphPart }: Props) => {
 
   return (
     <>
+      {/* `-mt-2` is to make this look like a subheading of the Justification section. */}
+      {/* Ideally it'd probably be significantly cleaner to just remove the mb-2 on the heading, and/or */}
+      {/* to move this subheading to be next to the heading, but didn't want to deal with refactoring right now. */}
+      <Typography className="-mt-2 mb-2 px-2 pb-1 text-center text-sm text-slate-500">
+        Claim: <ImpliedClaimText graphPart={graphPart} />
+      </Typography>
+
       {/* spacing is the amount that centers the add buttons above the columns */}
       <Stack
         direction="row"
