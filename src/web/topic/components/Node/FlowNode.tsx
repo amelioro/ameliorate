@@ -74,6 +74,10 @@ export const FlowNode = (flowNode: NodeProps) => {
   const showAddButtonsClasses =
     "[.selectable:hover_>_&]:flex [.selectable:has(>_div_>_.selected)_>_&]:flex";
 
+  // not sure if this is ideal or not, but we're using a darker shadow so that the button
+  // stands out when in front of a bunch of edges (Mui's default shadow doesn't stand out much)
+  const addButtonDecorationClasses = "shadow shadow-gray-500";
+
   const positionParentButtonsClasses =
     orientation === "DOWN"
       ? // have to use [arbitrary] tw values because can't apply two translate-x-* class names
@@ -99,7 +103,7 @@ export const FlowNode = (flowNode: NodeProps) => {
           addableRelations={addableParentRelations}
           title="Add node above"
           openDirection="top"
-          className={`absolute hidden ${showAddButtonsClasses} ${positionParentButtonsClasses}`}
+          className={`absolute hidden ${showAddButtonsClasses} ${positionParentButtonsClasses} ${addButtonDecorationClasses}`}
         />
       )}
 
@@ -127,7 +131,7 @@ export const FlowNode = (flowNode: NodeProps) => {
           addableRelations={addableChildRelations}
           title="Add node below"
           openDirection="bottom"
-          className={`absolute hidden ${showAddButtonsClasses} ${positionChildButtonsClasses}`}
+          className={`absolute hidden ${showAddButtonsClasses} ${positionChildButtonsClasses} ${addButtonDecorationClasses}`}
         />
       )}
     </>

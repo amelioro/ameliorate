@@ -75,7 +75,7 @@ const AddNodeButtonGroup = memo(
           variant="contained"
           className={
             // keep the button rendered if the menu is open (if button was only open due to hover, it'd otherwise disappear)
-            (menuOpen ? "!flex" : "") + ` ${className}`
+            (menuOpen ? "!flex" : "") + (className ? ` ${className}` : "")
           }
           onClick={(event) => {
             event.stopPropagation(); // don't trigger deselection of node
