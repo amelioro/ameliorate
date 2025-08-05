@@ -21,6 +21,7 @@ import { orientation } from "@/web/topic/utils/layout";
 import { FlowNodeType } from "@/web/topic/utils/node";
 import { getFlashlightMode, useUnrestrictedEditing } from "@/web/view/actionConfigStore";
 import { showNodeAndNeighbors } from "@/web/view/currentViewStore/filter";
+import { useIsGraphPartSelected } from "@/web/view/selectedPartStore";
 
 const convertToNode = (flowNode: NodeProps): Node => {
   return {
@@ -35,6 +36,7 @@ export const FlowNode = (flowNode: NodeProps) => {
 
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
+  const isSelected = useIsGraphPartSelected(flowNode.id);
   const isNeighborSelected = useIsNeighborSelected(flowNode.id);
   const isEdgeSelected = useIsEdgeSelected(flowNode.id);
 
@@ -45,7 +47,7 @@ export const FlowNode = (flowNode: NodeProps) => {
     return convertToNode(flowNode);
   }, [flowNode]);
 
-  const spotlight: Spotlight = flowNode.selected
+  const spotlight: Spotlight = isSelected
     ? "primary"
     : isNeighborSelected || isEdgeSelected
       ? "secondary"
