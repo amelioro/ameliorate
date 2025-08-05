@@ -44,6 +44,12 @@ const NodeHandleBase = ({ node, direction, orientation }: Props) => {
 
   const showNeighborIndicators = useShowNeighborIndicators();
   const neighborsInDirection = useNeighborsInDirection(node.id, direction);
+  // TODO(bug): if new neighbor is added and there are currently no hidden neighbors,
+  // `neighborsInDirection` will trigger a re-render at the same time as Diagram re-renders,
+  // so the `hiddenNeighbors` will not yet know that the new neighbor is displayed... then the Diagram
+  // will finish rendering and `hiddenNeighbors` will trigger a re-render.
+  // The result is that adding a new neighbor will make the handle flicker to indicate that there's
+  // a hidden neighbor for just a moment, before rendering without indicating a hidden neighbor.
   const hiddenNeighbors = useHiddenNodes(neighborsInDirection);
 
   const type = direction === "parent" ? "target" : "source";
