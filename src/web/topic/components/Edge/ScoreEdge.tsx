@@ -114,7 +114,7 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
     <StyledPath
       id={flowEdge.id}
       style={flowEdge.style}
-      className="react-flow__edge-path"
+      className={"react-flow__edge-path" + ` spotlight-${spotlight}`}
       d={pathDefinition}
       // assumes that we always want to point from child to parent
       markerStart={`url(#${inReactFlow ? flowMarkerId : nonFlowMarkerId}-${spotlight})`}
@@ -153,6 +153,8 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
       className={
         // pointer-events is set because this div is within an SVG and doesn't handle pointer-events properly by default
         "[pointer-events:all] flex flex-col items-center justify-center bg-white p-1 rounded-xl" +
+        // allow edge to be styled based on its spotlight
+        ` spotlight-${spotlight}` +
         // border adds a lot of clutter so only show it if we're highlighting the edge
         (spotlight === "normal" ? " border-none" : "") +
         // allow other components to apply conditional css related to this edge, e.g. when it's hovered/selected
