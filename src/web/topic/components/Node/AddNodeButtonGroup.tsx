@@ -4,6 +4,7 @@ import { memo, useCallback, useRef, useState } from "react";
 
 import { NodeType } from "@/common/node";
 import { Menu } from "@/web/common/components/Menu/Menu";
+import { Tooltip } from "@/web/common/components/Tooltip/Tooltip";
 import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
 import { DirectedToRelation } from "@/web/topic/utils/edge";
 import { useExpandAddNodeButtons } from "@/web/view/userConfigStore";
@@ -66,24 +67,30 @@ const AddNodeButtonGroup = memo(
 
     return !expandAddNodeButtons ? (
       <>
-        <Button
-          ref={buttonRef}
-          title={title}
-          aria-label={title}
-          color="neutral"
-          size="small"
-          variant="contained"
-          className={
-            // keep the button rendered if the menu is open (if button was only open due to hover, it'd otherwise disappear)
-            (menuOpen ? "!flex" : "") + (className ? ` ${className}` : "")
-          }
-          onClick={(event) => {
-            event.stopPropagation(); // don't trigger deselection of node
-            setMenuOpen(true);
-          }}
+        <Tooltip
+          tooltipHeading={title + (commonNodeButtons.length > 0 ? "" : " (uncommon)")}
+          placement={openDirection}
+          childrenOpensAMenu={true}
+          immediatelyOpenOnTouch={false}
+          childrenHideViaCss={true}
         >
-          <Add />
-        </Button>
+          <Button
+            ref={buttonRef}
+            color="neutral"
+            size="small"
+            variant="contained"
+            className={
+              // keep the button rendered if the menu is open (if button was only open due to hover, it'd otherwise disappear)
+              (menuOpen ? "!flex" : "") + (className ? ` ${className}` : "")
+            }
+            onClick={(event) => {
+              event.stopPropagation(); // don't trigger deselection of node
+              setMenuOpen(true);
+            }}
+          >
+            <Add />
+          </Button>
+        </Tooltip>
         <Menu
           anchorEl={buttonRef.current}
           open={menuOpen}
