@@ -1,5 +1,5 @@
 import { Add } from "@mui/icons-material";
-import { Button, ButtonGroup } from "@mui/material";
+import { Button, ButtonGroup, Divider, ListSubheader } from "@mui/material";
 import { memo, useCallback, useRef, useState } from "react";
 
 import { NodeType } from "@/common/node";
@@ -44,26 +44,46 @@ const AddNodeButtonGroup = memo(
 
     const expandAddNodeButtons = useExpandAddNodeButtons();
 
-    const addNodeButtons = addableRelations
-      ? addableRelations.map((addableRelation) => (
-          <AddNodeButton
-            key={addableRelation[addableRelation.as]}
-            fromNodeId={fromNodeId}
-            addableRelation={addableRelation}
-            buttonType={!expandAddNodeButtons ? "menu" : "button"}
-            selectNewNode={selectNewNode}
-            onClick={closeMenu}
-          />
-        ))
+    const commonNodeButtons = addableRelations
+      ? addableRelations
+          .filter((relation) => !relation.commonality || relation.commonality === "common")
+          .map((addableRelation) => (
+            <AddNodeButton
+              key={addableRelation[addableRelation.as]}
+              fromNodeId={fromNodeId}
+              addableRelation={addableRelation}
+              buttonType={!expandAddNodeButtons ? "menu" : "button"}
+              selectNewNode={selectNewNode}
+              tooltipDirection={openDirection}
+              onClick={closeMenu}
+            />
+          ))
       : addableNodeTypes.map((addableNodeType) => (
           <AddNodeButton
             key={addableNodeType}
             addableNodeType={addableNodeType}
             buttonType={!expandAddNodeButtons ? "menu" : "button"}
             selectNewNode={selectNewNode}
+            tooltipDirection={openDirection}
             onClick={closeMenu}
           />
         ));
+
+    const uncommonNodeButtons = addableRelations
+      ? addableRelations
+          .filter((relation) => relation.commonality === "uncommon")
+          .map((addableRelation) => (
+            <AddNodeButton
+              key={addableRelation[addableRelation.as]}
+              fromNodeId={fromNodeId}
+              addableRelation={addableRelation}
+              buttonType={!expandAddNodeButtons ? "menu" : "button"}
+              selectNewNode={selectNewNode}
+              tooltipDirection={openDirection}
+              onClick={closeMenu}
+            />
+          ))
+      : []; // right now addable node types are all assumed to be common
 
     return !expandAddNodeButtons ? (
       <>
@@ -76,12 +96,18 @@ const AddNodeButtonGroup = memo(
         >
           <Button
             ref={buttonRef}
-            color="neutral"
+            color={commonNodeButtons.length > 0 ? "neutral" : "paperPlain"}
             size="small"
             variant="contained"
             className={
               // keep the button rendered if the menu is open (if button was only open due to hover, it'd otherwise disappear)
-              (menuOpen ? "!flex" : "") + (className ? ` ${className}` : "")
+              (menuOpen ? "!flex" : "") +
+              // If the button only has uncommon options, make it stand out less - this way users
+              // are slightly encouraged to add nodes in the direction that is intended to commonly
+              // be added; e.g. problem nodes have problem details added below, and solution nodes
+              // have solution details added above.
+              (commonNodeButtons.length > 0 ? "" : " shadow-slate-300") +
+              (className ? ` ${className}` : "")
             }
             onClick={(event) => {
               event.stopPropagation(); // don't trigger deselection of node
@@ -109,12 +135,20 @@ const AddNodeButtonGroup = memo(
             paper: { id: "add-button-menu-paper" },
           }}
         >
-          {addNodeButtons}
+          {commonNodeButtons.length > 0 && uncommonNodeButtons.length > 0 && (
+            <ListSubheader className="leading-loose">Common</ListSubheader>
+          )}
+          {commonNodeButtons}
+          {commonNodeButtons.length > 0 && uncommonNodeButtons.length > 0 && <Divider />}
+          {uncommonNodeButtons.length > 0 && (
+            <ListSubheader className="leading-loose">Uncommon</ListSubheader>
+          )}
+          {uncommonNodeButtons}
         </Menu>
       </>
     ) : (
       <ButtonGroup variant="contained" aria-label="add node button group" className={className}>
-        {addNodeButtons}
+        {commonNodeButtons.concat(uncommonNodeButtons)}
       </ButtonGroup>
     );
   },

@@ -49,17 +49,21 @@ const researchRelations: AddableRelation[] = questionRelations.concat(
 // Assumes that we're always pointing from child to parent.
 // This list is sorted by `parent` and then `child` so that it matches the partition order of nodes
 // in the layout.
+// prettier-ignore
+// -- allow each relation to be on one line for readability, rather than having many on one line and some and multiple lines because they're too long
 export const relations: AddableRelation[] = researchRelations.concat([
   // topic relations
-  { child: "problem", name: "causes", parent: "problem", addableFrom: "child" },
-  { child: "cause", name: "causes", parent: "problem", addableFrom: "both" },
-  { child: "problem", name: "subproblemOf", parent: "problem", addableFrom: "parent" },
-  { child: "benefit", name: "createdBy", parent: "problem", addableFrom: "parent" },
-  { child: "effect", name: "createdBy", parent: "problem", addableFrom: "parent" },
+  { child: "problem", name: "causes", parent: "problem", addableFrom: "child", commonality: "uncommon" },
+  { child: "cause", name: "causes", parent: "problem", addableFrom: "parent", commonality: "common" },
+  { child: "cause", name: "causes", parent: "problem", addableFrom: "child", commonality: "uncommon" },
+  { child: "problem", name: "subproblemOf", parent: "problem", addableFrom: "parent", commonality: "uncommon" },
+  { child: "benefit", name: "createdBy", parent: "problem", addableFrom: "parent", commonality: "uncommon" },
+  { child: "effect", name: "createdBy", parent: "problem", addableFrom: "parent", commonality: "uncommon" },
   { child: "detriment", name: "createdBy", parent: "problem", addableFrom: "parent" },
-  { child: "criterion", name: "criterionFor", parent: "problem", addableFrom: "parent" },
-  { child: "solutionComponent", name: "addresses", parent: "problem", addableFrom: "child" },
-  { child: "solution", name: "addresses", parent: "problem", addableFrom: "both" },
+  { child: "criterion", name: "criterionFor", parent: "problem", addableFrom: "parent", commonality: "uncommon" },
+  { child: "solutionComponent", name: "addresses", parent: "problem", addableFrom: "child", commonality: "uncommon" },
+  { child: "solution", name: "addresses", parent: "problem", addableFrom: "parent", commonality: "common" },
+  { child: "solution", name: "addresses", parent: "problem", addableFrom: "child", commonality: "uncommon" },
   { child: "mitigationComponent", name: "addresses", parent: "problem", addableFrom: "neither" },
   { child: "mitigation", name: "addresses", parent: "problem", addableFrom: "neither" },
 
@@ -133,25 +137,20 @@ export const relations: AddableRelation[] = researchRelations.concat([
 
   { child: "solutionComponent", name: "has", parent: "solutionComponent", addableFrom: "child" },
   { child: "solution", name: "has", parent: "solutionComponent", addableFrom: "child" },
-  {
-    child: "mitigationComponent",
-    name: "has",
-    parent: "mitigationComponent",
-    addableFrom: "child",
-  },
+  { child: "mitigationComponent", name: "has", parent: "mitigationComponent", addableFrom: "child" },
   { child: "mitigation", name: "has", parent: "mitigationComponent", addableFrom: "child" },
 
-  { child: "obstacle", name: "obstacleOf", parent: "solutionComponent", addableFrom: "parent" },
-  { child: "obstacle", name: "obstacleOf", parent: "solution", addableFrom: "parent" },
-  { child: "obstacle", name: "obstacleOf", parent: "mitigationComponent", addableFrom: "parent" },
-  { child: "obstacle", name: "obstacleOf", parent: "mitigation", addableFrom: "parent" },
+  { child: "obstacle", name: "obstacleOf", parent: "solutionComponent", addableFrom: "parent", commonality: "uncommon" },
+  { child: "obstacle", name: "obstacleOf", parent: "solution", addableFrom: "parent", commonality: "uncommon" },
+  { child: "obstacle", name: "obstacleOf", parent: "mitigationComponent", addableFrom: "parent", commonality: "uncommon" },
+  { child: "obstacle", name: "obstacleOf", parent: "mitigation", addableFrom: "parent", commonality: "uncommon" },
 
   { child: "solutionComponent", name: "addresses", parent: "obstacle", addableFrom: "neither" },
   { child: "solution", name: "addresses", parent: "obstacle", addableFrom: "neither" },
   { child: "mitigationComponent", name: "mitigates", parent: "obstacle", addableFrom: "neither" },
   { child: "mitigation", name: "mitigates", parent: "obstacle", addableFrom: "parent" },
 
-  { child: "solution", name: "accomplishes", parent: "solution", addableFrom: "parent" },
+  { child: "solution", name: "accomplishes", parent: "solution", addableFrom: "parent", commonality: "uncommon" },
   { child: "solution", name: "contingencyFor", parent: "solution", addableFrom: "neither" },
 
   // justification relations
@@ -186,6 +185,7 @@ export interface DirectedToRelation extends Relation {
    * "as" because `DirectionTo` is usually used in the case of adding nodes, "as" parent or child
    */
   as: RelationDirection;
+  commonality?: Commonality;
 }
 
 /**
@@ -201,8 +201,20 @@ export const getDirectedRelationDescription = (relation: DirectedFromRelation): 
     : `'${lowerCase(relation.name)}' this ${startCase(relation.parent)}`; // e.g. causes this Problem
 };
 
+/**
+ * Used so that common relations can be given UI priority, e.g. common relations can be higher in a
+ * list of relations to add to a node.
+ *
+ * Unspecified should default to `common`.
+ *
+ * `onlyForConnections` means the relation shouldn't show when adding new nodes, but should be kept
+ * as a relation to add when connecting existing nodes.
+ */
+type Commonality = "common" | "uncommon" | "onlyForConnections";
+
 interface AddableRelation extends Relation {
   addableFrom: RelationDirection | "both" | "neither";
+  commonality?: Commonality;
 }
 
 export const getRelation = (
