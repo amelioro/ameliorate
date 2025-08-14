@@ -39,7 +39,3 @@ export const getEffectType = (node: Node, graph: Graph): EffectType => {
 
   return "neither";
 };
-
-export const isSolutionEffect = (effectType: EffectType): boolean => {
-  return effectType === "solution" || effectType === "problemAndSolution";
-};

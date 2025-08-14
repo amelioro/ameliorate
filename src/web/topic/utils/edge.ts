@@ -2,7 +2,7 @@ import { lowerCase, startCase } from "es-toolkit";
 
 import { RelationName, justificationRelationNames } from "@/common/edge";
 import { NodeType, getSameCategoryNodeTypes, nodeTypes, researchNodeTypes } from "@/common/node";
-import { EffectType, isSolutionEffect } from "@/web/topic/utils/effect";
+import { EffectType } from "@/web/topic/utils/effect";
 import { Edge, Graph, Node, RelationDirection, findNodeOrThrow } from "@/web/topic/utils/graph";
 import { hasJustification } from "@/web/topic/utils/justification";
 import { children, components, parents } from "@/web/topic/utils/node";
@@ -283,7 +283,7 @@ export const addableRelationsFrom = (
       // note2: maybe ideal to have different node types for problemDetriment vs solutionDetriment? then these could just have their own addableFrom relations.
       if (
         fromNodeType === "detriment" &&
-        isSolutionEffect(effectType) &&
+        effectType === "solution" &&
         addingAs === "child" &&
         toNodeType === "solution" &&
         !unrestrictedAddingFrom
@@ -300,7 +300,9 @@ export const addableRelationsFrom = (
         (relation) =>
           relation[fromDirection] === fromNodeType &&
           relation[toDirection] === toNodeType &&
-          ["both", fromDirection].includes(relation.addableFrom),
+          ["both", fromDirection].includes(relation.addableFrom) &&
+          (effectType !== "solution" || relation.name !== "createdBy") && // hack to not grab "createdBy" relations for solution effects, because these should be using "creates"
+          (effectType !== "problem" || relation.name !== "creates"), // hack to not grab "creates" relations for problem effects, because these should be using "createdBy"
       );
       if (addableRelationFrom) return addableRelationFrom;
 
