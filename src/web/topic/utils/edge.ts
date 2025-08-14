@@ -219,9 +219,9 @@ interface AddableRelation extends Relation {
 }
 
 export const getRelation = (
-  parent: NodeType,
   child: NodeType,
-  relationName?: RelationName,
+  relationName: RelationName | undefined,
+  parent: NodeType,
 ): Relation => {
   const relation = relationName
     ? relations.find(
@@ -307,8 +307,8 @@ export const addableRelationsFrom = (
       // otherwise, if unrestricted, allow adding any same-category node as parent or child
       if (unrestrictedAddingFrom) {
         return fromDirection === "parent"
-          ? getRelation(nodeType, toNodeType)
-          : getRelation(toNodeType, nodeType);
+          ? getRelation(toNodeType, undefined, fromNodeType)
+          : getRelation(fromNodeType, undefined, toNodeType);
       }
 
       // otherwise we have no addable relation from/to these node types
@@ -324,7 +324,7 @@ export const addableRelationsFrom = (
   return formattedRelations;
 };
 
-export const canCreateEdge = (topicGraph: Graph, parent: Node, child: Node) => {
+export const canCreateEdge = (topicGraph: Graph, child: Node, parent: Node) => {
   const existingEdge = topicGraph.edges.find((edge) => {
     return (
       (edge.source === parent.id && edge.target === child.id) ||

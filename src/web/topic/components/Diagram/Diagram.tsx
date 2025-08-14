@@ -215,7 +215,9 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
         minZoom={0} // is annoying if you can't see the whole diagram... not sure of downsides to allowing further zooming out; maybe you could lose where the diagram is if it's too small? but that doesn't seem like a big deal, since diagram autofits on filter change
         nodesFocusable={false}
         onConnect={
-          userCanEditTopicData ? ({ source, target }) => connectNodes(source, target) : undefined
+          userCanEditTopicData
+            ? ({ source, target }) => connectNodes(target, undefined, source)
+            : undefined
         }
         onContextMenu={(event) => openContextMenu(event, {})}
         onEdgeUpdate={userCanEditTopicData ? onEdgeUpdate : undefined}
