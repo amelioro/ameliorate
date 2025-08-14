@@ -2,6 +2,7 @@ import { lowerCase, startCase } from "es-toolkit";
 
 import { RelationName, justificationRelationNames } from "@/common/edge";
 import { NodeType, getSameCategoryNodeTypes, nodeTypes, researchNodeTypes } from "@/common/node";
+import { EffectType, isSolutionEffect } from "@/web/topic/utils/effect";
 import { Edge, Graph, Node, RelationDirection, findNodeOrThrow } from "@/web/topic/utils/graph";
 import { hasJustification } from "@/web/topic/utils/justification";
 import { children, components, parents } from "@/web/topic/utils/node";
@@ -266,22 +267,23 @@ export const shortcutRelations: ShortcutRelation[] = [
 ];
 
 export const addableRelationsFrom = (
-  nodeType: NodeType,
+  fromNodeType: NodeType,
   addingAs: RelationDirection,
   unrestrictedAddingFrom: boolean,
-  isMitigatableDetriment: boolean,
+  effectType: EffectType,
 ): DirectedToRelation[] => {
   const fromDirection = addingAs === "parent" ? "child" : "parent";
   const toDirection = addingAs === "parent" ? "parent" : "child";
 
-  const addableRelations: Relation[] = getSameCategoryNodeTypes(nodeType)
+  const addableRelations: Relation[] = getSameCategoryNodeTypes(fromNodeType)
     .map((toNodeType) => {
       // hack to ensure that problem detriments can't be mitigated (and can be solved), and solution detriments can be mitigated (but not solved);
       // this is really awkward but keeps detriment nodes from being able to have both solutions and mitigations added, which could be really confusing for users
       // note1: also not doing this when we're unrestricted, since that should result in being able to add both mitigations and solutions in both cases anyway.
       // note2: maybe ideal to have different node types for problemDetriment vs solutionDetriment? then these could just have their own addableFrom relations.
       if (
-        isMitigatableDetriment &&
+        fromNodeType === "detriment" &&
+        isSolutionEffect(effectType) &&
         addingAs === "child" &&
         toNodeType === "solution" &&
         !unrestrictedAddingFrom
@@ -289,14 +291,14 @@ export const addableRelationsFrom = (
         return {
           child: "mitigation",
           name: "mitigates",
-          parent: nodeType,
+          parent: fromNodeType,
         } satisfies Relation;
       }
 
       // use an addableFrom relation if it exists
       const addableRelationFrom = relations.find(
         (relation) =>
-          relation[fromDirection] === nodeType &&
+          relation[fromDirection] === fromNodeType &&
           relation[toDirection] === toNodeType &&
           ["both", fromDirection].includes(relation.addableFrom),
       );

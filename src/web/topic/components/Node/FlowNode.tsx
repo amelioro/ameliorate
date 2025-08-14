@@ -13,7 +13,7 @@ import {
 } from "@/web/topic/components/Node/FlowNode.styles";
 import { NodeHandle } from "@/web/topic/components/Node/NodeHandle";
 import { useIsEdgeSelected, useIsNeighborSelected } from "@/web/topic/diagramStore/nodeHooks";
-import { useIsMitigatableDetriment } from "@/web/topic/diagramStore/nodeTypeHooks";
+import { useEffectType } from "@/web/topic/diagramStore/nodeTypeHooks";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { addableRelationsFrom } from "@/web/topic/utils/edge";
 import { Node } from "@/web/topic/utils/graph";
@@ -41,7 +41,7 @@ export const FlowNode = (flowNode: NodeProps) => {
   const isEdgeSelected = useIsEdgeSelected(flowNode.id);
 
   const unrestrictedEditing = useUnrestrictedEditing();
-  const isMitigatableDetriment = useIsMitigatableDetriment(flowNode.id);
+  const effectType = useEffectType(flowNode.id);
 
   const node = useMemo(() => {
     return convertToNode(flowNode);
@@ -64,13 +64,13 @@ export const FlowNode = (flowNode: NodeProps) => {
     node.type,
     "parent",
     unrestrictedAddingFrom,
-    isMitigatableDetriment,
+    effectType,
   );
   const addableChildRelations = addableRelationsFrom(
     node.type,
     "child",
     unrestrictedAddingFrom,
-    isMitigatableDetriment,
+    effectType,
   );
 
   const showAddButtonsClasses =
