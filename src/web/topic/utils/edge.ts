@@ -93,20 +93,20 @@ export const relations: AddableRelation[] = researchRelations.concat([
   { child: "benefit", name: "creates", parent: "benefit", addableFrom: "child" },
   { child: "effect", name: "creates", parent: "benefit", addableFrom: "child" },
   { child: "detriment", name: "creates", parent: "benefit", addableFrom: "child" },
-  { child: "benefit", name: "creates", parent: "effect", addableFrom: "child" },
-  { child: "effect", name: "creates", parent: "effect", addableFrom: "child" },
-  { child: "detriment", name: "creates", parent: "effect", addableFrom: "child" },
+  { child: "benefit", name: "creates", parent: "effect", addableFrom: "child", commonality: "uncommon" }, // regular effects are generally uncommon - usually it feels like we think in terms of good or bad effects
+  { child: "effect", name: "creates", parent: "effect", addableFrom: "child", commonality: "uncommon" },
+  { child: "detriment", name: "creates", parent: "effect", addableFrom: "child", commonality: "uncommon" },
   { child: "benefit", name: "creates", parent: "detriment", addableFrom: "child" },
   { child: "effect", name: "creates", parent: "detriment", addableFrom: "child" },
   { child: "detriment", name: "creates", parent: "detriment", addableFrom: "child" },
   { child: "benefit", name: "createdBy", parent: "benefit", addableFrom: "parent" },
-  { child: "effect", name: "createdBy", parent: "benefit", addableFrom: "parent" },
+  { child: "effect", name: "createdBy", parent: "benefit", addableFrom: "parent", commonality: "uncommon" },
   { child: "detriment", name: "createdBy", parent: "benefit", addableFrom: "parent" },
   { child: "benefit", name: "createdBy", parent: "effect", addableFrom: "parent" },
-  { child: "effect", name: "createdBy", parent: "effect", addableFrom: "parent" },
+  { child: "effect", name: "createdBy", parent: "effect", addableFrom: "parent", commonality: "uncommon" },
   { child: "detriment", name: "createdBy", parent: "effect", addableFrom: "parent" },
   { child: "benefit", name: "createdBy", parent: "detriment", addableFrom: "parent" },
-  { child: "effect", name: "createdBy", parent: "detriment", addableFrom: "parent" },
+  { child: "effect", name: "createdBy", parent: "detriment", addableFrom: "parent", commonality: "uncommon" },
   { child: "detriment", name: "createdBy", parent: "detriment", addableFrom: "parent" },
 
   // below effect-create-effect relations so that Add Solution button is to the right of Add Effect button for Detriment, because effects are expected to be more commonly added than solutions
@@ -125,14 +125,14 @@ export const relations: AddableRelation[] = researchRelations.concat([
 
   { child: "solutionComponent", name: "creates", parent: "benefit", addableFrom: "child" },
   { child: "solution", name: "creates", parent: "benefit", addableFrom: "child" },
-  { child: "solutionComponent", name: "creates", parent: "effect", addableFrom: "child" },
-  { child: "solution", name: "creates", parent: "effect", addableFrom: "child" },
+  { child: "solutionComponent", name: "creates", parent: "effect", addableFrom: "child", commonality: "uncommon" },
+  { child: "solution", name: "creates", parent: "effect", addableFrom: "child", commonality: "uncommon" },
   { child: "solutionComponent", name: "creates", parent: "detriment", addableFrom: "child" },
   { child: "solution", name: "creates", parent: "detriment", addableFrom: "child" },
   { child: "mitigationComponent", name: "creates", parent: "benefit", addableFrom: "child" },
   { child: "mitigation", name: "creates", parent: "benefit", addableFrom: "child" },
-  { child: "mitigationComponent", name: "creates", parent: "effect", addableFrom: "child" },
-  { child: "mitigation", name: "creates", parent: "effect", addableFrom: "child" },
+  { child: "mitigationComponent", name: "creates", parent: "effect", addableFrom: "child", commonality: "uncommon" },
+  { child: "mitigation", name: "creates", parent: "effect", addableFrom: "child", commonality: "uncommon" },
   { child: "mitigationComponent", name: "creates", parent: "detriment", addableFrom: "child" },
   { child: "mitigation", name: "creates", parent: "detriment", addableFrom: "child" },
 
@@ -266,6 +266,8 @@ export const shortcutRelations: ShortcutRelation[] = [
   },
 ];
 
+type RelationWithCommonality = Relation & { commonality?: Commonality };
+
 export const addableRelationsFrom = (
   fromNodeType: NodeType,
   addingAs: RelationDirection,
@@ -275,7 +277,7 @@ export const addableRelationsFrom = (
   const fromDirection = addingAs === "parent" ? "child" : "parent";
   const toDirection = addingAs === "parent" ? "parent" : "child";
 
-  const addableRelations: Relation[] = getSameCategoryNodeTypes(fromNodeType)
+  const addableRelations: RelationWithCommonality[] = getSameCategoryNodeTypes(fromNodeType)
     .map((toNodeType) => {
       // hack to ensure that problem detriments can't be mitigated (and can be solved), and solution detriments can be mitigated (but not solved);
       // this is really awkward but keeps detriment nodes from being able to have both solutions and mitigations added, which could be really confusing for users
@@ -292,7 +294,8 @@ export const addableRelationsFrom = (
           child: "mitigation",
           name: "mitigates",
           parent: fromNodeType,
-        } satisfies Relation;
+          commonality: "uncommon",
+        } satisfies RelationWithCommonality;
       }
 
       // use an addableFrom relation if it exists
