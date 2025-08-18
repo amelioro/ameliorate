@@ -36,9 +36,10 @@ export const SourceDetails = ({ sourceNode }: Props) => {
 
         <AddNodeButtonGroup
           fromNodeId={sourceNode.id}
+          // prettier-ignore
           addableRelations={[
-            { child: "source", name: "sourceOf", parent: "fact", as: "parent" },
-            { child: "source", name: "mentions", parent: "source", as: "parent" },
+            { child: "source", name: "sourceOf", parent: "fact", as: "parent", commonality: "common" },
+            { child: "source", name: "mentions", parent: "source", as: "parent", commonality: "common" },
           ]}
           selectNewNode={false}
           className="mb-2"

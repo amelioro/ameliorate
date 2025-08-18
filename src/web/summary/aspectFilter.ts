@@ -28,7 +28,7 @@ export const getIncomingNodesByRelationDescription = (summaryNode: Node, graph: 
         child: childNode.type,
         name: childEdge.label,
         parent: summaryNode.type,
-        this: "parent",
+        as: "child",
       });
       if (acc[relationDescription] === undefined) acc[relationDescription] = [];
       acc[relationDescription].push(childNode);
@@ -55,7 +55,7 @@ export const getOutgoingNodesByRelationDescription = (summaryNode: Node, graph: 
         child: summaryNode.type,
         name: parentEdge.label,
         parent: parentNode.type,
-        this: "child",
+        as: "parent",
       });
 
       if (acc[relationDescription] === undefined) acc[relationDescription] = [];

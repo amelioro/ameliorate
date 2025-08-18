@@ -12,7 +12,7 @@ import { useExpandAddNodeButtons } from "@/web/view/userConfigStore";
 type AddableProps =
   | {
       fromNodeId: string;
-      addableRelations: DirectedToRelation[];
+      addableRelations: DirectedToRelationWithCommonality[];
       addableNodeTypes?: undefined;
     }
   | {
@@ -46,7 +46,7 @@ const AddNodeButtonGroup = memo(
 
     const commonNodeButtons = addableRelations
       ? addableRelations
-          .filter((relation) => !relation.commonality || relation.commonality === "common")
+          .filter((relation) => relation.commonality === "common")
           .map((addableRelation) => (
             <AddNodeButton
               key={addableRelation[addableRelation.as]}

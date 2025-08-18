@@ -4,7 +4,7 @@ import { AddNodeButtonGroup } from "@/web/topic/components/Node/AddNodeButtonGro
 import { EditableNode } from "@/web/topic/components/Node/EditableNode";
 import { NodeList } from "@/web/topic/components/TopicPane/NodeList";
 import { useResearchNodes } from "@/web/topic/diagramStore/graphPartHooks";
-import { DirectedToRelation } from "@/web/topic/utils/edge";
+import { DirectedToRelationWithCommonality } from "@/web/topic/utils/edge";
 import { Node } from "@/web/topic/utils/graph";
 
 interface Props {
@@ -19,16 +19,17 @@ export const DetailsResearchSection = ({ node }: Props) => {
   const researchNodes =
     node.type !== "fact" ? [...questions, ...facts, ...sources] : [...questions, ...facts];
 
-  const addableRelations: DirectedToRelation[] = (
+  // prettier-ignore
+  const addableRelations: DirectedToRelationWithCommonality[] = (
     [
-      { child: "question", name: "asksAbout", parent: node.type, as: "child" },
-    ] as DirectedToRelation[]
+      { child: "question", name: "asksAbout", parent: node.type, as: "child", commonality: "common" },
+    ] as DirectedToRelationWithCommonality[]
   ).concat(
     // disallow facts and sources as relevant for other facts and sources, because that gets confusing
     node.type !== "fact" && node.type !== "source"
       ? [
-          { child: "fact", name: "relevantFor", parent: node.type, as: "child" },
-          { child: "source", name: "relevantFor", parent: node.type, as: "child" },
+          { child: "fact", name: "relevantFor", parent: node.type, as: "child", commonality: "common" },
+          { child: "source", name: "relevantFor", parent: node.type, as: "child", commonality: "common" },
         ]
       : [],
   );

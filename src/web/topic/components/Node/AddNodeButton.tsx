@@ -87,11 +87,8 @@ export const AddNodeButton = ({
 
   const decoration = nodeDecorations[toNodeType];
 
-  const fromDirection = addableRelation?.as === "parent" ? "child" : "parent";
   const titleSuffix =
-    addableRelation === undefined
-      ? ""
-      : ` (${getDirectedRelationDescription({ ...addableRelation, this: fromDirection })})`;
+    addableRelation === undefined ? "" : ` (${getDirectedRelationDescription(addableRelation)})`;
 
   return buttonType === "menu" ? (
     <MenuItem className={className} onClick={memoizedOnClick}>

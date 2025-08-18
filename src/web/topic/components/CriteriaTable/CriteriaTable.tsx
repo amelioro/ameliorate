@@ -246,9 +246,10 @@ export const CriteriaTable = () => {
           <>
             <AddNodeButtonGroup
               fromNodeId={problemNode.id}
+              // prettier-ignore
               addableRelations={[
-                { as: "child", child: "solution", name: "addresses", parent: "problem" },
-                { as: "child", child: "criterion", name: "criterionFor", parent: "problem" },
+                { child: "solution", name: "addresses", parent: "problem", as: "child", commonality: "common" },
+                { child: "criterion", name: "criterionFor", parent: "problem", as: "child", commonality: "common" },
               ]}
             />
           </>
