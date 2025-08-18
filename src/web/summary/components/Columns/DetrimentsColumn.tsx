@@ -1,10 +1,13 @@
 import { Timeline } from "@mui/icons-material";
 import { Divider } from "@mui/material";
 
+import { detrimentsDirectedSearchRelations } from "@/web/summary/aspectFilter";
 import { IndirectHelpIcon } from "@/web/summary/components/IndirectHelpIcon";
 import { Row } from "@/web/summary/components/Row";
 import { AddNodeButtonGroup } from "@/web/topic/components/Node/AddNodeButtonGroup";
+import { useEffectType } from "@/web/topic/diagramStore/nodeTypeHooks";
 import { useDetriments } from "@/web/topic/diagramStore/summary";
+import { addableRelationsFrom, filterAddablesViaSearchRelations } from "@/web/topic/utils/edge";
 import { Node } from "@/web/topic/utils/graph";
 import { nodeDecorations } from "@/web/topic/utils/node";
 
@@ -14,25 +17,32 @@ interface Props {
 
 export const DetrimentsColumn = ({ summaryNode }: Props) => {
   const { directNodes, indirectNodes } = useDetriments(summaryNode);
+  const effectType = useEffectType(summaryNode.id);
+
+  // need to grab both parent and child relations because detriments cause further effects in direction
+  // that is based on whether they're problem effects or solution effects (e.g. problem effects
+  // chain downwards via child relations).
+  const defaultParentAddableRelations = addableRelationsFrom(
+    summaryNode.type,
+    "parent",
+    false,
+    effectType,
+  );
+  const defaultChildAddableRelations = addableRelationsFrom(
+    summaryNode.type,
+    "child",
+    false,
+    effectType,
+  );
+
+  const addableRelations = filterAddablesViaSearchRelations(
+    defaultParentAddableRelations.concat(defaultChildAddableRelations),
+    detrimentsDirectedSearchRelations,
+  );
 
   const AddButtons = (
     <div className="pb-1.5">
-      {/* TODO: this path should run if it's any problem-like node, including problem effects */}
-      {summaryNode.type === "problem" ? (
-        <AddNodeButtonGroup
-          fromNodeId={summaryNode.id}
-          addableRelations={[
-            { child: "detriment", name: "createdBy", parent: summaryNode.type, as: "child" },
-          ]}
-        />
-      ) : (
-        <AddNodeButtonGroup
-          fromNodeId={summaryNode.id}
-          addableRelations={[
-            { child: summaryNode.type, name: "creates", parent: "detriment", as: "parent" },
-          ]}
-        />
-      )}
+      <AddNodeButtonGroup fromNodeId={summaryNode.id} addableRelations={addableRelations} />
     </div>
   );
 

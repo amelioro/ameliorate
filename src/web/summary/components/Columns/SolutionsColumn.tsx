@@ -1,10 +1,13 @@
 import { Timeline } from "@mui/icons-material";
 import { Divider, Link } from "@mui/material";
 
+import { solutionsDirectedSearchRelations } from "@/web/summary/aspectFilter";
 import { IndirectHelpIcon } from "@/web/summary/components/IndirectHelpIcon";
 import { Row } from "@/web/summary/components/Row";
 import { AddNodeButtonGroup } from "@/web/topic/components/Node/AddNodeButtonGroup";
+import { useEffectType } from "@/web/topic/diagramStore/nodeTypeHooks";
 import { useSolutions } from "@/web/topic/diagramStore/summary";
+import { addableRelationsFrom, filterAddablesViaSearchRelations } from "@/web/topic/utils/edge";
 import { Node } from "@/web/topic/utils/graph";
 import { nodeDecorations } from "@/web/topic/utils/node";
 import { viewCriteriaTable } from "@/web/view/currentViewStore/filter";
@@ -15,16 +18,23 @@ interface Props {
 
 export const SolutionsColumn = ({ summaryNode }: Props) => {
   const { directNodes, indirectNodes } = useSolutions(summaryNode);
+  const effectType = useEffectType(summaryNode.id);
+
+  const defaultChildAddableRelations = addableRelationsFrom(
+    summaryNode.type,
+    "child",
+    false,
+    effectType, // in case summaryNode is a solution detriment, and we want to show mitgations
+  );
+
+  const addableRelations = filterAddablesViaSearchRelations(
+    defaultChildAddableRelations,
+    solutionsDirectedSearchRelations,
+  );
 
   const AddButtons = (
-    // TODO: implement this based on where we're a problem-like node (e.g. add solution) or a solution-like node (e.g. add mitigation)
     <div className="pb-1.5">
-      <AddNodeButtonGroup
-        fromNodeId={summaryNode.id}
-        addableRelations={[
-          { child: "solution", name: "addresses", parent: summaryNode.type, as: "child" },
-        ]}
-      />
+      <AddNodeButtonGroup fromNodeId={summaryNode.id} addableRelations={addableRelations} />
     </div>
   );
 

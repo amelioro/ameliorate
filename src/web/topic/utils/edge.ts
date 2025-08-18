@@ -171,6 +171,39 @@ export interface Relation {
   parent: NodeType;
 }
 
+/**
+ * For searching for relations or nodes, e.g. finding nodes in a summary column, or finding which
+ * addable relations should be used for the add node button's search box.
+ *
+ * Motivated to make this so that these two examples (summary column nodes and summary column's add
+ * button's search box nodes) can be built from this one data structure and kept consistent with
+ * each other.
+ */
+export interface DirectedSearchRelation {
+  toDirection: RelationDirection;
+  relationNames: RelationName[];
+  /**
+   * undefined means not to restrict based on node type, e.g. for getting addressed nodes, we don't
+   * care what kind of node is being addressed as long as there is/can-be an "addresses" edge.
+   */
+  toNodeTypes?: NodeType[];
+}
+
+export const filterAddablesViaSearchRelations = (
+  defaultAddableRelations: DirectedToRelationWithCommonality[],
+  directedSearchRelations: DirectedSearchRelation[],
+): DirectedToRelationWithCommonality[] => {
+  return defaultAddableRelations.filter((addableRelation) => {
+    return directedSearchRelations.some((searchRelation) => {
+      return (
+        searchRelation.relationNames.includes(addableRelation.name) &&
+        searchRelation.toDirection === addableRelation.as &&
+        (searchRelation.toNodeTypes ?? nodeTypes).includes(addableRelation[addableRelation.as])
+      );
+    });
+  });
+};
+
 export interface DirectedToRelation extends Relation {
   /**
    * "as" because `DirectionTo` is usually used in the case of adding nodes, "as" parent or child
