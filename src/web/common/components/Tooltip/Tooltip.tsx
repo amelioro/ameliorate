@@ -1,4 +1,4 @@
-import { Tooltip as MuiTooltip } from "@mui/material";
+import { Tooltip as MuiTooltip, TooltipProps } from "@mui/material";
 import { ReactElement, ReactNode } from "react";
 
 interface Props {
@@ -11,7 +11,29 @@ interface Props {
   tooltipHeading?: string;
   // TODO?: could make header or body required, but this makes types a bit complicated, particularly in combination with IconWithTooltip
   tooltipBody?: ReactNode;
+  placement?: TooltipProps["placement"];
+  /**
+   * Kind of jank but specifically for buttons with tooltips, if the button opens a menu, it can be
+   * annoying to have the tooltip flicker open for only a moment before closing when the menu opens.
+   * (e.g. add node button group when using a menu)
+   */
+  childrenOpensAMenu?: boolean;
   immediatelyOpenOnTouch?: boolean;
+  /**
+   * This is a hack to avoid the tooltip flickering at position (0,0) when the child element is hidden via CSS.
+   *
+   * This is accomplished by skipping the tooltip's exit transition.
+   *
+   * Unfortunately a warning will still be thrown, but maybe upgrading Mui will fix this (new versions
+   * use floating-ui for tooltips rather than popperjs)...
+   *
+   * To reproduce the issue:
+   * 1. hover a node
+   * 2. hover one of the node's add buttons to display this tooltip
+   * 3. mouse away from the node and add button
+   * 4. observe Mui warning "The `anchorEl` prop provided to the component is invalid."
+   */
+  childrenHideViaCss?: boolean;
   tooltipPopperClassName?: string;
 }
 
@@ -26,11 +48,14 @@ export const Tooltip = ({
   children,
   tooltipHeading,
   tooltipBody,
+  placement = undefined,
+  childrenOpensAMenu = false,
   /**
    * e.g. true for help icon tooltips, but false for node icon where tap actually performs an action
    * (sets the node as summary and selects it) - in these cases, hold-tap-to-open seems fine.
    */
   immediatelyOpenOnTouch = true,
+  childrenHideViaCss = false,
   tooltipPopperClassName,
 }: Props) => {
   return (
@@ -45,6 +70,9 @@ export const Tooltip = ({
           tooltipHeading
         )
       }
+      placement={placement}
+      TransitionProps={{ exit: !childrenHideViaCss }}
+      enterDelay={childrenOpensAMenu ? 500 : undefined}
       enterTouchDelay={immediatelyOpenOnTouch ? 0 : undefined}
       leaveTouchDelay={immediatelyOpenOnTouch ? Infinity : undefined} // touch-away to close on mobile, since message is long
       slotProps={{

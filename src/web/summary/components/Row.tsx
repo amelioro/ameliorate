@@ -13,7 +13,11 @@ import { getNumericScore } from "@/web/topic/utils/score";
 interface Props {
   title: string;
   Icon: MuiIcon;
-  nodes: Node[];
+  /**
+   * If no nodes are passed, this is just a header row e.g. for Incoming/Outgoing columns, and the
+   * column will be responsible for outputting nodes or a message that says there are no nodes.
+   */
+  nodes?: Node[];
   addButtonsSlot?: ReactNode;
   endHeaderSlot?: ReactNode;
   actionSlot?: ReactNode;
@@ -23,9 +27,9 @@ export const Row = ({ title, Icon, nodes, addButtonsSlot, endHeaderSlot, actionS
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
 
-  const { scoresByGraphPartId } = useDisplayScores(nodes.map((node) => node.id));
+  const { scoresByGraphPartId } = useDisplayScores((nodes ?? []).map((node) => node.id));
 
-  const nodesSortedByScoreThenType = nodes.toSorted((node1, node2) => {
+  const nodesSortedByScoreThenType = (nodes ?? []).toSorted((node1, node2) => {
     const score1 = getNumericScore(scoresByGraphPartId[node1.id] ?? "-");
     const score2 = getNumericScore(scoresByGraphPartId[node2.id] ?? "-");
 
@@ -50,15 +54,17 @@ export const Row = ({ title, Icon, nodes, addButtonsSlot, endHeaderSlot, actionS
         <div className="flex justify-center">{addButtonsSlot}</div>
       )}
 
-      <ContentDiv className="flex flex-wrap justify-center gap-2.5 p-0.5 lg:gap-4">
-        {nodes.length === 0 ? (
-          <Typography variant="body2">No nodes yet!</Typography>
-        ) : (
-          nodesSortedByScoreThenType.map((node) => (
-            <EditableNode key={node.id} node={node} className="[zoom:80%] lg:[zoom:normal]" />
-          ))
-        )}
-      </ContentDiv>
+      {nodes && (
+        <ContentDiv className="flex flex-wrap justify-center gap-2.5 p-0.5 lg:gap-4">
+          {nodes.length === 0 ? (
+            <Typography variant="body2">No nodes yet!</Typography>
+          ) : (
+            nodesSortedByScoreThenType.map((node) => (
+              <EditableNode key={node.id} node={node} className="[zoom:80%] lg:[zoom:normal]" />
+            ))
+          )}
+        </ContentDiv>
+      )}
     </div>
   );
 };

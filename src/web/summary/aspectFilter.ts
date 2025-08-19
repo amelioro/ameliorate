@@ -1,8 +1,14 @@
+/**
+ * The directed search relations in this file are kept here, near the aspect filter
+ * functions, because they should match the relations used via `ancestors` and
+ * `descendants` in these filter functions.
+ */
+
 import { uniqBy } from "es-toolkit";
 
 import { getEdgeInfoCategory } from "@/common/edge";
 import { badNodeTypes, getNodeInfoCategory } from "@/common/node";
-import { getDirectedRelationDescription } from "@/web/topic/utils/edge";
+import { DirectedSearchRelation, getDirectedRelationDescription } from "@/web/topic/utils/edge";
 import {
   Graph,
   Node,
@@ -28,7 +34,7 @@ export const getIncomingNodesByRelationDescription = (summaryNode: Node, graph: 
         child: childNode.type,
         name: childEdge.label,
         parent: summaryNode.type,
-        this: "parent",
+        as: "child",
       });
       if (acc[relationDescription] === undefined) acc[relationDescription] = [];
       acc[relationDescription].push(childNode);
@@ -55,7 +61,7 @@ export const getOutgoingNodesByRelationDescription = (summaryNode: Node, graph: 
         child: summaryNode.type,
         name: parentEdge.label,
         parent: parentNode.type,
-        this: "child",
+        as: "parent",
       });
 
       if (acc[relationDescription] === undefined) acc[relationDescription] = [];
@@ -69,6 +75,10 @@ export const getOutgoingNodesByRelationDescription = (summaryNode: Node, graph: 
 };
 
 // solution
+export const componentsDirectedSearchRelations: DirectedSearchRelation[] = [
+  { toDirection: "parent", relationNames: ["has"] },
+];
+
 // TODO: test this
 export const getComponents = (summaryNode: Node, graph: Graph) => {
   const components = ancestors(summaryNode, graph, ["has"]);
@@ -76,11 +86,19 @@ export const getComponents = (summaryNode: Node, graph: Graph) => {
   return splitNodesByDirectAndIndirect(components);
 };
 
+export const addressedDirectedSearchRelations: DirectedSearchRelation[] = [
+  { toDirection: "parent", relationNames: ["addresses"] },
+];
+
 export const getAddressed = (summaryNode: Node, graph: Graph) => {
   const addressed = ancestors(summaryNode, graph, ["has", "creates"], ["addresses"]);
 
   return splitNodesByDirectAndIndirect(addressed);
 };
+
+export const obstaclesDirectedSearchRelations: DirectedSearchRelation[] = [
+  { toDirection: "child", relationNames: ["obstacleOf"], toNodeTypes: badNodeTypes },
+];
 
 // TODO: test this
 export const getObstacles = (summaryNode: Node, graph: Graph) => {
@@ -100,6 +118,10 @@ export const getObstacles = (summaryNode: Node, graph: Graph) => {
 };
 
 // problem
+export const solutionsDirectedSearchRelations: DirectedSearchRelation[] = [
+  { toDirection: "child", relationNames: ["addresses", "mitigates"] },
+];
+
 export const getSolutions = (summaryNode: Node, graph: Graph) => {
   const concerns = descendants(
     summaryNode,
@@ -131,11 +153,20 @@ export const getSolutions = (summaryNode: Node, graph: Graph) => {
 };
 
 // effect
+export const solutionBenefitsDirectedSearchRelations: DirectedSearchRelation[] = [
+  { toDirection: "parent", relationNames: ["creates"], toNodeTypes: ["benefit"] },
+];
+
 export const getSolutionBenefits = (summaryNode: Node, graph: Graph) => {
   const benefits = ancestors(summaryNode, graph, ["has", "creates"], ["creates"], ["benefit"]);
 
   return splitNodesByDirectAndIndirect(benefits);
 };
+
+export const detrimentsDirectedSearchRelations: DirectedSearchRelation[] = [
+  { toDirection: "parent", relationNames: ["creates", "causes"], toNodeTypes: badNodeTypes },
+  { toDirection: "child", relationNames: ["createdBy"], toNodeTypes: badNodeTypes },
+];
 
 // TODO: test this
 export const getDetriments = (summaryNode: Node, graph: Graph) => {
@@ -153,6 +184,11 @@ export const getDetriments = (summaryNode: Node, graph: Graph) => {
   return splitNodesByDirectAndIndirect(detriments);
 };
 
+export const effectsDirectedSearchRelations: DirectedSearchRelation[] = [
+  { toDirection: "parent", relationNames: ["creates", "causes"] },
+  { toDirection: "child", relationNames: ["createdBy"] },
+];
+
 // TODO: test this
 export const getEffects = (summaryNode: Node, graph: Graph) => {
   const effects = [
@@ -162,6 +198,11 @@ export const getEffects = (summaryNode: Node, graph: Graph) => {
 
   return splitNodesByDirectAndIndirect(effects);
 };
+
+export const causesDirectedSearchRelations: DirectedSearchRelation[] = [
+  { toDirection: "parent", relationNames: ["createdBy"] },
+  { toDirection: "child", relationNames: ["has", "causes", "creates"] },
+];
 
 // TODO: test this
 export const getCauses = (summaryNode: Node, graph: Graph) => {

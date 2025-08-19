@@ -82,7 +82,7 @@ export const aspectsByCategory: Record<Category, [Aspect, Aspect?]> = {
   all: ["incoming", "outgoing"],
   // solution
   components: ["components"],
-  motivation: ["benefits", "addressed"],
+  motivation: ["benefits", "addressed"], // not currently in use - was used by solution but replaced by tradeoffs 'motivation' column - can remove but want to keep for a bit and see if it seems useful
   solutionConcerns: ["detriments", "obstacles"], // not currently in use - was used by solution but replaced by tradeoffs 'solutionConcerns' column - can remove but want to keep for a bit and see if it seems useful
   tradeoffs: ["motivation", "solutionConcerns"],
   // problem

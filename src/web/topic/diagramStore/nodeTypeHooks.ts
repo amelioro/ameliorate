@@ -1,26 +1,14 @@
 import { useDiagramStore } from "@/web/topic/diagramStore/store";
+import { EffectType, getEffectType } from "@/web/topic/utils/effect";
 import { findGraphPartOrThrow, findNodeOrThrow } from "@/web/topic/utils/graph";
 
-export const useIsMitigatableDetriment = (nodeId: string) => {
+export const useEffectType = (nodeId: string): EffectType => {
   return useDiagramStore((state) => {
     try {
       const node = findNodeOrThrow(nodeId, state.nodes);
-      // is mitigatable if it's created by a solution or mitigation
-      return (
-        node.type === "detriment" &&
-        state.edges.find(
-          (edge) =>
-            (edge.source === nodeId && edge.label === "creates") ||
-            // Rare case where detriment is below a solution; this can exist while this discussion is still unresolved https://github.com/amelioro/ameliorate/discussions/579.
-            // This case could technically exist for more situations e.g. detriment created by a solution component,
-            // but not going to spend effort on that until the mentioned discussion determines that such a case is important to cover.
-            (edge.target === nodeId &&
-              edge.label === "createdBy" &&
-              state.nodes.find((node) => node.id === edge.source)?.type === "solution"),
-        ) !== undefined
-      );
+      return getEffectType(node, { nodes: state.nodes, edges: state.edges });
     } catch {
-      return false;
+      return "n/a";
     }
   });
 };

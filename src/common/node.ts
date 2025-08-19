@@ -72,6 +72,8 @@ export const goodNodeTypes: NodeType[] = [
 
 export const badNodeTypes: NodeType[] = ["cause", "problem", "detriment", "obstacle"];
 
+export const effectNodeTypes: NodeType[] = ["benefit", "effect", "detriment"];
+
 export const infoNodeTypes: Record<InfoCategory, NodeType[]> = {
   breakdown: [
     "cause",
@@ -135,4 +137,8 @@ const nodePriorities = Object.fromEntries(
 
 export const compareNodesByType = (node1: { type: NodeType }, node2: { type: NodeType }) => {
   return Number(nodePriorities[node1.type]) - Number(nodePriorities[node2.type]);
+};
+
+export const isEffect = (nodeType: NodeType): boolean => {
+  return effectNodeTypes.includes(nodeType);
 };

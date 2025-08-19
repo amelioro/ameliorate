@@ -2,6 +2,7 @@ import { Button, MenuItem, useTheme } from "@mui/material";
 import { useCallback, useContext } from "react";
 
 import { NodeType } from "@/common/node";
+import { Tooltip } from "@/web/common/components/Tooltip/Tooltip";
 import { useSessionUser } from "@/web/common/hooks";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { addNode, addNodeWithoutParent } from "@/web/topic/diagramStore/createDeleteActions";
@@ -35,6 +36,12 @@ interface Props {
    * avoid changing selection so that the view isn't impacted as much (e.g. from the details pane)
    */
   selectNewNode?: boolean;
+  /**
+   * Mainly because if the button is showing above the node, and the tooltip shows below, then it
+   * gets annoying when you move the mouse down back to the node but you hit the tooltip instead,
+   * removing hover from the button and therefore hiding it but keeping the tooltip shown.
+   */
+  tooltipDirection?: "top" | "bottom";
   className?: string;
 }
 
@@ -45,6 +52,7 @@ export const AddNodeButton = ({
   buttonType = "button",
   onClick,
   selectNewNode,
+  tooltipDirection = "bottom",
   className,
 }: Props & AddableProps) => {
   const theme = useTheme();
@@ -79,11 +87,8 @@ export const AddNodeButton = ({
 
   const decoration = nodeDecorations[toNodeType];
 
-  const fromDirection = addableRelation?.as === "parent" ? "child" : "parent";
   const titleSuffix =
-    addableRelation === undefined
-      ? ""
-      : ` (${getDirectedRelationDescription({ ...addableRelation, this: fromDirection })})`;
+    addableRelation === undefined ? "" : ` (${getDirectedRelationDescription(addableRelation)})`;
 
   return buttonType === "menu" ? (
     <MenuItem className={className} onClick={memoizedOnClick}>
@@ -97,20 +102,21 @@ export const AddNodeButton = ({
       </span>
     </MenuItem>
   ) : (
-    <Button
-      className={"text-[0.5em]" + (className ? ` ${className}` : "")}
-      color={toNodeType}
-      size="small"
-      variant="contained"
-      onClick={memoizedOnClick}
-      // Not using MUI Tooltip because it throws anchorEl missing error when the button is hidden
-      // after hovering it. Think we'd have to pass `show` into this component in order to hide
-      // the tooltip at the same time as the button, rather than relying on css from the FlowNode,
-      // but that'd be slightly annoying to do.
-      title={`Add ${decoration.title}` + titleSuffix}
-      aria-label={`Add ${decoration.title}` + titleSuffix}
+    <Tooltip
+      tooltipHeading={`Add ${decoration.title}` + titleSuffix}
+      placement={tooltipDirection}
+      immediatelyOpenOnTouch={false}
+      childrenHideViaCss={true}
     >
-      <decoration.NodeIcon />
-    </Button>
+      <Button
+        className={"text-[0.5em]" + (className ? ` ${className}` : "")}
+        color={toNodeType}
+        size="small"
+        variant="contained"
+        onClick={memoizedOnClick}
+      >
+        <decoration.NodeIcon />
+      </Button>
+    </Tooltip>
   );
 };

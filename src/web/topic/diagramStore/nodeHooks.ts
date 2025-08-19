@@ -4,7 +4,9 @@ import { errorWithData } from "@/common/errorHandling";
 import { NodeType, isDefaultCoreNodeType } from "@/common/node";
 import { getDefaultNode } from "@/web/topic/diagramStore/nodeGetters";
 import { DiagramStoreState, useDiagramStore } from "@/web/topic/diagramStore/store";
+import { DirectedToRelation } from "@/web/topic/utils/edge";
 import {
+  Edge,
   Node,
   RelationDirection,
   ancestors,
@@ -34,6 +36,49 @@ export const useAllNodes = (nodeIds?: string[]) => {
     return nodeIds
       .map((nodeId) => state.nodes.find((node) => node.id === nodeId))
       .filter((node) => node !== undefined);
+  }, shallow);
+};
+
+type AddableNode = Node &
+  (
+    | { existingEdge: Edge; addableRelationToNode?: undefined }
+    | { existingEdge?: undefined; addableRelationToNode: DirectedToRelation }
+  );
+
+export const useConnectableNodes = (fromNodeId: string, addableRelations: DirectedToRelation[]) => {
+  return useDiagramStore((state) => {
+    const fromNode = state.nodes.find((node) => node.id === fromNodeId);
+    if (!fromNode) return { connected: [], notConnected: [] };
+
+    const connectableNodes: AddableNode[] = state.nodes
+      .map((toNode) => {
+        if (toNode.id === fromNodeId) return null; // can't connect to self
+
+        const addableRelationToNode = addableRelations.find((addableRelation) => {
+          const fromDirection = addableRelation.as === "parent" ? "child" : "parent";
+          return (
+            addableRelation[fromDirection] === fromNode.type &&
+            addableRelation[addableRelation.as] === toNode.type
+          );
+        });
+
+        if (!addableRelationToNode) return null;
+
+        const existingEdge = state.edges.find(
+          (edge) =>
+            (edge.source === fromNodeId && edge.target === toNode.id) ||
+            (edge.target === fromNodeId && edge.source === toNode.id),
+        );
+
+        if (existingEdge) return { ...toNode, existingEdge };
+        else return { ...toNode, addableRelationToNode };
+      })
+      .filter((node) => !!node);
+
+    return {
+      connected: connectableNodes.filter((node) => !!node.existingEdge),
+      notConnected: connectableNodes.filter((node) => !node.existingEdge),
+    };
   }, shallow);
 };
 

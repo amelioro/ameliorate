@@ -1,10 +1,12 @@
 import { Timeline } from "@mui/icons-material";
 import { Divider } from "@mui/material";
 
+import { obstaclesDirectedSearchRelations } from "@/web/summary/aspectFilter";
 import { IndirectHelpIcon } from "@/web/summary/components/IndirectHelpIcon";
 import { Row } from "@/web/summary/components/Row";
 import { AddNodeButtonGroup } from "@/web/topic/components/Node/AddNodeButtonGroup";
 import { useObstacles } from "@/web/topic/diagramStore/summary";
+import { addableRelationsFrom, filterAddablesViaSearchRelations } from "@/web/topic/utils/edge";
 import { Node } from "@/web/topic/utils/graph";
 import { nodeDecorations } from "@/web/topic/utils/node";
 
@@ -15,14 +17,21 @@ interface Props {
 export const ObstaclesColumn = ({ summaryNode }: Props) => {
   const { directNodes, indirectNodes } = useObstacles(summaryNode);
 
+  const defaultChildAddableRelations = addableRelationsFrom(
+    summaryNode.type,
+    "child",
+    false,
+    "n/a",
+  );
+
+  const addableRelations = filterAddablesViaSearchRelations(
+    defaultChildAddableRelations,
+    obstaclesDirectedSearchRelations,
+  );
+
   const AddButtons = (
     <div className="pb-1.5">
-      <AddNodeButtonGroup
-        fromNodeId={summaryNode.id}
-        addableRelations={[
-          { child: "obstacle", name: "obstacleOf", parent: summaryNode.type, as: "child" },
-        ]}
-      />
+      <AddNodeButtonGroup fromNodeId={summaryNode.id} addableRelations={addableRelations} />
     </div>
   );
 

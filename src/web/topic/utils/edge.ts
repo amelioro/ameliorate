@@ -2,6 +2,7 @@ import { lowerCase, startCase } from "es-toolkit";
 
 import { RelationName, justificationRelationNames } from "@/common/edge";
 import { NodeType, getSameCategoryNodeTypes, nodeTypes, researchNodeTypes } from "@/common/node";
+import { EffectType } from "@/web/topic/utils/effect";
 import { Edge, Graph, Node, RelationDirection, findNodeOrThrow } from "@/web/topic/utils/graph";
 import { hasJustification } from "@/web/topic/utils/justification";
 import { children, components, parents } from "@/web/topic/utils/node";
@@ -10,7 +11,7 @@ const questionRelations: AddableRelation[] = nodeTypes.map((nodeType) => ({
   child: "question",
   name: "asksAbout",
   parent: nodeType,
-  addableFrom: researchNodeTypes.includes(nodeType) ? "parent" : "neither",
+  commonalityFrom: researchNodeTypes.includes(nodeType) ? { parent: "common" } : {},
 }));
 
 const factRelations: AddableRelation[] = nodeTypes
@@ -19,7 +20,7 @@ const factRelations: AddableRelation[] = nodeTypes
     child: "fact",
     name: "relevantFor",
     parent: nodeType,
-    addableFrom: researchNodeTypes.includes(nodeType) ? "parent" : "neither",
+    commonalityFrom: researchNodeTypes.includes(nodeType) ? { parent: "common" } : {},
   }));
 
 const sourceRelations: AddableRelation[] = nodeTypes
@@ -28,141 +29,140 @@ const sourceRelations: AddableRelation[] = nodeTypes
     child: "source",
     name: "relevantFor",
     parent: nodeType,
-    addableFrom: researchNodeTypes.includes(nodeType) ? "parent" : "neither",
+    commonalityFrom: researchNodeTypes.includes(nodeType) ? { parent: "common" } : {},
   }));
 
+// prettier-ignore
 const researchRelations: AddableRelation[] = questionRelations.concat(
   // ordered this way so that answer add buttons are to the right of question-add and left of fact/source-add
   [
-    { child: "answer", name: "potentialAnswerTo", parent: "question", addableFrom: "parent" },
-    { child: "answer", name: "accomplishes", parent: "answer", addableFrom: "parent" },
+    { child: "answer", name: "potentialAnswerTo", parent: "question", commonalityFrom: { parent: "common" } },
+    { child: "answer", name: "accomplishes", parent: "answer", commonalityFrom: { parent: "common" } },
   ],
   factRelations,
   sourceRelations,
   [
-    { child: "fact", name: "relatesTo", parent: "fact", addableFrom: "child" }, // allow chaining facts, which feels natural
-    { child: "source", name: "sourceOf", parent: "fact", addableFrom: "both" },
-    { child: "source", name: "mentions", parent: "source", addableFrom: "child" },
+    { child: "fact", name: "relatesTo", parent: "fact", commonalityFrom: { child: "common" } }, // allow chaining facts, which feels natural
+    { child: "source", name: "sourceOf", parent: "fact", commonalityFrom: { child: "common", parent: "common" } },
+    { child: "source", name: "mentions", parent: "source", commonalityFrom: { child: "common" } },
   ],
 );
 
 // Assumes that we're always pointing from child to parent.
 // This list is sorted by `parent` and then `child` so that it matches the partition order of nodes
 // in the layout.
+// prettier-ignore
+// -- allow each relation to be on one line for readability, rather than having many on one line and some and multiple lines because they're too long
 export const relations: AddableRelation[] = researchRelations.concat([
   // topic relations
-  { child: "problem", name: "causes", parent: "problem", addableFrom: "child" },
-  { child: "cause", name: "causes", parent: "problem", addableFrom: "both" },
-  { child: "problem", name: "subproblemOf", parent: "problem", addableFrom: "parent" },
-  { child: "benefit", name: "createdBy", parent: "problem", addableFrom: "parent" },
-  { child: "effect", name: "createdBy", parent: "problem", addableFrom: "parent" },
-  { child: "detriment", name: "createdBy", parent: "problem", addableFrom: "parent" },
-  { child: "criterion", name: "criterionFor", parent: "problem", addableFrom: "parent" },
-  { child: "solutionComponent", name: "addresses", parent: "problem", addableFrom: "child" },
-  { child: "solution", name: "addresses", parent: "problem", addableFrom: "both" },
-  { child: "mitigationComponent", name: "addresses", parent: "problem", addableFrom: "neither" },
-  { child: "mitigation", name: "addresses", parent: "problem", addableFrom: "neither" },
+  { child: "problem", name: "causes", parent: "problem", commonalityFrom: { child: "uncommon" } },
+  { child: "cause", name: "causes", parent: "problem", commonalityFrom: { child: "uncommon", parent: "common" } },
+  { child: "problem", name: "subproblemOf", parent: "problem", commonalityFrom: { parent: "uncommon" } },
+  { child: "benefit", name: "createdBy", parent: "problem", commonalityFrom: { parent: "uncommon" } },
+  { child: "effect", name: "createdBy", parent: "problem", commonalityFrom: { parent: "uncommon" } },
+  { child: "detriment", name: "createdBy", parent: "problem", commonalityFrom: { parent: "common" } },
+  { child: "criterion", name: "criterionFor", parent: "problem", commonalityFrom: { parent: "uncommon" } },
+  { child: "solutionComponent", name: "addresses", parent: "problem", commonalityFrom: { child: "uncommon" } },
+  { child: "solution", name: "addresses", parent: "problem", commonalityFrom: { parent: "common" } },
+  { child: "solution", name: "addresses", parent: "problem", commonalityFrom: { child: "uncommon" } },
+  { child: "mitigationComponent", name: "addresses", parent: "problem", commonalityFrom: {} },
+  { child: "mitigation", name: "addresses", parent: "problem", commonalityFrom: {} },
 
-  { child: "cause", name: "causes", parent: "cause", addableFrom: "parent" },
-  { child: "solutionComponent", name: "addresses", parent: "cause", addableFrom: "neither" },
-  { child: "solution", name: "addresses", parent: "cause", addableFrom: "parent" },
-  { child: "mitigationComponent", name: "addresses", parent: "cause", addableFrom: "neither" },
-  { child: "mitigation", name: "addresses", parent: "cause", addableFrom: "neither" },
+  { child: "cause", name: "causes", parent: "cause", commonalityFrom: { parent: "common" } },
+  { child: "solutionComponent", name: "addresses", parent: "cause", commonalityFrom: {} },
+  { child: "solution", name: "addresses", parent: "cause", commonalityFrom: { parent: "common" } },
+  { child: "mitigationComponent", name: "addresses", parent: "cause", commonalityFrom: {} },
+  { child: "mitigation", name: "addresses", parent: "cause", commonalityFrom: {} },
 
-  { child: "criterion", name: "relatesTo", parent: "benefit", addableFrom: "neither" },
-  { child: "criterion", name: "relatesTo", parent: "effect", addableFrom: "neither" },
-  { child: "criterion", name: "relatesTo", parent: "detriment", addableFrom: "neither" },
+  { child: "criterion", name: "relatesTo", parent: "benefit", commonalityFrom: {} },
+  { child: "criterion", name: "relatesTo", parent: "effect", commonalityFrom: {} },
+  { child: "criterion", name: "relatesTo", parent: "detriment", commonalityFrom: {} },
 
   // These relations above `creates` relations so that new edges result in these over `creates`
   // by default; usually `creates` edges will be the result of an add node button, not a drag-and-drop edge.
   // This issue would probably be better solved by distinguishing problem effects vs solution effects,
   // because solution-problem relations would be addresses, and solution-solution/problem-problem
   // would be creates/createdBy. But that's a bigger change to make.
-  { child: "detriment", name: "causes", parent: "cause", addableFrom: "neither" },
-  { child: "detriment", name: "causes", parent: "detriment", addableFrom: "neither" },
-  { child: "benefit", name: "addresses", parent: "cause", addableFrom: "neither" },
-  { child: "benefit", name: "addresses", parent: "detriment", addableFrom: "neither" },
+  { child: "detriment", name: "causes", parent: "cause", commonalityFrom: {} },
+  { child: "detriment", name: "causes", parent: "detriment", commonalityFrom: {} },
+  { child: "benefit", name: "addresses", parent: "cause", commonalityFrom: {} },
+  { child: "benefit", name: "addresses", parent: "detriment", commonalityFrom: {} },
 
   // effects, benefits, detriments, can each create each other (when coming up from solution)
   // and be created by each other (when going up to problem)
-  { child: "benefit", name: "creates", parent: "benefit", addableFrom: "child" },
-  { child: "effect", name: "creates", parent: "benefit", addableFrom: "child" },
-  { child: "detriment", name: "creates", parent: "benefit", addableFrom: "child" },
-  { child: "benefit", name: "creates", parent: "effect", addableFrom: "child" },
-  { child: "effect", name: "creates", parent: "effect", addableFrom: "child" },
-  { child: "detriment", name: "creates", parent: "effect", addableFrom: "child" },
-  { child: "benefit", name: "creates", parent: "detriment", addableFrom: "child" },
-  { child: "effect", name: "creates", parent: "detriment", addableFrom: "child" },
-  { child: "detriment", name: "creates", parent: "detriment", addableFrom: "child" },
-  { child: "benefit", name: "createdBy", parent: "benefit", addableFrom: "parent" },
-  { child: "effect", name: "createdBy", parent: "benefit", addableFrom: "parent" },
-  { child: "detriment", name: "createdBy", parent: "benefit", addableFrom: "parent" },
-  { child: "benefit", name: "createdBy", parent: "effect", addableFrom: "parent" },
-  { child: "effect", name: "createdBy", parent: "effect", addableFrom: "parent" },
-  { child: "detriment", name: "createdBy", parent: "effect", addableFrom: "parent" },
-  { child: "benefit", name: "createdBy", parent: "detriment", addableFrom: "parent" },
-  { child: "effect", name: "createdBy", parent: "detriment", addableFrom: "parent" },
-  { child: "detriment", name: "createdBy", parent: "detriment", addableFrom: "parent" },
+  { child: "benefit", name: "creates", parent: "benefit", commonalityFrom: { child: "common" } },
+  { child: "effect", name: "creates", parent: "benefit", commonalityFrom: { child: "common" } },
+  { child: "detriment", name: "creates", parent: "benefit", commonalityFrom: { child: "common" } },
+  { child: "benefit", name: "creates", parent: "effect", commonalityFrom: { child: "uncommon" } }, // regular effects are generally uncommon - usually it feels like we think in terms of good or bad effects
+  { child: "effect", name: "creates", parent: "effect", commonalityFrom: { child: "uncommon" } },
+  { child: "detriment", name: "creates", parent: "effect", commonalityFrom: { child: "uncommon" } },
+  { child: "benefit", name: "creates", parent: "detriment", commonalityFrom: { child: "common" } },
+  { child: "effect", name: "creates", parent: "detriment", commonalityFrom: { child: "common" } },
+  { child: "detriment", name: "creates", parent: "detriment", commonalityFrom: { child: "common" } },
+  { child: "benefit", name: "createdBy", parent: "benefit", commonalityFrom: { parent: "common" } },
+  { child: "effect", name: "createdBy", parent: "benefit", commonalityFrom: { parent: "uncommon" } },
+  { child: "detriment", name: "createdBy", parent: "benefit", commonalityFrom: { parent: "common" } },
+  { child: "benefit", name: "createdBy", parent: "effect", commonalityFrom: { parent: "common" } },
+  { child: "effect", name: "createdBy", parent: "effect", commonalityFrom: { parent: "uncommon" } },
+  { child: "detriment", name: "createdBy", parent: "effect", commonalityFrom: { parent: "common" } },
+  { child: "benefit", name: "createdBy", parent: "detriment", commonalityFrom: { parent: "common" } },
+  { child: "effect", name: "createdBy", parent: "detriment", commonalityFrom: { parent: "uncommon" } },
+  { child: "detriment", name: "createdBy", parent: "detriment", commonalityFrom: { parent: "common" } },
 
   // below effect-create-effect relations so that Add Solution button is to the right of Add Effect button for Detriment, because effects are expected to be more commonly added than solutions
-  { child: "solutionComponent", name: "addresses", parent: "detriment", addableFrom: "neither" },
-  { child: "solution", name: "addresses", parent: "detriment", addableFrom: "parent" },
-  { child: "mitigationComponent", name: "mitigates", parent: "detriment", addableFrom: "neither" },
-  { child: "mitigation", name: "mitigates", parent: "detriment", addableFrom: "neither" }, // there's a hack to make this relation addable instead of solution for solution detriments
+  { child: "solutionComponent", name: "addresses", parent: "detriment", commonalityFrom: {} },
+  { child: "solution", name: "addresses", parent: "detriment", commonalityFrom: { parent: "common" } },
+  { child: "mitigationComponent", name: "mitigates", parent: "detriment", commonalityFrom: {} },
+  { child: "mitigation", name: "mitigates", parent: "detriment", commonalityFrom: {} }, // there's a hack to make this relation addable instead of solution for solution detriments
 
-  { child: "benefit", name: "fulfills", parent: "criterion", addableFrom: "neither" },
-  { child: "effect", name: "fulfills", parent: "criterion", addableFrom: "neither" },
-  { child: "detriment", name: "relatesTo", parent: "criterion", addableFrom: "neither" },
-  { child: "solutionComponent", name: "fulfills", parent: "criterion", addableFrom: "neither" },
-  { child: "solution", name: "fulfills", parent: "criterion", addableFrom: "neither" },
-  { child: "mitigationComponent", name: "fulfills", parent: "criterion", addableFrom: "neither" },
-  { child: "mitigation", name: "fulfills", parent: "criterion", addableFrom: "neither" },
+  { child: "benefit", name: "fulfills", parent: "criterion", commonalityFrom: {} },
+  { child: "effect", name: "fulfills", parent: "criterion", commonalityFrom: {} },
+  { child: "detriment", name: "relatesTo", parent: "criterion", commonalityFrom: {} },
+  { child: "solutionComponent", name: "fulfills", parent: "criterion", commonalityFrom: {} },
+  { child: "solution", name: "fulfills", parent: "criterion", commonalityFrom: {} },
+  { child: "mitigationComponent", name: "fulfills", parent: "criterion", commonalityFrom: {} },
+  { child: "mitigation", name: "fulfills", parent: "criterion", commonalityFrom: {} },
 
-  { child: "solutionComponent", name: "creates", parent: "benefit", addableFrom: "child" },
-  { child: "solution", name: "creates", parent: "benefit", addableFrom: "child" },
-  { child: "solutionComponent", name: "creates", parent: "effect", addableFrom: "child" },
-  { child: "solution", name: "creates", parent: "effect", addableFrom: "child" },
-  { child: "solutionComponent", name: "creates", parent: "detriment", addableFrom: "child" },
-  { child: "solution", name: "creates", parent: "detriment", addableFrom: "child" },
-  { child: "mitigationComponent", name: "creates", parent: "benefit", addableFrom: "child" },
-  { child: "mitigation", name: "creates", parent: "benefit", addableFrom: "child" },
-  { child: "mitigationComponent", name: "creates", parent: "effect", addableFrom: "child" },
-  { child: "mitigation", name: "creates", parent: "effect", addableFrom: "child" },
-  { child: "mitigationComponent", name: "creates", parent: "detriment", addableFrom: "child" },
-  { child: "mitigation", name: "creates", parent: "detriment", addableFrom: "child" },
+  { child: "solutionComponent", name: "creates", parent: "benefit", commonalityFrom: { child: "common" } },
+  { child: "solution", name: "creates", parent: "benefit", commonalityFrom: { child: "common" } },
+  { child: "solutionComponent", name: "creates", parent: "effect", commonalityFrom: { child: "uncommon" } },
+  { child: "solution", name: "creates", parent: "effect", commonalityFrom: { child: "uncommon" } },
+  { child: "solutionComponent", name: "creates", parent: "detriment", commonalityFrom: { child: "common" } },
+  { child: "solution", name: "creates", parent: "detriment", commonalityFrom: { child: "common" } },
+  { child: "mitigationComponent", name: "creates", parent: "benefit", commonalityFrom: { child: "common" } },
+  { child: "mitigation", name: "creates", parent: "benefit", commonalityFrom: { child: "common" } },
+  { child: "mitigationComponent", name: "creates", parent: "effect", commonalityFrom: { child: "uncommon" } },
+  { child: "mitigation", name: "creates", parent: "effect", commonalityFrom: { child: "uncommon" } },
+  { child: "mitigationComponent", name: "creates", parent: "detriment", commonalityFrom: { child: "common" } },
+  { child: "mitigation", name: "creates", parent: "detriment", commonalityFrom: { child: "common" } },
 
-  { child: "solutionComponent", name: "has", parent: "solutionComponent", addableFrom: "child" },
-  { child: "solution", name: "has", parent: "solutionComponent", addableFrom: "child" },
-  {
-    child: "mitigationComponent",
-    name: "has",
-    parent: "mitigationComponent",
-    addableFrom: "child",
-  },
-  { child: "mitigation", name: "has", parent: "mitigationComponent", addableFrom: "child" },
+  { child: "solutionComponent", name: "has", parent: "solutionComponent", commonalityFrom: { child: "common" } },
+  { child: "solution", name: "has", parent: "solutionComponent", commonalityFrom: { child: "common" } },
+  { child: "mitigationComponent", name: "has", parent: "mitigationComponent", commonalityFrom: { child: "common" } },
+  { child: "mitigation", name: "has", parent: "mitigationComponent", commonalityFrom: { child: "common" }},
 
-  { child: "obstacle", name: "obstacleOf", parent: "solutionComponent", addableFrom: "parent" },
-  { child: "obstacle", name: "obstacleOf", parent: "solution", addableFrom: "parent" },
-  { child: "obstacle", name: "obstacleOf", parent: "mitigationComponent", addableFrom: "parent" },
-  { child: "obstacle", name: "obstacleOf", parent: "mitigation", addableFrom: "parent" },
+  { child: "obstacle", name: "obstacleOf", parent: "solutionComponent", commonalityFrom: { parent: "uncommon" } },
+  { child: "obstacle", name: "obstacleOf", parent: "solution", commonalityFrom: { parent: "uncommon" } },
+  { child: "obstacle", name: "obstacleOf", parent: "mitigationComponent", commonalityFrom: { parent: "uncommon" } },
+  { child: "obstacle", name: "obstacleOf", parent: "mitigation", commonalityFrom: { parent: "uncommon" } },
 
-  { child: "solutionComponent", name: "addresses", parent: "obstacle", addableFrom: "neither" },
-  { child: "solution", name: "addresses", parent: "obstacle", addableFrom: "neither" },
-  { child: "mitigationComponent", name: "mitigates", parent: "obstacle", addableFrom: "neither" },
-  { child: "mitigation", name: "mitigates", parent: "obstacle", addableFrom: "parent" },
+  { child: "solutionComponent", name: "addresses", parent: "obstacle", commonalityFrom: {} },
+  { child: "solution", name: "addresses", parent: "obstacle", commonalityFrom: {} },
+  { child: "mitigationComponent", name: "mitigates", parent: "obstacle", commonalityFrom: {} },
+  { child: "mitigation", name: "mitigates", parent: "obstacle", commonalityFrom: { parent: "common" } },
 
-  { child: "solution", name: "accomplishes", parent: "solution", addableFrom: "parent" },
-  { child: "solution", name: "contingencyFor", parent: "solution", addableFrom: "neither" },
+  { child: "solution", name: "accomplishes", parent: "solution", commonalityFrom: { parent: "uncommon" } },
+  { child: "solution", name: "contingencyFor", parent: "solution", commonalityFrom: {} },
 
   // justification relations
-  { child: "support", name: "supports", parent: "rootClaim", addableFrom: "parent" },
-  { child: "critique", name: "critiques", parent: "rootClaim", addableFrom: "parent" },
+  { child: "support", name: "supports", parent: "rootClaim", commonalityFrom: { parent: "common" } },
+  { child: "critique", name: "critiques", parent: "rootClaim", commonalityFrom: { parent: "common" } },
 
-  { child: "support", name: "supports", parent: "support", addableFrom: "parent" },
-  { child: "critique", name: "critiques", parent: "support", addableFrom: "parent" },
+  { child: "support", name: "supports", parent: "support", commonalityFrom: { parent: "common" } },
+  { child: "critique", name: "critiques", parent: "support", commonalityFrom: { parent: "common" } },
 
-  { child: "support", name: "supports", parent: "critique", addableFrom: "parent" },
-  { child: "critique", name: "critiques", parent: "critique", addableFrom: "parent" },
+  { child: "support", name: "supports", parent: "critique", commonalityFrom: { parent: "common" } },
+  { child: "critique", name: "critiques", parent: "critique", commonalityFrom: { parent: "common" } },
 ]);
 
 export interface Relation {
@@ -172,15 +172,38 @@ export interface Relation {
 }
 
 /**
- * TODO: need to identify better naming between:
- * - DirectedToRelation: `as` is easy to think of when we're adding a node
- * - DirectedFromRelation: `this` is easy to think of when we're describing relations from a node
- * - AddableRelation: `addableFrom` seems to make sense for specifying which relations can be added from a node, along with how common they are
+ * For searching for relations or nodes, e.g. finding nodes in a summary column, or finding which
+ * addable relations should be used for the add node button's search box.
  *
- * Concerns:
- * - `getDirectedFromRelationDescription` is very ambiguous to read
- * - doesn't seem like there's much difference between `DirectedFromRelation` and `AddableRelation`
+ * Motivated to make this so that these two examples (summary column nodes and summary column's add
+ * button's search box nodes) can be built from this one data structure and kept consistent with
+ * each other.
  */
+export interface DirectedSearchRelation {
+  toDirection: RelationDirection;
+  relationNames: RelationName[];
+  /**
+   * undefined means not to restrict based on node type, e.g. for getting addressed nodes, we don't
+   * care what kind of node is being addressed as long as there is/can-be an "addresses" edge.
+   */
+  toNodeTypes?: NodeType[];
+}
+
+export const filterAddablesViaSearchRelations = (
+  defaultAddableRelations: DirectedToRelationWithCommonality[],
+  directedSearchRelations: DirectedSearchRelation[],
+): DirectedToRelationWithCommonality[] => {
+  return defaultAddableRelations.filter((addableRelation) => {
+    return directedSearchRelations.some((searchRelation) => {
+      return (
+        searchRelation.relationNames.includes(addableRelation.name) &&
+        searchRelation.toDirection === addableRelation.as &&
+        (searchRelation.toNodeTypes ?? nodeTypes).includes(addableRelation[addableRelation.as])
+      );
+    });
+  });
+};
+
 export interface DirectedToRelation extends Relation {
   /**
    * "as" because `DirectionTo` is usually used in the case of adding nodes, "as" parent or child
@@ -189,26 +212,42 @@ export interface DirectedToRelation extends Relation {
 }
 
 /**
- * e.g. for when we're using a relation from the perspective of one of the nodes
+ * Not the best name, but in some spots we care about direction and not about commonality, so we
+ * should have separate types for these separate situations.
  */
-interface DirectedFromRelation extends Relation {
-  this: RelationDirection;
+export interface DirectedToRelationWithCommonality extends DirectedToRelation {
+  commonality: Commonality;
 }
 
-export const getDirectedRelationDescription = (relation: DirectedFromRelation): string => {
-  return relation.this === "child"
+export const getDirectedRelationDescription = (relation: DirectedToRelation): string => {
+  const from: RelationDirection = relation.as === "parent" ? "child" : "parent";
+
+  return from === "child"
     ? `this ${startCase(relation.child)} '${lowerCase(relation.name)}'` // e.g. this Problem causes
     : `'${lowerCase(relation.name)}' this ${startCase(relation.parent)}`; // e.g. causes this Problem
 };
 
+/**
+ * Used so that common relations can be given UI priority, e.g. common relations can be higher in a
+ * list of relations to add to a node.
+ *
+ * Unspecified is assumed to be `onlyForConnections`.
+ *
+ * `onlyForConnections` means the relation shouldn't show when adding new nodes, but should be kept
+ * as a relation to add when connecting existing nodes.
+ */
+type Commonality = "common" | "uncommon" | "onlyForConnections";
+
 interface AddableRelation extends Relation {
-  addableFrom: RelationDirection | "both" | "neither";
+  commonalityFrom: {
+    [key in RelationDirection]?: Commonality;
+  };
 }
 
 export const getRelation = (
-  parent: NodeType,
   child: NodeType,
-  relationName?: RelationName,
+  relationName: RelationName | undefined,
+  parent: NodeType,
 ): Relation => {
   const relation = relationName
     ? relations.find(
@@ -253,23 +292,47 @@ export const shortcutRelations: ShortcutRelation[] = [
   },
 ];
 
+const compareCommonality = (
+  relation1: RelationWithCommonality,
+  relation2: RelationWithCommonality,
+) => {
+  const commonality1 = relation1.commonality;
+  const commonality2 = relation2.commonality;
+
+  if (commonality1 === commonality2) {
+    return 0;
+  }
+
+  if (
+    commonality1 === "common" ||
+    (commonality1 === "uncommon" && commonality2 === "onlyForConnections")
+  ) {
+    return -1;
+  }
+
+  return 1;
+};
+
+type RelationWithCommonality = Relation & { commonality: Commonality };
+
 export const addableRelationsFrom = (
-  nodeType: NodeType,
+  fromNodeType: NodeType,
   addingAs: RelationDirection,
   unrestrictedAddingFrom: boolean,
-  isMitigatableDetriment: boolean,
-): DirectedToRelation[] => {
+  effectType: EffectType,
+): DirectedToRelationWithCommonality[] => {
   const fromDirection = addingAs === "parent" ? "child" : "parent";
   const toDirection = addingAs === "parent" ? "parent" : "child";
 
-  const addableRelations: Relation[] = getSameCategoryNodeTypes(nodeType)
+  const addableRelations: RelationWithCommonality[] = getSameCategoryNodeTypes(fromNodeType)
     .map((toNodeType) => {
       // hack to ensure that problem detriments can't be mitigated (and can be solved), and solution detriments can be mitigated (but not solved);
       // this is really awkward but keeps detriment nodes from being able to have both solutions and mitigations added, which could be really confusing for users
       // note1: also not doing this when we're unrestricted, since that should result in being able to add both mitigations and solutions in both cases anyway.
       // note2: maybe ideal to have different node types for problemDetriment vs solutionDetriment? then these could just have their own addableFrom relations.
       if (
-        isMitigatableDetriment &&
+        fromNodeType === "detriment" &&
+        effectType === "solution" &&
         addingAs === "child" &&
         toNodeType === "solution" &&
         !unrestrictedAddingFrom
@@ -277,24 +340,48 @@ export const addableRelationsFrom = (
         return {
           child: "mitigation",
           name: "mitigates",
-          parent: nodeType,
-        } satisfies Relation;
+          parent: fromNodeType,
+          commonality: "uncommon",
+        } satisfies RelationWithCommonality;
       }
 
-      // use an addableFrom relation if it exists
-      const addableRelationFrom = relations.find(
-        (relation) =>
-          relation[fromDirection] === nodeType &&
-          relation[toDirection] === toNodeType &&
-          ["both", fromDirection].includes(relation.addableFrom),
-      );
-      if (addableRelationFrom) return addableRelationFrom;
+      // use an addableFrom relation if it exists, prioritizing commonality to grab common relations before uncommon ones
+      const addableRelationsFrom = relations
+        .filter(
+          (relation) =>
+            relation[fromDirection] === fromNodeType &&
+            relation[toDirection] === toNodeType &&
+            (effectType !== "solution" || relation.name !== "createdBy") && // hack to not grab "createdBy" relations for solution effects, because these should be using "creates"
+            (effectType !== "problem" || relation.name !== "creates"), // hack to not grab "creates" relations for problem effects, because these should be using "createdBy"
+        )
+        .map(
+          (relation) =>
+            ({
+              child: relation.child,
+              name: relation.name,
+              parent: relation.parent,
+              commonality: relation.commonalityFrom[fromDirection] ?? "onlyForConnections",
+            }) satisfies RelationWithCommonality,
+        )
+        .toSorted(compareCommonality);
+
+      const mostCommonAddable = addableRelationsFrom[0];
+      if (mostCommonAddable) {
+        if (unrestrictedAddingFrom) {
+          // if we're unrestricted-adding, only take a common relation because we want to show all add buttons (only common relations will have add buttons, and if there isn't one here, we'll find one with the main unrestricted logic below)
+          if (mostCommonAddable.commonality === "common") return mostCommonAddable;
+        } else {
+          return mostCommonAddable;
+        }
+      }
 
       // otherwise, if unrestricted, allow adding any same-category node as parent or child
       if (unrestrictedAddingFrom) {
-        return fromDirection === "parent"
-          ? getRelation(nodeType, toNodeType)
-          : getRelation(toNodeType, nodeType);
+        const unrestrictedRelation =
+          fromDirection === "parent"
+            ? getRelation(toNodeType, undefined, fromNodeType)
+            : getRelation(fromNodeType, undefined, toNodeType);
+        return { ...unrestrictedRelation, commonality: "common" } satisfies RelationWithCommonality;
       }
 
       // otherwise we have no addable relation from/to these node types
@@ -310,7 +397,7 @@ export const addableRelationsFrom = (
   return formattedRelations;
 };
 
-export const canCreateEdge = (topicGraph: Graph, parent: Node, child: Node) => {
+export const canCreateEdge = (topicGraph: Graph, child: Node, parent: Node) => {
   const existingEdge = topicGraph.edges.find((edge) => {
     return (
       (edge.source === parent.id && edge.target === child.id) ||

@@ -7,8 +7,8 @@ import { startCase } from "es-toolkit/compat";
  */
 export const tutorialDefaultAnchorClass = "tutorial-anchor";
 
-export const detailsPaneSelector = `.MuiDrawer-root:has(button[id$="-Details"])`;
-export const viewsPaneSelector = `.MuiDrawer-root:has(button[id$="-Views"])`;
+export const detailsPaneSelector = `div[id^="pane-"]:has(button[id$="-Details"])`;
+export const viewsPaneSelector = `div[id^="pane-"]:has(button[id$="-Views"])`;
 export const quickViewDropdownSelector = `#quick-view-select`;
 
 export type Tutorial =

@@ -1,11 +1,12 @@
 import ELK, { ElkEdgeSection, ElkLabel, ElkNode, LayoutOptions } from "elkjs";
 
 import { throwError } from "@/common/errorHandling";
-import { NodeType, compareNodesByType } from "@/common/node";
+import { NodeType, compareNodesByType, isEffect } from "@/common/node";
 import { scalePxViaDefaultFontSize } from "@/pages/_document.page";
 import { nodeHeightPx, nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
 import { Diagram } from "@/web/topic/utils/diagram";
-import { type Edge, type Node, ancestors, descendants } from "@/web/topic/utils/graph";
+import { getEffectType } from "@/web/topic/utils/effect";
+import { type Edge, type Node } from "@/web/topic/utils/graph";
 
 export type Orientation = "DOWN" | "UP" | "RIGHT" | "LEFT";
 export const orientation: Orientation = "DOWN" as Orientation; // not constant to allow potential other orientations in the future, and keeping code that currently exists for handling "LEFT" orientation
@@ -75,19 +76,11 @@ const partitionOrders: { [type in NodeType]: string } = {
 };
 
 const calculatePartition = (node: Node, diagram: Diagram) => {
-  if (["effect", "benefit", "detriment"].includes(node.type)) {
-    // could rely on just edge "createdBy" vs "creates" rather than traversing relations, but then
-    // mitigation effects wouldn't be distinguishable from solution effects
-    const createdByProblem = ancestors(node, diagram, ["createdBy"]).some(
-      (ancestor) => ancestor.type === "problem",
-    );
-    const createdBySolution = descendants(node, diagram, ["creates"]).some(
-      (descendant) => descendant.type === "solution" || descendant.type === "solutionComponent",
-    );
+  if (isEffect(node.type)) {
+    const effectType = getEffectType(node, diagram);
 
-    if (createdByProblem && createdBySolution) return "null";
-    else if (createdByProblem) return "0";
-    else if (createdBySolution) return "2";
+    if (effectType === "problem") return "0";
+    else if (effectType === "solution") return "2";
     else return "null";
   } else {
     return partitionOrders[node.type];
