@@ -149,7 +149,10 @@ export const getSolutions = (summaryNode: Node, graph: Graph) => {
     (node) => node.id,
   );
 
-  return splitNodesByDirectAndIndirect(solutions);
+  return {
+    directNodes: immediateSolutions,
+    indirectNodes: solutions.filter((node) => !immediateSolutions.includes(node)), // don't need to exclude by id because `solutions` was created from `immediateSolutions`, so the objects will be referentially equal
+  };
 };
 
 // effect
