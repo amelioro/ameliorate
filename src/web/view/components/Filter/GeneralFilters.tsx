@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Stack } from "@mui/material";
+import { startCase } from "es-toolkit";
 import { useCallback, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
@@ -19,6 +20,8 @@ import {
   generalFilterSchema,
   scoredComparers,
 } from "@/web/view/utils/generalFilter";
+
+const nodeTypeOptions = nodeTypes.map((type) => ({ id: type, label: startCase(type) })); // so that dropdown options can be startCased but ids can still be type-safe
 
 export const GeneralFilters = () => {
   const generalFilter = useGeneralFilter();
@@ -47,7 +50,7 @@ export const GeneralFilters = () => {
         <form style={{ padding: "8px" }}>
           {format === "diagram" && (
             <Stack spacing={1}>
-              <Select name="nodeTypes" options={nodeTypes} multiple />
+              <Select name="nodeTypes" options={nodeTypeOptions} multiple />
 
               <Stack direction="row" spacing={1}>
                 <Switch name="showOnlyScored" label="Show only nodes scored" />
