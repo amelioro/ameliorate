@@ -238,7 +238,7 @@ export const CriteriaTable = () => {
     return (
       <div
         onClick={(event) => event.stopPropagation()} // prevent triggering node deselect from table paper click
-        className="flex items-center"
+        className="flex items-center gap-1"
       >
         <MRT_ToggleGlobalFilterButton table={table} />
 
@@ -261,6 +261,7 @@ export const CriteriaTable = () => {
             variant="contained"
             color="neutral"
             onClick={() => setTransposed(!transposed)}
+            className="min-w-10" // match button group's thinner button width
           >
             <PivotTableChart />
           </Button>
