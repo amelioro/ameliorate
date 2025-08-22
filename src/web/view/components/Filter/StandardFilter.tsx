@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Stack } from "@mui/material";
+import { startCase } from "es-toolkit";
 import { useCallback, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
@@ -22,6 +23,11 @@ import {
   standardFilterSchemasByType,
 } from "@/web/view/utils/infoFilter";
 
+const problemDetailsOptions = problemDetails.map((detail) => ({
+  id: detail,
+  label: startCase(detail),
+})); // so that dropdown options can be startCased but ids can still be type-safe
+
 interface Props {
   infoCategory: InfoCategory;
   filter: StandardFilterData;
@@ -43,6 +49,7 @@ export const StandardFilter = ({ infoCategory, filter }: Props) => {
   const { getValues, handleSubmit, reset, watch } = methods;
 
   const filterTypes = infoStandardFilterTypes[infoCategory];
+  const filterTypeOptions = filterTypes.map((type) => ({ id: type, label: startCase(type) })); // so that dropdown options can be startCased but ids can still be type-safe
 
   const type = watch("type");
   const typeSchemaShape = standardFilterSchemasByType[type].shape;
@@ -72,7 +79,7 @@ export const StandardFilter = ({ infoCategory, filter }: Props) => {
       <FormContext.Provider value={{ submit }}>
         <form style={{ padding: "8px" }}>
           <Stack spacing={1.5}>
-            <Select name="type" label="Standard Filter" options={filterTypes} />
+            <Select name="type" label="Standard Filter" options={filterTypeOptions} />
 
             {"layersDeep" in typeSchemaShape && <NumberInput name="layersDeep" min={0} max={10} />}
 
@@ -85,7 +92,7 @@ export const StandardFilter = ({ infoCategory, filter }: Props) => {
             )}
 
             {"problemDetails" in typeSchemaShape && (
-              <Select name="problemDetails" options={problemDetails} multiple />
+              <Select name="problemDetails" options={problemDetailsOptions} multiple />
             )}
 
             {"centralSolutionId" in typeSchemaShape && (
@@ -96,10 +103,13 @@ export const StandardFilter = ({ infoCategory, filter }: Props) => {
               />
             )}
             {"solutionDetail" in typeSchemaShape && (
-              // TODO: build options with Pascal Case
               <Select
                 name="solutionDetail"
-                options={typeSchemaShape.solutionDetail.options.map((option) => option)}
+                // so that dropdown options can be startCased but ids can still be type-safe
+                options={typeSchemaShape.solutionDetail.options.map((option) => ({
+                  id: option,
+                  label: startCase(option),
+                }))}
               />
             )}
             {"solutions" in typeSchemaShape && (

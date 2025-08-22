@@ -170,12 +170,19 @@ interface Props {
   className?: string;
 }
 
+/**
+ * There's a ton of extra complexity in this component because the UX for whether or not we're
+ * expanding the common add node buttons is pretty different.
+ *
+ * I'm hoping to eventually choose one UX to always use without configuration, but it doesn't feel
+ * like one of these two options is obviously better right now.
+ */
 const AddNodeButtonGroup = memo(
   ({
     fromNodeId,
     addableRelations,
     addableNodeTypes,
-    title = "Add node",
+    title,
     selectNewNode,
     openDirection = "bottom",
     className,
@@ -219,59 +226,76 @@ const AddNodeButtonGroup = memo(
               key={addableRelation[addableRelation.as]}
               fromNodeId={fromNodeId}
               addableRelation={addableRelation}
-              buttonType={!expandAddNodeButtons ? "menu" : "button"}
+              // trying out how it feels to have "expanded" only expand common buttons, keeping uncommon stuff in the menu still
+              buttonType="menu"
               selectNewNode={selectNewNode}
               tooltipDirection={openDirection}
               onClick={closeMenu}
             />
           ))
-          .concat(
-            !expandAddNodeButtons
-              ? [
-                  <ListItem key="add-menu-search" disablePadding={false}>
-                    <AddMenuSearch
-                      fromNodeId={fromNodeId}
-                      addableRelations={addableRelations}
-                      className="mt-1 text-sm"
-                    />
-                  </ListItem>,
-                ]
-              : [],
-          )
+          .concat([
+            <ListItem key="add-menu-search" disablePadding={false}>
+              <AddMenuSearch
+                fromNodeId={fromNodeId}
+                addableRelations={addableRelations}
+                className="mt-1 text-sm"
+              />
+            </ListItem>,
+          ])
       : []; // right now addable node types are all assumed to be common
 
-    return !expandAddNodeButtons ? (
+    const menuButtonTitle = title ?? (!expandAddNodeButtons ? "Add node" : "Add more");
+
+    return (
       <>
-        <Tooltip
-          tooltipHeading={title + (commonNodeButtons.length > 0 ? "" : " (uncommon)")}
-          placement={openDirection}
-          childrenOpensAMenu={true}
-          immediatelyOpenOnTouch={false}
-          childrenHideViaCss={true}
+        <ButtonGroup
+          variant="contained"
+          aria-label="add node button group"
+          className={
+            // default for button group is inline-flex, but that creates different spacing than flex, and flex spacing seems nicer
+            "flex" +
+            // keep the button rendered if the menu is open (if button was only open due to hover, it'd otherwise disappear)
+            (menuOpen ? " !flex" : "") +
+            // If the menu button only has uncommon options, make it stand out less - this way users
+            // are slightly encouraged to add nodes in the direction that is intended to commonly
+            // be added; e.g. problem nodes have problem details added below, and solution nodes
+            // have solution details added above.
+            (expandAddNodeButtons || commonNodeButtons.length > 0 ? "" : " shadow-slate-300") +
+            (className ? ` ${className}` : "")
+          }
         >
-          <Button
-            ref={buttonRef}
-            color={commonNodeButtons.length > 0 ? "neutral" : "paperPlain"}
-            size="small"
-            variant="contained"
-            className={
-              // keep the button rendered if the menu is open (if button was only open due to hover, it'd otherwise disappear)
-              (menuOpen ? "!flex" : "") +
-              // If the button only has uncommon options, make it stand out less - this way users
-              // are slightly encouraged to add nodes in the direction that is intended to commonly
-              // be added; e.g. problem nodes have problem details added below, and solution nodes
-              // have solution details added above.
-              (commonNodeButtons.length > 0 ? "" : " shadow-slate-300") +
-              (className ? ` ${className}` : "")
-            }
-            onClick={(event) => {
-              event.stopPropagation(); // don't trigger deselection of node
-              setMenuOpen(true);
-            }}
-          >
-            <Add />
-          </Button>
-        </Tooltip>
+          {expandAddNodeButtons ? commonNodeButtons : null}
+
+          {/* don't show add menu button if it won't have anything in it */}
+          {(!expandAddNodeButtons || uncommonNodeButtons.length > 0) && (
+            <Tooltip
+              tooltipHeading={
+                menuButtonTitle +
+                (expandAddNodeButtons || commonNodeButtons.length > 0 ? "" : " (uncommon)")
+              }
+              placement={openDirection}
+              childrenOpensAMenu={true}
+              immediatelyOpenOnTouch={false}
+              childrenHideViaCss={true}
+            >
+              <Button
+                ref={buttonRef}
+                color={
+                  !expandAddNodeButtons && commonNodeButtons.length > 0 ? "neutral" : "paperPlain"
+                }
+                size="small"
+                variant="contained"
+                onClick={(event) => {
+                  event.stopPropagation(); // don't trigger deselection of node
+                  setMenuOpen(true);
+                }}
+              >
+                <Add />
+              </Button>
+            </Tooltip>
+          )}
+        </ButtonGroup>
+
         <Menu
           anchorEl={buttonRef.current}
           open={menuOpen}
@@ -290,21 +314,21 @@ const AddNodeButtonGroup = memo(
             paper: { id: "add-button-menu-paper" },
           }}
         >
-          {commonNodeButtons.length > 0 && uncommonNodeButtons.length > 0 && (
-            <ListSubheader className="leading-loose">Common</ListSubheader>
-          )}
-          {commonNodeButtons}
-          {commonNodeButtons.length > 0 && uncommonNodeButtons.length > 0 && <Divider />}
-          {uncommonNodeButtons.length > 0 && (
+          {!expandAddNodeButtons &&
+            commonNodeButtons.length > 0 &&
+            uncommonNodeButtons.length > 0 && (
+              <ListSubheader className="leading-loose">Common</ListSubheader>
+            )}
+          {!expandAddNodeButtons && commonNodeButtons}
+          {!expandAddNodeButtons &&
+            commonNodeButtons.length > 0 &&
+            uncommonNodeButtons.length > 0 && <Divider />}
+          {!expandAddNodeButtons && uncommonNodeButtons.length > 0 && (
             <ListSubheader className="leading-loose">Uncommon</ListSubheader>
           )}
           {uncommonNodeButtons}
         </Menu>
       </>
-    ) : (
-      <ButtonGroup variant="contained" aria-label="add node button group" className={className}>
-        {commonNodeButtons.concat(uncommonNodeButtons)}
-      </ButtonGroup>
     );
   },
 );

@@ -2,6 +2,7 @@ import { useContext, useRef, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import { htmlDefaultFontSize } from "@/pages/_document.page";
+import { Tooltip } from "@/web/common/components/Tooltip/Tooltip";
 import { useSessionUser } from "@/web/common/hooks";
 import { BackdropPopper, CircleDiv, ScorePopper } from "@/web/topic/components/Score/Score.styles";
 import { ScoreButton, buttonDiameterRem } from "@/web/topic/components/Score/ScoreButton";
@@ -95,27 +96,33 @@ export const Score = ({ graphPartId }: ScoreProps) => {
 
   return (
     <>
-      <ScoreButton
-        buttonRef={mainButtonRef}
-        onClick={(event) => {
-          event.stopPropagation(); // don't select the graph part when clicking
-          setSelected(true);
-        }}
-        // delay hover so that the score pie doesn't get in the way when you're not intending to score
-        // 100 ms matches the default for MUI tooltips https://mui.com/material-ui/api/tooltip/#Tooltip-prop-enterDelay
-        onMouseEnter={() => {
-          if (quickScoring) setHoverDelayHandler(setTimeout(() => setHovering(true), 100));
-        }}
-        onMouseLeave={() => clearTimeout(hoverDelayHandler)}
-        userScores={userScores}
-        aggregationMode={aggregationMode}
-        className={showScoreClasses}
-      />
+      <Tooltip
+        tooltipHeading="See score info"
+        placement="top"
+        // hack to hide tooltip when quick scoring because score pie will pop up quickly and the tooltip will just get in the way
+        tooltipPopperClassName={quickScoring ? "hidden" : ""}
+      >
+        <ScoreButton
+          ref={mainButtonRef}
+          onClick={(event) => {
+            event.stopPropagation(); // don't select the graph part when clicking
+            setSelected(true);
+          }}
+          // delay hover so that the score pie doesn't get in the way when you're not intending to score
+          // 100 ms matches the default for MUI tooltips https://mui.com/material-ui/api/tooltip/#Tooltip-prop-enterDelay
+          onMouseEnter={() => {
+            if (quickScoring) setHoverDelayHandler(setTimeout(() => setHovering(true), 100));
+          }}
+          onMouseLeave={() => clearTimeout(hoverDelayHandler)}
+          userScores={userScores}
+          aggregationMode={aggregationMode}
+          className={showScoreClasses}
+        />
+      </Tooltip>
 
       <BackdropPopper
         id="backdrop-popper"
         open={hovering || selected}
-        isPieSelected={selected}
         container={() => document.getElementById(workspaceId)} // workspace sets overflow-hidden so we don't have to worry about poppers going off page and creating scroll
         // Not used, since size is stretched to screen, but without this MUI will throw really
         // annoying errors. This is an easier fix than converting the popper to a modal, which
