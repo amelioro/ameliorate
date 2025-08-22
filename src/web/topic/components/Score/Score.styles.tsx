@@ -10,15 +10,7 @@ export const ScorePopper = styled(Popper)`
   `}
 `;
 
-interface BackdropProps {
-  isPieSelected: boolean;
-}
-
-const backdropOptions = {
-  shouldForwardProp: (props: string) => !["isPieSelected"].includes(props),
-};
-
-export const BackdropPopper = styled(Popper, backdropOptions)<BackdropProps>`
+export const BackdropPopper = styled(Popper)`
   // jank to override Popper behavior to work like a Modal;
   // using a Modal would be cleaner but more effort to switch to that now.
   inset: 0 !important;
@@ -28,13 +20,6 @@ export const BackdropPopper = styled(Popper, backdropOptions)<BackdropProps>`
   ${({ theme }) => css`
     z-index: ${theme.zIndex.tooltip};
   `}
-  ${({ isPieSelected }) => {
-    if (isPieSelected)
-      return css`
-        background: black;
-        opacity: 0.5;
-      `;
-  }}
 `;
 
 interface CircleProps {
