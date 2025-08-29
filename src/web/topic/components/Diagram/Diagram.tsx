@@ -179,6 +179,9 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
            * Somewhat janky way to blur not-selected/not-neighboring nodes, edge labels, and edge
            * paths when a node or edge is selected.
            *
+           * `blur-sm` (4px) might not be enough contrast, `blur` (8px) might be too much because blurred
+           * edge lines aren't easily found, so `blur-[5px]` seems like an ok middleground.
+           *
            * Notes:
            * - `has(.spotlight-primary)` is used so that blur only applies when a part currently
            * being spotlighted (rather than based on node selection, which if the selected node was
@@ -199,9 +202,9 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
            * version _moves_ edges in the DOM based on whether or not they're selected. The latest
            * version of react-flow doesn't seem to do this, so upgrading might fix.
            */
-          String.raw` [&:has(.spotlight-primary):not(:has(.react-flow\_\_connectionline))_.react-flow\_\_node:has(.spotlight-normal):not(:hover)]:blur` +
-          String.raw` [&:has(.spotlight-primary)_.diagram-edge.spotlight-normal:not(:hover)]:blur` +
-          String.raw` [&:has(.spotlight-primary)_.react-flow\_\_edge-path.spotlight-normal]:blur` +
+          String.raw` [&:has(.spotlight-primary):not(:has(.react-flow\_\_connectionline))_.react-flow\_\_node:has(.spotlight-normal):not(:hover)]:blur-[5px]` +
+          String.raw` [&:has(.spotlight-primary)_.diagram-edge.spotlight-normal:not(:hover)]:blur-[5px]` +
+          String.raw` [&:has(.spotlight-primary)_.react-flow\_\_edge-path.spotlight-normal]:blur-[5px]` +
           String.raw` [&_.react-flow\_\_node]:transition-[filter] [&_.react-flow\_\_node]:duration-300` +
           String.raw` [&_.diagram-edge]:transition-[filter] [&_.diagram-edge]:duration-300` +
           String.raw` [&_.react-flow\_\_edge-path]:transition-[filter] [&_.react-flow\_\_edge-path]:duration-300`
