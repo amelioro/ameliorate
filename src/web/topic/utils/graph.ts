@@ -22,7 +22,6 @@ export interface Node {
     label: string;
     notes: string;
     arguedDiagramPartId?: string;
-    showing: boolean;
   };
   type: FlowNodeType;
 }
@@ -54,7 +53,6 @@ export const buildNode = ({
       label: label ?? `new node`,
       notes: notes ?? "",
       arguedDiagramPartId: justificationNodeTypes.includes(type) ? arguedDiagramPartId : undefined, // don't set arguedDiagramPartId on non-justifications because non-justifications shouldn't be deleted when the justification tree is deleted
-      showing: true,
     },
     type: type,
   };
