@@ -62,6 +62,28 @@ export const nodeSchema = z.object({
 
 export type Node = z.infer<typeof nodeSchema>;
 
+/**
+ * Ideally we wouldn't need this outside of the react-flow components, but we unfortunately let this
+ * format leak into everywhere on the frontend, including the download topic JSON logic, and we use
+ * downloaded files for `examples/`, which we use on the backend (e.g. for topic AI examples).
+ *
+ * TODO: use the above `nodeSchema` in most places on the frontend, and only use the flow schema for
+ * flow-related components.
+ */
+export const reactFlowNodeSchema = z.object({
+  id: z.string(),
+  data: z.object({
+    /**
+     * Distinguished from `type` because this is explicitly open user input, and `type` can maintain stricter typing
+     */
+    customType: z.string().nullable(),
+    label: z.string(),
+    notes: z.string(),
+    arguedDiagramPartId: z.string().optional(),
+  }),
+  type: zNodeTypes,
+});
+
 export const goodNodeTypes: NodeType[] = [
   "solutionComponent",
   "benefit",

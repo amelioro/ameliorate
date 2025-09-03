@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { reactFlowEdgeSchema } from "@/common/edge";
+import { reactFlowNodeSchema } from "@/common/node";
 import { reservedSecondLevelEndpointNames } from "@/common/reservedEndpointNames";
 import { userSchema } from "@/common/user";
 import { getBaseUrl } from "@/common/utils";
@@ -37,6 +39,25 @@ export interface PlaygroundTopic {
   id: undefined; // so we can check to see if the topic is a playground topic
   description: string;
 }
+
+export const topicFileSchema = z.object({
+  topic: z.object({
+    state: z.object({ topic: z.record(z.any()) }), // z.record() because without it will result in optional `state`, see https://github.com/colinhacks/zod/issues/1628
+    version: z.number(),
+  }),
+  diagram: z.object({
+    state: z.object({
+      nodes: reactFlowNodeSchema.array(),
+      edges: reactFlowEdgeSchema.array(),
+      userScores: z.any(),
+    }),
+    version: z.number(),
+  }),
+  views: z.object({
+    state: z.record(z.any()),
+    version: z.number(),
+  }),
+});
 
 /**
  * @param topic can be a playground topic so that we can get URLs on the playground if we want to... not super useful but could be convenient at times

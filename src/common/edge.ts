@@ -54,6 +54,46 @@ export const edgeSchema = z.object({
 
 export type Edge = z.infer<typeof edgeSchema>;
 
+/**
+ * Ideally we wouldn't need this outside of the react-flow components, but we unfortunately let this
+ * format leak into everywhere on the frontend, including the download topic JSON logic, and we use
+ * downloaded files for `examples/`, which we use on the backend (e.g. for topic AI examples).
+ *
+ * TODO: use the above `edgeSchema` in most places on the frontend, and only use the flow schema for
+ * flow-related components.
+ */
+export const reactFlowEdgeSchema = z.object({
+  id: z.string(),
+  data: z.object({
+    /**
+     * Distinguished from `label` because this is explicitly open user input, and `label` can maintain stricter typing
+     */
+    customLabel: z.string().nullable(),
+    notes: z.string(),
+    arguedDiagramPartId: z.string().optional(),
+  }),
+  label: zRelationNames,
+  /**
+   * id of the source graph part. Can be a node or an edge, but most UI edge operations only work
+   * with node sources.
+   *
+   * It seems like there might be value in having a SuperEdge type that can point to edges, so that
+   * regular edges can be distinguished. But that sounds like a lot of work and it's hard to tell
+   * that it'd be worth it.
+   */
+  source: z.string(), // source === parent if arrows point from bottom to top
+  /**
+   * id of the target graph part. Can be a node or an edge, but most UI edge operations only work
+   * with node targets.
+   *
+   * It seems like there might be value in having a SuperEdge type that can point to edges, so that
+   * regular edges can be distinguished. But that sounds like a lot of work and it's hard to tell
+   * that it'd be worth it.
+   */
+  target: z.string(), // target === child if arrows point from bottom to top
+  type: z.literal("FlowEdge"),
+});
+
 export const infoRelationNames: Record<InfoCategory, RelationName[]> = {
   breakdown: [
     "causes",
