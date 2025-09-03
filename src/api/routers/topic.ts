@@ -4,7 +4,7 @@ import { z } from "zod";
 import { isLoggedIn } from "@/api/auth";
 import { procedure, router } from "@/api/trpc";
 import { edgeSchema } from "@/common/edge";
-import { getNewTopicProblemNode, nodeSchema } from "@/common/node";
+import { nodeSchema } from "@/common/node";
 import { topicSchema } from "@/common/topic";
 import { userSchema } from "@/common/user";
 import { userScoreSchema } from "@/common/userScore";
@@ -224,10 +224,6 @@ export const topicRouter = router({
           visibility: opts.input.topic.visibility,
           allowAnyoneToEdit: opts.input.topic.allowAnyoneToEdit,
         },
-      });
-
-      const _baseTopicProblemNode = await xprisma.node.create({
-        data: getNewTopicProblemNode(newTopic.id, newTopic.title),
       });
 
       // create basic views for topic
