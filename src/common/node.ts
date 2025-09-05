@@ -56,11 +56,60 @@ export const nodeSchema = z.object({
     .max(30)
     .regex(/^[a-z ]+$/i, "customType should only contain letters and spaces.")
     .nullable(),
-  text: z.string().max(200),
+  text: z
+    .string()
+    .max(200)
+    .describe(
+      "Brief summary of the node's meaning. Should generally be concise and in clauses rather than complete sentences.",
+    ),
   notes: z.string().max(10000),
 });
 
 export type Node = z.infer<typeof nodeSchema>;
+
+export const topicAINodeSchema = nodeSchema
+  .pick({
+    type: true,
+    text: true,
+    notes: true,
+  })
+  .extend({
+    tempId: z.number(),
+  });
+
+/**
+ * Looser schema to make hitting the API easier for consumers. Mainly different from `nodeSchema` in that many fields are optional and can use `tempId`.
+ */
+export const createNodeSchema = nodeSchema
+  .extend(topicAINodeSchema.shape)
+  .partial({ id: true, tempId: true, topicId: true, arguedDiagramPartId: true, customType: true })
+  .describe(
+    "Can use `tempId` to identify the node if you can't reliably generate a UUIDv4 for `id`.",
+  );
+
+export type CreateNode = z.infer<typeof createNodeSchema>;
+
+/**
+ * Ideally we wouldn't need this outside of the react-flow components, but we unfortunately let this
+ * format leak into everywhere on the frontend, including the download topic JSON logic, and we use
+ * downloaded files for `examples/`, which we use on the backend (e.g. for topic AI examples).
+ *
+ * TODO: use the above `nodeSchema` in most places on the frontend, and only use the flow schema for
+ * flow-related components.
+ */
+export const reactFlowNodeSchema = z.object({
+  id: z.string(),
+  data: z.object({
+    /**
+     * Distinguished from `type` because this is explicitly open user input, and `type` can maintain stricter typing
+     */
+    customType: z.string().nullable(),
+    label: z.string(),
+    notes: z.string(),
+    arguedDiagramPartId: z.string().optional(),
+  }),
+  type: zNodeTypes,
+});
 
 export const goodNodeTypes: NodeType[] = [
   "solutionComponent",

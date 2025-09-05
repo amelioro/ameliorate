@@ -1,15 +1,72 @@
 import { TRPCError } from "@trpc/server";
+import { v4 as uuid } from "uuid";
 import { z } from "zod";
 
 import { isLoggedIn } from "@/api/auth";
 import { procedure, router } from "@/api/trpc";
-import { edgeSchema } from "@/common/edge";
-import { getNewTopicProblemNode, nodeSchema } from "@/common/node";
+import { CreateEdge, Edge, createEdgeSchema, edgeSchema } from "@/common/edge";
+import { throwError } from "@/common/errorHandling";
+import { CreateNode, Node, createNodeSchema, nodeSchema } from "@/common/node";
 import { topicSchema } from "@/common/topic";
 import { userSchema } from "@/common/user";
 import { userScoreSchema } from "@/common/userScore";
 import { quickViewSchema } from "@/common/view";
 import { xprisma } from "@/db/extendedPrisma";
+
+/**
+ * Converts simplified nodes/edges into fully valid nodes/edges ready for persistence.
+ *
+ * Nodes and edges are allowed to be simpler over the API (i.e. have fewer fields and use tempIds
+ * if API consumers can't generate UUIDv4s reliably) so that it's easier for consumers to use.
+ */
+const solidifyParts = (topicId: number, nodes: CreateNode[], edges: CreateEdge[]) => {
+  const nodeUuidsByTempId: Record<number, string> = {};
+
+  const solidifiedNodes: Node[] = nodes.map((node) => {
+    const nodeId = node.id ?? uuid();
+    // eslint-disable-next-line functional/immutable-data
+    if (node.tempId !== undefined) nodeUuidsByTempId[node.tempId] = nodeId;
+
+    return {
+      id: nodeId,
+      topicId,
+      arguedDiagramPartId: node.arguedDiagramPartId ?? null,
+      type: node.type,
+      customType: node.customType ?? null,
+      text: node.text,
+      notes: node.notes,
+    };
+  });
+
+  const solidifiedEdges: Edge[] = edges.map((edge) => {
+    const sourceId =
+      edge.tempSourceId !== undefined ? nodeUuidsByTempId[edge.tempSourceId] : edge.sourceId;
+    const targetId =
+      edge.tempTargetId !== undefined ? nodeUuidsByTempId[edge.tempTargetId] : edge.targetId;
+
+    if (sourceId === undefined || targetId === undefined) {
+      return throwError("Edge is missing source or target", {
+        edge,
+        nodeUuidsByTempId,
+        nodes,
+        edges,
+      });
+    }
+
+    return {
+      id: edge.id ?? uuid(),
+      topicId,
+      arguedDiagramPartId: edge.arguedDiagramPartId ?? null,
+      type: edge.type,
+      customLabel: edge.customLabel ?? null,
+      notes: edge.notes,
+      sourceId,
+      targetId,
+    };
+  });
+
+  return { solidifiedNodes, solidifiedEdges };
+};
 
 export const topicRouter = router({
   findByUsernameAndTitle: procedure
@@ -84,19 +141,19 @@ export const topicRouter = router({
   updateDiagram: procedure
     .use(isLoggedIn)
     .input(
+      // seems nice to have these inputs each on one line
+      // prettier-ignore
       z.object({
         topicId: topicSchema.shape.id,
-        nodesToCreate: z.array(nodeSchema),
-        nodesToUpdate: z.array(nodeSchema.partial().required({ id: true, topicId: true })),
-        nodesToDelete: z.array(nodeSchema.pick({ id: true, topicId: true })),
-        edgesToCreate: z.array(edgeSchema),
-        edgesToUpdate: z.array(edgeSchema.partial().required({ id: true, topicId: true })),
-        edgesToDelete: z.array(edgeSchema.pick({ id: true, topicId: true })),
-        scoresToCreate: z.array(userScoreSchema),
-        scoresToUpdate: z.array(userScoreSchema),
-        scoresToDelete: z.array(
-          userScoreSchema.pick({ username: true, graphPartId: true, topicId: true }),
-        ),
+        nodesToCreate: z.array(createNodeSchema).default([]),
+        nodesToUpdate: z.array(nodeSchema.partial().required({ id: true, topicId: true })).default([]),
+        nodesToDelete: z.array(nodeSchema.pick({ id: true, topicId: true })).default([]),
+        edgesToCreate: z.array(createEdgeSchema).default([]),
+        edgesToUpdate: z.array(edgeSchema.partial().required({ id: true, topicId: true })).default([]),
+        edgesToDelete: z.array(edgeSchema.pick({ id: true, topicId: true })).default([]),
+        scoresToCreate: z.array(userScoreSchema).default([]),
+        scoresToUpdate: z.array(userScoreSchema).default([]),
+        scoresToDelete: z.array(userScoreSchema.pick({ username: true, graphPartId: true, topicId: true })).default([]),
       }),
     )
     .mutation(async (opts) => {
@@ -107,11 +164,14 @@ export const topicRouter = router({
       if (!topic || (!isCreator && topic.visibility === "private"))
         throw new TRPCError({ code: "FORBIDDEN" });
 
+      const { solidifiedNodes: solidifiedNodesToCreate, solidifiedEdges: solidifiedEdgesToCreate } =
+        solidifyParts(opts.input.topicId, opts.input.nodesToCreate, opts.input.edgesToCreate);
+
       const graphPartLists = [
-        opts.input.nodesToCreate,
+        solidifiedNodesToCreate,
         opts.input.nodesToUpdate,
         opts.input.nodesToDelete,
-        opts.input.edgesToCreate,
+        solidifiedEdgesToCreate,
         opts.input.edgesToUpdate,
         opts.input.edgesToDelete,
       ];
@@ -157,10 +217,10 @@ export const topicRouter = router({
         }
 
         // scores points to edges/nodes, and edges point to nodes, so create nodes -> edges -> scores, and delete in reverse
-        if (opts.input.nodesToCreate.length > 0)
-          await tx.node.createMany({ data: opts.input.nodesToCreate });
-        if (opts.input.edgesToCreate.length > 0)
-          await tx.edge.createMany({ data: opts.input.edgesToCreate });
+        if (solidifiedNodesToCreate.length > 0)
+          await tx.node.createMany({ data: solidifiedNodesToCreate });
+        if (solidifiedEdgesToCreate.length > 0)
+          await tx.edge.createMany({ data: solidifiedEdgesToCreate });
         if (opts.input.scoresToCreate.length > 0)
           await tx.userScore.createMany({ data: opts.input.scoresToCreate });
 
@@ -180,12 +240,14 @@ export const topicRouter = router({
         /* eslint-enable functional/no-loop-statements */
 
         const scoresToDeletePartIds = opts.input.scoresToDelete.map((score) => score.graphPartId);
-        await tx.userScore.deleteMany({
-          where: {
-            username: opts.ctx.user.username, // authorized earlier that all scores to delete are for this user
-            graphPartId: { in: scoresToDeletePartIds },
-          },
-        });
+        if (scoresToDeletePartIds.length > 0) {
+          await tx.userScore.deleteMany({
+            where: {
+              username: opts.ctx.user.username, // authorized earlier that all scores to delete are for this user
+              graphPartId: { in: scoresToDeletePartIds },
+            },
+          });
+        }
         const edgeIdsToDelete = opts.input.edgesToDelete.map((edge) => edge.id);
         if (edgeIdsToDelete.length > 0) {
           await tx.edge.deleteMany({
@@ -224,10 +286,6 @@ export const topicRouter = router({
           visibility: opts.input.topic.visibility,
           allowAnyoneToEdit: opts.input.topic.allowAnyoneToEdit,
         },
-      });
-
-      const _baseTopicProblemNode = await xprisma.node.create({
-        data: getNewTopicProblemNode(newTopic.id, newTopic.title),
       });
 
       // create basic views for topic

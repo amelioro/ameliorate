@@ -23,6 +23,7 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { getNewTopicProblemNode } from "@/common/node";
 import { topicSchema, visibilityTypes } from "@/common/topic";
 import { trpc } from "@/web/common/trpc";
 import { updateTopicWithoutSyncingToApi } from "@/web/topic/topicStore/store";
@@ -31,8 +32,17 @@ import { generateBasicViews } from "@/web/view/quickViewStore/store";
 export const CreateTopicForm = ({ creatorName }: { creatorName: string }) => {
   const utils = trpc.useContext();
 
+  const updateDiagram = trpc.topic.updateDiagram.useMutation();
+
   const createTopic = trpc.topic.create.useMutation({
     onSuccess: async (newTopic, variables) => {
+      // add a default problem node so the topic isn't empty (it seems more intuitive to add more nodes to an existing node I guess?)
+      updateDiagram.mutate({
+        topicId: newTopic.id,
+        // eventually we might create a default node based on if the topic is problem-based or solution-based?
+        nodesToCreate: [getNewTopicProblemNode(newTopic.id, newTopic.title)],
+      });
+
       utils.topic.findByUsernameAndTitle.setData(
         { username: creatorName, title: variables.topic.title },
         newTopic,

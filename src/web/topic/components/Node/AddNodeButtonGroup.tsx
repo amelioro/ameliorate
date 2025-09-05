@@ -313,6 +313,12 @@ const AddNodeButtonGroup = memo(
             root: { onClick: (event) => event.stopPropagation() }, // don't trigger deselection of node when clicking backdrop to close menu
             paper: { id: "add-button-menu-paper" },
           }}
+          // Not sure if this is worth but this prevents the annoying scenario where you accidentally
+          // drag on the menu, which can result in selecting a bunch of text unintentionally (including
+          // text across the app's various panes, if you drag far enough).
+          // Seems like there isn't much downside since you already can't select menu item text, since
+          // they're buttons with click actions.
+          className="select-none"
         >
           {!expandAddNodeButtons &&
             commonNodeButtons.length > 0 &&

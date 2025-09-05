@@ -13,6 +13,7 @@ import { z } from "zod";
 import { StorageValue } from "zustand/middleware";
 
 import { errorWithData } from "@/common/errorHandling";
+import { topicFileSchema } from "@/common/topic";
 import {
   loadCommentsFromApi,
   loadCommentsFromLocalStorage,
@@ -83,43 +84,27 @@ const oldDownloadSchema2 = z
   })
   .strict(); // strict because we shouldn't have additional properties (in this case schema 3 is only different because `diagram` is added)
 
-const downloadJsonSchema = z.preprocess(
-  (val) => {
-    const parsedSchema1 = oldDownloadSchema1.safeParse(val);
-    if (parsedSchema1.success) {
-      return {
-        topic: { state: { topic: parsedSchema1.data.state.topic }, version: 1 },
-        diagram: parsedSchema1.data,
-        views: { state: initialStateWithBasicViews(), version: currentViewsVersion },
-      };
-    }
+const downloadJsonSchema = z.preprocess((val) => {
+  const parsedSchema1 = oldDownloadSchema1.safeParse(val);
+  if (parsedSchema1.success) {
+    return {
+      topic: { state: { topic: parsedSchema1.data.state.topic }, version: 1 },
+      diagram: parsedSchema1.data,
+      views: { state: initialStateWithBasicViews(), version: currentViewsVersion },
+    };
+  }
 
-    const parsedSchema2 = oldDownloadSchema2.safeParse(val);
-    if (parsedSchema2.success) {
-      return {
-        topic: { state: { topic: parsedSchema2.data.topic.state.topic }, version: 1 },
-        diagram: parsedSchema2.data.topic,
-        views: parsedSchema2.data.views,
-      };
-    }
+  const parsedSchema2 = oldDownloadSchema2.safeParse(val);
+  if (parsedSchema2.success) {
+    return {
+      topic: { state: { topic: parsedSchema2.data.topic.state.topic }, version: 1 },
+      diagram: parsedSchema2.data.topic,
+      views: parsedSchema2.data.views,
+    };
+  }
 
-    return val;
-  },
-  z.object({
-    topic: z.object({
-      state: z.object({ topic: z.record(z.any()) }), // z.record() because without it will result in optional `state`, see https://github.com/colinhacks/zod/issues/1628
-      version: z.number(),
-    }),
-    diagram: z.object({
-      state: z.record(z.any()),
-      version: z.number(),
-    }),
-    views: z.object({
-      state: z.record(z.any()),
-      version: z.number(),
-    }),
-  }),
-);
+  return val;
+}, topicFileSchema);
 
 interface DownloadJson {
   topic: StorageValue<TopicStoreState>;

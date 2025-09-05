@@ -1,9 +1,21 @@
 import { uniqBy } from "es-toolkit";
 import { v4 as uuid } from "uuid";
+import { z } from "zod";
 
-import { RelationName, justificationRelationNames, relationNames } from "@/common/edge";
+import {
+  RelationName,
+  justificationRelationNames,
+  reactFlowEdgeSchema,
+  relationNames,
+} from "@/common/edge";
 import { errorWithData } from "@/common/errorHandling";
-import { NodeType, infoNodeTypes, justificationNodeTypes, nodeTypes } from "@/common/node";
+import {
+  NodeType,
+  infoNodeTypes,
+  justificationNodeTypes,
+  nodeTypes,
+  reactFlowNodeSchema,
+} from "@/common/node";
 import { FlowNodeType } from "@/web/topic/utils/node";
 import { GeneralFilter } from "@/web/view/utils/generalFilter";
 
@@ -12,20 +24,7 @@ export interface Graph {
   edges: Edge[];
 }
 
-export interface Node {
-  id: string;
-  data: {
-    /**
-     * Distinguished from `type` because this is explicitly open user input, and `type` can maintain stricter typing
-     */
-    customType: string | null;
-    label: string;
-    notes: string;
-    arguedDiagramPartId?: string;
-    showing: boolean;
-  };
-  type: FlowNodeType;
-}
+export type Node = z.infer<typeof reactFlowNodeSchema>;
 
 export interface ProblemNode extends Node {
   type: "problem";
@@ -54,7 +53,6 @@ export const buildNode = ({
       label: label ?? `new node`,
       notes: notes ?? "",
       arguedDiagramPartId: justificationNodeTypes.includes(type) ? arguedDiagramPartId : undefined, // don't set arguedDiagramPartId on non-justifications because non-justifications shouldn't be deleted when the justification tree is deleted
-      showing: true,
     },
     type: type,
   };
@@ -64,37 +62,7 @@ export const buildNode = ({
 
 export type RelationDirection = "parent" | "child";
 
-export interface Edge {
-  id: string;
-  data: {
-    /**
-     * Distinguished from `label` because this is explicitly open user input, and `label` can maintain stricter typing
-     */
-    customLabel: string | null;
-    notes: string;
-    arguedDiagramPartId?: string;
-  };
-  label: RelationName;
-  /**
-   * id of the source graph part. Can be a node or an edge, but most UI edge operations only work
-   * with node sources.
-   *
-   * It seems like there might be value in having a SuperEdge type that can point to edges, so that
-   * regular edges can be distinguished. But that sounds like a lot of work and it's hard to tell
-   * that it'd be worth it.
-   */
-  source: string; // source === parent if arrows point from bottom to top
-  /**
-   * id of the target graph part. Can be a node or an edge, but most UI edge operations only work
-   * with node targets.
-   *
-   * It seems like there might be value in having a SuperEdge type that can point to edges, so that
-   * regular edges can be distinguished. But that sounds like a lot of work and it's hard to tell
-   * that it'd be worth it.
-   */
-  target: string; // target === child if arrows point from bottom to top
-  type: "FlowEdge";
-}
+export type Edge = z.infer<typeof reactFlowEdgeSchema>;
 
 interface BuildEdgeProps {
   id?: string;
