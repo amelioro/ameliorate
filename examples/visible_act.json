@@ -1,0 +1,848 @@
+{
+  "topic": {
+    "state": {
+      "topic": {
+        "id": 304,
+        "title": "bill-HR-4667-VISIBLE-act",
+        "creatorName": "keyserj",
+        "description": "based on bill description https://pluralpolicy.com/app/legislative-tracking/bill/details/federal-119-hr4667/2784356 and Kialo arguments https://www.kialo.com/do-you-support-hr-4667-visible-act-72582",
+        "visibility": "public",
+        "allowAnyoneToEdit": false,
+        "createdAt": "2025-08-21T16:03:15.256Z",
+        "updatedAt": "2025-08-21T18:17:11.461Z"
+      }
+    },
+    "version": 1
+  },
+  "diagram": {
+    "state": {
+      "nodes": [
+        {
+          "id": "f1d09714-f540-4042-ad18-354a9db894e8",
+          "data": {
+            "customType": null,
+            "label": "duties of Office for Civil Rights and Civil Liberties",
+            "notes": "",
+            "showing": true
+          },
+          "type": "solutionComponent"
+        },
+        {
+          "id": "1a711f49-d928-4b0f-bb9a-e69f6bd3fd50",
+          "data": {
+            "customType": null,
+            "label": "receive and investigate public complaints re: Act's violations",
+            "notes": "",
+            "showing": true
+          },
+          "type": "solutionComponent"
+        },
+        {
+          "id": "9ea9aa89-c41c-42e6-bb11-f66c2d9284b9",
+          "data": {
+            "customType": null,
+            "label": "advise compliance and corrective actions to relevant DHS* groups",
+            "notes": "*DHS: Department of Homeland Security",
+            "showing": true
+          },
+          "type": "solutionComponent"
+        },
+        {
+          "id": "e8197dc6-5f47-46b5-848c-99494f07bd0c",
+          "data": {
+            "customType": null,
+            "label": "include its findings and actions re: this Act it its annual report",
+            "notes": "",
+            "showing": true
+          },
+          "type": "solutionComponent"
+        },
+        {
+          "id": "0e6a62d1-3e32-4cf9-9a6d-064ef659743a",
+          "data": {
+            "customType": null,
+            "label": "encourages proper officer conduct",
+            "notes": "",
+            "showing": true
+          },
+          "type": "benefit"
+        },
+        {
+          "id": "12c27740-fd8d-435b-b432-ec4b262b03ed",
+          "data": {
+            "customType": null,
+            "label": "could interfere with covert operations",
+            "notes": "",
+            "showing": true
+          },
+          "type": "detriment"
+        },
+        {
+          "id": "6495613d-1973-4459-a311-224dd35aa6c3",
+          "data": {
+            "customType": null,
+            "label": "\"could interfere with covert operations\" is an important Detriment in this topic",
+            "notes": "",
+            "arguedDiagramPartId": "12c27740-fd8d-435b-b432-ec4b262b03ed",
+            "showing": true
+          },
+          "type": "rootClaim"
+        },
+        {
+          "id": "64b5065f-d53a-4cae-a2ef-4e557ab12d6b",
+          "data": {
+            "customType": null,
+            "label": "this Act does not apply to covert operations",
+            "notes": "",
+            "arguedDiagramPartId": "12c27740-fd8d-435b-b432-ec4b262b03ed",
+            "showing": true
+          },
+          "type": "critique"
+        },
+        {
+          "id": "1b641a98-7b12-4dab-bd9b-7fa7c8f8cf49",
+          "data": {
+            "customType": null,
+            "label": "procedural burdens on officers during urgent enforcement actions",
+            "notes": "",
+            "showing": true
+          },
+          "type": "detriment"
+        },
+        {
+          "id": "7a27e25f-863d-4140-9fda-d51880aec150",
+          "data": {
+            "customType": null,
+            "label": "increased response times",
+            "notes": "",
+            "showing": true
+          },
+          "type": "detriment"
+        },
+        {
+          "id": "be92c2e9-8410-405c-953e-b3b13a31646b",
+          "data": {
+            "customType": null,
+            "label": "could endanger officers if identified in hostile environments",
+            "notes": "",
+            "showing": true
+          },
+          "type": "detriment"
+        },
+        {
+          "id": "ef16f65d-613e-4593-af51-e00f1fad7e52",
+          "data": {
+            "customType": null,
+            "label": "HR 4667: The VISIBLE Act of 2025",
+            "notes": "",
+            "showing": true
+          },
+          "type": "solution"
+        },
+        {
+          "id": "1e16d353-e3c1-4e9a-976b-1c73e5b39caf",
+          "data": {
+            "customType": null,
+            "label": "transparency in public immigration enforcement",
+            "notes": "",
+            "showing": true
+          },
+          "type": "benefit"
+        },
+        {
+          "id": "a2820706-da8b-4fb0-a728-b9f0def7d08b",
+          "data": {
+            "customType": null,
+            "label": "accountability in public immigration enforcement",
+            "notes": "",
+            "showing": true
+          },
+          "type": "benefit"
+        },
+        {
+          "id": "6a243ad5-da6f-4bbd-ad50-c1d082aa424d",
+          "data": {
+            "customType": null,
+            "label": "public trust in government",
+            "notes": "",
+            "showing": true
+          },
+          "type": "benefit"
+        },
+        {
+          "id": "8919b18f-744e-4145-9f25-8d0ed46f6850",
+          "data": {
+            "customType": null,
+            "label": "crumbling trust in government",
+            "notes": "",
+            "showing": true
+          },
+          "type": "problem"
+        },
+        {
+          "id": "3d4a7529-16c6-46c4-a547-bd88d67f7a1a",
+          "data": {
+            "customType": null,
+            "label": "immigration officers can take extreme action but aren't held accountable",
+            "notes": "",
+            "showing": true
+          },
+          "type": "cause"
+        },
+        {
+          "id": "720a1d99-0e81-49e9-a3ab-f32ec92ce3be",
+          "data": {
+            "customType": null,
+            "label": "immigration officers wear masks to hide face",
+            "notes": "",
+            "showing": true
+          },
+          "type": "cause"
+        },
+        {
+          "id": "b6ee4d4b-bf6f-484d-a63f-aeac9e76591c",
+          "data": {
+            "customType": null,
+            "label": "immigration officers don't have clear identification visible",
+            "notes": "",
+            "showing": true
+          },
+          "type": "cause"
+        },
+        {
+          "id": "2dc0bbe7-1bdc-4420-96bd-320a50189572",
+          "data": {
+            "customType": null,
+            "label": "officers may not wear non-medical face coverings",
+            "notes": "",
+            "showing": true
+          },
+          "type": "solutionComponent"
+        },
+        {
+          "id": "04354f0e-df52-4c80-9b4a-adc7b9bb68ea",
+          "data": {
+            "customType": null,
+            "label": "exception: during covert, non-public operation",
+            "notes": "",
+            "showing": true
+          },
+          "type": "solutionComponent"
+        },
+        {
+          "id": "da34765c-6b36-45a8-bd0c-05128c287d66",
+          "data": {
+            "customType": null,
+            "label": "officers are visibly identifiable during public enforcement",
+            "notes": "",
+            "showing": true
+          },
+          "type": "benefit"
+        },
+        {
+          "id": "20ef64d4-34d6-4a13-bd90-fba411bc589e",
+          "data": {
+            "customType": null,
+            "label": "exception: to guard from hazardous environment conditions",
+            "notes": "",
+            "showing": true
+          },
+          "type": "solutionComponent"
+        },
+        {
+          "id": "31370066-6c66-4d4a-8010-70c56d3ea307",
+          "data": { "customType": null, "label": "definitions", "notes": "", "showing": true },
+          "type": "solutionComponent"
+        },
+        {
+          "id": "e704564d-aea2-430a-80cf-b153f17fde58",
+          "data": {
+            "customType": null,
+            "label": "immigration officer",
+            "notes": "any individual authorized to perform immigration enforcement functions, and is 1. an employee of US Customs and Border Protection, 2. an employee of US Immigration and Customs Enforcement, or 3. an individual authorized under Federal law or agreement to perform immigration enforcement functions",
+            "showing": true
+          },
+          "type": "solutionComponent"
+        },
+        {
+          "id": "c3987b33-fa4c-4fe3-b30f-d80104adb933",
+          "data": {
+            "customType": null,
+            "label": "public immigration enforcement function",
+            "notes": "any activity directly exercising Federal immigration authority through public-facing actions, include a patrol, stop, arrest, search, interview to determine immigrations tatus, raid, check-point inspection, or the service of a judicial or administrative warrant; and does not include covert, non-public operations or non-enforcement activities",
+            "showing": true
+          },
+          "type": "solutionComponent"
+        },
+        {
+          "id": "24b18d79-8318-44f0-a233-fd7684263624",
+          "data": {
+            "customType": null,
+            "label": "visible identification",
+            "notes": "a display of an immigration officer’s agency and name or badge number",
+            "showing": true
+          },
+          "type": "solutionComponent"
+        },
+        {
+          "id": "d8e3a928-9a45-453c-8d52-473cbc3c5bce",
+          "data": {
+            "customType": null,
+            "label": "accountability for compliance of this Act",
+            "notes": "",
+            "showing": true
+          },
+          "type": "solutionComponent"
+        },
+        {
+          "id": "f75f0440-6af0-436b-8455-30da929bf676",
+          "data": {
+            "customType": null,
+            "label": "officers must wear visible ID during public enforcement",
+            "notes": "",
+            "showing": true
+          },
+          "type": "solutionComponent"
+        },
+        {
+          "id": "1c404944-103e-4609-b8b1-b469ee1ba61d",
+          "data": {
+            "customType": null,
+            "label": "full name or widely recognized initials of officer's agency",
+            "notes": "",
+            "showing": true
+          },
+          "type": "solutionComponent"
+        },
+        {
+          "id": "b3b2c988-1311-4fce-859c-98c81e2a3223",
+          "data": {
+            "customType": null,
+            "label": "officer's last name or unique badge/ID number",
+            "notes": "",
+            "showing": true
+          },
+          "type": "solutionComponent"
+        },
+        {
+          "id": "ca975a2d-483f-4754-ad83-1212e9914baf",
+          "data": {
+            "customType": null,
+            "label": "visibility requirements for worn identification",
+            "notes": "",
+            "showing": true
+          },
+          "type": "solutionComponent"
+        },
+        {
+          "id": "63f33af5-8b29-4d97-a2cf-553972deea24",
+          "data": {
+            "customType": null,
+            "label": "agency: clearly legible from 25 feet in low-light conditions",
+            "notes": "",
+            "showing": true
+          },
+          "type": "solutionComponent"
+        },
+        {
+          "id": "699c0966-0edc-4ea9-a476-aa6b20952e4f",
+          "data": {
+            "customType": null,
+            "label": "Secretary of HS* ensures discipline for noncompliant officers",
+            "notes": "*HS: Homeland Security",
+            "showing": true
+          },
+          "type": "solutionComponent"
+        },
+        {
+          "id": "2ce0086f-bd4c-4b7a-90f5-7c0f0b5d1dfd",
+          "data": {
+            "customType": null,
+            "label": "officer info: clearly readable during direct engagement w/public",
+            "notes": "",
+            "showing": true
+          },
+          "type": "solutionComponent"
+        },
+        {
+          "id": "6eaece5a-bdd5-4fb1-9980-620a2353dc28",
+          "data": {
+            "customType": null,
+            "label": "displayed on outermost gear and not obscured by gear",
+            "notes": "",
+            "showing": true
+          },
+          "type": "solutionComponent"
+        },
+        {
+          "id": "e0ff4faf-e98a-4f26-a330-35bf62635c9a",
+          "data": {
+            "customType": null,
+            "label": "Secretary of Homeland Security submits annual report",
+            "notes": "",
+            "showing": true
+          },
+          "type": "solutionComponent"
+        },
+        {
+          "id": "9e95bd97-909a-4a5c-ada3-6672ef34e3e4",
+          "data": {
+            "customType": null,
+            "label": "number of public enforcement functions",
+            "notes": "",
+            "showing": true
+          },
+          "type": "solutionComponent"
+        },
+        {
+          "id": "761573ad-d464-4ab9-959e-a47ecab860f3",
+          "data": {
+            "customType": null,
+            "label": "number of instances of noncompliance with this Act",
+            "notes": "",
+            "showing": true
+          },
+          "type": "solutionComponent"
+        },
+        {
+          "id": "b824f80f-4eb3-4306-8f2b-8648d56088c8",
+          "data": {
+            "customType": null,
+            "label": "summary of disciplinary actions for noncompliance",
+            "notes": "",
+            "showing": true
+          },
+          "type": "solutionComponent"
+        }
+      ],
+      "edges": [
+        {
+          "id": "15bdb936-4b0c-4085-991b-733ff587aa48",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "creates",
+          "source": "6a243ad5-da6f-4bbd-ad50-c1d082aa424d",
+          "target": "1e16d353-e3c1-4e9a-976b-1c73e5b39caf",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "cfd4505c-b24b-4de3-99ad-eab28f092824",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "causes",
+          "source": "8919b18f-744e-4145-9f25-8d0ed46f6850",
+          "target": "3d4a7529-16c6-46c4-a547-bd88d67f7a1a",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "7f45d783-1e1c-43c0-8ebf-31800fcc81a5",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "causes",
+          "source": "3d4a7529-16c6-46c4-a547-bd88d67f7a1a",
+          "target": "720a1d99-0e81-49e9-a3ab-f32ec92ce3be",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "ec2ba3ca-c47d-4645-bbd4-3c656e8337f4",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "causes",
+          "source": "3d4a7529-16c6-46c4-a547-bd88d67f7a1a",
+          "target": "b6ee4d4b-bf6f-484d-a63f-aeac9e76591c",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "1d54abbe-bbd4-41db-99d8-54b3c9c7b8de",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "addresses",
+          "source": "8919b18f-744e-4145-9f25-8d0ed46f6850",
+          "target": "6a243ad5-da6f-4bbd-ad50-c1d082aa424d",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "fe17b846-34e3-4df4-b8e9-44716e5a9fbe",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "creates",
+          "source": "6a243ad5-da6f-4bbd-ad50-c1d082aa424d",
+          "target": "a2820706-da8b-4fb0-a728-b9f0def7d08b",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "5705c7e6-3ccd-4638-aa8d-c86b73595a5f",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "creates",
+          "source": "a2820706-da8b-4fb0-a728-b9f0def7d08b",
+          "target": "da34765c-6b36-45a8-bd0c-05128c287d66",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "a7182e3f-8170-4da4-87be-83a1b7f75f7b",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "creates",
+          "source": "1e16d353-e3c1-4e9a-976b-1c73e5b39caf",
+          "target": "da34765c-6b36-45a8-bd0c-05128c287d66",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "5e4e3b90-bafa-4955-ad53-bd770af3156d",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "has",
+          "source": "31370066-6c66-4d4a-8010-70c56d3ea307",
+          "target": "ef16f65d-613e-4593-af51-e00f1fad7e52",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "37a38e97-cb5d-4b96-ab23-2fd78addde27",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "has",
+          "source": "e704564d-aea2-430a-80cf-b153f17fde58",
+          "target": "31370066-6c66-4d4a-8010-70c56d3ea307",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "61379bfd-0151-4968-8e49-a67537a60388",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "has",
+          "source": "c3987b33-fa4c-4fe3-b30f-d80104adb933",
+          "target": "31370066-6c66-4d4a-8010-70c56d3ea307",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "670c61fd-589b-4773-8c6d-aebe6620b99a",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "has",
+          "source": "24b18d79-8318-44f0-a233-fd7684263624",
+          "target": "31370066-6c66-4d4a-8010-70c56d3ea307",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "2a320990-533d-4663-bfdf-1b1a0ff86c3a",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "has",
+          "source": "f75f0440-6af0-436b-8455-30da929bf676",
+          "target": "ef16f65d-613e-4593-af51-e00f1fad7e52",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "b7d9785f-0317-4b44-807c-5194e5560e05",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "has",
+          "source": "1c404944-103e-4609-b8b1-b469ee1ba61d",
+          "target": "f75f0440-6af0-436b-8455-30da929bf676",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "f4567957-0e16-461e-82b1-cd74554350a3",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "has",
+          "source": "b3b2c988-1311-4fce-859c-98c81e2a3223",
+          "target": "f75f0440-6af0-436b-8455-30da929bf676",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "12ca5894-de04-4ac8-b70f-a7500b4f13dd",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "has",
+          "source": "ca975a2d-483f-4754-ad83-1212e9914baf",
+          "target": "ef16f65d-613e-4593-af51-e00f1fad7e52",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "40109359-7290-460f-931e-0cb02d83bf79",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "has",
+          "source": "63f33af5-8b29-4d97-a2cf-553972deea24",
+          "target": "ca975a2d-483f-4754-ad83-1212e9914baf",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "232d7c57-c32c-48a3-9354-b82463bbe5e1",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "has",
+          "source": "2ce0086f-bd4c-4b7a-90f5-7c0f0b5d1dfd",
+          "target": "ca975a2d-483f-4754-ad83-1212e9914baf",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "75e04deb-0f4a-4c36-b1d5-b37ffa64cd7b",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "has",
+          "source": "6eaece5a-bdd5-4fb1-9980-620a2353dc28",
+          "target": "ca975a2d-483f-4754-ad83-1212e9914baf",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "75ec6693-4683-4e8a-bc8d-0da5247f45f1",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "has",
+          "source": "2dc0bbe7-1bdc-4420-96bd-320a50189572",
+          "target": "ef16f65d-613e-4593-af51-e00f1fad7e52",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "3ca817bc-64dc-4244-b0c9-ce58bc590dd7",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "has",
+          "source": "04354f0e-df52-4c80-9b4a-adc7b9bb68ea",
+          "target": "2dc0bbe7-1bdc-4420-96bd-320a50189572",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "1fc6c794-7d27-4752-a00a-134c0a3422c6",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "has",
+          "source": "20ef64d4-34d6-4a13-bd90-fba411bc589e",
+          "target": "2dc0bbe7-1bdc-4420-96bd-320a50189572",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "42c29159-c332-410a-9694-485c23e06e86",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "has",
+          "source": "d8e3a928-9a45-453c-8d52-473cbc3c5bce",
+          "target": "ef16f65d-613e-4593-af51-e00f1fad7e52",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "1c0037d6-3b29-4216-90df-18fb3f9a612e",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "has",
+          "source": "699c0966-0edc-4ea9-a476-aa6b20952e4f",
+          "target": "d8e3a928-9a45-453c-8d52-473cbc3c5bce",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "46bc09b7-39f0-484e-84b7-d13a6b420fa9",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "has",
+          "source": "e0ff4faf-e98a-4f26-a330-35bf62635c9a",
+          "target": "d8e3a928-9a45-453c-8d52-473cbc3c5bce",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "646b2c3a-034e-49ce-88c2-f45af06cb447",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "has",
+          "source": "9e95bd97-909a-4a5c-ada3-6672ef34e3e4",
+          "target": "e0ff4faf-e98a-4f26-a330-35bf62635c9a",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "f079678a-38a8-483d-b4dd-7d483a01d09b",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "has",
+          "source": "761573ad-d464-4ab9-959e-a47ecab860f3",
+          "target": "e0ff4faf-e98a-4f26-a330-35bf62635c9a",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "1e2e82df-a843-4164-be39-d53ef63eedf2",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "has",
+          "source": "b824f80f-4eb3-4306-8f2b-8648d56088c8",
+          "target": "e0ff4faf-e98a-4f26-a330-35bf62635c9a",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "3a05b9b4-00bc-48ba-8ecf-a5a2f462a4be",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "has",
+          "source": "f1d09714-f540-4042-ad18-354a9db894e8",
+          "target": "ef16f65d-613e-4593-af51-e00f1fad7e52",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "159c970c-ed87-4a0c-b4d9-4a53e2d71f72",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "has",
+          "source": "1a711f49-d928-4b0f-bb9a-e69f6bd3fd50",
+          "target": "f1d09714-f540-4042-ad18-354a9db894e8",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "f858bf90-5cf1-4c4c-ac4a-314c1fe78d36",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "has",
+          "source": "9ea9aa89-c41c-42e6-bb11-f66c2d9284b9",
+          "target": "f1d09714-f540-4042-ad18-354a9db894e8",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "0f2e5841-f65b-42fc-a4de-d5d32a1161ee",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "has",
+          "source": "e8197dc6-5f47-46b5-848c-99494f07bd0c",
+          "target": "f1d09714-f540-4042-ad18-354a9db894e8",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "9c8bd680-30a0-42e4-8d30-fae460235efb",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "creates",
+          "source": "0e6a62d1-3e32-4cf9-9a6d-064ef659743a",
+          "target": "a2820706-da8b-4fb0-a728-b9f0def7d08b",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "5eb890f9-3651-4bd7-9acc-f875afec7eab",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "creates",
+          "source": "12c27740-fd8d-435b-b432-ec4b262b03ed",
+          "target": "da34765c-6b36-45a8-bd0c-05128c287d66",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "18546699-dc7c-4f8b-9354-ca7cec5a15a2",
+          "data": {
+            "customLabel": null,
+            "notes": "",
+            "arguedDiagramPartId": "12c27740-fd8d-435b-b432-ec4b262b03ed"
+          },
+          "label": "critiques",
+          "source": "6495613d-1973-4459-a311-224dd35aa6c3",
+          "target": "64b5065f-d53a-4cae-a2ef-4e557ab12d6b",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "1f991c4e-64ec-4754-9fa3-4e47b7861703",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "creates",
+          "source": "da34765c-6b36-45a8-bd0c-05128c287d66",
+          "target": "2dc0bbe7-1bdc-4420-96bd-320a50189572",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "5a9d41e0-c18a-4d88-bfc2-7781876ff74f",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "creates",
+          "source": "da34765c-6b36-45a8-bd0c-05128c287d66",
+          "target": "f75f0440-6af0-436b-8455-30da929bf676",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "ff37b3d9-9e09-4902-b115-db0730d6bf88",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "creates",
+          "source": "da34765c-6b36-45a8-bd0c-05128c287d66",
+          "target": "ca975a2d-483f-4754-ad83-1212e9914baf",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "8967ac50-c927-4bcb-a897-34990d74375c",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "creates",
+          "source": "1b641a98-7b12-4dab-bd9b-7fa7c8f8cf49",
+          "target": "f75f0440-6af0-436b-8455-30da929bf676",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "86680311-e905-4c33-bde2-b86763d34bf7",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "creates",
+          "source": "7a27e25f-863d-4140-9fda-d51880aec150",
+          "target": "1b641a98-7b12-4dab-bd9b-7fa7c8f8cf49",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "b617e0c5-7b4f-41cf-8a4b-b602f72b7c91",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "creates",
+          "source": "1b641a98-7b12-4dab-bd9b-7fa7c8f8cf49",
+          "target": "ca975a2d-483f-4754-ad83-1212e9914baf",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "fbaf5902-b214-4b1b-b31e-6895c0d61825",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "creates",
+          "source": "be92c2e9-8410-405c-953e-b3b13a31646b",
+          "target": "da34765c-6b36-45a8-bd0c-05128c287d66",
+          "type": "FlowEdge"
+        },
+        {
+          "id": "3d58260f-45f3-446d-bfb3-2cc2a439df3e",
+          "data": { "customLabel": null, "notes": "" },
+          "label": "addresses",
+          "source": "3d4a7529-16c6-46c4-a547-bd88d67f7a1a",
+          "target": "0e6a62d1-3e32-4cf9-9a6d-064ef659743a",
+          "type": "FlowEdge"
+        }
+      ],
+      "userScores": {}
+    },
+    "version": 25
+  },
+  "views": {
+    "state": {
+      "views": [
+        {
+          "id": "pNwPysEeA5fyeV8NApW13T",
+          "type": "quick",
+          "title": "Diagram",
+          "order": 1,
+          "viewState": {
+            "format": "diagram",
+            "transposed": true,
+            "tableFilter": { "criteria": [], "solutions": [] },
+            "generalFilter": {
+              "nodeTypes": [],
+              "nodesToHide": [],
+              "nodesToShow": [],
+              "scoreToCompare": "5",
+              "scoredComparer": "≥",
+              "showOnlyScored": false,
+              "showSecondaryResearch": false,
+              "showSecondaryBreakdown": true
+            },
+            "researchFilter": { "type": "none" },
+            "breakdownFilter": { "type": "none" },
+            "categoriesToShow": ["breakdown"],
+            "showImpliedEdges": false,
+            "layoutThoroughness": 100,
+            "selectedSummaryTab": "coreNodes",
+            "justificationFilter": { "type": "none" },
+            "forceNodesIntoLayers": true,
+            "avoidEdgeLabelOverlap": true,
+            "minimizeEdgeCrossings": true,
+            "layerNodeIslandsTogether": false,
+            "summaryBreadcrumbNodeIds": [],
+            "showProblemCriterionSolutionEdges": true
+          }
+        },
+        {
+          "id": "tKTmn2u2Jen8WZowS3JyWD",
+          "type": "quick",
+          "title": "Overview",
+          "order": 0,
+          "viewState": {
+            "format": "summary",
+            "transposed": true,
+            "tableFilter": { "criteria": [], "solutions": [] },
+            "generalFilter": {
+              "nodeTypes": [],
+              "nodesToHide": [],
+              "nodesToShow": [],
+              "scoreToCompare": "5",
+              "scoredComparer": "≥",
+              "showOnlyScored": false,
+              "showSecondaryResearch": false,
+              "showSecondaryBreakdown": true
+            },
+            "researchFilter": { "type": "none" },
+            "breakdownFilter": { "type": "none" },
+            "categoriesToShow": ["breakdown"],
+            "showImpliedEdges": false,
+            "layoutThoroughness": 100,
+            "selectedSummaryTab": "components",
+            "justificationFilter": { "type": "none" },
+            "forceNodesIntoLayers": true,
+            "avoidEdgeLabelOverlap": true,
+            "minimizeEdgeCrossings": true,
+            "layerNodeIslandsTogether": false,
+            "summaryBreadcrumbNodeIds": ["ef16f65d-613e-4593-af51-e00f1fad7e52"],
+            "showProblemCriterionSolutionEdges": true
+          }
+        }
+      ],
+      "selectedViewId": "tKTmn2u2Jen8WZowS3JyWD"
+    },
+    "version": 3
+  }
+}

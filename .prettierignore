@@ -12,5 +12,8 @@ pnpm-lock.yaml
 package-lock.json
 yarn.lock
 
+# ignore snapshots - we don't want to format output which would then be compared to unformatted output
+**/__snapshots__/**
+
 # misc
 .all-contributorsrc

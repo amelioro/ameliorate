@@ -1,0 +1,605 @@
+{
+  "schemas": {
+    "createParts": {
+      "type": "object",
+      "properties": {
+        "nodesToCreate": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "cause",
+                  "problem",
+                  "criterion",
+                  "solutionComponent",
+                  "benefit",
+                  "effect",
+                  "detriment",
+                  "solution",
+                  "obstacle",
+                  "mitigationComponent",
+                  "mitigation",
+                  "question",
+                  "answer",
+                  "fact",
+                  "source",
+                  "rootClaim",
+                  "support",
+                  "critique",
+                  "custom"
+                ]
+              },
+              "text": {
+                "type": "string",
+                "maxLength": 200,
+                "description": "Brief summary of the node's meaning. Should generally be concise and in clauses rather than complete sentences."
+              },
+              "notes": {
+                "type": "string",
+                "maxLength": 10000
+              },
+              "tempId": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "type",
+              "text",
+              "notes",
+              "tempId"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "edgesToCreate": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "causes",
+                  "subproblemOf",
+                  "addresses",
+                  "accomplishes",
+                  "contingencyFor",
+                  "createdBy",
+                  "has",
+                  "criterionFor",
+                  "creates",
+                  "fulfills",
+                  "obstacleOf",
+                  "mitigates",
+                  "asksAbout",
+                  "potentialAnswerTo",
+                  "relevantFor",
+                  "sourceOf",
+                  "mentions",
+                  "supports",
+                  "critiques",
+                  "relatesTo"
+                ],
+                "description": "Note: this unintuitively reads from the target node to the source node. E.g. target `Solution` node `addresses` source `Problem` node."
+              },
+              "notes": {
+                "type": "string",
+                "maxLength": 10000
+              },
+              "tempSourceId": {
+                "type": "number"
+              },
+              "tempTargetId": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "type",
+              "notes",
+              "tempSourceId",
+              "tempTargetId"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "nodesToCreate",
+        "edgesToCreate"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    }
+  },
+  "examples": {
+    "visibleAct": {
+      "nodesToCreate": [
+        {
+          "tempId": 0,
+          "type": "solutionComponent",
+          "text": "duties of Office for Civil Rights and Civil Liberties",
+          "notes": ""
+        },
+        {
+          "tempId": 1,
+          "type": "solutionComponent",
+          "text": "receive and investigate public complaints re: Act's violations",
+          "notes": ""
+        },
+        {
+          "tempId": 2,
+          "type": "solutionComponent",
+          "text": "advise compliance and corrective actions to relevant DHS* groups",
+          "notes": "*DHS: Department of Homeland Security"
+        },
+        {
+          "tempId": 3,
+          "type": "solutionComponent",
+          "text": "include its findings and actions re: this Act it its annual report",
+          "notes": ""
+        },
+        {
+          "tempId": 4,
+          "type": "benefit",
+          "text": "encourages proper officer conduct",
+          "notes": ""
+        },
+        {
+          "tempId": 5,
+          "type": "detriment",
+          "text": "could interfere with covert operations",
+          "notes": ""
+        },
+        {
+          "tempId": 6,
+          "type": "detriment",
+          "text": "procedural burdens on officers during urgent enforcement actions",
+          "notes": ""
+        },
+        {
+          "tempId": 7,
+          "type": "detriment",
+          "text": "increased response times",
+          "notes": ""
+        },
+        {
+          "tempId": 8,
+          "type": "detriment",
+          "text": "could endanger officers if identified in hostile environments",
+          "notes": ""
+        },
+        {
+          "tempId": 9,
+          "type": "solution",
+          "text": "HR 4667: The VISIBLE Act of 2025",
+          "notes": ""
+        },
+        {
+          "tempId": 10,
+          "type": "benefit",
+          "text": "transparency in public immigration enforcement",
+          "notes": ""
+        },
+        {
+          "tempId": 11,
+          "type": "benefit",
+          "text": "accountability in public immigration enforcement",
+          "notes": ""
+        },
+        {
+          "tempId": 12,
+          "type": "benefit",
+          "text": "public trust in government",
+          "notes": ""
+        },
+        {
+          "tempId": 13,
+          "type": "problem",
+          "text": "crumbling trust in government",
+          "notes": ""
+        },
+        {
+          "tempId": 14,
+          "type": "cause",
+          "text": "immigration officers can take extreme action but aren't held accountable",
+          "notes": ""
+        },
+        {
+          "tempId": 15,
+          "type": "cause",
+          "text": "immigration officers wear masks to hide face",
+          "notes": ""
+        },
+        {
+          "tempId": 16,
+          "type": "cause",
+          "text": "immigration officers don't have clear identification visible",
+          "notes": ""
+        },
+        {
+          "tempId": 17,
+          "type": "solutionComponent",
+          "text": "officers may not wear non-medical face coverings",
+          "notes": ""
+        },
+        {
+          "tempId": 18,
+          "type": "solutionComponent",
+          "text": "exception: during covert, non-public operation",
+          "notes": ""
+        },
+        {
+          "tempId": 19,
+          "type": "benefit",
+          "text": "officers are visibly identifiable during public enforcement",
+          "notes": ""
+        },
+        {
+          "tempId": 20,
+          "type": "solutionComponent",
+          "text": "exception: to guard from hazardous environment conditions",
+          "notes": ""
+        },
+        {
+          "tempId": 21,
+          "type": "solutionComponent",
+          "text": "definitions",
+          "notes": ""
+        },
+        {
+          "tempId": 22,
+          "type": "solutionComponent",
+          "text": "immigration officer",
+          "notes": "any individual authorized to perform immigration enforcement functions, and is 1. an employee of US Customs and Border Protection, 2. an employee of US Immigration and Customs Enforcement, or 3. an individual authorized under Federal law or agreement to perform immigration enforcement functions"
+        },
+        {
+          "tempId": 23,
+          "type": "solutionComponent",
+          "text": "public immigration enforcement function",
+          "notes": "any activity directly exercising Federal immigration authority through public-facing actions, include a patrol, stop, arrest, search, interview to determine immigrations tatus, raid, check-point inspection, or the service of a judicial or administrative warrant; and does not include covert, non-public operations or non-enforcement activities"
+        },
+        {
+          "tempId": 24,
+          "type": "solutionComponent",
+          "text": "visible identification",
+          "notes": "a display of an immigration officer’s agency and name or badge number"
+        },
+        {
+          "tempId": 25,
+          "type": "solutionComponent",
+          "text": "accountability for compliance of this Act",
+          "notes": ""
+        },
+        {
+          "tempId": 26,
+          "type": "solutionComponent",
+          "text": "officers must wear visible ID during public enforcement",
+          "notes": ""
+        },
+        {
+          "tempId": 27,
+          "type": "solutionComponent",
+          "text": "full name or widely recognized initials of officer's agency",
+          "notes": ""
+        },
+        {
+          "tempId": 28,
+          "type": "solutionComponent",
+          "text": "officer's last name or unique badge/ID number",
+          "notes": ""
+        },
+        {
+          "tempId": 29,
+          "type": "solutionComponent",
+          "text": "visibility requirements for worn identification",
+          "notes": ""
+        },
+        {
+          "tempId": 30,
+          "type": "solutionComponent",
+          "text": "agency: clearly legible from 25 feet in low-light conditions",
+          "notes": ""
+        },
+        {
+          "tempId": 31,
+          "type": "solutionComponent",
+          "text": "Secretary of HS* ensures discipline for noncompliant officers",
+          "notes": "*HS: Homeland Security"
+        },
+        {
+          "tempId": 32,
+          "type": "solutionComponent",
+          "text": "officer info: clearly readable during direct engagement w/public",
+          "notes": ""
+        },
+        {
+          "tempId": 33,
+          "type": "solutionComponent",
+          "text": "displayed on outermost gear and not obscured by gear",
+          "notes": ""
+        },
+        {
+          "tempId": 34,
+          "type": "solutionComponent",
+          "text": "Secretary of Homeland Security submits annual report",
+          "notes": ""
+        },
+        {
+          "tempId": 35,
+          "type": "solutionComponent",
+          "text": "number of public enforcement functions",
+          "notes": ""
+        },
+        {
+          "tempId": 36,
+          "type": "solutionComponent",
+          "text": "number of instances of noncompliance with this Act",
+          "notes": ""
+        },
+        {
+          "tempId": 37,
+          "type": "solutionComponent",
+          "text": "summary of disciplinary actions for noncompliance",
+          "notes": ""
+        }
+      ],
+      "edgesToCreate": [
+        {
+          "type": "creates",
+          "notes": "",
+          "tempSourceId": 12,
+          "tempTargetId": 10
+        },
+        {
+          "type": "causes",
+          "notes": "",
+          "tempSourceId": 13,
+          "tempTargetId": 14
+        },
+        {
+          "type": "causes",
+          "notes": "",
+          "tempSourceId": 14,
+          "tempTargetId": 15
+        },
+        {
+          "type": "causes",
+          "notes": "",
+          "tempSourceId": 14,
+          "tempTargetId": 16
+        },
+        {
+          "type": "addresses",
+          "notes": "",
+          "tempSourceId": 13,
+          "tempTargetId": 12
+        },
+        {
+          "type": "creates",
+          "notes": "",
+          "tempSourceId": 12,
+          "tempTargetId": 11
+        },
+        {
+          "type": "creates",
+          "notes": "",
+          "tempSourceId": 11,
+          "tempTargetId": 19
+        },
+        {
+          "type": "creates",
+          "notes": "",
+          "tempSourceId": 10,
+          "tempTargetId": 19
+        },
+        {
+          "type": "has",
+          "notes": "",
+          "tempSourceId": 21,
+          "tempTargetId": 9
+        },
+        {
+          "type": "has",
+          "notes": "",
+          "tempSourceId": 22,
+          "tempTargetId": 21
+        },
+        {
+          "type": "has",
+          "notes": "",
+          "tempSourceId": 23,
+          "tempTargetId": 21
+        },
+        {
+          "type": "has",
+          "notes": "",
+          "tempSourceId": 24,
+          "tempTargetId": 21
+        },
+        {
+          "type": "has",
+          "notes": "",
+          "tempSourceId": 26,
+          "tempTargetId": 9
+        },
+        {
+          "type": "has",
+          "notes": "",
+          "tempSourceId": 27,
+          "tempTargetId": 26
+        },
+        {
+          "type": "has",
+          "notes": "",
+          "tempSourceId": 28,
+          "tempTargetId": 26
+        },
+        {
+          "type": "has",
+          "notes": "",
+          "tempSourceId": 29,
+          "tempTargetId": 9
+        },
+        {
+          "type": "has",
+          "notes": "",
+          "tempSourceId": 30,
+          "tempTargetId": 29
+        },
+        {
+          "type": "has",
+          "notes": "",
+          "tempSourceId": 32,
+          "tempTargetId": 29
+        },
+        {
+          "type": "has",
+          "notes": "",
+          "tempSourceId": 33,
+          "tempTargetId": 29
+        },
+        {
+          "type": "has",
+          "notes": "",
+          "tempSourceId": 17,
+          "tempTargetId": 9
+        },
+        {
+          "type": "has",
+          "notes": "",
+          "tempSourceId": 18,
+          "tempTargetId": 17
+        },
+        {
+          "type": "has",
+          "notes": "",
+          "tempSourceId": 20,
+          "tempTargetId": 17
+        },
+        {
+          "type": "has",
+          "notes": "",
+          "tempSourceId": 25,
+          "tempTargetId": 9
+        },
+        {
+          "type": "has",
+          "notes": "",
+          "tempSourceId": 31,
+          "tempTargetId": 25
+        },
+        {
+          "type": "has",
+          "notes": "",
+          "tempSourceId": 34,
+          "tempTargetId": 25
+        },
+        {
+          "type": "has",
+          "notes": "",
+          "tempSourceId": 35,
+          "tempTargetId": 34
+        },
+        {
+          "type": "has",
+          "notes": "",
+          "tempSourceId": 36,
+          "tempTargetId": 34
+        },
+        {
+          "type": "has",
+          "notes": "",
+          "tempSourceId": 37,
+          "tempTargetId": 34
+        },
+        {
+          "type": "has",
+          "notes": "",
+          "tempSourceId": 0,
+          "tempTargetId": 9
+        },
+        {
+          "type": "has",
+          "notes": "",
+          "tempSourceId": 1,
+          "tempTargetId": 0
+        },
+        {
+          "type": "has",
+          "notes": "",
+          "tempSourceId": 2,
+          "tempTargetId": 0
+        },
+        {
+          "type": "has",
+          "notes": "",
+          "tempSourceId": 3,
+          "tempTargetId": 0
+        },
+        {
+          "type": "creates",
+          "notes": "",
+          "tempSourceId": 4,
+          "tempTargetId": 11
+        },
+        {
+          "type": "creates",
+          "notes": "",
+          "tempSourceId": 5,
+          "tempTargetId": 19
+        },
+        {
+          "type": "creates",
+          "notes": "",
+          "tempSourceId": 19,
+          "tempTargetId": 17
+        },
+        {
+          "type": "creates",
+          "notes": "",
+          "tempSourceId": 19,
+          "tempTargetId": 26
+        },
+        {
+          "type": "creates",
+          "notes": "",
+          "tempSourceId": 19,
+          "tempTargetId": 29
+        },
+        {
+          "type": "creates",
+          "notes": "",
+          "tempSourceId": 6,
+          "tempTargetId": 26
+        },
+        {
+          "type": "creates",
+          "notes": "",
+          "tempSourceId": 7,
+          "tempTargetId": 6
+        },
+        {
+          "type": "creates",
+          "notes": "",
+          "tempSourceId": 6,
+          "tempTargetId": 29
+        },
+        {
+          "type": "creates",
+          "notes": "",
+          "tempSourceId": 8,
+          "tempTargetId": 19
+        },
+        {
+          "type": "addresses",
+          "notes": "",
+          "tempSourceId": 14,
+          "tempTargetId": 4
+        }
+      ]
+    }
+  }
+}
