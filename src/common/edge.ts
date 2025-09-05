@@ -41,7 +41,9 @@ export const edgeSchema = z.object({
   id: z.string().uuid(),
   topicId: z.number(),
   arguedDiagramPartId: z.string().uuid().nullable(),
-  type: zRelationNames,
+  type: zRelationNames.describe(
+    "Note: this unintuitively reads from the target node to the source node. E.g. target `Solution` node `addresses` source `Problem` node.",
+  ),
   customLabel: z
     .string()
     .max(30)
@@ -53,6 +55,44 @@ export const edgeSchema = z.object({
 });
 
 export type Edge = z.infer<typeof edgeSchema>;
+
+export const topicAIEdgeSchema = edgeSchema
+  .pick({
+    type: true,
+    notes: true,
+  })
+  .extend({
+    tempSourceId: z.number(),
+    tempTargetId: z.number(),
+  });
+
+/**
+ * Looser schema to make hitting the API easier for consumers. Mainly different from `edgeSchema` in
+ * that many fields are optional and can use `tempId`s to identify temp nodes.
+ */
+export const createEdgeSchema = edgeSchema
+  .extend(topicAIEdgeSchema.shape)
+  .partial({
+    id: true,
+    topicId: true,
+    arguedDiagramPartId: true,
+    customLabel: true,
+    sourceId: true,
+    targetId: true,
+    tempSourceId: true,
+    tempTargetId: true,
+  })
+  .refine((data) => {
+    return data.sourceId !== undefined || data.tempSourceId !== undefined;
+  }, "Must provide either sourceId or tempSourceId.")
+  .refine((data) => {
+    return data.targetId !== undefined || data.tempTargetId !== undefined;
+  }, "Must provide either targetId or tempTargetId.")
+  .describe(
+    "Can use `tempSourceId`/`tempTargetId` to reference nodes that haven't been persisted yet, which you'll be identifying via `node.tempId`.",
+  );
+
+export type CreateEdge = z.infer<typeof createEdgeSchema>;
 
 /**
  * Ideally we wouldn't need this outside of the react-flow components, but we unfortunately let this
