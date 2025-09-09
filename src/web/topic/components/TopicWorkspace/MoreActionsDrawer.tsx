@@ -255,7 +255,7 @@ export const MoreActionsDrawer = ({
                   hidden
                   accept=".json"
                   type="file"
-                  onChange={(event) => uploadTopic(event, sessionUser?.username)}
+                  onChange={(event) => void uploadTopic(event, sessionUser?.username)}
                 />
               </IconButton>
               <IconButton
