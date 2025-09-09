@@ -12,7 +12,7 @@ import { v4 as uuid } from "uuid";
 import { z } from "zod";
 import { StorageValue } from "zustand/middleware";
 
-import { errorWithData } from "@/common/errorHandling";
+import { errorWithData, rethrowWithData } from "@/common/errorHandling";
 import { topicFileSchema } from "@/common/topic";
 import {
   loadCommentsFromApi,
@@ -171,7 +171,7 @@ const ensureUnique = (
   };
 };
 
-export const uploadTopic = (
+export const uploadTopic = async (
   event: React.ChangeEvent<HTMLInputElement>,
   sessionUsername?: string,
 ) => {
@@ -180,59 +180,52 @@ export const uploadTopic = (
   const file = event.target.files[0];
   if (!file) return;
 
-  file
-    .text()
-    .then((text) => {
-      const downloadJson = downloadJsonSchema.parse(JSON.parse(text)) as DownloadJson;
+  const fileText = await file.text();
 
-      // migrations
-      const diagramPersistState = downloadJson.diagram;
-      if (!diagramPersistState.version) {
-        throw errorWithData(
-          "No version found in file, cannot migrate old state",
-          diagramPersistState,
-        );
-      }
-      const migratedDiagramState = migrate(
-        diagramPersistState.state,
-        diagramPersistState.version,
-      ) as DiagramStoreState;
+  try {
+    const downloadJson = downloadJsonSchema.parse(JSON.parse(fileText)) as DownloadJson;
 
-      const topicPersistState = downloadJson.topic;
-      if (!topicPersistState.version) {
-        throw errorWithData(
-          "No version found in file, cannot migrate old state",
-          topicPersistState,
-        );
-      }
-      const migratedTopicState = migrateTopic(
-        topicPersistState.state,
-        topicPersistState.version,
-      ) as TopicStoreState;
+    // migrations
+    const diagramPersistState = downloadJson.diagram;
+    if (!diagramPersistState.version) {
+      throw errorWithData(
+        "No version found in file, cannot migrate old state",
+        diagramPersistState,
+      );
+    }
+    const migratedDiagramState = migrate(
+      diagramPersistState.state,
+      diagramPersistState.version,
+    ) as DiagramStoreState;
 
-      const viewsPersistState = downloadJson.views;
-      if (!viewsPersistState.version) {
-        throw errorWithData(
-          "No version found in file, cannot migrate old state",
-          viewsPersistState,
-        );
-      }
-      const migratedViewsState = migrateQuickView(
-        viewsPersistState.state,
-        viewsPersistState.version,
-      ) as QuickViewStoreState;
+    const topicPersistState = downloadJson.topic;
+    if (!topicPersistState.version) {
+      throw errorWithData("No version found in file, cannot migrate old state", topicPersistState);
+    }
+    const migratedTopicState = migrateTopic(
+      topicPersistState.state,
+      topicPersistState.version,
+    ) as TopicStoreState;
 
-      // avoid conflicts with existing topics
-      const { uniqueDiagram, uniqueViews } = ensureUnique(migratedDiagramState, migratedViewsState);
+    const viewsPersistState = downloadJson.views;
+    if (!viewsPersistState.version) {
+      throw errorWithData("No version found in file, cannot migrate old state", viewsPersistState);
+    }
+    const migratedViewsState = migrateQuickView(
+      viewsPersistState.state,
+      viewsPersistState.version,
+    ) as QuickViewStoreState;
 
-      // populate stores
-      setTopicDetails(migratedTopicState.topic.description);
-      setDiagramData(uniqueDiagram, sessionUsername);
-      loadQuickViewsFromDownloaded(uniqueViews);
-    })
-    .catch((error: unknown) => {
-      throw error;
-    });
+    // avoid conflicts with existing topics
+    const { uniqueDiagram, uniqueViews } = ensureUnique(migratedDiagramState, migratedViewsState);
+
+    // populate stores
+    setTopicDetails(migratedTopicState.topic.description);
+    setDiagramData(uniqueDiagram, sessionUsername);
+    loadQuickViewsFromDownloaded(uniqueViews);
+  } catch (error: unknown) {
+    rethrowWithData(error, { fileText });
+  }
 };
 
 export const loadStores = async (diagramData?: TopicData) => {

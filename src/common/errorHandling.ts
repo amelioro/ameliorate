@@ -20,3 +20,15 @@ export const errorWithData = (message: string, ...data: any[]) => {
 export const throwError = (message: string, ...data: any[]) => {
   throw errorWithData(message, data);
 };
+
+/**
+ * Try our best to retain everything about an error while adding data to it.
+ */
+// eslint-disable-next-line functional/functional-parameters, @typescript-eslint/no-explicit-any
+export const rethrowWithData = (error: unknown, ...data: any[]) => {
+  const typedError = error instanceof Error ? error : new Error(String(error));
+
+  // eslint-disable-next-line functional/immutable-data, no-param-reassign
+  typedError.message += "\n\nrelated data:\n" + JSON.stringify(data);
+  throw typedError;
+};
