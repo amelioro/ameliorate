@@ -35,7 +35,6 @@ yarn-error.log*
 *.tsbuildinfo
 
 # dotenv
-# TODO Comment out this rule if environment variables can be committed
 .env
 
 # Local Netlify folder
@@ -49,3 +48,6 @@ playwright/.cache/
 
 # docs things
 _pagefind/
+
+# prisma
+/src/db/generated/

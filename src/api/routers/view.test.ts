@@ -1,11 +1,11 @@
 /* eslint-disable functional/no-let -- let is needed to reuse `before`-initialized variables across tests */
-import { Topic, User } from "@prisma/client";
 import shortUUID from "short-uuid";
 import { beforeEach, describe, expect, test } from "vitest";
 
 import { appRouter } from "@/api/routers/_app";
 import { QuickView } from "@/common/view";
 import { xprisma } from "@/db/extendedPrisma";
+import { Topic, User } from "@/db/generated/prisma/client";
 
 import { testEmail } from "../../../scripts/setupTests";
 

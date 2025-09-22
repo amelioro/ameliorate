@@ -1,10 +1,10 @@
-import { Topic as ApiTopic } from "@prisma/client";
 import { StorageValue, persist } from "zustand/middleware";
 import { shallow } from "zustand/shallow";
 import { createWithEqualityFn } from "zustand/traditional";
 
 import { errorWithData } from "@/common/errorHandling";
 import { PlaygroundTopic } from "@/common/topic";
+import { Topic as ApiTopic } from "@/db/generated/prisma/client";
 import { apiSyncer } from "@/web/topic/topicStore/apiSyncerMiddleware";
 import { isPlaygroundTopic } from "@/web/topic/utils/topic";
 import { useReadonlyMode } from "@/web/view/actionConfigStore";

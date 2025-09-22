@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars -- assign names to seeded records even if unused, should make maintenance easier */
 
-import { Edge, Node } from "@prisma/client";
 import { v4 as uuid } from "uuid";
+
+import { Edge, Node } from "@/db/generated/prisma/client";
 
 import { RelationName } from "../src/common/edge";
 import { NodeType } from "../src/common/node";

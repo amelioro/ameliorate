@@ -1,6 +1,8 @@
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["tracing"]
+  provider            = "prisma-client"
+  output              = "./generated/prisma"
+  importFileExtension = "ts" // supposed to be "inferred from environment", not sure why these generate as e.g. 'import from [file].js otherwise'
+  engineType          = "client"
 }
 
 datasource db {

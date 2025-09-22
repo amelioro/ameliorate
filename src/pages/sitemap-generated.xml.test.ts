@@ -1,9 +1,9 @@
 /* eslint-disable functional/no-let -- let is needed to reuse `before`-initialized variables across tests */
-import { Topic, User } from "@prisma/client";
 import { GetServerSidePropsContext } from "next";
 import { beforeEach, expect, test, vi } from "vitest";
 
 import { xprisma } from "@/db/extendedPrisma";
+import { Topic, User } from "@/db/generated/prisma/client";
 import { getServerSideProps } from "@/pages/sitemap-generated.xml.page";
 import { testEmail } from "~/scripts/setupTests";
 

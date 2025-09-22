@@ -1,6 +1,5 @@
 import { Settings } from "@mui/icons-material";
 import { Box, Button, Dialog, IconButton } from "@mui/material";
-import { type Topic } from "@prisma/client";
 import {
   type MRT_ColumnDef,
   MRT_ShowHideColumnsButton,
@@ -12,6 +11,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
+import { type Topic } from "@/db/generated/prisma/client";
 import { NotFoundError, QueryError } from "@/web/common/components/Error/Error";
 import { Link } from "@/web/common/components/Link";
 import { Loading } from "@/web/common/components/Loading/Loading";

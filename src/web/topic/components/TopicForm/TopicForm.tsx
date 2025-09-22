@@ -17,7 +17,6 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { Topic } from "@prisma/client";
 import Router from "next/router";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -25,6 +24,7 @@ import { z } from "zod";
 
 import { getNewTopicProblemNode } from "@/common/node";
 import { topicSchema, visibilityTypes } from "@/common/topic";
+import { Topic } from "@/db/generated/prisma/client";
 import { trpc } from "@/web/common/trpc";
 import { updateTopicWithoutSyncingToApi } from "@/web/topic/topicStore/store";
 import { generateBasicViews } from "@/web/view/quickViewStore/store";

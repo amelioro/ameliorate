@@ -1,7 +1,10 @@
+import { type DMMF } from "@prisma/client/runtime/client";
+import { getDMMF } from "@prisma/internals";
 import * as matchers from "jest-extended";
-import { PrismockClient } from "prismock";
-import { PrismockClientType } from "prismock/build/main/lib/client";
+import { type PrismockClientType, createPrismock } from "prismock/build/main/lib/client";
 import { afterEach, expect, vi } from "vitest";
+
+import { type PrismaClient } from "@/db/generated/prisma/client";
 
 import { xprisma } from "../src/db/extendedPrisma";
 
@@ -26,10 +29,28 @@ process.env.BASE_URL = "http://localhost:3000"; // not sure how to reuse next.co
 export const testEmail = "test@test.test";
 
 // this seems to add ~300ms per test file, couldn't find a way to load this once for all tests
-vi.mock("@prisma/client", () => ({
-  PrismaClient: PrismockClient,
-}));
+vi.mock("@/db/generated/prisma/client", async (importOriginal) => {
+  const original = await importOriginal<typeof import("@/db/generated/prisma/client")>();
+  const { Prisma } = original;
+
+  // After upgrading from prisma 5.15.1 -> 6.16.2, and generating /prisma/client via the rust-free
+  // engine and prisma-client (rather than prisma-client-js), `Prisma` no longer has `dmmf` on it.
+  // Apparently `getDMMF()` is more stable for public usage, so we're using that here. https://www.answeroverflow.com/m/1366812800663420978
+  // Note: after upgrading, with prisma-client-js there _is_ `Prisma.dmmf`, but it doesn't have all
+  // the fields that are expected by its TS type, so that doesn't work either.
+  const dmmf = await getDMMF({ datamodelPath: "./src/db/schema.prisma" });
+  const PrismaWithDMMF = { ...Prisma, dmmf };
+
+  return {
+    // ensure other parts of the import are still usable e.g. `Prisma`
+    ...original,
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    PrismaClient: createPrismock(
+      PrismaWithDMMF as unknown as typeof Prisma & { dmmf: DMMF.Document },
+    ),
+  };
+});
 
 afterEach(() => {
-  (xprisma as PrismockClientType).reset();
+  (xprisma as PrismockClientType<PrismaClient>).reset();
 });
