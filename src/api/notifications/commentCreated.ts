@@ -1,4 +1,3 @@
-import { Topic, UnsubscribeCode, User } from "@prisma/client";
 import { truncate } from "es-toolkit/compat";
 import { encode } from "he";
 
@@ -8,6 +7,7 @@ import { errorWithData } from "@/common/errorHandling";
 import { InAppNotification, maxMessageLength } from "@/common/inAppNotification";
 import { getBaseUrl } from "@/common/utils";
 import { xprisma } from "@/db/extendedPrisma";
+import { Topic, UnsubscribeCode, User } from "@/db/generated/prisma/client";
 
 /**
  * user should receive an in-app notification if:
