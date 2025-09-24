@@ -33,7 +33,8 @@ export const TopicViews = () => {
 
         <ListItem key="1">
           <ListItemButton onClick={() => setIsFormatSectionOpen(!isFormatSectionOpen)}>
-            <ListItemText primary="Format" />
+            <ListItemText primary="Format" primaryTypographyProps={{ fontWeight: 'bold' }}
+            />
             {isFormatSectionOpen ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
         </ListItem>
@@ -72,7 +73,8 @@ export const TopicViews = () => {
               <ListItemButton
                 onClick={() => setIsInformationFiltersSectionOpen(!isInformationFiltersSectionOpen)}
               >
-                <ListItemText primary="Information Filters" />
+                <ListItemText primary="Information Filters" primaryTypographyProps={{ fontWeight: 'bold' }}
+                />
                 {isInformationFiltersSectionOpen ? <ExpandLess /> : <ExpandMore />}
               </ListItemButton>
             </ListItem>
@@ -90,7 +92,8 @@ export const TopicViews = () => {
               <ListItemButton
                 onClick={() => setIsTableFiltersSectionOpen(!isTableFiltersSectionOpen)}
               >
-                <ListItemText primary="Table Filters" />
+                <ListItemText primary="Table Filters" primaryTypographyProps={{ fontWeight: 'bold' }}
+                />
                 {isTableFiltersSectionOpen ? <ExpandLess /> : <ExpandMore />}
               </ListItemButton>
             </ListItem>
@@ -106,7 +109,8 @@ export const TopicViews = () => {
           <ListItemButton
             onClick={() => setIsGeneralFiltersSectionOpen(!isGeneralFiltersSectionOpen)}
           >
-            <ListItemText primary="General Filters" />
+            <ListItemText primary="General Filters" primaryTypographyProps={{ fontWeight: 'bold' }}
+            />
             {isGeneralFiltersSectionOpen ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
         </ListItem>
