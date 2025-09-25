@@ -1,4 +1,14 @@
-import { Add, Delete, Edit, Redo, Save, SwapVert, Undo, MoreVert, Visibility } from "@mui/icons-material";
+import {
+  Add,
+  Delete,
+  Edit,
+  MoreVert,
+  Redo,
+  Save,
+  SwapVert,
+  Undo,
+  Visibility,
+} from "@mui/icons-material";
 import {
   Divider,
   IconButton,
@@ -77,7 +87,9 @@ const QuickViewRow = ({ view, selected, editable, onEdit }: RowProps) => {
                 }}
                 closeMenu={() => setActionsMenuAnchorEl(null)}
               >
-                <ListItemIcon><SwapVert fontSize="small" /></ListItemIcon>
+                <ListItemIcon>
+                  <SwapVert fontSize="small" />
+                </ListItemIcon>
                 <ListItemText>Move up</ListItemText>
               </CloseOnClickMenuItem>
               <CloseOnClickMenuItem
@@ -87,7 +99,9 @@ const QuickViewRow = ({ view, selected, editable, onEdit }: RowProps) => {
                 }}
                 closeMenu={() => setActionsMenuAnchorEl(null)}
               >
-                <ListItemIcon><SwapVert fontSize="small" /></ListItemIcon>
+                <ListItemIcon>
+                  <SwapVert fontSize="small" />
+                </ListItemIcon>
                 <ListItemText>Move down</ListItemText>
               </CloseOnClickMenuItem>
               <CloseOnClickMenuItem
@@ -97,7 +111,9 @@ const QuickViewRow = ({ view, selected, editable, onEdit }: RowProps) => {
                 }}
                 closeMenu={() => setActionsMenuAnchorEl(null)}
               >
-                <ListItemIcon><Edit fontSize="small" /></ListItemIcon>
+                <ListItemIcon>
+                  <Edit fontSize="small" />
+                </ListItemIcon>
                 <ListItemText>Edit</ListItemText>
               </CloseOnClickMenuItem>
               <CloseOnClickMenuItem
@@ -108,7 +124,9 @@ const QuickViewRow = ({ view, selected, editable, onEdit }: RowProps) => {
                 }}
                 closeMenu={() => setActionsMenuAnchorEl(null)}
               >
-                <ListItemIcon><Save fontSize="small" /></ListItemIcon>
+                <ListItemIcon>
+                  <Save fontSize="small" />
+                </ListItemIcon>
                 <ListItemText>Overwrite</ListItemText>
               </CloseOnClickMenuItem>
               <CloseOnClickMenuItem
@@ -118,7 +136,9 @@ const QuickViewRow = ({ view, selected, editable, onEdit }: RowProps) => {
                 }}
                 closeMenu={() => setActionsMenuAnchorEl(null)}
               >
-                <ListItemIcon><Delete fontSize="small" /></ListItemIcon>
+                <ListItemIcon>
+                  <Delete fontSize="small" />
+                </ListItemIcon>
                 <ListItemText>Delete</ListItemText>
               </CloseOnClickMenuItem>
             </Menu>
@@ -141,15 +161,8 @@ export const QuickViewSection = () => {
 
   return (
     <>
-      <ListItem
-        key="QuickViewSection"
-        disablePadding={false}
-        sx={{ paddingY: 0, height: "40px" }}
-      >
-        <ListItemText
-          primary="Quick Views"
-          primaryTypographyProps={{ fontWeight: 'bold' }}
-        />
+      <ListItem key="QuickViewSection" disablePadding={false} sx={{ paddingY: 0, height: "40px" }}>
+        <ListItemText primary="Quick Views" primaryTypographyProps={{ fontWeight: "bold" }} />
 
         {userCanEditTopicData && (
           <>
