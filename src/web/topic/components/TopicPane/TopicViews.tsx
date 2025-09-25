@@ -33,7 +33,7 @@ export const TopicViews = () => {
 
         <ListItem key="1">
           <ListItemButton onClick={() => setIsFormatSectionOpen(!isFormatSectionOpen)}>
-            <ListItemText primary="Format" />
+            <ListItemText primary="Format" className="*:font-bold" />
             {isFormatSectionOpen ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
         </ListItem>
@@ -72,7 +72,7 @@ export const TopicViews = () => {
               <ListItemButton
                 onClick={() => setIsInformationFiltersSectionOpen(!isInformationFiltersSectionOpen)}
               >
-                <ListItemText primary="Information Filters" />
+                <ListItemText primary="Information Filters" className="*:font-bold" />
                 {isInformationFiltersSectionOpen ? <ExpandLess /> : <ExpandMore />}
               </ListItemButton>
             </ListItem>
@@ -90,7 +90,7 @@ export const TopicViews = () => {
               <ListItemButton
                 onClick={() => setIsTableFiltersSectionOpen(!isTableFiltersSectionOpen)}
               >
-                <ListItemText primary="Table Filters" />
+                <ListItemText primary="Table Filters" className="*:font-bold" />
                 {isTableFiltersSectionOpen ? <ExpandLess /> : <ExpandMore />}
               </ListItemButton>
             </ListItem>
@@ -106,7 +106,7 @@ export const TopicViews = () => {
           <ListItemButton
             onClick={() => setIsGeneralFiltersSectionOpen(!isGeneralFiltersSectionOpen)}
           >
-            <ListItemText primary="General Filters" />
+            <ListItemText primary="General Filters" className="*:font-bold" />
             {isGeneralFiltersSectionOpen ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
         </ListItem>
