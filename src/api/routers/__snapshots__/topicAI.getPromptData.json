@@ -116,490 +116,493 @@
   },
   "examples": {
     "visibleAct": {
-      "nodesToCreate": [
-        {
-          "tempId": 0,
-          "type": "solutionComponent",
-          "text": "duties of Office for Civil Rights and Civil Liberties",
-          "notes": ""
-        },
-        {
-          "tempId": 1,
-          "type": "solutionComponent",
-          "text": "receive and investigate public complaints re: Act's violations",
-          "notes": ""
-        },
-        {
-          "tempId": 2,
-          "type": "solutionComponent",
-          "text": "advise compliance and corrective actions to relevant DHS* groups",
-          "notes": "*DHS: Department of Homeland Security"
-        },
-        {
-          "tempId": 3,
-          "type": "solutionComponent",
-          "text": "include its findings and actions re: this Act it its annual report",
-          "notes": ""
-        },
-        {
-          "tempId": 4,
-          "type": "benefit",
-          "text": "encourages proper officer conduct",
-          "notes": ""
-        },
-        {
-          "tempId": 5,
-          "type": "detriment",
-          "text": "could interfere with covert operations",
-          "notes": ""
-        },
-        {
-          "tempId": 6,
-          "type": "detriment",
-          "text": "procedural burdens on officers during urgent enforcement actions",
-          "notes": ""
-        },
-        {
-          "tempId": 7,
-          "type": "detriment",
-          "text": "increased response times",
-          "notes": ""
-        },
-        {
-          "tempId": 8,
-          "type": "detriment",
-          "text": "could endanger officers if identified in hostile environments",
-          "notes": ""
-        },
-        {
-          "tempId": 9,
-          "type": "solution",
-          "text": "HR 4667: The VISIBLE Act of 2025",
-          "notes": ""
-        },
-        {
-          "tempId": 10,
-          "type": "benefit",
-          "text": "transparency in public immigration enforcement",
-          "notes": ""
-        },
-        {
-          "tempId": 11,
-          "type": "benefit",
-          "text": "accountability in public immigration enforcement",
-          "notes": ""
-        },
-        {
-          "tempId": 12,
-          "type": "benefit",
-          "text": "public trust in government",
-          "notes": ""
-        },
-        {
-          "tempId": 13,
-          "type": "problem",
-          "text": "crumbling trust in government",
-          "notes": ""
-        },
-        {
-          "tempId": 14,
-          "type": "cause",
-          "text": "immigration officers can take extreme action but aren't held accountable",
-          "notes": ""
-        },
-        {
-          "tempId": 15,
-          "type": "cause",
-          "text": "immigration officers wear masks to hide face",
-          "notes": ""
-        },
-        {
-          "tempId": 16,
-          "type": "cause",
-          "text": "immigration officers don't have clear identification visible",
-          "notes": ""
-        },
-        {
-          "tempId": 17,
-          "type": "solutionComponent",
-          "text": "officers may not wear non-medical face coverings",
-          "notes": ""
-        },
-        {
-          "tempId": 18,
-          "type": "solutionComponent",
-          "text": "exception: during covert, non-public operation",
-          "notes": ""
-        },
-        {
-          "tempId": 19,
-          "type": "benefit",
-          "text": "officers are visibly identifiable during public enforcement",
-          "notes": ""
-        },
-        {
-          "tempId": 20,
-          "type": "solutionComponent",
-          "text": "exception: to guard from hazardous environment conditions",
-          "notes": ""
-        },
-        {
-          "tempId": 21,
-          "type": "solutionComponent",
-          "text": "definitions",
-          "notes": ""
-        },
-        {
-          "tempId": 22,
-          "type": "solutionComponent",
-          "text": "immigration officer",
-          "notes": "any individual authorized to perform immigration enforcement functions, and is 1. an employee of US Customs and Border Protection, 2. an employee of US Immigration and Customs Enforcement, or 3. an individual authorized under Federal law or agreement to perform immigration enforcement functions"
-        },
-        {
-          "tempId": 23,
-          "type": "solutionComponent",
-          "text": "public immigration enforcement function",
-          "notes": "any activity directly exercising Federal immigration authority through public-facing actions, include a patrol, stop, arrest, search, interview to determine immigrations tatus, raid, check-point inspection, or the service of a judicial or administrative warrant; and does not include covert, non-public operations or non-enforcement activities"
-        },
-        {
-          "tempId": 24,
-          "type": "solutionComponent",
-          "text": "visible identification",
-          "notes": "a display of an immigration officer’s agency and name or badge number"
-        },
-        {
-          "tempId": 25,
-          "type": "solutionComponent",
-          "text": "accountability for compliance of this Act",
-          "notes": ""
-        },
-        {
-          "tempId": 26,
-          "type": "solutionComponent",
-          "text": "officers must wear visible ID during public enforcement",
-          "notes": ""
-        },
-        {
-          "tempId": 27,
-          "type": "solutionComponent",
-          "text": "full name or widely recognized initials of officer's agency",
-          "notes": ""
-        },
-        {
-          "tempId": 28,
-          "type": "solutionComponent",
-          "text": "officer's last name or unique badge/ID number",
-          "notes": ""
-        },
-        {
-          "tempId": 29,
-          "type": "solutionComponent",
-          "text": "visibility requirements for worn identification",
-          "notes": ""
-        },
-        {
-          "tempId": 30,
-          "type": "solutionComponent",
-          "text": "agency: clearly legible from 25 feet in low-light conditions",
-          "notes": ""
-        },
-        {
-          "tempId": 31,
-          "type": "solutionComponent",
-          "text": "Secretary of HS* ensures discipline for noncompliant officers",
-          "notes": "*HS: Homeland Security"
-        },
-        {
-          "tempId": 32,
-          "type": "solutionComponent",
-          "text": "officer info: clearly readable during direct engagement w/public",
-          "notes": ""
-        },
-        {
-          "tempId": 33,
-          "type": "solutionComponent",
-          "text": "displayed on outermost gear and not obscured by gear",
-          "notes": ""
-        },
-        {
-          "tempId": 34,
-          "type": "solutionComponent",
-          "text": "Secretary of Homeland Security submits annual report",
-          "notes": ""
-        },
-        {
-          "tempId": 35,
-          "type": "solutionComponent",
-          "text": "number of public enforcement functions",
-          "notes": ""
-        },
-        {
-          "tempId": 36,
-          "type": "solutionComponent",
-          "text": "number of instances of noncompliance with this Act",
-          "notes": ""
-        },
-        {
-          "tempId": 37,
-          "type": "solutionComponent",
-          "text": "summary of disciplinary actions for noncompliance",
-          "notes": ""
-        }
-      ],
-      "edgesToCreate": [
-        {
-          "type": "creates",
-          "notes": "",
-          "tempSourceId": 12,
-          "tempTargetId": 10
-        },
-        {
-          "type": "causes",
-          "notes": "",
-          "tempSourceId": 13,
-          "tempTargetId": 14
-        },
-        {
-          "type": "causes",
-          "notes": "",
-          "tempSourceId": 14,
-          "tempTargetId": 15
-        },
-        {
-          "type": "causes",
-          "notes": "",
-          "tempSourceId": 14,
-          "tempTargetId": 16
-        },
-        {
-          "type": "addresses",
-          "notes": "",
-          "tempSourceId": 13,
-          "tempTargetId": 12
-        },
-        {
-          "type": "creates",
-          "notes": "",
-          "tempSourceId": 12,
-          "tempTargetId": 11
-        },
-        {
-          "type": "creates",
-          "notes": "",
-          "tempSourceId": 11,
-          "tempTargetId": 19
-        },
-        {
-          "type": "creates",
-          "notes": "",
-          "tempSourceId": 10,
-          "tempTargetId": 19
-        },
-        {
-          "type": "has",
-          "notes": "",
-          "tempSourceId": 21,
-          "tempTargetId": 9
-        },
-        {
-          "type": "has",
-          "notes": "",
-          "tempSourceId": 22,
-          "tempTargetId": 21
-        },
-        {
-          "type": "has",
-          "notes": "",
-          "tempSourceId": 23,
-          "tempTargetId": 21
-        },
-        {
-          "type": "has",
-          "notes": "",
-          "tempSourceId": 24,
-          "tempTargetId": 21
-        },
-        {
-          "type": "has",
-          "notes": "",
-          "tempSourceId": 26,
-          "tempTargetId": 9
-        },
-        {
-          "type": "has",
-          "notes": "",
-          "tempSourceId": 27,
-          "tempTargetId": 26
-        },
-        {
-          "type": "has",
-          "notes": "",
-          "tempSourceId": 28,
-          "tempTargetId": 26
-        },
-        {
-          "type": "has",
-          "notes": "",
-          "tempSourceId": 29,
-          "tempTargetId": 9
-        },
-        {
-          "type": "has",
-          "notes": "",
-          "tempSourceId": 30,
-          "tempTargetId": 29
-        },
-        {
-          "type": "has",
-          "notes": "",
-          "tempSourceId": 32,
-          "tempTargetId": 29
-        },
-        {
-          "type": "has",
-          "notes": "",
-          "tempSourceId": 33,
-          "tempTargetId": 29
-        },
-        {
-          "type": "has",
-          "notes": "",
-          "tempSourceId": 17,
-          "tempTargetId": 9
-        },
-        {
-          "type": "has",
-          "notes": "",
-          "tempSourceId": 18,
-          "tempTargetId": 17
-        },
-        {
-          "type": "has",
-          "notes": "",
-          "tempSourceId": 20,
-          "tempTargetId": 17
-        },
-        {
-          "type": "has",
-          "notes": "",
-          "tempSourceId": 25,
-          "tempTargetId": 9
-        },
-        {
-          "type": "has",
-          "notes": "",
-          "tempSourceId": 31,
-          "tempTargetId": 25
-        },
-        {
-          "type": "has",
-          "notes": "",
-          "tempSourceId": 34,
-          "tempTargetId": 25
-        },
-        {
-          "type": "has",
-          "notes": "",
-          "tempSourceId": 35,
-          "tempTargetId": 34
-        },
-        {
-          "type": "has",
-          "notes": "",
-          "tempSourceId": 36,
-          "tempTargetId": 34
-        },
-        {
-          "type": "has",
-          "notes": "",
-          "tempSourceId": 37,
-          "tempTargetId": 34
-        },
-        {
-          "type": "has",
-          "notes": "",
-          "tempSourceId": 0,
-          "tempTargetId": 9
-        },
-        {
-          "type": "has",
-          "notes": "",
-          "tempSourceId": 1,
-          "tempTargetId": 0
-        },
-        {
-          "type": "has",
-          "notes": "",
-          "tempSourceId": 2,
-          "tempTargetId": 0
-        },
-        {
-          "type": "has",
-          "notes": "",
-          "tempSourceId": 3,
-          "tempTargetId": 0
-        },
-        {
-          "type": "creates",
-          "notes": "",
-          "tempSourceId": 4,
-          "tempTargetId": 11
-        },
-        {
-          "type": "creates",
-          "notes": "",
-          "tempSourceId": 5,
-          "tempTargetId": 19
-        },
-        {
-          "type": "creates",
-          "notes": "",
-          "tempSourceId": 19,
-          "tempTargetId": 17
-        },
-        {
-          "type": "creates",
-          "notes": "",
-          "tempSourceId": 19,
-          "tempTargetId": 26
-        },
-        {
-          "type": "creates",
-          "notes": "",
-          "tempSourceId": 19,
-          "tempTargetId": 29
-        },
-        {
-          "type": "creates",
-          "notes": "",
-          "tempSourceId": 6,
-          "tempTargetId": 26
-        },
-        {
-          "type": "creates",
-          "notes": "",
-          "tempSourceId": 7,
-          "tempTargetId": 6
-        },
-        {
-          "type": "creates",
-          "notes": "",
-          "tempSourceId": 6,
-          "tempTargetId": 29
-        },
-        {
-          "type": "creates",
-          "notes": "",
-          "tempSourceId": 8,
-          "tempTargetId": 19
-        },
-        {
-          "type": "addresses",
-          "notes": "",
-          "tempSourceId": 14,
-          "tempTargetId": 4
-        }
-      ]
+      "sourceText": "<billText>\nA BILL\nTo amend section 287 of the Immigration and Nationality\nAct to require all immigration enforcement officers to\ndisplay visible identification during public-facing immi-\ngration enforcement actions and to promote transparency\nand accountability.\n1.1\tBe it enacted by the Senate and House of Representa-\n1.2\ttives of the United States of America in Congress assembled,\nSECTION 1. SHORT TITLES.\n2.2\tThis Act may be cited as the ‘‘Visible Identification\n2.3\tStandards for Immigration-Based Law Enforcement Act\n2.4\tof 2025’’ or the ‘‘VISIBLE Act’’.\n2.5\tSEC. 2. FINDINGS.\n2.6\tCongress finds that—\n2.7\t(1) transparency and accountability in public\n2.8\timmigration enforcement are essential to maintain-\n2.9\ting public trust and upholding constitutional govern-\n2.10\tance; and\n2.11\t(2) immigration enforcement officers should be\n2.12\tvisibly identifiable during any civil immigration en-\n2.13\tforcement activity at which members of the public\n2.14\tmay be directly engaged or present, including ac-\n2.15\ttions involving civil and criminal authority, unless\n2.16\tthe activity is truly covert and not observable by the\n2.17\tpublic.\n2.18\tSEC. 3. REQUIREMENT FOR VISIBLE IDENTIFICATION DUR-\n2.19\tING IMMIGRATION ENFORCEMENT.\n2.20\tSection 287 of the Immigration and Nationality Act\n2.21\t(8 U.S.C. 1357) is amended by adding at the end the fol-\n2.22\tlowing:\n2.23\t‘‘(i)(1) In this subsection:\n2.24\t‘‘(A) The term ‘covered immigration officer’\n2.25\tmeans any individual who is—\n3.1\t‘‘(i) authorized to perform immigration en-\n3.2\tforcement functions; and\n3.3\t‘‘(ii)(I) an officer or employee of U.S. Cus-\n3.4\ttoms and Border Protection;\n3.5\t‘‘(II) an officer or employee of U.S. Immi-\n3.6\tgration and Customs Enforcement; or\n3.7\t‘‘(III) an individual authorized, deputized,\n3.8\tor designated under Federal law, regulation, or\n3.9\tagreement to perform immigration enforcement\n3.10\tfunctions, including pursuant to section 287(g)\n3.11\tor any other delegation or agreement with the\n3.12\tDepartment of Homeland Security.\n3.13\t‘‘(B) The term ‘public immigration enforcement\n3.14\tfunction’—\n3.15\t‘‘(i) means any activity that involves the\n3.16\tdirect exercise of Federal immigration authority\n3.17\tthrough public-facing actions, including a pa-\n3.18\ttrol, a stop, an arrest, a search, an interview to\n3.19\tdetermine immigration status, a raid, a check-\n3.20\tpoint inspection, or the service of a judicial or\n3.21\tadministrative warrant; and\n3.22\t‘‘(ii) does not include covert, non-public op-\n3.23\terations or non-enforcement activities.\n3.24\t‘‘(C) The term ‘visible identification’ means a\n3.25\tdisplay of an immigration officer’s agency and name\n4.1\tor badge number in a size and format that complies\n4.2\twith the requirements under paragraph (3).\n4.3\t‘‘(2) Each covered immigration officer who directly\n4.4\tengages in a public immigration enforcement function\n4.5\twithin the United States shall, at all times during such\n4.6\tengagement, wear visible identification, which shall in-\n4.7\tclude—\n4.8\t‘‘(A) the full name or widely recognized initials\n4.9\tof the officer’s employing agency; and\n4.10\t‘‘(B)(i) the officer’s last name; or\n4.11\t‘‘(ii) the officer’s unique badge or identification\n4.12\tnumber.\n4.13\t‘‘(3) The identifying information described in this\n4.14\tparagraph shall be—\n4.15\t‘‘(A) for the immigration officer’s agency, dis-\n4.16\tplayed in a size and format that is clearly legible\n4.17\tfrom a distance of not less than 25 feet, using mate-\n4.18\trials or markings suitable for visibility in both day-\n4.19\tlight and low-light conditions, under normal oper-\n4.20\tation conditions;\n4.21\t‘‘(B) for the officer’s name or badge number,\n4.22\tdisplayed in a manner that is clearly visible and\n4.23\treadable during direct engagement with the public;\n4.24\tand\n5.1\t‘‘(C) displayed on the outermost garment or\n5.2\tgear and not obscured by tactical equipment, body\n5.3\tarmor, or accessories.\n5.4\t‘‘(4) Covered immigration officers may not wear non-\n5.5\tmedical face coverings, including masks or balaclavas, that\n5.6\timpair the visibility of the identifying information required\n5.7\tunder this subsection or obscure the officer’s face unless\n5.8\tsuch face coverings are operationally necessary—\n5.9\t‘‘(A) to protect the integrity of a covert, non-\n5.10\tpublic operation; or\n5.11\t‘‘(B) to guard against hazardous environmental\n5.12\tconditions.’’.\n5.13\tSEC. 4. COMPLIANCE AND REPORTING.\n5.14\t(a) INTERNAL ACCOUNTABILITY.—The Secretary of\n5.15\tHomeland Security shall ensure that any covered immi-\n5.16\tgration officer who fails to comply with the requirements\n5.17\tunder section 287(i) of the Immigration and Nationality\n5.18\tAct, as added by section 3, receive appropriate administra-\n5.19\ttive discipline, including written reprimand, suspension, or\n5.20\tother personnel actions, consistent with agency policy and\n5.21\tany applicable collective bargaining agreement.\n5.22\t(b) ANNUAL REPORT TO CONGRESS.—Not later than\n5.23\tone year after the date of the enactment of this Act, and\n5.24\tannually thereafter, the Secretary of Homeland Security\n5.25\tshall submit a report to the Office for Civil Rights and\n6.1\tCivil Liberties of the Department of Homeland Security,\n6.2\tthe Committee on the Judiciary of the Senate, the Com-\n6.3\tmittee on Homeland Security and Governmental Affairs\n6.4\tof the Senate, the Committee on the Judiciary of the\n6.5\tHouse of Representatives, and the Committee on Home-\n6.6\tland Security of the House of Representatives that in-\n6.7\tcludes—\n6.8\t(1) the total number of public immigration en-\n6.9\tforcement functions conducted during the reporting\n6.10\tperiod;\n6.11\t(2) the number of documented instances of non-\n6.12\tcompliance with section 287(i) of the Immigration\n6.13\tand Nationality Act, as added by section 3; and\n6.14\t(3) a summary of disciplinary or remedial ac-\n6.15\ttions taken against those responsible for such in-\n6.16\tstances of noncompliance.\n6.17\tSEC. 5. ROLE OF THE OFFICE FOR CIVIL RIGHTS AND CIVIL\n6.18\tLIBERTIES.\n6.19\tThe Office for Civil Rights and Civil Liberties of the\n6.20\tDepartment of Homeland Security shall—\n6.21\t(1) receive and investigate complaints from the\n6.22\tpublic concerning violations of section 287(i) of the\n6.23\tImmigration and Nationality Act, as added by sec-\n6.24\ttion 3;\n7.1\t(2) issue recommendations to relevant Depart-\n7.2\tment of Homeland Security components concerning\n7.3\tcompliance and corrective actions that should be\n7.4\ttaken;\n7.5\t(3) include findings and actions taken pursuant\n7.6\tto this Act, including information contained in the\n7.7\treport received pursuant to section 4(b), in its an-\n7.8\tnual public report submitted pursuant to section\n7.9\t705(b) of the Homeland Security Act of 2002 (6\n7.10\tU.S.C. 345(b)); and\n7.11\t(4) carry out the responsibilities under this sec-\n7.12\ttion in accordance with its statutory authorities,\n7.13\twhich may include coordination with the Office of\n7.14\tInspector General of the Department, as appro-\n7.15\tpriate.\n</billText>\n<kialoArguments>\nDiscussion Name:\nDo you support HR 4667 (VISIBLE Act)?\n\n1. Thesis:\nThe VISIBLE Act mandates immigration enforcement officers to wear visible identification during public-facing operations. This is to promote transparency and accountability, ensuring the public can easily identify officers during enforcement activities under the Immigration and Nationality Act.\n\n  1.1. Con:\n  Could potentially endanger officers if their identities are easily accessible in hostile environments.\n\n  1.2. Con:\n  May impose additional procedural burdens on officers during urgent enforcement actions, impacting response times.\n\n  1.3. Con:\n  Could interfere with covert operations where officer anonymity is strategically necessary.\n\n  1.4. Pro:\n  This bill also prohibits the use of non-medical face coverings like masks or balaclavas that obscure identity or facial visibility, with exceptions for environmental hazards or covert operations.\n\n  1.5. Pro:\n  Promotes transparency and accountability by ensuring officers are visibly identifiable during enforcement actions.\n\n  1.6. Pro:\n  Increases public trust by allowing individuals to verify the identity of immigration officers in public-facing interactions.\n\n  1.7. Pro:\n  Encourages proper conduct among officers as they are more accountable when their identities are visible.\n</kialoArguments>\n",
+      "topic": {
+        "nodesToCreate": [
+          {
+            "tempId": 0,
+            "type": "solutionComponent",
+            "text": "duties of Office for Civil Rights and Civil Liberties",
+            "notes": ""
+          },
+          {
+            "tempId": 1,
+            "type": "solutionComponent",
+            "text": "receive and investigate public complaints re: Act's violations",
+            "notes": ""
+          },
+          {
+            "tempId": 2,
+            "type": "solutionComponent",
+            "text": "advise compliance and corrective actions to relevant DHS* groups",
+            "notes": "*DHS: Department of Homeland Security"
+          },
+          {
+            "tempId": 3,
+            "type": "solutionComponent",
+            "text": "include its findings and actions re: this Act it its annual report",
+            "notes": ""
+          },
+          {
+            "tempId": 4,
+            "type": "benefit",
+            "text": "encourages proper officer conduct",
+            "notes": ""
+          },
+          {
+            "tempId": 5,
+            "type": "detriment",
+            "text": "could interfere with covert operations",
+            "notes": ""
+          },
+          {
+            "tempId": 6,
+            "type": "detriment",
+            "text": "procedural burdens on officers during urgent enforcement actions",
+            "notes": ""
+          },
+          {
+            "tempId": 7,
+            "type": "detriment",
+            "text": "increased response times",
+            "notes": ""
+          },
+          {
+            "tempId": 8,
+            "type": "detriment",
+            "text": "could endanger officers if identified in hostile environments",
+            "notes": ""
+          },
+          {
+            "tempId": 9,
+            "type": "solution",
+            "text": "HR 4667: The VISIBLE Act of 2025",
+            "notes": ""
+          },
+          {
+            "tempId": 10,
+            "type": "benefit",
+            "text": "transparency in public immigration enforcement",
+            "notes": ""
+          },
+          {
+            "tempId": 11,
+            "type": "benefit",
+            "text": "accountability in public immigration enforcement",
+            "notes": ""
+          },
+          {
+            "tempId": 12,
+            "type": "benefit",
+            "text": "public trust in government",
+            "notes": ""
+          },
+          {
+            "tempId": 13,
+            "type": "problem",
+            "text": "crumbling trust in government",
+            "notes": ""
+          },
+          {
+            "tempId": 14,
+            "type": "cause",
+            "text": "immigration officers can take extreme action but aren't held accountable",
+            "notes": ""
+          },
+          {
+            "tempId": 15,
+            "type": "cause",
+            "text": "immigration officers wear masks to hide face",
+            "notes": ""
+          },
+          {
+            "tempId": 16,
+            "type": "cause",
+            "text": "immigration officers don't have clear identification visible",
+            "notes": ""
+          },
+          {
+            "tempId": 17,
+            "type": "solutionComponent",
+            "text": "officers may not wear non-medical face coverings",
+            "notes": ""
+          },
+          {
+            "tempId": 18,
+            "type": "solutionComponent",
+            "text": "exception: during covert, non-public operation",
+            "notes": ""
+          },
+          {
+            "tempId": 19,
+            "type": "benefit",
+            "text": "officers are visibly identifiable during public enforcement",
+            "notes": ""
+          },
+          {
+            "tempId": 20,
+            "type": "solutionComponent",
+            "text": "exception: to guard from hazardous environment conditions",
+            "notes": ""
+          },
+          {
+            "tempId": 21,
+            "type": "solutionComponent",
+            "text": "definitions",
+            "notes": ""
+          },
+          {
+            "tempId": 22,
+            "type": "solutionComponent",
+            "text": "immigration officer",
+            "notes": "any individual authorized to perform immigration enforcement functions, and is 1. an employee of US Customs and Border Protection, 2. an employee of US Immigration and Customs Enforcement, or 3. an individual authorized under Federal law or agreement to perform immigration enforcement functions"
+          },
+          {
+            "tempId": 23,
+            "type": "solutionComponent",
+            "text": "public immigration enforcement function",
+            "notes": "any activity directly exercising Federal immigration authority through public-facing actions, include a patrol, stop, arrest, search, interview to determine immigrations tatus, raid, check-point inspection, or the service of a judicial or administrative warrant; and does not include covert, non-public operations or non-enforcement activities"
+          },
+          {
+            "tempId": 24,
+            "type": "solutionComponent",
+            "text": "visible identification",
+            "notes": "a display of an immigration officer’s agency and name or badge number"
+          },
+          {
+            "tempId": 25,
+            "type": "solutionComponent",
+            "text": "accountability for compliance of this Act",
+            "notes": ""
+          },
+          {
+            "tempId": 26,
+            "type": "solutionComponent",
+            "text": "officers must wear visible ID during public enforcement",
+            "notes": ""
+          },
+          {
+            "tempId": 27,
+            "type": "solutionComponent",
+            "text": "full name or widely recognized initials of officer's agency",
+            "notes": ""
+          },
+          {
+            "tempId": 28,
+            "type": "solutionComponent",
+            "text": "officer's last name or unique badge/ID number",
+            "notes": ""
+          },
+          {
+            "tempId": 29,
+            "type": "solutionComponent",
+            "text": "visibility requirements for worn identification",
+            "notes": ""
+          },
+          {
+            "tempId": 30,
+            "type": "solutionComponent",
+            "text": "agency: clearly legible from 25 feet in low-light conditions",
+            "notes": ""
+          },
+          {
+            "tempId": 31,
+            "type": "solutionComponent",
+            "text": "Secretary of HS* ensures discipline for noncompliant officers",
+            "notes": "*HS: Homeland Security"
+          },
+          {
+            "tempId": 32,
+            "type": "solutionComponent",
+            "text": "officer info: clearly readable during direct engagement w/public",
+            "notes": ""
+          },
+          {
+            "tempId": 33,
+            "type": "solutionComponent",
+            "text": "displayed on outermost gear and not obscured by gear",
+            "notes": ""
+          },
+          {
+            "tempId": 34,
+            "type": "solutionComponent",
+            "text": "Secretary of Homeland Security submits annual report",
+            "notes": ""
+          },
+          {
+            "tempId": 35,
+            "type": "solutionComponent",
+            "text": "number of public enforcement functions",
+            "notes": ""
+          },
+          {
+            "tempId": 36,
+            "type": "solutionComponent",
+            "text": "number of instances of noncompliance with this Act",
+            "notes": ""
+          },
+          {
+            "tempId": 37,
+            "type": "solutionComponent",
+            "text": "summary of disciplinary actions for noncompliance",
+            "notes": ""
+          }
+        ],
+        "edgesToCreate": [
+          {
+            "type": "creates",
+            "notes": "",
+            "tempSourceId": 12,
+            "tempTargetId": 10
+          },
+          {
+            "type": "causes",
+            "notes": "",
+            "tempSourceId": 13,
+            "tempTargetId": 14
+          },
+          {
+            "type": "causes",
+            "notes": "",
+            "tempSourceId": 14,
+            "tempTargetId": 15
+          },
+          {
+            "type": "causes",
+            "notes": "",
+            "tempSourceId": 14,
+            "tempTargetId": 16
+          },
+          {
+            "type": "addresses",
+            "notes": "",
+            "tempSourceId": 13,
+            "tempTargetId": 12
+          },
+          {
+            "type": "creates",
+            "notes": "",
+            "tempSourceId": 12,
+            "tempTargetId": 11
+          },
+          {
+            "type": "creates",
+            "notes": "",
+            "tempSourceId": 11,
+            "tempTargetId": 19
+          },
+          {
+            "type": "creates",
+            "notes": "",
+            "tempSourceId": 10,
+            "tempTargetId": 19
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 21,
+            "tempTargetId": 9
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 22,
+            "tempTargetId": 21
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 23,
+            "tempTargetId": 21
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 24,
+            "tempTargetId": 21
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 26,
+            "tempTargetId": 9
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 27,
+            "tempTargetId": 26
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 28,
+            "tempTargetId": 26
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 29,
+            "tempTargetId": 9
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 30,
+            "tempTargetId": 29
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 32,
+            "tempTargetId": 29
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 33,
+            "tempTargetId": 29
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 17,
+            "tempTargetId": 9
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 18,
+            "tempTargetId": 17
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 20,
+            "tempTargetId": 17
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 25,
+            "tempTargetId": 9
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 31,
+            "tempTargetId": 25
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 34,
+            "tempTargetId": 25
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 35,
+            "tempTargetId": 34
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 36,
+            "tempTargetId": 34
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 37,
+            "tempTargetId": 34
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 0,
+            "tempTargetId": 9
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 1,
+            "tempTargetId": 0
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 2,
+            "tempTargetId": 0
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 3,
+            "tempTargetId": 0
+          },
+          {
+            "type": "creates",
+            "notes": "",
+            "tempSourceId": 4,
+            "tempTargetId": 11
+          },
+          {
+            "type": "creates",
+            "notes": "",
+            "tempSourceId": 5,
+            "tempTargetId": 19
+          },
+          {
+            "type": "creates",
+            "notes": "",
+            "tempSourceId": 19,
+            "tempTargetId": 17
+          },
+          {
+            "type": "creates",
+            "notes": "",
+            "tempSourceId": 19,
+            "tempTargetId": 26
+          },
+          {
+            "type": "creates",
+            "notes": "",
+            "tempSourceId": 19,
+            "tempTargetId": 29
+          },
+          {
+            "type": "creates",
+            "notes": "",
+            "tempSourceId": 6,
+            "tempTargetId": 26
+          },
+          {
+            "type": "creates",
+            "notes": "",
+            "tempSourceId": 7,
+            "tempTargetId": 6
+          },
+          {
+            "type": "creates",
+            "notes": "",
+            "tempSourceId": 6,
+            "tempTargetId": 29
+          },
+          {
+            "type": "creates",
+            "notes": "",
+            "tempSourceId": 8,
+            "tempTargetId": 19
+          },
+          {
+            "type": "addresses",
+            "notes": "",
+            "tempSourceId": 14,
+            "tempTargetId": 4
+          }
+        ]
+      }
     }
   }
 }

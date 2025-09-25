@@ -1,6 +1,10 @@
 import { zodToJsonSchema } from "zod-to-json-schema";
 
-import { getRefinedVisibleAct, topicAICreatePartsSchema } from "@/api/topicAI";
+import {
+  getRefinedVisibleAct,
+  topicAICreatePartsSchema,
+  visibleActSourceText,
+} from "@/api/topicAI";
 import { procedure, router } from "@/api/trpc";
 
 export const topicAIRouter = router({
@@ -10,7 +14,10 @@ export const topicAIRouter = router({
         createParts: zodToJsonSchema(topicAICreatePartsSchema),
       },
       examples: {
-        visibleAct: getRefinedVisibleAct(),
+        visibleAct: {
+          sourceText: visibleActSourceText,
+          topic: getRefinedVisibleAct(),
+        },
       },
     };
   }),
