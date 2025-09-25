@@ -91,6 +91,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/qdow"><img src="https://avatars.githubusercontent.com/u/156013833?v=4?s=100" width="100px;" alt="qdow"/><br /><sub><b>qdow</b></sub></a><br /><a href="https://github.com/amelioro/ameliorate/commits?author=qdow" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://portfoliofinal-blond.vercel.app/"><img src="https://avatars.githubusercontent.com/u/90109498?v=4?s=100" width="100px;" alt="Garv Thakral"/><br /><sub><b>Garv Thakral</b></sub></a><br /><a href="https://github.com/amelioro/ameliorate/commits?author=GarvThakral" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/akashchekodu"><img src="https://avatars.githubusercontent.com/u/110985224?v=4?s=100" width="100px;" alt="Akash Chekodu"/><br /><sub><b>Akash Chekodu</b></sub></a><br /><a href="https://github.com/amelioro/ameliorate/commits?author=akashchekodu" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
