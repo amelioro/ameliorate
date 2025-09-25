@@ -1,4 +1,9 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+if git config --get husky.skipPrecommit >/dev/null; then
+  echo "git config husky.skipPrecommit is set, skipping precommit hook"
+  exit 0
+fi
+
 npx lint-staged
