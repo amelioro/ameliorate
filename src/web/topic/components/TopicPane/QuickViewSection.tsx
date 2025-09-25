@@ -2,10 +2,11 @@ import {
   Add,
   Delete,
   Edit,
+  KeyboardDoubleArrowDown,
+  KeyboardDoubleArrowUp,
   MoreVert,
   Redo,
   Save,
-  SwapVert,
   Undo,
   Visibility,
 } from "@mui/icons-material";
@@ -50,102 +51,95 @@ const QuickViewRow = ({ view, selected, editable, onEdit }: RowProps) => {
   const [actionsMenuAnchorEl, setActionsMenuAnchorEl] = useState<HTMLElement | null>(null);
 
   return (
-    <ListItem key={view.id}>
-      <ListItemButton
-        selected={selected}
-        onClick={() => selectView(view.id)}
-        sx={{ paddingY: 0, height: "40px" }}
-      >
-        <ListItemIcon>
-          <Visibility />
-        </ListItemIcon>
+    <>
+      <ListItem key={view.id}>
+        <ListItemButton
+          selected={selected}
+          onClick={() => selectView(view.id)}
+          sx={{ paddingY: 0, height: "40px" }} // icon buttons have padding, so this extra padding isn't necessary, and use a consistent height whether or not icon buttons are showing
+        >
+          <ListItemIcon>
+            <Visibility />
+          </ListItemIcon>
 
-        <ListItemText primary={view.title} className="[&>span]:truncate" />
+          <ListItemText primary={view.title} className="[&>span]:truncate" />
 
-        {editable && (
-          <>
+          {editable && (
             <IconButton
               color="inherit"
               title="More Actions"
               aria-label="More Actions"
               onClick={(e) => {
                 setActionsMenuAnchorEl(e.currentTarget);
-                e.stopPropagation();
               }}
             >
               <MoreVert />
             </IconButton>
-            <Menu
-              anchorEl={actionsMenuAnchorEl}
-              open={Boolean(actionsMenuAnchorEl)}
-              onClose={() => setActionsMenuAnchorEl(null)}
-            >
-              <CloseOnClickMenuItem
-                onClick={(e) => {
-                  moveView(view.id, "up");
-                  e.stopPropagation();
-                }}
-                closeMenu={() => setActionsMenuAnchorEl(null)}
-              >
-                <ListItemIcon>
-                  <SwapVert fontSize="small" />
-                </ListItemIcon>
-                <ListItemText>Move up</ListItemText>
-              </CloseOnClickMenuItem>
-              <CloseOnClickMenuItem
-                onClick={(e) => {
-                  moveView(view.id, "down");
-                  e.stopPropagation();
-                }}
-                closeMenu={() => setActionsMenuAnchorEl(null)}
-              >
-                <ListItemIcon>
-                  <SwapVert fontSize="small" />
-                </ListItemIcon>
-                <ListItemText>Move down</ListItemText>
-              </CloseOnClickMenuItem>
-              <CloseOnClickMenuItem
-                onClick={(e) => {
-                  onEdit();
-                  e.stopPropagation();
-                }}
-                closeMenu={() => setActionsMenuAnchorEl(null)}
-              >
-                <ListItemIcon>
-                  <Edit fontSize="small" />
-                </ListItemIcon>
-                <ListItemText>Edit</ListItemText>
-              </CloseOnClickMenuItem>
-              <CloseOnClickMenuItem
-                disabled={selected}
-                onClick={(e) => {
-                  saveView(view.id);
-                  e.stopPropagation();
-                }}
-                closeMenu={() => setActionsMenuAnchorEl(null)}
-              >
-                <ListItemIcon>
-                  <Save fontSize="small" />
-                </ListItemIcon>
-                <ListItemText>Overwrite</ListItemText>
-              </CloseOnClickMenuItem>
-              <CloseOnClickMenuItem
-                onClick={(e) => {
-                  deleteView(view.id);
-                  e.stopPropagation();
-                }}
-                closeMenu={() => setActionsMenuAnchorEl(null)}
-              >
-                <ListItemIcon>
-                  <Delete fontSize="small" />
-                </ListItemIcon>
-                <ListItemText>Delete</ListItemText>
-              </CloseOnClickMenuItem>
-            </Menu>
-          </>
-        )}
-      </ListItemButton>
-    </ListItem>
+          )}
+        </ListItemButton>
+      </ListItem>
+
+      {editable && (
+        <Menu
+          anchorEl={actionsMenuAnchorEl}
+          open={Boolean(actionsMenuAnchorEl)}
+          onClose={() => setActionsMenuAnchorEl(null)}
+        >
+          <CloseOnClickMenuItem
+            onClick={() => moveView(view.id, "up")}
+            closeMenu={() => setActionsMenuAnchorEl(null)}
+          >
+            <ListItemIcon>
+              <KeyboardDoubleArrowUp fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>Move up</ListItemText>
+          </CloseOnClickMenuItem>
+
+          <CloseOnClickMenuItem
+            onClick={() => moveView(view.id, "down")}
+            closeMenu={() => setActionsMenuAnchorEl(null)}
+          >
+            <ListItemIcon>
+              <KeyboardDoubleArrowDown fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>Move down</ListItemText>
+          </CloseOnClickMenuItem>
+
+          <CloseOnClickMenuItem
+            onClick={() => onEdit()}
+            closeMenu={() => setActionsMenuAnchorEl(null)}
+          >
+            <ListItemIcon>
+              <Edit fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>Edit</ListItemText>
+          </CloseOnClickMenuItem>
+
+          <CloseOnClickMenuItem
+            disabled={selected}
+            // Assumes that the selected view is being displayed, so saving wouldn't do anything.
+            // Could be more accurate by checking if this index's view state deep equals the current view state... but that seems overkill performance-wise.
+            onClick={() => saveView(view.id)}
+            closeMenu={() => setActionsMenuAnchorEl(null)}
+          >
+            <ListItemIcon>
+              <Save fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>Overwrite</ListItemText>
+          </CloseOnClickMenuItem>
+
+          <CloseOnClickMenuItem
+            onClick={() => deleteView(view.id)}
+            closeMenu={() => setActionsMenuAnchorEl(null)}
+          >
+            <ListItemIcon>
+              <Delete fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>Delete</ListItemText>
+          </CloseOnClickMenuItem>
+        </Menu>
+      )}
+    </>
   );
 };
 
@@ -161,8 +155,14 @@ export const QuickViewSection = () => {
 
   return (
     <>
-      <ListItem key="QuickViewSection" disablePadding={false} sx={{ paddingY: 0, height: "40px" }}>
-        <ListItemText primary="Quick Views" primaryTypographyProps={{ fontWeight: "bold" }} />
+      {/* slightly jank to have this section assume there's a parent MUI list, but I think it's worth extracting to this component anyway */}
+
+      <ListItem
+        key="QuickViewSection"
+        disablePadding={false}
+        sx={{ paddingY: 0, height: "40px" }} // icon buttons have padding, so this extra padding isn't necessary, and use a consistent height whether or not icon buttons are showing
+      >
+        <ListItemText primary="Quick Views" className="*:font-bold" />
 
         {userCanEditTopicData && (
           <>
