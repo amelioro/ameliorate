@@ -71,6 +71,7 @@ const QuickViewRow = ({ view, selected, editable, onEdit }: RowProps) => {
               aria-label="More Actions"
               onClick={(e) => {
                 setActionsMenuAnchorEl(e.currentTarget);
+                e.stopPropagation();
               }}
             >
               <MoreVert />
