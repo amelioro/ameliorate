@@ -171,6 +171,8 @@ This project uses commit hooks to automate some tasks, and these are managed via
 
 Code formatting is managed by [prettier](https://prettier.io/), which is automatically run in a commit hook via [lint-staged](https://github.com/okonet/lint-staged).
 
+This can take a few seconds to run whenever creating a commit - run `git config husky.skipPrecommit true` to skip. You should only do this if you're ensuring your code is formatted properly elsewhere (e.g. via the recommended vscode settings, which runs the formatting on-save, or via manually running the formatting commands).
+
 ### UX / UI style
 
 For user experience & user interface design, please read [uxui-guidelines.md](./design-docs/uxui-guidelines.md).

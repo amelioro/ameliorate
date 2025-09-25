@@ -51,8 +51,9 @@ TOPIC_ID=$(echo $TOPIC_CREATE_RESULT | jq '.result.data.json.id')
 
 ```bash
 # for this example we're just taking nodes and edges from our example topic
-NODES_TO_CREATE=$(curl 'https://ameliorate.app/api/trpc/topicAI.getPromptData' | jq '.result.data.json.examples.visibleAct.nodesToCreate')
-EDGES_TO_CREATE=$(curl 'https://ameliorate.app/api/trpc/topicAI.getPromptData' | jq '.result.data.json.examples.visibleAct.edgesToCreate')
+NODES_TO_CREATE=$(curl 'https://ameliorate.app/api/trpc/topicAI.getPromptData' | jq '.result.data.json.examples.visibleAct.topic.nodesToCreate')
+EDGES_TO_CREATE=$(curl 'https://ameliorate.app/api/trpc/topicAI.getPromptData' | jq '.result.data.json.examples.visibleAct.topic.edgesToCreate')
+# note: the original source text for the topic (in this case, bill text + kialo arguments) can also be found via `jq '.result.data.json.examples.visibleAct.sourceText'`
 
 curl 'https://ameliorate.app/api/trpc/topic.updateDiagram' \
   -H 'accept: */*' \

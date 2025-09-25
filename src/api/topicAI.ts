@@ -1,3 +1,6 @@
+import { readFileSync } from "fs";
+import path from "path";
+
 import { z } from "zod";
 
 import { justificationRelationNames, topicAIEdgeSchema } from "@/common/edge";
@@ -11,6 +14,11 @@ export const topicAICreatePartsSchema = z.object({
 });
 
 type TopicAICreateParts = z.infer<typeof topicAICreatePartsSchema>;
+
+export const visibleActSourceText = readFileSync(
+  path.join(process.cwd(), "examples", "visible_act.source.txt"),
+  "utf-8",
+);
 
 /**
  * Could make a variable out of this so it doesn't need to be re-run on every call, but it doesn't

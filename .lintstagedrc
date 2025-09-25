@@ -1,3 +1,0 @@
-{
-  "*": "npx prettier --ignore-unknown --write"
-}
