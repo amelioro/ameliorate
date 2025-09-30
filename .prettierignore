@@ -17,3 +17,7 @@ yarn.lock
 
 # misc
 .all-contributorsrc
+
+# for some reason prettier doesn't format frontmatter in a way that the syntax highlighting sees as ok (property arrays are put on separate lines)
+# and AI tools use frontmatter for metadata
+.github/chatmodes/*.chatmode.md
