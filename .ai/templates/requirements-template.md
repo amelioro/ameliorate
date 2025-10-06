@@ -2,7 +2,9 @@
 
 ## Introduction
 
-[Provide a brief overview of the feature, its purpose, and its value to users]
+[Describe the existing problem(s) to solve]
+
+[Describe, at a high level, the feature(s) or refactor(s) that should solve these problems]
 
 ## Considered Alternatives
 
