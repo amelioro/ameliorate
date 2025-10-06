@@ -15,11 +15,10 @@
 
 ## Alignment with Product Vision
 
-[Explain how this feature supports the goals outlined in docs-site/app/mission-vision/page.mdx]
+[Explain how this feature supports the goals outlined in docs-site/app/mission-vision/page.mdx. Reference parts of the mission/vision directly.]
 
 ## Requirements
 
-[Note: for refactors, "role" may be "developer"]
 [Note: consider existing features that need to integrate well and shouldn't become broken]
 
 ### REQ-001
@@ -30,9 +29,9 @@
 
 [Note: Consider happy paths and edge cases]
 
-1. WHEN [event] THEN [system] SHALL [response]
-2. IF [precondition] THEN [system] SHALL [response]
-3. WHEN [event] AND [condition] THEN [system] SHALL [response]
+1. **CRI-001**: [concise criteria description]
+2. **CRI-002**: [concise criteria description]
+3. **CRI-003**: [concise criteria description]
 
 ### REQ-002
 
@@ -40,8 +39,8 @@
 
 #### Acceptance Criteria
 
-1. WHEN [event] THEN [system] SHALL [response]
-2. IF [precondition] THEN [system] SHALL [response]
+1. **CRI-004**: [concise criteria description]
+2. **CRI-005**: [concise criteria description]
 
 ## Non-Functional Requirements
 
