@@ -20,15 +20,15 @@
 
 [A list of files that are affected and may need to be changed.]
 
-- **[file path 1]**: [description of expected relevance and impact]
-- **[file path 2]**: [description of expected relevance and impact]
+- **FILE-001 [file path 1]**: [description of expected relevance and impact]
+- **FILE-002 [file path 2]**: [description of expected relevance and impact]
 
 ### Dependencies
 
 [List any dependencies that will be relevant for implementation, such as libraries, frameworks, or other components that the plan relies on.]
 
-- **[dependency title 1]**: [description of relevance. provide links to relevant external documentation if necessary.]
-- **[dependency title 2]**: [description of relevance. provide links to relevant external documentation if necessary.]
+- **DEP-001 [dependency title 1]**: [description of relevance. provide links to relevant external documentation if necessary.]
+- **DEP-002 [dependency title 2]**: [description of relevance. provide links to relevant external documentation if necessary.]
 
 ## Implementation concerns
 
@@ -46,7 +46,7 @@
 
 ## Implementation Steps
 
-[Break down the needed work into implementation phases. These should be smaller chunks of work that add up to accomplish all of the requirements.]
+[Break down the needed work into implementation phases. Each implementation phase should include a set of related tasks that accomplish a common goal. Ideally these can be implemented and tested independently from each other. All implementation phases together should add up to accomplish all of the requirements.]
 
 ### Phase 1
 
@@ -62,8 +62,8 @@
 
 [List the files that need to be updated during this phase.]
 
-- **[file path 1]**: [description of what needs to change]
-- **[file path 2]**: [description of what needs to change]
+- **FILE-XXX [file path 1]**: [description of what needs to change]
+- **FILE-XXX [file path 2]**: [description of what needs to change]
 
 #### Relevant pseudo-code or algorithms [optional]
 
@@ -87,8 +87,8 @@
 
 [List the files that need to be updated during this phase.]
 
-- **[file path 1]**: [description of what needs to change]
-- **[file path 2]**: [description of what needs to change]
+- **FILE-XXX [file path 1]**: [description of what needs to change]
+- **FILE-XXX [file path 2]**: [description of what needs to change]
 
 #### Relevant pseudo-code or algorithms [optional]
 

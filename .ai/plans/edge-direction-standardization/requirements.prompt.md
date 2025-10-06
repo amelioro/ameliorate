@@ -14,25 +14,25 @@
 
 ### Further motivation
 
-1. effects shouldn't need to know if they're "problem effects" or "solution effects"
+1. effects shouldn't always need to know if they're "problem effects" or "solution effects"
    - e.g. for add buttons (which need to know if we're adding "causes" or "causedBy"), separately in diagram and in summary Cause/Effect columns
-   - we should only need to know this for layout, so we can lay problem effects at the top with problems, and solution effects at the bottom with solutions
+   - one place we still need to know this for is for layout, so we can lay problem effects at the top with problems, and solution effects at the bottom with solutions
 2. source -> target matches the definition of "source" and "target"
 3. "all" column (Incoming | Outgoing) makes a lot more sense
 
 ### Use cases that are affected by this change
 
 - want to be able to allow configuring solutions to be at top of diagram and problems at bottom
-  - (don't need to implement this now, but good to keep in mind)
+  - (don't implement this now, but good to keep in mind)
 - laying out effects based on whether they're caused by problems or by solutions
   - layout can just traverse the source "cause" edges to see what kind they are
+- blue hidden-neighbor handles on nodes should still properly show based on hidden nodes being above or below
+  - the "above"/"below" calculation should still generally be based on outgoing/incoming edges, respectively, EXCEPT for problem effects because they are having their "createdBy" edges flipped
 
 ### Concerns with migrating
 
 - everything that uses "parents"/"children" and "ancestors"/"descendants" needs to be refactored to use a direction that makes sense
   - we'll have to consider each reference individually
 - layout needs to know how to place things top to bottom still
-  - e.g. causes and problem detriments should be below problems even though some cause -> problem edges point up and problem -> detriment edges will point down
+  - e.g. causes and problem effects should be below problems even though some cause -> problem edges point up and problem -> effect edges will point down
   - maybe the most reliable solution is just to manually flip edges before layout to ensure they're the same as they used to be
-- a planned future feature for expanding/collapsing "above" neighbors and "below" neighbors separately will need to know which neighbors are "above" and which are "below"
-  - maybe a hack that could be ok is to look at all edges whose other X, Y position is above this one (or below)
