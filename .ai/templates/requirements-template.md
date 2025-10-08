@@ -44,7 +44,7 @@
 
 ## Non-Functional Requirements
 
-[Other requirements - use 3 letters for each category here, establish your own categories if that seems good. Some examples: PER = performance, SEC = security, ACC = accessibility, OTH = other]
+[Other requirements - use 3 letters for each category here, establish your own categories if that seems good. Some examples: PER = performance, SEC = security, ACC = accessibility, OTH = other.]
 
 ### [3 LETTERS]-001
 
