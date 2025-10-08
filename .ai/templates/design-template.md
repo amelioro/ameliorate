@@ -22,7 +22,7 @@
 
 ### Phase 1: [title]
 
-- GOAL-001 ([status: completed✅ or TODO🔳]): [Describe the goal of this phase, e.g., "Implement database changes", "Replace all references of X", "Implement core logic for Y", etc.]
+- **GOAL-001** ([status: completed✅ or TODO🔳]): [Describe the goal of this phase, e.g., "Implement database changes", "Replace all references of X", "Implement core logic for Y", etc.]
 
 #### Dependencies
 
@@ -75,7 +75,7 @@
 
 ### Phase 2: [title]
 
-- GOAL-002 ([status: completed✅ or TODO🔳]): [Describe the goal of this phase, e.g., "Implement database changes", "Replace all references of X", "Implement core logic for Y", etc.]
+- **GOAL-002** ([status: completed✅ or TODO🔳]): [Describe the goal of this phase, e.g., "Implement database changes", "Replace all references of X", "Implement core logic for Y", etc.]
 - (optional) Related requirements: [e.g. REQ-001, REQ-004, etc.]
 
 #### Dependencies
