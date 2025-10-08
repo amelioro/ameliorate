@@ -6,12 +6,12 @@ This design implements edge direction standardization, relation label consolidat
 
 - Migrating database enum values and persisted diagram store data to canonical relation names and directions (source → target semantics everywhere).
 - Collapsing legacy labels (`subproblemOf`, `createdBy`, `creates`, `obstacleOf`) into canonical labels with appropriate direction normalization (`subproblemOf` + `createdBy` reversed; `creates` → `causes`; `obstacleOf` → `impedes`).
-- Replacing traversal nomenclature (parent/child/ancestor/descendant) with incoming/outgoing (immediate) and upstream/downstream (recursive) plus explicit above/below semantics for UI handles, using fixed exception rules independent of layout engine output.
+- Introducing new traversal & positional nomenclature: `sourceNodes` (immediate incoming), `targetNodes` (immediate outgoing), `downstreamNodes` (recursive outgoing), `upstreamNodes` (recursive incoming), `neighborsAbove` / `neighborsBelow` (UI / positional, derived from source/target with exception rules). Legacy names (`parents`, `children`, `ancestors`, `descendants`) will temporarily wrap the new helpers for incremental replacement (removed in the final phase).
 - Preserving visual layering (node vertical ordering) without changing user mental model (REQ-003) by adapting layout input (per-edge orientation option investigation; fallback to pre-layout directional transforms only if needed) while storing canonical directions.
-- Updating hidden neighbor indicator logic to rely on the new directional APIs and consistent above/below inference (REQ-004).
+- Updating hidden neighbor indicator logic to rely on the new directional APIs and consistent neighborsAbove / neighborsBelow inference (REQ-004).
 - Ensuring legacy imports auto-normalize on load while canonical exports remain unchanged (REQ-006).
 
-The implementation is phased to minimize refactor churn and keep each step testable. Phases 1–5 cover: migration, traversal refactor, hidden neighbor logic, layout invariance, and documentation/code comment updates. Testing is integrated within each phase—no trailing omnibus phase per guidance.
+The implementation is phased to minimize refactor churn and keep each step testable. Phases 1–6 cover: migration, traversal refactor (with wrappers), hidden neighbor logic, layout invariance, documentation/code updates, and final wrapper removal. Testing is integrated within each phase—no separate omnibus phase.
 
 ## Alternatives
 
@@ -41,14 +41,14 @@ Key areas affected:
 ```mermaid
 graph TD
   subgraph Traversal API
-    Upstream["upstream(node) - recursive incoming"] --> Incoming["incoming(node)"]
-    Incoming --> From["From this node"]
-    From --> Outgoing["outgoing(node)"]
-    Outgoing --> Downstream["downstream(node) - recursive outgoing"]
+    Upstream["upstreamNodes(node) - recursive incoming"] --> Source["sourceNodes(node)"]
+    Source --> From["From this node"]
+    From --> Target["targetNodes(node)"]
+    Target --> Downstream["downstreamNodes(node) - recursive outgoing"]
   end
-  subgraph UI
-    E["above(node) via outgoing + exceptions"]
-    F["below(node) via incoming + exceptions"]
+  subgraph UI Positional
+    NA["neighborsAbove(node) (normally = targetNodes; may invert on exceptions)"]
+    NB["neighborsBelow(node) (normally = sourceNodes; may invert on exceptions)"]
   end
 ```
 
@@ -68,25 +68,25 @@ graph TD
 
 ##### Automated tests
 
-- **TEST-002** `diagramStore/migrate.test.ts` (needs implementing): Feed serialized legacy store (including reversed labels) into migration -> assert full normalization & version bump.
+- **TEST-001** `diagramStore/migrate.test.ts` (needs implementing): Feed serialized legacy store (including reversed labels) into migration -> assert full normalization & version bump.
 
 ##### Manual tests
 
-- **TEST-003**: Run migration on a local DB containing edges with every legacy label. Verify SQL timing < 10s.
-- **TEST-004**: Spot-check an exported topic JSON post-migration shows canonical labels only.
-- **TEST-XXX**: `validate.sql` that can be run after the migration to verify that no legacy labels exist anymore.
-- **TEST-011**: Import pre-migration example file; confirm diagram renders with canonical arrow directions.
+- **TEST-002**: Run migration on a local DB containing edges with every legacy label. Verify SQL timing < 10s.
+- **TEST-003**: Spot-check an exported topic JSON post-migration shows canonical labels only.
+- **TEST-004**: `validate.sql` that can be run after the migration to verify that no legacy labels exist anymore.
+- **TEST-005**: Import pre-migration example file; confirm diagram renders with canonical arrow directions.
 
 #### Files
 
 - **FILE-001** `src/common/edge.ts`: Update `relationNames` list based on mapping, update description removing reverse note.
-- **FILE-XXX** `src/web/topic/utils/edge.ts`: Update `relations` list based on mapping. `commonalityFrom` needs `parent`/`child` reversed if the edge is being reversed in this migration, but don't update `parent`/`child` terminology in this phase.
-- **FILE-XXX** search for legacy relation labels and update them based on the mapping.
-- **FILE-002** `src/db/schema.prisma`: Update edge types enum to only use new canonical values.
-- **FILE-003** `src/db/migrations/*/migration.sql`: Raw SQL (forward) performing enum alteration + data rewrite.
-- **FILE-XXX** `src/db/migrations/*/down.sql`: Raw SQL (down) reversing `migration.sql`.
-- **FILE-004** `src/web/topic/diagramStore/migrate.ts`: New migration to migrate edge labels and direction in persisted store state.
-- **FILE-005** `src/web/topic/diagramStore/store.ts`: Increment store version.
+- **FILE-002** `src/web/topic/utils/edge.ts`: Update `relations` list based on mapping. Adjust `commonalityFrom` direction reversal where needed (keep legacy wrapper names for now).
+- **FILE-003** (repo-wide) Search & update legacy relation labels to canonical forms.
+- **FILE-004** `src/db/schema.prisma`: Update edge types enum to only use new canonical values.
+- **FILE-005** `src/db/migrations/*/migration.sql`: Raw SQL (forward) performing enum alteration + data rewrite.
+- **FILE-006** `src/db/migrations/*/down.sql`: Raw SQL (down) reversing forward migration (non-idempotent caveat noted).
+- **FILE-007** `src/web/topic/diagramStore/migrate.ts`: New migration to migrate edge labels and direction in persisted store state.
+- **FILE-008** `src/web/topic/diagramStore/store.ts`: Increment store version.
 
 #### Relevant pseudo-code or algorithms
 
@@ -108,9 +108,9 @@ mapEdge({label, sourceId, targetId}): {label, sourceId, targetId} =
 SELECT COUNT(*) FROM "Edge" WHERE "type" IN ('subproblemOf','createdBy','creates','obstacleOf'); --> expect 0
 ```
 
-### Phase 2: Traversal & Terminology Refactor
+### Phase 2: Traversal & Terminology Refactor (Add New APIs + Wrappers)
 
-- GOAL-002 (TODO🔳): Replace parent/child/ancestor/descendant with incoming/outgoing (direct), upstream/downstream (recursive), or above/below, based on context. Introduce above/below exception logic but do not yet wire NodeHandle.
+- GOAL-002 (TODO🔳): Introduce new APIs (`sourceNodes`, `targetNodes`, `downstreamNodes`, `upstreamNodes`, `neighborsAbove`, `neighborsBelow`) while keeping legacy wrappers (`parents`, `children`, `ancestors`, `descendants`) delegating to new implementations. Add neighborsAbove/Below exception scaffolding (not yet used by NodeHandle). Do NOT remove `RelationDirection` yet; only add new direction enums/types alongside it.
 - Related requirements: REQ-002 (CRI-004, CRI-005).
 
 #### Dependencies
@@ -128,20 +128,20 @@ SELECT COUNT(*) FROM "Edge" WHERE "type" IN ('subproblemOf','createdBy','creates
 
 ##### Automated tests
 
-- **TEST-005** `graph.test.ts` (needs updating): test incoming/outgoing, upstream/downstream, cases: simple chain A→B→C; cycle detection (ensure no infinite loops).
-- **TEST-005** `diagram.test.ts` (needs implementing): test above/below, normal and exception cases.
+- **TEST-006** `graph.test.ts` (needs updating): test sourceNodes/targetNodes and upstreamNodes/downstreamNodes; cases: simple chain A→B→C; no infinite loops when there's a cycle.
+- **TEST-007** `diagram.test.ts` (needs implementing): test neighborsAbove / neighborsBelow, normal and exception cases.
 
 ##### Manual tests
 
-- **TEST-007**: Interactive: open a topic, verify no runtime errors in console after refactor branch.
+- **TEST-008**: Interactive: open a topic, verify no runtime errors and wrappers still function.
 
 #### Files
 
-- **FILE-007** `src/web/topic/utils/graph.ts`: Split `RelationDirection` into `VerticalRelation` (above/below), `EdgeDirection` (incoming/outgoing) and `StreamDirection` (upstream/downstream); replace `parents`, `children`, `ancestors`, `descendants` with `outgoing`, `incoming`, `downstream`, `upstream`.
-- **FILE-XXX** Update any usages in components referencing `RelationDirection` to use one of the three new types.
-- **FILE-008** `src/web/topic/utils/node.ts`: Update functions referencing parents/children; rename logic; remove comments about parents/children semantics.
-- **FILE-009** `src/web/topic/utils/diagram.ts`: Export `above(node, graph)` and `below(...)`, using `getEffectType` in `effect.ts`. Just base rule scaffolding (Phase 3 will integrate).
-- **FILE-010** Update `nodeHooks.ts`: `useNeighborsInDirection` -> `useNeighbors(direction: 'incoming' | 'outgoing')` internal rename; adjust other hooks.
+- **FILE-009** `src/web/topic/utils/graph.ts`: Add new traversal functions: `sourceNodes`, `targetNodes`, `downstreamNodes`, `upstreamNodes`; add wrappers `parents`, `children`, `ancestors`, `descendants` (deprecated internally) forwarding to new functions; add new enums to eventually replace `RelationDirection`: `VerticalRelation` (above/below), `EdgeDirection` (source/target), `StreamDirection` (upstream/downstream).
+- **FILE-010** Update any usages in components referencing `RelationDirection` to use one of the three new types.
+- **FILE-011** `src/web/topic/utils/node.ts`: Update functions referencing parents/children; rename logic; replace comments about parents/children semantics.
+- **FILE-012** `src/web/topic/utils/diagram.ts`: Add `neighborsAbove`, `neighborsBelow`, using `getEffectType` in `effect.ts`.
+- **FILE-013** `src/web/topic/diagramStore/nodeHooks.ts`: update `useNeighborsInDirection` to use new terminology and methods.
 
 #### Relevant pseudo-code or algorithms
 
@@ -153,7 +153,7 @@ function downstream(node): Node[] = recurse(node, 'outgoing')
 // recurse similar to existing findNodesRecursivelyFrom but parameterized by edge role
 ```
 
-##### MET-004 above/below Base Rule
+##### MET-004 neighborsAbove / neighborsBelow Base Rule
 
 ```
 if exception(edge): // defined Phase 3 fully
@@ -184,13 +184,12 @@ below is the complement direction
 
 ##### Manual tests
 
-- **TEST-008**: Hide an outgoing neighbor -> expect top (above) handle indicator (blue) under normal rule; hide incoming neighbor -> bottom indicator; verify exceptions (causes→problemEffect & has from problem) invert.
+- **TEST-009**: Hide a source neighbor -> expect neighborsBelow indicator; hide a target neighbor -> neighborsAbove indicator; verify exceptions (causes→problemEffect & has from problem) invert.
 
 #### Files
 
-- **FILE-012** `src/web/topic/components/Node/NodeHandle.tsx`: Replace `RelationDirection` usage, integrate `above/below` decision.
-- **FILE-013** `src/web/topic/diagramStore/nodeHooks.ts`: `useNeighborsInDirection` -> `useNeighbors`; adapt hidden neighbor logic.
-- **FILE-014** (If needed) adjust `useConnectableNodes` mapping for addable relations (rename of direction tokens).
+- **FILE-014** `src/web/topic/components/Node/NodeHandle.tsx`: Integrate `neighborsAbove` / `neighborsBelow` logic, replacing `RelationDirection` usage.
+- **FILE-015** `src/web/topic/diagramStore/nodeHooks.ts`: Adapt hidden neighbor logic to use `sourceNodes` / `targetNodes` (or wrappers) and map to `neighborsAbove` / `neighborsBelow`.
 
 #### Relevant pseudo-code or algorithms
 
@@ -221,16 +220,16 @@ function exception(edge, graph): boolean =
 
 ##### Automated tests
 
-- **TEST-009** `layout.test.ts` (needs implementing): Build graph with: problem, cause, criterion, problem benefit, solution detriment, solution, solutionComponent. Run layout; assert order indices (group by sorted unique layer from node y). Layer expectations: 1. problem, 2. cause & problem benefit, 3. criteria, 4. solution detriment & solution component, 5. solution.
+- **TEST-010** `layout.test.ts` (needs implementing): Build graph with: problem, cause, criterion, problem benefit, solution detriment, solution, solutionComponent. Run layout; assert order indices (group by sorted unique layer from node y). Layer expectations: 1. problem, 2. cause & problem benefit, 3. criteria, 4. solution detriment & solution component, 5. solution.
 
 ##### Manual tests
 
-- **TEST-010**: Visual comparison in browser (quick scan that arrowheads flip but layering identical).
+- **TEST-011**: Visual comparison in browser (quick scan that arrowheads flip but layering identical).
 
 #### Files
 
-- **FILE-015** `src/web/topic/utils/layout.ts`: Edge-level orientation investigation; add adapter logic before passing edges to elkjs, if required.
-- **FILE-017** `design-docs/diagram-rendering.md`: Update explanation if adapter used.
+- **FILE-017** `src/web/topic/utils/layout.ts`: Edge-level orientation investigation; add adapter logic before passing edges to elkjs, if required.
+- **FILE-018** `design-docs/diagram-rendering.md`: Update explanation if adapter used.
 
 #### Relevant pseudo-code or algorithms
 
@@ -245,7 +244,7 @@ for each edge:
 
 ### Phase 5: Documentation & Vocabulary Update
 
-- GOAL-006 (TODO🔳): Update code comments and internal vocabulary docs; remove misleading reverse-direction notes; incorporate new terminology (incoming/outgoing/upstream/downstream/above/below). No release notes banner (not required).
+- GOAL-005 (TODO🔳): Update code comments and internal vocabulary docs; remove misleading reverse-direction notes; incorporate new terminology (incoming/outgoing/upstream/downstream/above/below). No release notes banner (not required).
 - Related requirements: REQ-002 (terminology consistency), REQ-001 clarity.
 
 #### Dependencies
@@ -265,14 +264,35 @@ for each edge:
 
 ##### Manual tests
 
-- **TEST-012**: Grep verification: only remaining `parent`/`child` references belong to comments domain or 3rd-party libs.
+- **TEST-012**: Grep verification: only remaining `parent`/`child` / legacy traversal references belong to the comments domain or 3rd-party libs (wrappers still present, not yet removed).
 
 #### Files
 
-- **FILE-020** `design-docs/vocabulary.md`: Add new terms; remove old.
-- **FILE-021** `design-docs/data-flow.md`: Update traversal references.
-- **FILE-022** `src/common/edge.ts`: Updated description already Phase 1; confirm final wording.
-- **FILE-023** `design-docs/diagram-rendering.md`: Clarify adapter (if used) and above/below logic.
+- **FILE-019** `design-docs/vocabulary.md`: Add new terms (diagram = positioned graph; sourceNodes/targetNodes/etc.); remove old.
+- **FILE-020** `design-docs/data-flow.md`: Update traversal references.
+- **FILE-021** `src/common/edge.ts`: Confirm final wording (no reverse direction note).
+- **FILE-022** `design-docs/diagram-rendering.md`: Clarify adapter (if used) and neighborsAbove / neighborsBelow logic.
+
+### Phase 6: Wrapper & Legacy Direction Symbol Removal
+
+- GOAL-006 (TODO🔳): Remove legacy wrapper functions (`parents`, `children`, `ancestors`, `descendants`) and any remaining `RelationDirection` usages, converting all call sites fully to new nomenclature; replace deprecated comments.
+- Related requirements: Final cleanup for REQ-002 clarity.
+
+#### Implementation concerns
+
+- **RISK-010**: Missed reference causing runtime error post-removal. Mitigation: TypeScript compile + grep before commit.
+
+#### Testing strategy
+
+##### Manual tests
+
+- **TEST-014**: Run application; navigate diagrams ensuring no console errors referencing missing traversal helpers.
+
+#### Files
+
+- **FILE-023** `src/web/topic/utils/graph.ts`: Remove wrappers & deprecated comments.
+- **FILE-024** Repo-wide search: Replace any final references (commit ensures none remain).
+- **FILE-025** `design-docs/vocabulary.md`: Remove wrapper deprecation note section.
 
 ## Traceability Matrix (Requirement → Phase References)
 
@@ -314,11 +334,11 @@ END,
 
 ## Appendix: Exception Logic Table
 
-| Relation | Condition                                                                 | Effect                         | Invert Above/Below? |
-| -------- | ------------------------------------------------------------------------- | ------------------------------ | ------------------- |
-| causes   | target is problem effect (effect/benefit/detriment with upstream problem) | Treat incoming as above        | Yes                 |
-| has      | source is problem                                                         | Treat incoming as above        | Yes                 |
-| (others) | n/a                                                                       | above=outgoing, below=incoming | No                  |
+| Relation | Condition                                                                 | Effect on neighborsAbove / neighborsBelow                         | Invert? |
+| -------- | ------------------------------------------------------------------------- | ----------------------------------------------------------------- | ------- |
+| causes   | target is problem effect (effect/benefit/detriment with upstream problem) | neighborsAbove uses sourceNodes (incoming) instead of targetNodes | Yes     |
+| has      | source is problem                                                         | neighborsAbove uses sourceNodes (incoming) instead of targetNodes | Yes     |
+| (others) | n/a                                                                       | neighborsAbove = targetNodes; neighborsBelow = sourceNodes        | No      |
 
 ## Completion Criteria
 
