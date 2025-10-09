@@ -9,9 +9,9 @@
 import diff from "microdiff";
 import { StateCreator, StoreMutatorIdentifier } from "zustand";
 
-import { trpcClient } from "@/pages/_app.page";
 import { buildApiSyncerError } from "@/web/common/components/Error/apiSyncerError";
 import { showError } from "@/web/common/components/InfoDialog/infoEvents";
+import { trpcHelper } from "@/web/common/trpc";
 import { DiagramStoreState } from "@/web/topic/diagramStore/store";
 import { getTopic } from "@/web/topic/topicStore/store";
 import { convertToApi } from "@/web/topic/utils/apiConversion";
@@ -87,7 +87,7 @@ const saveDiffs = (
   if (!anyChanges) return;
 
   // TODO: is there a way to compress this data? when uploading a new topic, the payload appears to be 30% larger than the file being uploaded
-  trpcClient.topic.updateDiagram.mutate({ topicId, ...changeLists }).catch((e: unknown) => {
+  trpcHelper.client.topic.updateDiagram.mutate({ topicId, ...changeLists }).catch((e: unknown) => {
     showError("changesFailedToSave", buildApiSyncerError(changeLists, e));
     throw e;
   });
