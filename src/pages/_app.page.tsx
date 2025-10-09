@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import { globals } from "@/pages/_app.styles";
 import Layout from "@/web/common/components/Layout";
 import { getThemeOptions } from "@/web/common/theme";
-import { trpc } from "@/web/common/trpc";
+import { trpc, trpcHelper } from "@/web/common/trpc";
 import "@/web/common/globals.css";
 import "@/web/common/patches/fixGoogleTranslateIssue";
 
@@ -23,9 +23,6 @@ const siteNameJsonLd = {
   url: "https://ameliorate.app/",
 };
 
-// eslint-disable-next-line functional/no-let -- jank way to enable trpc queries outside of react tree, e.g. from zustand middleware https://github.com/trpc/trpc/discussions/2926#discussioncomment-5647033
-export let trpcClient = null as unknown as ReturnType<typeof trpc.useContext>["client"];
-
 // eslint-disable-next-line functional/no-let -- not sure why `plausible()` is only exposed through a hook, but this enables using it outside of a react tree, e.g. from zustand store
 export let plausible = null as unknown as ReturnType<typeof usePlausible>;
 
@@ -34,7 +31,8 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 
   const utils = trpc.useContext();
   useEffect(() => {
-    trpcClient = utils.client;
+    // eslint-disable-next-line functional/immutable-data -- ideally we wouldn't need to do this jank to use trpc outside of the react tree
+    trpcHelper.client = utils.client;
   }, [utils.client]);
 
   const plausibleHook = usePlausible();

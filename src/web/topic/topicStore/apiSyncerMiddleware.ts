@@ -8,9 +8,9 @@
 
 import { StateCreator, StoreMutatorIdentifier } from "zustand";
 
-import { trpcClient } from "@/pages/_app.page";
 import { buildApiSyncerError } from "@/web/common/components/Error/apiSyncerError";
 import { showError } from "@/web/common/components/InfoDialog/infoEvents";
+import { trpcHelper } from "@/web/common/trpc";
 import { TopicStoreState, getTopic } from "@/web/topic/topicStore/store";
 import { isPlaygroundTopic } from "@/web/topic/utils/topic";
 
@@ -32,7 +32,7 @@ const saveDiffs = (storeBefore: TopicStoreState, storeAfter: TopicStoreState) =>
     topicChange: [topicChange],
   };
 
-  trpcClient.topic.update.mutate(topicChange).catch((e: unknown) => {
+  trpcHelper.client.topic.update.mutate(topicChange).catch((e: unknown) => {
     showError("changesFailedToSave", buildApiSyncerError(changeLists, e));
     throw e;
   });

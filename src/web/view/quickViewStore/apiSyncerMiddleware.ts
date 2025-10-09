@@ -10,9 +10,9 @@ import diff from "microdiff";
 import { StateCreator, StoreMutatorIdentifier } from "zustand";
 
 import { QuickView } from "@/common/view";
-import { trpcClient } from "@/pages/_app.page";
 import { buildApiSyncerError } from "@/web/common/components/Error/apiSyncerError";
 import { showError } from "@/web/common/components/InfoDialog/infoEvents";
+import { trpcHelper } from "@/web/common/trpc";
 import { getTopic } from "@/web/topic/topicStore/store";
 import { isPlaygroundTopic } from "@/web/topic/utils/topic";
 import { QuickViewStoreState } from "@/web/view/quickViewStore/store";
@@ -90,7 +90,7 @@ const saveDiffs = (
   );
   if (!anyChanges) return;
 
-  trpcClient.view.handleChangesets
+  trpcHelper.client.view.handleChangesets
     .mutate({ topicId, viewsToCreate, viewsToUpdate, viewsToDelete })
     .catch((e: unknown) => {
       showError(

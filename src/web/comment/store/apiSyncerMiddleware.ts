@@ -10,10 +10,10 @@ import diff from "microdiff";
 import { StateCreator, StoreMutatorIdentifier } from "zustand";
 
 import { Comment } from "@/common/comment";
-import { trpcClient } from "@/pages/_app.page";
 import { CommentStoreState } from "@/web/comment/store/commentStore";
 import { buildApiSyncerError } from "@/web/common/components/Error/apiSyncerError";
 import { showError } from "@/web/common/components/InfoDialog/infoEvents";
+import { trpcHelper } from "@/web/common/trpc";
 import { getTopic } from "@/web/topic/topicStore/store";
 import { isPlaygroundTopic } from "@/web/topic/utils/topic";
 
@@ -89,7 +89,7 @@ const saveDiffs = (
   );
   if (!anyChanges) return;
 
-  trpcClient.comment.handleChangesets
+  trpcHelper.client.comment.handleChangesets
     .mutate({ topicId, commentsToCreate, commentsToUpdate, commentsToDelete })
     .catch((e: unknown) => {
       showError(
