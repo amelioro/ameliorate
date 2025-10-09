@@ -13,7 +13,7 @@ Solution components:
 
 1. Standardize all topic-level edges to flow source → target semantically.
 2. Collapse duplicate / reverse-form labels into one canonical label per relation concept.
-3. Replace traversal/layout terminology: parent/child → outgoing/incoming or above/below; ancestor/descendant → downstream/upstream (investigate each usage; downstream/upstream might not cover every prior usage, but all ancestor/descendant references will be removed/refactored).
+3. Replace traversal/layout terminology: parent/child → source/target (edge direction) or above/below (layout positional); ancestor/descendant → downstream/upstream (investigate each usage; downstream/upstream might not cover every prior usage, but all ancestor/descendant references will be removed/refactored).
 
 Canonical topic relation labels, with legacy -> new mapping:
 
@@ -59,7 +59,7 @@ Consistent, intuitive graph semantics reduce friction in understanding complex p
 
 #### Acceptance Criteria
 
-1. **CRI-004**: All occurrences of `parent`/`child` are replaced with context-appropriate `outgoing`/`incoming` (edge direction) or `above`/`below` (layout positional) terminology.
+1. **CRI-004**: All occurrences of `parent`/`child` are replaced with context-appropriate `target`/`source` (edge direction) or `above`/`below` (layout positional) terminology.
 2. **CRI-005**: All occurrences of `ancestor`/`descendant` are removed; wherever semantically correct they are replaced with `downstream`/`upstream`; contexts where that pair is insufficient are refactored to explicit alternative terminology/logic, which will have to be determined.
 
 ### REQ-003 Layout Invariance (Visual)
@@ -78,8 +78,8 @@ Consistent, intuitive graph semantics reduce friction in understanding complex p
 
 #### Acceptance Criteria
 
-1. **CRI-009**: Blue handle above a node displays when there exists at least one hidden outgoing neighbor (excluding special exceptions below).
-2. **CRI-010**: Blue handle below a node displays when there exists at least one hidden incoming neighbor (excluding special exceptions below).
+1. **CRI-009**: Blue handle above a node displays when there exists at least one hidden target (outgoing) neighbor (excluding special exceptions below).
+2. **CRI-010**: Blue handle below a node displays when there exists at least one hidden source (incoming) neighbor (excluding special exceptions below).
 3. **CRI-011**: Exceptions: For traversing edges to determine neighbors that are above/below, `causes` edges incoming from problems or problem effects to problem effects, and `has` edges incoming from problems to problems, the above/below determination is inverted.
 4. **CRI-012**: Unit test or logic test verifies both standard and exception cases.
 

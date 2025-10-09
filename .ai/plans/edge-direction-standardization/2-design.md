@@ -28,7 +28,7 @@ Key areas affected:
 - Prisma schema: `schema.prisma` (enum EdgeType; add canonical values, remove legacy).
 - Data migration scripts & SQL generation utilities in `scripts/` (new forward + down migration pair; single transaction, raw SQL for enum value surgery).
 - Diagram store: `src/web/topic/diagramStore/store.ts` (version bump & data migration function for persisted store JSON & in-browser local storage).
-- Traversal utilities: `src/web/topic/utils/graph.ts`, `src/web/topic/utils/node.ts` (remove `parents/children/ancestors/descendants`; add `incoming`, `outgoing`, `upstream`, `downstream`).
+- Traversal utilities: `src/web/topic/utils/graph.ts`, `src/web/topic/utils/node.ts` (remove `parents/children/ancestors/descendants`; add `sourceNodes`, `targetNodes`, `upstreamNodes`, `downstreamNodes`).
 - New above/below helpers (new file `src/web/topic/utils/direction.ts` or consolidated into `graph.ts`) encapsulating exception rules.
 - Hidden neighbor & handle logic: `src/web/topic/components/Node/NodeHandle.tsx`, `src/web/topic/diagramStore/nodeHooks.ts` (update to new direction APIs and above/below logic).
 - Edge addition / connectable logic: `useConnectableNodes` in `nodeHooks.ts` referencing directional roles.
@@ -211,7 +211,9 @@ below is the complement direction
 
 ##### Automated tests
 
-- TEST-013 `addMenu.test.ts` (needs implementing): Given a node, `addableRelationsFrom` returns only canonical `toDirection: 'source'|'target'`; creation intents produce edges with correct source/target.
+- TEST-013 `edge.test.ts` (needs implementing):
+  - Asserts `addableRelationsFrom` returns expected addable relations for a basic set of inputs.
+  - Asserts extracted `getConnectableNodes(fromNode, addableRelations, graph)` produces expected candidate nodes per relation.
 
 ##### Manual tests
 
@@ -219,8 +221,8 @@ below is the complement direction
 
 #### Files
 
-- FILE-030 `src/web/topic/diagramStore/nodeHooks.ts` (useConnectableNodes and related): Convert to `toDirection: 'source'|'target'` and canonical semantics.
-- FILE-028 `src/web/topic/utils/edge.ts`: Update `addableRelationsFrom` and `getRelation` to align with canonical direction semantics and mapping helpers.
+- FILE-028 `src/web/topic/utils/edge.ts`: extract `getConnectableNodes(fromNode, addableRelations, graph)` from `useConnectableNodes` and use new `toDirection: 'source'|'target'`; update `addableRelationsFrom` and `getRelation` to align with canonical direction semantics and mapping helpers.
+- FILE-030 `src/web/topic/diagramStore/nodeHooks.ts` (useConnectableNodes and related): Convert to `toDirection: 'source'|'target'` and canonical semantics; delegate candidate computation to the extracted pure helper.
 - FILE-032 Repo-wide configs that include `toDirection` (e.g., column configs or UI constants): Replace `parent|child` with `target|source`.
 
 #### Relevant pseudo-code or algorithms
@@ -378,16 +380,27 @@ for each edge:
 
 ### Phase 10: Minor / Misc Utilities
 
-- GOAL-008 (TODO🔳): Convert residual minor utilities (notably `effect.ts` classification) from legacy traversal names to upstream/downstream; clean remaining isolated occurrences.
-- Related requirements: REQ-002 completes semantic sweep; supports accurate exception detection for neighborsAbove/Below.
+- GOAL-008 (TODO🔳): Convert residual minor utilities (notably `effect.ts` classification) from legacy traversal names to upstream/downstream; clean remaining isolated occurrences; update `ScoreEdge` to place the arrowhead at the target end of the path (no longer always at the top) to reflect canonical direction.
+- Related requirements: REQ-002 completes semantic sweep; supports accurate exception detection for neighborsAbove/Below; reinforces REQ-001 CRI-002 (arrowheads point source → target).
+
+#### Dependencies
+
+- DEP-010 Canonical direction semantics from earlier phases are in place so ScoreEdge can derive correct marker orientation.
 
 #### Implementation concerns
 
 - **RISK-016**: Overlooked minor reference delays wrapper removal. Mitigation: Grep for `ancestors|descendants|parents|children` after phase.
 
+#### Testing strategy
+
+##### Manual tests
+
+- TEST-004: Visual scan in the app for a mixed set of edges (causes, has, impedes) confirming arrowhead at target and no regression in edge styling.
+
 #### Files
 
-- `src/web/topic/utils/effect.ts` and any stray utilities found via grep.
+- FILE-042 `src/web/topic/components/Edge/ScoreEdge.tsx`: Update arrowhead marker placement to the target end based on edge direction.
+- FILE-044 `src/web/topic/utils/effect.ts`: Migrate to upstream/downstream naming internally; adjust any traversal calls.
 
 ### Phase 11: Documentation & Vocabulary Update
 
@@ -483,9 +496,9 @@ END,
 
 | Relation | Condition                                                                 | Effect on neighborsAbove / neighborsBelow                                   | Invert? |
 | -------- | ------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ------- |
-| causes   | target is problem effect (effect/benefit/detriment with upstream problem) | neighborsAbove uses targetNodes (incoming) instead of sourceNodes (default) | Yes     |
-| has      | source is problem                                                         | neighborsAbove uses targetNodes (incoming) instead of sourceNodes (default) | Yes     |
-| (others) | n/a                                                                       | neighborsAbove = sourceNodes; neighborsBelow = targetNodes                  | No      |
+| causes   | target is problem effect (effect/benefit/detriment with upstream problem) | neighborsAbove uses sourceNodes (incoming) instead of targetNodes (default) | Yes     |
+| has      | source is problem                                                         | neighborsAbove uses sourceNodes (incoming) instead of targetNodes (default) | Yes     |
+| (others) | n/a                                                                       | neighborsAbove = targetNodes; neighborsBelow = sourceNodes                  | No      |
 
 ## Completion Criteria
 
