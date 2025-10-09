@@ -11,7 +11,7 @@ This design implements edge direction standardization, relation label consolidat
 - Updating hidden neighbor indicator logic to rely on the new directional APIs and consistent neighborsAbove / neighborsBelow inference (REQ-004).
 - Ensuring legacy imports auto-normalize on load while canonical exports remain unchanged (REQ-006).
 
-The implementation is phased to minimize refactor churn and keep each step testable. Phases 1–6 cover: migration, traversal refactor (with wrappers), hidden neighbor logic, layout invariance, documentation/code updates, and final wrapper removal. Testing is integrated within each phase—no separate omnibus phase.
+The implementation is phased to minimize refactor churn and keep each step testable. The plan spans 12 phases: migration, API introduction, core graph refactor, add menu & direction value conversion, summary/aspect refactor, view filters/context refactor, diagram store action refactor, hidden neighbor integration, layout invariance, minor utilities, documentation, and final wrapper removal. Testing is integrated within each phase.
 
 ## Alternatives
 
@@ -163,7 +163,141 @@ else
 below is the complement direction
 ```
 
-### Phase 3: Hidden Neighbor Handle Logic Integration
+### Phase 3: Core Graph / Node Utilities & Hooks Refactor
+
+- GOAL-003 (TODO🔳): Refactor core graph & node utilities (`graph.ts`, `node.ts`, `edge.ts` traversal-related logic, `getRelation`) to internally leverage new APIs while wrappers expose legacy names; update hooks (e.g. `useNeighbors`) without yet changing external direction tokens; exclude `addableRelationsFrom` and `toDirection` transformations (moved to Phase 4).
+- Related requirements: REQ-002 foundation; prepares subsequent domain migrations.
+
+#### Dependencies
+
+- DEP-005 Phase 2 traversal primitives: New helpers (`sourceNodes`, `targetNodes`, `upstreamNodes`, `downstreamNodes`, `neighborsAbove`, `neighborsBelow`) available for internal adoption.
+
+#### Implementation concerns
+
+- **RISK-011**: Divergence between internal semantics and external wrapper naming can confuse future contributors. Mitigation: Add transitional JSDoc on each wrapper referencing removal Phase 12.
+- **ASSUMPTION-011**: No external consumer imports internal traversal utilities directly.
+
+#### Testing strategy
+
+##### Automated tests
+
+- TEST-006 `graph.test.ts` (exists): Ensure upstream/downstream/source/target behavior remains correct after internal adoption.
+- TEST-007 `diagram.test.ts` (exists): neighborsAbove/below base behavior unchanged by refactor.
+
+##### Manual tests
+
+- TEST-008: Build and smoke-run app; navigate a topic to ensure no runtime errors and wrapper names still behave as before.
+
+#### Files
+
+- FILE-026 `src/web/topic/utils/graph.ts`: Adopt new traversal primitives internally; keep legacy wrappers delegating; add deprecation JSDoc pointing to Phase 12 removal.
+- FILE-027 `src/web/topic/utils/node.ts`: Update helpers to call `sourceNodes`/`targetNodes` internally where applicable.
+- FILE-029 `src/web/topic/diagramStore/nodeHooks.ts`: Update internal hooks to use new primitives while preserving wrapper-based external contracts.
+
+### Phase 4: Add Menu & Direction Value Conversion
+
+- GOAL-004 (TODO🔳): Update add/connect UI logic to adopt source/target semantics; convert all `toDirection` values from `parent|child` to `source|target` (property name retained). Migrate `addableRelationsFrom` to operate on canonical direction semantics (keeping function name). Ensure relation suggestion & creation flows remain stable.
+- Related requirements: REQ-002 clarity; prerequisite for summary & filters refactors.
+
+#### Dependencies
+
+- DEP-006 Phase 3 internal adoption: Graph/node utilities and hooks stable on canonical primitives, enabling UI conversion.
+
+#### Implementation concerns
+
+- **RISK-012**: Partial conversion leaves mixed direction tokens causing inconsistent filtering. Mitigation: Grep check disallowing `toDirection: "parent"` / `"child"` after phase completion.
+
+#### Testing strategy
+
+##### Automated tests
+
+- TEST-013 `addMenu.test.ts` (needs implementing): Given a node, `addableRelationsFrom` returns only canonical `toDirection: 'source'|'target'`; creation intents produce edges with correct source/target.
+
+##### Manual tests
+
+- TEST-003: Use add/connect UI to create edges of each relation type; verify correct arrowhead orientation and no `parent`/`child` tokens remain in code paths.
+
+#### Files
+
+- FILE-030 `src/web/topic/diagramStore/nodeHooks.ts` (useConnectableNodes and related): Convert to `toDirection: 'source'|'target'` and canonical semantics.
+- FILE-028 `src/web/topic/utils/edge.ts`: Update `addableRelationsFrom` and `getRelation` to align with canonical direction semantics and mapping helpers.
+- FILE-032 Repo-wide configs that include `toDirection` (e.g., column configs or UI constants): Replace `parent|child` with `target|source`.
+
+#### Relevant pseudo-code or algorithms
+
+##### MET-007 toDirection normalization
+
+```
+normalizeToDirection(value: 'parent'|'child'|'source'|'target'): 'source'|'target' =
+  value === 'parent' ? 'target' : value === 'child' ? 'source' : value
+```
+
+### Phase 5: Summary & Aspect Refactor
+
+- GOAL-005 (TODO🔳): Replace legacy traversal calls in `aspectFilter.ts` and summary column components with new traversal APIs; now rely on `toDirection: 'source'|'target'` from Phase 4.
+- Related requirements: REQ-002 (terminology), secondary support for REQ-001 consistency.
+
+#### Dependencies
+
+- DEP-007 Phase 4 direction token conversion: Summary consumes `toDirection: 'source'|'target'` values.
+
+#### Testing strategy
+
+##### Automated tests
+
+- Existing `aspectFilter.test.ts` should work without modification
+
+#### Files
+
+- FILE-033 `src/web/summary/aspectFilter.ts`: Replace traversal calls and direction handling with canonical APIs and tokens.
+- FILE-034 `src/web/summary/components/Columns/*`: Update any direction logic and traversal references accordingly.
+
+### Phase 6: View Filters & Context Utilities Refactor
+
+- GOAL-006 (TODO🔳): Migrate `infoFilter.ts` & `contextFilters.ts` to new traversal primitives (`sourceNodes`, `targetNodes`, `downstreamNodes`, `upstreamNodes`).
+- Related requirements: REQ-002.
+
+#### Dependencies
+
+- DEP-008 Phases 2–5 completed: Traversal primitives ready; direction tokens standardized to `source|target`.
+
+#### Testing strategy
+
+##### Automated tests
+
+- None specific to this phase; rely on incidental coverage from existing tests where applicable.
+
+##### Manual tests
+
+- TEST-005: Toggle view filters in the UI and verify resulting node/edge sets match pre-change behavior qualitatively and by sampled counts.
+
+#### Files
+
+- FILE-035 `src/web/view/utils/infoFilter.ts`: Replace legacy traversal with canonical primitives; maintain behavior.
+- FILE-036 `src/web/view/utils/contextFilters.ts`: Same as above; ensure depth/recursion semantics preserved.
+
+### Phase 7: Diagram Store Actions & Relation Construction Refactor
+
+- GOAL-007 (TODO🔳): Update `createDeleteActions.ts`, `scoreHooks.ts`, and internal directed relation objects from parent/child to source/target semantics while wrappers still exist. Ensure undo/redo & validation unaffected.
+- Related requirements: REQ-002, stabilizes for later wrapper removal.
+
+#### Dependencies
+
+- DEP-009 Phases 2–6 completed: Canonical primitives and direction tokens available across UI and utils.
+
+#### Testing strategy
+
+##### Manual tests
+
+- TEST-006: Create and delete edges across relation types; verify undo/redo works and scoring still updates correctly.
+
+#### Files
+
+- FILE-037 `src/web/topic/diagramStore/createDeleteActions.ts`: Convert construction and validation to source/target semantics.
+- FILE-038 `src/web/topic/diagramStore/scoreHooks.ts`: Update any traversal-based scoring logic to canonical primitives.
+- FILE-039 Any shared validation utilities referenced by the above: Align direction semantics if needed.
+
+### Phase 8: Hidden Neighbor Handle Logic Integration
 
 - GOAL-003 (TODO🔳): Replace NodeHandle and related hooks to use new above/below & directional APIs; no added tests beyond Phase 2 direction tests (reuse).
 - Related requirements: REQ-004 (CRI-009–CRI-012).
@@ -201,7 +335,7 @@ function exception(edge, graph): boolean =
   (edge.label == 'has' && sourceNode.type == 'problem')
 ```
 
-### Phase 4: Layout Invariance & Vertical Ordering Test
+### Phase 9: Layout Invariance & Vertical Ordering Test
 
 - GOAL-004 (TODO🔳): Maintain pre-migration vertical ordering semantics under canonical edge directions by edge-level orientation config or adapter; assert vertical ordering by node type.
 - Related requirements: REQ-003 (CRI-006–CRI-008).
@@ -242,7 +376,20 @@ for each edge:
 // after layout: coordinates unaffected by canonical storage; no post-adjustment needed since geometry only depends on virtual graph
 ```
 
-### Phase 5: Documentation & Vocabulary Update
+### Phase 10: Minor / Misc Utilities
+
+- GOAL-008 (TODO🔳): Convert residual minor utilities (notably `effect.ts` classification) from legacy traversal names to upstream/downstream; clean remaining isolated occurrences.
+- Related requirements: REQ-002 completes semantic sweep; supports accurate exception detection for neighborsAbove/Below.
+
+#### Implementation concerns
+
+- **RISK-016**: Overlooked minor reference delays wrapper removal. Mitigation: Grep for `ancestors|descendants|parents|children` after phase.
+
+#### Files
+
+- `src/web/topic/utils/effect.ts` and any stray utilities found via grep.
+
+### Phase 11: Documentation & Vocabulary Update
 
 - GOAL-005 (TODO🔳): Update code comments and internal vocabulary docs; remove misleading reverse-direction notes; incorporate new terminology (incoming/outgoing/upstream/downstream/above/below). No release notes banner (not required).
 - Related requirements: REQ-002 (terminology consistency), REQ-001 clarity.
@@ -273,7 +420,7 @@ for each edge:
 - **FILE-021** `src/common/edge.ts`: Confirm final wording (no reverse direction note).
 - **FILE-022** `design-docs/diagram-rendering.md`: Clarify adapter (if used) and neighborsAbove / neighborsBelow logic.
 
-### Phase 6: Wrapper & Legacy Direction Symbol Removal
+### Phase 12: Wrapper & Legacy Direction Symbol Removal
 
 - GOAL-006 (TODO🔳): Remove legacy wrapper functions (`parents`, `children`, `ancestors`, `descendants`) and any remaining `RelationDirection` usages, converting all call sites fully to new nomenclature; replace deprecated comments.
 - Related requirements: Final cleanup for REQ-002 clarity.
@@ -296,13 +443,13 @@ for each edge:
 
 ## Traceability Matrix (Requirement → Phase References)
 
-- REQ-001 (CRI-001–003): Phase 1 (migration), Phase 4 (arrow visual orientation confirmed).
-- REQ-002 (CRI-004–005): Phase 2 (terminology), Phase 5 (docs).
-- REQ-003 (CRI-006–008): Phase 4 (layout test & invariance logic).
-- REQ-004 (CRI-009–012): Phase 3 (handle logic) + Phase 2 direction tests.
-- REQ-005 (CRI-013–016): Phase 1 (migration + store); down migration included.
-- REQ-006 (CRI-017): Phase 1 (migration).
-- OPR-001: Phase 1 ensures efficient single-pass SQL; no extra runtime overhead added afterwards.
+- REQ-001 (CRI-001–003): Phases 1 (migration), 9 (layout visual confirmation of direction).
+- REQ-002 (CRI-004–005): Phases 2–7 incremental code refactors, 10 minor utilities, 11 documentation, 12 final purge.
+- REQ-003 (CRI-006–008): Phase 9 layout invariance tests & adapter.
+- REQ-004 (CRI-009–012): Phase 8 hidden neighbor integration (built atop traversal from Phases 2–3).
+- REQ-005 (CRI-013–016): Phase 1 migration & store versioning.
+- REQ-006 (CRI-017): Phase 1 provides canonical mapping for legacy imports (import normalization shares mapping logic).
+- OPR-001: Phase 1 single-pass SQL ensures downtime constraint.
 
 ## Appendix: Data Migration SQL Sketch (Forward)
 
@@ -334,11 +481,11 @@ END,
 
 ## Appendix: Exception Logic Table
 
-| Relation | Condition                                                                 | Effect on neighborsAbove / neighborsBelow                         | Invert? |
-| -------- | ------------------------------------------------------------------------- | ----------------------------------------------------------------- | ------- |
-| causes   | target is problem effect (effect/benefit/detriment with upstream problem) | neighborsAbove uses sourceNodes (incoming) instead of targetNodes | Yes     |
-| has      | source is problem                                                         | neighborsAbove uses sourceNodes (incoming) instead of targetNodes | Yes     |
-| (others) | n/a                                                                       | neighborsAbove = targetNodes; neighborsBelow = sourceNodes        | No      |
+| Relation | Condition                                                                 | Effect on neighborsAbove / neighborsBelow                                   | Invert? |
+| -------- | ------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ------- |
+| causes   | target is problem effect (effect/benefit/detriment with upstream problem) | neighborsAbove uses targetNodes (incoming) instead of sourceNodes (default) | Yes     |
+| has      | source is problem                                                         | neighborsAbove uses targetNodes (incoming) instead of sourceNodes (default) | Yes     |
+| (others) | n/a                                                                       | neighborsAbove = sourceNodes; neighborsBelow = targetNodes                  | No      |
 
 ## Completion Criteria
 
