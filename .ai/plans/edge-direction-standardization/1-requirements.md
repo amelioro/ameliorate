@@ -15,23 +15,24 @@ Solution components:
 2. Collapse duplicate / reverse-form labels into one canonical label per relation concept.
 3. Replace traversal/layout terminology: parent/child → source/target (edge direction) or above/below (layout positional); ancestor/descendant → downstream/upstream (investigate each usage; downstream/upstream might not cover every prior usage, but all ancestor/descendant references will be removed/refactored).
 
-Canonical topic relation labels, with legacy -> new mapping:
+Canonical topic relation labels, with legacy -> new mapping and direction changes (legacy stored direction is target → source):
 
-- causes
-- has
-- addresses
-- accomplishes
-- contingencyFor
-- criterionFor
-- fulfills
-- impedes
-- mitigates
-- subproblemOf → has (reversed)
-- createdBy → causes (reversed)
-- creates → causes (same direction)
-- obstacleOf → impedes (same direction)
+- causes (flip direction)
+- has (flip direction)
+- addresses (flip direction)
+- accomplishes (flip direction)
+- contingencyFor (flip direction)
+- criterionFor (flip direction)
+- fulfills (flip direction)
+- impedes (flip direction)
+- mitigates (flip direction)
+- subproblemOf → has (direction unchanged)
+- createdBy → causes (direction unchanged)
+- creates → causes (flip direction)
+- obstacleOf → impedes (flip direction)
+- relatesTo (flip direction)
 
-(Research / justification labels unchanged)
+(Research / justification labels unchanged, with flipped direction)
 
 ## Considered Alternatives
 
@@ -49,9 +50,9 @@ Consistent, intuitive graph semantics reduce friction in understanding complex p
 
 #### Acceptance Criteria
 
-1. **CRI-001**: Legacy labels (`subproblemOf`, `createdBy`, `creates`, `obstacleOf`) are fully replaced per canonical mapping with no remaining occurrences in the project. Note the two (`subproblemOf`, `createdBy`) that also need to be reversed.
-2. **CRI-002**: Arrowheads in the diagram visually point from semantic source to semantic target for all canonical relation types.
-3. **CRI-003**: Research / justification labels remain unchanged.
+1. **CRI-001**: Legacy labels (`subproblemOf`, `createdBy`, `creates`, `obstacleOf`) are fully replaced per canonical mapping with no remaining occurrences in the project. Directions flip for every relation except legacy `subproblemOf` and `createdBy`, which retain their stored orientation when renamed.
+2. **CRI-002**: Arrowheads in the diagram visually point from semantic source to semantic target for all canonical relation types after the stored direction flips are applied.
+3. **CRI-003**: Research / justification / generic labels remain unchanged while their stored direction flips to canonical source → target.
 
 ### REQ-002 Traversal Terminology Refactor
 

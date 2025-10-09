@@ -4,8 +4,8 @@
 
 This design implements edge direction standardization, relation label consolidation, and traversal/layout terminology refactors across the topic diagram domain. It fulfills requirements REQ-001 through REQ-006 plus associated acceptance criteria by:
 
-- Migrating database enum values and persisted diagram store data to canonical relation names and directions (source → target semantics everywhere).
-- Collapsing legacy labels (`subproblemOf`, `createdBy`, `creates`, `obstacleOf`) into canonical labels with appropriate direction normalization (`subproblemOf` + `createdBy` reversed; `creates` → `causes`; `obstacleOf` → `impedes`).
+- Migrating database enum values and persisted diagram store data to canonical relation names and directions (legacy data is stored target → source; all relations except legacy `subproblemOf` and `createdBy` will flip to source → target semantics while those two keep their stored orientation when renamed).
+- Collapsing legacy labels (`subproblemOf`, `createdBy`, `creates`, `obstacleOf`) into canonical labels with appropriate direction normalization (all relations flip direction except `subproblemOf` → `has` and `createdBy` → `causes`, which keep their stored orientation).
 - Introducing new traversal & positional nomenclature: `sourceNodes` (immediate incoming), `targetNodes` (immediate outgoing), `downstreamNodes` (recursive outgoing), `upstreamNodes` (recursive incoming), `neighborsAbove` / `neighborsBelow` (UI / positional, derived from source/target with exception rules). Legacy names (`parents`, `children`, `ancestors`, `descendants`) will temporarily wrap the new helpers for incremental replacement (removed in the final phase).
 - Preserving visual layering (node vertical ordering) without changing user mental model (REQ-003) by adapting layout input (per-edge orientation option investigation; fallback to pre-layout directional transforms only if needed) while storing canonical directions.
 - Updating hidden neighbor indicator logic to rely on the new directional APIs and consistent neighborsAbove / neighborsBelow inference (REQ-004).
@@ -62,7 +62,7 @@ graph TD
 #### Implementation concerns
 
 - **RISK-001**: Enum alteration lock could block writes briefly. Mitigation: run during deployment window; ensure fast UPDATE via single pass.
-- **RISK-002**: Missed reversal of an edge type produces semantic inconsistency. Mitigation: unit test mapping function.
+- **RISK-002**: Missed direction flip (or accidental flip of `subproblemOf`/`createdBy`) produces semantic inconsistency. Mitigation: unit test mapping function.
 
 #### Testing strategy
 
@@ -95,11 +95,11 @@ graph TD
 ```
 mapEdge({label, sourceId, targetId}): {label, sourceId, targetId} =
   switch label:
-    case 'subproblemOf': return {label: 'has', sourceId: targetId, targetId: sourceId}
-    case 'createdBy':   return {label: 'causes', sourceId: targetId, targetId: sourceId}
-    case 'creates':     return {label: 'causes', sourceId, targetId}
-    case 'obstacleOf':  return {label: 'impedes', sourceId, targetId}
-    default:            return {label, sourceId, targetId}
+    case 'subproblemOf': return {label: 'has', sourceId, targetId} // direction unchanged
+    case 'createdBy':   return {label: 'causes', sourceId, targetId} // direction unchanged
+    case 'creates':     return {label: 'causes', sourceId: targetId, targetId: sourceId}
+    case 'obstacleOf':  return {label: 'impedes', sourceId: targetId, targetId: sourceId}
+    default:            return {label, sourceId: targetId, targetId: sourceId} // all other topic relations flip
 ```
 
 ##### MET-002 Post-Migration Validation (SQL)
