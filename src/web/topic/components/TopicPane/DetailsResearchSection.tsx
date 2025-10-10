@@ -1,9 +1,11 @@
 import { Typography } from "@mui/material";
 
+import { useSessionUser } from "@/web/common/hooks";
 import { AddNodeButtonGroup } from "@/web/topic/components/Node/AddNodeButtonGroup";
 import { EditableNode } from "@/web/topic/components/Node/EditableNode";
 import { NodeList } from "@/web/topic/components/TopicPane/NodeList";
 import { useResearchNodes } from "@/web/topic/diagramStore/graphPartHooks";
+import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { DirectedToRelationWithCommonality } from "@/web/topic/utils/edge";
 import { Node } from "@/web/topic/utils/graph";
 
@@ -13,6 +15,9 @@ interface Props {
 
 // make work for topic (when no graphPart is passed)
 export const DetailsResearchSection = ({ node }: Props) => {
+  const { sessionUser } = useSessionUser();
+  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
+
   const { questions, facts, sources } = useResearchNodes(node.id);
 
   // facts shouldn't show sources because they have a different specific section for sources
@@ -36,12 +41,14 @@ export const DetailsResearchSection = ({ node }: Props) => {
 
   return (
     <>
-      <AddNodeButtonGroup
-        fromNodeId={node.id}
-        addableRelations={addableRelations}
-        selectNewNode={false}
-        className="mb-2"
-      />
+      {userCanEditTopicData && (
+        <AddNodeButtonGroup
+          fromNodeId={node.id}
+          addableRelations={addableRelations}
+          selectNewNode={false}
+          className="mb-2"
+        />
+      )}
 
       <NodeList>
         {researchNodes.length > 0 ? (
