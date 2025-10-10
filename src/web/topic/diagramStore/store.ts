@@ -63,7 +63,7 @@ export const useDiagramStore = createWithEqualityFn<DiagramStoreState>()(
   apiSyncer(
     persist(temporal(devtools(() => initialState, { name: diagramStorePlaygroundName })), {
       name: diagramStorePlaygroundName,
-      version: 25,
+      version: 26,
       migrate: migrate,
       skipHydration: true,
     }),

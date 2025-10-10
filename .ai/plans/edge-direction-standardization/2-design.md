@@ -57,6 +57,7 @@ graph TD
 ### Phase 1: Database & Store Migration to Canonical Relations
 
 - GOAL-001 (TODO🔳): Introduce canonical edge relations; migrate DB + persisted store + in-memory schemas to consistent source→target semantics and remove legacy labels.
+- STATUS NOTE: Runtime helpers in `src/web/topic/utils/infoFilter.ts`, `src/web/summary/aspectFilter.ts`, and `src/web/topic/utils/effect.ts` currently have only label canonicalization; their directional correctness remains pending in later phases (see Phases 5, 6, and 10). Traversal wrappers (`parents`/`children` etc.) also retain legacy semantics intentionally until wrapper removal in Phase 12.
 - Related requirements: REQ-001 (CRI-001, CRI-002, CRI-003), REQ-005 (CRI-013, CRI-015, CRI-016), partial REQ-006 (foundation for import transform).
 
 #### Implementation concerns

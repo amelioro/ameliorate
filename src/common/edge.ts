@@ -6,16 +6,13 @@ import { InfoCategory } from "@/common/infoCategory";
 export const relationNames = [
   // topic
   "causes",
-  "subproblemOf",
   "addresses",
   "accomplishes",
   "contingencyFor",
-  "createdBy",
   "has",
   "criterionFor",
-  "creates",
   "fulfills",
-  "obstacleOf",
+  "impedes",
   "mitigates",
 
   // research
@@ -42,7 +39,7 @@ export const edgeSchema = z.object({
   topicId: z.number(),
   arguedDiagramPartId: z.string().uuid().nullable(),
   type: zRelationNames.describe(
-    "Note: this unintuitively reads from the target node to the source node. E.g. target `Solution` node `addresses` source `Problem` node.",
+    "Note: this reads from the source node to the target node. E.g. source `Solution` node `addresses` target `Problem` node.",
   ),
   customLabel: z
     .string()
@@ -137,16 +134,13 @@ export const reactFlowEdgeSchema = z.object({
 export const infoRelationNames: Record<InfoCategory, RelationName[]> = {
   breakdown: [
     "causes",
-    "subproblemOf",
     "addresses",
     "accomplishes",
     "contingencyFor",
-    "createdBy",
     "has",
     "criterionFor",
-    "creates",
     "fulfills",
-    "obstacleOf",
+    "impedes",
     "mitigates",
     "relatesTo", // is a generic relation but currently only seems worthwhile in topic
   ],

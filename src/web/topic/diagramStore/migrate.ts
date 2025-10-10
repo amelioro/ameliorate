@@ -32,6 +32,7 @@ export const migrate = (persistedState: any, version: number) => {
     migrate_22_to_23,
     migrate_23_to_24,
     migrate_24_to_25,
+    migrate_25_to_26,
   ];
 
   let state = persistedState;
@@ -599,4 +600,63 @@ const migrate_24_to_25 = (state: FromState24) => {
   });
 
   return state as ToState25;
+};
+
+interface Edge25 {
+  id: string;
+  label: string;
+  source: string;
+  target: string;
+}
+
+type State25 = ToState25 & {
+  nodes: { id: string; type: string }[];
+  edges: (Edge25 & Record<string, unknown>)[];
+};
+
+const isPersistedEdge = (edge: unknown): edge is Edge25 => {
+  if (typeof edge !== "object" || edge === null) return false;
+
+  const candidate = edge as Partial<Edge25>;
+
+  return (
+    typeof candidate.id === "string" &&
+    typeof candidate.label === "string" &&
+    typeof candidate.source === "string" &&
+    typeof candidate.target === "string"
+  );
+};
+
+const migrate_25_to_26 = (state: State25) => {
+  const renameMap: Record<string, string> = {
+    subproblemOf: "has",
+    createdBy: "causes",
+    creates: "causes",
+    obstacleOf: "impedes",
+  };
+
+  state.edges.forEach((edgeRaw) => {
+    if (!isPersistedEdge(edgeRaw)) return;
+
+    const edge = edgeRaw;
+    const originalLabel = edge.label;
+
+    const renamed = Object.prototype.hasOwnProperty.call(renameMap, originalLabel)
+      ? renameMap[originalLabel]
+      : undefined;
+
+    if (renamed) {
+      edge.label = renamed;
+    }
+
+    if (originalLabel === "subproblemOf" || originalLabel === "createdBy") {
+      return;
+    }
+
+    const previousSource = edge.source;
+    edge.source = edge.target;
+    edge.target = previousSource;
+  });
+
+  return state;
 };

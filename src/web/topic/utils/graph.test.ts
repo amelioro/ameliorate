@@ -95,7 +95,7 @@ describe("ancestors", () => {
         buildEdge({
           sourceId: label2IndirectAncestor.id,
           targetId: label1DirectAncestor.id,
-          relation: "creates", // would usually use `causes` here but this is just to test two labels being passed
+          relation: "fulfills", // would usually use `causes` here but this is just to test two labels being passed
         }),
         buildEdge({
           sourceId: notLabelDirectAncestor.id,
@@ -110,7 +110,7 @@ describe("ancestors", () => {
       ],
     };
 
-    const found = ancestors(fromNode, graph, ["causes", "creates"]);
+    const found = ancestors(fromNode, graph, ["causes", "fulfills"]);
 
     expect(found).toIncludeSameMembers([
       { ...label1DirectAncestor, layersAway: 1 },
@@ -216,7 +216,7 @@ describe("descendants", () => {
         buildEdge({
           sourceId: label1DirectDescendant.id,
           targetId: label2IndirectDescendant.id,
-          relation: "creates", // would usually use `causes` here but this is just to test two labels being passed
+          relation: "fulfills", // would usually use `causes` here but this is just to test two labels being passed
         }),
         buildEdge({
           sourceId: fromNode.id,
@@ -231,7 +231,7 @@ describe("descendants", () => {
       ],
     };
 
-    const found = descendants(fromNode, graph, ["causes", "creates"]);
+    const found = descendants(fromNode, graph, ["causes", "fulfills"]);
 
     expect(found).toIncludeSameMembers([
       { ...label1DirectDescendant, layersAway: 1 },

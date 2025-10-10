@@ -73,8 +73,8 @@ const applyProblemFilter = (graph: Graph, filters: ProblemOptions) => {
   const detailEdges: RelationName[] = [];
   /* eslint-disable functional/immutable-data */
   if (filters.problemDetails.includes("causes")) detailEdges.push("causes");
-  if (filters.problemDetails.includes("effects")) detailEdges.push("createdBy");
-  if (filters.problemDetails.includes("subproblems")) detailEdges.push("subproblemOf");
+  if (filters.problemDetails.includes("effects")) detailEdges.push("causes");
+  if (filters.problemDetails.includes("subproblems")) detailEdges.push("has");
   if (filters.problemDetails.includes("criteria")) detailEdges.push("criterionFor");
   if (filters.problemDetails.includes("solutions")) detailEdges.push("addresses", "accomplishes");
   /* eslint-enable functional/immutable-data */
@@ -173,11 +173,11 @@ const getSolutionDetails = (
   if (detailType === "none") return [];
 
   const ancestorDetails = solutions.flatMap((solution) =>
-    ancestors(solution, graph, ["has", "creates"]),
+    ancestors(solution, graph, ["has", "causes"]),
   );
 
   const descendantDetails = solutions.flatMap((solution) =>
-    descendants(solution, graph, ["createdBy", "obstacleOf", "accomplishes", "contingencyFor"]),
+    descendants(solution, graph, ["causes", "impedes", "accomplishes", "contingencyFor"]),
   );
 
   const criteriaIds = criteria.map((criterion) => criterion.id);
