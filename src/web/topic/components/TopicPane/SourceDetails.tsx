@@ -1,10 +1,12 @@
 import { Typography } from "@mui/material";
 
+import { useSessionUser } from "@/web/common/hooks";
 import { StandaloneEdge } from "@/web/topic/components/Edge/StandaloneEdge";
 import { AddNodeButtonGroup } from "@/web/topic/components/Node/AddNodeButtonGroup";
 import { EditableNode } from "@/web/topic/components/Node/EditableNode";
 import { NodeList } from "@/web/topic/components/TopicPane/NodeList";
 import { useSourceDetails } from "@/web/topic/diagramStore/nodeTypeHooks";
+import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { Node } from "@/web/topic/utils/graph";
 
 interface Props {
@@ -12,6 +14,9 @@ interface Props {
 }
 
 export const SourceDetails = ({ sourceNode }: Props) => {
+  const { sessionUser } = useSessionUser();
+  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
+
   const { nodesRelevantFor, edgesRelevantFor, facts, sources } = useSourceDetails(sourceNode.id);
   const mentions = facts.concat(sources);
 
@@ -34,16 +39,18 @@ export const SourceDetails = ({ sourceNode }: Props) => {
       <div className="mt-4 flex flex-col items-center gap-0.5">
         <Typography variant="body1">Mentions</Typography>
 
-        <AddNodeButtonGroup
-          fromNodeId={sourceNode.id}
-          // prettier-ignore
-          addableRelations={[
-            { child: "source", name: "sourceOf", parent: "fact", as: "parent", commonality: "common" },
-            { child: "source", name: "mentions", parent: "source", as: "parent", commonality: "common" },
-          ]}
-          selectNewNode={false}
-          className="mb-2"
-        />
+        {userCanEditTopicData && (
+          <AddNodeButtonGroup
+            fromNodeId={sourceNode.id}
+            // prettier-ignore
+            addableRelations={[
+              { child: "source", name: "sourceOf", parent: "fact", as: "parent", commonality: "common" },
+              { child: "source", name: "mentions", parent: "source", as: "parent", commonality: "common" },
+            ]}
+            selectNewNode={false}
+            className="mb-2"
+          />
+        )}
 
         <NodeList>
           {mentions.length > 0 ? (
