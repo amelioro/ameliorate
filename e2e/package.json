@@ -25,7 +25,7 @@
     "ui": "npx playwright test --ui-port=0"
   },
   "devDependencies": {
-    "@playwright/test": "1.49.1",
+    "@playwright/test": "1.56.1",
     "@types/node": "^22.10.2"
   }
 }
