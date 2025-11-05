@@ -205,7 +205,7 @@ const EditableNodeBase = ({ node, className = "", onClick }: Props) => {
         <BottomDiv className="relative">
           {node.type !== "rootClaim" && ( // root claim indicators don't seem very helpful
             <>
-              {/* TODO?: how to make corner indicators not look bad in the table? they're cut off */}
+              {/* TODO?: how to make corner indicators not look bad in the table? they're cut off. fit indicators into node footer? */}
               <LeftCornerStatusIndicators
                 graphPartId={node.id}
                 bgColor={nodeStyles.backgroundColor as string}

@@ -72,6 +72,7 @@ export const NodeToolbar = ({ node, context }: Props) => {
         size="small"
         onClick={(event) => {
           // TODO: ideally this would open like a menu from the IconButton, not from the mouse position
+          // TODO: this should open without closing the node toolbar (at least when the node is being focused, not selected)
           openContextMenu(event, { node: node });
         }}
         className="rounded"
