@@ -41,7 +41,7 @@ jobs:
       run:
         working-directory: ./e2e
     container:
-      image: mcr.microsoft.com/playwright:v1.49.1-noble
+      image: mcr.microsoft.com/playwright:v1.56.1-noble
       # not sure why, but it seems that the git-auto-commit-action has permission issues without this
       options: --user 1001
     steps:

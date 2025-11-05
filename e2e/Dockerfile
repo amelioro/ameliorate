@@ -1,6 +1,6 @@
 # playwright's image that contains browsers and OS dependencies for running
 # note: use specifically the version matching the npm package version, as playwright recommends https://playwright.dev/docs/docker#image-tags
-FROM mcr.microsoft.com/playwright:v1.49.1-noble
+FROM mcr.microsoft.com/playwright:v1.56.1-noble
 
 WORKDIR /app
 
