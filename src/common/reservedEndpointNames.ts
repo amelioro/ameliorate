@@ -66,6 +66,7 @@ export const reservedFirstLevelEndpointNames = [
   "notifications",
   "now",
   "official",
+  "ontology",
   "org",
   "organizations",
   "partners",

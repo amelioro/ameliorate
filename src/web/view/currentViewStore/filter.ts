@@ -225,6 +225,8 @@ export const viewNodeInDiagram = (nodeId: string) => {
   );
 
   emitter.emit("changedDiagramFilter");
+  // TODO: centralize, but don't centralize so far zoomed in...
+  // setPartIdToCentralize(nodeId);
 };
 
 /**

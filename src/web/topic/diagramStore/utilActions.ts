@@ -33,7 +33,20 @@ export const setDiagramData = (state: DiagramStoreState, sessionUsername?: strin
   const sessionScores = sessionUsername ? state.userScores[sessionUsername] : undefined;
   const myScores = sessionScores ?? state.userScores[playgroundUsername]; // state should only have one of these at most
   const myUsername = isPlaygroundTopic(currentTopic) ? playgroundUsername : sessionUsername;
-  const userScores = myScores && myUsername ? { [myUsername]: myScores } : {};
+
+  /**
+   * Slightly jank to only overwrite our user's scores so that we don't delete other users' scores,
+   * since we shouldn't have permission to.
+   * We could consider allowing deleting others' scores on the server (if we're admin?), but then
+   * we'd also need permission to create others' scores so that undo/redo could work... which seems
+   * not preferred.
+   * Note: orphaned scores can cause some confusion, since you can't see them but you'll still see
+   * those users' names in the perspectives list. We could consider either filtering the perspectives
+   * list to only scores whose diagram parts still exist, or by deleting orphaned scores via job.
+   */
+  const currentScores = useDiagramStore.getState().userScores;
+  const userScores =
+    myScores && myUsername ? { ...currentScores, [myUsername]: myScores } : currentScores;
 
   useDiagramStore.setState({ ...state, userScores }, false, "setDiagramData");
 
