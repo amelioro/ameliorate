@@ -12,7 +12,7 @@ jobs:
       run:
         working-directory: ./e2e
     container:
-      image: mcr.microsoft.com/playwright:v1.49.1-noble
+      image: mcr.microsoft.com/playwright:v1.56.1-noble
       # need this for ci.yml's job (see comment there), may as well keep it here for consistency
       options: --user 1001
     steps:
