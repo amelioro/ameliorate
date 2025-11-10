@@ -10,7 +10,7 @@ import { InfoCategory } from "@/common/infoCategory";
 // - the order to group node types in the same layer of the diagram,
 // - (future) the order to group node types in different layers of the diagram
 export const nodeTypes = [
-  // topic
+  // breakdown
   "cause",
   "problem", // weird for problem not to be first, but subproblems should be to the right of causes for layout - maybe just make a subproblem node so this isn't awkward?
   "criterion",
@@ -42,7 +42,41 @@ export const nodeTypes = [
   "custom",
 ] as const;
 
-export const zNodeTypes = z.enum(nodeTypes);
+export const zNodeTypes = z.enum(nodeTypes).describe(
+  `Implies the intended meaning of the node. There are three categories of node types: Breakdown, Research, and Justification.  Generally if a node could be a breakdown node or another category of node, it should be a breakdown node, because those are generally causally-related nodes, and causally-related things are easier to reason about.
+
+Breakdown nodes are the primary focus of a diagram, and usually causally-relate to each other.
+
+Breakdown node types:
+- Problem: core problem that wants to be solved, e.g. "cars going too fast in my neighborhood"
+- Cause: matters mainly because it causes a Problem, e.g. "street goes downhill"
+- Detriment: if caused by a Problem, explains why a Problem is concerning; if caused by a Solution, explains a downside of a Solution; e.g. "pedestrians might get hit"
+- Benefit: positive effect, e.g. "people get places faster"
+- Effect: neutral effect; use this if an effect isn't obviously positive or negative, e.g. "fewer larger wildlife in neighborhood"
+- Solution: option for addressing a Problem, or one of its Causes/Detriments, e.g. "speed bump between intersection and hill"
+- Solution Component: piece of a Solution, e.g. "rubber, portable speed bump", "$500 cost"
+- Obstacle: impedes a Solution, e.g. "street is a thoroughfare"
+- Mitigation: option for addressing a downside of a Solution, e.g. "only place speedbump on downhill-going half of street"
+- Mitigation Component: piece of a Mitigation, if the Mitigation is worth detailing
+- Criterion: indicates a good aspect of a Solution and can be used to compare Solutions, e.g. "inexpensive"; this isn't causally-related to other breakdown nodes, and so doesn't necessarily belong in this category, but it's here for now.
+
+Research nodes are auxiliary nodes that provide context about unknowns to look into, relevant facts, etc. These generally relate to a specific node or nodes.
+
+Research node types:
+- Question: an unknown that would be good to clarify or find an answer for, usually asks about another node, e.g. "what traffic data is available?"
+- Answer: potential answer to a question
+- Fact: auxiliary detail, usually a statistic, e.g. "residential street has 25 mph speed limit"
+- Source: source of some information, could be an article or website; these node's text should generally be a title, and the node's notes should be the URL; e.g. "WI traffic manual"
+
+Justification nodes are auxiliary nodes that convey arguments in support or critique of the implication of a node or edge in the topic. Node implications are "[node text] is an important [node type] in the context of this topic", and edge implications are "[source node text] [edge type, verb] [target node text]".
+
+Justification node types:
+- Root Claim: a claim about the impliciation of a node or edge, e.g. "'cars going too fast in my neighborhood' is an important Problem in the context of this topic"
+- Support: a claim that supports another claim, e.g. "visually see cars zipping by all the time"
+- Critique: a claim that critiques another claim, e.g. "we measured traffic years ago, and it wasn't a problem".
+
+Finally, there's the Custom node, which can be used when there's some information that doesn't fit cleanly into another existing node type.`,
+);
 
 export type NodeType = z.infer<typeof zNodeTypes>;
 
