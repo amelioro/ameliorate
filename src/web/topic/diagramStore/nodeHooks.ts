@@ -134,18 +134,6 @@ export const useNodeChildren = (nodeId: string | undefined) => {
   }, shallow);
 };
 
-export const useNodeParents = (nodeId: string) => {
-  return useDiagramStore((state) => {
-    try {
-      const node = findNodeOrThrow(nodeId, state.nodes);
-      const topicGraph = { nodes: state.nodes, edges: state.edges };
-      return parents(node, topicGraph);
-    } catch {
-      return [];
-    }
-  }, shallow);
-};
-
 export const useCriterionSolutionEdges = (problemNodeId: string | undefined) => {
   return useDiagramStore((state) => {
     if (!problemNodeId) return [];

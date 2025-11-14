@@ -53,7 +53,7 @@ const researchRelations: AddableRelation[] = questionRelations.concat(
 // in the layout.
 // prettier-ignore
 // -- allow each relation to be on one line for readability, rather than having many on one line and some and multiple lines because they're too long
-export const relations: AddableRelation[] = researchRelations.concat([
+const relations: AddableRelation[] = researchRelations.concat([
   // topic relations
   { child: "problem", name: "causes", parent: "problem", commonalityFrom: { child: "uncommon" } },
   { child: "cause", name: "causes", parent: "problem", commonalityFrom: { child: "uncommon", parent: "common" } },
