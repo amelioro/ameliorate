@@ -1,5 +1,7 @@
 import { errorWithData } from "@/common/errorHandling";
-import { areSameCategoryNodes } from "@/common/node";
+import { NodeType, areSameCategoryNodes } from "@/common/node";
+import { DirectedToRelationWithCommonality, addableRelationsFrom } from "@/web/topic/utils/edge";
+import { EffectType } from "@/web/topic/utils/effect";
 import { Graph, Node } from "@/web/topic/utils/graph";
 
 export type RelativePlacement = "above" | "below";
@@ -36,4 +38,20 @@ export const neighborsBelow = (node: Node, topicGraph: Graph, sameCategoryNodes 
   } else {
     return nodesBelow;
   }
+};
+
+export const addableRelationsAbove = (
+  fromNodeType: NodeType,
+  unrestrictedAddingFrom: boolean,
+  effectType: EffectType,
+): DirectedToRelationWithCommonality[] => {
+  return addableRelationsFrom(fromNodeType, "parent", unrestrictedAddingFrom, effectType);
+};
+
+export const addableRelationsBelow = (
+  fromNodeType: NodeType,
+  unrestrictedAddingFrom: boolean,
+  effectType: EffectType,
+): DirectedToRelationWithCommonality[] => {
+  return addableRelationsFrom(fromNodeType, "child", unrestrictedAddingFrom, effectType);
 };

@@ -15,10 +15,10 @@ import { NodeHandle } from "@/web/topic/components/Node/NodeHandle";
 import { useIsEdgeSelected, useIsNeighborSelected } from "@/web/topic/diagramStore/nodeHooks";
 import { useEffectType } from "@/web/topic/diagramStore/nodeTypeHooks";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
-import { addableRelationsFrom } from "@/web/topic/utils/edge";
 import { Node } from "@/web/topic/utils/graph";
 import { orientation } from "@/web/topic/utils/layout";
 import { FlowNodeType } from "@/web/topic/utils/node";
+import { addableRelationsAbove, addableRelationsBelow } from "@/web/topic/utils/relativePlacement";
 import { getFlashlightMode, useUnrestrictedEditing } from "@/web/view/actionConfigStore";
 import { showNodeAndNeighbors } from "@/web/view/currentViewStore/filter";
 import { useIsGraphPartSelected } from "@/web/view/selectedPartStore";
@@ -60,15 +60,13 @@ export const FlowNode = (flowNode: NodeProps) => {
   }, []);
 
   const unrestrictedAddingFrom = node.type === "custom" || unrestrictedEditing;
-  const addableParentRelations = addableRelationsFrom(
+  const addableAboveRelations = addableRelationsAbove(
     node.type,
-    "parent",
     unrestrictedAddingFrom,
     effectType,
   );
-  const addableChildRelations = addableRelationsFrom(
+  const addableBelowRelations = addableRelationsBelow(
     node.type,
-    "child",
     unrestrictedAddingFrom,
     effectType,
   );
@@ -80,14 +78,14 @@ export const FlowNode = (flowNode: NodeProps) => {
   // stands out when in front of a bunch of edges (Mui's default shadow doesn't stand out much)
   const addButtonDecorationClasses = "shadow shadow-gray-500";
 
-  const positionParentButtonsClasses =
+  const aboveButtonsClasses =
     orientation === "DOWN"
       ? // have to use [arbitrary] tw values because can't apply two translate-x-* class names
         // `left-1/2 top-0 -translate-x-1/2 translate-y-[calc(-100%-${nodeBridgeGap}px)]`
         // also can't use `${nodeBridgeGap}` because tw classes are detected based on full class names being present in the source file https://tailwindcss.com/docs/content-configuration#dynamic-class-names
         `left-1/2 top-0 -translate-x-1/2 translate-y-[calc(-100%-16px)]`
       : `top-1/2 left-0 -translate-y-1/2 translate-x-[calc(-100%-16px)]`;
-  const positionChildButtonsClasses =
+  const belowButtonsClasses =
     orientation === "DOWN"
       ? `left-1/2 bottom-0 -translate-x-1/2 translate-y-[calc(100%+16px)]`
       : `top-1/2 right-0 -translate-y-1/2 translate-x-[calc(100%+16px)]`;
@@ -102,10 +100,10 @@ export const FlowNode = (flowNode: NodeProps) => {
       {userCanEditTopicData && (
         <AddNodeButtonGroup
           fromNodeId={flowNode.id}
-          addableRelations={addableParentRelations}
+          addableRelations={addableAboveRelations}
           title="Add node above"
           openDirection="top"
-          className={`absolute hidden ${showAddButtonsClasses} ${positionParentButtonsClasses} ${addButtonDecorationClasses}`}
+          className={`absolute hidden ${showAddButtonsClasses} ${aboveButtonsClasses} ${addButtonDecorationClasses}`}
         />
       )}
 
@@ -130,10 +128,10 @@ export const FlowNode = (flowNode: NodeProps) => {
       {userCanEditTopicData && (
         <AddNodeButtonGroup
           fromNodeId={flowNode.id}
-          addableRelations={addableChildRelations}
+          addableRelations={addableBelowRelations}
           title="Add node below"
           openDirection="bottom"
-          className={`absolute hidden ${showAddButtonsClasses} ${positionChildButtonsClasses} ${addButtonDecorationClasses}`}
+          className={`absolute hidden ${showAddButtonsClasses} ${belowButtonsClasses} ${addButtonDecorationClasses}`}
         />
       )}
     </>
