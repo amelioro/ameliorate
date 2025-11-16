@@ -4,7 +4,7 @@ import { breakdownNodeTypes, researchNodeTypes } from "@/common/node";
 import { ContextMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
 import { NestedMenuItem } from "@/web/common/components/Menu/NestedMenuItem";
 import { useSessionUser } from "@/web/common/hooks";
-import { addNodeWithoutParent } from "@/web/topic/diagramStore/createDeleteActions";
+import { addNodeWithoutEdge } from "@/web/topic/diagramStore/createDeleteActions";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { nodeDecorations } from "@/web/topic/utils/node";
 import { useFormat } from "@/web/view/currentViewStore/store";
@@ -34,7 +34,7 @@ export const AddNodeMenuItem = ({ parentMenuOpen }: Props) => {
         {shownNodeTypes.map((type) => {
           const { NodeIcon, title } = nodeDecorations[type];
           return (
-            <ContextMenuItem key={type} onClick={() => addNodeWithoutParent(type, "diagram")}>
+            <ContextMenuItem key={type} onClick={() => addNodeWithoutEdge(type, "diagram")}>
               <NodeIcon
                 sx={{ backgroundColor: theme.palette[type].main }}
                 className="mr-2 rounded p-0.5"

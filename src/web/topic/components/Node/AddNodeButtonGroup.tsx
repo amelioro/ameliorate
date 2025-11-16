@@ -63,7 +63,7 @@ const AddMenuSearch = ({ fromNodeId, addableRelations, className }: AddMenuSearc
         const optionNode = details?.option;
         if (optionNode) {
           if (reason === "selectOption" && optionNode.addableRelationToNode) {
-            if (optionNode.addableRelationToNode.as === "parent") {
+            if (optionNode.addableRelationToNode.as === "source") {
               connectNodes(fromNodeId, optionNode.addableRelationToNode.name, optionNode.id);
             } else {
               connectNodes(optionNode.id, optionNode.addableRelationToNode.name, fromNodeId);
@@ -139,7 +139,7 @@ const AddMenuSearch = ({ fromNodeId, addableRelations, className }: AddMenuSearc
                       )
                   : optionText}
                 <i className="text-slate-400">
-                  {/* ideally the `existingEdge` would probably use the same format of relation description, but that'd require grabbing the source/target node types figuring out parent/child relation from the current node, which is a bit annoying to do, and showing at least the edge label seems fine enough */}
+                  {/* ideally the `existingEdge` would probably use the same format of relation description, but that'd require grabbing the source/target node types from the edge, which is a bit annoying to do, and showing at least the edge label seems fine enough */}
                   {` (${option.addableRelationToNode ? getDirectedRelationDescription(option.addableRelationToNode) : option.existingEdge.label})`}
                 </i>
               </span>

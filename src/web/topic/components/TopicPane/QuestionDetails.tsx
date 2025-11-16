@@ -39,10 +39,10 @@ export const QuestionDetails = ({ questionNode }: Props) => {
           <AddNodeButton
             fromNodeId={questionNode.id}
             addableRelation={{
-              child: "answer",
+              target: "answer",
               name: "potentialAnswerTo",
-              parent: "question",
-              as: "child",
+              source: "question",
+              as: "target",
             }}
             selectNewNode={false}
           />

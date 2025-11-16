@@ -121,7 +121,7 @@ export const reactFlowEdgeSchema = z.object({
    * regular edges can be distinguished. But that sounds like a lot of work and it's hard to tell
    * that it'd be worth it.
    */
-  source: z.string(), // source === parent if arrows point from bottom to top
+  source: z.string(), // arrows point from target to source
   /**
    * id of the target graph part. Can be a node or an edge, but most UI edge operations only work
    * with node targets.
@@ -130,7 +130,7 @@ export const reactFlowEdgeSchema = z.object({
    * regular edges can be distinguished. But that sounds like a lot of work and it's hard to tell
    * that it'd be worth it.
    */
-  target: z.string(), // target === child if arrows point from bottom to top
+  target: z.string(), // arrows point from target to source
   type: z.literal("FlowEdge"),
 });
 

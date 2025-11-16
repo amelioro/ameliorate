@@ -42,10 +42,10 @@ export const DetailsJustificationSection = ({ graphPart }: Props) => {
           fromNodeId={graphPart.id}
           // TODO: remove root claims with edge directly to argued part
           addableRelation={{
-            child: "support",
+            target: "support",
             name: "supports",
-            parent: isJustificationNode ? graphPart.type : "rootClaim",
-            as: "child",
+            source: isJustificationNode ? graphPart.type : "rootClaim",
+            as: "target",
           }}
           selectNewNode={false}
         />
@@ -56,10 +56,10 @@ export const DetailsJustificationSection = ({ graphPart }: Props) => {
           fromNodeId={graphPart.id}
           // TODO: remove root claims with edge directly to argued part
           addableRelation={{
-            child: "critique",
+            target: "critique",
             name: "critiques",
-            parent: isJustificationNode ? graphPart.type : "rootClaim",
-            as: "child",
+            source: isJustificationNode ? graphPart.type : "rootClaim",
+            as: "target",
           }}
           selectNewNode={false}
         />

@@ -5,13 +5,13 @@ import { NodeType } from "@/common/node";
 import { Tooltip } from "@/web/common/components/Tooltip/Tooltip";
 import { useSessionUser } from "@/web/common/hooks";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
-import { addNode, addNodeWithoutParent } from "@/web/topic/diagramStore/createDeleteActions";
+import { addNode, addNodeWithoutEdge } from "@/web/topic/diagramStore/createDeleteActions";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { DirectedToRelation, getDirectedRelationDescription } from "@/web/topic/utils/edge";
 import { nodeDecorations } from "@/web/topic/utils/node";
 
 /**
- * Either we add a node with a relation to an existing node, or we add a node without a parent.
+ * Either we add a node with a relation to an existing node, or we add a node without an edge.
  */
 type AddableProps =
   | {
@@ -66,7 +66,7 @@ export const AddNodeButton = ({
       event.stopPropagation(); // don't trigger selection of node
 
       if (fromNodeId === undefined) {
-        addNodeWithoutParent(addableNodeType, context, selectNewNode);
+        addNodeWithoutEdge(addableNodeType, context, selectNewNode);
       } else {
         addNode({
           fromPartId: fromNodeId,

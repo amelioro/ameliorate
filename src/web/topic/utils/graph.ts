@@ -60,7 +60,7 @@ export const buildNode = ({
   return node;
 };
 
-export type RelationDirection = "parent" | "child";
+export type EdgeDirection = "source" | "target";
 
 export type Edge = z.infer<typeof reactFlowEdgeSchema>;
 
@@ -139,7 +139,7 @@ export const isNodeType = <T extends NodeType>(
 
 const findNodesRecursivelyFrom = (
   fromNode: Node,
-  toDirection: RelationDirection,
+  toDirection: EdgeDirection,
   graph: Graph,
   labelsToTraverse: readonly RelationName[] = relationNames,
   labelsToKeep: readonly RelationName[] = labelsToTraverse, // if we don't have labelsToKeep, assume we want to narrow via labelsToTraverse (we don't generally want to keep nodes through all edge types, unless we're traversing all edge types)
@@ -160,8 +160,8 @@ const findNodesRecursivelyFrom = (
    */
   layersAway: number;
 })[] => {
-  const from = toDirection === "child" ? "source" : "target";
-  const to = toDirection === "child" ? "target" : "source";
+  const from = toDirection === "target" ? "source" : "target";
+  const to = toDirection;
 
   const foundEdges = {
     traverse: graph.edges.filter(
@@ -215,7 +215,7 @@ const findNodesRecursivelyFrom = (
   return uniqBy(foundNodes.keep.concat(furtherNodesToKeep), (node) => node.id);
 };
 
-export const ancestors = (
+export const upstreamNodes = (
   fromNode: Node,
   graph: Graph,
   labelsToTraverse?: RelationName[],
@@ -224,7 +224,7 @@ export const ancestors = (
 ) => {
   return findNodesRecursivelyFrom(
     fromNode,
-    "parent",
+    "source",
     graph,
     labelsToTraverse,
     labelsToKeep,
@@ -232,7 +232,7 @@ export const ancestors = (
   );
 };
 
-export const descendants = (
+export const downstreamNodes = (
   fromNode: Node,
   graph: Graph,
   labelsToTraverse?: RelationName[],
@@ -241,7 +241,7 @@ export const descendants = (
 ) => {
   return findNodesRecursivelyFrom(
     fromNode,
-    "child",
+    "target",
     graph,
     labelsToTraverse,
     labelsToKeep,

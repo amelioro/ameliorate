@@ -23,23 +23,10 @@ export const SolutionConcernsColumn = ({ summaryNode }: Props) => {
   const { directNodes: directObstacles, indirectNodes: indirectObstacles } =
     useObstacles(summaryNode);
 
-  // need to grab both parent and child relations because detriments generally go up from solutions
-  // and obstacles go down from solutions
-  const defaultParentAddableRelations = addableRelationsFrom(
-    summaryNode.type,
-    "parent",
-    false,
-    "n/a",
-  );
-  const defaultChildAddableRelations = addableRelationsFrom(
-    summaryNode.type,
-    "child",
-    false,
-    "n/a",
-  );
+  const defaultAddableRelations = addableRelationsFrom(summaryNode.type, undefined, false, "n/a");
 
   const addableRelations = filterAddablesViaSearchRelations(
-    defaultParentAddableRelations.concat(defaultChildAddableRelations),
+    defaultAddableRelations,
     detrimentsDirectedSearchRelations.concat(obstaclesDirectedSearchRelations),
   );
 

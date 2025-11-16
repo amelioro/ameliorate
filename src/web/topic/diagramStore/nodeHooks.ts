@@ -8,12 +8,12 @@ import { DirectedToRelation } from "@/web/topic/utils/edge";
 import {
   Edge,
   Node,
-  RelationDirection,
-  ancestors,
-  descendants,
+  downstreamNodes,
   findNodeOrThrow,
+  upstreamNodes,
 } from "@/web/topic/utils/graph";
-import { children, edges, neighbors, parents } from "@/web/topic/utils/node";
+import { edges, neighbors, targetNodes } from "@/web/topic/utils/node";
+import { RelativePlacement, neighborsInDirection } from "@/web/topic/utils/relativePlacement";
 import { useIsAnyGraphPartSelected } from "@/web/view/selectedPartStore";
 
 export const useNode = (nodeId: string | null) => {
@@ -55,7 +55,7 @@ export const useConnectableNodes = (fromNodeId: string, addableRelations: Direct
         if (toNode.id === fromNodeId) return null; // can't connect to self
 
         const addableRelationToNode = addableRelations.find((addableRelation) => {
-          const fromDirection = addableRelation.as === "parent" ? "child" : "parent";
+          const fromDirection = addableRelation.as === "source" ? "target" : "source";
           return (
             addableRelation[fromDirection] === fromNode.type &&
             addableRelation[addableRelation.as] === toNode.type
@@ -112,34 +112,22 @@ export const useRelatedUnrelatedCoreNodes = (
       if (node.id === summaryNode.id) return { ...node, related: true };
 
       const related =
-        ancestors(node, graph).some((ancestor) => ancestor.id === summaryNode.id) ||
-        descendants(node, graph).some((descendant) => descendant.id === summaryNode.id);
+        upstreamNodes(node, graph).some((upstreamNode) => upstreamNode.id === summaryNode.id) ||
+        downstreamNodes(node, graph).some((downstreamNode) => downstreamNode.id === summaryNode.id);
 
       return { ...node, related };
     });
   }, shallow);
 };
 
-export const useNodeChildren = (nodeId: string | undefined) => {
+export const useTargetNodes = (nodeId: string | undefined) => {
   return useDiagramStore((state) => {
     if (!nodeId) return [];
 
     try {
       const node = findNodeOrThrow(nodeId, state.nodes);
       const topicGraph = { nodes: state.nodes, edges: state.edges };
-      return children(node, topicGraph);
-    } catch {
-      return [];
-    }
-  }, shallow);
-};
-
-export const useNodeParents = (nodeId: string) => {
-  return useDiagramStore((state) => {
-    try {
-      const node = findNodeOrThrow(nodeId, state.nodes);
-      const topicGraph = { nodes: state.nodes, edges: state.edges };
-      return parents(node, topicGraph);
+      return targetNodes(node, topicGraph);
     } catch {
       return [];
     }
@@ -157,7 +145,7 @@ export const useCriterionSolutionEdges = (problemNodeId: string | undefined) => 
       }
 
       const topicGraph = { nodes: state.nodes, edges: state.edges };
-      const nodeChildren = children(problemNode, topicGraph);
+      const nodeChildren = targetNodes(problemNode, topicGraph);
       const criteria = nodeChildren.filter((node) => node.type === "criterion");
       const criteriaIds = criteria.map((node) => node.id);
       const solutions = nodeChildren.filter((node) => node.type === "solution");
@@ -172,12 +160,12 @@ export const useCriterionSolutionEdges = (problemNodeId: string | undefined) => 
   }, shallow);
 };
 
-export const useNeighborsInDirection = (nodeId: string, direction: RelationDirection) => {
+export const useNeighborsInDirection = (nodeId: string, direction: RelativePlacement) => {
   return useDiagramStore((state) => {
     try {
       const node = findNodeOrThrow(nodeId, state.nodes);
       const topicGraph = { nodes: state.nodes, edges: state.edges };
-      return direction === "parent" ? parents(node, topicGraph) : children(node, topicGraph);
+      return neighborsInDirection(node, topicGraph, direction);
     } catch {
       return [];
     }

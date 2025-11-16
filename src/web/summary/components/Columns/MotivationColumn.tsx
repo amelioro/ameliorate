@@ -26,7 +26,7 @@ export const MotivationColumn = ({ summaryNode }: Props) => {
   // would pass its `effectType` so that we could show the right `creates` vs `createdBy` relations
   // based on solution effect vs problem effect; but problem benefits seem to be rare enough that
   // it doesn't seem worth the effort right now.
-  const defaultAddableRelations = addableRelationsFrom(summaryNode.type, "parent", false, "n/a");
+  const defaultAddableRelations = addableRelationsFrom(summaryNode.type, "source", false, "n/a");
 
   const addableRelations = filterAddablesViaSearchRelations(
     defaultAddableRelations,

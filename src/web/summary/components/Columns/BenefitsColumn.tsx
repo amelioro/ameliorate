@@ -19,18 +19,15 @@ export const BenefitsColumn = ({ summaryNode }: Props) => {
   const { directNodes, indirectNodes } = useBenefits(summaryNode);
   const effectType = useEffectType(summaryNode.id);
 
-  // normally a benefit column should pull both parent and child relations based on if this is a
-  // solution benefit or a problem benefit, but currently we're only building this column for
-  // solution benefits
-  const defaultParentAddableRelations = addableRelationsFrom(
+  const defaultAddableRelations = addableRelationsFrom(
     summaryNode.type,
-    "parent",
+    undefined,
     false,
     effectType,
   );
 
   const addableRelations = filterAddablesViaSearchRelations(
-    defaultParentAddableRelations,
+    defaultAddableRelations,
     solutionBenefitsDirectedSearchRelations,
   );
 

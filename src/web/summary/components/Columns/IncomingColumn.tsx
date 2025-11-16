@@ -17,10 +17,10 @@ export const IncomingColumn = ({ summaryNode }: Props) => {
   const incomingByDescription = useIncomingNodesByRelationDescription(summaryNode);
   const effectType = useEffectType(summaryNode.id);
 
-  // edges always point from child toward parent right now, so incoming nodes will always be children
+  // edges point from target to source right now, so incoming nodes are targets
   const defaultChildAddableRelations = addableRelationsFrom(
     summaryNode.type,
-    "child",
+    "target",
     false,
     effectType,
   );

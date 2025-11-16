@@ -9,9 +9,10 @@ import { useSessionUser } from "@/web/common/hooks";
 import { useNeighborsInDirection } from "@/web/topic/diagramStore/nodeHooks";
 import { useHiddenNodes } from "@/web/topic/hooks/flowHooks";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
-import { Node, RelationDirection } from "@/web/topic/utils/graph";
+import { Node } from "@/web/topic/utils/graph";
 import { Orientation } from "@/web/topic/utils/layout";
 import { nodeDecorations } from "@/web/topic/utils/node";
+import { RelativePlacement } from "@/web/topic/utils/relativePlacement";
 import { showNode } from "@/web/view/currentViewStore/filter";
 import { useShowNeighborIndicators } from "@/web/view/userConfigStore";
 
@@ -34,7 +35,7 @@ const NodeSummary = ({ node, beforeSlot }: { node: Node; beforeSlot?: ReactNode 
 
 interface Props {
   node: Node;
-  direction: RelationDirection;
+  direction: RelativePlacement;
   orientation: Orientation;
 }
 
@@ -52,9 +53,10 @@ const NodeHandleBase = ({ node, direction, orientation }: Props) => {
   // a hidden neighbor for just a moment, before rendering without indicating a hidden neighbor.
   const hiddenNeighbors = useHiddenNodes(neighborsInDirection);
 
-  const type = direction === "parent" ? "target" : "source";
+  const handleType = direction === "above" ? "target" : "source";
   const isPotentiallyConnectingToThisHandle = useStore(
-    (state) => state.connectionStartHandle !== null && state.connectionStartHandle.type !== type,
+    (state) =>
+      state.connectionStartHandle !== null && state.connectionStartHandle.type !== handleType,
   );
 
   // sort by node type the same way the nodeTypes array is ordered; thanks https://stackoverflow.com/a/44063445
@@ -75,7 +77,7 @@ const NodeHandleBase = ({ node, direction, orientation }: Props) => {
       : "";
 
   const position =
-    direction === "parent"
+    direction === "above"
       ? orientation === "DOWN"
         ? Position.Top
         : Position.Left
@@ -109,7 +111,7 @@ const NodeHandleBase = ({ node, direction, orientation }: Props) => {
       }
     >
       <Handle
-        type={type}
+        type={handleType}
         position={position}
         role={hasHiddenNeighbors ? "button" : undefined}
         className={

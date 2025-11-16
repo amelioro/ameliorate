@@ -116,7 +116,6 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
       style={flowEdge.style}
       className={"react-flow__edge-path" + ` spotlight-${spotlight}`}
       d={pathDefinition}
-      // assumes that we always want to point from child to parent
       markerStart={`url(#${inReactFlow ? flowMarkerId : nonFlowMarkerId}-${spotlight})`}
       spotlight={spotlight}
       onClick={() => setSelected(edge.id)}

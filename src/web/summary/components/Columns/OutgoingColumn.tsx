@@ -17,15 +17,15 @@ export const OutgoingColumn = ({ summaryNode }: Props) => {
   const outgoingByDescription = useOutgoingNodesByRelationDescription(summaryNode);
   const effectType = useEffectType(summaryNode.id);
 
-  // edges always point from child toward parent right now, so outgoing nodes will always be parents
-  const defaultParentAddableRelations = addableRelationsFrom(
+  // edges point from target to source right now, so outgoing nodes are sources
+  const defaultSourceAddableRelations = addableRelationsFrom(
     summaryNode.type,
-    "parent",
+    "source",
     false,
     effectType,
   );
 
-  const addableRelations = defaultParentAddableRelations;
+  const addableRelations = defaultSourceAddableRelations;
 
   const AddButtons = (
     <div className="pb-1.5">

@@ -44,8 +44,8 @@ export const SourceDetails = ({ sourceNode }: Props) => {
             fromNodeId={sourceNode.id}
             // prettier-ignore
             addableRelations={[
-              { child: "source", name: "sourceOf", parent: "fact", as: "parent", commonality: "common" },
-              { child: "source", name: "mentions", parent: "source", as: "parent", commonality: "common" },
+              { target: "source", name: "sourceOf", source: "fact", as: "source", commonality: "common" },
+              { target: "source", name: "mentions", source: "source", as: "source", commonality: "common" },
             ]}
             selectNewNode={false}
             className="mb-2"
