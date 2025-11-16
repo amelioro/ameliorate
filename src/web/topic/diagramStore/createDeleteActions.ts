@@ -47,15 +47,15 @@ const createNode = (
 const connectCriteriaToSolutions = (state: DiagramStoreState, newNode: Node, problemNode: Node) => {
   const targetRelation: Relation =
     newNode.type === "criterion"
-      ? { child: "solution", name: "addresses", parent: "problem" }
-      : { child: "criterion", name: "criterionFor", parent: "problem" };
+      ? { target: "solution", name: "addresses", source: "problem" }
+      : { target: "criterion", name: "criterionFor", source: "problem" };
 
   const newCriterionEdges = state.edges
     .filter(
       (edge) =>
         edge.source === problemNode.id &&
         edge.label === targetRelation.name &&
-        findNodeOrThrow(edge.target, state.nodes).type === targetRelation.child,
+        findNodeOrThrow(edge.target, state.nodes).type === targetRelation.target,
     )
     .map((edge) => {
       const sourceId = newNode.type === "criterion" ? newNode.id : edge.target;
@@ -92,7 +92,7 @@ export const addNode = ({ fromPartId, directedRelation, context, selectNewNode }
   // root claim has existed because edges could not previously point to other edges, but they will
   // be able to soon.
   if (
-    directedRelation.parent === "rootClaim" &&
+    directedRelation.source === "rootClaim" &&
     !topicGraph.nodes.find(
       (node) =>
         node.type === "rootClaim" &&
@@ -105,7 +105,7 @@ export const addNode = ({ fromPartId, directedRelation, context, selectNewNode }
   }
 
   const rootClaim =
-    directedRelation.parent === "rootClaim"
+    directedRelation.source === "rootClaim"
       ? topicGraph.nodes.find(
           (node) =>
             node.type === "rootClaim" &&
@@ -118,15 +118,15 @@ export const addNode = ({ fromPartId, directedRelation, context, selectNewNode }
   // create and connect node
   const newNode = createNode(state, toNodeType, fromPart.data.arguedDiagramPartId, selectNewNode);
 
-  const parent = directedRelation.as === "parent" ? newNode : fromPart;
-  const child = directedRelation.as === "parent" ? fromPart : newNode;
-  createEdge(topicGraph, child, directedRelation.name, parent);
+  const sourceNode = directedRelation.as === "source" ? newNode : fromPart;
+  const targetNode = directedRelation.as === "source" ? fromPart : newNode;
+  createEdge(topicGraph, targetNode, directedRelation.name, sourceNode);
 
   // connect criteria
   if (
     ["criterion", "solution"].includes(newNode.type) &&
     fromPart.type === "problem" &&
-    directedRelation.as === "child"
+    directedRelation.as === "target"
   ) {
     connectCriteriaToSolutions(state, newNode, fromPart);
   }
@@ -141,7 +141,7 @@ export const addNode = ({ fromPartId, directedRelation, context, selectNewNode }
   useDiagramStore.setState(finishDraft(state), false, "addNode");
 };
 
-export const addNodeWithoutParent = (
+export const addNodeWithoutEdge = (
   nodeType: FlowNodeType,
   context: WorkspaceContextType,
   selectNewNode = true,
@@ -156,27 +156,27 @@ export const addNodeWithoutParent = (
   // seems like there should be a cleaner way to do this - perhaps custom zustand middleware to emit for any action
   emitter.emit("addNode", newNode);
 
-  useDiagramStore.setState(finishDraft(state), false, "addNodeWithoutParent");
+  useDiagramStore.setState(finishDraft(state), false, "addNodeWithoutEdge");
 };
 
 // see algorithm pseudocode & example at https://github.com/amelioro/ameliorate/issues/66#issuecomment-1465078133
 const createEdge = (
   topicGraph: Graph,
-  child: GraphPart,
+  target: GraphPart,
   relationName: RelationName,
-  parent: GraphPart,
+  source: GraphPart,
 ) => {
   // We aren't yet fully supporting edges pointing to other edges.
   // It's not clear at this time whether completely adding or removing support for edges to edges is better,
   // so here's a hack assuming we won't use it for now.,
-  if (!isNode(parent) || !isNode(child)) throw new Error("parent or child is not a node");
-  if (!canCreateEdge(topicGraph, child, parent)) return null;
+  if (!isNode(source) || !isNode(target)) throw new Error("source or target is not a node");
+  if (!canCreateEdge(topicGraph, target, source)) return null;
 
   const newEdge = buildEdge({
-    sourceId: parent.id,
-    targetId: child.id,
+    sourceId: source.id,
+    targetId: target.id,
     relation: relationName,
-    arguedDiagramPartId: parent.data.arguedDiagramPartId,
+    arguedDiagramPartId: source.data.arguedDiagramPartId,
   });
 
   /* eslint-disable functional/immutable-data, no-param-reassign */
@@ -188,33 +188,33 @@ const createEdge = (
 
 const createConnection = (
   topicGraph: Graph,
-  childId: string | null,
+  targetId: string | null,
   relationName: RelationName | undefined,
-  parentId: string | null,
+  sourceId: string | null,
 ) => {
-  const parent = topicGraph.nodes.find((node) => node.id === parentId);
-  const child = topicGraph.nodes.find((node) => node.id === childId);
-  if (!parent || !child) {
-    throw errorWithData("parent or child not found", parentId, childId, topicGraph);
+  const source = topicGraph.nodes.find((node) => node.id === sourceId);
+  const target = topicGraph.nodes.find((node) => node.id === targetId);
+  if (!source || !target) {
+    throw errorWithData("source or target not found", sourceId, targetId, topicGraph);
   }
 
-  if (!canCreateEdge(topicGraph, child, parent)) return null;
+  if (!canCreateEdge(topicGraph, target, source)) return null;
 
-  const relation = getRelation(child.type, relationName, parent.type);
+  const relation = getRelation(target.type, relationName, source.type);
 
   // modifies topicGraph.edges through `state`
-  return createEdge(topicGraph, child, relation.name, parent);
+  return createEdge(topicGraph, target, relation.name, source);
 };
 
 export const connectNodes = (
-  childId: string | null,
+  targetId: string | null,
   relationName: RelationName | undefined,
-  parentId: string | null,
+  sourceId: string | null,
 ) => {
   const state = createDraft(useDiagramStore.getState());
 
   const topicGraph = { nodes: state.nodes, edges: state.edges };
-  const newEdge = createConnection(topicGraph, childId, relationName, parentId);
+  const newEdge = createConnection(topicGraph, targetId, relationName, sourceId);
   if (!newEdge) return;
 
   useDiagramStore.setState(finishDraft(state), false, "connectNodes");
@@ -228,10 +228,10 @@ export const connectNodes = (
 
 export const reconnectEdge = (
   oldEdge: { id: string; source: string; target: string },
-  newParentId: string | null,
-  newChildId: string | null,
+  newSourceId: string | null,
+  newTargetId: string | null,
 ) => {
-  if (oldEdge.source === newParentId && oldEdge.target === newChildId) return;
+  if (oldEdge.source === newSourceId && oldEdge.target === newTargetId) return;
 
   const state = createDraft(useDiagramStore.getState());
 
@@ -240,7 +240,7 @@ export const reconnectEdge = (
   /* eslint-enable functional/immutable-data, no-param-reassign */
 
   const topicGraph = { nodes: state.nodes, edges: state.edges };
-  const newEdge = createConnection(topicGraph, newChildId, undefined, newParentId);
+  const newEdge = createConnection(topicGraph, newTargetId, undefined, newSourceId);
   if (!newEdge) return;
 
   useDiagramStore.setState(finishDraft(state), false, "reconnectEdge");

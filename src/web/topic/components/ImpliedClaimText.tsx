@@ -9,7 +9,7 @@ import { nodeDecorations } from "@/web/topic/utils/node";
  * formatting here, so it doesn't seem easy to reuse the text.
  */
 export const ImpliedClaimText = ({ graphPart }: { graphPart: GraphPart }) => {
-  const [edgeParentNode, edgeChildNode] = useEdgeNodes(graphPart.id);
+  const [edgeSourceNode, edgeTargetNode] = useEdgeNodes(graphPart.id);
 
   const isNode = checkIsNode(graphPart);
 
@@ -21,15 +21,15 @@ export const ImpliedClaimText = ({ graphPart }: { graphPart: GraphPart }) => {
       </i>
     );
   } else {
-    if (!edgeParentNode || !edgeChildNode) throw new Error("Edge nodes not found");
+    if (!edgeSourceNode || !edgeTargetNode) throw new Error("Edge nodes not found");
 
     return (
       <i>
-        <b>{nodeDecorations[edgeChildNode.type].title}</b> "{edgeChildNode.data.label}"{" "}
+        <b>{nodeDecorations[edgeTargetNode.type].title}</b> "{edgeTargetNode.data.label}"{" "}
         <b>
-          {lowerCase(graphPart.label)} {nodeDecorations[edgeParentNode.type].title}
+          {lowerCase(graphPart.label)} {nodeDecorations[edgeSourceNode.type].title}
         </b>{" "}
-        "{edgeParentNode.data.label}"
+        "{edgeSourceNode.data.label}"
       </i>
     );
   }

@@ -114,7 +114,7 @@ export const FlowNode = (flowNode: NodeProps) => {
         layout={animated}
         style={{ pointerEvents: "none" }}
       >
-        <NodeHandle node={node} direction="parent" orientation={orientation} />
+        <NodeHandle node={node} direction="above" orientation={orientation} />
         <StyledEditableNode
           node={node}
           className={`spotlight-${spotlight}`}
@@ -122,7 +122,7 @@ export const FlowNode = (flowNode: NodeProps) => {
             if (getFlashlightMode()) showNodeAndNeighbors(node.id, true);
           }}
         />
-        <NodeHandle node={node} direction="child" orientation={orientation} />
+        <NodeHandle node={node} direction="below" orientation={orientation} />
       </motion.div>
 
       {userCanEditTopicData && (

@@ -1,7 +1,7 @@
 import { throwError } from "@/common/errorHandling";
-import { childNode, parentNode } from "@/web/topic/utils/edge";
+import { sourceNode, targetNode } from "@/web/topic/utils/edge";
 import { Graph, findEdgeOrThrow, findNodeOrThrow } from "@/web/topic/utils/graph";
-import { children, parents } from "@/web/topic/utils/node";
+import { sourceNodes, targetNodes } from "@/web/topic/utils/node";
 import { SolutionOptions, TradeoffsOptions } from "@/web/view/utils/infoFilter";
 
 export const getSolutionContextFilter = (graph: Graph, solutionId: string): SolutionOptions => {
@@ -20,10 +20,10 @@ export const getCriterionContextFilter = (graph: Graph, criterionId: string): Tr
   // This is likely suboptimal. I think we should avoid reusing criteria... if there's a strong reason
   // to reuse, then we'll need to add a way to specify which problem we want to use.
   const problem =
-    parents(criterion, graph).find((parent) => parent.type === "problem") ??
-    throwError("Criterion has no problem parent");
+    sourceNodes(criterion, graph).find((source) => source.type === "problem") ??
+    throwError("Criterion has no problem source node");
 
-  const solutions = children(problem, graph).filter((child) => child.type === "solution");
+  const solutions = targetNodes(problem, graph).filter((target) => target.type === "solution");
 
   return {
     type: "tradeoffs",
@@ -40,8 +40,8 @@ export const getFulfillsContextFilter = (
 ): TradeoffsOptions => {
   const fulfillsEdge = findEdgeOrThrow(fulfillsEdgeId, graph.edges);
 
-  const criterion = parentNode(fulfillsEdge, graph.nodes);
-  const solution = childNode(fulfillsEdge, graph.nodes);
+  const criterion = sourceNode(fulfillsEdge, graph.nodes);
+  const solution = targetNode(fulfillsEdge, graph.nodes);
 
   if (criterion.type !== "criterion" || solution.type !== "solution") {
     // e.g. benefit -fulfills-> criterion, which we don't want context for anyway
@@ -52,8 +52,8 @@ export const getFulfillsContextFilter = (
   // This is likely suboptimal. I think we should avoid reusing criteria... if there's a strong reason
   // to reuse, then we'll need to add a way to specify which problem we want to use.
   const problem =
-    parents(criterion, graph).find((parent) => parent.type === "problem") ??
-    throwError("Criterion has no problem parent");
+    sourceNodes(criterion, graph).find((source) => source.type === "problem") ??
+    throwError("Criterion has no problem source node");
 
   return {
     type: "tradeoffs",

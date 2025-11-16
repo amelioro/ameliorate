@@ -40,12 +40,23 @@ export const neighborsBelow = (node: Node, topicGraph: Graph, sameCategoryNodes 
   }
 };
 
+export const neighborsInDirection = (
+  node: Node,
+  topicGraph: Graph,
+  direction: RelativePlacement,
+  sameCategoryNodes = true,
+) => {
+  return direction === "above"
+    ? neighborsAbove(node, topicGraph, sameCategoryNodes)
+    : neighborsBelow(node, topicGraph, sameCategoryNodes);
+};
+
 export const addableRelationsAbove = (
   fromNodeType: NodeType,
   unrestrictedAddingFrom: boolean,
   effectType: EffectType,
 ): DirectedToRelationWithCommonality[] => {
-  return addableRelationsFrom(fromNodeType, "parent", unrestrictedAddingFrom, effectType);
+  return addableRelationsFrom(fromNodeType, "source", unrestrictedAddingFrom, effectType);
 };
 
 export const addableRelationsBelow = (
@@ -53,5 +64,5 @@ export const addableRelationsBelow = (
   unrestrictedAddingFrom: boolean,
   effectType: EffectType,
 ): DirectedToRelationWithCommonality[] => {
-  return addableRelationsFrom(fromNodeType, "child", unrestrictedAddingFrom, effectType);
+  return addableRelationsFrom(fromNodeType, "target", unrestrictedAddingFrom, effectType);
 };

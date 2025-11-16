@@ -19,24 +19,15 @@ export const EffectsColumn = ({ summaryNode }: Props) => {
   const { directNodes, indirectNodes } = useEffects(summaryNode);
   const effectType = useEffectType(summaryNode.id);
 
-  // need to grab both parent and child relations because effects cause further effects in direction
-  // that is based on whether they're problem effects or solution effects (e.g. problem effects
-  // chain downwards via child relations).
-  const defaultParentAddableRelations = addableRelationsFrom(
+  const defaultAddableRelations = addableRelationsFrom(
     summaryNode.type,
-    "parent",
-    false,
-    effectType,
-  );
-  const defaultChildAddableRelations = addableRelationsFrom(
-    summaryNode.type,
-    "child",
+    undefined,
     false,
     effectType,
   );
 
   const addableRelations = filterAddablesViaSearchRelations(
-    defaultParentAddableRelations.concat(defaultChildAddableRelations),
+    defaultAddableRelations,
     effectsDirectedSearchRelations,
   );
 

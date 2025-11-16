@@ -1,5 +1,5 @@
 import { isEffect } from "@/common/node";
-import { Graph, Node, ancestors, descendants } from "@/web/topic/utils/graph";
+import { Graph, Node, downstreamNodes, upstreamNodes } from "@/web/topic/utils/graph";
 
 /**
  * For determining layout and which nodes can be added from this node, we need to know if this
@@ -26,11 +26,12 @@ export const getEffectType = (node: Node, graph: Graph): EffectType => {
   // ideally to just always only "causes" relations (https://github.com/amelioro/ameliorate/issues/787),
   // but this should be ok for now.
   // Note: technically the issue in this discussion is not covered until handling the above https://github.com/amelioro/ameliorate/discussions/579.
-  const createdByProblem = ancestors(node, graph, ["createdBy"]).some(
-    (ancestor) => ancestor.type === "problem",
+  const createdByProblem = upstreamNodes(node, graph, ["createdBy"]).some(
+    (upstreamNode) => upstreamNode.type === "problem",
   );
-  const createdBySolution = descendants(node, graph, ["creates"]).some(
-    (descendant) => descendant.type === "solution" || descendant.type === "solutionComponent",
+  const createdBySolution = downstreamNodes(node, graph, ["creates"]).some(
+    (downstreamNode) =>
+      downstreamNode.type === "solution" || downstreamNode.type === "solutionComponent",
   );
 
   if (createdByProblem && createdBySolution) return "problemAndSolution";

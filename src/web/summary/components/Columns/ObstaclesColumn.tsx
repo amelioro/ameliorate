@@ -17,15 +17,10 @@ interface Props {
 export const ObstaclesColumn = ({ summaryNode }: Props) => {
   const { directNodes, indirectNodes } = useObstacles(summaryNode);
 
-  const defaultChildAddableRelations = addableRelationsFrom(
-    summaryNode.type,
-    "child",
-    false,
-    "n/a",
-  );
+  const defaultAddableRelations = addableRelationsFrom(summaryNode.type, undefined, false, "n/a");
 
   const addableRelations = filterAddablesViaSearchRelations(
-    defaultChildAddableRelations,
+    defaultAddableRelations,
     obstaclesDirectedSearchRelations,
   );
 

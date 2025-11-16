@@ -20,15 +20,15 @@ export const SolutionsColumn = ({ summaryNode }: Props) => {
   const { directNodes, indirectNodes } = useSolutions(summaryNode);
   const effectType = useEffectType(summaryNode.id);
 
-  const defaultChildAddableRelations = addableRelationsFrom(
+  const defaultAddableRelations = addableRelationsFrom(
     summaryNode.type,
-    "child",
+    undefined,
     false,
     effectType, // in case summaryNode is a solution detriment, and we want to show mitgations
   );
 
   const addableRelations = filterAddablesViaSearchRelations(
-    defaultChildAddableRelations,
+    defaultAddableRelations,
     solutionsDirectedSearchRelations,
   );
 

@@ -4,8 +4,14 @@ import { z } from "zod";
 import { RelationName, researchRelationNames } from "@/common/edge";
 import { InfoCategory } from "@/common/infoCategory";
 import { infoNodeTypes, nodeSchema } from "@/common/node";
-import { Graph, Node, ancestors, descendants, getRelevantEdges } from "@/web/topic/utils/graph";
-import { children, neighbors, parents } from "@/web/topic/utils/node";
+import {
+  Graph,
+  Node,
+  downstreamNodes,
+  getRelevantEdges,
+  upstreamNodes,
+} from "@/web/topic/utils/graph";
+import { neighbors, sourceNodes, targetNodes } from "@/web/topic/utils/node";
 
 // cross-standard-filter options
 const detailTypes = ["all", "connectedToCriteria", "none"] as const;
@@ -79,7 +85,7 @@ const applyProblemFilter = (graph: Graph, filters: ProblemOptions) => {
   if (filters.problemDetails.includes("solutions")) detailEdges.push("addresses", "accomplishes");
   /* eslint-enable functional/immutable-data */
 
-  const problemDetails = descendants(centralProblem, graph, detailEdges);
+  const problemDetails = downstreamNodes(centralProblem, graph, detailEdges);
 
   const solutions = problemDetails.filter((detail) => detail.type === "solution");
   const criteria = problemDetails.filter((detail) => detail.type === "criterion");
@@ -117,7 +123,7 @@ type ProblemOptions = z.infer<typeof problemSchema>;
 
 /**
  * Description:
- * - Show selected criteria with all depth-1 related parents (causes, effects, benefits, detriments)
+ * - Show selected criteria with all depth-1 related source nodes (causes, effects, benefits, detriments)
  * - Show selected solutions with all components, recursive effects, benefits, detriments
  *
  * Detail options:
@@ -133,9 +139,9 @@ export const applyTradeoffsFilter = (graph: Graph, filters: TradeoffsOptions) =>
   const centralProblem = graph.nodes.find((node) => node.id === filters.centralProblemId);
   if (!centralProblem) return graph;
 
-  const problemChildren = children(centralProblem, graph);
-  const solutions = problemChildren.filter((child) => child.type === "solution");
-  const criteria = problemChildren.filter((child) => child.type === "criterion");
+  const problemTargets = targetNodes(centralProblem, graph);
+  const solutions = problemTargets.filter((target) => target.type === "solution");
+  const criteria = problemTargets.filter((target) => target.type === "criterion");
 
   const { selectedSolutions, selectedCriteria } = getSelectedTradeoffNodes(
     solutions,
@@ -143,9 +149,9 @@ export const applyTradeoffsFilter = (graph: Graph, filters: TradeoffsOptions) =>
     filters,
   );
 
-  const criteriaParents = selectedCriteria.flatMap((criterion) =>
+  const criteriaSources = selectedCriteria.flatMap((criterion) =>
     // filter problem because we want to separately include the problem regardless of if we're showing criteria, for context
-    parents(criterion, graph).filter((parent) => parent.type !== "problem"),
+    sourceNodes(criterion, graph).filter((source) => source.type !== "problem"),
   );
 
   const filteredSolutionDetails = getSolutionDetails(
@@ -156,7 +162,7 @@ export const applyTradeoffsFilter = (graph: Graph, filters: TradeoffsOptions) =>
   );
 
   const nodes = uniqBy(
-    [...selectedSolutions, ...selectedCriteria, ...criteriaParents, ...filteredSolutionDetails],
+    [...selectedSolutions, ...selectedCriteria, ...criteriaSources, ...filteredSolutionDetails],
     (node) => node.id,
   );
   const edges = getRelevantEdges(nodes, graph);
@@ -172,20 +178,20 @@ const getSolutionDetails = (
 ) => {
   if (detailType === "none") return [];
 
-  const ancestorDetails = solutions.flatMap((solution) =>
-    ancestors(solution, graph, ["has", "creates"]),
+  const upstreamDetails = solutions.flatMap((solution) =>
+    upstreamNodes(solution, graph, ["has", "creates"]),
   );
 
-  const descendantDetails = solutions.flatMap((solution) =>
-    descendants(solution, graph, ["createdBy", "obstacleOf", "accomplishes", "contingencyFor"]),
+  const downstreamDetails = solutions.flatMap((solution) =>
+    downstreamNodes(solution, graph, ["createdBy", "obstacleOf", "accomplishes", "contingencyFor"]),
   );
 
   const criteriaIds = criteria.map((criterion) => criterion.id);
 
   return detailType === "all"
-    ? [...ancestorDetails, ...descendantDetails]
-    : ancestorDetails.filter((detail) =>
-        ancestors(detail, graph).some((ancestor) => criteriaIds.includes(ancestor.id)),
+    ? [...upstreamDetails, ...downstreamDetails]
+    : upstreamDetails.filter((detail) =>
+        upstreamNodes(detail, graph).some((upstream) => criteriaIds.includes(upstream.id)),
       );
 };
 
@@ -249,7 +255,7 @@ export type SolutionOptions = z.infer<typeof solutionSchema>;
 
 /**
  * Description:
- * - Show question, depth-1 parents for context, all recursive child questions, answers, facts,
+ * - Show question, depth-1 source nodes for context, all recursive downstream questions, answers, facts,
  * sources.
  *
  * Use cases:
@@ -259,10 +265,10 @@ const applyQuestionFilter = (graph: Graph, filters: QuestionOptions) => {
   const centralQuestion = graph.nodes.find((node) => node.id === filters.centralQuestionId);
   if (!centralQuestion) return graph;
 
-  const parentsForContext = parents(centralQuestion, graph, false);
-  const researchChildren = descendants(centralQuestion, graph, researchRelationNames);
+  const sourcesForContext = sourceNodes(centralQuestion, graph, false);
+  const researchDownstream = downstreamNodes(centralQuestion, graph, researchRelationNames);
 
-  const nodes = [centralQuestion, ...parentsForContext, ...researchChildren];
+  const nodes = [centralQuestion, ...sourcesForContext, ...researchDownstream];
   const edges = getRelevantEdges(nodes, graph);
 
   return { nodes, edges };
@@ -277,7 +283,7 @@ type QuestionOptions = z.infer<typeof questionSchema>;
 
 /**
  * Description:
- * - Show source and all ancestors that it's relevant for.
+ * - Show source and all nodes that it's relevant for.
  *
  * Use cases:
  * - Take notes on a source
@@ -287,7 +293,7 @@ const applySourceFilter = (graph: Graph, filters: SourceOptions) => {
   const centralSource = graph.nodes.find((node) => node.id === filters.centralSourceId);
   if (!centralSource) return graph;
 
-  const details = ancestors(centralSource, graph, [
+  const details = upstreamNodes(centralSource, graph, [
     "sourceOf",
     "relevantFor",
     "mentions",
@@ -318,7 +324,7 @@ const applyRootClaimFilter = (graph: Graph, filters: RootClaimOptions) => {
   const centralRootClaim = graph.nodes.find((node) => node.id === filters.centralRootClaimId);
   if (!centralRootClaim) return graph;
 
-  const justification = descendants(centralRootClaim, graph, ["supports", "critiques"]);
+  const justification = downstreamNodes(centralRootClaim, graph, ["supports", "critiques"]);
 
   const nodes = [centralRootClaim, ...justification];
   const edges = getRelevantEdges(nodes, graph);

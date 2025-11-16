@@ -1,9 +1,15 @@
 import { describe, expect, test } from "vitest";
 
-import { Graph, ancestors, buildEdge, buildNode, descendants } from "@/web/topic/utils/graph";
+import {
+  Graph,
+  buildEdge,
+  buildNode,
+  downstreamNodes,
+  upstreamNodes,
+} from "@/web/topic/utils/graph";
 
-describe("ancestors", () => {
-  test("finds nothing when there are no ancestors", () => {
+describe("upstreamNodes", () => {
+  test("finds nothing when there are no upstream nodes", () => {
     const fromNode = buildNode({ type: "problem" });
     const randomNode1 = buildNode({ type: "cause" });
     const randomNode2 = buildNode({ type: "problem" });
@@ -15,112 +21,116 @@ describe("ancestors", () => {
       ],
     };
 
-    const found = ancestors(fromNode, graph);
+    const found = upstreamNodes(fromNode, graph);
 
     expect(found).toEqual([]);
   });
 
-  test("finds direct and indirect ancestors", () => {
+  test("finds direct and indirect upstream nodes", () => {
     const fromNode = buildNode({ type: "cause" });
-    const directAncestor = buildNode({ type: "cause" });
-    const indirectAncestor = buildNode({ type: "problem" });
+    const directUpstreamNode = buildNode({ type: "cause" });
+    const indirectUpstreamNode = buildNode({ type: "problem" });
 
     const graph: Graph = {
-      nodes: [fromNode, directAncestor, indirectAncestor],
+      nodes: [fromNode, directUpstreamNode, indirectUpstreamNode],
       edges: [
-        buildEdge({ sourceId: directAncestor.id, targetId: fromNode.id, relation: "causes" }),
+        buildEdge({ sourceId: directUpstreamNode.id, targetId: fromNode.id, relation: "causes" }),
         buildEdge({
-          sourceId: indirectAncestor.id,
-          targetId: directAncestor.id,
+          sourceId: indirectUpstreamNode.id,
+          targetId: directUpstreamNode.id,
           relation: "causes",
         }),
       ],
     };
 
-    const found = ancestors(fromNode, graph);
+    const found = upstreamNodes(fromNode, graph);
 
     expect(found).toIncludeSameMembers([
-      { ...indirectAncestor, layersAway: 2 },
-      { ...directAncestor, layersAway: 1 },
+      { ...indirectUpstreamNode, layersAway: 2 },
+      { ...directUpstreamNode, layersAway: 1 },
     ]);
   });
 
-  test("finds ancestors even if there is a cycle", () => {
+  test("finds upstream nodes even if there is a cycle", () => {
     const fromNode = buildNode({ type: "cause" });
-    const directAncestor = buildNode({ type: "cause" });
-    const indirectAncestor = buildNode({ type: "problem" });
+    const directUpstreamNode = buildNode({ type: "cause" });
+    const indirectUpstreamNode = buildNode({ type: "problem" });
 
     const graph: Graph = {
-      nodes: [fromNode, directAncestor, indirectAncestor],
+      nodes: [fromNode, directUpstreamNode, indirectUpstreamNode],
       edges: [
-        buildEdge({ sourceId: directAncestor.id, targetId: fromNode.id, relation: "causes" }),
+        buildEdge({ sourceId: directUpstreamNode.id, targetId: fromNode.id, relation: "causes" }),
         buildEdge({
-          sourceId: indirectAncestor.id,
-          targetId: directAncestor.id,
+          sourceId: indirectUpstreamNode.id,
+          targetId: directUpstreamNode.id,
           relation: "causes",
         }),
         buildEdge({
           sourceId: fromNode.id,
-          targetId: indirectAncestor.id,
+          targetId: indirectUpstreamNode.id,
           relation: "causes",
         }),
       ],
     };
 
-    const found = ancestors(fromNode, graph);
+    const found = upstreamNodes(fromNode, graph);
 
     expect(found).toIncludeSameMembers([
-      { ...indirectAncestor, layersAway: 2 },
-      { ...directAncestor, layersAway: 1 },
+      { ...indirectUpstreamNode, layersAway: 2 },
+      { ...directUpstreamNode, layersAway: 1 },
     ]);
   });
 
-  test("finds only ancestors through edges with labels if labels are passed", () => {
+  test("finds only upstream nodes through edges with labels if labels are passed", () => {
     const fromNode = buildNode({ type: "cause" });
-    const label1DirectAncestor = buildNode({ type: "cause" });
-    const label2IndirectAncestor = buildNode({ type: "problem" });
-    const notLabelDirectAncestor = buildNode({ type: "cause" });
-    const label1IndirectAncestorThroughNotLabel = buildNode({ type: "problem" });
+    const label1DirectUpstreamNode = buildNode({ type: "cause" });
+    const label2IndirectUpstreamNode = buildNode({ type: "problem" });
+    const notLabelDirectUpstreamNode = buildNode({ type: "cause" });
+    const label1IndirectUpstreamNodeThroughNotLabel = buildNode({ type: "problem" });
 
     const graph: Graph = {
       nodes: [
         fromNode,
-        label1DirectAncestor,
-        label2IndirectAncestor,
-        notLabelDirectAncestor,
-        label1IndirectAncestorThroughNotLabel,
+        label1DirectUpstreamNode,
+        label2IndirectUpstreamNode,
+        notLabelDirectUpstreamNode,
+        label1IndirectUpstreamNodeThroughNotLabel,
       ],
       edges: [
-        buildEdge({ sourceId: label1DirectAncestor.id, targetId: fromNode.id, relation: "causes" }),
         buildEdge({
-          sourceId: label2IndirectAncestor.id,
-          targetId: label1DirectAncestor.id,
+          sourceId: label1DirectUpstreamNode.id,
+          targetId: fromNode.id,
+          relation: "causes",
+        }),
+        buildEdge({
+          sourceId: label2IndirectUpstreamNode.id,
+          targetId: label1DirectUpstreamNode.id,
           relation: "creates", // would usually use `causes` here but this is just to test two labels being passed
         }),
         buildEdge({
-          sourceId: notLabelDirectAncestor.id,
+          sourceId: notLabelDirectUpstreamNode.id,
           targetId: fromNode.id,
           relation: "relatesTo",
         }),
         buildEdge({
-          sourceId: label1IndirectAncestorThroughNotLabel.id,
-          targetId: notLabelDirectAncestor.id,
+          sourceId: label1IndirectUpstreamNodeThroughNotLabel.id,
+          targetId: notLabelDirectUpstreamNode.id,
           relation: "causes",
         }),
       ],
     };
 
-    const found = ancestors(fromNode, graph, ["causes", "creates"]);
+    const found = upstreamNodes(fromNode, graph, ["causes", "creates"]);
 
     expect(found).toIncludeSameMembers([
-      { ...label1DirectAncestor, layersAway: 1 },
-      { ...label2IndirectAncestor, layersAway: 2 },
+      { ...label1DirectUpstreamNode, layersAway: 1 },
+      { ...label2IndirectUpstreamNode, layersAway: 2 },
     ]);
   });
 });
 
-describe("descendants", () => {
-  test("finds nothing when there are no descendants", () => {
+describe("downstreamNodes", () => {
+  test("finds nothing when there are no downstream nodes", () => {
     const fromNode = buildNode({ type: "problem" });
     const randomNode1 = buildNode({ type: "cause" });
     const randomNode2 = buildNode({ type: "problem" });
@@ -132,110 +142,110 @@ describe("descendants", () => {
       ],
     };
 
-    const found = descendants(fromNode, graph);
+    const found = downstreamNodes(fromNode, graph);
 
     expect(found).toEqual([]);
   });
 
-  test("finds direct and indirect descendants", () => {
+  test("finds direct and indirect downstream nodes", () => {
     const fromNode = buildNode({ type: "problem" });
-    const directDescendant = buildNode({ type: "cause" });
-    const indirectDescendant = buildNode({ type: "cause" });
+    const directDownstreamNode = buildNode({ type: "cause" });
+    const indirectDownstreamNode = buildNode({ type: "cause" });
 
     const graph: Graph = {
-      nodes: [fromNode, directDescendant, indirectDescendant],
+      nodes: [fromNode, directDownstreamNode, indirectDownstreamNode],
       edges: [
-        buildEdge({ sourceId: fromNode.id, targetId: directDescendant.id, relation: "causes" }),
+        buildEdge({ sourceId: fromNode.id, targetId: directDownstreamNode.id, relation: "causes" }),
         buildEdge({
-          sourceId: directDescendant.id,
-          targetId: indirectDescendant.id,
+          sourceId: directDownstreamNode.id,
+          targetId: indirectDownstreamNode.id,
           relation: "causes",
         }),
       ],
     };
 
-    const found = descendants(fromNode, graph);
+    const found = downstreamNodes(fromNode, graph);
 
     expect(found).toIncludeSameMembers([
-      { ...directDescendant, layersAway: 1 },
-      { ...indirectDescendant, layersAway: 2 },
+      { ...directDownstreamNode, layersAway: 1 },
+      { ...indirectDownstreamNode, layersAway: 2 },
     ]);
   });
 
-  test("finds descendants even if there is a cycle", () => {
+  test("finds downstream nodes even if there is a cycle", () => {
     const fromNode = buildNode({ type: "problem" });
-    const directDescendant = buildNode({ type: "cause" });
-    const indirectDescendant = buildNode({ type: "cause" });
+    const directDownstreamNode = buildNode({ type: "cause" });
+    const indirectDownstreamNode = buildNode({ type: "cause" });
 
     const graph: Graph = {
-      nodes: [fromNode, directDescendant, indirectDescendant],
+      nodes: [fromNode, directDownstreamNode, indirectDownstreamNode],
       edges: [
-        buildEdge({ sourceId: fromNode.id, targetId: directDescendant.id, relation: "causes" }),
+        buildEdge({ sourceId: fromNode.id, targetId: directDownstreamNode.id, relation: "causes" }),
         buildEdge({
-          sourceId: directDescendant.id,
-          targetId: indirectDescendant.id,
+          sourceId: directDownstreamNode.id,
+          targetId: indirectDownstreamNode.id,
           relation: "causes",
         }),
         buildEdge({
-          sourceId: indirectDescendant.id,
+          sourceId: indirectDownstreamNode.id,
           targetId: fromNode.id,
           relation: "causes",
         }),
       ],
     };
 
-    const found = descendants(fromNode, graph);
+    const found = downstreamNodes(fromNode, graph);
 
     expect(found).toIncludeSameMembers([
-      { ...indirectDescendant, layersAway: 2 },
-      { ...directDescendant, layersAway: 1 },
+      { ...indirectDownstreamNode, layersAway: 2 },
+      { ...directDownstreamNode, layersAway: 1 },
     ]);
   });
 
-  test("finds only descendants through edges with labels if labels are passed", () => {
+  test("finds only downstream nodes through edges with labels if labels are passed", () => {
     const fromNode = buildNode({ type: "problem" });
-    const label1DirectDescendant = buildNode({ type: "cause" });
-    const label2IndirectDescendant = buildNode({ type: "cause" });
-    const notLabelDirectDescendant = buildNode({ type: "cause" });
-    const label1IndirectDescendantThroughNotLabel = buildNode({ type: "cause" });
+    const label1DirectDownstreamNode = buildNode({ type: "cause" });
+    const label2IndirectDownstreamNode = buildNode({ type: "cause" });
+    const notLabelDirectDownstreamNode = buildNode({ type: "cause" });
+    const label1IndirectDownstreamNodeThroughNotLabel = buildNode({ type: "cause" });
 
     const graph: Graph = {
       nodes: [
         fromNode,
-        label1DirectDescendant,
-        label2IndirectDescendant,
-        notLabelDirectDescendant,
-        label1IndirectDescendantThroughNotLabel,
+        label1DirectDownstreamNode,
+        label2IndirectDownstreamNode,
+        notLabelDirectDownstreamNode,
+        label1IndirectDownstreamNodeThroughNotLabel,
       ],
       edges: [
         buildEdge({
           sourceId: fromNode.id,
-          targetId: label1DirectDescendant.id,
+          targetId: label1DirectDownstreamNode.id,
           relation: "causes",
         }),
         buildEdge({
-          sourceId: label1DirectDescendant.id,
-          targetId: label2IndirectDescendant.id,
+          sourceId: label1DirectDownstreamNode.id,
+          targetId: label2IndirectDownstreamNode.id,
           relation: "creates", // would usually use `causes` here but this is just to test two labels being passed
         }),
         buildEdge({
           sourceId: fromNode.id,
-          targetId: notLabelDirectDescendant.id,
+          targetId: notLabelDirectDownstreamNode.id,
           relation: "relatesTo",
         }),
         buildEdge({
-          sourceId: notLabelDirectDescendant.id,
-          targetId: label1IndirectDescendantThroughNotLabel.id,
+          sourceId: notLabelDirectDownstreamNode.id,
+          targetId: label1IndirectDownstreamNodeThroughNotLabel.id,
           relation: "causes",
         }),
       ],
     };
 
-    const found = descendants(fromNode, graph, ["causes", "creates"]);
+    const found = downstreamNodes(fromNode, graph, ["causes", "creates"]);
 
     expect(found).toIncludeSameMembers([
-      { ...label1DirectDescendant, layersAway: 1 },
-      { ...label2IndirectDescendant, layersAway: 2 },
+      { ...label1DirectDownstreamNode, layersAway: 1 },
+      { ...label2IndirectDownstreamNode, layersAway: 2 },
     ]);
   });
 });

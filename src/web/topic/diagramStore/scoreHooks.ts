@@ -6,7 +6,7 @@ import { throwError } from "@/common/errorHandling";
 import { getDisplayScoresByGraphPartId } from "@/web/topic/diagramStore/scoreGetters";
 import { useDiagramStore } from "@/web/topic/diagramStore/store";
 import { Node, Score } from "@/web/topic/utils/graph";
-import { children, edges } from "@/web/topic/utils/node";
+import { edges, targetNodes } from "@/web/topic/utils/node";
 import { ScoreMeaning, getNumericScore, getScoreMeaning } from "@/web/topic/utils/score";
 import { useAggregationMode, usePerspectives } from "@/web/view/perspectiveStore";
 
@@ -51,7 +51,7 @@ export const useScoringUsernames = () => {
 export const useSolutionTotal = (solution: Node, problem: Node) => {
   const criteriaSolutionEdges = useDiagramStore((state) => {
     const topicGraph = { nodes: state.nodes, edges: state.edges };
-    const criteriaForProblem = children(problem, topicGraph).filter(
+    const criteriaForProblem = targetNodes(problem, topicGraph).filter(
       (node) => node.type === "criterion",
     );
     const criteriaSolutionEdges = compact(

@@ -126,10 +126,10 @@ export const nodeDecorations: Record<FlowNodeType, NodeDecoration> = {
 };
 
 // TODO: memoize? this could traverse a lot of nodes & edges, seems not performant
-export const parents = (node: Node, topicGraph: Graph, sameCategoryNodes = true) => {
-  const parentEdges = topicGraph.edges.filter((edge) => edge.target === node.id);
+export const sourceNodes = (node: Node, topicGraph: Graph, sameCategoryNodes = true) => {
+  const sourceEdges = topicGraph.edges.filter((edge) => edge.target === node.id);
 
-  const parentNodes = parentEdges.map((edge) => {
+  const sources = sourceEdges.map((edge) => {
     const node = topicGraph.nodes.find((node) => edge.source === node.id);
     if (!node) throw errorWithData(`node ${edge.source} not found`, topicGraph);
 
@@ -137,14 +137,14 @@ export const parents = (node: Node, topicGraph: Graph, sameCategoryNodes = true)
   });
 
   if (sameCategoryNodes) {
-    return parentNodes.filter((parentNode) => areSameCategoryNodes(node.type, parentNode.type));
-  } else return parentNodes;
+    return sources.filter((sourceNode) => areSameCategoryNodes(node.type, sourceNode.type));
+  } else return sources;
 };
 
 // all children references prefer to look for same-category nodes
-export const children = (node: Node, topicGraph: Graph, sameCategoryNodes = true) => {
-  const childEdges = topicGraph.edges.filter((edge) => edge.source === node.id);
-  const childNodes = childEdges.map((edge) => {
+export const targetNodes = (node: Node, topicGraph: Graph, sameCategoryNodes = true) => {
+  const targetEdges = topicGraph.edges.filter((edge) => edge.source === node.id);
+  const targets = targetEdges.map((edge) => {
     const node = topicGraph.nodes.find((node) => edge.target === node.id);
     if (!node) throw errorWithData(`node ${edge.target} not found`, topicGraph);
 
@@ -152,8 +152,8 @@ export const children = (node: Node, topicGraph: Graph, sameCategoryNodes = true
   });
 
   if (sameCategoryNodes) {
-    return childNodes.filter((childNode) => areSameCategoryNodes(node.type, childNode.type));
-  } else return childNodes;
+    return targets.filter((targetNode) => areSameCategoryNodes(node.type, targetNode.type));
+  } else return targets;
 };
 
 /**
@@ -171,8 +171,8 @@ export const neighbors = (
   if (layersDeep < 1) throw errorWithData("layersDeep must be at least 1", layersDeep);
 
   const immediateNeighbors = [
-    ...parents(node, topicGraph, sameCategoryNodes),
-    ...children(node, topicGraph, sameCategoryNodes),
+    ...sourceNodes(node, topicGraph, sameCategoryNodes),
+    ...targetNodes(node, topicGraph, sameCategoryNodes),
   ].filter((immediateNeighbor) => !foundNodeIds.includes(immediateNeighbor.id));
 
   if (layersDeep === 1) return immediateNeighbors;
@@ -189,7 +189,7 @@ export const neighbors = (
 };
 
 export const components = (node: Node, topicGraph: Graph) => {
-  return parents(node, topicGraph).filter((parent) => componentTypes.includes(parent.type));
+  return sourceNodes(node, topicGraph).filter((source) => componentTypes.includes(source.type));
 };
 
 export const edges = (node: Node, edges: Edge[]) => {

@@ -17,15 +17,10 @@ interface Props {
 export const AddressedColumn = ({ summaryNode }: Props) => {
   const { directNodes, indirectNodes } = useAddressed(summaryNode);
 
-  const defaultParentAddableRelations = addableRelationsFrom(
-    summaryNode.type,
-    "parent",
-    false,
-    "n/a",
-  );
+  const defaultAddableRelations = addableRelationsFrom(summaryNode.type, undefined, false, "n/a");
 
   const addableRelations = filterAddablesViaSearchRelations(
-    defaultParentAddableRelations,
+    defaultAddableRelations,
     addressedDirectedSearchRelations,
   );
 
