@@ -8,167 +8,167 @@ import { hasJustification } from "@/web/topic/utils/justification";
 import { components, sourceNodes, targetNodes } from "@/web/topic/utils/node";
 
 const questionRelations: AddableRelation[] = nodeTypes.map((nodeType) => ({
-  target: "question",
+  source: "question",
   name: "asksAbout",
-  source: nodeType,
-  commonalityFrom: researchNodeTypes.includes(nodeType) ? { source: "common" } : {},
+  target: nodeType,
+  commonalityFrom: researchNodeTypes.includes(nodeType) ? { target: "common" } : {},
 }));
 
 const factRelations: AddableRelation[] = nodeTypes
   .filter((nodeType) => nodeType !== "fact" && nodeType !== "source")
   .map((nodeType) => ({
-    target: "fact",
+    source: "fact",
     name: "relevantFor",
-    source: nodeType,
-    commonalityFrom: researchNodeTypes.includes(nodeType) ? { source: "common" } : {},
+    target: nodeType,
+    commonalityFrom: researchNodeTypes.includes(nodeType) ? { target: "common" } : {},
   }));
 
 const sourceRelations: AddableRelation[] = nodeTypes
   .filter((nodeType) => nodeType !== "fact" && nodeType !== "source")
   .map((nodeType) => ({
-    target: "source",
+    source: "source",
     name: "relevantFor",
-    source: nodeType,
-    commonalityFrom: researchNodeTypes.includes(nodeType) ? { source: "common" } : {},
+    target: nodeType,
+    commonalityFrom: researchNodeTypes.includes(nodeType) ? { target: "common" } : {},
   }));
 
 // prettier-ignore
 const researchRelations: AddableRelation[] = questionRelations.concat(
   // ordered this way so that answer add buttons are to the right of question-add and left of fact/source-add
   [
-    { target: "answer", name: "potentialAnswerTo", source: "question", commonalityFrom: { source: "common" } },
-    { target: "answer", name: "accomplishes", source: "answer", commonalityFrom: { source: "common" } },
+    { source: "answer", name: "potentialAnswerTo", target: "question", commonalityFrom: { target: "common" } },
+    { source: "answer", name: "accomplishes", target: "answer", commonalityFrom: { target: "common" } },
   ],
   factRelations,
   sourceRelations,
   [
-    { target: "fact", name: "relatesTo", source: "fact", commonalityFrom: { target: "common" } }, // allow chaining facts, which feels natural
-    { target: "source", name: "sourceOf", source: "fact", commonalityFrom: { target: "common", source: "common" } },
-    { target: "source", name: "mentions", source: "source", commonalityFrom: { target: "common" } },
+    { source: "fact", name: "relatesTo", target: "fact", commonalityFrom: { source: "common" } }, // allow chaining facts, which feels natural
+    { source: "source", name: "sourceOf", target: "fact", commonalityFrom: { source: "common", target: "common" } },
+    { source: "source", name: "mentions", target: "source", commonalityFrom: { source: "common" } },
   ],
 );
 
-// Assumes that we're always pointing from target to source.
-// This list is sorted by `source` and then `target` so that it matches the partition order of nodes
+// Assumes that we're always pointing from source to target.
+// This list is sorted by `target` and then `source` so that it matches the partition order of nodes
 // in the layout.
 // prettier-ignore
 // -- allow each relation to be on one line for readability, rather than having many on one line and some and multiple lines because they're too long
 const relations: AddableRelation[] = researchRelations.concat([
   // topic relations
-  { target: "problem", name: "causes", source: "problem", commonalityFrom: { target: "uncommon" } },
-  { target: "cause", name: "causes", source: "problem", commonalityFrom: { target: "uncommon", source: "common" } },
-  { target: "problem", name: "subproblemOf", source: "problem", commonalityFrom: { source: "uncommon" } },
-  { target: "benefit", name: "createdBy", source: "problem", commonalityFrom: { source: "uncommon" } },
-  { target: "effect", name: "createdBy", source: "problem", commonalityFrom: { source: "uncommon" } },
-  { target: "detriment", name: "createdBy", source: "problem", commonalityFrom: { source: "common" } },
-  { target: "criterion", name: "criterionFor", source: "problem", commonalityFrom: { source: "uncommon" } },
-  { target: "solutionComponent", name: "addresses", source: "problem", commonalityFrom: { target: "uncommon" } },
-  { target: "solution", name: "addresses", source: "problem", commonalityFrom: { source: "common" } },
-  { target: "solution", name: "addresses", source: "problem", commonalityFrom: { target: "uncommon" } },
-  { target: "mitigationComponent", name: "addresses", source: "problem", commonalityFrom: {} },
-  { target: "mitigation", name: "addresses", source: "problem", commonalityFrom: {} },
+  { source: "problem", name: "causes", target: "problem", commonalityFrom: { source: "uncommon" } },
+  { source: "cause", name: "causes", target: "problem", commonalityFrom: { source: "uncommon", target: "common" } },
+  { source: "problem", name: "subproblemOf", target: "problem", commonalityFrom: { target: "uncommon" } },
+  { source: "benefit", name: "createdBy", target: "problem", commonalityFrom: { target: "uncommon" } },
+  { source: "effect", name: "createdBy", target: "problem", commonalityFrom: { target: "uncommon" } },
+  { source: "detriment", name: "createdBy", target: "problem", commonalityFrom: { target: "common" } },
+  { source: "criterion", name: "criterionFor", target: "problem", commonalityFrom: { target: "uncommon" } },
+  { source: "solutionComponent", name: "addresses", target: "problem", commonalityFrom: { source: "uncommon" } },
+  { source: "solution", name: "addresses", target: "problem", commonalityFrom: { target: "common" } },
+  { source: "solution", name: "addresses", target: "problem", commonalityFrom: { source: "uncommon" } },
+  { source: "mitigationComponent", name: "addresses", target: "problem", commonalityFrom: {} },
+  { source: "mitigation", name: "addresses", target: "problem", commonalityFrom: {} },
 
-  { target: "cause", name: "causes", source: "cause", commonalityFrom: { source: "common" } },
-  { target: "solutionComponent", name: "addresses", source: "cause", commonalityFrom: {} },
-  { target: "solution", name: "addresses", source: "cause", commonalityFrom: { source: "common" } },
-  { target: "mitigationComponent", name: "addresses", source: "cause", commonalityFrom: {} },
-  { target: "mitigation", name: "addresses", source: "cause", commonalityFrom: {} },
+  { source: "cause", name: "causes", target: "cause", commonalityFrom: { target: "common" } },
+  { source: "solutionComponent", name: "addresses", target: "cause", commonalityFrom: {} },
+  { source: "solution", name: "addresses", target: "cause", commonalityFrom: { target: "common" } },
+  { source: "mitigationComponent", name: "addresses", target: "cause", commonalityFrom: {} },
+  { source: "mitigation", name: "addresses", target: "cause", commonalityFrom: {} },
 
-  { target: "criterion", name: "relatesTo", source: "benefit", commonalityFrom: {} },
-  { target: "criterion", name: "relatesTo", source: "effect", commonalityFrom: {} },
-  { target: "criterion", name: "relatesTo", source: "detriment", commonalityFrom: {} },
+  { source: "criterion", name: "relatesTo", target: "benefit", commonalityFrom: {} },
+  { source: "criterion", name: "relatesTo", target: "effect", commonalityFrom: {} },
+  { source: "criterion", name: "relatesTo", target: "detriment", commonalityFrom: {} },
 
   // These relations above `creates` relations so that new edges result in these over `creates`
   // by default; usually `creates` edges will be the result of an add node button, not a drag-and-drop edge.
   // This issue would probably be better solved by distinguishing problem effects vs solution effects,
   // because solution-problem relations would be addresses, and solution-solution/problem-problem
   // would be creates/createdBy. But that's a bigger change to make.
-  { target: "detriment", name: "causes", source: "cause", commonalityFrom: {} },
-  { target: "detriment", name: "causes", source: "detriment", commonalityFrom: {} },
-  { target: "benefit", name: "addresses", source: "cause", commonalityFrom: {} },
-  { target: "benefit", name: "addresses", source: "detriment", commonalityFrom: {} },
+  { source: "detriment", name: "causes", target: "cause", commonalityFrom: {} },
+  { source: "detriment", name: "causes", target: "detriment", commonalityFrom: {} },
+  { source: "benefit", name: "addresses", target: "cause", commonalityFrom: {} },
+  { source: "benefit", name: "addresses", target: "detriment", commonalityFrom: {} },
 
   // effects, benefits, detriments, can each create each other (when coming up from solution)
   // and be created by each other (when going up to problem)
-  { target: "benefit", name: "creates", source: "benefit", commonalityFrom: { target: "common" } },
-  { target: "effect", name: "creates", source: "benefit", commonalityFrom: { target: "common" } },
-  { target: "detriment", name: "creates", source: "benefit", commonalityFrom: { target: "common" } },
-  { target: "benefit", name: "creates", source: "effect", commonalityFrom: { target: "uncommon" } }, // regular effects are generally uncommon - usually it feels like we think in terms of good or bad effects
-  { target: "effect", name: "creates", source: "effect", commonalityFrom: { target: "uncommon" } },
-  { target: "detriment", name: "creates", source: "effect", commonalityFrom: { target: "uncommon" } },
-  { target: "benefit", name: "creates", source: "detriment", commonalityFrom: { target: "common" } },
-  { target: "effect", name: "creates", source: "detriment", commonalityFrom: { target: "common" } },
-  { target: "detriment", name: "creates", source: "detriment", commonalityFrom: { target: "common" } },
-  { target: "benefit", name: "createdBy", source: "benefit", commonalityFrom: { source: "common" } },
-  { target: "effect", name: "createdBy", source: "benefit", commonalityFrom: { source: "uncommon" } },
-  { target: "detriment", name: "createdBy", source: "benefit", commonalityFrom: { source: "common" } },
-  { target: "benefit", name: "createdBy", source: "effect", commonalityFrom: { source: "common" } },
-  { target: "effect", name: "createdBy", source: "effect", commonalityFrom: { source: "uncommon" } },
-  { target: "detriment", name: "createdBy", source: "effect", commonalityFrom: { source: "common" } },
-  { target: "benefit", name: "createdBy", source: "detriment", commonalityFrom: { source: "common" } },
-  { target: "effect", name: "createdBy", source: "detriment", commonalityFrom: { source: "uncommon" } },
-  { target: "detriment", name: "createdBy", source: "detriment", commonalityFrom: { source: "common" } },
+  { source: "benefit", name: "creates", target: "benefit", commonalityFrom: { source: "common" } },
+  { source: "effect", name: "creates", target: "benefit", commonalityFrom: { source: "common" } },
+  { source: "detriment", name: "creates", target: "benefit", commonalityFrom: { source: "common" } },
+  { source: "benefit", name: "creates", target: "effect", commonalityFrom: { source: "uncommon" } }, // regular effects are generally uncommon - usually it feels like we think in terms of good or bad effects
+  { source: "effect", name: "creates", target: "effect", commonalityFrom: { source: "uncommon" } },
+  { source: "detriment", name: "creates", target: "effect", commonalityFrom: { source: "uncommon" } },
+  { source: "benefit", name: "creates", target: "detriment", commonalityFrom: { source: "common" } },
+  { source: "effect", name: "creates", target: "detriment", commonalityFrom: { source: "common" } },
+  { source: "detriment", name: "creates", target: "detriment", commonalityFrom: { source: "common" } },
+  { source: "benefit", name: "createdBy", target: "benefit", commonalityFrom: { target: "common" } },
+  { source: "effect", name: "createdBy", target: "benefit", commonalityFrom: { target: "uncommon" } },
+  { source: "detriment", name: "createdBy", target: "benefit", commonalityFrom: { target: "common" } },
+  { source: "benefit", name: "createdBy", target: "effect", commonalityFrom: { target: "common" } },
+  { source: "effect", name: "createdBy", target: "effect", commonalityFrom: { target: "uncommon" } },
+  { source: "detriment", name: "createdBy", target: "effect", commonalityFrom: { target: "common" } },
+  { source: "benefit", name: "createdBy", target: "detriment", commonalityFrom: { target: "common" } },
+  { source: "effect", name: "createdBy", target: "detriment", commonalityFrom: { target: "uncommon" } },
+  { source: "detriment", name: "createdBy", target: "detriment", commonalityFrom: { target: "common" } },
 
   // below effect-create-effect relations so that Add Solution button is to the right of Add Effect button for Detriment, because effects are expected to be more commonly added than solutions
-  { target: "solutionComponent", name: "addresses", source: "detriment", commonalityFrom: {} },
-  { target: "solution", name: "addresses", source: "detriment", commonalityFrom: { source: "common" } },
-  { target: "mitigationComponent", name: "mitigates", source: "detriment", commonalityFrom: {} },
-  { target: "mitigation", name: "mitigates", source: "detriment", commonalityFrom: {} }, // there's a hack to make this relation addable instead of solution for solution detriments
+  { source: "solutionComponent", name: "addresses", target: "detriment", commonalityFrom: {} },
+  { source: "solution", name: "addresses", target: "detriment", commonalityFrom: { target: "common" } },
+  { source: "mitigationComponent", name: "mitigates", target: "detriment", commonalityFrom: {} },
+  { source: "mitigation", name: "mitigates", target: "detriment", commonalityFrom: {} }, // there's a hack to make this relation addable instead of solution for solution detriments
 
-  { target: "benefit", name: "fulfills", source: "criterion", commonalityFrom: {} },
-  { target: "effect", name: "fulfills", source: "criterion", commonalityFrom: {} },
-  { target: "detriment", name: "relatesTo", source: "criterion", commonalityFrom: {} },
-  { target: "solutionComponent", name: "fulfills", source: "criterion", commonalityFrom: {} },
-  { target: "solution", name: "fulfills", source: "criterion", commonalityFrom: {} },
-  { target: "mitigationComponent", name: "fulfills", source: "criterion", commonalityFrom: {} },
-  { target: "mitigation", name: "fulfills", source: "criterion", commonalityFrom: {} },
+  { source: "benefit", name: "fulfills", target: "criterion", commonalityFrom: {} },
+  { source: "effect", name: "fulfills", target: "criterion", commonalityFrom: {} },
+  { source: "detriment", name: "relatesTo", target: "criterion", commonalityFrom: {} },
+  { source: "solutionComponent", name: "fulfills", target: "criterion", commonalityFrom: {} },
+  { source: "solution", name: "fulfills", target: "criterion", commonalityFrom: {} },
+  { source: "mitigationComponent", name: "fulfills", target: "criterion", commonalityFrom: {} },
+  { source: "mitigation", name: "fulfills", target: "criterion", commonalityFrom: {} },
 
-  { target: "solutionComponent", name: "creates", source: "benefit", commonalityFrom: { target: "common" } },
-  { target: "solution", name: "creates", source: "benefit", commonalityFrom: { target: "common" } },
-  { target: "solutionComponent", name: "creates", source: "effect", commonalityFrom: { target: "uncommon" } },
-  { target: "solution", name: "creates", source: "effect", commonalityFrom: { target: "uncommon" } },
-  { target: "solutionComponent", name: "creates", source: "detriment", commonalityFrom: { target: "common" } },
-  { target: "solution", name: "creates", source: "detriment", commonalityFrom: { target: "common" } },
-  { target: "mitigationComponent", name: "creates", source: "benefit", commonalityFrom: { target: "common" } },
-  { target: "mitigation", name: "creates", source: "benefit", commonalityFrom: { target: "common" } },
-  { target: "mitigationComponent", name: "creates", source: "effect", commonalityFrom: { target: "uncommon" } },
-  { target: "mitigation", name: "creates", source: "effect", commonalityFrom: { target: "uncommon" } },
-  { target: "mitigationComponent", name: "creates", source: "detriment", commonalityFrom: { target: "common" } },
-  { target: "mitigation", name: "creates", source: "detriment", commonalityFrom: { target: "common" } },
+  { source: "solutionComponent", name: "creates", target: "benefit", commonalityFrom: { source: "common" } },
+  { source: "solution", name: "creates", target: "benefit", commonalityFrom: { source: "common" } },
+  { source: "solutionComponent", name: "creates", target: "effect", commonalityFrom: { source: "uncommon" } },
+  { source: "solution", name: "creates", target: "effect", commonalityFrom: { source: "uncommon" } },
+  { source: "solutionComponent", name: "creates", target: "detriment", commonalityFrom: { source: "common" } },
+  { source: "solution", name: "creates", target: "detriment", commonalityFrom: { source: "common" } },
+  { source: "mitigationComponent", name: "creates", target: "benefit", commonalityFrom: { source: "common" } },
+  { source: "mitigation", name: "creates", target: "benefit", commonalityFrom: { source: "common" } },
+  { source: "mitigationComponent", name: "creates", target: "effect", commonalityFrom: { source: "uncommon" } },
+  { source: "mitigation", name: "creates", target: "effect", commonalityFrom: { source: "uncommon" } },
+  { source: "mitigationComponent", name: "creates", target: "detriment", commonalityFrom: { source: "common" } },
+  { source: "mitigation", name: "creates", target: "detriment", commonalityFrom: { source: "common" } },
 
-  { target: "solutionComponent", name: "has", source: "solutionComponent", commonalityFrom: { target: "common" } },
-  { target: "solution", name: "has", source: "solutionComponent", commonalityFrom: { target: "common" } },
-  { target: "mitigationComponent", name: "has", source: "mitigationComponent", commonalityFrom: { target: "common" } },
-  { target: "mitigation", name: "has", source: "mitigationComponent", commonalityFrom: { target: "common" }},
+  { source: "solutionComponent", name: "has", target: "solutionComponent", commonalityFrom: { source: "common" } },
+  { source: "solution", name: "has", target: "solutionComponent", commonalityFrom: { source: "common" } },
+  { source: "mitigationComponent", name: "has", target: "mitigationComponent", commonalityFrom: { source: "common" } },
+  { source: "mitigation", name: "has", target: "mitigationComponent", commonalityFrom: { source: "common" }},
 
-  { target: "obstacle", name: "obstacleOf", source: "solutionComponent", commonalityFrom: { source: "uncommon" } },
-  { target: "obstacle", name: "obstacleOf", source: "solution", commonalityFrom: { source: "uncommon" } },
-  { target: "obstacle", name: "obstacleOf", source: "mitigationComponent", commonalityFrom: { source: "uncommon" } },
-  { target: "obstacle", name: "obstacleOf", source: "mitigation", commonalityFrom: { source: "uncommon" } },
+  { source: "obstacle", name: "obstacleOf", target: "solutionComponent", commonalityFrom: { target: "uncommon" } },
+  { source: "obstacle", name: "obstacleOf", target: "solution", commonalityFrom: { target: "uncommon" } },
+  { source: "obstacle", name: "obstacleOf", target: "mitigationComponent", commonalityFrom: { target: "uncommon" } },
+  { source: "obstacle", name: "obstacleOf", target: "mitigation", commonalityFrom: { target: "uncommon" } },
 
-  { target: "solutionComponent", name: "addresses", source: "obstacle", commonalityFrom: {} },
-  { target: "solution", name: "addresses", source: "obstacle", commonalityFrom: {} },
-  { target: "mitigationComponent", name: "mitigates", source: "obstacle", commonalityFrom: {} },
-  { target: "mitigation", name: "mitigates", source: "obstacle", commonalityFrom: { source: "common" } },
+  { source: "solutionComponent", name: "addresses", target: "obstacle", commonalityFrom: {} },
+  { source: "solution", name: "addresses", target: "obstacle", commonalityFrom: {} },
+  { source: "mitigationComponent", name: "mitigates", target: "obstacle", commonalityFrom: {} },
+  { source: "mitigation", name: "mitigates", target: "obstacle", commonalityFrom: { target: "common" } },
 
-  { target: "solution", name: "accomplishes", source: "solution", commonalityFrom: { source: "uncommon" } },
-  { target: "solution", name: "contingencyFor", source: "solution", commonalityFrom: {} },
+  { source: "solution", name: "accomplishes", target: "solution", commonalityFrom: { target: "uncommon" } },
+  { source: "solution", name: "contingencyFor", target: "solution", commonalityFrom: {} },
 
   // justification relations
-  { target: "support", name: "supports", source: "rootClaim", commonalityFrom: { source: "common" } },
-  { target: "critique", name: "critiques", source: "rootClaim", commonalityFrom: { source: "common" } },
+  { source: "support", name: "supports", target: "rootClaim", commonalityFrom: { target: "common" } },
+  { source: "critique", name: "critiques", target: "rootClaim", commonalityFrom: { target: "common" } },
 
-  { target: "support", name: "supports", source: "support", commonalityFrom: { source: "common" } },
-  { target: "critique", name: "critiques", source: "support", commonalityFrom: { source: "common" } },
+  { source: "support", name: "supports", target: "support", commonalityFrom: { target: "common" } },
+  { source: "critique", name: "critiques", target: "support", commonalityFrom: { target: "common" } },
 
-  { target: "support", name: "supports", source: "critique", commonalityFrom: { source: "common" } },
-  { target: "critique", name: "critiques", source: "critique", commonalityFrom: { source: "common" } },
+  { source: "support", name: "supports", target: "critique", commonalityFrom: { target: "common" } },
+  { source: "critique", name: "critiques", target: "critique", commonalityFrom: { target: "common" } },
 ]);
 
 export interface Relation {
-  target: NodeType;
-  name: RelationName;
   source: NodeType;
+  name: RelationName;
+  target: NodeType;
 }
 
 /**
@@ -220,11 +220,11 @@ export interface DirectedToRelationWithCommonality extends DirectedToRelation {
 }
 
 export const getDirectedRelationDescription = (relation: DirectedToRelation): string => {
-  const from: EdgeDirection = relation.as === "source" ? "target" : "source";
+  const from: EdgeDirection = relation.as === "target" ? "source" : "target";
 
-  return from === "target"
-    ? `this ${startCase(relation.target)} '${lowerCase(relation.name)}'` // e.g. this Problem causes
-    : `'${lowerCase(relation.name)}' this ${startCase(relation.source)}`; // e.g. causes this Problem
+  return from === "source"
+    ? `this ${startCase(relation.source)} '${lowerCase(relation.name)}'` // e.g. this Problem causes
+    : `'${lowerCase(relation.name)}' this ${startCase(relation.target)}`; // e.g. causes this Problem
 };
 
 /**
@@ -245,28 +245,28 @@ interface AddableRelation extends Relation {
 }
 
 export const getRelation = (
-  target: NodeType,
-  relationName: RelationName | undefined,
   source: NodeType,
+  relationName: RelationName | undefined,
+  target: NodeType,
 ): Relation => {
   const relation = relationName
     ? relations.find(
         (relation) =>
           relation.source === source &&
-          relation.target === target &&
-          relation.name === relationName,
+          relation.name === relationName &&
+          relation.target === target,
       )
     : relations.find((relation) => relation.source === source && relation.target === target);
 
   // we're assuming that anything can relate to anything else; potentially this should only be true when unrestricted editing is on
-  return relation ?? { target, name: "relatesTo", source };
+  return relation ?? { source, name: "relatesTo", target };
 };
 
 export const composedRelations: Relation[] = [
-  { target: "solution", name: "has", source: "solutionComponent" },
+  { source: "solution", name: "has", target: "solutionComponent" },
 ];
 
-export const componentTypes = composedRelations.map((relation) => relation.source);
+export const componentTypes = composedRelations.map((relation) => relation.target);
 
 interface ShortcutRelation {
   detourNodeType: NodeType;
@@ -282,15 +282,15 @@ interface ShortcutRelation {
 export const shortcutRelations: ShortcutRelation[] = [
   {
     detourNodeType: "criterion",
-    relation: { target: "solution", name: "addresses", source: "problem" },
+    relation: { source: "solution", name: "addresses", target: "problem" },
   },
   {
     detourNodeType: "criterion",
-    relation: { target: "solutionComponent", name: "addresses", source: "problem" },
+    relation: { source: "solutionComponent", name: "addresses", target: "problem" },
   },
   {
     detourNodeType: "criterion",
-    relation: { target: "effect", name: "addresses", source: "problem" },
+    relation: { source: "effect", name: "addresses", target: "problem" },
   },
 ];
 
@@ -324,8 +324,8 @@ export const addableRelationsFrom = (
   effectType: EffectType,
 ): DirectedToRelationWithCommonality[] => {
   if (addingAs === undefined) {
-    return addableRelationsFrom(fromNodeType, "target", unrestrictedAddingFrom, effectType).concat(
-      addableRelationsFrom(fromNodeType, "source", unrestrictedAddingFrom, effectType),
+    return addableRelationsFrom(fromNodeType, "source", unrestrictedAddingFrom, effectType).concat(
+      addableRelationsFrom(fromNodeType, "target", unrestrictedAddingFrom, effectType),
     );
   }
 
@@ -341,14 +341,14 @@ export const addableRelationsFrom = (
       if (
         fromNodeType === "detriment" &&
         effectType === "solution" &&
-        addingAs === "target" &&
+        addingAs === "source" &&
         toNodeType === "solution" &&
         !unrestrictedAddingFrom
       ) {
         return {
-          target: "mitigation",
+          source: "mitigation",
           name: "mitigates",
-          source: fromNodeType,
+          target: fromNodeType,
           commonality: "uncommon",
         } satisfies RelationWithCommonality;
       }
@@ -365,9 +365,9 @@ export const addableRelationsFrom = (
         .map(
           (relation) =>
             ({
-              target: relation.target,
-              name: relation.name,
               source: relation.source,
+              name: relation.name,
+              target: relation.target,
               commonality: relation.commonalityFrom[fromDirection] ?? "onlyForConnections",
             }) satisfies RelationWithCommonality,
         )
@@ -387,8 +387,8 @@ export const addableRelationsFrom = (
       if (unrestrictedAddingFrom) {
         const unrestrictedRelation =
           fromDirection === "source"
-            ? getRelation(toNodeType, undefined, fromNodeType)
-            : getRelation(fromNodeType, undefined, toNodeType);
+            ? getRelation(fromNodeType, undefined, toNodeType)
+            : getRelation(toNodeType, undefined, fromNodeType);
         return { ...unrestrictedRelation, commonality: "common" } satisfies RelationWithCommonality;
       }
 
@@ -405,11 +405,11 @@ export const addableRelationsFrom = (
   return formattedRelations;
 };
 
-export const canCreateEdge = (topicGraph: Graph, target: Node, source: Node) => {
+export const canCreateEdge = (topicGraph: Graph, source: Node, target: Node) => {
   const existingEdge = topicGraph.edges.find((edge) => {
     return (
-      (edge.source === source.id && edge.target === target.id) ||
-      (edge.source === target.id && edge.target === source.id)
+      (edge.source === target.id && edge.target === source.id) ||
+      (edge.source === source.id && edge.target === target.id)
     );
   });
 
@@ -491,20 +491,7 @@ export const isEdgeImpliedByComposition = (edge: Edge, topicGraph: Graph) => {
   const edgeSource = sourceNode(edge, topicGraph.nodes);
   const edgeTarget = targetNode(edge, topicGraph.nodes);
 
-  // check implied through source, i.e. target -[X]-> component, target -[X]-> source, and source -has-> component
-  const componentsOfSource = components(edgeSource, topicGraph);
-  const impliedThroughSourceComponent = componentsOfSource.some((component) => {
-    return topicGraph.edges.some(
-      (otherEdge) =>
-        otherEdge.source === component.id &&
-        otherEdge.label === edge.label &&
-        otherEdge.target === edgeTarget.id,
-    );
-  });
-
-  if (impliedThroughSourceComponent) return true;
-
-  // check implied through target, i.e. target -has-> component, component -[X]-> source, target -[X]-> source
+  // check implied through target, i.e. source -[X]-> component, source -[X]-> target, and target -has-> component
   const componentsOfTarget = components(edgeTarget, topicGraph);
   const impliedThroughTargetComponent = componentsOfTarget.some((component) => {
     return topicGraph.edges.some(
@@ -515,7 +502,20 @@ export const isEdgeImpliedByComposition = (edge: Edge, topicGraph: Graph) => {
     );
   });
 
-  return impliedThroughTargetComponent;
+  if (impliedThroughTargetComponent) return true;
+
+  // check implied through source, i.e. source -has-> component, component -[X]-> target, source -[X]-> target
+  const componentsOfSource = components(edgeSource, topicGraph);
+  const impliedThroughSourceComponent = componentsOfSource.some((component) => {
+    return topicGraph.edges.some(
+      (otherEdge) =>
+        otherEdge.source === component.id &&
+        otherEdge.label === edge.label &&
+        otherEdge.target === edgeTarget.id,
+    );
+  });
+
+  return impliedThroughSourceComponent;
 };
 
 // Implied edges feel a little jank.

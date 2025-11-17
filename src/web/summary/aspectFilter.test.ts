@@ -13,11 +13,11 @@ describe("getSolutionBenefits", () => {
       nodes: [fromSolution, solutionObstacle, solutionEffect],
       edges: [
         buildEdge({
-          targetId: solutionObstacle.id,
+          sourceId: solutionObstacle.id,
           relation: "obstacleOf",
-          sourceId: fromSolution.id,
+          targetId: fromSolution.id,
         }),
-        buildEdge({ targetId: fromSolution.id, relation: "creates", sourceId: solutionEffect.id }),
+        buildEdge({ sourceId: fromSolution.id, relation: "creates", targetId: solutionEffect.id }),
       ],
     };
 
@@ -36,8 +36,8 @@ describe("getSolutionBenefits", () => {
     const solutionComponent = buildNode({ type: "solutionComponent" });
 
     const solutionBenefit = buildNode({ type: "benefit" });
-    const upstreamBenefitViaBenefit = buildNode({ type: "benefit" });
-    const upstreamBenefitViaComponent = buildNode({ type: "benefit" });
+    const downstreamBenefitViaBenefit = buildNode({ type: "benefit" });
+    const downstreamBenefitViaComponent = buildNode({ type: "benefit" });
 
     const graph: Graph = {
       nodes: [
@@ -46,29 +46,29 @@ describe("getSolutionBenefits", () => {
         solutionEffect,
         solutionComponent,
         solutionBenefit,
-        upstreamBenefitViaBenefit,
-        upstreamBenefitViaComponent,
+        downstreamBenefitViaBenefit,
+        downstreamBenefitViaComponent,
       ],
       edges: [
         buildEdge({
-          sourceId: fromSolution.id,
-          targetId: randomObstacle.id,
+          sourceId: randomObstacle.id,
           relation: "obstacleOf",
+          targetId: fromSolution.id,
         }),
 
-        buildEdge({ targetId: fromSolution.id, relation: "creates", sourceId: solutionEffect.id }),
-        buildEdge({ targetId: fromSolution.id, relation: "has", sourceId: solutionComponent.id }),
+        buildEdge({ sourceId: fromSolution.id, relation: "creates", targetId: solutionEffect.id }),
+        buildEdge({ sourceId: fromSolution.id, relation: "has", targetId: solutionComponent.id }),
 
-        buildEdge({ targetId: fromSolution.id, relation: "creates", sourceId: solutionBenefit.id }),
+        buildEdge({ sourceId: fromSolution.id, relation: "creates", targetId: solutionBenefit.id }),
         buildEdge({
-          targetId: solutionBenefit.id,
+          sourceId: solutionBenefit.id,
           relation: "creates",
-          sourceId: upstreamBenefitViaBenefit.id,
+          targetId: downstreamBenefitViaBenefit.id,
         }),
         buildEdge({
-          targetId: solutionComponent.id,
+          sourceId: solutionComponent.id,
           relation: "creates",
-          sourceId: upstreamBenefitViaComponent.id,
+          targetId: downstreamBenefitViaComponent.id,
         }),
       ],
     };
@@ -77,8 +77,8 @@ describe("getSolutionBenefits", () => {
 
     expect(directNodes).toEqual([{ ...solutionBenefit, layersAway: 1 }]);
     expect(indirectNodes).toIncludeSameMembers([
-      { ...upstreamBenefitViaBenefit, layersAway: 2 },
-      { ...upstreamBenefitViaComponent, layersAway: 2 },
+      { ...downstreamBenefitViaBenefit, layersAway: 2 },
+      { ...downstreamBenefitViaComponent, layersAway: 2 },
     ]);
   });
 });
@@ -93,14 +93,14 @@ describe("getAddressed", () => {
       nodes: [fromSolution, solutionObstacle, solutionProblem],
       edges: [
         buildEdge({
-          targetId: solutionObstacle.id,
+          sourceId: solutionObstacle.id,
           relation: "obstacleOf",
-          sourceId: fromSolution.id,
+          targetId: fromSolution.id,
         }),
         buildEdge({
-          targetId: fromSolution.id,
+          sourceId: fromSolution.id,
           relation: "relatesTo",
-          sourceId: solutionProblem.id,
+          targetId: solutionProblem.id,
         }),
       ],
     };
@@ -135,28 +135,28 @@ describe("getAddressed", () => {
       ],
       edges: [
         buildEdge({
-          targetId: randomObstacle.id,
+          sourceId: randomObstacle.id,
           relation: "obstacleOf",
-          sourceId: fromSolution.id,
-        }),
-
-        buildEdge({ targetId: fromSolution.id, relation: "creates", sourceId: solutionEffect.id }),
-        buildEdge({ targetId: fromSolution.id, relation: "has", sourceId: solutionComponent.id }),
-
-        buildEdge({
           targetId: fromSolution.id,
+        }),
+
+        buildEdge({ sourceId: fromSolution.id, relation: "creates", targetId: solutionEffect.id }),
+        buildEdge({ sourceId: fromSolution.id, relation: "has", targetId: solutionComponent.id }),
+
+        buildEdge({
+          sourceId: fromSolution.id,
           relation: "addresses",
-          sourceId: addressedProblem.id,
+          targetId: addressedProblem.id,
         }),
         buildEdge({
-          targetId: solutionEffect.id,
+          sourceId: solutionEffect.id,
           relation: "addresses",
-          sourceId: addressedCauseViaEffect.id,
+          targetId: addressedCauseViaEffect.id,
         }),
         buildEdge({
-          targetId: solutionComponent.id,
+          sourceId: solutionComponent.id,
           relation: "addresses",
-          sourceId: addressedDetrimentViaComponent.id,
+          targetId: addressedDetrimentViaComponent.id,
         }),
       ],
     };

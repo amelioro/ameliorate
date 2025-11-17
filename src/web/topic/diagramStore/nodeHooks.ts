@@ -12,7 +12,7 @@ import {
   findNodeOrThrow,
   upstreamNodes,
 } from "@/web/topic/utils/graph";
-import { edges, neighbors, targetNodes } from "@/web/topic/utils/node";
+import { edges, neighbors, sourceNodes } from "@/web/topic/utils/node";
 import { RelativePlacement, neighborsInDirection } from "@/web/topic/utils/relativePlacement";
 import { useIsAnyGraphPartSelected } from "@/web/view/selectedPartStore";
 
@@ -120,14 +120,14 @@ export const useRelatedUnrelatedCoreNodes = (
   }, shallow);
 };
 
-export const useTargetNodes = (nodeId: string | undefined) => {
+export const useSourceNodes = (nodeId: string | undefined) => {
   return useDiagramStore((state) => {
     if (!nodeId) return [];
 
     try {
       const node = findNodeOrThrow(nodeId, state.nodes);
       const topicGraph = { nodes: state.nodes, edges: state.edges };
-      return targetNodes(node, topicGraph);
+      return sourceNodes(node, topicGraph);
     } catch {
       return [];
     }
@@ -145,14 +145,14 @@ export const useCriterionSolutionEdges = (problemNodeId: string | undefined) => 
       }
 
       const topicGraph = { nodes: state.nodes, edges: state.edges };
-      const nodeChildren = targetNodes(problemNode, topicGraph);
-      const criteria = nodeChildren.filter((node) => node.type === "criterion");
+      const nodeSources = sourceNodes(problemNode, topicGraph);
+      const criteria = nodeSources.filter((node) => node.type === "criterion");
       const criteriaIds = criteria.map((node) => node.id);
-      const solutions = nodeChildren.filter((node) => node.type === "solution");
+      const solutions = nodeSources.filter((node) => node.type === "solution");
       const solutionIds = solutions.map((node) => node.id);
 
       return topicGraph.edges.filter((edge) => {
-        return criteriaIds.includes(edge.source) && solutionIds.includes(edge.target);
+        return solutionIds.includes(edge.source) && criteriaIds.includes(edge.target);
       });
     } catch {
       return [];
@@ -225,7 +225,7 @@ export const useSolutions = (problemId?: string) => {
     const problemSolutions = solutions.filter((solution) =>
       state.edges.find(
         (edge) =>
-          edge.source === problemId && edge.label === "addresses" && edge.target === solution.id,
+          edge.source === solution.id && edge.label === "addresses" && edge.target === problemId,
       ),
     );
 
@@ -241,9 +241,9 @@ export const useCriteria = (problemId?: string) => {
     const problemCriteria = criteria.filter((criterion) =>
       state.edges.find(
         (edge) =>
-          edge.source === problemId &&
+          edge.source === criterion.id &&
           edge.label === "criterionFor" &&
-          edge.target === criterion.id,
+          edge.target === problemId,
       ),
     );
 

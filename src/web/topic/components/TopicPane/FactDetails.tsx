@@ -37,10 +37,10 @@ export const FactDetails = ({ factNode }: Props) => {
           <AddNodeButton
             fromNodeId={factNode.id}
             addableRelation={{
-              target: "source",
+              source: "source",
               name: "sourceOf",
-              source: "fact",
-              as: "target",
+              target: "fact",
+              as: "source",
             }}
             selectNewNode={false}
           />

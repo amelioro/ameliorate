@@ -20,10 +20,10 @@ const convertToStandaloneFlowEdge = (edge: Edge, selected: boolean): EdgeProps =
     target: edge.target,
 
     sourceX: nodeWidthPx / 2, // center of node
-    sourceY: 0,
-    sourcePosition: Position.Top,
+    sourceY: 100,
+    sourcePosition: Position.Top, // match layout's upward orientation, so source handles will be on top of nodes
     targetX: nodeWidthPx / 2,
-    targetY: 100,
+    targetY: 0,
     targetPosition: Position.Bottom,
   };
 };
@@ -46,9 +46,9 @@ export const StandaloneEdge = ({ edge }: Props) => {
   return (
     <Stack>
       {/* z-index to ensure hanging node indicators don't fall behind the edge svg empty background */}
-      <EditableNode node={sourceNode} className="z-10" />
-      <ScoreEdge inReactFlow={false} {...flowEdge} />
       <EditableNode node={targetNode} className="z-10" />
+      <ScoreEdge inReactFlow={false} {...flowEdge} />
+      <EditableNode node={sourceNode} className="z-10" />
     </Stack>
   );
 };

@@ -26,12 +26,11 @@ export const getEffectType = (node: Node, graph: Graph): EffectType => {
   // ideally to just always only "causes" relations (https://github.com/amelioro/ameliorate/issues/787),
   // but this should be ok for now.
   // Note: technically the issue in this discussion is not covered until handling the above https://github.com/amelioro/ameliorate/discussions/579.
-  const createdByProblem = upstreamNodes(node, graph, ["createdBy"]).some(
-    (upstreamNode) => upstreamNode.type === "problem",
+  const createdByProblem = downstreamNodes(node, graph, ["createdBy"]).some(
+    (downstreamNode) => downstreamNode.type === "problem",
   );
-  const createdBySolution = downstreamNodes(node, graph, ["creates"]).some(
-    (downstreamNode) =>
-      downstreamNode.type === "solution" || downstreamNode.type === "solutionComponent",
+  const createdBySolution = upstreamNodes(node, graph, ["creates"]).some(
+    (upstreamNode) => upstreamNode.type === "solution" || upstreamNode.type === "solutionComponent",
   );
 
   if (createdByProblem && createdBySolution) return "problemAndSolution";

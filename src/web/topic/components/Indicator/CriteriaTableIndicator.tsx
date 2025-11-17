@@ -2,7 +2,7 @@ import { TableChartOutlined } from "@mui/icons-material";
 import { memo, useCallback } from "react";
 
 import { ViewIndicator } from "@/web/topic/components/Indicator/Base/ViewIndicator";
-import { useNode, useTargetNodes } from "@/web/topic/diagramStore/nodeHooks";
+import { useNode, useSourceNodes } from "@/web/topic/diagramStore/nodeHooks";
 import { Node, ProblemNode } from "@/web/topic/utils/graph";
 import { viewCriteriaTable } from "@/web/view/currentViewStore/filter";
 
@@ -14,13 +14,13 @@ interface Props {
 
 const CriteriaTableIndicatorBase = ({ nodeId }: Props) => {
   const node = useNode(nodeId);
-  const targetNodes = useTargetNodes(nodeId);
+  const sourceNodes = useSourceNodes(nodeId);
 
   const onClick = useCallback(() => viewCriteriaTable(nodeId), [nodeId]);
 
   if (!node || !isProblem(node)) return <></>;
 
-  const hasCriteria = targetNodes.some((targetNode) => targetNode.type === "criterion");
+  const hasCriteria = sourceNodes.some((sourceNode) => sourceNode.type === "criterion");
 
   return (
     <ViewIndicator

@@ -79,14 +79,14 @@ export const FlowNode = (flowNode: NodeProps) => {
   const addButtonDecorationClasses = "shadow shadow-gray-500";
 
   const aboveButtonsClasses =
-    orientation === "DOWN"
+    orientation === "UP"
       ? // have to use [arbitrary] tw values because can't apply two translate-x-* class names
         // `left-1/2 top-0 -translate-x-1/2 translate-y-[calc(-100%-${nodeBridgeGap}px)]`
         // also can't use `${nodeBridgeGap}` because tw classes are detected based on full class names being present in the source file https://tailwindcss.com/docs/content-configuration#dynamic-class-names
         `left-1/2 top-0 -translate-x-1/2 translate-y-[calc(-100%-16px)]`
       : `top-1/2 left-0 -translate-y-1/2 translate-x-[calc(-100%-16px)]`;
   const belowButtonsClasses =
-    orientation === "DOWN"
+    orientation === "UP"
       ? `left-1/2 bottom-0 -translate-x-1/2 translate-y-[calc(100%+16px)]`
       : `top-1/2 right-0 -translate-y-1/2 translate-x-[calc(100%+16px)]`;
 

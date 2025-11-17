@@ -19,15 +19,15 @@ describe("neighborsAbove", () => {
       nodes: [centerSubproblem, problemAbove, causeBelow, detrimentBelow],
       edges: [
         buildEdge({
-          targetId: centerSubproblem.id,
-          relation: "subproblemOf",
-          sourceId: problemAbove.id,
-        }),
-        buildEdge({ targetId: causeBelow.id, relation: "causes", sourceId: centerSubproblem.id }),
-        buildEdge({
-          targetId: detrimentBelow.id,
-          relation: "createdBy",
           sourceId: centerSubproblem.id,
+          relation: "subproblemOf",
+          targetId: problemAbove.id,
+        }),
+        buildEdge({ sourceId: causeBelow.id, relation: "causes", targetId: centerSubproblem.id }),
+        buildEdge({
+          sourceId: detrimentBelow.id,
+          relation: "createdBy",
+          targetId: centerSubproblem.id,
         }),
       ],
     };
@@ -49,15 +49,15 @@ describe("neighborsBelow", () => {
       nodes: [centerSubproblem, problemAbove, causeBelow, detrimentBelow],
       edges: [
         buildEdge({
-          targetId: centerSubproblem.id,
-          relation: "subproblemOf",
-          sourceId: problemAbove.id,
-        }),
-        buildEdge({ targetId: causeBelow.id, relation: "causes", sourceId: centerSubproblem.id }),
-        buildEdge({
-          targetId: detrimentBelow.id,
-          relation: "createdBy",
           sourceId: centerSubproblem.id,
+          relation: "subproblemOf",
+          targetId: problemAbove.id,
+        }),
+        buildEdge({ sourceId: causeBelow.id, relation: "causes", targetId: centerSubproblem.id }),
+        buildEdge({
+          sourceId: detrimentBelow.id,
+          relation: "createdBy",
+          targetId: centerSubproblem.id,
         }),
       ],
     };
@@ -74,10 +74,10 @@ describe("addableRelationsAbove", () => {
 
     const commonAddableAboveTypes = addables
       .filter((addable) => addable.commonality === "common")
-      .map((addable) => addable.source);
+      .map((addable) => addable.target);
     const uncommonAddableAboveTypes = addables
       .filter((addable) => addable.commonality === "uncommon")
-      .map((addable) => addable.source);
+      .map((addable) => addable.target);
 
     expect(commonAddableAboveTypes).toIncludeSameMembers([
       "solutionComponent",
@@ -92,10 +92,10 @@ describe("addableRelationsAbove", () => {
 
     const commonAddableAboveTypes = addables
       .filter((addable) => addable.commonality === "common")
-      .map((addable) => addable.source);
+      .map((addable) => addable.target);
     const uncommonAddableAboveTypes = addables
       .filter((addable) => addable.commonality === "uncommon")
-      .map((addable) => addable.source);
+      .map((addable) => addable.target);
 
     expect(commonAddableAboveTypes).toIncludeSameMembers(["benefit", "detriment"]);
     expect(uncommonAddableAboveTypes).toIncludeSameMembers(["effect"]);
@@ -106,10 +106,10 @@ describe("addableRelationsAbove", () => {
 
     const commonAddableAboveTypes = addables
       .filter((addable) => addable.commonality === "common")
-      .map((addable) => addable.source);
+      .map((addable) => addable.target);
     const uncommonAddableAboveTypes = addables
       .filter((addable) => addable.commonality === "uncommon")
-      .map((addable) => addable.source);
+      .map((addable) => addable.target);
 
     expect(commonAddableAboveTypes).toIncludeSameMembers([]);
     expect(uncommonAddableAboveTypes).toIncludeSameMembers([]);
@@ -122,10 +122,10 @@ describe("addableRelationsBelow", () => {
 
     const commonAddableBelowTypes = addables
       .filter((addable) => addable.commonality === "common")
-      .map((addable) => addable.target);
+      .map((addable) => addable.source);
     const uncommonAddableBelowTypes = addables
       .filter((addable) => addable.commonality === "uncommon")
-      .map((addable) => addable.target);
+      .map((addable) => addable.source);
 
     expect(commonAddableBelowTypes).toIncludeSameMembers([]);
     expect(uncommonAddableBelowTypes).toIncludeSameMembers(["solution", "obstacle"]);
@@ -136,10 +136,10 @@ describe("addableRelationsBelow", () => {
 
     const commonAddableBelowTypes = addables
       .filter((addable) => addable.commonality === "common")
-      .map((addable) => addable.target);
+      .map((addable) => addable.source);
     const uncommonAddableBelowTypes = addables
       .filter((addable) => addable.commonality === "uncommon")
-      .map((addable) => addable.target);
+      .map((addable) => addable.source);
 
     expect(commonAddableBelowTypes).toIncludeSameMembers([]);
     expect(uncommonAddableBelowTypes).toIncludeSameMembers(["mitigation"]);
@@ -150,10 +150,10 @@ describe("addableRelationsBelow", () => {
 
     const commonAddableBelowTypes = addables
       .filter((addable) => addable.commonality === "common")
-      .map((addable) => addable.target);
+      .map((addable) => addable.source);
     const uncommonAddableBelowTypes = addables
       .filter((addable) => addable.commonality === "uncommon")
-      .map((addable) => addable.target);
+      .map((addable) => addable.source);
 
     expect(commonAddableBelowTypes).toIncludeSameMembers(["benefit", "detriment", "solution"]);
     expect(uncommonAddableBelowTypes).toIncludeSameMembers(["effect"]);

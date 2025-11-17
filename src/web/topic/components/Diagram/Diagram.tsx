@@ -219,7 +219,7 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
         nodesFocusable={false}
         onConnect={
           userCanEditTopicData
-            ? ({ source, target }) => connectNodes(target, undefined, source)
+            ? ({ source, target }) => connectNodes(source, undefined, target)
             : undefined
         }
         onContextMenu={(event) => openContextMenu(event, {})}

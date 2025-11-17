@@ -25,11 +25,11 @@ export const ImpliedClaimText = ({ graphPart }: { graphPart: GraphPart }) => {
 
     return (
       <i>
-        <b>{nodeDecorations[edgeTargetNode.type].title}</b> "{edgeTargetNode.data.label}"{" "}
+        <b>{nodeDecorations[edgeSourceNode.type].title}</b> "{edgeSourceNode.data.label}"{" "}
         <b>
-          {lowerCase(graphPart.label)} {nodeDecorations[edgeSourceNode.type].title}
+          {lowerCase(graphPart.label)} {nodeDecorations[edgeTargetNode.type].title}
         </b>{" "}
-        "{edgeSourceNode.data.label}"
+        "{edgeTargetNode.data.label}"
       </i>
     );
   }

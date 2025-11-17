@@ -29,9 +29,9 @@ export const getImplicitLabel = (arguedDiagramPartId: string, topicGraph: Graph)
     }
 
     return (
-      `${nodeDecorations[targetNode.type].title} "${targetNode.data.label}" ` +
+      `${nodeDecorations[sourceNode.type].title} "${sourceNode.data.label}" ` +
       lowerCase(arguedDiagramPart.label) +
-      ` ${nodeDecorations[sourceNode.type].title} "${sourceNode.data.label}"`
+      ` ${nodeDecorations[targetNode.type].title} "${targetNode.data.label}"`
     );
   }
 };

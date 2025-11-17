@@ -16,9 +16,7 @@ describe("upstreamNodes", () => {
 
     const graph: Graph = {
       nodes: [fromNode, randomNode1, randomNode2],
-      edges: [
-        buildEdge({ sourceId: randomNode2.id, targetId: randomNode1.id, relation: "causes" }),
-      ],
+      edges: [buildEdge({ sourceId: fromNode.id, targetId: randomNode2.id, relation: "causes" })],
     };
 
     const found = upstreamNodes(fromNode, graph);
@@ -27,9 +25,9 @@ describe("upstreamNodes", () => {
   });
 
   test("finds direct and indirect upstream nodes", () => {
-    const fromNode = buildNode({ type: "cause" });
+    const fromNode = buildNode({ type: "problem" });
     const directUpstreamNode = buildNode({ type: "cause" });
-    const indirectUpstreamNode = buildNode({ type: "problem" });
+    const indirectUpstreamNode = buildNode({ type: "cause" });
 
     const graph: Graph = {
       nodes: [fromNode, directUpstreamNode, indirectUpstreamNode],
@@ -52,9 +50,9 @@ describe("upstreamNodes", () => {
   });
 
   test("finds upstream nodes even if there is a cycle", () => {
-    const fromNode = buildNode({ type: "cause" });
+    const fromNode = buildNode({ type: "problem" });
     const directUpstreamNode = buildNode({ type: "cause" });
-    const indirectUpstreamNode = buildNode({ type: "problem" });
+    const indirectUpstreamNode = buildNode({ type: "cause" });
 
     const graph: Graph = {
       nodes: [fromNode, directUpstreamNode, indirectUpstreamNode],
@@ -82,11 +80,11 @@ describe("upstreamNodes", () => {
   });
 
   test("finds only upstream nodes through edges with labels if labels are passed", () => {
-    const fromNode = buildNode({ type: "cause" });
+    const fromNode = buildNode({ type: "problem" });
     const label1DirectUpstreamNode = buildNode({ type: "cause" });
-    const label2IndirectUpstreamNode = buildNode({ type: "problem" });
+    const label2IndirectUpstreamNode = buildNode({ type: "cause" });
     const notLabelDirectUpstreamNode = buildNode({ type: "cause" });
-    const label1IndirectUpstreamNodeThroughNotLabel = buildNode({ type: "problem" });
+    const label1IndirectUpstreamNodeThroughNotLabel = buildNode({ type: "cause" });
 
     const graph: Graph = {
       nodes: [
@@ -131,15 +129,13 @@ describe("upstreamNodes", () => {
 
 describe("downstreamNodes", () => {
   test("finds nothing when there are no downstream nodes", () => {
-    const fromNode = buildNode({ type: "problem" });
+    const fromNode = buildNode({ type: "cause" });
     const randomNode1 = buildNode({ type: "cause" });
     const randomNode2 = buildNode({ type: "problem" });
 
     const graph: Graph = {
       nodes: [fromNode, randomNode1, randomNode2],
-      edges: [
-        buildEdge({ sourceId: randomNode2.id, targetId: randomNode1.id, relation: "causes" }),
-      ],
+      edges: [buildEdge({ sourceId: randomNode1.id, targetId: fromNode.id, relation: "causes" })],
     };
 
     const found = downstreamNodes(fromNode, graph);
@@ -148,9 +144,9 @@ describe("downstreamNodes", () => {
   });
 
   test("finds direct and indirect downstream nodes", () => {
-    const fromNode = buildNode({ type: "problem" });
+    const fromNode = buildNode({ type: "cause" });
     const directDownstreamNode = buildNode({ type: "cause" });
-    const indirectDownstreamNode = buildNode({ type: "cause" });
+    const indirectDownstreamNode = buildNode({ type: "problem" });
 
     const graph: Graph = {
       nodes: [fromNode, directDownstreamNode, indirectDownstreamNode],
@@ -173,9 +169,9 @@ describe("downstreamNodes", () => {
   });
 
   test("finds downstream nodes even if there is a cycle", () => {
-    const fromNode = buildNode({ type: "problem" });
+    const fromNode = buildNode({ type: "cause" });
     const directDownstreamNode = buildNode({ type: "cause" });
-    const indirectDownstreamNode = buildNode({ type: "cause" });
+    const indirectDownstreamNode = buildNode({ type: "problem" });
 
     const graph: Graph = {
       nodes: [fromNode, directDownstreamNode, indirectDownstreamNode],
@@ -203,7 +199,7 @@ describe("downstreamNodes", () => {
   });
 
   test("finds only downstream nodes through edges with labels if labels are passed", () => {
-    const fromNode = buildNode({ type: "problem" });
+    const fromNode = buildNode({ type: "cause" });
     const label1DirectDownstreamNode = buildNode({ type: "cause" });
     const label2IndirectDownstreamNode = buildNode({ type: "cause" });
     const notLabelDirectDownstreamNode = buildNode({ type: "cause" });

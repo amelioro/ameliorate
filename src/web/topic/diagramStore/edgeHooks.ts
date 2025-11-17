@@ -28,7 +28,7 @@ export const useIsTableEdge = (edgeId: string) => {
       if (edge.label !== "fulfills") return false;
 
       const [sourceNode, targetNode] = nodes(edge, state.nodes);
-      return sourceNode.type === "criterion" && targetNode.type === "solution";
+      return sourceNode.type === "solution" && targetNode.type === "criterion";
     } catch {
       return false;
     }
