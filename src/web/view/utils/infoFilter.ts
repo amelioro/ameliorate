@@ -85,7 +85,7 @@ const applyProblemFilter = (graph: Graph, filters: ProblemOptions) => {
   if (filters.problemDetails.includes("solutions")) detailEdges.push("addresses", "accomplishes");
   /* eslint-enable functional/immutable-data */
 
-  const problemDetails = downstreamNodes(centralProblem, graph, detailEdges);
+  const problemDetails = upstreamNodes(centralProblem, graph, detailEdges);
 
   const solutions = problemDetails.filter((detail) => detail.type === "solution");
   const criteria = problemDetails.filter((detail) => detail.type === "criterion");
@@ -139,9 +139,9 @@ export const applyTradeoffsFilter = (graph: Graph, filters: TradeoffsOptions) =>
   const centralProblem = graph.nodes.find((node) => node.id === filters.centralProblemId);
   if (!centralProblem) return graph;
 
-  const problemTargets = targetNodes(centralProblem, graph);
-  const solutions = problemTargets.filter((target) => target.type === "solution");
-  const criteria = problemTargets.filter((target) => target.type === "criterion");
+  const problemSources = sourceNodes(centralProblem, graph);
+  const solutions = problemSources.filter((source) => source.type === "solution");
+  const criteria = problemSources.filter((source) => source.type === "criterion");
 
   const { selectedSolutions, selectedCriteria } = getSelectedTradeoffNodes(
     solutions,
@@ -149,9 +149,9 @@ export const applyTradeoffsFilter = (graph: Graph, filters: TradeoffsOptions) =>
     filters,
   );
 
-  const criteriaSources = selectedCriteria.flatMap((criterion) =>
+  const criteriaTargets = selectedCriteria.flatMap((criterion) =>
     // filter problem because we want to separately include the problem regardless of if we're showing criteria, for context
-    sourceNodes(criterion, graph).filter((source) => source.type !== "problem"),
+    targetNodes(criterion, graph).filter((target) => target.type !== "problem"),
   );
 
   const filteredSolutionDetails = getSolutionDetails(
@@ -162,7 +162,7 @@ export const applyTradeoffsFilter = (graph: Graph, filters: TradeoffsOptions) =>
   );
 
   const nodes = uniqBy(
-    [...selectedSolutions, ...selectedCriteria, ...criteriaSources, ...filteredSolutionDetails],
+    [...selectedSolutions, ...selectedCriteria, ...criteriaTargets, ...filteredSolutionDetails],
     (node) => node.id,
   );
   const edges = getRelevantEdges(nodes, graph);
@@ -178,20 +178,22 @@ const getSolutionDetails = (
 ) => {
   if (detailType === "none") return [];
 
-  const upstreamDetails = solutions.flatMap((solution) =>
-    upstreamNodes(solution, graph, ["has", "creates"]),
+  const downstreamDetails = solutions.flatMap((solution) =>
+    downstreamNodes(solution, graph, ["has", "creates"]),
   );
 
-  const downstreamDetails = solutions.flatMap((solution) =>
-    downstreamNodes(solution, graph, ["createdBy", "obstacleOf", "accomplishes", "contingencyFor"]),
+  const upstreamDetails = solutions.flatMap((solution) =>
+    upstreamNodes(solution, graph, ["createdBy", "obstacleOf", "accomplishes", "contingencyFor"]),
   );
 
   const criteriaIds = criteria.map((criterion) => criterion.id);
 
   return detailType === "all"
-    ? [...upstreamDetails, ...downstreamDetails]
-    : upstreamDetails.filter((detail) =>
-        upstreamNodes(detail, graph).some((upstream) => criteriaIds.includes(upstream.id)),
+    ? [...downstreamDetails, ...upstreamDetails]
+    : downstreamDetails.filter((detail) =>
+        downstreamNodes(detail, graph).some((downstreamNode) =>
+          criteriaIds.includes(downstreamNode.id),
+        ),
       );
 };
 
@@ -255,7 +257,7 @@ export type SolutionOptions = z.infer<typeof solutionSchema>;
 
 /**
  * Description:
- * - Show question, depth-1 source nodes for context, all recursive downstream questions, answers, facts,
+ * - Show question, depth-1 target nodes for context, all recursive upstream questions, answers, facts,
  * sources.
  *
  * Use cases:
@@ -265,10 +267,10 @@ const applyQuestionFilter = (graph: Graph, filters: QuestionOptions) => {
   const centralQuestion = graph.nodes.find((node) => node.id === filters.centralQuestionId);
   if (!centralQuestion) return graph;
 
-  const sourcesForContext = sourceNodes(centralQuestion, graph, false);
-  const researchDownstream = downstreamNodes(centralQuestion, graph, researchRelationNames);
+  const targetsForContext = targetNodes(centralQuestion, graph, false);
+  const researchUpstream = upstreamNodes(centralQuestion, graph, researchRelationNames);
 
-  const nodes = [centralQuestion, ...sourcesForContext, ...researchDownstream];
+  const nodes = [centralQuestion, ...targetsForContext, ...researchUpstream];
   const edges = getRelevantEdges(nodes, graph);
 
   return { nodes, edges };
@@ -293,7 +295,7 @@ const applySourceFilter = (graph: Graph, filters: SourceOptions) => {
   const centralSource = graph.nodes.find((node) => node.id === filters.centralSourceId);
   if (!centralSource) return graph;
 
-  const details = upstreamNodes(centralSource, graph, [
+  const details = downstreamNodes(centralSource, graph, [
     "sourceOf",
     "relevantFor",
     "mentions",
@@ -324,7 +326,7 @@ const applyRootClaimFilter = (graph: Graph, filters: RootClaimOptions) => {
   const centralRootClaim = graph.nodes.find((node) => node.id === filters.centralRootClaimId);
   if (!centralRootClaim) return graph;
 
-  const justification = downstreamNodes(centralRootClaim, graph, ["supports", "critiques"]);
+  const justification = upstreamNodes(centralRootClaim, graph, ["supports", "critiques"]);
 
   const nodes = [centralRootClaim, ...justification];
   const edges = getRelevantEdges(nodes, graph);

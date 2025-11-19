@@ -23,19 +23,47 @@ export const getIncomingNodesByRelationDescription = (summaryNode: Node, graph: 
   const nodeInfoCategory = getNodeInfoCategory(summaryNode.type);
 
   /* eslint-disable functional/immutable-data, no-param-reassign, functional/immutable-data -- seems easiest to do this mutably */
+  const sourcesByRelationDescription = graph.edges
+    .filter(
+      (edge) =>
+        edge.target === summaryNode.id && getEdgeInfoCategory(edge.label) === nodeInfoCategory,
+    )
+    .reduce<Record<string, Node[]>>((acc, incomingEdge) => {
+      const incomingNode = findNodeOrThrow(incomingEdge.source, graph.nodes);
+      const relationDescription = getDirectedRelationDescription({
+        source: incomingNode.type,
+        name: incomingEdge.label,
+        target: summaryNode.type,
+        as: "source",
+      });
+      if (acc[relationDescription] === undefined) acc[relationDescription] = [];
+      acc[relationDescription].push(incomingNode);
+
+      return acc;
+    }, {});
+  /* eslint-disable functional/immutable-data, no-param-reassign, functional/immutable-data */
+
+  return sourcesByRelationDescription;
+};
+
+export const getOutgoingNodesByRelationDescription = (summaryNode: Node, graph: Graph) => {
+  const nodeInfoCategory = getNodeInfoCategory(summaryNode.type);
+
+  /* eslint-disable functional/immutable-data, no-param-reassign, functional/immutable-data -- seems easiest to do this mutably */
   const targetsByRelationDescription = graph.edges
     .filter(
       (edge) =>
         edge.source === summaryNode.id && getEdgeInfoCategory(edge.label) === nodeInfoCategory,
     )
-    .reduce<Record<string, Node[]>>((acc, targetEdge) => {
-      const targetNode = findNodeOrThrow(targetEdge.target, graph.nodes);
+    .reduce<Record<string, Node[]>>((acc, sourceEdge) => {
+      const targetNode = findNodeOrThrow(sourceEdge.target, graph.nodes);
       const relationDescription = getDirectedRelationDescription({
-        target: targetNode.type,
-        name: targetEdge.label,
         source: summaryNode.type,
+        name: sourceEdge.label,
+        target: targetNode.type,
         as: "target",
       });
+
       if (acc[relationDescription] === undefined) acc[relationDescription] = [];
       acc[relationDescription].push(targetNode);
 
@@ -46,72 +74,47 @@ export const getIncomingNodesByRelationDescription = (summaryNode: Node, graph: 
   return targetsByRelationDescription;
 };
 
-export const getOutgoingNodesByRelationDescription = (summaryNode: Node, graph: Graph) => {
-  const nodeInfoCategory = getNodeInfoCategory(summaryNode.type);
-
-  /* eslint-disable functional/immutable-data, no-param-reassign, functional/immutable-data -- seems easiest to do this mutably */
-  const sourcesByRelationDescription = graph.edges
-    .filter(
-      (edge) =>
-        edge.target === summaryNode.id && getEdgeInfoCategory(edge.label) === nodeInfoCategory,
-    )
-    .reduce<Record<string, Node[]>>((acc, sourceEdge) => {
-      const sourceNode = findNodeOrThrow(sourceEdge.source, graph.nodes);
-      const relationDescription = getDirectedRelationDescription({
-        target: summaryNode.type,
-        name: sourceEdge.label,
-        source: sourceNode.type,
-        as: "source",
-      });
-
-      if (acc[relationDescription] === undefined) acc[relationDescription] = [];
-      acc[relationDescription].push(sourceNode);
-
-      return acc;
-    }, {});
-  /* eslint-disable functional/immutable-data, no-param-reassign, functional/immutable-data */
-
-  return sourcesByRelationDescription;
-};
-
 // solution
 export const componentsDirectedSearchRelations: DirectedSearchRelation[] = [
-  { toDirection: "source", relationNames: ["has"] },
+  { toDirection: "target", relationNames: ["has"] },
 ];
 
 // TODO: test this
 export const getComponents = (summaryNode: Node, graph: Graph) => {
-  const components = upstreamNodes(summaryNode, graph, ["has"]);
+  const components = downstreamNodes(summaryNode, graph, ["has"]);
 
   return splitNodesByDirectAndIndirect(components);
 };
 
 export const addressedDirectedSearchRelations: DirectedSearchRelation[] = [
-  { toDirection: "source", relationNames: ["addresses"] },
+  { toDirection: "target", relationNames: ["addresses"] },
 ];
 
 export const getAddressed = (summaryNode: Node, graph: Graph) => {
-  const addressed = upstreamNodes(summaryNode, graph, ["has", "creates"], ["addresses"]);
+  const addressed = downstreamNodes(summaryNode, graph, ["has", "creates"], ["addresses"]);
 
   return splitNodesByDirectAndIndirect(addressed);
 };
 
 export const obstaclesDirectedSearchRelations: DirectedSearchRelation[] = [
-  { toDirection: "target", relationNames: ["obstacleOf"], toNodeTypes: badNodeTypes },
+  { toDirection: "source", relationNames: ["obstacleOf"], toNodeTypes: badNodeTypes },
 ];
 
 // TODO: test this
 export const getObstacles = (summaryNode: Node, graph: Graph) => {
-  const directObstacles = downstreamNodes(summaryNode, graph, [], ["obstacleOf"]); // empty edgesToTraverse because we only want direct obstacles
+  const directObstacles = upstreamNodes(summaryNode, graph, [], ["obstacleOf"]); // empty edgesToTraverse because we only want direct obstacles
   const directObstaclesIds = directObstacles.map((node) => node.id);
 
-  const componentsAndDetriments = upstreamNodes(summaryNode, graph, ["has", "creates"], undefined, [
-    "solutionComponent",
-    "detriment",
-  ]).sort((node1, node2) => node1.layersAway - node2.layersAway); // ensure indirect obstacles are sorted by how far away they are, for convenience
+  const componentsAndDetriments = downstreamNodes(
+    summaryNode,
+    graph,
+    ["has", "creates"],
+    undefined,
+    ["solutionComponent", "detriment"],
+  ).sort((node1, node2) => node1.layersAway - node2.layersAway); // ensure indirect obstacles are sorted by how far away they are, for convenience
 
   const indirectObstacles = componentsAndDetriments
-    .flatMap((node) => downstreamNodes(node, graph, [], ["obstacleOf"]))
+    .flatMap((node) => upstreamNodes(node, graph, [], ["obstacleOf"]))
     .filter((node) => !directObstaclesIds.includes(node.id));
 
   return { directNodes: directObstacles, indirectNodes: indirectObstacles };
@@ -119,11 +122,11 @@ export const getObstacles = (summaryNode: Node, graph: Graph) => {
 
 // problem
 export const solutionsDirectedSearchRelations: DirectedSearchRelation[] = [
-  { toDirection: "target", relationNames: ["addresses", "mitigates"] },
+  { toDirection: "source", relationNames: ["addresses", "mitigates"] },
 ];
 
 export const getSolutions = (summaryNode: Node, graph: Graph) => {
-  const concerns = downstreamNodes(
+  const concerns = upstreamNodes(
     summaryNode,
     graph,
     ["causes", "subproblemOf", "createdBy"],
@@ -131,12 +134,12 @@ export const getSolutions = (summaryNode: Node, graph: Graph) => {
     badNodeTypes,
   );
   const concernSolutions = concerns.flatMap((concern) =>
-    downstreamNodes(concern, graph, ["addresses", "mitigates"], ["addresses", "mitigates"]),
+    upstreamNodes(concern, graph, ["addresses", "mitigates"], ["addresses", "mitigates"]),
   );
 
-  const immediateSolutions = downstreamNodes(summaryNode, graph, [], ["addresses", "mitigates"]);
+  const immediateSolutions = upstreamNodes(summaryNode, graph, [], ["addresses", "mitigates"]);
   const indirectSolutions = immediateSolutions.flatMap((solution) =>
-    downstreamNodes(solution, graph, ["has", "creates"]),
+    upstreamNodes(solution, graph, ["has", "creates"]),
   );
 
   const solutions = uniqBy(
@@ -157,61 +160,67 @@ export const getSolutions = (summaryNode: Node, graph: Graph) => {
 
 // effect
 export const solutionBenefitsDirectedSearchRelations: DirectedSearchRelation[] = [
-  { toDirection: "source", relationNames: ["creates"], toNodeTypes: ["benefit"] },
+  { toDirection: "target", relationNames: ["creates"], toNodeTypes: ["benefit"] },
 ];
 
 export const getSolutionBenefits = (summaryNode: Node, graph: Graph) => {
-  const benefits = upstreamNodes(summaryNode, graph, ["has", "creates"], ["creates"], ["benefit"]);
+  const benefits = downstreamNodes(
+    summaryNode,
+    graph,
+    ["has", "creates"],
+    ["creates"],
+    ["benefit"],
+  );
 
   return splitNodesByDirectAndIndirect(benefits);
 };
 
 export const detrimentsDirectedSearchRelations: DirectedSearchRelation[] = [
-  { toDirection: "source", relationNames: ["creates", "causes"], toNodeTypes: badNodeTypes },
-  { toDirection: "target", relationNames: ["createdBy"], toNodeTypes: badNodeTypes },
+  { toDirection: "target", relationNames: ["creates", "causes"], toNodeTypes: badNodeTypes },
+  { toDirection: "source", relationNames: ["createdBy"], toNodeTypes: badNodeTypes },
 ];
 
 // TODO: test this
 export const getDetriments = (summaryNode: Node, graph: Graph) => {
   const detriments = [
-    ...upstreamNodes(
+    ...downstreamNodes(
       summaryNode,
       graph,
       ["has", "creates", "causes"],
       ["creates", "causes"],
       badNodeTypes,
     ),
-    ...downstreamNodes(summaryNode, graph, ["createdBy"], ["createdBy"], badNodeTypes),
+    ...upstreamNodes(summaryNode, graph, ["createdBy"], ["createdBy"], badNodeTypes),
   ];
 
   return splitNodesByDirectAndIndirect(detriments);
 };
 
 export const effectsDirectedSearchRelations: DirectedSearchRelation[] = [
-  { toDirection: "source", relationNames: ["creates", "causes"] },
-  { toDirection: "target", relationNames: ["createdBy"] },
+  { toDirection: "target", relationNames: ["creates", "causes"] },
+  { toDirection: "source", relationNames: ["createdBy"] },
 ];
 
 // TODO: test this
 export const getEffects = (summaryNode: Node, graph: Graph) => {
   const effects = [
-    ...upstreamNodes(summaryNode, graph, ["has", "creates", "causes"], ["creates", "causes"]),
-    ...downstreamNodes(summaryNode, graph, ["createdBy"], ["createdBy"]),
+    ...downstreamNodes(summaryNode, graph, ["has", "creates", "causes"], ["creates", "causes"]),
+    ...upstreamNodes(summaryNode, graph, ["createdBy"], ["createdBy"]),
   ];
 
   return splitNodesByDirectAndIndirect(effects);
 };
 
 export const causesDirectedSearchRelations: DirectedSearchRelation[] = [
-  { toDirection: "source", relationNames: ["createdBy"] },
-  { toDirection: "target", relationNames: ["has", "causes", "creates"] },
+  { toDirection: "target", relationNames: ["createdBy"] },
+  { toDirection: "source", relationNames: ["has", "causes", "creates"] },
 ];
 
 // TODO: test this
 export const getCauses = (summaryNode: Node, graph: Graph) => {
   const causes = [
-    ...upstreamNodes(summaryNode, graph, ["createdBy"], ["createdBy"]),
-    ...downstreamNodes(
+    ...downstreamNodes(summaryNode, graph, ["createdBy"], ["createdBy"]),
+    ...upstreamNodes(
       summaryNode,
       graph,
       ["has", "causes", "creates"],

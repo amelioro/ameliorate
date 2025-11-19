@@ -16,9 +16,9 @@ export const hideProblemCriterionSolutionEdges = (nodes: Node[], edges: Edge[]) 
   const solutionIds = nodes.filter((node) => node.type === "solution").map((node) => node.id);
 
   return edges.filter((edge) => {
-    if (problemIds.includes(edge.source) && criterionIds.includes(edge.target)) return false;
-    if (criterionIds.includes(edge.source) && solutionIds.includes(edge.target)) return false;
-    if (problemIds.includes(edge.source) && solutionIds.includes(edge.target)) return false;
+    if (criterionIds.includes(edge.source) && problemIds.includes(edge.target)) return false;
+    if (solutionIds.includes(edge.source) && criterionIds.includes(edge.target)) return false;
+    if (solutionIds.includes(edge.source) && problemIds.includes(edge.target)) return false;
 
     return true;
   });

@@ -9,7 +9,7 @@ import { getEffectType } from "@/web/topic/utils/effect";
 import { type Edge, type Node } from "@/web/topic/utils/graph";
 
 export type Orientation = "DOWN" | "UP" | "RIGHT" | "LEFT";
-export const orientation: Orientation = "DOWN" as Orientation; // not constant to allow potential other orientations in the future, and keeping code that currently exists for handling "LEFT" orientation
+export const orientation: Orientation = "UP" as Orientation; // not constant to allow potential other orientations in the future, and keeping code that currently exists for handling "LEFT" orientation
 
 /**
  * Using the highest-width of the common labels ("subproblem of"; excludes "contingency for" because
@@ -23,7 +23,7 @@ export const labelWidthPx = 115;
 
 const elk = new ELK();
 
-// sort by source priority, then target priority
+// sort by target priority, then source priority
 const compareEdges = (edge1: Edge, edge2: Edge, nodes: Node[]) => {
   const source1 = nodes.find((node) => node.id === edge1.source);
   const source2 = nodes.find((node) => node.id === edge2.source);
@@ -33,27 +33,27 @@ const compareEdges = (edge1: Edge, edge2: Edge, nodes: Node[]) => {
   if (!source1 || !source2 || !target1 || !target2)
     throw new Error("Edge source or target not found");
 
-  const sourceCompare = compareNodesByType(source1, source2);
-  if (sourceCompare !== 0) return sourceCompare;
+  const targetCompare = compareNodesByType(target1, target2);
+  if (targetCompare !== 0) return targetCompare;
 
-  return compareNodesByType(target1, target2);
+  return compareNodesByType(source1, source2);
 };
 
 /**
  * "null" means no partition; the node will be placed in any layer that makes sense based on edges.
- * "[number]" means the node will be placed in a layer higher than nodes with lower [number], and lower than nodes with higher [number].
+ * For "UP" orientation, a lower partitioned node will be placed in a layer lower than nodes of a higher partition.
  * "calculated" is a string that will error if it remains; it should be replaced before layout.
  */
 const partitionOrders: { [type in NodeType]: string } = {
   // topic
-  problem: "0",
-  cause: "0",
-  criterion: "1",
+  problem: "3",
+  cause: "3",
+  criterion: "2",
   effect: "calculated",
   benefit: "calculated",
   detriment: "calculated",
-  solutionComponent: "2",
-  solution: "3",
+  solutionComponent: "1",
+  solution: "0",
   obstacle: "null",
   mitigationComponent: "null",
   mitigation: "null",
@@ -76,11 +76,12 @@ const partitionOrders: { [type in NodeType]: string } = {
 };
 
 const calculatePartition = (node: Node, diagram: Diagram) => {
+  // TODO?: if we want to support flipping orientation (to "DOWN"), we could take the resulting value from this method and flip it (e.g. 100 - X)
   if (isEffect(node.type)) {
     const effectType = getEffectType(node, diagram);
 
-    if (effectType === "problem") return "0";
-    else if (effectType === "solution") return "2";
+    if (effectType === "problem") return "3";
+    else if (effectType === "solution") return "1";
     else return "null";
   } else {
     return partitionOrders[node.type];
@@ -194,18 +195,18 @@ export const layout = async (
     // other placement strategies seem to either spread nodes out too much, or ignore edges between layers
     "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX",
     // allows grouping nodes by type (within a layer) when nodes are sorted by type
-    // tried using `position` to do this but it doesn't group nodes near their source node
+    // tried using `position` to do this but it doesn't group nodes near their target node
     "elk.layered.considerModelOrder.strategy": "PREFER_EDGES",
     // These spacings are just what roughly seem to look good, avoiding add buttons from overlapping
     // with edge labels.
     // Note: Edge labels are given layers like nodes, so we need to halve the spacing between layers
     // when including labels in the layout, in order to keep the same distance between nodes.
     "elk.layered.spacing.nodeNodeBetweenLayers":
-      orientation === "DOWN"
+      orientation === "UP"
         ? scalePxViaDefaultFontSize(avoidEdgeLabelOverlap ? 75 : 150).toString()
         : scalePxViaDefaultFontSize(avoidEdgeLabelOverlap ? 55 : 110).toString(),
     "elk.spacing.nodeNode":
-      orientation === "DOWN"
+      orientation === "UP"
         ? scalePxViaDefaultFontSize(20).toString()
         : scalePxViaDefaultFontSize(50).toString(),
     // allow nodes to be partitioned into layers by type

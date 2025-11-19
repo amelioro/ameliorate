@@ -17,15 +17,14 @@ export const IncomingColumn = ({ summaryNode }: Props) => {
   const incomingByDescription = useIncomingNodesByRelationDescription(summaryNode);
   const effectType = useEffectType(summaryNode.id);
 
-  // edges point from target to source right now, so incoming nodes are targets
-  const defaultChildAddableRelations = addableRelationsFrom(
+  const defaultSourceAddableRelations = addableRelationsFrom(
     summaryNode.type,
-    "target",
+    "source",
     false,
     effectType,
   );
 
-  const addableRelations = defaultChildAddableRelations;
+  const addableRelations = defaultSourceAddableRelations;
 
   const AddButtons = (
     <div className="pb-1.5">

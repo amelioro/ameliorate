@@ -84,7 +84,7 @@
                   "critiques",
                   "relatesTo"
                 ],
-                "description": "Note: this unintuitively reads from the target node to the source node. E.g. target `Solution` node `addresses` source `Problem` node."
+                "description": "This reads from the source node to the target node. E.g. source `Solution` node `addresses` target `Problem` node."
               },
               "notes": {
                 "type": "string",
@@ -353,254 +353,254 @@
           {
             "type": "creates",
             "notes": "",
-            "tempSourceId": 12,
-            "tempTargetId": 10
+            "tempSourceId": 10,
+            "tempTargetId": 12
           },
           {
             "type": "causes",
             "notes": "",
-            "tempSourceId": 13,
+            "tempSourceId": 14,
+            "tempTargetId": 13
+          },
+          {
+            "type": "causes",
+            "notes": "",
+            "tempSourceId": 15,
             "tempTargetId": 14
           },
           {
             "type": "causes",
             "notes": "",
-            "tempSourceId": 14,
-            "tempTargetId": 15
-          },
-          {
-            "type": "causes",
-            "notes": "",
-            "tempSourceId": 14,
-            "tempTargetId": 16
+            "tempSourceId": 16,
+            "tempTargetId": 14
           },
           {
             "type": "addresses",
             "notes": "",
-            "tempSourceId": 13,
-            "tempTargetId": 12
-          },
-          {
-            "type": "creates",
-            "notes": "",
             "tempSourceId": 12,
-            "tempTargetId": 11
+            "tempTargetId": 13
           },
           {
             "type": "creates",
             "notes": "",
             "tempSourceId": 11,
-            "tempTargetId": 19
+            "tempTargetId": 12
           },
           {
             "type": "creates",
             "notes": "",
-            "tempSourceId": 10,
-            "tempTargetId": 19
-          },
-          {
-            "type": "has",
-            "notes": "",
-            "tempSourceId": 21,
-            "tempTargetId": 9
-          },
-          {
-            "type": "has",
-            "notes": "",
-            "tempSourceId": 22,
-            "tempTargetId": 21
-          },
-          {
-            "type": "has",
-            "notes": "",
-            "tempSourceId": 23,
-            "tempTargetId": 21
-          },
-          {
-            "type": "has",
-            "notes": "",
-            "tempSourceId": 24,
-            "tempTargetId": 21
-          },
-          {
-            "type": "has",
-            "notes": "",
-            "tempSourceId": 26,
-            "tempTargetId": 9
-          },
-          {
-            "type": "has",
-            "notes": "",
-            "tempSourceId": 27,
-            "tempTargetId": 26
-          },
-          {
-            "type": "has",
-            "notes": "",
-            "tempSourceId": 28,
-            "tempTargetId": 26
-          },
-          {
-            "type": "has",
-            "notes": "",
-            "tempSourceId": 29,
-            "tempTargetId": 9
-          },
-          {
-            "type": "has",
-            "notes": "",
-            "tempSourceId": 30,
-            "tempTargetId": 29
-          },
-          {
-            "type": "has",
-            "notes": "",
-            "tempSourceId": 32,
-            "tempTargetId": 29
-          },
-          {
-            "type": "has",
-            "notes": "",
-            "tempSourceId": 33,
-            "tempTargetId": 29
-          },
-          {
-            "type": "has",
-            "notes": "",
-            "tempSourceId": 17,
-            "tempTargetId": 9
-          },
-          {
-            "type": "has",
-            "notes": "",
-            "tempSourceId": 18,
-            "tempTargetId": 17
-          },
-          {
-            "type": "has",
-            "notes": "",
-            "tempSourceId": 20,
-            "tempTargetId": 17
-          },
-          {
-            "type": "has",
-            "notes": "",
-            "tempSourceId": 25,
-            "tempTargetId": 9
-          },
-          {
-            "type": "has",
-            "notes": "",
-            "tempSourceId": 31,
-            "tempTargetId": 25
-          },
-          {
-            "type": "has",
-            "notes": "",
-            "tempSourceId": 34,
-            "tempTargetId": 25
-          },
-          {
-            "type": "has",
-            "notes": "",
-            "tempSourceId": 35,
-            "tempTargetId": 34
-          },
-          {
-            "type": "has",
-            "notes": "",
-            "tempSourceId": 36,
-            "tempTargetId": 34
-          },
-          {
-            "type": "has",
-            "notes": "",
-            "tempSourceId": 37,
-            "tempTargetId": 34
-          },
-          {
-            "type": "has",
-            "notes": "",
-            "tempSourceId": 0,
-            "tempTargetId": 9
-          },
-          {
-            "type": "has",
-            "notes": "",
-            "tempSourceId": 1,
-            "tempTargetId": 0
-          },
-          {
-            "type": "has",
-            "notes": "",
-            "tempSourceId": 2,
-            "tempTargetId": 0
-          },
-          {
-            "type": "has",
-            "notes": "",
-            "tempSourceId": 3,
-            "tempTargetId": 0
-          },
-          {
-            "type": "creates",
-            "notes": "",
-            "tempSourceId": 4,
+            "tempSourceId": 19,
             "tempTargetId": 11
           },
           {
             "type": "creates",
             "notes": "",
-            "tempSourceId": 5,
+            "tempSourceId": 19,
+            "tempTargetId": 10
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 9,
+            "tempTargetId": 21
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 21,
+            "tempTargetId": 22
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 21,
+            "tempTargetId": 23
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 21,
+            "tempTargetId": 24
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 9,
+            "tempTargetId": 26
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 26,
+            "tempTargetId": 27
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 26,
+            "tempTargetId": 28
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 9,
+            "tempTargetId": 29
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 29,
+            "tempTargetId": 30
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 29,
+            "tempTargetId": 32
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 29,
+            "tempTargetId": 33
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 9,
+            "tempTargetId": 17
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 17,
+            "tempTargetId": 18
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 17,
+            "tempTargetId": 20
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 9,
+            "tempTargetId": 25
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 25,
+            "tempTargetId": 31
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 25,
+            "tempTargetId": 34
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 34,
+            "tempTargetId": 35
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 34,
+            "tempTargetId": 36
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 34,
+            "tempTargetId": 37
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 9,
+            "tempTargetId": 0
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 0,
+            "tempTargetId": 1
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 0,
+            "tempTargetId": 2
+          },
+          {
+            "type": "has",
+            "notes": "",
+            "tempSourceId": 0,
+            "tempTargetId": 3
+          },
+          {
+            "type": "creates",
+            "notes": "",
+            "tempSourceId": 11,
+            "tempTargetId": 4
+          },
+          {
+            "type": "creates",
+            "notes": "",
+            "tempSourceId": 19,
+            "tempTargetId": 5
+          },
+          {
+            "type": "creates",
+            "notes": "",
+            "tempSourceId": 17,
             "tempTargetId": 19
           },
           {
             "type": "creates",
             "notes": "",
-            "tempSourceId": 19,
-            "tempTargetId": 17
+            "tempSourceId": 26,
+            "tempTargetId": 19
           },
           {
             "type": "creates",
             "notes": "",
-            "tempSourceId": 19,
-            "tempTargetId": 26
+            "tempSourceId": 29,
+            "tempTargetId": 19
           },
           {
             "type": "creates",
             "notes": "",
-            "tempSourceId": 19,
-            "tempTargetId": 29
-          },
-          {
-            "type": "creates",
-            "notes": "",
-            "tempSourceId": 6,
-            "tempTargetId": 26
-          },
-          {
-            "type": "creates",
-            "notes": "",
-            "tempSourceId": 7,
+            "tempSourceId": 26,
             "tempTargetId": 6
           },
           {
             "type": "creates",
             "notes": "",
             "tempSourceId": 6,
-            "tempTargetId": 29
+            "tempTargetId": 7
           },
           {
             "type": "creates",
             "notes": "",
-            "tempSourceId": 8,
-            "tempTargetId": 19
+            "tempSourceId": 29,
+            "tempTargetId": 6
+          },
+          {
+            "type": "creates",
+            "notes": "",
+            "tempSourceId": 19,
+            "tempTargetId": 8
           },
           {
             "type": "addresses",
             "notes": "",
-            "tempSourceId": 14,
-            "tempTargetId": 4
+            "tempSourceId": 4,
+            "tempTargetId": 14
           }
         ]
       }

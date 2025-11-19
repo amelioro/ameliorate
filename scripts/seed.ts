@@ -92,7 +92,7 @@ const seed = async () => {
   );
 
   // edges
-  const createEdge = async (type: RelationName, source: Node, target: Node) => {
+  const createEdge = async (source: Node, type: RelationName, target: Node) => {
     const id = uuid();
 
     return await xprisma.edge.create({
@@ -108,56 +108,56 @@ const seed = async () => {
   };
 
   const edgeFastInexpensive = await createEdge(
+    nodeInexpensive,
     "criterionFor",
     nodeCarsGoingTooFast,
-    nodeInexpensive,
   );
   const edgeFastConveys = await createEdge(
+    nodeConveysReasoning,
     "criterionFor",
     nodeCarsGoingTooFast,
-    nodeConveysReasoning,
   );
-  const edgeFastSlow = await createEdge("criterionFor", nodeCarsGoingTooFast, nodeGetsCarsToSlow);
-  const edgeFastStoplight = await createEdge("addresses", nodeCarsGoingTooFast, nodeStoplight);
-  const edgeFastStopSign = await createEdge("addresses", nodeCarsGoingTooFast, nodeStopSign);
-  const edgeFastBump = await createEdge("addresses", nodeCarsGoingTooFast, nodeSpeedBump);
-  const edgeFastPlay = await createEdge("addresses", nodeCarsGoingTooFast, nodeKidsAtPlaySign);
-  const edgeInexpensiveLight = await createEdge("fulfills", nodeInexpensive, nodeStoplight);
-  const edgeInexpensiveSign = await createEdge("fulfills", nodeInexpensive, nodeStopSign);
-  const edgeInexpensiveBump = await createEdge("fulfills", nodeInexpensive, nodeSpeedBump);
-  const edgeInexpensivePlay = await createEdge("fulfills", nodeInexpensive, nodeKidsAtPlaySign);
-  const edgeConveysLight = await createEdge("fulfills", nodeConveysReasoning, nodeStoplight);
-  const edgeConveysSign = await createEdge("fulfills", nodeConveysReasoning, nodeStopSign);
-  const edgeConveysBump = await createEdge("fulfills", nodeConveysReasoning, nodeSpeedBump);
-  const edgeConveysPlay = await createEdge("fulfills", nodeConveysReasoning, nodeKidsAtPlaySign);
-  const edgeSlowLight = await createEdge("fulfills", nodeGetsCarsToSlow, nodeStoplight);
-  const edgeSlowSign = await createEdge("fulfills", nodeGetsCarsToSlow, nodeStopSign);
-  const edgeSlowBump = await createEdge("fulfills", nodeGetsCarsToSlow, nodeSpeedBump);
-  const edgeSlowPlay = await createEdge("fulfills", nodeGetsCarsToSlow, nodeKidsAtPlaySign);
+  const edgeFastSlow = await createEdge(nodeGetsCarsToSlow, "criterionFor", nodeCarsGoingTooFast);
+  const edgeFastStoplight = await createEdge(nodeStoplight, "addresses", nodeCarsGoingTooFast);
+  const edgeFastStopSign = await createEdge(nodeStopSign, "addresses", nodeCarsGoingTooFast);
+  const edgeFastBump = await createEdge(nodeSpeedBump, "addresses", nodeCarsGoingTooFast);
+  const edgeFastPlay = await createEdge(nodeKidsAtPlaySign, "addresses", nodeCarsGoingTooFast);
+  const edgeInexpensiveLight = await createEdge(nodeStoplight, "fulfills", nodeInexpensive);
+  const edgeInexpensiveSign = await createEdge(nodeStopSign, "fulfills", nodeInexpensive);
+  const edgeInexpensiveBump = await createEdge(nodeSpeedBump, "fulfills", nodeInexpensive);
+  const edgeInexpensivePlay = await createEdge(nodeKidsAtPlaySign, "fulfills", nodeInexpensive);
+  const edgeConveysLight = await createEdge(nodeStoplight, "fulfills", nodeConveysReasoning);
+  const edgeConveysSign = await createEdge(nodeStopSign, "fulfills", nodeConveysReasoning);
+  const edgeConveysBump = await createEdge(nodeSpeedBump, "fulfills", nodeConveysReasoning);
+  const edgeConveysPlay = await createEdge(nodeKidsAtPlaySign, "fulfills", nodeConveysReasoning);
+  const edgeSlowLight = await createEdge(nodeStoplight, "fulfills", nodeGetsCarsToSlow);
+  const edgeSlowSign = await createEdge(nodeStopSign, "fulfills", nodeGetsCarsToSlow);
+  const edgeSlowBump = await createEdge(nodeSpeedBump, "fulfills", nodeGetsCarsToSlow);
+  const edgeSlowPlay = await createEdge(nodeKidsAtPlaySign, "fulfills", nodeGetsCarsToSlow);
   const edgeFastRootClaimLittle = await createEdge(
+    nodeLittleKidsLive,
     "supports",
     nodeCarsGoingTooFastRootClaim,
-    nodeLittleKidsLive,
   );
   const edgeFastImportantMeasured = await createEdge(
+    nodeMeasuredTraffic,
     "critiques",
     nodeCarsGoingTooFastRootClaim,
-    nodeMeasuredTraffic,
   );
   const edgeMeasuredGentrification = await createEdge(
+    nodeGentrification,
     "critiques",
     nodeMeasuredTraffic,
-    nodeGentrification,
   );
   const edgeFastImportantZipping = await createEdge(
+    nodeCarsZipping,
     "supports",
     nodeCarsGoingTooFastRootClaim,
-    nodeCarsZipping,
   );
   const edgeBumpRootClaimThoroughfare = await createEdge(
+    nodeThoroughfare,
     "critiques",
     nodeSpeedBumpRootClaim,
-    nodeThoroughfare,
   );
 
   const nodeInexpensiveLightRootClaim = await createNode(
@@ -171,9 +171,9 @@ const seed = async () => {
     edgeInexpensiveLight,
   );
   const edgeInexpensiveLightWeek = await createEdge(
+    nodeInexpensiveLightWeek,
     "critiques",
     nodeInexpensiveLightRootClaim,
-    nodeInexpensiveLightWeek,
   );
 
   // user scores

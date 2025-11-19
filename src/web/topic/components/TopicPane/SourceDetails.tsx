@@ -17,8 +17,10 @@ export const SourceDetails = ({ sourceNode }: Props) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
 
-  const { nodesRelevantFor, edgesRelevantFor, facts, sources } = useSourceDetails(sourceNode.id);
-  const mentions = facts.concat(sources);
+  const { nodesRelevantFor, edgesRelevantFor, facts, mentionedSources } = useSourceDetails(
+    sourceNode.id,
+  );
+  const mentions = facts.concat(mentionedSources);
 
   return (
     <>
@@ -44,8 +46,8 @@ export const SourceDetails = ({ sourceNode }: Props) => {
             fromNodeId={sourceNode.id}
             // prettier-ignore
             addableRelations={[
-              { target: "source", name: "sourceOf", source: "fact", as: "source", commonality: "common" },
-              { target: "source", name: "mentions", source: "source", as: "source", commonality: "common" },
+              { source: "source", name: "sourceOf", target: "fact", as: "target", commonality: "common" },
+              { source: "source", name: "mentions", target: "source", as: "target", commonality: "common" },
             ]}
             selectNewNode={false}
             className="mb-2"

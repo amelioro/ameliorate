@@ -22,7 +22,7 @@ import { AddNodeButtonGroup } from "@/web/topic/components/Node/AddNodeButtonGro
 import {
   useCriterionSolutionEdges,
   useDefaultNode,
-  useTargetNodes,
+  useSourceNodes,
 } from "@/web/topic/diagramStore/nodeHooks";
 import { useDisplayScores } from "@/web/topic/diagramStore/scoreHooks";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
@@ -195,9 +195,9 @@ export const CriteriaTable = () => {
 
   // if no problem is selected, show the criteria table for a fallback problem
   const problemNode = useDefaultNode("problem", tableFilter.centralProblemId);
-  const targetNodes = useTargetNodes(problemNode?.id);
+  const sourceNodes = useSourceNodes(problemNode?.id);
   const edges = useCriterionSolutionEdges(problemNode?.id);
-  const { scoresByGraphPartId: scores } = useDisplayScores(targetNodes.map((node) => node.id));
+  const { scoresByGraphPartId: scores } = useDisplayScores(sourceNodes.map((node) => node.id));
 
   if (!problemNode)
     return (
@@ -206,8 +206,8 @@ export const CriteriaTable = () => {
       </Box>
     );
 
-  const solutions = targetNodes.filter((targetNode) => targetNode.type === "solution");
-  const criteria = targetNodes.filter((targetNode) => targetNode.type === "criterion");
+  const solutions = sourceNodes.filter((sourceNode) => sourceNode.type === "solution");
+  const criteria = sourceNodes.filter((sourceNode) => sourceNode.type === "criterion");
 
   const { selectedSolutions, selectedCriteria } = getSelectedTradeoffNodes(
     solutions,
@@ -248,8 +248,8 @@ export const CriteriaTable = () => {
               fromNodeId={problemNode.id}
               // prettier-ignore
               addableRelations={[
-                { target: "solution", name: "addresses", source: "problem", as: "target", commonality: "common" },
-                { target: "criterion", name: "criterionFor", source: "problem", as: "target", commonality: "common" },
+                { source: "solution", name: "addresses", target: "problem", as: "source", commonality: "common" },
+                { source: "criterion", name: "criterionFor", target: "problem", as: "source", commonality: "common" },
               ]}
             />
           </>

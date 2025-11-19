@@ -63,7 +63,7 @@ const AddMenuSearch = ({ fromNodeId, addableRelations, className }: AddMenuSearc
         const optionNode = details?.option;
         if (optionNode) {
           if (reason === "selectOption" && optionNode.addableRelationToNode) {
-            if (optionNode.addableRelationToNode.as === "source") {
+            if (optionNode.addableRelationToNode.as === "target") {
               connectNodes(fromNodeId, optionNode.addableRelationToNode.name, optionNode.id);
             } else {
               connectNodes(optionNode.id, optionNode.addableRelationToNode.name, fromNodeId);

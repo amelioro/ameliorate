@@ -32,6 +32,7 @@ export const migrate = (persistedState: any, version: number) => {
     migrate_22_to_23,
     migrate_23_to_24,
     migrate_24_to_25,
+    migrate_25_to_26,
   ];
 
   let state = persistedState;
@@ -599,4 +600,24 @@ const migrate_24_to_25 = (state: FromState24) => {
   });
 
   return state as ToState25;
+};
+
+interface Edge25 {
+  source: string;
+  target: string;
+}
+
+interface State25 {
+  edges: Edge25[];
+}
+
+const migrate_25_to_26 = (state: State25) => {
+  // flip source and target (so that edges point from source to target)
+  state.edges.forEach((edge) => {
+    const originalSource = edge.source;
+    edge.source = edge.target;
+    edge.target = originalSource;
+  });
+
+  return state;
 };

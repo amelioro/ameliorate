@@ -1,4 +1,4 @@
-import { getBezierPath } from "reactflow";
+import { Position, getBezierPath } from "reactflow";
 
 import { throwError } from "@/common/errorHandling";
 import { scalePxViaDefaultFontSize } from "@/pages/_document.page";
@@ -32,10 +32,10 @@ export const getPathDefinitionForEdge = (flowEdge: EdgeProps, avoidEdgeLabelOver
     const [pathDefinition, labelX, labelY] = getBezierPath({
       sourceX: flowEdge.sourceX,
       sourceY: flowEdge.sourceY,
-      sourcePosition: flowEdge.sourcePosition,
+      sourcePosition: Position.Top, // match layout's upward orientation, so source handles will be on top of nodes (react flow's default puts source at bottom of node because orientation defaults downwards)
       targetX: flowEdge.targetX,
       targetY: flowEdge.targetY,
-      targetPosition: flowEdge.targetPosition,
+      targetPosition: Position.Bottom,
     });
 
     return { pathDefinition, labelX, labelY };

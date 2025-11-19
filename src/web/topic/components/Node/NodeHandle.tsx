@@ -53,7 +53,7 @@ const NodeHandleBase = ({ node, direction, orientation }: Props) => {
   // a hidden neighbor for just a moment, before rendering without indicating a hidden neighbor.
   const hiddenNeighbors = useHiddenNodes(neighborsInDirection);
 
-  const handleType = direction === "above" ? "target" : "source";
+  const handleType = direction === "above" ? "source" : "target";
   const isPotentiallyConnectingToThisHandle = useStore(
     (state) =>
       state.connectionStartHandle !== null && state.connectionStartHandle.type !== handleType,
@@ -78,10 +78,10 @@ const NodeHandleBase = ({ node, direction, orientation }: Props) => {
 
   const position =
     direction === "above"
-      ? orientation === "DOWN"
+      ? orientation === "UP"
         ? Position.Top
         : Position.Left
-      : orientation === "DOWN"
+      : orientation === "UP"
         ? Position.Bottom
         : Position.Right;
 

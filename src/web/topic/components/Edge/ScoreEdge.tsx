@@ -116,7 +116,7 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
       style={flowEdge.style}
       className={"react-flow__edge-path" + ` spotlight-${spotlight}`}
       d={pathDefinition}
-      markerStart={`url(#${inReactFlow ? flowMarkerId : nonFlowMarkerId}-${spotlight})`}
+      markerEnd={`url(#${inReactFlow ? flowMarkerId : nonFlowMarkerId}-${spotlight})`}
       spotlight={spotlight}
       onClick={() => setSelected(edge.id)}
       onContextMenu={(event) => openContextMenu(event, { edge })}

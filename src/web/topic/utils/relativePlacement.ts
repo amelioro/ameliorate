@@ -7,13 +7,13 @@ import { Graph, Node } from "@/web/topic/utils/graph";
 export type RelativePlacement = "above" | "below";
 
 export const neighborsAbove = (node: Node, topicGraph: Graph, sameCategoryNodes = true) => {
-  const edgesPointingToNode = topicGraph.edges.filter((edge) => edge.target === node.id);
+  const edgesPointingFromNode = topicGraph.edges.filter((edge) => edge.source === node.id);
 
-  const nodesAbove = edgesPointingToNode.map((edge) => {
-    const sourceNode = topicGraph.nodes.find((nodes) => nodes.id === edge.source);
-    if (!sourceNode) throw errorWithData(`node ${edge.source} not found`, topicGraph);
+  const nodesAbove = edgesPointingFromNode.map((edge) => {
+    const targetNode = topicGraph.nodes.find((nodes) => nodes.id === edge.target);
+    if (!targetNode) throw errorWithData(`node ${edge.target} not found`, topicGraph);
 
-    return sourceNode;
+    return targetNode;
   });
 
   if (sameCategoryNodes) {
@@ -24,13 +24,13 @@ export const neighborsAbove = (node: Node, topicGraph: Graph, sameCategoryNodes 
 };
 
 export const neighborsBelow = (node: Node, topicGraph: Graph, sameCategoryNodes = true) => {
-  const edgesPointingFromNode = topicGraph.edges.filter((edge) => edge.source === node.id);
+  const edgesPointingToNode = topicGraph.edges.filter((edge) => edge.target === node.id);
 
-  const nodesBelow = edgesPointingFromNode.map((edge) => {
-    const targetNode = topicGraph.nodes.find((nodes) => nodes.id === edge.target);
-    if (!targetNode) throw errorWithData(`node ${edge.target} not found`, topicGraph);
+  const nodesBelow = edgesPointingToNode.map((edge) => {
+    const sourceNode = topicGraph.nodes.find((nodes) => nodes.id === edge.source);
+    if (!sourceNode) throw errorWithData(`node ${edge.source} not found`, topicGraph);
 
-    return targetNode;
+    return sourceNode;
   });
 
   if (sameCategoryNodes) {
@@ -56,7 +56,7 @@ export const addableRelationsAbove = (
   unrestrictedAddingFrom: boolean,
   effectType: EffectType,
 ): DirectedToRelationWithCommonality[] => {
-  return addableRelationsFrom(fromNodeType, "source", unrestrictedAddingFrom, effectType);
+  return addableRelationsFrom(fromNodeType, "target", unrestrictedAddingFrom, effectType);
 };
 
 export const addableRelationsBelow = (
@@ -64,5 +64,5 @@ export const addableRelationsBelow = (
   unrestrictedAddingFrom: boolean,
   effectType: EffectType,
 ): DirectedToRelationWithCommonality[] => {
-  return addableRelationsFrom(fromNodeType, "target", unrestrictedAddingFrom, effectType);
+  return addableRelationsFrom(fromNodeType, "source", unrestrictedAddingFrom, effectType);
 };

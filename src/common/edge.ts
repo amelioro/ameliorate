@@ -42,7 +42,7 @@ export const edgeSchema = z.object({
   topicId: z.number(),
   arguedDiagramPartId: z.string().uuid().nullable(),
   type: zRelationNames.describe(
-    "Note: this unintuitively reads from the target node to the source node. E.g. target `Solution` node `addresses` source `Problem` node.",
+    "This reads from the source node to the target node. E.g. source `Solution` node `addresses` target `Problem` node.",
   ),
   customLabel: z
     .string()
@@ -121,7 +121,7 @@ export const reactFlowEdgeSchema = z.object({
    * regular edges can be distinguished. But that sounds like a lot of work and it's hard to tell
    * that it'd be worth it.
    */
-  source: z.string(), // arrows point from target to source
+  source: z.string(), // arrows point from source to target
   /**
    * id of the target graph part. Can be a node or an edge, but most UI edge operations only work
    * with node targets.
@@ -130,7 +130,7 @@ export const reactFlowEdgeSchema = z.object({
    * regular edges can be distinguished. But that sounds like a lot of work and it's hard to tell
    * that it'd be worth it.
    */
-  target: z.string(), // arrows point from target to source
+  target: z.string(), // arrows point from source to target
   type: z.literal("FlowEdge"),
 });
 

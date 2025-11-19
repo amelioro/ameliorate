@@ -27,14 +27,14 @@ export const DetailsResearchSection = ({ node }: Props) => {
   // prettier-ignore
   const addableRelations: DirectedToRelationWithCommonality[] = (
     [
-      { target: "question", name: "asksAbout", source: node.type, as: "target", commonality: "common" },
+      { source: "question", name: "asksAbout", target: node.type, as: "source", commonality: "common" },
     ] as DirectedToRelationWithCommonality[]
   ).concat(
     // disallow facts and sources as relevant for other facts and sources, because that gets confusing
     node.type !== "fact" && node.type !== "source"
       ? [
-          { target: "fact", name: "relevantFor", source: node.type, as: "target", commonality: "common" },
-          { target: "source", name: "relevantFor", source: node.type, as: "target", commonality: "common" },
+          { source: "fact", name: "relevantFor", target: node.type, as: "source", commonality: "common" },
+          { source: "source", name: "relevantFor", target: node.type, as: "source", commonality: "common" },
         ]
       : [],
   );

@@ -20,10 +20,10 @@ export const getCriterionContextFilter = (graph: Graph, criterionId: string): Tr
   // This is likely suboptimal. I think we should avoid reusing criteria... if there's a strong reason
   // to reuse, then we'll need to add a way to specify which problem we want to use.
   const problem =
-    sourceNodes(criterion, graph).find((source) => source.type === "problem") ??
-    throwError("Criterion has no problem source node");
+    targetNodes(criterion, graph).find((target) => target.type === "problem") ??
+    throwError("Criterion has no problem target node");
 
-  const solutions = targetNodes(problem, graph).filter((target) => target.type === "solution");
+  const solutions = sourceNodes(problem, graph).filter((source) => source.type === "solution");
 
   return {
     type: "tradeoffs",
@@ -40,20 +40,20 @@ export const getFulfillsContextFilter = (
 ): TradeoffsOptions => {
   const fulfillsEdge = findEdgeOrThrow(fulfillsEdgeId, graph.edges);
 
-  const criterion = sourceNode(fulfillsEdge, graph.nodes);
-  const solution = targetNode(fulfillsEdge, graph.nodes);
+  const solution = sourceNode(fulfillsEdge, graph.nodes);
+  const criterion = targetNode(fulfillsEdge, graph.nodes);
 
   if (criterion.type !== "criterion" || solution.type !== "solution") {
     // e.g. benefit -fulfills-> criterion, which we don't want context for anyway
-    throwError("Fulfills edge does not connect a criterion to a solution");
+    throwError("Fulfills edge does not connect a solution to a criterion");
   }
 
   // If criterion is reused for two problems, we're arbitrarily just using one of the problems.
   // This is likely suboptimal. I think we should avoid reusing criteria... if there's a strong reason
   // to reuse, then we'll need to add a way to specify which problem we want to use.
   const problem =
-    sourceNodes(criterion, graph).find((source) => source.type === "problem") ??
-    throwError("Criterion has no problem source node");
+    targetNodes(criterion, graph).find((target) => target.type === "problem") ??
+    throwError("Criterion has no problem target node");
 
   return {
     type: "tradeoffs",

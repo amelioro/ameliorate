@@ -189,7 +189,7 @@ export const neighbors = (
 };
 
 export const components = (node: Node, topicGraph: Graph) => {
-  return sourceNodes(node, topicGraph).filter((source) => componentTypes.includes(source.type));
+  return targetNodes(node, topicGraph).filter((target) => componentTypes.includes(target.type));
 };
 
 export const edges = (node: Node, edges: Edge[]) => {
