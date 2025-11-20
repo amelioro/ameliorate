@@ -1,5 +1,4 @@
 {
-  "plugins": ["prettier-plugin-sql-cst"],
   "tabWidth": 2,
   "printWidth": 100
 }
