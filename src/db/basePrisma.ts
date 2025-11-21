@@ -10,11 +10,13 @@ import { PrismaClient } from "@/db/generated/prisma/client";
 // eslint-disable-next-line functional/immutable-data
 neonConfig.webSocketConstructor = ws;
 
+const dbUrl = process.env.DATABASE_URL ?? "";
+
 const adapter =
   // don't use neon adapter in development https://github.com/prisma/prisma/discussions/21346#discussioncomment-9068554
-  process.env.NODE_ENV !== "development"
-    ? new PrismaNeon({ connectionString: process.env.DATABASE_URL })
-    : new PrismaPg({ connectionString: process.env.DATABASE_URL });
+  dbUrl.includes("localhost")
+    ? new PrismaPg({ connectionString: dbUrl })
+    : new PrismaNeon({ connectionString: dbUrl });
 
 // awkward solution to prevent many connections to the db, specifically as created by nextjs hotreloading
 // https://www.prisma.io/docs/guides/other/troubleshooting-orm/help-articles/nextjs-prisma-client-dev-practices

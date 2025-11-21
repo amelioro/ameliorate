@@ -57,6 +57,9 @@ const nextAndSentryConfig = withSentryConfig(nextConfig, {
   // side errors will fail.
   // tunnelRoute: "/monitoring",
 
+  // don't need sourcemaps uploaded to sentry in development; this process takes some time during build, so skip it if unnecessary
+  sourcemaps: { disable: process.env.SENTRY_ENVIRONMENT === "development" },
+
   // Hides source maps from generated client bundles
   hideSourceMaps: true,
 
