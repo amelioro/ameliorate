@@ -28,7 +28,7 @@ export const throwError = (message: string, ...data: any[]) => {
 export const rethrowWithData = (error: unknown, ...data: any[]) => {
   const typedError = error instanceof Error ? error : new Error(String(error));
 
-  // eslint-disable-next-line functional/immutable-data, no-param-reassign
-  typedError.message += "\n\nrelated data:\n" + JSON.stringify(data);
-  throw typedError;
+  throw new Error(typedError.message + "\n\nrelated data:\n" + JSON.stringify(data), {
+    cause: typedError,
+  });
 };
