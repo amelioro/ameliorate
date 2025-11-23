@@ -20,10 +20,6 @@ interface Props {
 export const MotivationColumn = ({ summaryNode }: Props) => {
   const { directNodes, indirectNodes } = useMotivation(summaryNode);
 
-  // technically this column can show for a Benefit node, which is an effect, so we ideally
-  // would pass its `effectType` so that we could show the right `creates` vs `createdBy` relations
-  // based on solution effect vs problem effect; but problem benefits seem to be rare enough that
-  // it doesn't seem worth the effort right now.
   const defaultAddableRelations = addableRelationsFrom(summaryNode.type, undefined, false, "n/a");
 
   const addableRelations = filterAddablesViaSearchRelations(

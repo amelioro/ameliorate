@@ -20,10 +20,10 @@ describe("getSolutionBenefits", () => {
       edges: [
         buildEdge({
           sourceId: solutionObstacle.id,
-          relation: "obstacleOf",
+          relation: "impedes",
           targetId: fromSolution.id,
         }),
-        buildEdge({ sourceId: fromSolution.id, relation: "creates", targetId: solutionEffect.id }),
+        buildEdge({ sourceId: fromSolution.id, relation: "causes", targetId: solutionEffect.id }),
       ],
     };
 
@@ -58,22 +58,22 @@ describe("getSolutionBenefits", () => {
       edges: [
         buildEdge({
           sourceId: randomObstacle.id,
-          relation: "obstacleOf",
+          relation: "impedes",
           targetId: fromSolution.id,
         }),
 
-        buildEdge({ sourceId: fromSolution.id, relation: "creates", targetId: solutionEffect.id }),
+        buildEdge({ sourceId: fromSolution.id, relation: "causes", targetId: solutionEffect.id }),
         buildEdge({ sourceId: fromSolution.id, relation: "has", targetId: solutionComponent.id }),
 
-        buildEdge({ sourceId: fromSolution.id, relation: "creates", targetId: solutionBenefit.id }),
+        buildEdge({ sourceId: fromSolution.id, relation: "causes", targetId: solutionBenefit.id }),
         buildEdge({
           sourceId: solutionBenefit.id,
-          relation: "creates",
+          relation: "causes",
           targetId: downstreamBenefitViaBenefit.id,
         }),
         buildEdge({
           sourceId: solutionComponent.id,
-          relation: "creates",
+          relation: "causes",
           targetId: downstreamBenefitViaComponent.id,
         }),
       ],
@@ -100,7 +100,7 @@ describe("getAddressed", () => {
       edges: [
         buildEdge({
           sourceId: solutionObstacle.id,
-          relation: "obstacleOf",
+          relation: "impedes",
           targetId: fromSolution.id,
         }),
         buildEdge({
@@ -142,11 +142,11 @@ describe("getAddressed", () => {
       edges: [
         buildEdge({
           sourceId: randomObstacle.id,
-          relation: "obstacleOf",
+          relation: "impedes",
           targetId: fromSolution.id,
         }),
 
-        buildEdge({ sourceId: fromSolution.id, relation: "creates", targetId: solutionEffect.id }),
+        buildEdge({ sourceId: fromSolution.id, relation: "causes", targetId: solutionEffect.id }),
         buildEdge({ sourceId: fromSolution.id, relation: "has", targetId: solutionComponent.id }),
 
         buildEdge({

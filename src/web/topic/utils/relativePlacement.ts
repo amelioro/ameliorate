@@ -6,6 +6,7 @@ import { Graph, Node } from "@/web/topic/utils/graph";
 
 export type RelativePlacement = "above" | "below";
 
+// related: to lay detriments above vs below their solution? https://github.com/amelioro/ameliorate/discussions/579.
 export const neighborsAbove = (node: Node, topicGraph: Graph, sameCategoryNodes = true) => {
   const edgesPointingFromNode = topicGraph.edges.filter((edge) => edge.source === node.id);
 

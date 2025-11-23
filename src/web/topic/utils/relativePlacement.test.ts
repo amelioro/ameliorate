@@ -19,15 +19,15 @@ describe("neighborsAbove", () => {
       nodes: [centerSubproblem, problemAbove, causeBelow, detrimentBelow],
       edges: [
         buildEdge({
-          sourceId: centerSubproblem.id,
-          relation: "subproblemOf",
-          targetId: problemAbove.id,
+          sourceId: problemAbove.id,
+          relation: "has",
+          targetId: centerSubproblem.id,
         }),
         buildEdge({ sourceId: causeBelow.id, relation: "causes", targetId: centerSubproblem.id }),
         buildEdge({
-          sourceId: detrimentBelow.id,
-          relation: "createdBy",
-          targetId: centerSubproblem.id,
+          sourceId: centerSubproblem.id,
+          relation: "causes",
+          targetId: detrimentBelow.id,
         }),
       ],
     };
@@ -49,15 +49,15 @@ describe("neighborsBelow", () => {
       nodes: [centerSubproblem, problemAbove, causeBelow, detrimentBelow],
       edges: [
         buildEdge({
-          sourceId: centerSubproblem.id,
-          relation: "subproblemOf",
-          targetId: problemAbove.id,
+          sourceId: problemAbove.id,
+          relation: "has",
+          targetId: centerSubproblem.id,
         }),
         buildEdge({ sourceId: causeBelow.id, relation: "causes", targetId: centerSubproblem.id }),
         buildEdge({
-          sourceId: detrimentBelow.id,
-          relation: "createdBy",
-          targetId: centerSubproblem.id,
+          sourceId: centerSubproblem.id,
+          relation: "causes",
+          targetId: detrimentBelow.id,
         }),
       ],
     };

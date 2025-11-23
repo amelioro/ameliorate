@@ -56,7 +56,7 @@ export const initialState: DiagramStoreState = {
 };
 
 export const diagramStorePlaygroundName = "diagram-storage";
-export const currentDiagramVersion = 26;
+export const currentDiagramVersion = 27;
 
 // create atomic selectors for usage outside of store/ dir
 // this is only exported to allow actions to be extracted to a separate file

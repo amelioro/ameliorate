@@ -69,16 +69,13 @@
                 "type": "string",
                 "enum": [
                   "causes",
-                  "subproblemOf",
                   "addresses",
                   "accomplishes",
                   "contingencyFor",
-                  "createdBy",
                   "has",
                   "criterionFor",
-                  "creates",
                   "fulfills",
-                  "obstacleOf",
+                  "impedes",
                   "mitigates",
                   "asksAbout",
                   "potentialAnswerTo",
@@ -356,7 +353,7 @@
         ],
         "edgesToCreate": [
           {
-            "type": "creates",
+            "type": "causes",
             "notes": "",
             "tempSourceId": 10,
             "tempTargetId": 12
@@ -386,19 +383,19 @@
             "tempTargetId": 13
           },
           {
-            "type": "creates",
+            "type": "causes",
             "notes": "",
             "tempSourceId": 11,
             "tempTargetId": 12
           },
           {
-            "type": "creates",
+            "type": "causes",
             "notes": "",
             "tempSourceId": 19,
             "tempTargetId": 11
           },
           {
-            "type": "creates",
+            "type": "causes",
             "notes": "",
             "tempSourceId": 19,
             "tempTargetId": 10
@@ -548,55 +545,55 @@
             "tempTargetId": 3
           },
           {
-            "type": "creates",
+            "type": "causes",
             "notes": "",
             "tempSourceId": 11,
             "tempTargetId": 4
           },
           {
-            "type": "creates",
+            "type": "causes",
             "notes": "",
             "tempSourceId": 19,
             "tempTargetId": 5
           },
           {
-            "type": "creates",
+            "type": "causes",
             "notes": "",
             "tempSourceId": 17,
             "tempTargetId": 19
           },
           {
-            "type": "creates",
+            "type": "causes",
             "notes": "",
             "tempSourceId": 26,
             "tempTargetId": 19
           },
           {
-            "type": "creates",
+            "type": "causes",
             "notes": "",
             "tempSourceId": 29,
             "tempTargetId": 19
           },
           {
-            "type": "creates",
+            "type": "causes",
             "notes": "",
             "tempSourceId": 26,
             "tempTargetId": 6
           },
           {
-            "type": "creates",
+            "type": "causes",
             "notes": "",
             "tempSourceId": 6,
             "tempTargetId": 7
           },
           {
-            "type": "creates",
+            "type": "causes",
             "notes": "",
             "tempSourceId": 29,
             "tempTargetId": 6
           },
           {
-            "type": "creates",
+            "type": "causes",
             "notes": "",
             "tempSourceId": 19,
             "tempTargetId": 8

@@ -6,16 +6,13 @@ import { InfoCategory } from "@/common/infoCategory";
 export const relationNames = [
   // topic
   "causes",
-  "subproblemOf",
   "addresses",
   "accomplishes",
   "contingencyFor",
-  "createdBy",
   "has",
   "criterionFor",
-  "creates",
   "fulfills",
-  "obstacleOf",
+  "impedes",
   "mitigates",
 
   // research
@@ -137,16 +134,13 @@ export const reactFlowEdgeSchema = z.object({
 export const infoRelationNames: Record<InfoCategory, RelationName[]> = {
   breakdown: [
     "causes",
-    "subproblemOf",
     "addresses",
     "accomplishes",
     "contingencyFor",
-    "createdBy",
     "has",
     "criterionFor",
-    "creates",
     "fulfills",
-    "obstacleOf",
+    "impedes",
     "mitigates",
     "relatesTo", // is a generic relation but currently only seems worthwhile in topic
   ],
