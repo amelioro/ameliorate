@@ -8,7 +8,7 @@ import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/Workspac
 import { addNode, addNodeWithoutEdge } from "@/web/topic/diagramStore/createDeleteActions";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { DirectedToRelation, getDirectedRelationDescription } from "@/web/topic/utils/edge";
-import { nodeDecorations } from "@/web/topic/utils/node";
+import { nodeDecorations } from "@/web/topic/utils/nodeDecoration";
 
 /**
  * Either we add a node with a relation to an existing node, or we add a node without an edge.

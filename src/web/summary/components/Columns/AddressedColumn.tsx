@@ -8,7 +8,7 @@ import { AddNodeButtonGroup } from "@/web/topic/components/Node/AddNodeButtonGro
 import { useAddressed } from "@/web/topic/diagramStore/summary";
 import { addableRelationsFrom, filterAddablesViaSearchRelations } from "@/web/topic/utils/edge";
 import { Node } from "@/web/topic/utils/graph";
-import { nodeDecorations } from "@/web/topic/utils/node";
+import { nodeDecorations } from "@/web/topic/utils/nodeDecoration";
 
 interface Props {
   summaryNode: Node;

@@ -2,7 +2,7 @@ import { lowerCase } from "es-toolkit";
 
 import { useEdgeNodes } from "@/web/topic/diagramStore/edgeHooks";
 import { GraphPart, isNode as checkIsNode } from "@/web/topic/utils/graph";
-import { nodeDecorations } from "@/web/topic/utils/node";
+import { nodeDecorations } from "@/web/topic/utils/nodeDecoration";
 
 /**
  * Note: this claim text also exists in `getImplicitLabel`, but we want to apply italics/bold html

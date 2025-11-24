@@ -6,7 +6,7 @@ import { NestedMenuItem } from "@/web/common/components/Menu/NestedMenuItem";
 import { useSessionUser } from "@/web/common/hooks";
 import { addNodeWithoutEdge } from "@/web/topic/diagramStore/createDeleteActions";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
-import { nodeDecorations } from "@/web/topic/utils/node";
+import { nodeDecorations } from "@/web/topic/utils/nodeDecoration";
 import { useFormat } from "@/web/view/currentViewStore/store";
 
 interface Props {

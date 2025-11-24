@@ -2,7 +2,7 @@ import { lowerCase, startCase } from "es-toolkit";
 
 import { RelationName, justificationRelationNames } from "@/common/edge";
 import { NodeType, getSameCategoryNodeTypes, nodeTypes, researchNodeTypes } from "@/common/node";
-import { EffectType } from "@/web/topic/utils/effect";
+import { type EffectType } from "@/web/topic/utils/effect";
 import { Edge, EdgeDirection, Graph, Node, findNodeOrThrow } from "@/web/topic/utils/graph";
 import { hasJustification } from "@/web/topic/utils/justification";
 import { components, sourceNodes, targetNodes } from "@/web/topic/utils/node";

@@ -36,7 +36,7 @@ import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/Workspac
 import { setCustomNodeType } from "@/web/topic/diagramStore/actions";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { Node } from "@/web/topic/utils/graph";
-import { nodeDecorations } from "@/web/topic/utils/node";
+import { nodeDecorations } from "@/web/topic/utils/nodeDecoration";
 import { useUnrestrictedEditing } from "@/web/view/actionConfigStore";
 import { setSummaryNodeId } from "@/web/view/currentViewStore/summary";
 import { setSelected, useIsGraphPartSelected } from "@/web/view/selectedPartStore";

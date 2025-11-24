@@ -7,7 +7,7 @@ import { primarySpotlightColor } from "@/web/topic/components/Diagram/Diagram.st
 import { EditableNode } from "@/web/topic/components/Node/EditableNode";
 import { useIsCoreNode } from "@/web/topic/diagramStore/nodeHooks";
 import { Node } from "@/web/topic/utils/graph";
-import { nodeDecorations } from "@/web/topic/utils/node";
+import { nodeDecorations } from "@/web/topic/utils/nodeDecoration";
 import { useIsGraphPartSelected } from "@/web/view/selectedPartStore";
 
 interface Props {

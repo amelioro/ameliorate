@@ -3,7 +3,7 @@ import { lowerCase } from "es-toolkit";
 import { justificationRelationNames } from "@/common/edge";
 import { errorWithData } from "@/common/errorHandling";
 import { Edge, Graph, GraphPart, findGraphPartOrThrow, isNode } from "@/web/topic/utils/graph";
-import { nodeDecorations } from "@/web/topic/utils/node";
+import { nodeDecorations } from "@/web/topic/utils/nodeDecoration";
 
 // Using justificationEdges instead of justificationNodes because eventually we'll probably replace Root Claim nodes
 // with direct edges from a justification to diagram part.

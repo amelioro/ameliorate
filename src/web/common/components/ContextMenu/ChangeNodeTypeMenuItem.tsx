@@ -7,7 +7,7 @@ import { useSessionUser } from "@/web/common/hooks";
 import { changeNodeType } from "@/web/topic/diagramStore/actions";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { Node } from "@/web/topic/utils/graph";
-import { nodeDecorations } from "@/web/topic/utils/node";
+import { nodeDecorations } from "@/web/topic/utils/nodeDecoration";
 
 interface Props {
   node: Node;

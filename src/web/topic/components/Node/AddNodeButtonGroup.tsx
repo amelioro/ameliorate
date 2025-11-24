@@ -24,7 +24,7 @@ import {
   getDirectedRelationDescription,
 } from "@/web/topic/utils/edge";
 import { Node } from "@/web/topic/utils/graph";
-import { nodeDecorations } from "@/web/topic/utils/node";
+import { nodeDecorations } from "@/web/topic/utils/nodeDecoration";
 import { useExpandAddNodeButtons } from "@/web/view/userConfigStore";
 
 const getOptionText = (node: Node) => {
