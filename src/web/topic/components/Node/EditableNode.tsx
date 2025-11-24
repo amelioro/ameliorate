@@ -11,7 +11,7 @@ import { type SxProps, styled, useTheme } from "@mui/material";
 import { motion } from "motion/react";
 import { MouseEvent, memo, useContext, useState } from "react";
 
-import { isDefaultCoreNodeType } from "@/common/node";
+import { isDefaultCoreNodeType, prettyNodeTypes } from "@/common/node";
 import { useSessionUser } from "@/web/common/hooks";
 import { openContextMenu } from "@/web/common/store/contextMenuActions";
 import {
@@ -88,11 +88,10 @@ const EditableNodeBase = ({ node, className = "", onClick }: Props) => {
 
   const theme = useTheme();
 
-  const nodeDecoration = nodeDecorations[node.type];
   const nodeColor = theme.palette[node.type].main;
   const nodeLightColor = `color-mix(in oklch, ${nodeColor}, #fff 80%)`;
-  const NodeIcon = nodeDecoration.NodeIcon;
-  const typeText = node.data.customType ?? nodeDecoration.title;
+  const NodeIcon = nodeDecorations[node.type].NodeIcon;
+  const typeText = node.data.customType ?? prettyNodeTypes[node.type];
 
   const customizable = userCanEditTopicData && (unrestrictedEditing || node.type === "custom");
 
@@ -179,7 +178,7 @@ const EditableNodeBase = ({ node, className = "", onClick }: Props) => {
               suppressContentEditableWarning // https://stackoverflow.com/a/49639256/8409296
               onBlur={(event) => {
                 const text = event.target.textContent?.trim();
-                if (text && text !== nodeDecoration.title && text !== node.data.customType)
+                if (text && text !== typeText && text !== node.data.customType)
                   setCustomNodeType(node, text);
               }}
               className={

@@ -180,6 +180,28 @@ export const breakdownNodeTypes = infoNodeTypes.breakdown;
 export const researchNodeTypes = infoNodeTypes.research;
 export const justificationNodeTypes = infoNodeTypes.justification;
 
+export const prettyNodeTypes: Record<NodeType, string> = {
+  cause: "Cause",
+  problem: "Problem",
+  criterion: "Criterion",
+  solutionComponent: "Component",
+  benefit: "Benefit",
+  effect: "Effect",
+  detriment: "Detriment",
+  solution: "Solution",
+  obstacle: "Obstacle",
+  mitigationComponent: "Component",
+  mitigation: "Mitigation",
+  question: "Question",
+  answer: "Answer",
+  fact: "Fact",
+  source: "Source",
+  rootClaim: "Root Claim",
+  support: "Support",
+  critique: "Critique",
+  custom: "Custom",
+};
+
 export const getNewTopicProblemNode = (topicId: number, topicTitle: string): Node => {
   return {
     id: uuid(),

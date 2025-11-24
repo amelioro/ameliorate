@@ -1,8 +1,8 @@
 import { lowerCase } from "es-toolkit";
 
+import { prettyNodeTypes } from "@/common/node";
 import { useEdgeNodes } from "@/web/topic/diagramStore/edgeHooks";
 import { GraphPart, isNode as checkIsNode } from "@/web/topic/utils/graph";
-import { nodeDecorations } from "@/web/topic/utils/nodeDecoration";
 
 /**
  * Note: this claim text also exists in `getImplicitLabel`, but we want to apply italics/bold html
@@ -16,8 +16,8 @@ export const ImpliedClaimText = ({ graphPart }: { graphPart: GraphPart }) => {
   if (isNode) {
     return (
       <i>
-        "{graphPart.data.label}" <b>is an important {nodeDecorations[graphPart.type].title}</b> in
-        this topic
+        "{graphPart.data.label}" <b>is an important {prettyNodeTypes[graphPart.type]}</b> in this
+        topic
       </i>
     );
   } else {
@@ -25,9 +25,9 @@ export const ImpliedClaimText = ({ graphPart }: { graphPart: GraphPart }) => {
 
     return (
       <i>
-        <b>{nodeDecorations[edgeSourceNode.type].title}</b> "{edgeSourceNode.data.label}"{" "}
+        <b>{prettyNodeTypes[edgeSourceNode.type]}</b> "{edgeSourceNode.data.label}"{" "}
         <b>
-          {lowerCase(graphPart.label)} {nodeDecorations[edgeTargetNode.type].title}
+          {lowerCase(graphPart.label)} {prettyNodeTypes[edgeTargetNode.type]}
         </b>{" "}
         "{edgeTargetNode.data.label}"
       </i>

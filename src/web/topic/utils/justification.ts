@@ -2,8 +2,8 @@ import { lowerCase } from "es-toolkit";
 
 import { justificationRelationNames } from "@/common/edge";
 import { errorWithData } from "@/common/errorHandling";
+import { prettyNodeTypes } from "@/common/node";
 import { Edge, Graph, GraphPart, findGraphPartOrThrow, isNode } from "@/web/topic/utils/graph";
-import { nodeDecorations } from "@/web/topic/utils/nodeDecoration";
 
 // Using justificationEdges instead of justificationNodes because eventually we'll probably replace Root Claim nodes
 // with direct edges from a justification to diagram part.
@@ -20,7 +20,7 @@ export const getImplicitLabel = (arguedDiagramPartId: string, topicGraph: Graph)
     topicGraph.edges,
   );
   if (isNode(arguedDiagramPart)) {
-    return `"${arguedDiagramPart.data.label}" is an important ${nodeDecorations[arguedDiagramPart.type].title} in this topic`;
+    return `"${arguedDiagramPart.data.label}" is an important ${prettyNodeTypes[arguedDiagramPart.type]} in this topic`;
   } else {
     const sourceNode = topicGraph.nodes.find((node) => node.id === arguedDiagramPart.source);
     const targetNode = topicGraph.nodes.find((node) => node.id === arguedDiagramPart.target);
@@ -29,9 +29,9 @@ export const getImplicitLabel = (arguedDiagramPartId: string, topicGraph: Graph)
     }
 
     return (
-      `${nodeDecorations[sourceNode.type].title} "${sourceNode.data.label}" ` +
+      `${prettyNodeTypes[sourceNode.type]} "${sourceNode.data.label}" ` +
       lowerCase(arguedDiagramPart.label) +
-      ` ${nodeDecorations[targetNode.type].title} "${targetNode.data.label}"`
+      ` ${prettyNodeTypes[targetNode.type]} "${targetNode.data.label}"`
     );
   }
 };

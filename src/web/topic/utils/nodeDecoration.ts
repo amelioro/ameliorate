@@ -32,92 +32,79 @@ export const indicatorLengthRem = 1.25; // rem
 export type MuiIcon = typeof Extension;
 
 interface NodeDecoration {
-  title: string;
   NodeIcon: MuiIcon;
 }
 
+/**
+ * This used to have `title` on it, but that was separated in order to allow title usage separate from
+ * the icons (so places don't need to import MUI stuff if they only need the titles).
+ *
+ * Could refactor this to nodeIcons, but it seems like more decoration stuff could be useful in the
+ * future, so I'm leaving it as nodeDecorations for now.
+ */
 export const nodeDecorations: Record<FlowNodeType, NodeDecoration> = {
   // topic
   problem: {
-    title: "Problem",
     NodeIcon: Extension,
   },
   cause: {
-    title: "Cause",
     NodeIcon: Mediation,
   },
   criterion: {
-    title: "Criterion",
     NodeIcon: Ballot,
   },
   benefit: {
-    title: "Benefit",
     NodeIcon: LocalFlorist,
   },
   effect: {
-    title: "Effect",
     NodeIcon: Bolt,
   },
   detriment: {
-    title: "Detriment",
     NodeIcon: Flood,
   },
   solutionComponent: {
-    title: "Component",
     NodeIcon: Widgets,
   },
   solution: {
-    title: "Solution",
     NodeIcon: Check,
   },
   obstacle: {
-    title: "Obstacle",
     NodeIcon: Fence,
   },
   mitigationComponent: {
-    title: "Component",
     NodeIcon: Widgets,
   },
   mitigation: {
-    title: "Mitigation",
     NodeIcon: VerifiedUserOutlined,
   },
 
   // research
   question: {
-    title: "Question",
     NodeIcon: QuestionMark,
   },
   answer: {
-    title: "Answer",
     NodeIcon: LightbulbRounded,
   },
   fact: {
-    title: "Fact",
     NodeIcon: Info,
   },
   source: {
-    title: "Source",
     NodeIcon: Code,
   },
 
   // justification
   rootClaim: {
-    title: "Root Claim",
     NodeIcon: Article,
   },
   support: {
-    title: "Support",
     NodeIcon: ThumbUp,
   },
   critique: {
-    title: "Critique",
     NodeIcon: ThumbDown,
   },
 
   // generic
   custom: {
-    title: "Custom",
     NodeIcon: Edit,
   },
 };

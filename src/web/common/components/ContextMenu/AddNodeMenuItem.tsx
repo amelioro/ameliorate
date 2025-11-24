@@ -1,6 +1,6 @@
 import { useTheme } from "@mui/material/styles";
 
-import { breakdownNodeTypes, researchNodeTypes } from "@/common/node";
+import { breakdownNodeTypes, prettyNodeTypes, researchNodeTypes } from "@/common/node";
 import { ContextMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
 import { NestedMenuItem } from "@/web/common/components/Menu/NestedMenuItem";
 import { useSessionUser } from "@/web/common/hooks";
@@ -32,7 +32,8 @@ export const AddNodeMenuItem = ({ parentMenuOpen }: Props) => {
     <>
       <NestedMenuItem label="Add node" parentMenuOpen={parentMenuOpen}>
         {shownNodeTypes.map((type) => {
-          const { NodeIcon, title } = nodeDecorations[type];
+          const { NodeIcon } = nodeDecorations[type];
+          const title = prettyNodeTypes[type];
           return (
             <ContextMenuItem key={type} onClick={() => addNodeWithoutEdge(type, "diagram")}>
               <NodeIcon

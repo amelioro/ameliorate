@@ -2,6 +2,7 @@ import { useTheme } from "@mui/material";
 import { LayoutGroup } from "framer-motion";
 import { MouseEvent } from "react";
 
+import { prettyNodeTypes } from "@/common/node";
 import { Tooltip } from "@/web/common/components/Tooltip/Tooltip";
 import { primarySpotlightColor } from "@/web/topic/components/Diagram/Diagram.styles";
 import { EditableNode } from "@/web/topic/components/Node/EditableNode";
@@ -22,12 +23,11 @@ export const IconNode = ({ node, className, onClick }: Props) => {
   const isSelected = useIsGraphPartSelected(node.id);
   const isCoreNode = useIsCoreNode(node.id);
 
-  const nodeDecoration = nodeDecorations[node.type];
   const nodeColor = theme.palette[node.type].main;
   const nodeLightColor = `color-mix(in oklch, ${nodeColor}, #fff 80%)`;
-  const NodeIcon = nodeDecoration.NodeIcon;
+  const NodeIcon = nodeDecorations[node.type].NodeIcon;
 
-  const typeText = node.data.customType ?? nodeDecoration.title;
+  const typeText = node.data.customType ?? prettyNodeTypes[node.type];
   const nodeDescription = `${typeText}: ${node.data.label}`;
 
   const tooltipBody = (
