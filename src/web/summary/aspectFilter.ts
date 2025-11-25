@@ -8,6 +8,7 @@ import { uniqBy } from "es-toolkit";
 
 import { getEdgeInfoCategory } from "@/common/edge";
 import { badNodeTypes, getNodeInfoCategory } from "@/common/node";
+import { type Aspect } from "@/web/summary/summary";
 import { DirectedSearchRelation, getDirectedRelationDescription } from "@/web/topic/utils/edge";
 import {
   Graph,
@@ -17,6 +18,58 @@ import {
   splitNodesByDirectAndIndirect,
   upstreamNodes,
 } from "@/web/topic/utils/graph";
+
+/**
+ * Return nodes for a given aspect of a summary node.
+ *
+ * Somewhat awkward return value because the incoming/outgoing aspects don't always make sense
+ * without having their relations, where the other aspects do.
+ *
+ * Example cases that want this method:
+ * - displaying aspects in the diagram (e.g. for focused nodes feature, not yet implemented) only
+ * needs the nodes, because relations are automatically added
+ * - sharing aspects via JSON (e.g. for LLM to more-easily understand relations that each node has);
+ * incoming/outgoing won't make sense here (e.g. solution outgoing: Benefit, Problem) without
+ * relations specified (e.g. solution outgoing: creates Benefit, addresses Problem)
+ *
+ * So we're just returning direct nodes OR direct nodes by relation description, then the diagram
+ * can flatmap everything, and we handle both cases separately for JSON.
+ */
+export const getAspectNodes = (
+  summaryNode: Node,
+  graph: Graph,
+  aspect: Aspect,
+):
+  | { directNodes: Node[]; indirectNodes: Node[]; nodesByRelationDescription?: undefined }
+  | {
+      directNodes?: undefined;
+      indirectNodes?: undefined;
+      nodesByRelationDescription: Record<string, Node[]>;
+    } => {
+  if (aspect === "incoming")
+    return {
+      nodesByRelationDescription: getIncomingNodesByRelationDescription(summaryNode, graph),
+    };
+  else if (aspect === "outgoing")
+    return {
+      nodesByRelationDescription: getOutgoingNodesByRelationDescription(summaryNode, graph),
+    };
+  else if (aspect === "components") return getComponents(summaryNode, graph);
+  else if (aspect === "addressed") return getAddressed(summaryNode, graph);
+  else if (aspect === "obstacles") return getObstacles(summaryNode, graph);
+  else if (aspect === "motivation") return getMotivation(summaryNode, graph);
+  else if (aspect === "solutionConcerns") return getSolutionConcerns(summaryNode, graph);
+  else if (aspect === "solutions") return getSolutions(summaryNode, graph);
+  else if (aspect === "benefits") return getSolutionBenefits(summaryNode, graph);
+  else if (aspect === "detriments") return getDetriments(summaryNode, graph);
+  else if (aspect === "effects") return getEffects(summaryNode, graph);
+  else if (aspect === "causes") return getCauses(summaryNode, graph);
+  else {
+    throw new Error(
+      `unhandled aspect ${aspect} - note: topic aspects e.g. coreNodes are not supported`,
+    );
+  }
+};
 
 // TODO?: this and "getOutgoing..." could be refactored to be one function that takes a direction
 export const getIncomingNodesByRelationDescription = (summaryNode: Node, graph: Graph) => {

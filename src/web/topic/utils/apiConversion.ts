@@ -2,20 +2,23 @@ import { inferRouterOutputs } from "@trpc/server";
 import { compact } from "es-toolkit";
 import { set } from "es-toolkit/compat";
 
-import { AppRouter } from "@/api/routers/_app";
+import { type AppRouter } from "@/api/routers/_app";
 import { Edge as ApiEdge, Edge } from "@/common/edge";
 import { Node as ApiNode, Node } from "@/common/node";
 import { UserScore as ApiScore } from "@/common/userScore";
-import { DiagramStoreState, UserScores as StoreScores } from "@/web/topic/diagramStore/store";
 import {
-  Score,
-  Edge as StoreEdge,
-  Node as StoreNode,
+  type DiagramStoreState,
+  type UserScores as StoreScores,
+} from "@/web/topic/diagramStore/store";
+import {
+  type Score,
+  type Edge as StoreEdge,
+  type Node as StoreNode,
   buildEdge,
   buildNode,
 } from "@/web/topic/utils/graph";
 
-export const convertToStoreNode = (apiNode: TopicNode) => {
+export const convertToStoreNode = (apiNode: ApiNode) => {
   return buildNode({
     id: apiNode.id,
     label: apiNode.text,
@@ -26,7 +29,7 @@ export const convertToStoreNode = (apiNode: TopicNode) => {
   });
 };
 
-export const convertToStoreEdge = (apiEdge: TopicEdge) => {
+export const convertToStoreEdge = (apiEdge: ApiEdge) => {
   return buildEdge({
     id: apiEdge.id,
     notes: apiEdge.notes,

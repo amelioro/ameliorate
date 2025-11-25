@@ -1,4 +1,6 @@
-import { nodeTypes } from "@/common/node";
+import { uniqBy } from "es-toolkit";
+
+import { NodeType, nodeTypes } from "@/common/node";
 
 const summaries = ["topic", ...nodeTypes] as const;
 export type Summary = (typeof summaries)[number];
@@ -90,4 +92,13 @@ export const aspectsByCategory: Record<Category, [Aspect, Aspect?]> = {
   solutions: ["solutions"],
   // effect
   causeAndEffect: ["causes", "effects"],
+};
+
+export const getAspectsForNodeType = (nodeType: NodeType) => {
+  const categories = categoriesBySummary[nodeType];
+  const aspects = categories
+    .flatMap((category) => aspectsByCategory[category])
+    .filter((aspect) => aspect !== undefined);
+
+  return uniqBy(aspects, (aspect) => aspect);
 };
