@@ -86,6 +86,22 @@ export const getComponents = (summaryNode: Node, graph: Graph) => {
   return splitNodesByDirectAndIndirect(components);
 };
 
+export const getMotivation = (summaryNode: Node, graph: Graph) => {
+  const { directNodes: directBenefits, indirectNodes: indirectBenefits } = getSolutionBenefits(
+    summaryNode,
+    graph,
+  );
+  const { directNodes: directAddressed, indirectNodes: indirectAddressed } = getAddressed(
+    summaryNode,
+    graph,
+  );
+
+  return {
+    directNodes: [...directBenefits, ...directAddressed],
+    indirectNodes: [...indirectBenefits, ...indirectAddressed],
+  };
+};
+
 export const addressedDirectedSearchRelations: DirectedSearchRelation[] = [
   { toDirection: "target", relationNames: ["addresses", "mitigates"] },
 ];
@@ -99,6 +115,22 @@ export const getAddressed = (summaryNode: Node, graph: Graph) => {
   );
 
   return splitNodesByDirectAndIndirect(addressed);
+};
+
+export const getSolutionConcerns = (summaryNode: Node, graph: Graph) => {
+  const { directNodes: directDetriments, indirectNodes: indirectDetriments } = getDetriments(
+    summaryNode,
+    graph,
+  );
+  const { directNodes: directObstacles, indirectNodes: indirectObstacles } = getObstacles(
+    summaryNode,
+    graph,
+  );
+
+  return {
+    directNodes: [...directDetriments, ...directObstacles],
+    indirectNodes: [...indirectDetriments, ...indirectObstacles],
+  };
 };
 
 export const obstaclesDirectedSearchRelations: DirectedSearchRelation[] = [

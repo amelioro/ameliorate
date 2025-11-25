@@ -8,7 +8,7 @@ import {
 import { IndirectHelpIcon } from "@/web/summary/components/IndirectHelpIcon";
 import { Row } from "@/web/summary/components/Row";
 import { AddNodeButtonGroup } from "@/web/topic/components/Node/AddNodeButtonGroup";
-import { useAddressed, useBenefits } from "@/web/topic/diagramStore/summary";
+import { useMotivation } from "@/web/topic/diagramStore/summary";
 import { addableRelationsFrom, filterAddablesViaSearchRelations } from "@/web/topic/utils/edge";
 import { Node } from "@/web/topic/utils/graph";
 import { nodeDecorations } from "@/web/topic/utils/nodeDecoration";
@@ -18,9 +18,7 @@ interface Props {
 }
 
 export const MotivationColumn = ({ summaryNode }: Props) => {
-  const { directNodes: directBenefits, indirectNodes: indirectBenefits } = useBenefits(summaryNode);
-  const { directNodes: directAddressed, indirectNodes: indirectAddressed } =
-    useAddressed(summaryNode);
+  const { directNodes, indirectNodes } = useMotivation(summaryNode);
 
   // technically this column can show for a Benefit node, which is an effect, so we ideally
   // would pass its `effectType` so that we could show the right `creates` vs `createdBy` relations
@@ -45,7 +43,7 @@ export const MotivationColumn = ({ summaryNode }: Props) => {
         title="Motivation"
         Icon={nodeDecorations.benefit.NodeIcon}
         addButtonsSlot={AddButtons}
-        nodes={[...directBenefits, ...directAddressed]}
+        nodes={directNodes}
       />
 
       <Divider className="mx-2 my-1" />
@@ -54,7 +52,7 @@ export const MotivationColumn = ({ summaryNode }: Props) => {
         title="Indirect"
         Icon={Timeline}
         endHeaderSlot={<IndirectHelpIcon />}
-        nodes={[...indirectBenefits, ...indirectAddressed]}
+        nodes={indirectNodes}
       />
     </div>
   );

@@ -5,9 +5,11 @@ import {
   getDetriments,
   getEffects,
   getIncomingNodesByRelationDescription,
+  getMotivation,
   getObstacles,
   getOutgoingNodesByRelationDescription,
   getSolutionBenefits,
+  getSolutionConcerns,
   getSolutions,
 } from "@/web/summary/aspectFilter";
 import { useDiagramStore } from "@/web/topic/diagramStore/store";
@@ -38,9 +40,21 @@ export const useComponents = (summaryNode: Node) => {
   });
 };
 
+export const useMotivation = (summaryNode: Node) => {
+  return useDiagramStore((state) => {
+    return getMotivation(summaryNode, state);
+  });
+};
+
 export const useAddressed = (summaryNode: Node) => {
   return useDiagramStore((state) => {
     return getAddressed(summaryNode, state);
+  });
+};
+
+export const useSolutionConcerns = (summaryNode: Node) => {
+  return useDiagramStore((state) => {
+    return getSolutionConcerns(summaryNode, state);
   });
 };
 
