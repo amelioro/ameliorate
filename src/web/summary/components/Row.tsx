@@ -7,7 +7,7 @@ import { EditableNode } from "@/web/topic/components/Node/EditableNode";
 import { useDisplayScores } from "@/web/topic/diagramStore/scoreHooks";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { Node } from "@/web/topic/utils/graph";
-import { MuiIcon } from "@/web/topic/utils/node";
+import { MuiIcon } from "@/web/topic/utils/nodeDecoration";
 import { getNumericScore } from "@/web/topic/utils/score";
 
 interface Props {

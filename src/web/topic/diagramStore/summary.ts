@@ -5,9 +5,14 @@ import {
   getDetriments,
   getEffects,
   getIncomingNodesByRelationDescription,
+  getIsAbout,
+  getJustification,
+  getMotivation,
   getObstacles,
   getOutgoingNodesByRelationDescription,
+  getResearch,
   getSolutionBenefits,
+  getSolutionConcerns,
   getSolutions,
 } from "@/web/summary/aspectFilter";
 import { useDiagramStore } from "@/web/topic/diagramStore/store";
@@ -38,9 +43,21 @@ export const useComponents = (summaryNode: Node) => {
   });
 };
 
+export const useMotivation = (summaryNode: Node) => {
+  return useDiagramStore((state) => {
+    return getMotivation(summaryNode, state);
+  });
+};
+
 export const useAddressed = (summaryNode: Node) => {
   return useDiagramStore((state) => {
     return getAddressed(summaryNode, state);
+  });
+};
+
+export const useSolutionConcerns = (summaryNode: Node) => {
+  return useDiagramStore((state) => {
+    return getSolutionConcerns(summaryNode, state);
   });
 };
 
@@ -79,5 +96,24 @@ export const useEffects = (summaryNode: Node) => {
 export const useCauses = (summaryNode: Node) => {
   return useDiagramStore((state) => {
     return getCauses(summaryNode, state);
+  });
+};
+
+// justification / research
+export const useJustification = (summaryNode: Node) => {
+  return useDiagramStore((state) => {
+    return getJustification(summaryNode, state);
+  });
+};
+
+export const useResearch = (summaryNode: Node) => {
+  return useDiagramStore((state) => {
+    return getResearch(summaryNode, state);
+  });
+};
+
+export const useIsAbout = (summaryNode: Node) => {
+  return useDiagramStore((state) => {
+    return getIsAbout(summaryNode, state);
   });
 };

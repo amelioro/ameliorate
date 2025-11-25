@@ -8,20 +8,17 @@ import {
 import { IndirectHelpIcon } from "@/web/summary/components/IndirectHelpIcon";
 import { Row } from "@/web/summary/components/Row";
 import { AddNodeButtonGroup } from "@/web/topic/components/Node/AddNodeButtonGroup";
-import { useDetriments, useObstacles } from "@/web/topic/diagramStore/summary";
+import { useSolutionConcerns } from "@/web/topic/diagramStore/summary";
 import { addableRelationsFrom, filterAddablesViaSearchRelations } from "@/web/topic/utils/edge";
 import { Node } from "@/web/topic/utils/graph";
-import { nodeDecorations } from "@/web/topic/utils/node";
+import { nodeDecorations } from "@/web/topic/utils/nodeDecoration";
 
 interface Props {
   summaryNode: Node;
 }
 
 export const SolutionConcernsColumn = ({ summaryNode }: Props) => {
-  const { directNodes: directDetriments, indirectNodes: indirectDetriments } =
-    useDetriments(summaryNode);
-  const { directNodes: directObstacles, indirectNodes: indirectObstacles } =
-    useObstacles(summaryNode);
+  const { directNodes, indirectNodes } = useSolutionConcerns(summaryNode);
 
   const defaultAddableRelations = addableRelationsFrom(summaryNode.type, undefined, false, "n/a");
 
@@ -42,7 +39,7 @@ export const SolutionConcernsColumn = ({ summaryNode }: Props) => {
         title="Concerns"
         Icon={nodeDecorations.detriment.NodeIcon}
         addButtonsSlot={AddButtons}
-        nodes={[...directDetriments, ...directObstacles]}
+        nodes={directNodes}
       />
 
       <Divider className="mx-2 my-1" />
@@ -51,7 +48,7 @@ export const SolutionConcernsColumn = ({ summaryNode }: Props) => {
         title="Indirect"
         Icon={Timeline}
         endHeaderSlot={<IndirectHelpIcon />}
-        nodes={[...indirectDetriments, ...indirectObstacles]}
+        nodes={indirectNodes}
       />
     </div>
   );

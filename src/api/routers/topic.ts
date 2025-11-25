@@ -3,6 +3,7 @@ import { v4 as uuid } from "uuid";
 import { z } from "zod";
 
 import { isLoggedIn } from "@/api/auth";
+import { findTopicByUsernameAndTitle } from "@/api/topic/topic";
 import { procedure, router } from "@/api/trpc";
 import { CreateEdge, Edge, createEdgeSchema, edgeSchema } from "@/common/edge";
 import { throwError } from "@/common/errorHandling";
@@ -79,13 +80,7 @@ export const topicRouter = router({
     .query(async (opts) => {
       const isCreator = opts.input.username === opts.ctx.user?.username;
 
-      return await xprisma.topic.findFirst({
-        where: {
-          title: opts.input.title,
-          creatorName: opts.input.username,
-          visibility: isCreator ? undefined : { not: "private" },
-        },
-      });
+      return await findTopicByUsernameAndTitle(isCreator, opts.input.username, opts.input.title);
     }),
 
   /**
@@ -103,19 +98,12 @@ export const topicRouter = router({
     .query(async (opts) => {
       const isCreator = opts.input.username === opts.ctx.user?.username;
 
-      return await xprisma.topic.findFirst({
-        where: {
-          title: opts.input.title,
-          creatorName: opts.input.username,
-          visibility: isCreator ? undefined : { not: "private" },
-        },
-        include: {
-          nodes: true,
-          edges: true,
-          userScores: true,
-          views: true,
-          comments: true,
-        },
+      return await findTopicByUsernameAndTitle(isCreator, opts.input.username, opts.input.title, {
+        nodes: true,
+        edges: true,
+        userScores: true,
+        views: true,
+        comments: true,
       });
     }),
 

@@ -2,7 +2,7 @@ import { lowerCase, startCase } from "es-toolkit";
 
 import { RelationName, justificationRelationNames } from "@/common/edge";
 import { NodeType, getSameCategoryNodeTypes, nodeTypes, researchNodeTypes } from "@/common/node";
-import { EffectType } from "@/web/topic/utils/effect";
+import { type EffectType } from "@/web/topic/utils/effect";
 import { Edge, EdgeDirection, Graph, Node, findNodeOrThrow } from "@/web/topic/utils/graph";
 import { hasJustification } from "@/web/topic/utils/justification";
 import { components, sourceNodes, targetNodes } from "@/web/topic/utils/node";
@@ -322,17 +322,34 @@ export const addableRelationsFrom = (
   addingAs: EdgeDirection | undefined,
   unrestrictedAddingFrom: boolean,
   effectType: EffectType,
+  sameCategoryNodeTypes = true,
 ): DirectedToRelationWithCommonality[] => {
   if (addingAs === undefined) {
-    return addableRelationsFrom(fromNodeType, "source", unrestrictedAddingFrom, effectType).concat(
-      addableRelationsFrom(fromNodeType, "target", unrestrictedAddingFrom, effectType),
+    return addableRelationsFrom(
+      fromNodeType,
+      "source",
+      unrestrictedAddingFrom,
+      effectType,
+      sameCategoryNodeTypes,
+    ).concat(
+      addableRelationsFrom(
+        fromNodeType,
+        "target",
+        unrestrictedAddingFrom,
+        effectType,
+        sameCategoryNodeTypes,
+      ),
     );
   }
 
   const fromDirection = addingAs === "source" ? "target" : "source";
   const toDirection = addingAs;
 
-  const addableRelations: RelationWithCommonality[] = getSameCategoryNodeTypes(fromNodeType)
+  const nodeTypesToCheckRelations = sameCategoryNodeTypes
+    ? getSameCategoryNodeTypes(fromNodeType)
+    : nodeTypes;
+
+  const addableRelations: RelationWithCommonality[] = nodeTypesToCheckRelations
     .map((toNodeType) => {
       // hack to ensure that problem detriments can't be mitigated (and can be solved), and solution detriments can be mitigated (but not solved);
       // this is really awkward but keeps detriment nodes from being able to have both solutions and mitigations added, which could be really confusing for users

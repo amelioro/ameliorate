@@ -1,7 +1,7 @@
 import { type Palette } from "@mui/material";
 import { maxBy, mean, meanBy, round } from "es-toolkit";
 
-import { Score } from "@/web/topic/utils/graph";
+import { type Score } from "@/web/topic/utils/graph";
 
 // could have average in here too but average of importance still means importance and seems like it should use the same colors
 // TODO? probably add "truth" as a type here, for edges

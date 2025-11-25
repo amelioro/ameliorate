@@ -1,13 +1,13 @@
 import { useTheme } from "@mui/material/styles";
 import { NestedMenuItem } from "mui-nested-menu";
 
-import { getSameCategoryNodeTypes } from "@/common/node";
+import { getSameCategoryNodeTypes, prettyNodeTypes } from "@/common/node";
 import { ContextMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
 import { useSessionUser } from "@/web/common/hooks";
 import { changeNodeType } from "@/web/topic/diagramStore/actions";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { Node } from "@/web/topic/utils/graph";
-import { nodeDecorations } from "@/web/topic/utils/node";
+import { nodeDecorations } from "@/web/topic/utils/nodeDecoration";
 
 interface Props {
   node: Node;
@@ -30,7 +30,8 @@ export const ChangeNodeTypeMenuItem = ({ node, parentMenuOpen }: Props) => {
       className="px-[16px] [&_p]:px-0 [&_p]:text-sm"
     >
       {getSameCategoryNodeTypes(node.type).map((type) => {
-        const { NodeIcon, title } = nodeDecorations[type];
+        const { NodeIcon } = nodeDecorations[type];
+        const title = prettyNodeTypes[type];
 
         return (
           <ContextMenuItem key={type} onClick={() => changeNodeType(node, type)}>

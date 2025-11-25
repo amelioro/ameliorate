@@ -1,4 +1,6 @@
-import { nodeTypes } from "@/common/node";
+import { uniqBy } from "es-toolkit";
+
+import { NodeType, nodeTypes } from "@/common/node";
 
 const summaries = ["topic", ...nodeTypes] as const;
 export type Summary = (typeof summaries)[number];
@@ -17,6 +19,9 @@ const categories = [
   "solutions",
   // effects
   "causeAndEffect",
+  // research / justification
+  "nuance",
+  "isAbout",
 ] as const;
 export type Category = (typeof categories)[number];
 
@@ -24,33 +29,33 @@ export const categoriesBySummary: Record<Summary, [Category, ...Category[]]> = {
   topic: ["coreNodes"],
 
   // breakdown
-  cause: ["causeAndEffect", "solutions", "all"],
-  problem: ["problemConcerns", "solutions", "all"],
-  criterion: ["all"],
-  solutionComponent: ["components", "tradeoffs", "all"],
-  benefit: ["causeAndEffect", "motivation", "all"],
-  effect: ["causeAndEffect", "all"],
-  detriment: ["causeAndEffect", "solutions", "all"],
+  cause: ["causeAndEffect", "solutions", "nuance", "all"],
+  problem: ["problemConcerns", "solutions", "nuance", "all"],
+  criterion: ["nuance", "all"],
+  solutionComponent: ["components", "tradeoffs", "nuance", "all"],
+  benefit: ["causeAndEffect", "motivation", "nuance", "all"],
+  effect: ["causeAndEffect", "nuance", "all"],
+  detriment: ["causeAndEffect", "solutions", "nuance", "all"],
   // tradeoffs seems like it's pretty good actually, not sure if there's need to keep motivation and concerns separately
   // solution: ["components", "tradeoffs", "motivation", "solutionConcerns", "all"],
-  solution: ["components", "tradeoffs", "all"],
-  obstacle: ["solutions", "all"],
-  mitigationComponent: ["components", "tradeoffs", "all"],
-  mitigation: ["components", "tradeoffs", "all"],
+  solution: ["components", "tradeoffs", "nuance", "all"],
+  obstacle: ["solutions", "nuance", "all"],
+  mitigationComponent: ["components", "tradeoffs", "nuance", "all"],
+  mitigation: ["components", "tradeoffs", "nuance", "all"],
 
   // research
-  question: ["all"],
-  answer: ["all"],
-  fact: ["all"],
-  source: ["all"],
+  question: ["isAbout", "nuance", "all"],
+  answer: ["isAbout", "nuance", "all"],
+  fact: ["isAbout", "nuance", "all"],
+  source: ["isAbout", "nuance", "all"],
 
   // justification
-  rootClaim: ["all"],
-  support: ["all"],
-  critique: ["all"],
+  rootClaim: ["isAbout", "nuance", "all"],
+  support: ["isAbout", "nuance", "all"],
+  critique: ["isAbout", "nuance", "all"],
 
   // generic
-  custom: ["all"],
+  custom: ["nuance", "all"],
 };
 
 // aspects are used as columns with a summary view's tab
@@ -71,6 +76,10 @@ const nodeAspects = [
   "detriments",
   "effects",
   "causes",
+  // research / justification
+  "justification",
+  "research",
+  "isAbout",
 ] as const;
 
 export type TopicAspect = (typeof topicAspects)[number];
@@ -90,4 +99,16 @@ export const aspectsByCategory: Record<Category, [Aspect, Aspect?]> = {
   solutions: ["solutions"],
   // effect
   causeAndEffect: ["causes", "effects"],
+  // research / justification
+  nuance: ["justification", "research"],
+  isAbout: ["isAbout"],
+};
+
+export const getAspectsForNodeType = (nodeType: NodeType) => {
+  const categories = categoriesBySummary[nodeType];
+  const aspects = categories
+    .flatMap((category) => aspectsByCategory[category])
+    .filter((aspect) => aspect !== undefined);
+
+  return uniqBy(aspects, (aspect) => aspect);
 };

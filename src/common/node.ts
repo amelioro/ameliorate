@@ -109,6 +109,29 @@ export const topicAINodeSchema = nodeSchema
   })
   .extend({
     tempId: z.number(),
+    summary: z
+      .record(z.any())
+      .optional()
+      .describe(
+        `Summary of nodes that are related to this node, categorized by aspect. Each node will be in the form "(<relation description>) <node type>: <node text>". Incoming/outgoing relations will be described precisely, but other aspects will have their relations partially implied by the aspect name, and partially described via either "direct" or "indirect", meaning that the node is directly connected or indirectly connected (through other nodes) to the given node.
+
+Here are the possible aspects, with descriptions and examples (examples are mostly from a topic about open source vs closed source code):
+- incoming: This is a very broad category to capture all nodes that point to this node. e.g. "('addresses' this Problem) solution: open source"
+- outgoing: This is a very broad category to capture all nodes that this node points to. e.g. "(this Solution 'addresses') problem: open source vs closed"
+- components: Describes pieces of this node, usually if this node is a Solution, Mitigation, or of another Component. e.g. "(direct) solutionComponent: source code can be forked"
+- addressed: Describes concerns that are addressed by this node, e.g. "(direct) detriment: possibility of abuse of lots of users without anyone looking close"
+- obstacles: Describes concerns that impede this node from being implemented, e.g. "(direct) obstacle: street is a thoroughfare"
+- motivation: Describes concerns that are addressed by this node, or benefits that this node causes, e.g. "(direct) benefit: others can create extensions of the API"
+- solutionConcerns: Describes concerns with this node - detriments this node causes, or obstacles that impede the node, e.g. "(direct) obstacle: street is a thoroughfare"
+- solutions: Describes solutions that address or mitigate this node, e.g. "(direct) mitigation: create paid version of the software for commercial use"
+- benefits: Describes benefits that this node causes, e.g. "(indirect) benefit: contributes logic, design, etc. to the tech world"
+- detriments: Describes detriments that this node causes, e.g. "(indirect) detriment: reduced quality"
+- effects: Describes effects that this node causes, e.g. "(indirect) detriment: reduced quality"
+- causes: Describes causes that lead to this node, e.g. "(indirect) solutionComponent: source code can be forked"
+- justification: Describes claims that support or critique this node, e.g. "(direct) rootClaim: 'open source' is an important Solution"
+- research: Describes questions, facts, or sources relevant to this node, e.g. "(direct) question: how many users are there?"
+- isAbout: Describes what this node is about (if it is a research or justification node), e.g. "(direct) solution: open source"`,
+      ),
   });
 
 /**
@@ -179,6 +202,28 @@ export const infoNodeTypes: Record<InfoCategory, NodeType[]> = {
 export const breakdownNodeTypes = infoNodeTypes.breakdown;
 export const researchNodeTypes = infoNodeTypes.research;
 export const justificationNodeTypes = infoNodeTypes.justification;
+
+export const prettyNodeTypes: Record<NodeType, string> = {
+  cause: "Cause",
+  problem: "Problem",
+  criterion: "Criterion",
+  solutionComponent: "Component",
+  benefit: "Benefit",
+  effect: "Effect",
+  detriment: "Detriment",
+  solution: "Solution",
+  obstacle: "Obstacle",
+  mitigationComponent: "Component",
+  mitigation: "Mitigation",
+  question: "Question",
+  answer: "Answer",
+  fact: "Fact",
+  source: "Source",
+  rootClaim: "Root Claim",
+  support: "Support",
+  critique: "Critique",
+  custom: "Custom",
+};
 
 export const getNewTopicProblemNode = (topicId: number, topicTitle: string): Node => {
   return {

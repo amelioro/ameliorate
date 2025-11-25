@@ -16,7 +16,7 @@ import {
   nodeTypes,
   reactFlowNodeSchema,
 } from "@/common/node";
-import { FlowNodeType } from "@/web/topic/utils/node";
+import { type FlowNodeType } from "@/web/topic/utils/node";
 import { GeneralFilter } from "@/web/view/utils/generalFilter";
 
 export interface Graph {

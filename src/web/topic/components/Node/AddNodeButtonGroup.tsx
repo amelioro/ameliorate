@@ -12,7 +12,7 @@ import {
 import fuzzysort from "fuzzysort";
 import { memo, useCallback, useRef, useState } from "react";
 
-import { NodeType, compareNodesByType } from "@/common/node";
+import { NodeType, compareNodesByType, prettyNodeTypes } from "@/common/node";
 import { Menu } from "@/web/common/components/Menu/Menu";
 import { Tooltip } from "@/web/common/components/Tooltip/Tooltip";
 import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
@@ -24,11 +24,11 @@ import {
   getDirectedRelationDescription,
 } from "@/web/topic/utils/edge";
 import { Node } from "@/web/topic/utils/graph";
-import { nodeDecorations } from "@/web/topic/utils/node";
+import { nodeDecorations } from "@/web/topic/utils/nodeDecoration";
 import { useExpandAddNodeButtons } from "@/web/view/userConfigStore";
 
 const getOptionText = (node: Node) => {
-  const { title } = nodeDecorations[node.type];
+  const title = prettyNodeTypes[node.type];
   return `${title}: ${node.data.label}`;
 };
 

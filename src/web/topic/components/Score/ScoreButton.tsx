@@ -4,7 +4,7 @@ import { MouseEventHandler, forwardRef } from "react";
 import { StyledButton } from "@/web/topic/components/Score/ScoreButton.styles";
 import { ScoreCompare } from "@/web/topic/components/Score/ScoreCompare";
 import { type Score as ScoreData } from "@/web/topic/utils/graph";
-import { indicatorLengthRem } from "@/web/topic/utils/node";
+import { indicatorLengthRem } from "@/web/topic/utils/nodeDecoration";
 import {
   AggregationMode,
   getDisplayScore,

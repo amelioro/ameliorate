@@ -3,7 +3,7 @@ import { IconButton, Typography } from "@mui/material";
 import { ReactNode, memo } from "react";
 import { Handle, Position, useStore } from "reactflow";
 
-import { nodeTypes } from "@/common/node";
+import { nodeTypes, prettyNodeTypes } from "@/common/node";
 import { Tooltip } from "@/web/common/components/Tooltip/Tooltip";
 import { useSessionUser } from "@/web/common/hooks";
 import { useNeighborsInDirection } from "@/web/topic/diagramStore/nodeHooks";
@@ -11,13 +11,14 @@ import { useHiddenNodes } from "@/web/topic/hooks/flowHooks";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { Node } from "@/web/topic/utils/graph";
 import { Orientation } from "@/web/topic/utils/layout";
-import { nodeDecorations } from "@/web/topic/utils/node";
+import { nodeDecorations } from "@/web/topic/utils/nodeDecoration";
 import { RelativePlacement } from "@/web/topic/utils/relativePlacement";
 import { showNode } from "@/web/view/currentViewStore/filter";
 import { useShowNeighborIndicators } from "@/web/view/userConfigStore";
 
 const NodeSummary = ({ node, beforeSlot }: { node: Node; beforeSlot?: ReactNode }) => {
-  const { NodeIcon, title } = nodeDecorations[node.type];
+  const { NodeIcon } = nodeDecorations[node.type];
+  const title = prettyNodeTypes[node.type];
 
   const summary = `${title}: ${node.data.label}`;
 

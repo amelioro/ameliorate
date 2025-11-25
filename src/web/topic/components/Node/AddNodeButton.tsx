@@ -1,14 +1,14 @@
 import { Button, MenuItem, useTheme } from "@mui/material";
 import { useCallback, useContext } from "react";
 
-import { NodeType } from "@/common/node";
+import { NodeType, prettyNodeTypes } from "@/common/node";
 import { Tooltip } from "@/web/common/components/Tooltip/Tooltip";
 import { useSessionUser } from "@/web/common/hooks";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { addNode, addNodeWithoutEdge } from "@/web/topic/diagramStore/createDeleteActions";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { DirectedToRelation, getDirectedRelationDescription } from "@/web/topic/utils/edge";
-import { nodeDecorations } from "@/web/topic/utils/node";
+import { nodeDecorations } from "@/web/topic/utils/nodeDecoration";
 
 /**
  * Either we add a node with a relation to an existing node, or we add a node without an edge.
@@ -85,25 +85,26 @@ export const AddNodeButton = ({
 
   const toNodeType = addableRelation ? addableRelation[addableRelation.as] : addableNodeType;
 
-  const decoration = nodeDecorations[toNodeType];
+  const NodeIcon = nodeDecorations[toNodeType].NodeIcon;
+  const title = prettyNodeTypes[toNodeType];
 
   const titleSuffix =
     addableRelation === undefined ? "" : ` (${getDirectedRelationDescription(addableRelation)})`;
 
   return buttonType === "menu" ? (
     <MenuItem className={className} onClick={memoizedOnClick}>
-      <decoration.NodeIcon
+      <NodeIcon
         className="mr-2 rounded p-0.5"
         sx={{ backgroundColor: theme.palette[toNodeType].main }}
       />
       <span>
-        Add {decoration.title}
+        Add {title}
         <i className="ml-1 text-slate-400">{titleSuffix}</i>
       </span>
     </MenuItem>
   ) : (
     <Tooltip
-      tooltipHeading={`Add ${decoration.title}` + titleSuffix}
+      tooltipHeading={`Add ${title}` + titleSuffix}
       placement={tooltipDirection}
       immediatelyOpenOnTouch={false}
       childrenHideViaCss={true}
@@ -115,7 +116,7 @@ export const AddNodeButton = ({
         variant="contained"
         onClick={memoizedOnClick}
       >
-        <decoration.NodeIcon />
+        <NodeIcon />
       </Button>
     </Tooltip>
   );

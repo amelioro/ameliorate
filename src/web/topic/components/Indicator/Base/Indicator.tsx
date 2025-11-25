@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import { MouseEventHandler } from "react";
 
-import { MuiIcon, indicatorLengthRem } from "@/web/topic/utils/node";
+import { type MuiIcon, indicatorLengthRem } from "@/web/topic/utils/nodeDecoration";
 
 export interface IndicatorProps {
   Icon: MuiIcon;

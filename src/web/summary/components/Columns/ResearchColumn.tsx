@@ -1,34 +1,32 @@
-import { Timeline } from "@mui/icons-material";
+import { School, Timeline } from "@mui/icons-material";
 import { Divider } from "@mui/material";
 
-import { effectsDirectedSearchRelations } from "@/web/summary/aspectFilter";
+import { researchDirectedSearchRelations } from "@/web/summary/aspectFilter";
 import { IndirectHelpIcon } from "@/web/summary/components/IndirectHelpIcon";
 import { Row } from "@/web/summary/components/Row";
 import { AddNodeButtonGroup } from "@/web/topic/components/Node/AddNodeButtonGroup";
-import { useEffectType } from "@/web/topic/diagramStore/nodeTypeHooks";
-import { useEffects } from "@/web/topic/diagramStore/summary";
+import { useResearch } from "@/web/topic/diagramStore/summary";
 import { addableRelationsFrom, filterAddablesViaSearchRelations } from "@/web/topic/utils/edge";
 import { Node } from "@/web/topic/utils/graph";
-import { nodeDecorations } from "@/web/topic/utils/nodeDecoration";
 
 interface Props {
   summaryNode: Node;
 }
 
-export const EffectsColumn = ({ summaryNode }: Props) => {
-  const { directNodes, indirectNodes } = useEffects(summaryNode);
-  const effectType = useEffectType(summaryNode.id);
+export const ResearchColumn = ({ summaryNode }: Props) => {
+  const { directNodes, indirectNodes } = useResearch(summaryNode);
 
   const defaultAddableRelations = addableRelationsFrom(
     summaryNode.type,
     undefined,
     false,
-    effectType,
+    "n/a",
+    false,
   );
 
   const addableRelations = filterAddablesViaSearchRelations(
     defaultAddableRelations,
-    effectsDirectedSearchRelations,
+    researchDirectedSearchRelations,
   );
 
   const AddButtons = (
@@ -39,12 +37,7 @@ export const EffectsColumn = ({ summaryNode }: Props) => {
 
   return (
     <div className="flex flex-col">
-      <Row
-        title="Effects"
-        Icon={nodeDecorations.effect.NodeIcon}
-        addButtonsSlot={AddButtons}
-        nodes={directNodes}
-      />
+      <Row title="Research" Icon={School} addButtonsSlot={AddButtons} nodes={directNodes} />
 
       <Divider className="mx-2 my-1" />
 

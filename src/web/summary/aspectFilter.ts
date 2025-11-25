@@ -6,8 +6,13 @@
 
 import { uniqBy } from "es-toolkit";
 
-import { getEdgeInfoCategory } from "@/common/edge";
+import {
+  getEdgeInfoCategory,
+  justificationRelationNames,
+  researchRelationNames,
+} from "@/common/edge";
 import { badNodeTypes, getNodeInfoCategory } from "@/common/node";
+import { type Aspect } from "@/web/summary/summary";
 import { DirectedSearchRelation, getDirectedRelationDescription } from "@/web/topic/utils/edge";
 import {
   Graph,
@@ -17,6 +22,61 @@ import {
   splitNodesByDirectAndIndirect,
   upstreamNodes,
 } from "@/web/topic/utils/graph";
+
+/**
+ * Return nodes for a given aspect of a summary node.
+ *
+ * Somewhat awkward return value because the incoming/outgoing aspects don't always make sense
+ * without having their relations, where the other aspects do.
+ *
+ * Example cases that want this method:
+ * - displaying aspects in the diagram (e.g. for focused nodes feature, not yet implemented) only
+ * needs the nodes, because relations are automatically added
+ * - sharing aspects via JSON (e.g. for LLM to more-easily understand relations that each node has);
+ * incoming/outgoing won't make sense here (e.g. solution outgoing: Benefit, Problem) without
+ * relations specified (e.g. solution outgoing: creates Benefit, addresses Problem)
+ *
+ * So we're just returning direct nodes OR direct nodes by relation description, then the diagram
+ * can flatmap everything, and we handle both cases separately for JSON.
+ */
+export const getAspectNodes = (
+  summaryNode: Node,
+  graph: Graph,
+  aspect: Aspect,
+):
+  | { directNodes: Node[]; indirectNodes: Node[]; nodesByRelationDescription?: undefined }
+  | {
+      directNodes?: undefined;
+      indirectNodes?: undefined;
+      nodesByRelationDescription: Record<string, Node[]>;
+    } => {
+  if (aspect === "incoming")
+    return {
+      nodesByRelationDescription: getIncomingNodesByRelationDescription(summaryNode, graph),
+    };
+  else if (aspect === "outgoing")
+    return {
+      nodesByRelationDescription: getOutgoingNodesByRelationDescription(summaryNode, graph),
+    };
+  else if (aspect === "components") return getComponents(summaryNode, graph);
+  else if (aspect === "addressed") return getAddressed(summaryNode, graph);
+  else if (aspect === "obstacles") return getObstacles(summaryNode, graph);
+  else if (aspect === "motivation") return getMotivation(summaryNode, graph);
+  else if (aspect === "solutionConcerns") return getSolutionConcerns(summaryNode, graph);
+  else if (aspect === "solutions") return getSolutions(summaryNode, graph);
+  else if (aspect === "benefits") return getSolutionBenefits(summaryNode, graph);
+  else if (aspect === "detriments") return getDetriments(summaryNode, graph);
+  else if (aspect === "effects") return getEffects(summaryNode, graph);
+  else if (aspect === "causes") return getCauses(summaryNode, graph);
+  else if (aspect === "justification") return getJustification(summaryNode, graph);
+  else if (aspect === "research") return getResearch(summaryNode, graph);
+  else if (aspect === "isAbout") return getIsAbout(summaryNode, graph);
+  else {
+    throw new Error(
+      `unhandled aspect ${aspect} - note: topic aspects e.g. coreNodes are not supported`,
+    );
+  }
+};
 
 // TODO?: this and "getOutgoing..." could be refactored to be one function that takes a direction
 export const getIncomingNodesByRelationDescription = (summaryNode: Node, graph: Graph) => {
@@ -86,14 +146,51 @@ export const getComponents = (summaryNode: Node, graph: Graph) => {
   return splitNodesByDirectAndIndirect(components);
 };
 
+export const getMotivation = (summaryNode: Node, graph: Graph) => {
+  const { directNodes: directBenefits, indirectNodes: indirectBenefits } = getSolutionBenefits(
+    summaryNode,
+    graph,
+  );
+  const { directNodes: directAddressed, indirectNodes: indirectAddressed } = getAddressed(
+    summaryNode,
+    graph,
+  );
+
+  return {
+    directNodes: [...directBenefits, ...directAddressed],
+    indirectNodes: [...indirectBenefits, ...indirectAddressed],
+  };
+};
+
 export const addressedDirectedSearchRelations: DirectedSearchRelation[] = [
-  { toDirection: "target", relationNames: ["addresses"] },
+  { toDirection: "target", relationNames: ["addresses", "mitigates"] },
 ];
 
 export const getAddressed = (summaryNode: Node, graph: Graph) => {
-  const addressed = downstreamNodes(summaryNode, graph, ["has", "creates"], ["addresses"]);
+  const addressed = downstreamNodes(
+    summaryNode,
+    graph,
+    ["has", "creates"],
+    ["addresses", "mitigates"],
+  );
 
   return splitNodesByDirectAndIndirect(addressed);
+};
+
+export const getSolutionConcerns = (summaryNode: Node, graph: Graph) => {
+  const { directNodes: directDetriments, indirectNodes: indirectDetriments } = getDetriments(
+    summaryNode,
+    graph,
+  );
+  const { directNodes: directObstacles, indirectNodes: indirectObstacles } = getObstacles(
+    summaryNode,
+    graph,
+  );
+
+  return {
+    directNodes: [...directDetriments, ...directObstacles],
+    indirectNodes: [...indirectDetriments, ...indirectObstacles],
+  };
 };
 
 export const obstaclesDirectedSearchRelations: DirectedSearchRelation[] = [
@@ -229,4 +326,72 @@ export const getCauses = (summaryNode: Node, graph: Graph) => {
   ];
 
   return splitNodesByDirectAndIndirect(causes);
+};
+
+// justification / research
+
+// no directed search relations for justification because root claims make it complicated
+
+export const getJustification = (summaryNode: Node, graph: Graph) => {
+  const directRootClaims = graph.nodes.filter(
+    (node) => node.type === "rootClaim" && node.data.arguedDiagramPartId === summaryNode.id,
+  );
+
+  const indirectClaimsThroughRootClaims = directRootClaims.flatMap((rootClaim) =>
+    upstreamNodes(rootClaim, graph, ["supports", "critiques"], ["supports", "critiques"]),
+  );
+
+  const claimsThroughThisNode = upstreamNodes(
+    summaryNode,
+    graph,
+    ["supports", "critiques"],
+    ["supports", "critiques"],
+  );
+
+  const { directNodes: directThroughThisNode, indirectNodes: indirectThroughThisNode } =
+    splitNodesByDirectAndIndirect(claimsThroughThisNode);
+
+  return {
+    directNodes: [...directRootClaims, ...directThroughThisNode],
+    indirectNodes: [...indirectClaimsThroughRootClaims, ...indirectThroughThisNode],
+  };
+};
+
+export const researchDirectedSearchRelations: DirectedSearchRelation[] = [
+  {
+    toDirection: "source",
+    relationNames: ["asksAbout", "potentialAnswerTo", "relevantFor", "sourceOf", "mentions"],
+  },
+];
+
+export const getResearch = (summaryNode: Node, graph: Graph) => {
+  const research = upstreamNodes(
+    summaryNode,
+    graph,
+    ["asksAbout", "potentialAnswerTo", "relevantFor", "sourceOf", "mentions"],
+    ["asksAbout", "potentialAnswerTo", "relevantFor", "sourceOf", "mentions"],
+  );
+
+  return splitNodesByDirectAndIndirect(research);
+};
+
+// No isAbout directed search relations because root claims make it complicated
+
+export const getIsAbout = (summaryNode: Node, graph: Graph) => {
+  // because there isn't a direct relation from root claim to its parent part being argued
+  const rootClaimIsAboutNode =
+    summaryNode.type === "rootClaim"
+      ? graph.nodes.find((node) => node.id === summaryNode.data.arguedDiagramPartId)
+      : undefined;
+
+  if (rootClaimIsAboutNode) return { directNodes: [rootClaimIsAboutNode], indirectNodes: [] };
+
+  const isAboutNodes = downstreamNodes(
+    summaryNode,
+    graph,
+    [], // we only want nodes we're directly referencing
+    researchRelationNames.concat(justificationRelationNames), // should work for both research and justification nodes
+  );
+
+  return { directNodes: isAboutNodes, indirectNodes: [] };
 };
