@@ -5,9 +5,12 @@ import {
   getDetriments,
   getEffects,
   getIncomingNodesByRelationDescription,
+  getIsAbout,
+  getJustification,
   getMotivation,
   getObstacles,
   getOutgoingNodesByRelationDescription,
+  getResearch,
   getSolutionBenefits,
   getSolutionConcerns,
   getSolutions,
@@ -93,5 +96,24 @@ export const useEffects = (summaryNode: Node) => {
 export const useCauses = (summaryNode: Node) => {
   return useDiagramStore((state) => {
     return getCauses(summaryNode, state);
+  });
+};
+
+// justification / research
+export const useJustification = (summaryNode: Node) => {
+  return useDiagramStore((state) => {
+    return getJustification(summaryNode, state);
+  });
+};
+
+export const useResearch = (summaryNode: Node) => {
+  return useDiagramStore((state) => {
+    return getResearch(summaryNode, state);
+  });
+};
+
+export const useIsAbout = (summaryNode: Node) => {
+  return useDiagramStore((state) => {
+    return getIsAbout(summaryNode, state);
   });
 };

@@ -127,7 +127,10 @@ Here are the possible aspects, with descriptions and examples (examples are most
 - benefits: Describes benefits that this node causes, e.g. "(indirect) benefit: contributes logic, design, etc. to the tech world"
 - detriments: Describes detriments that this node causes, e.g. "(indirect) detriment: reduced quality"
 - effects: Describes effects that this node causes, e.g. "(indirect) detriment: reduced quality"
-- causes: Describes causes that lead to this node, e.g. "(indirect) solutionComponent: source code can be forked"`,
+- causes: Describes causes that lead to this node, e.g. "(indirect) solutionComponent: source code can be forked"
+- justification: Describes claims that support or critique this node, e.g. "(direct) rootClaim: 'open source' is an important Solution"
+- research: Describes questions, facts, or sources relevant to this node, e.g. "(direct) question: how many users are there?"
+- isAbout: Describes what this node is about (if it is a research or justification node), e.g. "(direct) solution: open source"`,
       ),
   });
 

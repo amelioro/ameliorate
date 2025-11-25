@@ -6,7 +6,11 @@
 
 import { uniqBy } from "es-toolkit";
 
-import { getEdgeInfoCategory } from "@/common/edge";
+import {
+  getEdgeInfoCategory,
+  justificationRelationNames,
+  researchRelationNames,
+} from "@/common/edge";
 import { badNodeTypes, getNodeInfoCategory } from "@/common/node";
 import { type Aspect } from "@/web/summary/summary";
 import { DirectedSearchRelation, getDirectedRelationDescription } from "@/web/topic/utils/edge";
@@ -64,6 +68,9 @@ export const getAspectNodes = (
   else if (aspect === "detriments") return getDetriments(summaryNode, graph);
   else if (aspect === "effects") return getEffects(summaryNode, graph);
   else if (aspect === "causes") return getCauses(summaryNode, graph);
+  else if (aspect === "justification") return getJustification(summaryNode, graph);
+  else if (aspect === "research") return getResearch(summaryNode, graph);
+  else if (aspect === "isAbout") return getIsAbout(summaryNode, graph);
   else {
     throw new Error(
       `unhandled aspect ${aspect} - note: topic aspects e.g. coreNodes are not supported`,
@@ -319,4 +326,72 @@ export const getCauses = (summaryNode: Node, graph: Graph) => {
   ];
 
   return splitNodesByDirectAndIndirect(causes);
+};
+
+// justification / research
+
+// no directed search relations for justification because root claims make it complicated
+
+export const getJustification = (summaryNode: Node, graph: Graph) => {
+  const directRootClaims = graph.nodes.filter(
+    (node) => node.type === "rootClaim" && node.data.arguedDiagramPartId === summaryNode.id,
+  );
+
+  const indirectClaimsThroughRootClaims = directRootClaims.flatMap((rootClaim) =>
+    upstreamNodes(rootClaim, graph, ["supports", "critiques"], ["supports", "critiques"]),
+  );
+
+  const claimsThroughThisNode = upstreamNodes(
+    summaryNode,
+    graph,
+    ["supports", "critiques"],
+    ["supports", "critiques"],
+  );
+
+  const { directNodes: directThroughThisNode, indirectNodes: indirectThroughThisNode } =
+    splitNodesByDirectAndIndirect(claimsThroughThisNode);
+
+  return {
+    directNodes: [...directRootClaims, ...directThroughThisNode],
+    indirectNodes: [...indirectClaimsThroughRootClaims, ...indirectThroughThisNode],
+  };
+};
+
+export const researchDirectedSearchRelations: DirectedSearchRelation[] = [
+  {
+    toDirection: "source",
+    relationNames: ["asksAbout", "potentialAnswerTo", "relevantFor", "sourceOf", "mentions"],
+  },
+];
+
+export const getResearch = (summaryNode: Node, graph: Graph) => {
+  const research = upstreamNodes(
+    summaryNode,
+    graph,
+    ["asksAbout", "potentialAnswerTo", "relevantFor", "sourceOf", "mentions"],
+    ["asksAbout", "potentialAnswerTo", "relevantFor", "sourceOf", "mentions"],
+  );
+
+  return splitNodesByDirectAndIndirect(research);
+};
+
+// No isAbout directed search relations because root claims make it complicated
+
+export const getIsAbout = (summaryNode: Node, graph: Graph) => {
+  // because there isn't a direct relation from root claim to its parent part being argued
+  const rootClaimIsAboutNode =
+    summaryNode.type === "rootClaim"
+      ? graph.nodes.find((node) => node.id === summaryNode.data.arguedDiagramPartId)
+      : undefined;
+
+  if (rootClaimIsAboutNode) return { directNodes: [rootClaimIsAboutNode], indirectNodes: [] };
+
+  const isAboutNodes = downstreamNodes(
+    summaryNode,
+    graph,
+    [], // we only want nodes we're directly referencing
+    researchRelationNames.concat(justificationRelationNames), // should work for both research and justification nodes
+  );
+
+  return { directNodes: isAboutNodes, indirectNodes: [] };
 };

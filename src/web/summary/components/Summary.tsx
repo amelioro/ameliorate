@@ -11,9 +11,12 @@ import { CoreNodesColumn } from "@/web/summary/components/Columns/CoreNodesColum
 import { DetrimentsColumn } from "@/web/summary/components/Columns/DetrimentsColumn";
 import { EffectsColumn } from "@/web/summary/components/Columns/EffectsColumn";
 import { IncomingColumn } from "@/web/summary/components/Columns/IncomingColumn";
+import { IsAboutColumn } from "@/web/summary/components/Columns/IsAboutColumn";
+import { JustificationColumn } from "@/web/summary/components/Columns/JustificationColumn";
 import { MotivationColumn } from "@/web/summary/components/Columns/MotivationColumn";
 import { ObstaclesColumn } from "@/web/summary/components/Columns/ObstaclesColumn";
 import { OutgoingColumn } from "@/web/summary/components/Columns/OutgoingColumn";
+import { ResearchColumn } from "@/web/summary/components/Columns/ResearchColumn";
 import { SolutionConcernsColumn } from "@/web/summary/components/Columns/SolutionConcernsColumn";
 import { SolutionsColumn } from "@/web/summary/components/Columns/SolutionsColumn";
 import { CoreNodesHeading } from "@/web/summary/components/CoreNodesHeading";
@@ -54,6 +57,10 @@ const columnComponentsByAspect: Record<NodeAspect, ComponentType<NodeColumnProps
   detriments: DetrimentsColumn,
   effects: EffectsColumn,
   causes: CausesColumn,
+  // research / justification
+  justification: JustificationColumn,
+  research: ResearchColumn,
+  isAbout: IsAboutColumn,
 };
 
 export const Summary = () => {
