@@ -87,11 +87,16 @@ export const getComponents = (summaryNode: Node, graph: Graph) => {
 };
 
 export const addressedDirectedSearchRelations: DirectedSearchRelation[] = [
-  { toDirection: "target", relationNames: ["addresses"] },
+  { toDirection: "target", relationNames: ["addresses", "mitigates"] },
 ];
 
 export const getAddressed = (summaryNode: Node, graph: Graph) => {
-  const addressed = downstreamNodes(summaryNode, graph, ["has", "creates"], ["addresses"]);
+  const addressed = downstreamNodes(
+    summaryNode,
+    graph,
+    ["has", "creates"],
+    ["addresses", "mitigates"],
+  );
 
   return splitNodesByDirectAndIndirect(addressed);
 };
