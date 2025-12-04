@@ -1,4 +1,4 @@
-import ELK, { ElkEdgeSection, ElkLabel, ElkNode, LayoutOptions } from "elkjs";
+import ELK, { ElkEdgeSection, ElkExtendedEdge, ElkLabel, ElkNode, LayoutOptions } from "elkjs";
 
 import { throwError } from "@/common/errorHandling";
 import { NodeType, compareNodesByType, isEffect } from "@/common/node";
@@ -175,18 +175,17 @@ const parseElkjsOutput = (layoutedGraph: ElkNode): LayoutedGraph => {
   return { layoutedNodes, layoutedEdges };
 };
 
-export const layout = async (
-  diagram: Diagram,
+/**
+ * See supported layout options at https://www.eclipse.org/elk/reference/algorithms/org-eclipse-elk-layered.html
+ */
+const buildElkLayoutOptions = (
   partition: boolean,
   layerNodeIslandsTogether: boolean,
   minimizeEdgeCrossings: boolean,
   avoidEdgeLabelOverlap: boolean,
   thoroughness: number,
-): Promise<LayoutedGraph> => {
-  const { nodes, edges } = diagram;
-
-  // see support layout options at https://www.eclipse.org/elk/reference/algorithms/org-eclipse-elk-layered.html
-  const layoutOptions: LayoutOptions = {
+): LayoutOptions => {
+  return {
     algorithm: "layered",
     "elk.direction": orientation,
     // results in edges curving more around other things
@@ -232,52 +231,83 @@ export const layout = async (
     // this is particularly needed when drawing edge paths based on this layout algorithm's output.
     mergeEdges: "true",
   };
+};
+
+const buildElkEdges = (
+  { edges, nodes }: Diagram,
+  avoidEdgeLabelOverlap: boolean,
+): ElkExtendedEdge[] => {
+  return edges
+    .toSorted((edge1, edge2) => compareEdges(edge1, edge2, nodes))
+    .map((edge) => {
+      return {
+        id: edge.id,
+        sources: [edge.source],
+        targets: [edge.target],
+        labels: avoidEdgeLabelOverlap
+          ? [
+              {
+                text: edge.label,
+                layoutOptions: {
+                  "edgeLabels.inline": "true",
+                },
+                width: scalePxViaDefaultFontSize(labelWidthPx),
+                // Give labels 0 height so they don't create more space between node layers;
+                // layout still avoids overlap with labels based on their widths when they have 0 height.
+                height: 0,
+              },
+            ]
+          : undefined,
+      };
+    });
+};
+
+const buildElkNodes = (diagram: Diagram): ElkNode[] => {
+  return diagram.nodes
+    .toSorted((node1, node2) => compareNodesByType(node1, node2))
+    .map((node) => {
+      return {
+        id: node.id,
+        width: nodeWidthPx,
+        height: calculateNodeHeight(node.data.label),
+        layoutOptions: {
+          // Some nodes can be taller than others (based on how long their text is),
+          // so align them all along the center.
+          "elk.alignment": "CENTER",
+          // Allow nodes to be partitioned into layers by type.
+          // This can get awkward if there are multiple problems with their own sets of criteria,
+          // solutions, components, effects; we might be able to improve that situation by modeling
+          // each problem within a nested node. Or maybe we could just do partitioning within
+          // a special "problem context view" rather than in the main topic diagram view.
+          "elk.partitioning.partition": calculatePartition(node, diagram),
+        },
+      };
+    });
+};
+
+export const layout = async (
+  diagram: Diagram,
+  partition: boolean,
+  layerNodeIslandsTogether: boolean,
+  minimizeEdgeCrossings: boolean,
+  avoidEdgeLabelOverlap: boolean,
+  thoroughness: number,
+): Promise<LayoutedGraph> => {
+  const layoutOptions = buildElkLayoutOptions(
+    partition,
+    layerNodeIslandsTogether,
+    minimizeEdgeCrossings,
+    avoidEdgeLabelOverlap,
+    thoroughness,
+  );
+
+  const elkEdges = buildElkEdges(diagram, avoidEdgeLabelOverlap);
+  const elkNodes = buildElkNodes(diagram);
 
   const graph: ElkNode = {
     id: "elkgraph",
-    children: [...nodes]
-      .toSorted((node1, node2) => compareNodesByType(node1, node2))
-      .map((node) => {
-        return {
-          id: node.id,
-          width: nodeWidthPx,
-          height: calculateNodeHeight(node.data.label),
-          layoutOptions: {
-            // Some nodes can be taller than others (based on how long their text is),
-            // so align them all along the center.
-            "elk.alignment": "CENTER",
-            // Allow nodes to be partitioned into layers by type.
-            // This can get awkward if there are multiple problems with their own sets of criteria,
-            // solutions, components, effects; we might be able to improve that situation by modeling
-            // each problem within a nested node. Or maybe we could just do partitioning within
-            // a special "problem context view" rather than in the main topic diagram view.
-            "elk.partitioning.partition": calculatePartition(node, diagram),
-          },
-        };
-      }),
-    edges: edges
-      .toSorted((edge1, edge2) => compareEdges(edge1, edge2, nodes))
-      .map((edge) => {
-        return {
-          id: edge.id,
-          sources: [edge.source],
-          targets: [edge.target],
-          labels: avoidEdgeLabelOverlap
-            ? [
-                {
-                  text: edge.label,
-                  layoutOptions: {
-                    "edgeLabels.inline": "true",
-                  },
-                  width: scalePxViaDefaultFontSize(labelWidthPx),
-                  // Give labels 0 height so they don't create more space between node layers;
-                  // layout still avoids overlap with labels based on their widths when they have 0 height.
-                  height: 0,
-                },
-              ]
-            : undefined,
-        };
-      }),
+    children: elkNodes,
+    edges: elkEdges,
   };
 
   // hack to try laying out without partition if partitions cause error
