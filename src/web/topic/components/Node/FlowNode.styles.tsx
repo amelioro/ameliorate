@@ -20,7 +20,7 @@ export const HoverBridgeDiv = styled.div`
   z-index: -1; // behind node
   display: none;
 
-  .react-flow__node:hover > & {
+  .react-flow__node:not(:has(.interactable:hover)):hover > & {
     display: inherit;
   }
 `;

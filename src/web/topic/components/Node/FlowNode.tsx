@@ -13,14 +13,16 @@ import {
   StyledEditableNode,
   nodeStyles,
 } from "@/web/topic/components/Node/FlowNode.styles";
+import { FocusNodeAttachment } from "@/web/topic/components/Node/FocusNodeAttachment";
 import { NodeHandle } from "@/web/topic/components/Node/NodeHandle";
 import { useIsEdgeSelected, useIsNeighborSelected } from "@/web/topic/diagramStore/nodeHooks";
 import { useEffectType } from "@/web/topic/diagramStore/nodeTypeHooks";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { addableRelationsFrom } from "@/web/topic/utils/edge";
 import { Node } from "@/web/topic/utils/graph";
-import { orientation, positions } from "@/web/topic/utils/layout";
+import { opposite, orientation, positions } from "@/web/topic/utils/layout";
 import { FlowNodeType } from "@/web/topic/utils/node";
+import { flexOnNodeHoverSelectedClasses, interactableClass } from "@/web/topic/utils/styleUtils";
 import { getFlashlightMode, useUnrestrictedEditing } from "@/web/view/actionConfigStore";
 import { showNodeAndNeighbors } from "@/web/view/currentViewStore/filter";
 import { useIsGraphPartSelected } from "@/web/view/selectedPartStore";
@@ -69,9 +71,6 @@ export const FlowNode = (flowNode: NodeProps) => {
     effectType,
   );
 
-  const showAddButtonsClasses =
-    "[.selectable:hover_>_&]:flex [.selectable:has(>_div_>_.selected)_>_&]:flex";
-
   // not sure if this is ideal or not, but we're using a darker shadow so that the button
   // stands out when in front of a bunch of edges (Mui's default shadow doesn't stand out much)
   const addButtonDecorationClasses = "shadow shadow-gray-500";
@@ -97,6 +96,17 @@ export const FlowNode = (flowNode: NodeProps) => {
           ? "left-0 top-1/2 -translate-y-1/2 translate-x-[calc(-100%-16px)]"
           : "right-0 top-1/2 -translate-y-1/2 translate-x-[calc(100%+16px)]";
 
+  const focusNodeAttachmentPosition = opposite[addButtonPosition];
+
+  const focusNodeAttachmentPositionClasses =
+    focusNodeAttachmentPosition === Position.Top
+      ? "top-0 left-2 -translate-y-full"
+      : focusNodeAttachmentPosition === Position.Bottom
+        ? "bottom-0 left-2 translate-y-full"
+        : focusNodeAttachmentPosition === Position.Left
+          ? "left-0 bottom-2 -translate-x-full"
+          : "right-0 bottom-2 translate-x-full";
+
   return (
     <>
       <Global styles={nodeStyles(node, spotlight)} />
@@ -110,7 +120,13 @@ export const FlowNode = (flowNode: NodeProps) => {
         layout={animated}
         style={{ pointerEvents: "none" }}
       >
-        <NodeHandle node={node} direction="above" orientation={orientation} />
+        <FocusNodeAttachment
+          node={node}
+          position={focusNodeAttachmentPosition}
+          className={focusNodeAttachmentPositionClasses + ` ${interactableClass}`}
+        />
+
+        <NodeHandle position={abovePosition} />
         <StyledEditableNode
           node={node}
           className={`spotlight-${spotlight}`}
@@ -118,7 +134,7 @@ export const FlowNode = (flowNode: NodeProps) => {
             if (getFlashlightMode()) showNodeAndNeighbors(node.id, true);
           }}
         />
-        <NodeHandle node={node} direction="below" orientation={orientation} />
+        <NodeHandle position={belowPosition} />
       </motion.div>
 
       {/* should this use react-flow's NodeToolbar? seems like it'd automatically handle positioning. but it probably would be jank if we want the toolbar to work outside of the diagram */}
@@ -128,7 +144,7 @@ export const FlowNode = (flowNode: NodeProps) => {
           addableRelations={addableRelations}
           title="Add node"
           openDirection={addButtonPosition === Position.Top ? "top" : "bottom"}
-          className={`absolute hidden ${showAddButtonsClasses} ${addButtonPositionClasses} ${addButtonDecorationClasses}`}
+          className={`absolute hidden ${flexOnNodeHoverSelectedClasses} ${addButtonPositionClasses} ${addButtonDecorationClasses}`}
         />
       )}
     </>

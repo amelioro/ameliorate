@@ -4,7 +4,6 @@ import {
   Build,
   Delete,
   EditOff,
-  FiberManualRecord,
   FormatLineSpacing,
   Group,
   Highlight,
@@ -61,14 +60,12 @@ import {
   toggleIndicateWhenNodeForcedToShow,
   toggleQuickScoring,
   toggleShowContentIndicators,
-  toggleShowNeighborIndicators,
   toggleShowScores,
   toggleShowViewIndicators,
   toggleZenMode,
   useIndicateWhenNodeForcedToShow,
   useQuickScoring,
   useShowContentIndicators,
-  useShowNeighborIndicators,
   useShowScores,
   useShowViewIndicators,
 } from "@/web/view/userConfigStore";
@@ -153,7 +150,6 @@ interface ShowHideMenuProps {
 const ShowHideMenu = ({ anchorEl, setAnchorEl }: ShowHideMenuProps) => {
   const showScores = useShowScores();
   const showContentIndicators = useShowContentIndicators();
-  const showNeighborIndicators = useShowNeighborIndicators();
   const showViewIndicators = useShowViewIndicators();
   const indicateWhenNodeForcedToShow = useIndicateWhenNodeForcedToShow();
 
@@ -187,18 +183,6 @@ const ShowHideMenu = ({ anchorEl, setAnchorEl }: ShowHideMenuProps) => {
         <ListItemText primary="Show content indicators" />
         <Switch
           checked={showContentIndicators}
-          // for some reason the parent MenuItem click gets doubled if we don't stopPropagation
-          onClick={(e) => e.stopPropagation()}
-          className="pointer-events-none"
-        />
-      </MenuItem>
-      <MenuItem onClick={() => toggleShowNeighborIndicators()}>
-        <ListItemIcon>
-          <FiberManualRecord />
-        </ListItemIcon>
-        <ListItemText primary="Show neighbor indicators" />
-        <Switch
-          checked={showNeighborIndicators}
           // for some reason the parent MenuItem click gets doubled if we don't stopPropagation
           onClick={(e) => e.stopPropagation()}
           className="pointer-events-none"
