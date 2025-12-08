@@ -1,4 +1,5 @@
 import ELK, { ElkEdgeSection, ElkExtendedEdge, ElkLabel, ElkNode, LayoutOptions } from "elkjs";
+import { Position } from "reactflow";
 
 import { throwError } from "@/common/errorHandling";
 import { NodeType, compareNodesByType, isEffect } from "@/common/node";
@@ -10,6 +11,41 @@ import { type Edge, type Node } from "@/web/topic/utils/graph";
 
 export type Orientation = "DOWN" | "UP" | "RIGHT" | "LEFT";
 export const orientation: Orientation = "UP" as Orientation; // not constant to allow potential other orientations in the future, and keeping code that currently exists for handling "LEFT" orientation
+
+type OrientationDirection = "forward" | "backward" | "clockwise" | "counterClockwise";
+export const positions: Record<OrientationDirection, Record<Orientation, Position>> = {
+  forward: {
+    DOWN: Position.Bottom,
+    UP: Position.Top,
+    RIGHT: Position.Right,
+    LEFT: Position.Left,
+  },
+  backward: {
+    DOWN: Position.Top,
+    UP: Position.Bottom,
+    RIGHT: Position.Left,
+    LEFT: Position.Right,
+  },
+  clockwise: {
+    DOWN: Position.Left,
+    UP: Position.Right,
+    RIGHT: Position.Bottom,
+    LEFT: Position.Top,
+  },
+  counterClockwise: {
+    DOWN: Position.Right,
+    UP: Position.Left,
+    RIGHT: Position.Top,
+    LEFT: Position.Bottom,
+  },
+};
+
+export const opposite: Record<Position, Position> = {
+  [Position.Top]: Position.Bottom,
+  [Position.Bottom]: Position.Top,
+  [Position.Left]: Position.Right,
+  [Position.Right]: Position.Left,
+};
 
 /**
  * Using the highest-width of the common labels ("subproblem of"; excludes "contingency for" because

@@ -339,8 +339,8 @@ export const addableRelationsFrom = (
     ? getSameCategoryNodeTypes(fromNodeType)
     : nodeTypes;
 
-  const addableRelations: RelationWithCommonality[] = nodeTypesToCheckRelations
-    .map((toNodeType) => {
+  const addableRelations: RelationWithCommonality[] = nodeTypesToCheckRelations.flatMap(
+    (toNodeType) => {
       // hack to ensure that problem detriments can't be mitigated (and can be solved), and solution detriments can be mitigated (but not solved);
       // this is really awkward but keeps detriment nodes from being able to have both solutions and mitigations added, which could be really confusing for users
       // note1: also not doing this when we're unrestricted, since that should result in being able to add both mitigations and solutions in both cases anyway.
@@ -377,29 +377,27 @@ export const addableRelationsFrom = (
         )
         .toSorted(compareCommonality);
 
-      const mostCommonAddable = addableRelationsFrom[0];
-      if (mostCommonAddable) {
-        if (unrestrictedAddingFrom) {
-          // if we're unrestricted-adding, only take a common relation because we want to show all add buttons (only common relations will have add buttons, and if there isn't one here, we'll find one with the main unrestricted logic below)
-          if (mostCommonAddable.commonality === "common") return mostCommonAddable;
-        } else {
-          return mostCommonAddable;
-        }
+      if (!unrestrictedAddingFrom) {
+        // ideally we shouldn't have multiple common relations returned for the same toNodeType
+        // because then multiple add buttons could show with the same node type icon and that would
+        // be confusing UX; but generally we're manually restricting this in the `relations` list
+        return addableRelationsFrom;
       }
 
       // otherwise, if unrestricted, allow adding any same-category node as source or target
-      if (unrestrictedAddingFrom) {
-        const unrestrictedRelation =
-          fromDirection === "source"
-            ? getRelation(fromNodeType, undefined, toNodeType)
-            : getRelation(toNodeType, undefined, fromNodeType);
-        return { ...unrestrictedRelation, commonality: "common" } satisfies RelationWithCommonality;
+      // but prioritize common relations first if they exist
+      const mostCommonAddable = addableRelationsFrom[0];
+      if (mostCommonAddable && mostCommonAddable.commonality === "common") {
+        return mostCommonAddable;
       }
 
-      // otherwise we have no addable relation from/to these node types
-      return null;
-    })
-    .filter((relation) => relation !== null);
+      const unrestrictedRelation =
+        fromDirection === "source"
+          ? getRelation(fromNodeType, undefined, toNodeType)
+          : getRelation(toNodeType, undefined, fromNodeType);
+      return { ...unrestrictedRelation, commonality: "common" } satisfies RelationWithCommonality;
+    },
+  );
 
   const formattedRelations = addableRelations.map((relation) => ({
     ...relation,

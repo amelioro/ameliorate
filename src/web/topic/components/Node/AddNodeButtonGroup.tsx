@@ -151,6 +151,10 @@ const AddMenuSearch = ({ fromNodeId, addableRelations, className }: AddMenuSearc
   );
 };
 
+const getDirectedRelationKey = (relation: DirectedToRelation) => {
+  return `${relation.source}-${relation.name}-${relation.target}-${relation.as}`;
+};
+
 type AddableProps =
   | {
       fromNodeId: string;
@@ -198,7 +202,7 @@ const AddNodeButtonGroup = memo(
           .filter((relation) => relation.commonality === "common")
           .map((addableRelation) => (
             <AddNodeButton
-              key={addableRelation[addableRelation.as]}
+              key={getDirectedRelationKey(addableRelation)}
               fromNodeId={fromNodeId}
               addableRelation={addableRelation}
               buttonType={!expandAddNodeButtons ? "menu" : "button"}
@@ -223,7 +227,7 @@ const AddNodeButtonGroup = memo(
           .filter((relation) => relation.commonality === "uncommon")
           .map((addableRelation) => (
             <AddNodeButton
-              key={addableRelation[addableRelation.as]}
+              key={getDirectedRelationKey(addableRelation)}
               fromNodeId={fromNodeId}
               addableRelation={addableRelation}
               // trying out how it feels to have "expanded" only expand common buttons, keeping uncommon stuff in the menu still

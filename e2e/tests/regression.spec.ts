@@ -29,34 +29,37 @@ test("can play around", async ({ page }) => {
   // confirm playground and layout with standard nodes look normal, and are persisted after refresh
   await page.getByRole("link", { name: "Play Around" }).first().click();
   await page.getByLabel("Close Tour").click();
+  const flow = await page.getByTestId("rf__wrapper");
   // add problem nodes
   await getNode(page, "Problem").click();
-  await page.getByRole("button", { name: "Add node below" }).click();
+  await flow.getByRole("button", { name: "Add node" }).click();
   await page.getByRole("menuitem", { name: "Add Cause" }).click();
   await getNode(page, "Problem").click();
-  await page.getByRole("button", { name: "Add node below" }).click();
+  await flow.getByRole("button", { name: "Add node" }).click();
   await page.getByRole("menuitem", { name: "Add Benefit" }).click();
   await getNode(page, "Problem").click();
-  await page.getByRole("button", { name: "Add node below" }).click();
+  await flow.getByRole("button", { name: "Add node" }).click();
   await page.getByRole("menuitem", { name: "Add Detriment" }).click();
-  await page.getByRole("button", { name: "Add node below" }).click();
+  await flow.getByRole("button", { name: "Add node" }).click();
   await page.getByRole("menuitem", { name: "Add Detriment" }).click();
+  // awkward need to reload because the problem's add button is too high, behind the top toolbar, reloading seems the easiest way to re-center things
+  await page.reload();
+  await page.getByLabel("Close Tour").click(); // make sure page is done reloading, and get the tour out of the screenshot so we can see the diagram
   await getNode(page, "Problem").click();
-  await page.getByRole("button", { name: "Add node below" }).click();
+  await flow.getByRole("button", { name: "Add node" }).click();
   await page.getByRole("menuitem", { name: "Add Solution" }).click();
   // add solution nodes
-  await page.getByRole("button", { name: "Add node below" }).click();
+  await flow.getByRole("button", { name: "Add node" }).click();
   await page.getByRole("menuitem", { name: "Add Obstacle" }).click();
   await getNode(page, "Solution").click();
-  await page.getByRole("button", { name: "Add node above" }).click();
+  await flow.getByRole("button", { name: "Add node" }).click();
   await page.getByRole("menuitem", { name: "Add Component" }).click();
-  await page.getByRole("button", { name: "Add node above" }).click();
+  await flow.getByRole("button", { name: "Add node" }).click();
   await page.getByRole("menuitem", { name: "Add Benefit" }).click();
   await getNode(page, "Component").click();
-  await page.getByRole("button", { name: "Add node above" }).click();
+  await flow.getByRole("button", { name: "Add node" }).click();
   await page.getByRole("menuitem", { name: "Add Detriment" }).click();
   // confirm it looks good
   await page.reload();
-  await page.getByLabel("Close Tour").click(); // make sure page is done reloading, and get the tour out of the screenshot so we can see the diagram
   await expect(page).toHaveScreenshot("playground-with-solution.png");
 });
