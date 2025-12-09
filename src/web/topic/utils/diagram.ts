@@ -1,4 +1,4 @@
-import { type EdgeProps } from "reactflow";
+import { type EdgeProps } from "@xyflow/react";
 
 import { type Edge, type Node } from "@/web/topic/utils/graph";
 import { type LayoutedEdge, type LayoutedNode } from "@/web/topic/utils/layout";

@@ -1,5 +1,5 @@
 import { Stack } from "@mui/material";
-import { Position } from "reactflow";
+import { Position } from "@xyflow/react";
 
 import { EdgeProps } from "@/web/topic/components/Diagram/Diagram";
 import { ScoreEdge } from "@/web/topic/components/Edge/ScoreEdge";
@@ -17,6 +17,7 @@ const convertToStandaloneFlowEdge = (edge: Edge, selected: boolean): EdgeProps =
     data: { ...edge.data, elkSections: [], sourcePortId: "", targetPortId: "" },
     label: edge.label,
     selected: selected,
+    type: "FlowEdge",
     source: edge.source,
     target: edge.target,
 

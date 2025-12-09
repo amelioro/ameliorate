@@ -1,4 +1,4 @@
-import { Position, getBezierPath } from "reactflow";
+import { Position, getBezierPath } from "@xyflow/react";
 
 import { throwError } from "@/common/errorHandling";
 import { scalePxViaDefaultFontSize } from "@/pages/_document.page";
@@ -14,8 +14,7 @@ import { labelWidthPx } from "@/web/topic/utils/layout";
  * resulted in vertical slopes, but the curve to/from the next bend points became jagged.
  */
 export const getPathDefinitionForEdge = (flowEdge: EdgeProps, avoidEdgeLabelOverlap: boolean) => {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- reactflow types data as nullable but we always pass it, so it should always be here
-  const { elkLabel, elkSections } = flowEdge.data!;
+  const { elkLabel, elkSections } = flowEdge.data;
   const elkSection = elkSections[0];
   const bendPoints = elkSection?.bendPoints;
   const firstBendPoint = bendPoints?.[0];

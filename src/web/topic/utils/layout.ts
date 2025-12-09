@@ -1,3 +1,4 @@
+import { Position } from "@xyflow/react";
 import ELK, {
   type ElkEdgeSection,
   type ElkExtendedEdge,
@@ -6,7 +7,6 @@ import ELK, {
   type ElkPort,
   type LayoutOptions,
 } from "elkjs";
-import { Position } from "reactflow";
 
 import { throwError } from "@/common/errorHandling";
 import { type NodeType, compareNodesByType, isEffect } from "@/common/node";

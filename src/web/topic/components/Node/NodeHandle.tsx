@@ -1,5 +1,5 @@
+import { Handle, Position } from "@xyflow/react";
 import { memo } from "react";
-import { Handle, Position } from "reactflow";
 
 import { useSessionUser } from "@/web/common/hooks";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
@@ -10,25 +10,22 @@ interface Props {
   position: Position;
 }
 
-// TODO(bug): handles show drag cursor on the wrong side of node, also dragging to reconnect makes the reconnecting-path look messed up
-// probably try upgrading reactflow to see if that fixes it
 const NodeHandleBase = ({ id, position }: Props) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
 
   // Show if an edge is being connected from a handle of the opposite type.
-  // Easier for us to use css for this because the reactflow store's connectionStartHandle only has
-  // source/target, not position, and we need position since our handles can be used for both
-  // source/target depending on edge relative placement direction.
-  // (note: reactflow v12 adds useConnection which provides start handle position, but we're on v11)
+  // Could use reactflow's `useConnection` for this to be simpler logic, but that triggers thousands
+  // of selector checks because it checks on _every_ mouse move. Doesn't seem worth that since we
+  // can do it this way.
   const showIfConnectingClassName =
     position === Position.Top
-      ? String.raw` [.react-flow\_\_nodes:has(.connecting-from.react-flow\_\_handle-bottom)_&]:visible`
+      ? String.raw` [.react-flow\_\_nodes:has(.connectingfrom.react-flow\_\_handle-bottom)_&]:visible`
       : position === Position.Bottom
-        ? String.raw` [.react-flow\_\_nodes:has(.connecting-from.react-flow\_\_handle-top)_&]:visible`
+        ? String.raw` [.react-flow\_\_nodes:has(.connectingfrom.react-flow\_\_handle-top)_&]:visible`
         : position === Position.Left
-          ? String.raw` [.react-flow\_\_nodes:has(.connecting-from.react-flow\_\_handle-right)_&]:visible`
-          : String.raw` [.react-flow\_\_nodes:has(.connecting-from.react-flow\_\_handle-left)_&]:visible`;
+          ? String.raw` [.react-flow\_\_nodes:has(.connectingfrom.react-flow\_\_handle-right)_&]:visible`
+          : String.raw` [.react-flow\_\_nodes:has(.connectingfrom.react-flow\_\_handle-left)_&]:visible`;
 
   // if editing, show handles on-hover/-select so that we can create edges
   const showOnHoverSelectClassName = userCanEditTopicData ? visibleOnNodeHoverSelectedClasses : "";

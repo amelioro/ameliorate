@@ -43,16 +43,17 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
+import { getViewportForBounds } from "@xyflow/react";
 import { toPng } from "html-to-image";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { getRectOfNodes, getTransformForBounds } from "reactflow";
 import { z } from "zod";
 
 import { hasComments, resetComments } from "@/web/comment/store/commentStore";
 import { getDisplayNodes } from "@/web/topic/components/Diagram/externalFlowStore";
 import { resetDiagramData } from "@/web/topic/diagramStore/utilActions";
 import { downloadTopic, uploadTopic } from "@/web/topic/loadStores";
+import { defaultFitViewPadding, getNotYetRenderedNodesBounds } from "@/web/topic/utils/flowUtils";
 import { hotkeys } from "@/web/topic/utils/hotkeys";
 import {
   toggleFlashlightMode,
@@ -104,8 +105,8 @@ const onScreenshotSubmit = ({ width, height }: ScreenshotFormData) => {
   const nodes = getDisplayNodes();
 
   // thanks react flow example https://reactflow.dev/examples/misc/download-image
-  const nodesBounds = getRectOfNodes(nodes);
-  const transform = getTransformForBounds(nodesBounds, width, height, 0.125, 2);
+  const bounds = getNotYetRenderedNodesBounds(nodes);
+  const viewport = getViewportForBounds(bounds, width, height, 0.125, 2, defaultFitViewPadding);
   const viewportElement = document.querySelector(".react-flow__viewport");
   if (!viewportElement) throw new Error("Couldn't find viewport element to screenshot");
 
@@ -116,7 +117,7 @@ const onScreenshotSubmit = ({ width, height }: ScreenshotFormData) => {
     style: {
       width: width.toString(),
       height: height.toString(),
-      transform: `translate(${transform[0]}px, ${transform[1]}px) scale(${transform[2]})`,
+      transform: `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.zoom})`,
     },
   })
     .then((dataUrl) => {

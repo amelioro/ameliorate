@@ -1,10 +1,10 @@
 import { useTheme } from "@emotion/react";
 import { Visibility } from "@mui/icons-material";
 import { Button, IconButton, Typography } from "@mui/material";
+import { Position } from "@xyflow/react";
 import { groupBy } from "es-toolkit";
 import { ReactNode } from "react";
 import { Data } from "react-minimal-pie-chart/types/commonTypes";
-import { Position } from "reactflow";
 
 import { NodeType, nodeTypes, prettyNodeTypes } from "@/common/node";
 import { Tooltip } from "@/web/common/components/Tooltip/Tooltip";

@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
+import { EdgeLabelRenderer } from "@xyflow/react";
 import { lowerCase } from "es-toolkit";
-import { EdgeLabelRenderer } from "reactflow";
 
 import { RelationName } from "@/common/edge";
 import { useSessionUser } from "@/web/common/hooks";
@@ -70,9 +70,9 @@ const svgMarkerDef = (inReactFlow: boolean, spotlight: Spotlight) => {
 const convertToEdge = (flowEdge: EdgeProps): Edge => {
   return {
     id: flowEdge.id,
-    // react-flow makes these nullable but we'll always pass them
+    data: flowEdge.data,
+    // react-flow makes this nullable but we'll always pass it
     /* eslint-disable @typescript-eslint/no-non-null-assertion */
-    data: flowEdge.data!,
     label: flowEdge.label! as RelationName,
     /* eslint-enable @typescript-eslint/no-non-null-assertion */
 

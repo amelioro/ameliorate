@@ -1,18 +1,15 @@
-import { ComponentType, useEffect, useState } from "react";
-import { useHotkeys } from "react-hotkeys-hook";
 import {
   Background,
   BackgroundVariant,
   ConnectionMode,
   type EdgeProps as DefaultEdgeProps,
   type NodeProps as DefaultNodeProps,
-  OnConnectEnd,
-  OnConnectStart,
-  OnEdgeUpdateFunc,
+  OnReconnect as OnReconnectFunc,
   ReactFlowProvider,
   useReactFlow,
-  useStore,
-} from "reactflow";
+} from "@xyflow/react";
+import { ComponentType, useEffect, useState } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
 
 import { Loading } from "@/web/common/components/Loading/Loading";
 import { emitter } from "@/web/common/event";
@@ -29,6 +26,7 @@ import { useLayoutedDiagram } from "@/web/topic/hooks/diagramHooks";
 import { PanDirection, panDirections, useViewportUpdater } from "@/web/topic/hooks/flowHooks";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { Diagram as DiagramData, PositionedEdge, PositionedNode } from "@/web/topic/utils/diagram";
+import { Edge } from "@/web/topic/utils/graph";
 import { hotkeys } from "@/web/topic/utils/hotkeys";
 import { FlowNodeType } from "@/web/topic/utils/node";
 import { tutorialIsOpen } from "@/web/tutorial/tutorial";
@@ -81,28 +79,11 @@ export interface NodeProps extends DefaultNodeProps {
 }
 
 export interface EdgeProps extends DefaultEdgeProps {
-  // we'll always pass data - why does react-flow make it nullable :(
-  // can't figure out how to amend this to make it non-nullable, since react-flow's Edge is defined as a type, not an interface
-  data?: PositionedEdge["data"];
+  data: PositionedEdge["data"];
+  type: Edge["type"]; // for some reason after reactflow 11->12, DefaultEdgeProps has optional type, but ReactFlow component expects it to be defined
 }
 
-const connectingFromClassName = "connecting-from";
-
-const onConnectStart: OnConnectStart = (_event, { handleId }) => {
-  if (!handleId) return;
-  const handle = document.querySelector<HTMLElement>(`div[data-handleid='${handleId}']`);
-  if (!handle) return;
-  handle.classList.add(connectingFromClassName);
-};
-
-const onConnectEnd: OnConnectEnd = (_event) => {
-  const handles = document.getElementsByClassName(connectingFromClassName);
-  Array.from(handles).forEach((handle) => {
-    handle.classList.remove(connectingFromClassName);
-  });
-};
-
-const onEdgeUpdate: OnEdgeUpdateFunc = (oldEdge, newConnection) => {
+const onReconnect: OnReconnectFunc = (oldEdge, newConnection) => {
   reconnectEdge(oldEdge, newConnection.source, newConnection.target);
 };
 
@@ -113,20 +94,19 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const { fitViewForNodes, moveViewportToIncludeNode, pan, zoomIn, zoomOut } = useViewportUpdater();
-  const { viewportInitialized } = useReactFlow();
+  const { viewportInitialized, getNodes } = useReactFlow();
   const { layoutedDiagram, hasNewLayout, setHasNewLayout } = useLayoutedDiagram(diagram);
-  const getNodes = useStore((state) => state.getNodes);
 
   const flashlightMode = useFlashlightMode();
   const partIdToCentralize = usePartIdToCentralize();
 
   useHotkeys(hotkeys.zoomIn, (e) => {
     e.preventDefault(); // don't use browser's zoom
-    zoomIn();
+    void zoomIn();
   });
   useHotkeys(hotkeys.zoomOut, (e) => {
     e.preventDefault(); // don't use browser's zoom
-    zoomOut();
+    void zoomOut();
   });
   useHotkeys(hotkeys.pan, (_e, hotkeyEvent) => {
     if (!hotkeyEvent.keys) return;
@@ -162,8 +142,7 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
     const edgeToCentralize = layoutedDiagram.edges.find((edge) => edge.id === partIdToCentralize);
     const partIsDisplayed = nodeToCentralize ?? edgeToCentralize;
 
-    // apparently timeout is needed to actually move the viewport? not sure why, since we know viewport is already initialized
-    if (nodeToCentralize) setTimeout(() => fitViewForNodes([nodeToCentralize], true), 0);
+    if (nodeToCentralize) fitViewForNodes([nodeToCentralize], true);
     else if (!partIsDisplayed) emitter.emit("viewBasics");
 
     clearPartIdToCentralize();
@@ -241,11 +220,9 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
             ? ({ source, target }) => connectNodes(source, undefined, target)
             : undefined
         }
-        onConnectStart={onConnectStart}
-        onConnectEnd={onConnectEnd}
         onContextMenu={(event) => openContextMenu(event, {})}
         connectionMode={ConnectionMode.Loose}
-        onEdgeUpdate={userCanEditTopicData ? onEdgeUpdate : undefined}
+        onReconnect={userCanEditTopicData ? onReconnect : undefined}
         nodesDraggable={false}
         nodesConnectable={userCanEditTopicData}
         onPaneClick={() => setSelected(null)}

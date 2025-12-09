@@ -1,15 +1,15 @@
 import {
   type Viewport,
-  getRectOfNodes,
-  getTransformForBounds,
+  getViewportForBounds,
   useReactFlow,
   useStore,
   useStoreApi,
-} from "reactflow";
+} from "@xyflow/react";
 import { shallow } from "zustand/shallow";
 
 import { nodeHeightPx, nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
 import { PositionedNode } from "@/web/topic/utils/diagram";
+import { defaultFitViewPadding, getNotYetRenderedNodesBounds } from "@/web/topic/utils/flowUtils";
 import { Node } from "@/web/topic/utils/graph";
 
 const getViewportToIncludeNode = (
@@ -59,6 +59,11 @@ export type PanDirection = (typeof panDirections)[number];
  *
  * This is a hook because that's how reactflow exposes this data - presumably so
  * that the state can come from the nearest react flow provider.
+ *
+ * Uses setTimeout to defer viewport updates to after the current render cycle, avoiding React's
+ * "Cannot update a component while rendering a different component" error e.g. when called during
+ * Diagram render, so that react flow's Background component doesn't try to re-render during that
+ * Diagram render.
  */
 export const useViewportUpdater = () => {
   const { getViewport, setViewport, zoomIn, zoomOut } = useReactFlow();
@@ -72,27 +77,21 @@ export const useViewportUpdater = () => {
    * re-rendered the flow yet.
    */
   const fitViewForNodes = (nodes: PositionedNode[], smoothTransition = false) => {
-    // roughly figured the code here by referencing the fitView implementation https://github.com/wbkd/react-flow/blob/9dba3c5e7fb0d7edb6a3015bf65282f7030ca929/packages/core/src/store/utils.ts#L128
-    const rect = getRectOfNodes(nodes);
-    const adjustedRect = {
-      ...rect,
-      // Matches flow's built-in `fitView`, except it might be off a few px because flow's built-in
-      // `fitView` uses the nodes' rendered heights, which are different if 2-3 lines of text.
-      // Width/height adjustment is needed likely because nodes are positioned based on their upper-left corner?
-      width: rect.width + nodeWidthPx,
-      height: rect.height + nodeHeightPx,
-    };
+    const bounds = getNotYetRenderedNodesBounds(nodes);
 
-    const transform = getTransformForBounds(
-      adjustedRect,
+    const viewport = getViewportForBounds(
+      bounds,
       viewportWidth,
       viewportHeight,
       minZoom,
       1,
+      defaultFitViewPadding,
     );
 
-    const viewport = { x: transform[0], y: transform[1], zoom: transform[2] };
-    setViewport(viewport, smoothTransition ? { duration: 500 } : undefined);
+    const transition = smoothTransition ? { duration: 500 } : undefined;
+
+    // defer to avoid "Cannot update a component while rendering a different component" error e.g. when called during Diagram render, so that react flow's Background component doesn't try to re-render during that Diagram render
+    setTimeout(() => void setViewport(viewport, transition), 0);
   };
 
   const moveViewportToIncludeNode = (node: PositionedNode) => {
@@ -100,7 +99,8 @@ export const useViewportUpdater = () => {
     const viewport = getViewport();
     const newViewport = getViewportToIncludeNode(node, viewport, viewportHeight, viewportWidth);
 
-    setViewport(newViewport, { duration: 500 });
+    // defer to avoid "Cannot update a component while rendering a different component" error e.g. when called during Diagram render, so that react flow's Background component doesn't try to re-render during that Diagram render
+    setTimeout(() => void setViewport(newViewport, { duration: 500 }), 0);
   };
 
   const pan = (direction: PanDirection) => {
@@ -122,9 +122,9 @@ export const useViewportUpdater = () => {
             ? viewport.y - panAmount
             : viewport.y,
     };
-    setViewport(newViewport);
+    // defer to avoid "Cannot update a component while rendering a different component" error e.g. when called during Diagram render, so that react flow's Background component doesn't try to re-render during that Diagram render
+    setTimeout(() => void setViewport(newViewport), 0);
   };
-
   return { fitViewForNodes, moveViewportToIncludeNode, pan, zoomIn, zoomOut };
 };
 
@@ -151,7 +151,7 @@ export const useFlowZoom = () => {
  */
 export const useHiddenNodes = (nodes: Node[]) => {
   return useStore((state) => {
-    const displayingNodes = Array.from(state.nodeInternals.values());
+    const displayingNodes = Array.from(state.nodeLookup.values());
     return nodes.filter((node) => !displayingNodes.some((displaying) => displaying.id === node.id));
   }, shallow);
 };

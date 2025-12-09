@@ -1,7 +1,7 @@
 import { Global } from "@emotion/react";
+import { Position } from "@xyflow/react";
 import { motion } from "motion/react";
 import { useEffect, useMemo, useState } from "react";
-import { Position } from "reactflow";
 
 import { isEffect, solutionSpecificNodeTypes } from "@/common/node";
 import { useSessionUser } from "@/web/common/hooks";
