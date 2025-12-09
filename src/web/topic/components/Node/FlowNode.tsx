@@ -22,7 +22,7 @@ import { addableRelationsFrom } from "@/web/topic/utils/edge";
 import { Node } from "@/web/topic/utils/graph";
 import { opposite, orientation, positions } from "@/web/topic/utils/layout";
 import { FlowNodeType } from "@/web/topic/utils/node";
-import { flexOnNodeHoverSelectedClasses, interactableClass } from "@/web/topic/utils/styleUtils";
+import { interactableClass, visibleOnNodeHoverSelectedClasses } from "@/web/topic/utils/styleUtils";
 import { getFlashlightMode, useUnrestrictedEditing } from "@/web/view/actionConfigStore";
 import { showNodeAndNeighbors } from "@/web/view/currentViewStore/filter";
 import { useIsGraphPartSelected } from "@/web/view/selectedPartStore";
@@ -162,7 +162,7 @@ export const FlowNode = (flowNode: NodeProps) => {
           addableRelations={addableRelations}
           title="Add node"
           openDirection={addButtonPosition === Position.Top ? "top" : "bottom"}
-          className={`absolute hidden ${flexOnNodeHoverSelectedClasses} ${addButtonPositionClasses} ${addButtonDecorationClasses}`}
+          className={`invisible absolute ${visibleOnNodeHoverSelectedClasses} ${addButtonPositionClasses} ${addButtonDecorationClasses}`}
         />
       )}
     </>

@@ -16,5 +16,4 @@ export const interactableClass = "interactable";
 
 // keep these next to `interactableClass` because tailwind doesn't let us reference the `interactableClass` variable and we need to hardcode the class as a string
 // `String.raw` in order to allow underscores to be escaped for tailwind, so they don't get converted to spaces
-export const flexOnNodeHoverSelectedClasses = String.raw` [.react-flow\_\_node:not(:has(:not(&).interactable:hover)):hover_&]:flex [.react-flow\_\_node:has(.diagram-node.selected)_&]:flex`;
 export const visibleOnNodeHoverSelectedClasses = String.raw` [.react-flow\_\_node:not(:has(:not(&).interactable:hover)):hover_&]:visible [.react-flow\_\_node:has(.diagram-node.selected)_&]:visible`;
