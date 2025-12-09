@@ -18,7 +18,7 @@ export interface PositionedNode extends Node {
 }
 
 export interface PositionedEdge extends Edge, Pick<EdgeProps, "sourceHandleId" | "targetHandleId"> {
-  data: Edge["data"] & Omit<LayoutedEdge, "id">; // edge already has id directly on it
+  data: Edge["data"] & Omit<LayoutedEdge, "id" | "sourcePortId" | "targetPortId">; // edge already has id directly on it
   selected: boolean;
 }
 

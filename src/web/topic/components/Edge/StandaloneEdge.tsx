@@ -44,6 +44,7 @@ export const StandaloneEdge = ({ edge }: Props) => {
 
   const flowEdge = convertToStandaloneFlowEdge(edge, isEdgeSelected);
 
+  // TODO?: could consider flipping the edge if layout will flip it, but doesn't seem totally necessary
   return (
     <Stack>
       {/* z-index to ensure hanging node indicators don't fall behind the edge svg empty background */}

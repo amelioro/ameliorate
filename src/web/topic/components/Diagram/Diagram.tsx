@@ -3,6 +3,7 @@ import { useHotkeys } from "react-hotkeys-hook";
 import {
   Background,
   BackgroundVariant,
+  ConnectionMode,
   type EdgeProps as DefaultEdgeProps,
   type NodeProps as DefaultNodeProps,
   OnConnectEnd,
@@ -243,6 +244,7 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
         onConnectStart={onConnectStart}
         onConnectEnd={onConnectEnd}
         onContextMenu={(event) => openContextMenu(event, {})}
+        connectionMode={ConnectionMode.Loose}
         onEdgeUpdate={userCanEditTopicData ? onEdgeUpdate : undefined}
         nodesDraggable={false}
         nodesConnectable={userCanEditTopicData}

@@ -59,6 +59,7 @@ const relations: AddableRelation[] = researchRelations.concat([
   { source: "cause", name: "causes", target: "problem", commonalityFrom: { source: "uncommon", target: "common" } },
   { source: "problem", name: "has", target: "problem", commonalityFrom: { source: "uncommon" } },
   { source: "criterion", name: "criterionFor", target: "problem", commonalityFrom: { target: "uncommon" } },
+  { source: "benefit", name: "addresses", target: "problem", commonalityFrom: { source: "uncommon" } },
   { source: "solutionComponent", name: "addresses", target: "problem", commonalityFrom: { source: "uncommon" } },
   { source: "solution", name: "addresses", target: "problem", commonalityFrom: { target: "common" } },
   { source: "solution", name: "addresses", target: "problem", commonalityFrom: { source: "uncommon" } },
@@ -239,17 +240,24 @@ export const getRelation = (
   relationName: RelationName | undefined,
   target: NodeType,
 ): Relation => {
-  const relation = relationName
-    ? relations.find(
+  const possibleRelations = relationName
+    ? relations.filter(
         (relation) =>
           relation.source === source &&
           relation.name === relationName &&
           relation.target === target,
       )
-    : relations.find((relation) => relation.source === source && relation.target === target);
+    : relations.filter((relation) => relation.source === source && relation.target === target);
+
+  const relationsSortedByCommonality = possibleRelations
+    .map((relation) => ({
+      ...relation,
+      commonality: relation.commonalityFrom.source ?? "onlyForConnections",
+    }))
+    .toSorted(compareCommonality);
 
   // we're assuming that anything can relate to anything else; potentially this should only be true when unrestricted editing is on
-  return relation ?? { source, name: "relatesTo", target };
+  return relationsSortedByCommonality[0] ?? { source, name: "relatesTo", target };
 };
 
 export const composedRelations: Relation[] = [

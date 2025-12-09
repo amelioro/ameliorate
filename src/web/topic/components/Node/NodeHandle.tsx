@@ -10,13 +10,11 @@ interface Props {
   position: Position;
 }
 
+// TODO(bug): handles show drag cursor on the wrong side of node, also dragging to reconnect makes the reconnecting-path look messed up
+// probably try upgrading reactflow to see if that fixes it
 const NodeHandleBase = ({ id, position }: Props) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
-
-  // handle type is required by reactflow but I'm not sure what the type actually does since we're
-  // allowing source->target and target->source connections (so that edges can point in either direction)
-  const handleType = position === Position.Top || position === Position.Left ? "source" : "target";
 
   // Show if an edge is being connected from a handle of the opposite type.
   // Easier for us to use css for this because the reactflow store's connectionStartHandle only has
@@ -38,7 +36,8 @@ const NodeHandleBase = ({ id, position }: Props) => {
   return (
     <Handle
       id={id}
-      type={handleType}
+      // reactflow bidirectional example uses "source" for both handles, so we're going to do that (though it shouldn't matter which type we use) https://reactflow.dev/examples/edges/custom-edges
+      type="source"
       position={position}
       className={
         // z-index to show in front of EditableNode, which is otherwise in the same stacking context (since it's set to relative positioning now)

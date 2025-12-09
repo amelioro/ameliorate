@@ -13,7 +13,11 @@ import { type NodeType, compareNodesByType, isEffect } from "@/common/node";
 import { scalePxViaDefaultFontSize } from "@/pages/_document.page";
 import { nodeHeightPx, nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
 import { type Diagram } from "@/web/topic/utils/diagram";
-import { getEffectType } from "@/web/topic/utils/effect";
+import {
+  sourceNode as sourceNodeOfEdge,
+  targetNode as targetNodeOfEdge,
+} from "@/web/topic/utils/edge";
+import { EffectType, getEffectType } from "@/web/topic/utils/effect";
 import { type Edge, type Node } from "@/web/topic/utils/graph";
 
 export type Orientation = "DOWN" | "UP" | "RIGHT" | "LEFT";
@@ -172,6 +176,15 @@ const calculateNodeHeight = (label: string) => {
   return nodeHeightPx + scalePxViaDefaultFontSize(additionalHeightPx);
 };
 
+const flipElkSection = (elkSection: ElkEdgeSection): ElkEdgeSection => {
+  return {
+    ...elkSection,
+    startPoint: elkSection.endPoint,
+    endPoint: elkSection.startPoint,
+    bendPoints: elkSection.bendPoints?.toReversed(),
+  };
+};
+
 export interface LayoutedNode {
   id: string;
   x: number;
@@ -216,10 +229,24 @@ const parseElkjsOutput = (layoutedGraph: ElkNode): LayoutedGraph => {
 
     const elkLabel = edge.labels?.[0]; // allowed to be missing if we're excluding labels from the layout calc
     const elkSections = edge.sections;
-    if (!elkSections) {
-      return throwError("edge missing sections in layout", edge);
+    if (!elkSections) return throwError("edge missing sections in layout", edge);
+    const elkSection = elkSections[0];
+    if (!elkSection) return throwError("edge missing section in layout", edge);
+
+    // annoying to actually carry `flipped` up to this point without casting so we're just casting it
+    const flippableEdge = edge as unknown as Edge & { flipped: boolean };
+
+    if (flippableEdge.flipped) {
+      return {
+        id: edge.id,
+        sourcePortId: targetPortId,
+        targetPortId: sourcePortId,
+        elkLabel,
+        elkSections: [flipElkSection(elkSection)],
+      };
+    } else {
+      return { id: edge.id, sourcePortId, targetPortId, elkLabel, elkSections };
     }
-    return { id: edge.id, sourcePortId, targetPortId, elkLabel, elkSections };
   });
 
   return { layoutedNodes, layoutedEdges };
@@ -283,10 +310,33 @@ const buildElkLayoutOptions = (
   };
 };
 
+const shouldFlipEdge = (edge: Edge, nodes: Node[], edges: Edge[]) => {
+  if (edge.label !== "has" && edge.label !== "causes") return false;
+
+  const sourceNode = sourceNodeOfEdge(edge, nodes);
+  const targetNode = targetNodeOfEdge(edge, nodes);
+
+  const sourceEffectType: EffectType = getEffectType(sourceNode, { nodes, edges });
+
+  const isSubproblemEdge = edge.label === "has" && sourceNode.type === "problem";
+  const isProblemCausesEdge =
+    edge.label === "causes" &&
+    (sourceNode.type === "problem" || sourceEffectType === "problem") &&
+    // if causing a problem, let problem continue in orientation direction so that its causes and effects can both be placed between it and solutions
+    targetNode.type !== "problem";
+
+  return isSubproblemEdge || isProblemCausesEdge;
+};
+
 const buildElkEdgesAndUsedPorts = ({ edges, nodes }: Diagram, avoidEdgeLabelOverlap: boolean) => {
   const usedPortsByNodeId: Record<string, ElkPort[]> = {};
 
   const elkEdges: ElkExtendedEdge[] = edges
+    .map((edge) => {
+      return shouldFlipEdge(edge, nodes, edges)
+        ? { ...edge, source: edge.target, target: edge.source, flipped: true }
+        : { ...edge, flipped: false };
+    })
     .toSorted((edge1, edge2) => compareEdges(edge1, edge2, nodes))
     .map((edge) => {
       /* eslint-disable functional/immutable-data -- seems significantly easier to populate used ports via mutation */
@@ -313,6 +363,7 @@ const buildElkEdgesAndUsedPorts = ({ edges, nodes }: Diagram, avoidEdgeLabelOver
         id: edge.id,
         sources: [sourcePort.id],
         targets: [targetPort.id],
+        flipped: edge.flipped,
         labels: avoidEdgeLabelOverlap
           ? [
               {

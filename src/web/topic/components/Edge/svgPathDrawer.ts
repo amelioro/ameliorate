@@ -28,14 +28,23 @@ export const getPathDefinitionForEdge = (flowEdge: EdgeProps, avoidEdgeLabelOver
     lastBendPoint === undefined;
 
   if (!avoidEdgeLabelOverlap || missingBendPoints) {
+    // Draw paths using elk output if possible, because reactflow source/target will be wrong if edge is flipped.
+    // If we laid out the edges, we should have an elk section; we e.g. won't have one for standalone edges.
+    const [start, end] = elkSection
+      ? [elkSection.startPoint, elkSection.endPoint]
+      : [
+          { x: flowEdge.sourceX, y: flowEdge.sourceY },
+          { x: flowEdge.targetX, y: flowEdge.targetY },
+        ];
+
     // TODO: probably ideally would draw this path through the ELK label position if that's provided
     const [pathDefinition, labelX, labelY] = getBezierPath({
-      sourceX: flowEdge.sourceX,
-      sourceY: flowEdge.sourceY,
-      sourcePosition: Position.Top, // match layout's upward orientation, so source handles will be on top of nodes (react flow's default puts source at bottom of node because orientation defaults downwards)
-      targetX: flowEdge.targetX,
-      targetY: flowEdge.targetY,
-      targetPosition: Position.Bottom,
+      sourceX: start.x,
+      sourceY: start.y,
+      sourcePosition: start.y > end.y ? Position.Top : Position.Bottom,
+      targetX: end.x,
+      targetY: end.y,
+      targetPosition: start.y > end.y ? Position.Bottom : Position.Top,
     });
 
     return { pathDefinition, labelX, labelY };
