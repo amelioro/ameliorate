@@ -70,22 +70,6 @@ export const labelWidthPx = 115;
 
 const elk = new ELK();
 
-// sort by target priority, then source priority
-const compareEdges = (edge1: Edge, edge2: Edge, nodes: Node[]) => {
-  const source1 = nodes.find((node) => node.id === edge1.source);
-  const source2 = nodes.find((node) => node.id === edge2.source);
-  const target1 = nodes.find((node) => node.id === edge1.target);
-  const target2 = nodes.find((node) => node.id === edge2.target);
-
-  if (!source1 || !source2 || !target1 || !target2)
-    throw new Error("Edge source or target not found");
-
-  const targetCompare = compareNodesByType(target1, target2);
-  if (targetCompare !== 0) return targetCompare;
-
-  return compareNodesByType(source1, source2);
-};
-
 /**
  * "null" means no partition; the node will be placed in any layer that makes sense based on edges.
  * For "UP" orientation, a lower partitioned node will be placed in a layer lower than nodes of a higher partition.
@@ -272,7 +256,7 @@ const buildElkLayoutOptions = (
     "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX",
     // allows grouping nodes by type (within a layer) when nodes are sorted by type
     // tried using `position` to do this but it doesn't group nodes near their target node
-    "elk.layered.considerModelOrder.strategy": "PREFER_EDGES",
+    "elk.layered.considerModelOrder.strategy": "PREFER_NODES",
     // These spacings are just what roughly seem to look good, avoiding add buttons from overlapping
     // with edge labels.
     // Note: Edge labels are given layers like nodes, so we need to halve the spacing between layers
@@ -301,9 +285,6 @@ const buildElkLayoutOptions = (
     // Elk defaults to minimizing, but sometimes this makes nodes in the same layer be spread out a lot;
     // turning this off prioritizes nodes in the same layer being close together at the cost of more edge crossings.
     "crossingMinimization.strategy": minimizeEdgeCrossings ? "LAYER_SWEEP" : "NONE",
-    // Edges should all connect to a node at the same point, rather than different points
-    // this is particularly needed when drawing edge paths based on this layout algorithm's output.
-    mergeEdges: "true",
   };
 };
 
@@ -334,7 +315,6 @@ const buildElkEdgesAndUsedPorts = ({ edges, nodes }: Diagram, avoidEdgeLabelOver
         ? { ...edge, source: edge.target, target: edge.source, flipped: true }
         : { ...edge, flipped: false };
     })
-    .toSorted((edge1, edge2) => compareEdges(edge1, edge2, nodes))
     .map((edge) => {
       /* eslint-disable functional/immutable-data -- seems significantly easier to populate used ports via mutation */
       const sourcePort: ElkPort = {
