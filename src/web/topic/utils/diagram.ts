@@ -1,5 +1,7 @@
-import { Edge, Node } from "@/web/topic/utils/graph";
-import { LayoutedEdge } from "@/web/topic/utils/layout";
+import { type EdgeProps } from "reactflow";
+
+import { type Edge, type Node } from "@/web/topic/utils/graph";
+import { type LayoutedEdge, type LayoutedNode } from "@/web/topic/utils/layout";
 
 export interface Diagram {
   nodes: Node[];
@@ -7,6 +9,7 @@ export interface Diagram {
 }
 
 export interface PositionedNode extends Node {
+  data: Node["data"] & { ports: LayoutedNode["ports"] };
   position: {
     x: number;
     y: number;
@@ -14,7 +17,7 @@ export interface PositionedNode extends Node {
   selected: boolean;
 }
 
-export interface PositionedEdge extends Edge {
+export interface PositionedEdge extends Edge, Pick<EdgeProps, "sourceHandleId" | "targetHandleId"> {
   data: Edge["data"] & Omit<LayoutedEdge, "id">; // edge already has id directly on it
   selected: boolean;
 }

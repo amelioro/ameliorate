@@ -5,6 +5,8 @@ import {
   BackgroundVariant,
   type EdgeProps as DefaultEdgeProps,
   type NodeProps as DefaultNodeProps,
+  OnConnectEnd,
+  OnConnectStart,
   OnEdgeUpdateFunc,
   ReactFlowProvider,
   useReactFlow,
@@ -82,6 +84,22 @@ export interface EdgeProps extends DefaultEdgeProps {
   // can't figure out how to amend this to make it non-nullable, since react-flow's Edge is defined as a type, not an interface
   data?: PositionedEdge["data"];
 }
+
+const connectingFromClassName = "connecting-from";
+
+const onConnectStart: OnConnectStart = (_event, { handleId }) => {
+  if (!handleId) return;
+  const handle = document.querySelector<HTMLElement>(`div[data-handleid='${handleId}']`);
+  if (!handle) return;
+  handle.classList.add(connectingFromClassName);
+};
+
+const onConnectEnd: OnConnectEnd = (_event) => {
+  const handles = document.getElementsByClassName(connectingFromClassName);
+  Array.from(handles).forEach((handle) => {
+    handle.classList.remove(connectingFromClassName);
+  });
+};
 
 const onEdgeUpdate: OnEdgeUpdateFunc = (oldEdge, newConnection) => {
   reconnectEdge(oldEdge, newConnection.source, newConnection.target);
@@ -222,6 +240,8 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
             ? ({ source, target }) => connectNodes(source, undefined, target)
             : undefined
         }
+        onConnectStart={onConnectStart}
+        onConnectEnd={onConnectEnd}
         onContextMenu={(event) => openContextMenu(event, {})}
         onEdgeUpdate={userCanEditTopicData ? onEdgeUpdate : undefined}
         nodesDraggable={false}

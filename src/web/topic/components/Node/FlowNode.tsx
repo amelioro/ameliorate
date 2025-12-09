@@ -70,6 +70,12 @@ export const FlowNode = (flowNode: NodeProps) => {
     unrestrictedAddingFrom,
     effectType,
   );
+  const portsAbove = flowNode.data.ports.filter(
+    (port) => port.layoutOptions?.["elk.port.side"] === "NORTH",
+  );
+  const portsBelow = flowNode.data.ports.filter(
+    (port) => port.layoutOptions?.["elk.port.side"] === "SOUTH",
+  );
 
   // not sure if this is ideal or not, but we're using a darker shadow so that the button
   // stands out when in front of a bunch of edges (Mui's default shadow doesn't stand out much)
@@ -126,7 +132,14 @@ export const FlowNode = (flowNode: NodeProps) => {
           className={focusNodeAttachmentPositionClasses + ` ${interactableClass}`}
         />
 
-        <NodeHandle position={abovePosition} />
+        {/* always render a handle even if layout did not create a port for the node, because reactflow ports are currently needed in order to create connections */}
+        {/* TODO: remove once we make reactflow ports unnecessary for creating connections */}
+        {portsAbove.length === 0 && (
+          <NodeHandle id={node.id + "-regularSource"} position={abovePosition} />
+        )}
+        {portsAbove.map((port) => (
+          <NodeHandle key={port.id} id={port.id} position={abovePosition} />
+        ))}
         <StyledEditableNode
           node={node}
           className={`spotlight-${spotlight}`}
@@ -134,7 +147,12 @@ export const FlowNode = (flowNode: NodeProps) => {
             if (getFlashlightMode()) showNodeAndNeighbors(node.id, true);
           }}
         />
-        <NodeHandle position={belowPosition} />
+        {portsBelow.length === 0 && (
+          <NodeHandle id={node.id + "-regularTarget"} position={belowPosition} />
+        )}
+        {portsBelow.map((port) => (
+          <NodeHandle key={port.id} id={port.id} position={belowPosition} />
+        ))}
       </motion.div>
 
       {/* should this use react-flow's NodeToolbar? seems like it'd automatically handle positioning. but it probably would be jank if we want the toolbar to work outside of the diagram */}

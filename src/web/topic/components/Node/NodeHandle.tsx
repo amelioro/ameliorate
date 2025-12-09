@@ -6,13 +6,16 @@ import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { visibleOnNodeHoverSelectedClasses } from "@/web/topic/utils/styleUtils";
 
 interface Props {
+  id: string;
   position: Position;
 }
 
-const NodeHandleBase = ({ position }: Props) => {
+const NodeHandleBase = ({ id, position }: Props) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
 
+  // handle type is required by reactflow but I'm not sure what the type actually does since we're
+  // allowing source->target and target->source connections (so that edges can point in either direction)
   const handleType = position === Position.Top || position === Position.Left ? "source" : "target";
 
   // Show if an edge is being connected from a handle of the opposite type.
@@ -34,6 +37,7 @@ const NodeHandleBase = ({ position }: Props) => {
 
   return (
     <Handle
+      id={id}
       type={handleType}
       position={position}
       className={

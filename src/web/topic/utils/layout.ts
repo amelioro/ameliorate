@@ -1,11 +1,18 @@
-import ELK, { ElkEdgeSection, ElkExtendedEdge, ElkLabel, ElkNode, LayoutOptions } from "elkjs";
+import ELK, {
+  type ElkEdgeSection,
+  type ElkExtendedEdge,
+  type ElkLabel,
+  type ElkNode,
+  type ElkPort,
+  type LayoutOptions,
+} from "elkjs";
 import { Position } from "reactflow";
 
 import { throwError } from "@/common/errorHandling";
-import { NodeType, compareNodesByType, isEffect } from "@/common/node";
+import { type NodeType, compareNodesByType, isEffect } from "@/common/node";
 import { scalePxViaDefaultFontSize } from "@/pages/_document.page";
 import { nodeHeightPx, nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
-import { Diagram } from "@/web/topic/utils/diagram";
+import { type Diagram } from "@/web/topic/utils/diagram";
 import { getEffectType } from "@/web/topic/utils/effect";
 import { type Edge, type Node } from "@/web/topic/utils/graph";
 
@@ -165,14 +172,17 @@ const calculateNodeHeight = (label: string) => {
   return nodeHeightPx + scalePxViaDefaultFontSize(additionalHeightPx);
 };
 
-interface LayoutedNode {
+export interface LayoutedNode {
   id: string;
   x: number;
   y: number;
+  ports: ElkPort[];
 }
 
 export interface LayoutedEdge {
   id: string;
+  sourcePortId: string;
+  targetPortId: string;
   /**
    * Will be undefined when edge labels are excluded from the layout calculation
    */
@@ -192,20 +202,24 @@ const parseElkjsOutput = (layoutedGraph: ElkNode): LayoutedGraph => {
   }
 
   const layoutedNodes = children.map((node) => {
-    const { x, y } = node;
+    const { x, y, ports } = node;
     if (x === undefined || y === undefined) {
       return throwError("node missing x or y in layout", node);
     }
-    return { id: node.id, x, y };
+    return { id: node.id, x, y, ports: ports ?? [] };
   });
 
   const layoutedEdges = edges.map((edge) => {
+    // can rename sources/targets as "port ids" because we connect edges to ports for layout rather than directly to nodes
+    const sourcePortId = edge.sources[0] ?? throwError("edge missing source port in layout", edge);
+    const targetPortId = edge.targets[0] ?? throwError("edge missing target port in layout", edge);
+
     const elkLabel = edge.labels?.[0]; // allowed to be missing if we're excluding labels from the layout calc
     const elkSections = edge.sections;
     if (!elkSections) {
       return throwError("edge missing sections in layout", edge);
     }
-    return { id: edge.id, elkLabel, elkSections };
+    return { id: edge.id, sourcePortId, targetPortId, elkLabel, elkSections };
   });
 
   return { layoutedNodes, layoutedEdges };
@@ -269,17 +283,36 @@ const buildElkLayoutOptions = (
   };
 };
 
-const buildElkEdges = (
-  { edges, nodes }: Diagram,
-  avoidEdgeLabelOverlap: boolean,
-): ElkExtendedEdge[] => {
-  return edges
+const buildElkEdgesAndUsedPorts = ({ edges, nodes }: Diagram, avoidEdgeLabelOverlap: boolean) => {
+  const usedPortsByNodeId: Record<string, ElkPort[]> = {};
+
+  const elkEdges: ElkExtendedEdge[] = edges
     .toSorted((edge1, edge2) => compareEdges(edge1, edge2, nodes))
     .map((edge) => {
+      /* eslint-disable functional/immutable-data -- seems significantly easier to populate used ports via mutation */
+      const sourcePort: ElkPort = {
+        id: edge.source + "-regularSource",
+        layoutOptions: { "elk.port.side": "NORTH" },
+      };
+      const usedSourcePorts = (usedPortsByNodeId[edge.source] ??= []);
+      if (usedSourcePorts.find((port) => port.id === sourcePort.id) === undefined) {
+        usedSourcePorts.push(sourcePort);
+      }
+
+      const targetPort: ElkPort = {
+        id: edge.target + "-regularTarget",
+        layoutOptions: { "elk.port.side": "SOUTH" },
+      };
+      const usedTargetPorts = (usedPortsByNodeId[edge.target] ??= []);
+      if (usedTargetPorts.find((port) => port.id === targetPort.id) === undefined) {
+        usedTargetPorts.push(targetPort);
+      }
+      /* eslint-enable functional/immutable-data */
+
       return {
         id: edge.id,
-        sources: [edge.source],
-        targets: [edge.target],
+        sources: [sourcePort.id],
+        targets: [targetPort.id],
         labels: avoidEdgeLabelOverlap
           ? [
               {
@@ -296,16 +329,22 @@ const buildElkEdges = (
           : undefined,
       };
     });
+
+  return { elkEdges, usedPortsByNodeId };
 };
 
-const buildElkNodes = (diagram: Diagram): ElkNode[] => {
+const buildElkNodes = (
+  diagram: Diagram,
+  usedPortsByNodeId: Record<string, ElkPort[]>,
+): ElkNode[] => {
   return diagram.nodes
     .toSorted((node1, node2) => compareNodesByType(node1, node2))
     .map((node) => {
-      return {
+      const elkNode: ElkNode = {
         id: node.id,
         width: nodeWidthPx,
         height: calculateNodeHeight(node.data.label),
+        ports: usedPortsByNodeId[node.id],
         layoutOptions: {
           // Some nodes can be taller than others (based on how long their text is),
           // so align them all along the center.
@@ -316,8 +355,16 @@ const buildElkNodes = (diagram: Diagram): ElkNode[] => {
           // each problem within a nested node. Or maybe we could just do partitioning within
           // a special "problem context view" rather than in the main topic diagram view.
           "elk.partitioning.partition": calculatePartition(node, diagram),
+          // ensure ports stay on their side and in order
+          // we could consider letting side flip in case elk decides to flip an edge and moving a
+          // port could make the edge less awkward... but we want to maintain port order once we
+          // add two ports per side, so that incoming edges can be organized distinctly from
+          // outgoing edges
+          portConstraints: "FIXED_ORDER",
         },
       };
+
+      return elkNode;
     });
 };
 
@@ -337,8 +384,8 @@ export const layout = async (
     thoroughness,
   );
 
-  const elkEdges = buildElkEdges(diagram, avoidEdgeLabelOverlap);
-  const elkNodes = buildElkNodes(diagram);
+  const { elkEdges, usedPortsByNodeId } = buildElkEdgesAndUsedPorts(diagram, avoidEdgeLabelOverlap);
+  const elkNodes = buildElkNodes(diagram, usedPortsByNodeId);
 
   const graph: ElkNode = {
     id: "elkgraph",

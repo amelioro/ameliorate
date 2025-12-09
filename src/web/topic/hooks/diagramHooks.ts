@@ -1,11 +1,6 @@
 import { useState } from "react";
 
-import {
-  Diagram,
-  PositionedDiagram,
-  PositionedEdge,
-  PositionedNode,
-} from "@/web/topic/utils/diagram";
+import { Diagram, PositionedDiagram, PositionedEdge } from "@/web/topic/utils/diagram";
 import { isNode } from "@/web/topic/utils/graph";
 import { LayoutedGraph, layout } from "@/web/topic/utils/layout";
 import {
@@ -79,6 +74,7 @@ export const useLayoutedDiagram = (diagram: Diagram) => {
 
         return {
           ...node,
+          data: { ...node.data, ports: layoutedNode.ports },
           position: {
             x: layoutedNode.x,
             y: layoutedNode.y,
@@ -86,7 +82,7 @@ export const useLayoutedDiagram = (diagram: Diagram) => {
           selected: node.id === selectedGraphPart?.id, // add selected here because react flow uses it (as opposed to our custom components, which can rely on selectedGraphPart hook independently)
         };
       })
-      .filter((node): node is PositionedNode => node !== null),
+      .filter((node) => node !== null),
     edges: diagram.edges
       .map((edge) => {
         const layoutedEdge = layoutedGraph.layoutedEdges.find(
