@@ -293,9 +293,6 @@ const buildElkLayoutOptions = (
     // e.g. if no problem ties solutions together, still put those solutions into the same partition (if partitions are on)
     // want this off for cases when islands are truly unrelated, but on for when we're just hiding edges
     "elk.separateConnectedComponents": layerNodeIslandsTogether ? "false" : "true",
-    // prioritize shorter edges e.g. if a problem has multiple direct causes, prioritize putting
-    // them in the same layer over using space efficiently
-    "elk.layered.priority.shortness": "10",
     // Try fewer random layouts to see if better layout exists.
     // No idea why this seems to preserve node order (and therefore group node types) better;
     // perhaps higher thoroughness means it'll find a layout that better uses space,
@@ -364,6 +361,17 @@ const buildElkEdgesAndUsedPorts = ({ edges, nodes }: Diagram, avoidEdgeLabelOver
         sources: [sourcePort.id],
         targets: [targetPort.id],
         flipped: edge.flipped,
+        layoutOptions: {
+          // Prioritize shorter problem-problem/solution-solution edges so that problem details
+          // are kept closer together and solution details are kept closer together. E.g. if a
+          // problem has multiple direct causes, prioritize putting them in the same layer over
+          // using space efficiently.
+          // This isn't thoroughly tested, and might be more accurate to check source/target types?
+          // But seems ok enough for now.
+          "elk.layered.priority.shortness": ["addresses", "mitigates"].includes(edge.label)
+            ? "0"
+            : "100",
+        },
         labels: avoidEdgeLabelOverlap
           ? [
               {
