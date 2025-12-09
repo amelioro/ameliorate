@@ -1,4 +1,4 @@
-import { type EdgeProps } from "@xyflow/react";
+import { type Edge as ReactFlowEdge } from "@xyflow/react";
 
 import { type Edge, type Node } from "@/web/topic/utils/graph";
 import { type LayoutedEdge, type LayoutedNode } from "@/web/topic/utils/layout";
@@ -17,7 +17,9 @@ export interface PositionedNode extends Node {
   selected: boolean;
 }
 
-export interface PositionedEdge extends Edge, Pick<EdgeProps, "sourceHandleId" | "targetHandleId"> {
+export interface PositionedEdge
+  extends Edge,
+    Required<Pick<ReactFlowEdge, "sourceHandle" | "targetHandle">> {
   data: Edge["data"] & Omit<LayoutedEdge, "id" | "sourcePortId" | "targetPortId">; // edge already has id directly on it
   selected: boolean;
 }

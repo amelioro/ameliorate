@@ -14,7 +14,7 @@ const convertToStandaloneFlowEdge = (edge: Edge, selected: boolean): EdgeProps =
     id: edge.id,
     // don't provide a position for the label, so it defaults to being placed between the two nodes
     // also we don't need source/target port ids because these are only used within react flow
-    data: { ...edge.data, elkSections: [], sourcePortId: "", targetPortId: "" },
+    data: { ...edge.data, elkSections: [] },
     label: edge.label,
     selected: selected,
     type: "FlowEdge",

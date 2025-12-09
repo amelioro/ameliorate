@@ -93,8 +93,8 @@ export const useLayoutedDiagram = (diagram: Diagram) => {
 
         return {
           ...edge,
-          sourceHandleId: sourcePortId,
-          targetHandleId: targetPortId,
+          sourceHandle: sourcePortId,
+          targetHandle: targetPortId,
           data: { ...edge.data, elkLabel, elkSections },
           selected: edge.id === selectedGraphPart?.id, // add selected here because react flow uses it (as opposed to our custom components, which can rely on selectedGraphPart hook independently)
         };
