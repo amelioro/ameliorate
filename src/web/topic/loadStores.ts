@@ -12,7 +12,7 @@ import { v4 as uuid } from "uuid";
 import { z } from "zod";
 import { StorageValue } from "zustand/middleware";
 
-import { errorWithData, rethrowWithData } from "@/common/errorHandling";
+import { rethrowWithData } from "@/common/errorHandling";
 import { topicFileSchema } from "@/common/topic";
 import {
   loadCommentsFromApi,
@@ -26,13 +26,17 @@ import {
   populateDiagramFromApi,
   populateDiagramFromLocalStorage,
 } from "@/web/topic/diagramStore/loadActions";
-import { migrate } from "@/web/topic/diagramStore/migrate";
-import { DiagramStoreState } from "@/web/topic/diagramStore/store";
-import { getPersistState, setDiagramData } from "@/web/topic/diagramStore/utilActions";
+import { migrate as migrateDiagram } from "@/web/topic/diagramStore/migrate";
+import { DiagramStoreState, currentDiagramVersion } from "@/web/topic/diagramStore/store";
+import {
+  getPersistState as getDiagramPersistState,
+  setDiagramData,
+} from "@/web/topic/diagramStore/utilActions";
 import { getTopicTitleFromNodes } from "@/web/topic/diagramStore/utils";
 import { migrate as migrateTopic } from "@/web/topic/topicStore/migrate";
 import {
   TopicStoreState,
+  currentTopicVersion,
   getPersistState as getTopicPersistState,
   loadTopicFromApi,
   loadTopicFromLocalStorage,
@@ -47,7 +51,7 @@ import { migrate as migrateQuickView } from "@/web/view/quickViewStore/migrate";
 import {
   QuickView,
   QuickViewStoreState,
-  currentVersion as currentViewsVersion,
+  currentVersion as currentQuickViewsVersion,
   getPersistState as getViewsPersistState,
   initialStateWithBasicViews,
   loadQuickViewsFromApi,
@@ -84,17 +88,34 @@ const oldDownloadSchema2 = z
   })
   .strict(); // strict because we shouldn't have additional properties (in this case schema 3 is only different because `diagram` is added)
 
-const downloadJsonSchema = z.preprocess((val) => {
-  const parsedSchema1 = oldDownloadSchema1.safeParse(val);
+const topicFileSkeletonSchema = z.object({
+  topic: z.object({
+    state: z.record(z.any()),
+    version: z.number(),
+  }),
+  diagram: z.object({
+    state: z.record(z.any()),
+    version: z.number(),
+  }),
+  views: z.object({
+    state: z.record(z.any()),
+    version: z.number(),
+  }),
+});
+
+type TopicFileSkeletonSchema = z.infer<typeof topicFileSkeletonSchema>;
+
+const parseStoreSkeletons = (input: unknown): TopicFileSkeletonSchema => {
+  const parsedSchema1 = oldDownloadSchema1.safeParse(input);
   if (parsedSchema1.success) {
     return {
       topic: { state: { topic: parsedSchema1.data.state.topic }, version: 1 },
       diagram: parsedSchema1.data,
-      views: { state: initialStateWithBasicViews(), version: currentViewsVersion },
+      views: { state: initialStateWithBasicViews(), version: currentQuickViewsVersion },
     };
   }
 
-  const parsedSchema2 = oldDownloadSchema2.safeParse(val);
+  const parsedSchema2 = oldDownloadSchema2.safeParse(input);
   if (parsedSchema2.success) {
     return {
       topic: { state: { topic: parsedSchema2.data.topic.state.topic }, version: 1 },
@@ -103,10 +124,53 @@ const downloadJsonSchema = z.preprocess((val) => {
     };
   }
 
-  return val;
+  return topicFileSkeletonSchema.parse(input);
+};
+
+const topicFileSchemaWithMigrationProcessing = z.preprocess((inputText) => {
+  // Parsing the skeleton allows us to manage the file structure separately from the individual store's structures.
+  // This way, when we update a store (e.g. changing edge type "obstacleOf" to "impedes"), we can rely
+  // on store migrations without needing to update this logic.
+  // File structure changes aren't going to be solved via store migrations, so we have those separately
+  // managed as zod schemas for each version.
+  const storeSkeletons = parseStoreSkeletons(inputText);
+
+  const migratedTopic = migrateTopic(
+    storeSkeletons.topic.state,
+    storeSkeletons.topic.version,
+  ) as unknown;
+  const migratedDiagram = migrateDiagram(
+    storeSkeletons.diagram.state,
+    storeSkeletons.diagram.version,
+  ) as unknown;
+  const migratedViews = migrateQuickView(
+    storeSkeletons.views.state,
+    storeSkeletons.views.version,
+  ) as unknown;
+
+  const migratedFileData = {
+    topic: { state: migratedTopic, version: currentTopicVersion },
+    diagram: { state: migratedDiagram, version: currentDiagramVersion },
+    views: { state: migratedViews, version: currentQuickViewsVersion },
+  };
+
+  return migratedFileData;
 }, topicFileSchema);
 
-interface DownloadJson {
+/**
+ * TODO: avoiding using a type built from topicFileSchema is hack to create a type with the exact
+ * store structures without us needing to extract those into the zod schemas completely.
+ *
+ * We _should_ extract the types into the zod schemas completely, but that's more work than I want to
+ * do right now.
+ *
+ * Probably ideally would have xStoreSchema (e.g. diagramStoreSchema) for each store, and each store
+ * uses the type from that, then the topicFileSchema could be completely accurate.
+ * What's slightly awkward is that files should be able to process on the
+ * backend, so we want these schemas in common/. They could also have preprocess logic to run store
+ * migrations, but store migrations seem even more awkward to put in common/.
+ */
+interface TopicFileJson {
   topic: StorageValue<TopicStoreState>;
   diagram: StorageValue<DiagramStoreState>;
   views: StorageValue<QuickViewStoreState>;
@@ -114,7 +178,7 @@ interface DownloadJson {
 
 export const downloadTopic = () => {
   const topicPersistState = getTopicPersistState();
-  const diagramPersistState = getPersistState();
+  const diagramPersistState = getDiagramPersistState();
   const viewsPersistState = getViewsPersistState();
 
   const topic = topicPersistState.state.topic;
@@ -123,13 +187,13 @@ export const downloadTopic = () => {
     : getTopicTitleFromNodes(diagramPersistState.state);
   const sanitizedFileName = topicTitle.replace(/[^a-z0-9]/gi, "_").toLowerCase(); // thanks https://stackoverflow.com/a/8485137
 
-  const downloadJson = {
+  const topicFileJson: TopicFileJson = {
     topic: topicPersistState,
     diagram: diagramPersistState,
     views: viewsPersistState,
   };
 
-  fileDownload(JSON.stringify(downloadJson), `${sanitizedFileName}.json`);
+  fileDownload(JSON.stringify(topicFileJson), `${sanitizedFileName}.json`);
 };
 
 /**
@@ -147,14 +211,14 @@ const ensureUnique = (
 
   // much easier to ensure all uuids are replaced this way, rather than replacing uuids for each specifically-relevant property
   // eslint-disable-next-line functional/no-let
-  let stringifiedTopic = JSON.stringify(diagramStoreState);
+  let stringifiedDiagram = JSON.stringify(diagramStoreState);
   // eslint-disable-next-line functional/no-let
   let stringifiedViews = JSON.stringify(quickViewStoreState);
 
   [...nodes, ...edges].forEach((graphPart) => {
     const newId = uuid();
 
-    stringifiedTopic = stringifiedTopic.replace(new RegExp(graphPart.id, "g"), newId);
+    stringifiedDiagram = stringifiedDiagram.replace(new RegExp(graphPart.id, "g"), newId);
     stringifiedViews = stringifiedViews.replace(new RegExp(graphPart.id, "g"), newId);
   });
 
@@ -166,7 +230,7 @@ const ensureUnique = (
   });
 
   return {
-    uniqueDiagram: JSON.parse(stringifiedTopic) as DiagramStoreState,
+    uniqueDiagram: JSON.parse(stringifiedDiagram) as DiagramStoreState,
     uniqueViews: JSON.parse(stringifiedViews) as QuickViewStoreState,
   };
 };
@@ -183,44 +247,15 @@ export const uploadTopic = async (
   const fileText = await file.text();
 
   try {
-    const downloadJson = downloadJsonSchema.parse(JSON.parse(fileText)) as DownloadJson;
-
-    // migrations
-    const diagramPersistState = downloadJson.diagram;
-    if (!diagramPersistState.version) {
-      throw errorWithData(
-        "No version found in file, cannot migrate old state",
-        diagramPersistState,
-      );
-    }
-    const migratedDiagramState = migrate(
-      diagramPersistState.state,
-      diagramPersistState.version,
-    ) as DiagramStoreState;
-
-    const topicPersistState = downloadJson.topic;
-    if (!topicPersistState.version) {
-      throw errorWithData("No version found in file, cannot migrate old state", topicPersistState);
-    }
-    const migratedTopicState = migrateTopic(
-      topicPersistState.state,
-      topicPersistState.version,
-    ) as TopicStoreState;
-
-    const viewsPersistState = downloadJson.views;
-    if (!viewsPersistState.version) {
-      throw errorWithData("No version found in file, cannot migrate old state", viewsPersistState);
-    }
-    const migratedViewsState = migrateQuickView(
-      viewsPersistState.state,
-      viewsPersistState.version,
-    ) as QuickViewStoreState;
+    const { topic, diagram, views } = topicFileSchemaWithMigrationProcessing.parse(
+      JSON.parse(fileText),
+    ) as TopicFileJson; // casting is a hack, see comment on TopicFileJson interface
 
     // avoid conflicts with existing topics
-    const { uniqueDiagram, uniqueViews } = ensureUnique(migratedDiagramState, migratedViewsState);
+    const { uniqueDiagram, uniqueViews } = ensureUnique(diagram.state, views.state);
 
     // populate stores
-    setTopicDetails(migratedTopicState.topic.description);
+    setTopicDetails(topic.state.topic.description);
     setDiagramData(uniqueDiagram, sessionUsername);
     loadQuickViewsFromDownloaded(uniqueViews);
   } catch (error: unknown) {

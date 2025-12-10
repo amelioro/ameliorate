@@ -1,15 +1,62 @@
-import ELK, { ElkEdgeSection, ElkLabel, ElkNode, LayoutOptions } from "elkjs";
+import { Position } from "@xyflow/react";
+import ELK, {
+  type ElkEdgeSection,
+  type ElkExtendedEdge,
+  type ElkLabel,
+  type ElkNode,
+  type ElkPort,
+  type LayoutOptions,
+} from "elkjs";
 
 import { throwError } from "@/common/errorHandling";
-import { NodeType, compareNodesByType, isEffect } from "@/common/node";
+import { type NodeType, compareNodesByType, isEffect } from "@/common/node";
 import { scalePxViaDefaultFontSize } from "@/pages/_document.page";
 import { nodeHeightPx, nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
-import { Diagram } from "@/web/topic/utils/diagram";
-import { getEffectType } from "@/web/topic/utils/effect";
+import { type Diagram } from "@/web/topic/utils/diagram";
+import {
+  sourceNode as sourceNodeOfEdge,
+  targetNode as targetNodeOfEdge,
+} from "@/web/topic/utils/edge";
+import { EffectType, getEffectType } from "@/web/topic/utils/effect";
 import { type Edge, type Node } from "@/web/topic/utils/graph";
 
 export type Orientation = "DOWN" | "UP" | "RIGHT" | "LEFT";
 export const orientation: Orientation = "UP" as Orientation; // not constant to allow potential other orientations in the future, and keeping code that currently exists for handling "LEFT" orientation
+
+type OrientationDirection = "forward" | "backward" | "clockwise" | "counterClockwise";
+export const positions: Record<OrientationDirection, Record<Orientation, Position>> = {
+  forward: {
+    DOWN: Position.Bottom,
+    UP: Position.Top,
+    RIGHT: Position.Right,
+    LEFT: Position.Left,
+  },
+  backward: {
+    DOWN: Position.Top,
+    UP: Position.Bottom,
+    RIGHT: Position.Left,
+    LEFT: Position.Right,
+  },
+  clockwise: {
+    DOWN: Position.Left,
+    UP: Position.Right,
+    RIGHT: Position.Bottom,
+    LEFT: Position.Top,
+  },
+  counterClockwise: {
+    DOWN: Position.Right,
+    UP: Position.Left,
+    RIGHT: Position.Top,
+    LEFT: Position.Bottom,
+  },
+};
+
+export const opposite: Record<Position, Position> = {
+  [Position.Top]: Position.Bottom,
+  [Position.Bottom]: Position.Top,
+  [Position.Left]: Position.Right,
+  [Position.Right]: Position.Left,
+};
 
 /**
  * Using the highest-width of the common labels ("subproblem of"; excludes "contingency for" because
@@ -22,22 +69,6 @@ export const orientation: Orientation = "UP" as Orientation; // not constant to 
 export const labelWidthPx = 115;
 
 const elk = new ELK();
-
-// sort by target priority, then source priority
-const compareEdges = (edge1: Edge, edge2: Edge, nodes: Node[]) => {
-  const source1 = nodes.find((node) => node.id === edge1.source);
-  const source2 = nodes.find((node) => node.id === edge2.source);
-  const target1 = nodes.find((node) => node.id === edge1.target);
-  const target2 = nodes.find((node) => node.id === edge2.target);
-
-  if (!source1 || !source2 || !target1 || !target2)
-    throw new Error("Edge source or target not found");
-
-  const targetCompare = compareNodesByType(target1, target2);
-  if (targetCompare !== 0) return targetCompare;
-
-  return compareNodesByType(source1, source2);
-};
 
 /**
  * "null" means no partition; the node will be placed in any layer that makes sense based on edges.
@@ -129,14 +160,26 @@ const calculateNodeHeight = (label: string) => {
   return nodeHeightPx + scalePxViaDefaultFontSize(additionalHeightPx);
 };
 
-interface LayoutedNode {
+const flipElkSection = (elkSection: ElkEdgeSection): ElkEdgeSection => {
+  return {
+    ...elkSection,
+    startPoint: elkSection.endPoint,
+    endPoint: elkSection.startPoint,
+    bendPoints: elkSection.bendPoints?.toReversed(),
+  };
+};
+
+export interface LayoutedNode {
   id: string;
   x: number;
   y: number;
+  ports: ElkPort[];
 }
 
 export interface LayoutedEdge {
   id: string;
+  sourcePortId: string;
+  targetPortId: string;
   /**
    * Will be undefined when edge labels are excluded from the layout calculation
    */
@@ -156,37 +199,54 @@ const parseElkjsOutput = (layoutedGraph: ElkNode): LayoutedGraph => {
   }
 
   const layoutedNodes = children.map((node) => {
-    const { x, y } = node;
+    const { x, y, ports } = node;
     if (x === undefined || y === undefined) {
       return throwError("node missing x or y in layout", node);
     }
-    return { id: node.id, x, y };
+    return { id: node.id, x, y, ports: ports ?? [] };
   });
 
   const layoutedEdges = edges.map((edge) => {
+    // can rename sources/targets as "port ids" because we connect edges to ports for layout rather than directly to nodes
+    const sourcePortId = edge.sources[0] ?? throwError("edge missing source port in layout", edge);
+    const targetPortId = edge.targets[0] ?? throwError("edge missing target port in layout", edge);
+
     const elkLabel = edge.labels?.[0]; // allowed to be missing if we're excluding labels from the layout calc
     const elkSections = edge.sections;
-    if (!elkSections) {
-      return throwError("edge missing sections in layout", edge);
+    if (!elkSections) return throwError("edge missing sections in layout", edge);
+    const elkSection = elkSections[0];
+    if (!elkSection) return throwError("edge missing section in layout", edge);
+
+    // annoying to actually carry `flipped` up to this point without casting so we're just casting it
+    const flippableEdge = edge as unknown as Edge & { flipped: boolean };
+
+    if (flippableEdge.flipped) {
+      return {
+        id: edge.id,
+        sourcePortId: targetPortId,
+        targetPortId: sourcePortId,
+        elkLabel,
+        elkSections: [flipElkSection(elkSection)],
+      };
+    } else {
+      return { id: edge.id, sourcePortId, targetPortId, elkLabel, elkSections };
     }
-    return { id: edge.id, elkLabel, elkSections };
   });
 
   return { layoutedNodes, layoutedEdges };
 };
 
-export const layout = async (
-  diagram: Diagram,
+/**
+ * See supported layout options at https://www.eclipse.org/elk/reference/algorithms/org-eclipse-elk-layered.html
+ */
+const buildElkLayoutOptions = (
   partition: boolean,
   layerNodeIslandsTogether: boolean,
   minimizeEdgeCrossings: boolean,
   avoidEdgeLabelOverlap: boolean,
   thoroughness: number,
-): Promise<LayoutedGraph> => {
-  const { nodes, edges } = diagram;
-
-  // see support layout options at https://www.eclipse.org/elk/reference/algorithms/org-eclipse-elk-layered.html
-  const layoutOptions: LayoutOptions = {
+): LayoutOptions => {
+  return {
     algorithm: "layered",
     "elk.direction": orientation,
     // results in edges curving more around other things
@@ -196,7 +256,7 @@ export const layout = async (
     "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX",
     // allows grouping nodes by type (within a layer) when nodes are sorted by type
     // tried using `position` to do this but it doesn't group nodes near their target node
-    "elk.layered.considerModelOrder.strategy": "PREFER_EDGES",
+    "elk.layered.considerModelOrder.strategy": "PREFER_NODES",
     // These spacings are just what roughly seem to look good, avoiding add buttons from overlapping
     // with edge labels.
     // Note: Edge labels are given layers like nodes, so we need to halve the spacing between layers
@@ -217,9 +277,6 @@ export const layout = async (
     // e.g. if no problem ties solutions together, still put those solutions into the same partition (if partitions are on)
     // want this off for cases when islands are truly unrelated, but on for when we're just hiding edges
     "elk.separateConnectedComponents": layerNodeIslandsTogether ? "false" : "true",
-    // prioritize shorter edges e.g. if a problem has multiple direct causes, prioritize putting
-    // them in the same layer over using space efficiently
-    "elk.layered.priority.shortness": "10",
     // Try fewer random layouts to see if better layout exists.
     // No idea why this seems to preserve node order (and therefore group node types) better;
     // perhaps higher thoroughness means it'll find a layout that better uses space,
@@ -228,56 +285,151 @@ export const layout = async (
     // Elk defaults to minimizing, but sometimes this makes nodes in the same layer be spread out a lot;
     // turning this off prioritizes nodes in the same layer being close together at the cost of more edge crossings.
     "crossingMinimization.strategy": minimizeEdgeCrossings ? "LAYER_SWEEP" : "NONE",
-    // Edges should all connect to a node at the same point, rather than different points
-    // this is particularly needed when drawing edge paths based on this layout algorithm's output.
-    mergeEdges: "true",
   };
+};
+
+const shouldFlipEdge = (edge: Edge, nodes: Node[], edges: Edge[]) => {
+  if (edge.label !== "has" && edge.label !== "causes") return false;
+
+  const sourceNode = sourceNodeOfEdge(edge, nodes);
+  const targetNode = targetNodeOfEdge(edge, nodes);
+
+  const sourceEffectType: EffectType = getEffectType(sourceNode, { nodes, edges });
+
+  const isSubproblemEdge = edge.label === "has" && sourceNode.type === "problem";
+  const isProblemCausesEdge =
+    edge.label === "causes" &&
+    (sourceNode.type === "problem" || sourceEffectType === "problem") &&
+    // if causing a problem, let problem continue in orientation direction so that its causes and effects can both be placed between it and solutions
+    targetNode.type !== "problem";
+
+  return isSubproblemEdge || isProblemCausesEdge;
+};
+
+const buildElkEdgesAndUsedPorts = ({ edges, nodes }: Diagram, avoidEdgeLabelOverlap: boolean) => {
+  const usedPortsByNodeId: Record<string, ElkPort[]> = {};
+
+  const elkEdges: ElkExtendedEdge[] = edges
+    .map((edge) => {
+      return shouldFlipEdge(edge, nodes, edges)
+        ? { ...edge, source: edge.target, target: edge.source, flipped: true }
+        : { ...edge, flipped: false };
+    })
+    .map((edge) => {
+      /* eslint-disable functional/immutable-data -- seems significantly easier to populate used ports via mutation */
+      const sourcePort: ElkPort = {
+        id: edge.source + "-regularSource",
+        layoutOptions: { "elk.port.side": "NORTH" },
+      };
+      const usedSourcePorts = (usedPortsByNodeId[edge.source] ??= []);
+      if (usedSourcePorts.find((port) => port.id === sourcePort.id) === undefined) {
+        usedSourcePorts.push(sourcePort);
+      }
+
+      const targetPort: ElkPort = {
+        id: edge.target + "-regularTarget",
+        layoutOptions: { "elk.port.side": "SOUTH" },
+      };
+      const usedTargetPorts = (usedPortsByNodeId[edge.target] ??= []);
+      if (usedTargetPorts.find((port) => port.id === targetPort.id) === undefined) {
+        usedTargetPorts.push(targetPort);
+      }
+      /* eslint-enable functional/immutable-data */
+
+      return {
+        id: edge.id,
+        sources: [sourcePort.id],
+        targets: [targetPort.id],
+        flipped: edge.flipped,
+        layoutOptions: {
+          // Prioritize shorter problem-problem/solution-solution edges so that problem details
+          // are kept closer together and solution details are kept closer together. E.g. if a
+          // problem has multiple direct causes, prioritize putting them in the same layer over
+          // using space efficiently.
+          // This isn't thoroughly tested, and might be more accurate to check source/target types?
+          // But seems ok enough for now.
+          "elk.layered.priority.shortness": ["addresses", "mitigates"].includes(edge.label)
+            ? "0"
+            : "100",
+        },
+        labels: avoidEdgeLabelOverlap
+          ? [
+              {
+                text: edge.label,
+                layoutOptions: {
+                  "edgeLabels.inline": "true",
+                },
+                width: scalePxViaDefaultFontSize(labelWidthPx),
+                // Give labels 0 height so they don't create more space between node layers;
+                // layout still avoids overlap with labels based on their widths when they have 0 height.
+                height: 0,
+              },
+            ]
+          : undefined,
+      };
+    });
+
+  return { elkEdges, usedPortsByNodeId };
+};
+
+const buildElkNodes = (
+  diagram: Diagram,
+  usedPortsByNodeId: Record<string, ElkPort[]>,
+): ElkNode[] => {
+  return diagram.nodes
+    .toSorted((node1, node2) => compareNodesByType(node1, node2))
+    .map((node) => {
+      const elkNode: ElkNode = {
+        id: node.id,
+        width: nodeWidthPx,
+        height: calculateNodeHeight(node.data.label),
+        ports: usedPortsByNodeId[node.id],
+        layoutOptions: {
+          // Some nodes can be taller than others (based on how long their text is),
+          // so align them all along the center.
+          "elk.alignment": "CENTER",
+          // Allow nodes to be partitioned into layers by type.
+          // This can get awkward if there are multiple problems with their own sets of criteria,
+          // solutions, components, effects; we might be able to improve that situation by modeling
+          // each problem within a nested node. Or maybe we could just do partitioning within
+          // a special "problem context view" rather than in the main topic diagram view.
+          "elk.partitioning.partition": calculatePartition(node, diagram),
+          // ensure ports stay on their side and in order
+          // we could consider letting side flip in case elk decides to flip an edge and moving a
+          // port could make the edge less awkward... but we want to maintain port order once we
+          // add two ports per side, so that incoming edges can be organized distinctly from
+          // outgoing edges
+          portConstraints: "FIXED_ORDER",
+        },
+      };
+
+      return elkNode;
+    });
+};
+
+export const layout = async (
+  diagram: Diagram,
+  partition: boolean,
+  layerNodeIslandsTogether: boolean,
+  minimizeEdgeCrossings: boolean,
+  avoidEdgeLabelOverlap: boolean,
+  thoroughness: number,
+): Promise<LayoutedGraph> => {
+  const layoutOptions = buildElkLayoutOptions(
+    partition,
+    layerNodeIslandsTogether,
+    minimizeEdgeCrossings,
+    avoidEdgeLabelOverlap,
+    thoroughness,
+  );
+
+  const { elkEdges, usedPortsByNodeId } = buildElkEdgesAndUsedPorts(diagram, avoidEdgeLabelOverlap);
+  const elkNodes = buildElkNodes(diagram, usedPortsByNodeId);
 
   const graph: ElkNode = {
     id: "elkgraph",
-    children: [...nodes]
-      .toSorted((node1, node2) => compareNodesByType(node1, node2))
-      .map((node) => {
-        return {
-          id: node.id,
-          width: nodeWidthPx,
-          height: calculateNodeHeight(node.data.label),
-          layoutOptions: {
-            // Some nodes can be taller than others (based on how long their text is),
-            // so align them all along the center.
-            "elk.alignment": "CENTER",
-            // Allow nodes to be partitioned into layers by type.
-            // This can get awkward if there are multiple problems with their own sets of criteria,
-            // solutions, components, effects; we might be able to improve that situation by modeling
-            // each problem within a nested node. Or maybe we could just do partitioning within
-            // a special "problem context view" rather than in the main topic diagram view.
-            "elk.partitioning.partition": calculatePartition(node, diagram),
-          },
-        };
-      }),
-    edges: edges
-      .toSorted((edge1, edge2) => compareEdges(edge1, edge2, nodes))
-      .map((edge) => {
-        return {
-          id: edge.id,
-          sources: [edge.source],
-          targets: [edge.target],
-          labels: avoidEdgeLabelOverlap
-            ? [
-                {
-                  text: edge.label,
-                  layoutOptions: {
-                    "edgeLabels.inline": "true",
-                  },
-                  width: scalePxViaDefaultFontSize(labelWidthPx),
-                  // Give labels 0 height so they don't create more space between node layers;
-                  // layout still avoids overlap with labels based on their widths when they have 0 height.
-                  height: 0,
-                },
-              ]
-            : undefined,
-        };
-      }),
+    children: elkNodes,
+    edges: elkEdges,
   };
 
   // hack to try laying out without partition if partitions cause error

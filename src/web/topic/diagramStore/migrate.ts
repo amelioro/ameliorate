@@ -33,6 +33,7 @@ export const migrate = (persistedState: any, version: number) => {
     migrate_23_to_24,
     migrate_24_to_25,
     migrate_25_to_26,
+    migrate_26_to_27,
   ];
 
   let state = persistedState;
@@ -617,6 +618,76 @@ const migrate_25_to_26 = (state: State25) => {
     const originalSource = edge.source;
     edge.source = edge.target;
     edge.target = originalSource;
+  });
+
+  return state;
+};
+
+type Relation26 =
+  | "causes"
+  | "subproblemOf"
+  | "addresses"
+  | "accomplishes"
+  | "contingencyFor"
+  | "createdBy"
+  | "creates"
+  | "has"
+  | "criterionFor"
+  | "fulfills"
+  | "obstacleOf"
+  | "mitigates"
+  | "asksAbout"
+  | "potentialAnswerTo"
+  | "relevantFor"
+  | "sourceOf"
+  | "mentions"
+  | "supports"
+  | "critiques"
+  | "relatesTo";
+
+type Relation27 =
+  | "causes"
+  | "addresses"
+  | "accomplishes"
+  | "contingencyFor"
+  | "has"
+  | "criterionFor"
+  | "fulfills"
+  | "impedes"
+  | "mitigates"
+  | "asksAbout"
+  | "potentialAnswerTo"
+  | "relevantFor"
+  | "sourceOf"
+  | "mentions"
+  | "supports"
+  | "critiques"
+  | "relatesTo";
+
+const relationMapping: Partial<Record<Relation26, Relation27>> = {
+  subproblemOf: "has",
+  createdBy: "causes",
+  creates: "causes",
+  obstacleOf: "impedes",
+};
+
+interface State26 {
+  edges: { source: string; label: Relation26; target: string }[];
+}
+
+const migrate_26_to_27 = (state: State26) => {
+  // update edge types using mapping, and flip source/target for subproblemOf/createdBy because their direction is changing
+  state.edges.forEach((edge) => {
+    if (edge.label === "subproblemOf" || edge.label === "createdBy") {
+      const originalSource = edge.source;
+      edge.source = edge.target;
+      edge.target = originalSource;
+    }
+
+    const newLabel = relationMapping[edge.label];
+    if (newLabel) {
+      (edge.label as Relation27) = newLabel;
+    }
   });
 
   return state;

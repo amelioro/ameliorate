@@ -1,5 +1,5 @@
 import { Stack } from "@mui/material";
-import { Position } from "reactflow";
+import { Position } from "@xyflow/react";
 
 import { EdgeProps } from "@/web/topic/components/Diagram/Diagram";
 import { ScoreEdge } from "@/web/topic/components/Edge/ScoreEdge";
@@ -13,9 +13,11 @@ const convertToStandaloneFlowEdge = (edge: Edge, selected: boolean): EdgeProps =
   return {
     id: edge.id,
     // don't provide a position for the label, so it defaults to being placed between the two nodes
+    // also we don't need source/target port ids because these are only used within react flow
     data: { ...edge.data, elkSections: [] },
     label: edge.label,
     selected: selected,
+    type: "FlowEdge",
     source: edge.source,
     target: edge.target,
 
@@ -43,6 +45,7 @@ export const StandaloneEdge = ({ edge }: Props) => {
 
   const flowEdge = convertToStandaloneFlowEdge(edge, isEdgeSelected);
 
+  // TODO?: could consider flipping the edge if layout will flip it, but doesn't seem totally necessary
   return (
     <Stack>
       {/* z-index to ensure hanging node indicators don't fall behind the edge svg empty background */}

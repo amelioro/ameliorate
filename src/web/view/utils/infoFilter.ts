@@ -76,19 +76,23 @@ const applyProblemFilter = (graph: Graph, filters: ProblemOptions) => {
   const centralProblem = graph.nodes.find((node) => node.id === filters.centralProblemId);
   if (!centralProblem) return graph;
 
-  const detailEdges: RelationName[] = [];
+  const upstreamDetailEdges: RelationName[] = [];
+  const downstreamDetailEdges: RelationName[] = [];
   /* eslint-disable functional/immutable-data */
-  if (filters.problemDetails.includes("causes")) detailEdges.push("causes");
-  if (filters.problemDetails.includes("effects")) detailEdges.push("createdBy");
-  if (filters.problemDetails.includes("subproblems")) detailEdges.push("subproblemOf");
-  if (filters.problemDetails.includes("criteria")) detailEdges.push("criterionFor");
-  if (filters.problemDetails.includes("solutions")) detailEdges.push("addresses", "accomplishes");
+  if (filters.problemDetails.includes("causes")) upstreamDetailEdges.push("causes");
+  if (filters.problemDetails.includes("effects")) downstreamDetailEdges.push("causes");
+  if (filters.problemDetails.includes("subproblems")) downstreamDetailEdges.push("has");
+  if (filters.problemDetails.includes("criteria")) upstreamDetailEdges.push("criterionFor");
+  if (filters.problemDetails.includes("solutions")) {
+    upstreamDetailEdges.push("addresses", "accomplishes");
+  }
   /* eslint-enable functional/immutable-data */
 
-  const problemDetails = upstreamNodes(centralProblem, graph, detailEdges);
+  const upstreamProblemDetails = upstreamNodes(centralProblem, graph, upstreamDetailEdges);
+  const downstreamProblemDetails = downstreamNodes(centralProblem, graph, downstreamDetailEdges);
 
-  const solutions = problemDetails.filter((detail) => detail.type === "solution");
-  const criteria = problemDetails.filter((detail) => detail.type === "criterion");
+  const solutions = upstreamProblemDetails.filter((detail) => detail.type === "solution");
+  const criteria = upstreamProblemDetails.filter((detail) => detail.type === "criterion");
   const filteredSolutionDetails = getSolutionDetails(
     solutions,
     criteria,
@@ -96,6 +100,7 @@ const applyProblemFilter = (graph: Graph, filters: ProblemOptions) => {
     graph,
   );
 
+  const problemDetails = [...upstreamProblemDetails, ...downstreamProblemDetails];
   const nodes = [centralProblem, ...problemDetails, ...filteredSolutionDetails];
   const edges = getRelevantEdges(nodes, graph);
 
@@ -179,11 +184,11 @@ const getSolutionDetails = (
   if (detailType === "none") return [];
 
   const downstreamDetails = solutions.flatMap((solution) =>
-    downstreamNodes(solution, graph, ["has", "creates"]),
+    downstreamNodes(solution, graph, ["has", "causes"]),
   );
 
   const upstreamDetails = solutions.flatMap((solution) =>
-    upstreamNodes(solution, graph, ["createdBy", "obstacleOf", "accomplishes", "contingencyFor"]),
+    upstreamNodes(solution, graph, ["impedes", "accomplishes", "contingencyFor"]),
   );
 
   const criteriaIds = criteria.map((criterion) => criterion.id);

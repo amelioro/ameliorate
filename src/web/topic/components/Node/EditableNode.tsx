@@ -37,6 +37,7 @@ import { setCustomNodeType } from "@/web/topic/diagramStore/actions";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { Node } from "@/web/topic/utils/graph";
 import { nodeDecorations } from "@/web/topic/utils/nodeDecoration";
+import { interactableClass } from "@/web/topic/utils/styleUtils";
 import { useUnrestrictedEditing } from "@/web/view/actionConfigStore";
 import { setSummaryNodeId } from "@/web/view/currentViewStore/summary";
 import { setSelected, useIsGraphPartSelected } from "@/web/view/selectedPartStore";
@@ -128,7 +129,7 @@ const EditableNodeBase = ({ node, className = "", onClick }: Props) => {
       ref={floatingToolbarProps.refs.setFloating}
       style={floatingToolbarProps.floatingStyles}
       {...floatingToolbarProps.getFloatingProps()}
-      className="z-10"
+      className={"z-10" + ` ${interactableClass}`}
     >
       <NodeToolbar node={node} context={context} />
     </div>
@@ -209,11 +210,13 @@ const EditableNodeBase = ({ node, className = "", onClick }: Props) => {
                 graphPartId={node.id}
                 bgColor={nodeStyles.backgroundColor as string}
                 notes={node.data.notes}
+                className={interactableClass}
               />
               <RightCornerContentIndicators
                 graphPartId={node.id}
                 graphPartType="node"
                 bgColor={nodeStyles.backgroundColor as string}
+                className={interactableClass}
               />
             </>
           )}

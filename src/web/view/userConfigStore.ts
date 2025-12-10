@@ -22,7 +22,6 @@ interface UserConfigStoreState {
 
   showScores: boolean;
   showContentIndicators: boolean;
-  showNeighborIndicators: boolean;
   showViewIndicators: boolean;
   indicateWhenNodeForcedToShow: boolean; // legacy name, could rename to `showForceShownIndicators`
 }
@@ -36,7 +35,6 @@ const initialState: UserConfigStoreState = {
 
   showScores: true,
   showContentIndicators: true,
-  showNeighborIndicators: false,
   showViewIndicators: false,
   indicateWhenNodeForcedToShow: false,
 };
@@ -76,10 +74,6 @@ export const useShowContentIndicators = () => {
   return useUserConfigStore((state) => state.showContentIndicators);
 };
 
-export const useShowNeighborIndicators = () => {
-  return useUserConfigStore((state) => state.showNeighborIndicators);
-};
-
 export const useShowViewIndicators = () => {
   return useUserConfigStore((state) => state.showViewIndicators);
 };
@@ -115,12 +109,6 @@ export const toggleShowScores = () => {
 
 export const toggleShowContentIndicators = () => {
   useUserConfigStore.setState((state) => ({ showContentIndicators: !state.showContentIndicators }));
-};
-
-export const toggleShowNeighborIndicators = () => {
-  useUserConfigStore.setState((state) => ({
-    showNeighborIndicators: !state.showNeighborIndicators,
-  }));
 };
 
 export const toggleShowViewIndicators = () => {

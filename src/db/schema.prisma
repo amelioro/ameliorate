@@ -137,16 +137,13 @@ model Edge {
 enum EdgeType {
   // topic
   causes
-  subproblemOf
   addresses
   accomplishes
   contingencyFor
-  createdBy
   has
   criterionFor
-  creates
   fulfills
-  obstacleOf
+  impedes
   mitigates
 
   // research

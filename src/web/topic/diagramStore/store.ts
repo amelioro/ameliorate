@@ -56,6 +56,7 @@ export const initialState: DiagramStoreState = {
 };
 
 export const diagramStorePlaygroundName = "diagram-storage";
+export const currentDiagramVersion = 27;
 
 // create atomic selectors for usage outside of store/ dir
 // this is only exported to allow actions to be extracted to a separate file
@@ -63,7 +64,7 @@ export const useDiagramStore = createWithEqualityFn<DiagramStoreState>()(
   apiSyncer(
     persist(temporal(devtools(() => initialState, { name: diagramStorePlaygroundName })), {
       name: diagramStorePlaygroundName,
-      version: 26,
+      version: currentDiagramVersion,
       migrate: migrate,
       skipHydration: true,
     }),

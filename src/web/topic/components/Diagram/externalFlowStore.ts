@@ -1,4 +1,4 @@
-import { Node as FlowNode } from "reactflow";
+import { Node as FlowNode } from "@xyflow/react";
 import { create } from "zustand";
 
 interface ExternalFlowStoreState {

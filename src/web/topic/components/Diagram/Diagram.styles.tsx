@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
-import { ReactFlow } from "reactflow";
+import { ReactFlow } from "@xyflow/react";
 
 import { infoColor } from "@/web/common/theme";
-import "reactflow/dist/style.css";
+import "@xyflow/react/dist/style.css";
 
 /**
  * default render order:
@@ -34,7 +34,7 @@ export const StyledReactFlow = styled(ReactFlow)`
   // doesn't elevate node neighbors when a node is selected?).
   // (Doubly fragile separate attr selectors because reactflow sets "z-index: " with a space, but
   // emotion removes the space from the attr selector when compiling).
-  svg.react-flow__edges[style*="z-index:"][style*="1000"] {
+  .react-flow__edges > svg[style*="z-index:"][style*="1000"] {
     z-index: ${zIndex.svgWhenAnyGraphPartSelected} !important; // z-index on this is set via library's inline style, so need to use !important to override
   }
 `;

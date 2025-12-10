@@ -103,7 +103,7 @@ describe("upstreamNodes", () => {
         buildEdge({
           sourceId: label2IndirectUpstreamNode.id,
           targetId: label1DirectUpstreamNode.id,
-          relation: "creates", // would usually use `causes` here but this is just to test two labels being passed
+          relation: "has", // would usually use `causes` here but this is just to test two labels being passed
         }),
         buildEdge({
           sourceId: notLabelDirectUpstreamNode.id,
@@ -118,7 +118,7 @@ describe("upstreamNodes", () => {
       ],
     };
 
-    const found = upstreamNodes(fromNode, graph, ["causes", "creates"]);
+    const found = upstreamNodes(fromNode, graph, ["causes", "has"]);
 
     expect(found).toIncludeSameMembers([
       { ...label1DirectUpstreamNode, layersAway: 1 },
@@ -222,7 +222,7 @@ describe("downstreamNodes", () => {
         buildEdge({
           sourceId: label1DirectDownstreamNode.id,
           targetId: label2IndirectDownstreamNode.id,
-          relation: "creates", // would usually use `causes` here but this is just to test two labels being passed
+          relation: "has", // would usually use `causes` here but this is just to test two labels being passed
         }),
         buildEdge({
           sourceId: fromNode.id,
@@ -237,7 +237,7 @@ describe("downstreamNodes", () => {
       ],
     };
 
-    const found = downstreamNodes(fromNode, graph, ["causes", "creates"]);
+    const found = downstreamNodes(fromNode, graph, ["causes", "has"]);
 
     expect(found).toIncludeSameMembers([
       { ...label1DirectDownstreamNode, layersAway: 1 },

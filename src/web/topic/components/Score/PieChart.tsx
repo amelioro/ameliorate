@@ -15,12 +15,19 @@ interface PieProps {
   customData: Data<CustomDataEntry>;
   startAngle: number;
   type?: "regular" | "button";
+  interactive?: boolean;
 }
 
 /**
  * Pie will take up the size of its parent
  */
-export const PieChart = ({ onClick, customData, startAngle, type = "regular" }: PieProps) => {
+export const PieChart = ({
+  onClick,
+  customData,
+  startAngle,
+  type = "regular",
+  interactive = true,
+}: PieProps) => {
   const theme = useTheme();
   const [hovered, setHovered] = useState<number | undefined>(undefined);
 
@@ -64,7 +71,7 @@ export const PieChart = ({ onClick, customData, startAngle, type = "regular" }: 
             transition: theme.transitions.create("all", {
               duration: theme.transitions.duration.shortest,
             }),
-            pointerEvents: "auto",
+            pointerEvents: interactive ? "auto" : "none",
             cursor: onClick ?? type === "button" ? "pointer" : "auto",
           })}
           labelPosition={70} // percent of radius

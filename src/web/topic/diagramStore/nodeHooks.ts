@@ -13,7 +13,6 @@ import {
   upstreamNodes,
 } from "@/web/topic/utils/graph";
 import { edges, neighbors, sourceNodes } from "@/web/topic/utils/node";
-import { RelativePlacement, neighborsInDirection } from "@/web/topic/utils/relativePlacement";
 import { useIsAnyGraphPartSelected } from "@/web/view/selectedPartStore";
 
 export const useNode = (nodeId: string | null) => {
@@ -160,12 +159,12 @@ export const useCriterionSolutionEdges = (problemNodeId: string | undefined) => 
   }, shallow);
 };
 
-export const useNeighborsInDirection = (nodeId: string, direction: RelativePlacement) => {
+export const useNeighbors = (nodeId: string) => {
   return useDiagramStore((state) => {
     try {
       const node = findNodeOrThrow(nodeId, state.nodes);
       const topicGraph = { nodes: state.nodes, edges: state.edges };
-      return neighborsInDirection(node, topicGraph, direction);
+      return neighbors(node, topicGraph);
     } catch {
       return [];
     }

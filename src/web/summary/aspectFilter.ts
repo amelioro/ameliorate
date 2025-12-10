@@ -170,7 +170,7 @@ export const getAddressed = (summaryNode: Node, graph: Graph) => {
   const addressed = downstreamNodes(
     summaryNode,
     graph,
-    ["has", "creates"],
+    ["has", "causes"],
     ["addresses", "mitigates"],
   );
 
@@ -194,24 +194,24 @@ export const getSolutionConcerns = (summaryNode: Node, graph: Graph) => {
 };
 
 export const obstaclesDirectedSearchRelations: DirectedSearchRelation[] = [
-  { toDirection: "source", relationNames: ["obstacleOf"], toNodeTypes: badNodeTypes },
+  { toDirection: "source", relationNames: ["impedes"], toNodeTypes: badNodeTypes },
 ];
 
 // TODO: test this
 export const getObstacles = (summaryNode: Node, graph: Graph) => {
-  const directObstacles = upstreamNodes(summaryNode, graph, [], ["obstacleOf"]); // empty edgesToTraverse because we only want direct obstacles
+  const directObstacles = upstreamNodes(summaryNode, graph, [], ["impedes"]); // empty edgesToTraverse because we only want direct obstacles
   const directObstaclesIds = directObstacles.map((node) => node.id);
 
   const componentsAndDetriments = downstreamNodes(
     summaryNode,
     graph,
-    ["has", "creates"],
+    ["has", "causes"],
     undefined,
     ["solutionComponent", "detriment"],
   ).sort((node1, node2) => node1.layersAway - node2.layersAway); // ensure indirect obstacles are sorted by how far away they are, for convenience
 
   const indirectObstacles = componentsAndDetriments
-    .flatMap((node) => upstreamNodes(node, graph, [], ["obstacleOf"]))
+    .flatMap((node) => upstreamNodes(node, graph, [], ["impedes"]))
     .filter((node) => !directObstaclesIds.includes(node.id));
 
   return { directNodes: directObstacles, indirectNodes: indirectObstacles };
@@ -223,20 +223,22 @@ export const solutionsDirectedSearchRelations: DirectedSearchRelation[] = [
 ];
 
 export const getSolutions = (summaryNode: Node, graph: Graph) => {
-  const concerns = upstreamNodes(
+  const upstreamConcerns = upstreamNodes(summaryNode, graph, ["causes"], undefined, badNodeTypes);
+  const downstreamConcerns = downstreamNodes(
     summaryNode,
     graph,
-    ["causes", "subproblemOf", "createdBy"],
+    ["has", "causes"],
     undefined,
     badNodeTypes,
   );
+  const concerns = upstreamConcerns.concat(downstreamConcerns);
   const concernSolutions = concerns.flatMap((concern) =>
     upstreamNodes(concern, graph, ["addresses", "mitigates"], ["addresses", "mitigates"]),
   );
 
   const immediateSolutions = upstreamNodes(summaryNode, graph, [], ["addresses", "mitigates"]);
   const indirectSolutions = immediateSolutions.flatMap((solution) =>
-    upstreamNodes(solution, graph, ["has", "creates"]),
+    upstreamNodes(solution, graph, ["has", "causes"]),
   );
 
   const solutions = uniqBy(
@@ -257,73 +259,51 @@ export const getSolutions = (summaryNode: Node, graph: Graph) => {
 
 // effect
 export const solutionBenefitsDirectedSearchRelations: DirectedSearchRelation[] = [
-  { toDirection: "target", relationNames: ["creates"], toNodeTypes: ["benefit"] },
+  { toDirection: "target", relationNames: ["causes"], toNodeTypes: ["benefit"] },
 ];
 
 export const getSolutionBenefits = (summaryNode: Node, graph: Graph) => {
-  const benefits = downstreamNodes(
-    summaryNode,
-    graph,
-    ["has", "creates"],
-    ["creates"],
-    ["benefit"],
-  );
+  const benefits = downstreamNodes(summaryNode, graph, ["has", "causes"], ["causes"], ["benefit"]);
 
   return splitNodesByDirectAndIndirect(benefits);
 };
 
 export const detrimentsDirectedSearchRelations: DirectedSearchRelation[] = [
-  { toDirection: "target", relationNames: ["creates", "causes"], toNodeTypes: badNodeTypes },
-  { toDirection: "source", relationNames: ["createdBy"], toNodeTypes: badNodeTypes },
+  { toDirection: "target", relationNames: ["causes"], toNodeTypes: badNodeTypes },
 ];
 
 // TODO: test this
 export const getDetriments = (summaryNode: Node, graph: Graph) => {
-  const detriments = [
-    ...downstreamNodes(
-      summaryNode,
-      graph,
-      ["has", "creates", "causes"],
-      ["creates", "causes"],
-      badNodeTypes,
-    ),
-    ...upstreamNodes(summaryNode, graph, ["createdBy"], ["createdBy"], badNodeTypes),
-  ];
+  const detriments = downstreamNodes(
+    summaryNode,
+    graph,
+    ["has", "causes"],
+    ["causes"],
+    badNodeTypes,
+  );
 
   return splitNodesByDirectAndIndirect(detriments);
 };
 
 export const effectsDirectedSearchRelations: DirectedSearchRelation[] = [
-  { toDirection: "target", relationNames: ["creates", "causes"] },
-  { toDirection: "source", relationNames: ["createdBy"] },
+  { toDirection: "target", relationNames: ["causes"] },
 ];
 
 // TODO: test this
 export const getEffects = (summaryNode: Node, graph: Graph) => {
-  const effects = [
-    ...downstreamNodes(summaryNode, graph, ["has", "creates", "causes"], ["creates", "causes"]),
-    ...upstreamNodes(summaryNode, graph, ["createdBy"], ["createdBy"]),
-  ];
+  const effects = downstreamNodes(summaryNode, graph, ["has", "causes"], ["causes"]);
 
   return splitNodesByDirectAndIndirect(effects);
 };
 
 export const causesDirectedSearchRelations: DirectedSearchRelation[] = [
-  { toDirection: "target", relationNames: ["createdBy"] },
-  { toDirection: "source", relationNames: ["has", "causes", "creates"] },
+  { toDirection: "source", relationNames: ["causes"] },
 ];
 
 // TODO: test this
 export const getCauses = (summaryNode: Node, graph: Graph) => {
-  const causes = [
-    ...downstreamNodes(summaryNode, graph, ["createdBy"], ["createdBy"]),
-    ...upstreamNodes(
-      summaryNode,
-      graph,
-      ["has", "causes", "creates"],
-      ["has", "causes", "creates"],
-    ),
-  ];
+  // include "has" so that we get e.g. solutions that have components that cause benefits
+  const causes = upstreamNodes(summaryNode, graph, ["has", "causes"], ["has", "causes"]);
 
   return splitNodesByDirectAndIndirect(causes);
 };

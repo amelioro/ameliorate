@@ -23,12 +23,13 @@ const initialState: TopicStoreState = {
 
 const topicStoreBaseName = "topic-storage";
 const topicStorePlaygroundName = `${topicStoreBaseName}-playground`;
+export const currentTopicVersion = 1;
 
 const useTopicStore = createWithEqualityFn<TopicStoreState>()(
   apiSyncer(
     persist(() => initialState, {
       name: topicStorePlaygroundName,
-      version: 1,
+      version: currentTopicVersion,
     }),
   ),
   Object.is,

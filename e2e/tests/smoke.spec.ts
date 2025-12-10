@@ -18,11 +18,12 @@ test("can play around", async ({ page }) => {
 
   // confirm playground starts with tutorial popup
   await expect(page.getByLabel("Close Tour")).toBeVisible();
+  const flow = await page.getByTestId("rf__wrapper");
 
   // confirm nodes/edges can be added and persist after refresh
   await page.getByLabel("Close Tour").click();
   await getNode(page, "Problem").click();
-  await page.getByRole("button", { name: "Add node below" }).click();
+  await flow.getByRole("button", { name: "Add node" }).click();
   await page.getByRole("menuitem", { name: "Add Solution" }).click();
   await page.reload();
   await page.getByLabel("Close Tour").click(); // make sure page is done reloading, and get the tour out of the screenshot so we can see the diagram

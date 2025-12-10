@@ -180,6 +180,14 @@ export const badNodeTypes: NodeType[] = ["cause", "problem", "detriment", "obsta
 
 export const effectNodeTypes: NodeType[] = ["benefit", "effect", "detriment"];
 
+export const solutionSpecificNodeTypes: NodeType[] = [
+  "solution",
+  "solutionComponent",
+  "obstacle",
+  "mitigation",
+  "mitigationComponent",
+];
+
 export const infoNodeTypes: Record<InfoCategory, NodeType[]> = {
   breakdown: [
     "cause",
