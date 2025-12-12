@@ -4,6 +4,17 @@ import { persist } from "zustand/middleware";
 interface UserConfigStoreState {
   zenMode: boolean;
   fillNodesWithColor: boolean;
+  /**
+   * Have this because there's visual conflict with scores, but it can be nice sometimes to have the
+   * hint of which node types are hidden.
+   *
+   * Default on, assuming that we'll default "show scores" to on-hover/select so there isn't as much
+   * visual conflict.
+   *
+   * We'll want to keep an eye on this to see if on/off feels best; ideally we wouldn't have to have
+   * a config for this.
+   */
+  fillNodeAttachmentWithColor: boolean;
   expandDetailsTabs: boolean;
   /**
    * Use a group of AddNodeButtons instead of a menu.
@@ -29,6 +40,7 @@ interface UserConfigStoreState {
 const initialState: UserConfigStoreState = {
   zenMode: false,
   fillNodesWithColor: false,
+  fillNodeAttachmentWithColor: true,
   expandDetailsTabs: true,
   expandAddNodeButtons: false,
   quickScoring: false,
@@ -52,6 +64,10 @@ export const useZenMode = () => {
 
 export const useFillNodesWithColor = () => {
   return useUserConfigStore((state) => state.fillNodesWithColor);
+};
+
+export const useFillNodeAttachmentWithColor = () => {
+  return useUserConfigStore((state) => state.fillNodeAttachmentWithColor);
 };
 
 export const useExpandDetailsTabs = () => {
@@ -89,6 +105,10 @@ export const toggleZenMode = () => {
 
 export const toggleFillNodesWithColor = (fill: boolean) => {
   useUserConfigStore.setState({ fillNodesWithColor: fill });
+};
+
+export const toggleFillNodeAttachmentWithColor = (fill: boolean) => {
+  useUserConfigStore.setState({ fillNodeAttachmentWithColor: fill });
 };
 
 export const toggleExpandDetailsTabs = () => {

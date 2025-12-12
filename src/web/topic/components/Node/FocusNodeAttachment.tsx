@@ -15,6 +15,7 @@ import { useHiddenNodes } from "@/web/topic/hooks/flowHooks";
 import { Node } from "@/web/topic/utils/graph";
 import { indicatorLengthRem, nodeDecorations } from "@/web/topic/utils/nodeDecoration";
 import { showNode } from "@/web/view/currentViewStore/filter";
+import { useFillNodeAttachmentWithColor } from "@/web/view/userConfigStore";
 
 const NodeSummary = ({ node, beforeSlot }: { node: Node; beforeSlot?: ReactNode }) => {
   const { NodeIcon } = nodeDecorations[node.type];
@@ -64,6 +65,7 @@ interface FocusNodeAttachmentProps {
 
 export const FocusNodeAttachment = ({ node, position, className }: FocusNodeAttachmentProps) => {
   const neighbors = useNeighbors(node.id);
+  const fillNodeAttachmentWithColor = useFillNodeAttachmentWithColor();
   // TODO(bug): if new neighbor is added and there are currently no hidden neighbors,
   // `useNeighbors` will trigger a re-render at the same time as Diagram re-renders,
   // so the `hiddenNeighbors` will not yet know that the new neighbor is displayed... then the Diagram
@@ -107,18 +109,27 @@ export const FocusNodeAttachment = ({ node, position, className }: FocusNodeAtta
       }
     >
       <Button
-        className="min-w-0 cursor-auto rounded-full p-0 text-text-primary"
-        sx={{ height: `${indicatorLengthRem}rem`, width: `${indicatorLengthRem}rem` }}
+        className={
+          "min-w-0 cursor-auto rounded-full border-solid p-0 text-text-primary" +
+          (fillNodeAttachmentWithColor ? "" : " border bg-paperPlain-main")
+        }
+        sx={{
+          height: `${indicatorLengthRem}rem`,
+          width: `${indicatorLengthRem}rem`,
+          borderColor: edgeColor,
+        }}
       >
-        <div
-          // Behind the button so the score shows in front of the pie.
-          // No pointer events because our button will handle clicks/hovers.
-          // Overflow hidden because pie chart type "button" renders a larger pie in case you want a
-          // square pie e.g. like the score button does.
-          className="absolute z-[-1] size-full overflow-hidden rounded-full *:pointer-events-none"
-        >
-          <NeighborsPie neighbors={hiddenNeighbors} />
-        </div>
+        {fillNodeAttachmentWithColor && (
+          <div
+            // Behind the button so the score shows in front of the pie.
+            // No pointer events because our button will handle clicks/hovers.
+            // Overflow hidden because pie chart type "button" renders a larger pie in case you want a
+            // square pie e.g. like the score button does.
+            className="absolute z-[-1] size-full overflow-hidden rounded-full *:pointer-events-none"
+          >
+            <NeighborsPie neighbors={hiddenNeighbors} />
+          </div>
+        )}
         {hiddenNeighbors.length}
       </Button>
     </Tooltip>

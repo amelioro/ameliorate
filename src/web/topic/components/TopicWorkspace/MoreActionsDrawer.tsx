@@ -14,6 +14,7 @@ import {
   Info,
   Layers,
   PhotoCamera,
+  PieChart,
   PowerInput,
   Route,
   SsidChart,
@@ -86,9 +87,11 @@ import { resetQuickViews } from "@/web/view/quickViewStore/store";
 import {
   toggleExpandAddNodeButtons,
   toggleExpandDetailsTabs,
+  toggleFillNodeAttachmentWithColor,
   toggleFillNodesWithColor,
   useExpandAddNodeButtons,
   useExpandDetailsTabs,
+  useFillNodeAttachmentWithColor,
   useFillNodesWithColor,
 } from "@/web/view/userConfigStore";
 
@@ -161,6 +164,7 @@ export const MoreActionsDrawer = ({
   const layoutThoroughness = useLayoutThoroughness();
 
   const fillNodesWithColor = useFillNodesWithColor();
+  const fillNodeAttachmentWithColor = useFillNodeAttachmentWithColor();
   const expandDetailsTabs = useExpandDetailsTabs();
   const expandAddNodeButtons = useExpandAddNodeButtons();
 
@@ -490,6 +494,18 @@ export const MoreActionsDrawer = ({
             sx={{ borderRadius: "50%", border: "0" }}
           >
             <FormatColorFill />
+          </ToggleButton>
+          <ToggleButton
+            value={fillNodeAttachmentWithColor}
+            title="Fill node attachment with color"
+            aria-label="Fill node attachment with color"
+            color="primary"
+            size="small"
+            selected={fillNodeAttachmentWithColor}
+            onClick={() => toggleFillNodeAttachmentWithColor(!fillNodeAttachmentWithColor)}
+            sx={{ borderRadius: "50%", border: "0" }}
+          >
+            <PieChart />
           </ToggleButton>
           <ToggleButton
             value={expandDetailsTabs}
