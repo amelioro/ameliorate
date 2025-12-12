@@ -1,8 +1,8 @@
 import { lowerCase } from "es-toolkit";
-import { NestedMenuItem } from "mui-nested-menu";
 
 import { getSameCategoryEdgeTypes } from "@/common/edge";
 import { ContextMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
+import { NestedMenuItem } from "@/web/common/components/Menu/NestedMenuItem";
 import { useSessionUser } from "@/web/common/hooks";
 import { changeEdgeType } from "@/web/topic/diagramStore/actions";
 import { useIsTableEdge } from "@/web/topic/diagramStore/edgeHooks";
@@ -26,12 +26,7 @@ export const ChangeEdgeTypeMenuItem = ({ edge, parentMenuOpen }: Props) => {
 
   return (
     <>
-      <NestedMenuItem
-        label="Change edge type"
-        parentMenuOpen={parentMenuOpen}
-        // match default mui menu padding and size
-        className="px-[16px] [&_p]:px-0 [&_p]:text-sm"
-      >
+      <NestedMenuItem label="Change edge type" parentMenuOpen={parentMenuOpen}>
         {getSameCategoryEdgeTypes(edge.label).map((type) => (
           <ContextMenuItem
             key={type}
