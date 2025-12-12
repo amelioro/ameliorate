@@ -1,8 +1,8 @@
 import { useTheme } from "@mui/material/styles";
-import { NestedMenuItem } from "mui-nested-menu";
 
 import { getSameCategoryNodeTypes, prettyNodeTypes } from "@/common/node";
 import { ContextMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
+import { NestedMenuItem } from "@/web/common/components/Menu/NestedMenuItem";
 import { useSessionUser } from "@/web/common/hooks";
 import { changeNodeType } from "@/web/topic/diagramStore/actions";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
@@ -23,12 +23,7 @@ export const ChangeNodeTypeMenuItem = ({ node, parentMenuOpen }: Props) => {
   if (!userCanEditTopicData) return <></>;
 
   return (
-    <NestedMenuItem
-      label="Change node type"
-      parentMenuOpen={parentMenuOpen}
-      // match default mui menu padding and size
-      className="px-[16px] [&_p]:px-0 [&_p]:text-sm"
-    >
+    <NestedMenuItem label="Change node type" parentMenuOpen={parentMenuOpen}>
       {getSameCategoryNodeTypes(node.type).map((type) => {
         const { NodeIcon } = nodeDecorations[type];
         const title = prettyNodeTypes[type];
