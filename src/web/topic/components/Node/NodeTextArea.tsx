@@ -22,7 +22,7 @@ const onFontResize = (textAreaId: string) => {
         <br />
         Consider:
       </span>
-      <ul className="list-inside !list-disc">
+      <ul className="list-inside list-disc!">
         <li>using a sentence fragment of just one concept, like 'Problem: cars going too fast'</li>
         <li>using a title for the node and putting an explanation in the node's notes</li>
       </ul>

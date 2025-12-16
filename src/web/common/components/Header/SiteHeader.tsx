@@ -31,7 +31,7 @@ export const SiteHeader = () => {
       {/* banner within app bar so that it matches stickiness of the toolbar */}
       <SiteBanner />
 
-      <Toolbar className="h-12 min-h-[auto]">
+      <Toolbar className="h-12 min-h-auto">
         <div className="flex flex-1 items-center justify-between gap-4 *:shrink-0">
           <div className="flex items-center gap-4">
             <SiteMenu className="p-0 md:hidden" />

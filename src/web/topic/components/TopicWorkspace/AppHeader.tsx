@@ -20,7 +20,7 @@ import { setSelected } from "@/web/view/selectedPartStore";
 // TODO: check if need overflow-x-auto to deal with increased html font size
 // h-[calc(3rem + 1 px)] to match SiteHeader's 48px + 1px border
 // border stuff to allow corners to have their own border on large screens, but use the parent's shared border for smaller screens
-const headerCornerClasses = "h-[calc(3rem_+_1px)] bg-paperShaded-main flex items-center";
+const headerCornerClasses = "h-[calc(3rem+1px)] bg-paperShaded-main flex items-center";
 
 export const AppHeader = () => {
   const theme = useTheme();
@@ -40,7 +40,7 @@ export const AppHeader = () => {
     // shrink-0 because center header should be the only one shrinking
     <div className={"shrink-0 pl-1 " + headerCornerClasses}>
       <SiteMenu />
-      <Logo className="ml-1 mr-4" titleClassName="hidden xl:flex" />
+      <Logo className="mr-4 ml-1" titleClassName="hidden xl:flex" />
 
       <Divider orientation="vertical" flexItem />
 
@@ -112,7 +112,7 @@ export const AppHeader = () => {
         <>
           <Link
             // hardcoded max-w instead of % because it seems like % results in the parent div being wider than these contents, despite being a flex container and items/justify center
-            className="min-w-12 max-w-28 overflow-hidden text-ellipsis"
+            className="max-w-28 min-w-12 overflow-hidden text-ellipsis"
             href={`/${topic.creatorName}`}
             title={topic.creatorName} // allow hovering since it can be truncated
           >

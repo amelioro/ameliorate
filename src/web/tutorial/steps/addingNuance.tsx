@@ -34,7 +34,7 @@ export const addingNuanceSteps: StepType[] = [
             width={434}
             height={328}
             unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-            className="rounded-xl border shadow"
+            className="rounded-xl border shadow-sm"
           />
         }
       />
@@ -62,7 +62,7 @@ export const addingNuanceSteps: StepType[] = [
             width={492}
             height={411}
             unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-            className="rounded-xl border shadow"
+            className="rounded-xl border shadow-sm"
           />
         }
       />
@@ -92,7 +92,7 @@ export const addingNuanceSteps: StepType[] = [
             width={600}
             height={353}
             unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-            className="rounded-xl border shadow"
+            className="rounded-xl border shadow-sm"
           />
         }
       />
@@ -121,7 +121,7 @@ export const addingNuanceSteps: StepType[] = [
             width={579}
             height={379}
             unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-            className="rounded-xl border shadow"
+            className="rounded-xl border shadow-sm"
           />
         }
       />
@@ -182,7 +182,7 @@ export const addingNuanceSteps: StepType[] = [
             width={507}
             height={360}
             unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-            className="rounded-xl border shadow"
+            className="rounded-xl border shadow-sm"
           />
         }
       />

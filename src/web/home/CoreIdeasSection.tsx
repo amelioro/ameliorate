@@ -19,7 +19,7 @@ const copy = {
         width={495.416}
         height={600}
         unoptimized
-        className="rounded-xl border shadow"
+        className="rounded-xl border shadow-sm"
       />
     ),
   },
@@ -35,7 +35,7 @@ const copy = {
         height={600}
         unoptimized
         // extra padding & bg because spacing seems to look better
-        className="rounded-xl border bg-paperPlain-main p-3 shadow"
+        className="rounded-xl border bg-paperPlain-main p-3 shadow-sm"
       />
     ),
   },

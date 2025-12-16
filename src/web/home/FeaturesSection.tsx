@@ -18,7 +18,7 @@ const copy = {
           height={847}
           unoptimized // warning without this - gifs aren't optimized by nextjs apparently
           // extra padding & bg because spacing seems to look better
-          className="rounded-xl border bg-paperPlain-main p-2 shadow"
+          className="rounded-xl border bg-paperPlain-main p-2 shadow-sm"
         />
         <Typography variant="caption">
           Topic:{" "}
@@ -41,7 +41,7 @@ const copy = {
           width={756}
           height={703}
           unoptimized // warning without this - gifs aren't optimized by nextjs apparently
-          className="rounded-xl border shadow"
+          className="rounded-xl border shadow-sm"
         />
         <Typography variant="caption">
           Topic:{" "}
@@ -65,7 +65,7 @@ const copy = {
           height={455}
           unoptimized
           // extra padding & bg because spacing seems to look better
-          className="rounded-xl border bg-paperPlain-main p-3 shadow"
+          className="rounded-xl border bg-paperPlain-main p-3 shadow-sm"
         />
         <Typography variant="caption">
           Topic:{" "}
@@ -90,7 +90,7 @@ const copy = {
           width={1022}
           height={728}
           unoptimized // warning without this - gifs aren't optimized by nextjs apparently
-          className="rounded-xl border shadow"
+          className="rounded-xl border shadow-sm"
         />
         <Typography variant="caption">
           Topic:{" "}

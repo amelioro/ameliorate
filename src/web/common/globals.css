@@ -1,3 +1,37 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/*
+  The `important` flag adds !important to all Tailwind utilities.
+  
+  This is needed because Tailwind v4 outputs styles in CSS cascade layers (@layer),
+  and layered styles always lose to unlayered styles regardless of specificity.
+  MUI v5's Emotion-based styles are unlayered, so without `important`, MUI styles
+  would always override Tailwind utilities.
+  
+  If MUI is upgraded to v6+, this can be replaced with the cleaner CSS layer approach:
+  https://mui.com/material-ui/integrations/tailwindcss/tailwindcss-v4/
+*/
+@import "tailwindcss" important;
+
+/*
+  JS Tailwind config is considered legacy in favor of Tailwind v4's CSS-first @theme approach, but
+  we need to use JS in order to add our custom MUI palette to Tailwind. See file comment in
+  tailwind.config.js.
+*/
+@config '../../../tailwind.config.js';
+
+/*
+  The default border color changed to `currentcolor` in Tailwind CSS v4,
+  so we set the border color explicitly to the previous default. This ensures it
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}

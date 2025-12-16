@@ -117,7 +117,7 @@ const AddMenuSearch = ({ fromNodeId, addableRelations, className }: AddMenuSearc
           <li {...props} key={option.id}>
             <div className="flex items-center">
               <NodeIcon
-                className="mr-2 rounded p-0.5"
+                className="mr-2 rounded-sm p-0.5"
                 sx={{ backgroundColor: theme.palette[option.type].main }}
               />
               <span>
@@ -259,7 +259,7 @@ const AddNodeButtonGroup = memo(
             // default for button group is inline-flex, but that creates different spacing than flex, and flex spacing seems nicer
             "flex" +
             // keep the button rendered if the menu is open (if button was only open due to hover, it'd otherwise disappear)
-            (menuOpen ? " !flex" : "") +
+            (menuOpen ? " flex!" : "") +
             // If the menu button only has uncommon options, make it stand out less - this way users
             // are slightly encouraged to add nodes in the direction that is intended to commonly
             // be added; e.g. problem nodes have problem details added below, and solution nodes

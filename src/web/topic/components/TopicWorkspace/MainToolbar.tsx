@@ -105,7 +105,7 @@ const PerspectivesMenu = ({ anchorEl, setAnchorEl }: PerspectivesMenuProps) => {
       closeOnClick={false}
       openDirection="top"
       // match the ~300px width of drawer
-      className="w-[18.75rem] px-2"
+      className="w-75 px-2"
     >
       <MenuItem onClick={() => toggleQuickScoring()}>
         <ListItemText
@@ -250,7 +250,7 @@ export const MainToolbar = () => {
           color="primary"
           size="small"
           onClick={() => toggleZenMode()}
-          className="rounded border-none"
+          className="rounded-sm border-none"
         >
           <SelfImprovement />
         </ToggleButton>
@@ -262,7 +262,7 @@ export const MainToolbar = () => {
           size="small"
           onClick={(event) => setShowHideMenuAnchorEl(event.currentTarget)}
           // pr-0 because the dropdown arrow has a bunch of extra space
-          className="rounded border-none pr-0"
+          className="rounded-sm border-none pr-0"
         >
           <TabUnselected />
           <ArrowDropDown fontSize="small" />
@@ -281,7 +281,7 @@ export const MainToolbar = () => {
               onClick={() =>
                 isComparingPerspectives ? resetPerspectives() : comparePerspectives()
               }
-              className="rounded border-none"
+              className="rounded-sm border-none"
             >
               <Group />
             </ToggleButton>
@@ -294,7 +294,7 @@ export const MainToolbar = () => {
               // small width to keep the menu button narrow
               // extra right padding because otherwise icon is too close to right-divider
               // extra y padding to match other icon buttons with default fontSize="medium"
-              className="w-3 rounded py-2.5 pl-2 pr-2.5"
+              className="w-3 rounded-sm py-2.5 pr-2.5 pl-2"
             >
               <ArrowDropDown fontSize="small" />
             </IconButton>
@@ -316,7 +316,7 @@ export const MainToolbar = () => {
             size="small"
             selected={flashlightMode}
             onClick={() => toggleFlashlightMode(!flashlightMode)}
-            className="rounded border-none"
+            className="rounded-sm border-none"
           >
             <Highlight />
           </ToggleButton>
@@ -331,7 +331,7 @@ export const MainToolbar = () => {
             size="small"
             selected={readonlyMode}
             onClick={() => toggleReadonlyMode()}
-            className="rounded border-none"
+            className="rounded-sm border-none"
           >
             <EditOff />
           </ToggleButton>
@@ -352,7 +352,7 @@ export const MainToolbar = () => {
               }}
               // don't allow modifying edges that are part of the table, because they should always exist as long as their nodes do
               disabled={!selectedGraphPart || partIsTableEdge}
-              className="rounded"
+              className="rounded-sm"
             >
               <Delete />
             </IconButton>
@@ -366,7 +366,7 @@ export const MainToolbar = () => {
           title="More actions"
           aria-label="More actions"
           onClick={() => setIsMoreActionsDrawerOpen(true)}
-          className="rounded"
+          className="rounded-sm"
         >
           <Build />
         </IconButton>
@@ -382,7 +382,7 @@ export const MainToolbar = () => {
           title="Help"
           aria-label="Help"
           onClick={(event) => setHelpAnchorEl(event.currentTarget)}
-          className="rounded"
+          className="rounded-sm"
         >
           <QuestionMark />
         </IconButton>

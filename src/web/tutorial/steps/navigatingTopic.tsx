@@ -30,7 +30,7 @@ export const navigatingTopicSteps: StepType[] = [
               height={847}
               unoptimized // warning without this - gifs aren't optimized by nextjs apparently
               // extra padding & bg because spacing seems to look better
-              className="rounded-xl border bg-paperPlain-main p-2 shadow"
+              className="rounded-xl border bg-paperPlain-main p-2 shadow-sm"
             />
             <Typography variant="caption">
               From:{" "}
@@ -69,7 +69,7 @@ export const navigatingTopicSteps: StepType[] = [
               width={600}
               height={467}
               unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-              className="rounded-xl border shadow"
+              className="rounded-xl border shadow-sm"
             />
           </>
         }
@@ -99,7 +99,7 @@ export const navigatingTopicSteps: StepType[] = [
             width={492}
             height={411}
             unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-            className="rounded-xl border shadow"
+            className="rounded-xl border shadow-sm"
           />
         }
       />

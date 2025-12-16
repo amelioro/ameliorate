@@ -108,7 +108,7 @@ export const Summary = () => {
         <TabList
           onChange={(_, value: Category) => setSelectedSummaryTab(value)}
           aria-label="Summary Tabs"
-          className="[&_.MuiTab-root]:min-w-[auto] [&_.MuiTab-root]:px-2 [&_.MuiTabScrollButton-root]:w-6"
+          className="[&_.MuiTab-root]:min-w-auto [&_.MuiTab-root]:px-2 [&_.MuiTabScrollButton-root]:w-6"
           variant="scrollable"
           scrollButtons="auto"
           allowScrollButtonsMobile

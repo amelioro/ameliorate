@@ -13,7 +13,7 @@ export const Thread = ({ myUsername, threadStarterComment }: Props) => {
   const draft = useDraft(threadStarterComment.id, "comment");
 
   return (
-    <div className="space-y-3 rounded border p-3 shadow">
+    <div className="space-y-3 rounded-sm border p-3 shadow-sm">
       <Comment comment={threadStarterComment} />
 
       {threadChildrenComments.map((comment) => (

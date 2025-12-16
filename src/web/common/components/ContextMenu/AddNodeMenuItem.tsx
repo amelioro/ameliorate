@@ -38,7 +38,7 @@ export const AddNodeMenuItem = ({ parentMenuOpen }: Props) => {
             <ContextMenuItem key={type} onClick={() => addNodeWithoutEdge(type, "diagram")}>
               <NodeIcon
                 sx={{ backgroundColor: theme.palette[type].main }}
-                className="mr-2 rounded p-0.5"
+                className="mr-2 rounded-sm p-0.5"
               />
               {title}
             </ContextMenuItem>

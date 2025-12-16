@@ -59,7 +59,7 @@ const ZenModeButton = () => {
       color="primary"
       size="small"
       onClick={() => toggleZenMode()}
-      className="absolute bottom-0 left-0 z-10 rounded border-none"
+      className="absolute bottom-0 left-0 z-10 rounded-sm border-none"
     >
       <SelfImprovement />
     </ToggleButton>
@@ -102,8 +102,8 @@ export const TopicWorkspace = () => {
            * Ideally we wouldn't hardcode the id's here, but tailwind can't use dynamic values
            * (unless we wanted to use css variables for them).
            */
-          " [&:has(>#pane-left.pane-open)>#workspace-content]:ml-[--drawer-min-width-rem]" +
-          " [&:has(>#pane-right.pane-open)>#workspace-content]:mr-[--drawer-min-width-rem]"
+          " [&:has(>#pane-left.pane-open)>#workspace-content]:ml-(--drawer-min-width-rem)" +
+          " [&:has(>#pane-right.pane-open)>#workspace-content]:mr-(--drawer-min-width-rem)"
         }
         style={{ "--drawer-min-width-rem": `${drawerMinWidthRem}rem` } as React.CSSProperties}
       >

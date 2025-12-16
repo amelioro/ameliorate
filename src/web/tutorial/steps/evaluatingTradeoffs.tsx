@@ -33,7 +33,7 @@ export const getEvaluatingTradeoffsSteps = (track: Track | null): StepType[] => 
             width={677}
             height={472}
             unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-            className="rounded-xl border shadow"
+            className="rounded-xl border shadow-sm"
           />
         }
       />
@@ -63,7 +63,7 @@ export const getEvaluatingTradeoffsSteps = (track: Track | null): StepType[] => 
               alt="criteria table scores"
               width={540}
               height={325}
-              className="rounded-xl border shadow"
+              className="rounded-xl border shadow-sm"
             />
             <Typography variant="caption">
               From:{" "}
@@ -102,7 +102,7 @@ export const getEvaluatingTradeoffsSteps = (track: Track | null): StepType[] => 
               alt="solution totals"
               width={543}
               height={108}
-              className="rounded-xl border shadow"
+              className="rounded-xl border shadow-sm"
             />
             <Typography variant="caption">
               From:{" "}

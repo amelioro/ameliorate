@@ -25,7 +25,7 @@ Below is a problem node, which suggests that "cars going too fast in my neighbor
             width={305}
             height={159}
             unoptimized
-            className="rounded-xl border shadow"
+            className="rounded-xl border shadow-sm"
           />
         }
       />
@@ -47,7 +47,7 @@ Note that editing is only possible if you created the topic or if you were given
             width={322}
             height={205}
             unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-            className="rounded-xl border shadow"
+            className="rounded-xl border shadow-sm"
           />
         }
       />
@@ -67,7 +67,7 @@ Note that editing is only possible if you created the topic or if you were given
             width={527}
             height={387}
             unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-            className="rounded-xl border shadow"
+            className="rounded-xl border shadow-sm"
           />
         }
       />
@@ -96,7 +96,7 @@ Note that editing is only possible if you created the topic or if you were given
             width={413}
             height={476}
             unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-            className="rounded-xl border shadow"
+            className="rounded-xl border shadow-sm"
           />
         }
       />
@@ -116,7 +116,7 @@ Note that editing is only possible if you created the topic or if you were given
             width={273}
             height={324}
             unoptimized
-            className="rounded-xl border shadow"
+            className="rounded-xl border shadow-sm"
           />
         }
       />

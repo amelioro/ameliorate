@@ -15,7 +15,7 @@ export const NodeTypeText = ({ type }: { type: NodeType }) => {
     <span className="text-nowrap">
       <span>{title}</span>
       <NodeIcon
-        className="ml-1 size-4 rounded p-0.5"
+        className="ml-1 size-4 rounded-sm p-0.5"
         sx={{ backgroundColor: theme.palette[type].main }}
       />
     </span>

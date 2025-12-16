@@ -47,7 +47,7 @@ export const CommentSection = ({ parentId, parentType }: Props) => {
         </div>
       )}
 
-      <div className="w-full space-y-2 text-wrap text-sm">
+      <div className="w-full space-y-2 text-sm text-wrap">
         {threadStarterComments.map((comment) => (
           <Thread key={comment.id} myUsername={myUsername} threadStarterComment={comment} />
         ))}

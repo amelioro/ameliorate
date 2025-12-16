@@ -56,7 +56,7 @@ export const InfoDialog = () => {
   return (
     <>
       {/* set opacity to match MUI Backdrop's opacity, bit lighter than reactour's mask's 70%. feels a bit nicer, don't need to create as much emphasis as that. */}
-      <Mask sizes={maskSizes} onClick={() => setOpen(false)} className="!opacity-50" />
+      <Mask sizes={maskSizes} onClick={() => setOpen(false)} className="opacity-50!" />
 
       <Popper
         open={open}
@@ -69,8 +69,8 @@ export const InfoDialog = () => {
         ]}
         // z-index to match the mask's so that Popper is above the mask
         className={
-          "z-[99999] max-w-[min(80svw,36rem)] rounded-lg bg-white" +
-          (anchorEl ? "" : " !left-1/2 !top-1/2 !-translate-x-1/2 !-translate-y-1/2")
+          "z-99999 max-w-[min(80svw,36rem)] rounded-lg bg-white" +
+          (anchorEl ? "" : " left-1/2! top-1/2! -translate-x-1/2! -translate-y-1/2!")
         }
         aria-label="Info Dialog"
       >
@@ -113,7 +113,7 @@ export const InfoDialog = () => {
 
               <Typography
                 variant="body2"
-                className="max-h-[70svh] overflow-auto whitespace-pre-wrap p-2"
+                className="max-h-[70svh] overflow-auto p-2 whitespace-pre-wrap"
               >
                 {message}
               </Typography>

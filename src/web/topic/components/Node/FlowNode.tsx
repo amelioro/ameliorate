@@ -79,7 +79,7 @@ export const FlowNode = (flowNode: NodeProps) => {
 
   // not sure if this is ideal or not, but we're using a darker shadow so that the button
   // stands out when in front of a bunch of edges (Mui's default shadow doesn't stand out much)
-  const addButtonDecorationClasses = "shadow shadow-gray-500";
+  const addButtonDecorationClasses = "shadow-sm shadow-gray-500";
 
   const abovePosition = orientation === "UP" ? Position.Top : Position.Left;
   const belowPosition = orientation === "UP" ? Position.Bottom : Position.Right;

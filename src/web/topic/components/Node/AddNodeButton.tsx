@@ -94,7 +94,7 @@ export const AddNodeButton = ({
   return buttonType === "menu" ? (
     <MenuItem className={className} onClick={memoizedOnClick}>
       <NodeIcon
-        className="mr-2 rounded p-0.5"
+        className="mr-2 rounded-sm p-0.5"
         sx={{ backgroundColor: theme.palette[toNodeType].main }}
       />
       <span>
