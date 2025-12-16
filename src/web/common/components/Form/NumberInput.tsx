@@ -26,7 +26,7 @@ export const NumberInput = ({ name, min, max }: Props) => {
         value={field.value as number} // should be able to type-safe this but seems hard and not worth effort
         onChange={(event: React.SyntheticEvent, value: number | null) => {
           event.preventDefault(); // don't trigger default form submit, which would refresh the page
-          if (value === null) throw new Error("NumberInput should not allow empty value");
+          if (value === null) return; // after blurring, this should result in the change being undone
 
           field.onChange(value);
           submit();
