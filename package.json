@@ -63,7 +63,7 @@
     "@trpc/client": "10.34.0",
     "@trpc/next": "10.34.0",
     "@trpc/react-query": "10.34.0",
-    "@trpc/server": "10.34.0",
+    "@trpc/server": "10.45.3",
     "@xyflow/react": "12.10.0",
     "colorjs.io": "0.5.2",
     "dotenv": "17.2.2",
