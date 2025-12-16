@@ -314,7 +314,7 @@ const AddNodeButtonGroup = memo(
             document.getElementById("add-button-menu-paper")?.blur();
           }}
           slotProps={{
-            root: { onClick: (event) => event.stopPropagation() }, // don't trigger deselection of node when clicking backdrop to close menu
+            root: { onClick: (event: React.MouseEvent) => event.stopPropagation() }, // don't trigger deselection of node when clicking backdrop to close menu
             paper: { id: "add-button-menu-paper" },
           }}
           // Not sure if this is worth but this prevents the annoying scenario where you accidentally
