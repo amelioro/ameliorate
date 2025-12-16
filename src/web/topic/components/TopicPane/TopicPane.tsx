@@ -178,9 +178,9 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
         <TabPanel
           key="Details"
           value="Details"
-          // flex to allow details to grow & fill up available space... but only if this tab is selected, because otherwise we override `TabPanel`'s default `display: hidden`
-          // flex flex-col to put details toolbar above the content
-          className={"flex-col grow overflow-auto p-0" + (selectedTab === "Details" ? " flex" : "")}
+          // flex to allow details to grow & fill up available space
+          // flex-col to put details toolbar above the content
+          classes={{ root: "p-0 flex flex-col grow overflow-auto" }}
         >
           {/* Toolbar centered above content to be near content's title, in hopes of implying that the */}
           {/* back/forward buttons are to navigate to previous/next content. */}
@@ -204,7 +204,7 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
       )}
 
       {tabs.includes("Views") && (
-        <TabPanel key="Views" value="Views" className="overflow-auto p-0">
+        <TabPanel key="Views" value="Views" classes={{ root: "p-0 overflow-auto" }}>
           <TopicViews />
         </TabPanel>
       )}

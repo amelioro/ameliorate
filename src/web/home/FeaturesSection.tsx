@@ -120,16 +120,9 @@ export const FeaturesSection = () => {
 
         <TabPanel
           key="views"
-          // Using `selectedCard` here instead of `views` is a hack to keep the panels all mounted, so that
-          // the images don't have to reload every time a tab is clicked.
-          // TODO: after mui v6 upgrade, instead of this hack, can use `keepMounted` https://github.com/mui/material-ui/issues/37398
-          value={selectedCard}
-          // value="views"
-          className={
-            "items-center gap-2 p-0" +
-            // `hidden` is specified only because the hack above prevents the panels from knowing when they should be hidden
-            (selectedCard === "views" ? " flex flex-col" : " hidden")
-          }
+          value="views"
+          keepMounted
+          classes={{ root: "p-0 flex flex-col items-center gap-2" }}
         >
           <Typography variant="body1" className="pt-3">
             {copy.views.description}
@@ -139,16 +132,9 @@ export const FeaturesSection = () => {
 
         <TabPanel
           key="disagree"
-          // Using `selectedCard` here instead of `disagree` is a hack to keep the panels all mounted, so that
-          // the images don't have to reload every time a tab is clicked.
-          // TODO: after mui v6 upgrade, instead of this hack, can use `keepMounted` https://github.com/mui/material-ui/issues/37398
-          value={selectedCard}
-          // value="disagree"
-          className={
-            "items-center gap-2 p-0" +
-            // `hidden` is specified only because the hack above prevents the panels from knowing when they should be hidden
-            (selectedCard === "disagree" ? " flex flex-col" : " hidden")
-          }
+          value="disagree"
+          keepMounted
+          classes={{ root: "p-0 flex flex-col items-center gap-2" }}
         >
           <Typography variant="body1" className="pt-3">
             {copy.disagree.description}
@@ -158,16 +144,9 @@ export const FeaturesSection = () => {
 
         <TabPanel
           key="tradeoffs"
-          // Using `selectedCard` here instead of `tradeoffs` is a hack to keep the panels all mounted, so that
-          // the images don't have to reload every time a tab is clicked.
-          // TODO: after mui v6 upgrade, instead of this hack, can use `keepMounted` https://github.com/mui/material-ui/issues/37398
-          value={selectedCard}
-          // value="tradeoffs"
-          className={
-            "items-center gap-2 p-0" +
-            // `hidden` is specified only because the hack above prevents the panels from knowing when they should be hidden
-            (selectedCard === "tradeoffs" ? " flex flex-col" : " hidden")
-          }
+          value="tradeoffs"
+          keepMounted
+          classes={{ root: "p-0 flex flex-col items-center gap-2" }}
         >
           <Typography variant="body1" className="pt-3">
             {copy.tradeoffs.description}
@@ -177,16 +156,9 @@ export const FeaturesSection = () => {
 
         <TabPanel
           key="flashlight"
-          // Using `selectedCard` here instead of `flashlight` is a hack to keep the panels all mounted, so that
-          // the images don't have to reload every time a tab is clicked.
-          // TODO: after mui v6 upgrade, instead of this hack, can use `keepMounted` https://github.com/mui/material-ui/issues/37398
-          value={selectedCard}
-          // value="flashlight"
-          className={
-            "items-center gap-2 p-0" +
-            // `hidden` is specified only because the hack above prevents the panels from knowing when they should be hidden
-            (selectedCard === "flashlight" ? " flex flex-col" : " hidden")
-          }
+          value="flashlight"
+          keepMounted
+          classes={{ root: "p-0 flex flex-col items-center gap-2" }}
         >
           <Typography variant="body1" className="pt-3">
             {copy.flashlight.description}
