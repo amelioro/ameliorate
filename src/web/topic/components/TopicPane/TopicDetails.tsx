@@ -83,8 +83,10 @@ const BasicsSection = ({ topic }: { topic: StoreTopic }) => {
         multiline
         fullWidth
         size="small"
-        InputProps={{ className: "text-sm", readOnly: !userCanEditTopicData }}
-        InputLabelProps={{ className: "text-sm" }}
+        slotProps={{
+          input: { className: "text-sm", readOnly: !userCanEditTopicData },
+          inputLabel: { className: "text-sm" },
+        }}
         maxRows={10}
       />
     </form>

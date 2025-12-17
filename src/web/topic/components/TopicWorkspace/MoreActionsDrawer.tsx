@@ -554,7 +554,9 @@ export const MoreActionsDrawer = ({
             label="Width"
             type="number"
             margin="dense"
-            InputProps={{ endAdornment: <InputAdornment position="end">px</InputAdornment> }}
+            slotProps={{
+              input: { endAdornment: <InputAdornment position="end">px</InputAdornment> },
+            }}
             error={!!errors.width}
             helperText={errors.width?.message}
             {...register("width", { valueAsNumber: true })}
@@ -563,7 +565,9 @@ export const MoreActionsDrawer = ({
             label="Height"
             type="number"
             margin="dense"
-            InputProps={{ endAdornment: <InputAdornment position="end">px</InputAdornment> }}
+            slotProps={{
+              input: { endAdornment: <InputAdornment position="end">px</InputAdornment> },
+            }}
             error={!!errors.height}
             helperText={errors.height?.message}
             {...register("height", { valueAsNumber: true })}

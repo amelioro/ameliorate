@@ -50,7 +50,7 @@ export const Draft = ({
       <TextField
         inputRef={inputRef}
         size="small"
-        inputProps={{ className: "text-sm" }}
+        slotProps={{ htmlInput: { className: "text-sm" } }}
         placeholder={
           replying ? "Reply to this thread..." : "Write a comment, starting a new thread..."
         }
