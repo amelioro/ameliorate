@@ -419,19 +419,21 @@ export const standardFilterSchema = z.discriminatedUnion("type", [
 ]);
 
 // intentionally use spread operators instead of chaining `.merge(schema)` to avoid "type instantiation is excessively deep and possibly infinite" error
+// also want to make everything optional - have to use partial() on each schema because deepPartial is deprecated to be removed from zod 4
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- we're using this to build a type, and we might later use it beyond just for a type
 const standardFilterWithFallbacksSchema = z
   .object({
-    ...noneSchema.shape,
-    ...highLevelSchema.shape,
-    ...problemSchema.shape,
-    ...tradeoffsSchema.shape,
-    ...solutionSchema.shape,
-    ...questionSchema.shape,
-    ...sourceSchema.shape,
-    ...rootClaimSchema.shape,
+    ...noneSchema.partial().shape,
+    ...highLevelSchema.partial().shape,
+    ...problemSchema.partial().shape,
+    ...tradeoffsSchema.partial().shape,
+    ...solutionSchema.partial().shape,
+    ...questionSchema.partial().shape,
+    ...sourceSchema.partial().shape,
+    ...rootClaimSchema.partial().shape,
     type: zStandardFilterTypes,
   })
-  .deepPartial(); // all defaults should be optional to specify
+  .partial();
 
 export const standardFilterSchemasByType = {
   none: noneSchema,
