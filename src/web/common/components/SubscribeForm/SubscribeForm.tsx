@@ -34,7 +34,7 @@ export const SubscribeForm = ({ header, headerAnchor, action, buttonText }: Prop
             type="email"
             name="email"
             required
-            className="max-w-52 grow rounded border border-primary-main p-2 text-sm focus:outline-none"
+            className="max-w-52 grow rounded-sm border border-primary-main p-2 text-sm focus:outline-hidden"
           />
 
           <Button
@@ -42,7 +42,7 @@ export const SubscribeForm = ({ header, headerAnchor, action, buttonText }: Prop
             color="primary"
             type="submit"
             disabled={submitted}
-            className="shrink-0 text-nowrap rounded shadow-none"
+            className="shrink-0 rounded-sm text-nowrap shadow-none"
           >
             {submitted ? <Check /> : buttonText}
           </Button>

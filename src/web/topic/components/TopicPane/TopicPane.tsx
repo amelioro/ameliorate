@@ -61,9 +61,9 @@ const flashOutlineIfElementDoesntChange = (element: HTMLElement | null) => {
 
   setTimeout(() => {
     if (!elementChanged) {
-      element.classList.add("!outline-yellow-400");
+      element.classList.add("outline-yellow-400!");
       setTimeout(() => {
-        element.classList.remove("!outline-yellow-400");
+        element.classList.remove("outline-yellow-400!");
       }, 500);
     }
     observer.disconnect();
@@ -178,9 +178,9 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
         <TabPanel
           key="Details"
           value="Details"
-          // flex to allow details to grow & fill up available space... but only if this tab is selected, because otherwise we override `TabPanel`'s default `display: hidden`
-          // flex flex-col to put details toolbar above the content
-          className={"flex-col grow overflow-auto p-0" + (selectedTab === "Details" ? " flex" : "")}
+          // flex to allow details to grow & fill up available space
+          // flex-col to put details toolbar above the content
+          classes={{ root: "p-0 flex flex-col grow overflow-auto" }}
         >
           {/* Toolbar centered above content to be near content's title, in hopes of implying that the */}
           {/* back/forward buttons are to navigate to previous/next content. */}
@@ -204,7 +204,7 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
       )}
 
       {tabs.includes("Views") && (
-        <TabPanel key="Views" value="Views" className="overflow-auto p-0">
+        <TabPanel key="Views" value="Views" classes={{ root: "p-0 overflow-auto" }}>
           <TopicViews />
         </TabPanel>
       )}
@@ -227,7 +227,7 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
       className={
         // z-20 to be in front of node toolbar's z-10 in case we're viewing the summary and the summary node's toolbar is open
         "z-20 h-full absolute bg-paperShaded-main transition-transform duration-300" +
-        (anchor !== "bottom" ? " w-[--drawer-min-width-rem]" : " w-full") +
+        (anchor !== "bottom" ? " w-(--drawer-min-width-rem)" : " w-full") +
         (anchor === "left" ? " border-r left-0" + (isOpen ? "" : " -translate-x-full") : "") +
         (anchor === "right" ? " border-l right-0" + (isOpen ? "" : " translate-x-full") : "") +
         (anchor === "bottom" ? " border-t bottom-0" + (isOpen ? "" : " translate-y-full") : "") +
@@ -254,7 +254,7 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
         className={
           "flex size-full flex-col" +
           // allow drawing user attention to the pane e.g. if they click to open the pane but it's already open
-          " outline-transparent outline -outline-offset-4 transition-[outline-color] duration-500"
+          " outline-transparent outline-solid -outline-offset-4 transition-[outline-color] duration-500"
         }
       >
         {paneContent}

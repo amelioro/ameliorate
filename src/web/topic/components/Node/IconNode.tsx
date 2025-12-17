@@ -51,7 +51,7 @@ export const IconNode = ({ node, className, onClick }: Props) => {
           ? `0 0 0 1px ${primarySpotlightColor}, 0 0 0 1px ${primarySpotlightColor}`
           : "none",
       }}
-      className={"rounded p-[0.0625rem]" + (className ? ` ${className}` : "")}
+      className={"rounded-sm p-0.25" + (className ? ` ${className}` : "")}
     />
   );
 
@@ -60,7 +60,7 @@ export const IconNode = ({ node, className, onClick }: Props) => {
       tooltipBody={tooltipBody}
       immediatelyOpenOnTouch={false}
       // set zIndex to MuiMenu - 1 as a hack to allow context menu to show in front
-      tooltipPopperClassName="z-[1299]"
+      tooltipPopperClassName="z-1299"
     >
       <button
         className={"flex" + (onClick ? "" : " cursor-default")}

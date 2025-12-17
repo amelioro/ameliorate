@@ -2,7 +2,6 @@ import styled from "@emotion/styled";
 import { ReactFlow } from "@xyflow/react";
 
 import { infoColor } from "@/web/common/theme";
-import "@xyflow/react/dist/style.css";
 
 /**
  * default render order:

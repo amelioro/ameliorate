@@ -20,7 +20,7 @@ export const NodeToolbar = ({ node, context }: Props) => {
 
   return (
     <div
-      className="flex flex-col rounded border bg-paperShaded-main shadow"
+      className="flex flex-col rounded-sm border bg-paperShaded-main shadow-sm"
       onClick={(event) => event.stopPropagation()} // prevent triggering a click of the node e.g. invoking setSummaryNodeId
     >
       {format === "diagram" && (
@@ -31,7 +31,7 @@ export const NodeToolbar = ({ node, context }: Props) => {
           onClick={() => {
             viewNodeInSummary(node.id);
           }}
-          className="rounded"
+          className="rounded-sm"
         >
           <ViewCarousel fontSize="inherit" />
         </IconButton>
@@ -45,7 +45,7 @@ export const NodeToolbar = ({ node, context }: Props) => {
           onClick={() => {
             viewNodeInDiagram(node.id);
           }}
-          className="rounded"
+          className="rounded-sm"
         >
           <Schema fontSize="inherit" />
         </IconButton>
@@ -60,7 +60,7 @@ export const NodeToolbar = ({ node, context }: Props) => {
             setSelected(node.id);
             emitter.emit("viewBasics");
           }}
-          className="rounded"
+          className="rounded-sm"
         >
           <InfoOutlined fontSize="inherit" />
         </IconButton>
@@ -75,7 +75,7 @@ export const NodeToolbar = ({ node, context }: Props) => {
           // TODO: this should open without closing the node toolbar (at least when the node is being focused, not selected)
           openContextMenu(event, { node: node });
         }}
-        className="rounded"
+        className="rounded-sm"
       >
         <MoreHoriz fontSize="inherit" />
       </IconButton>

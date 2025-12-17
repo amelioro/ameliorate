@@ -90,7 +90,7 @@ export const HelpMenu = ({ helpAnchorEl, setHelpAnchorEl }: Props) => {
           <Tab icon={<Handyman />} label="Experts" value="Experts" />
         </TabList>
 
-        <TabPanel value="Builders" className="p-2">
+        <TabPanel value="Builders" classes={{ root: "p-2" }}>
           <TutorialMenuItem onClick={() => startTutorial("diagramBasics", "builders")}>
             {getProgressIcon("diagramBasics")} 1. Diagram basics
           </TutorialMenuItem>
@@ -108,7 +108,7 @@ export const HelpMenu = ({ helpAnchorEl, setHelpAnchorEl }: Props) => {
           </TutorialMenuItem>
         </TabPanel>
 
-        <TabPanel value="Viewers" className="p-2">
+        <TabPanel value="Viewers" classes={{ root: "p-2" }}>
           <TutorialMenuItem onClick={() => startTutorial("readingADiagram", "diagramViewers")}>
             {getProgressIcon("readingADiagram")} 1a. Reading a diagram
           </TutorialMenuItem>
@@ -120,7 +120,7 @@ export const HelpMenu = ({ helpAnchorEl, setHelpAnchorEl }: Props) => {
           </TutorialMenuItem>
         </TabPanel>
 
-        <TabPanel value="Experts" className="p-2">
+        <TabPanel value="Experts" classes={{ root: "p-2" }}>
           <TutorialMenuItem disabled>More actions (coming later)</TutorialMenuItem>
           <TutorialMenuItem disabled>Advanced filtering (coming later)</TutorialMenuItem>
         </TabPanel>

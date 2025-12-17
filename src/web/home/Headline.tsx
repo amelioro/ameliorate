@@ -16,7 +16,7 @@ export const Headline = () => {
         priority={true}
         className="absolute hidden opacity-30 sm:block"
       />
-      <Typography variant="caption" className="absolute right-0 top-0 hidden sm:block">
+      <Typography variant="caption" className="absolute top-0 right-0 hidden sm:block">
         Background:{" "}
         <Link
           href="https://ameliorate.app/examples/detailed-cars-going-too-fast?view=All+structure"

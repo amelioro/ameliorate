@@ -1,7 +1,9 @@
 import { UserProvider as AuthUserProvider } from "@auth0/nextjs-auth0/client";
 import { Global } from "@emotion/react";
+import { GlobalStyles } from "@mui/material";
+import { AppCacheProvider } from "@mui/material-nextjs/v14-pagesRouter";
 import CssBaseline from "@mui/material/CssBaseline";
-import { StyledEngineProvider, ThemeProvider, createTheme } from "@mui/material/styles";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { TourProvider } from "@reactour/tour";
 import PlausibleProvider, { usePlausible } from "next-plausible";
 import type { AppProps } from "next/app";
@@ -10,7 +12,7 @@ import { useEffect } from "react";
 
 import { globals } from "@/pages/_app.styles";
 import Layout from "@/web/common/components/Layout";
-import { getThemeOptions } from "@/web/common/theme";
+import { clientEmotionCache, getThemeOptions } from "@/web/common/theme";
 import { trpc, trpcHelper } from "@/web/common/trpc";
 import "@/web/common/globals.css";
 import "@/web/common/patches/fixGoogleTranslateIssue";
@@ -41,7 +43,11 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   }, [plausibleHook]);
 
   return (
-    <>
+    <AppCacheProvider emotionCache={clientEmotionCache}>
+      {/* Seems like we need to set the layers here for the pages router https://mui.com/material-ui/integrations/tailwindcss/tailwindcss-v4/#next-js-pages-router */}
+      {/* Maybe we can move it to the less-awkward globals.css as recommended by tailwind after we upgrade to nextjs 15? or with the app router? https://mui.com/material-ui/integrations/tailwindcss/tailwindcss-v4/#next-js-app-router */}
+      <GlobalStyles styles="@layer theme, base, mui, components, utilities;" />
+
       <Head>
         <title>Ameliorate</title>
         <meta
@@ -68,40 +74,37 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       </Head>
 
       <PlausibleProvider domain="ameliorate.app">
-        {/* https://mui.com/material-ui/integrations/interoperability/#setup */}
-        <StyledEngineProvider injectFirst>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
 
-            <TourProvider
-              steps={[]}
-              showBadge={false}
-              styles={{ maskWrapper: () => ({ display: "none" }) }}
-              className={
-                "rounded-2xl border border-black !shadow-lg !shadow-black" +
-                // 32rem is the most we really need, but only go up to 95vw so it doesn't go to the edge of the screen.
-                // use w instead of max-w so that width is consistent
-                " !max-w-none w-[min(95vw,32rem)]" +
-                // for (probably extremely rare) 480px height phones
-                // use max-h because children will take up consistent height
-                " max-h-[95vh]" +
-                // super jank & brittle way to hide nav when there's only one step, because there's no exposed way for reactour do this...
-                // also add padding to nav buttons so they're easier to click
-                " [&_>_div:nth-child(3):has(div_>_button:only-child)]:!hidden [&_>_div:nth-child(3)_button]:!p-1"
-              }
-            >
-              <AuthUserProvider>
-                <Layout>
-                  <Component {...pageProps} />
-                </Layout>
-              </AuthUserProvider>
-            </TourProvider>
-          </ThemeProvider>
-        </StyledEngineProvider>
+          <TourProvider
+            steps={[]}
+            showBadge={false}
+            styles={{ maskWrapper: () => ({ display: "none" }) }}
+            className={
+              "rounded-2xl border border-black shadow-lg! shadow-black!" +
+              // 32rem is the most we really need, but only go up to 95vw so it doesn't go to the edge of the screen.
+              // use w instead of max-w so that width is consistent
+              " max-w-none! w-[min(95vw,32rem)]" +
+              // for (probably extremely rare) 480px height phones
+              // use max-h because children will take up consistent height
+              " max-h-[95vh]" +
+              // super jank & brittle way to hide nav when there's only one step, because there's no exposed way for reactour do this...
+              // also add padding to nav buttons so they're easier to click
+              " [&_>_div:nth-child(3):has(div_>_button:only-child)]:hidden! [&_>_div:nth-child(3)_button]:p-1!"
+            }
+          >
+            <AuthUserProvider>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </AuthUserProvider>
+          </TourProvider>
+        </ThemeProvider>
       </PlausibleProvider>
 
       <Global styles={globals} />
-    </>
+    </AppCacheProvider>
   );
 };
 

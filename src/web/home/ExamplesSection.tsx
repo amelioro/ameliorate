@@ -32,7 +32,7 @@ const examples = [
         width={900}
         height={522}
         unoptimized
-        className="rounded-xl border p-2 shadow"
+        className="rounded-xl border p-2 shadow-sm"
         // Only using eager loading to avoid layout shift - don't know how to do this with nextjs Image
         // component otherwise, since the parent container should shrink if the Image fits, otherwise
         // the Image should shrink into the max height of the parent.
@@ -55,7 +55,7 @@ const examples = [
         width={735}
         height={688}
         unoptimized
-        className="rounded-xl border p-2 shadow"
+        className="rounded-xl border p-2 shadow-sm"
         // Only using eager loading to avoid layout shift - don't know how to do this with nextjs Image
         // component otherwise, since the parent container should shrink if the Image fits, otherwise
         // the Image should shrink into the max height of the parent.
@@ -79,7 +79,7 @@ const examples = [
         width={648}
         height={783}
         unoptimized
-        className="rounded-xl border shadow"
+        className="rounded-xl border shadow-sm"
         // Only using eager loading to avoid layout shift - don't know how to do this with nextjs Image
         // component otherwise, since the parent container should shrink if the Image fits, otherwise
         // the Image should shrink into the max height of the parent.
@@ -103,7 +103,7 @@ const examples = [
         width={811}
         height={756}
         unoptimized
-        className="rounded-xl border shadow"
+        className="rounded-xl border shadow-sm"
         // Only using eager loading to avoid layout shift - don't know how to do this with nextjs Image
         // component otherwise, since the parent container should shrink if the Image fits, otherwise
         // the Image should shrink into the max height of the parent.
@@ -127,7 +127,7 @@ const examples = [
         width={787}
         height={739}
         unoptimized
-        className="rounded-xl border shadow"
+        className="rounded-xl border shadow-sm"
         // Only using eager loading to avoid layout shift - don't know how to do this with nextjs Image
         // component otherwise, since the parent container should shrink if the Image fits, otherwise
         // the Image should shrink into the max height of the parent.
@@ -151,7 +151,7 @@ const examples = [
         width={638}
         height={794}
         unoptimized
-        className="rounded-xl border shadow"
+        className="rounded-xl border shadow-sm"
         // Only using eager loading to avoid layout shift - don't know how to do this with nextjs Image
         // component otherwise, since the parent container should shrink if the Image fits, otherwise
         // the Image should shrink into the max height of the parent.
@@ -186,7 +186,7 @@ const examples = [
         width={569}
         height={805}
         unoptimized
-        className="rounded-xl border shadow"
+        className="rounded-xl border shadow-sm"
         // Only using eager loading to avoid layout shift - don't know how to do this with nextjs Image
         // component otherwise, since the parent container should shrink if the Image fits, otherwise
         // the Image should shrink into the max height of the parent.
@@ -221,7 +221,7 @@ const examples = [
         width={714}
         height={672}
         unoptimized
-        className="rounded-xl border shadow"
+        className="rounded-xl border shadow-sm"
         // Only using eager loading to avoid layout shift - don't know how to do this with nextjs Image
         // component otherwise, since the parent container should shrink if the Image fits, otherwise
         // the Image should shrink into the max height of the parent.
@@ -256,7 +256,7 @@ const examples = [
         width={718}
         height={651}
         unoptimized
-        className="rounded-xl border shadow"
+        className="rounded-xl border shadow-sm"
         // Only using eager loading to avoid layout shift - don't know how to do this with nextjs Image
         // component otherwise, since the parent container should shrink if the Image fits, otherwise
         // the Image should shrink into the max height of the parent.
@@ -308,8 +308,8 @@ export const ExamplesSection = () => {
         infinite={false}
         beforeChange={(_current, next) => setCurrentExampleIndex(next)}
         className={
-          "w-screen -translate-x-1/2 relative left-1/2 !m-0" +
-          " [&_.slick-slide]:py-1 [&_.slick-slide]:px-1 sm:[&_.slick-slide]:px-2 [&_.slick-slide]:max-w-[100vw] [&_.slick-slide]:!h-auto" +
+          "w-screen -translate-x-1/2 relative left-1/2 m-0!" +
+          " [&_.slick-slide]:py-1 [&_.slick-slide]:px-1 sm:[&_.slick-slide]:px-2 [&_.slick-slide]:max-w-[100vw] [&_.slick-slide]:h-auto!" +
           " [&_.slick-slide_>_*]:h-full [&_.slick-slide_>_*]:flex [&_.slick-slide_>_*]:justify-stretch" +
           // for some reason the track will go into two rows (even with rows={1}) without `flex`
           " [&_.slick-track]:flex [&_.slick-track]:justify-stretch"

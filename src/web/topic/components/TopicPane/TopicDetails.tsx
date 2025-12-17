@@ -83,8 +83,10 @@ const BasicsSection = ({ topic }: { topic: StoreTopic }) => {
         multiline
         fullWidth
         size="small"
-        InputProps={{ className: "text-sm", readOnly: !userCanEditTopicData }}
-        InputLabelProps={{ className: "text-sm" }}
+        slotProps={{
+          input: { className: "text-sm", readOnly: !userCanEditTopicData },
+          inputLabel: { className: "text-sm" },
+        }}
         maxRows={10}
       />
     </form>
@@ -142,7 +144,7 @@ export const TopicDetails = ({ selectedTab, setSelectedTab }: Props) => {
     <div className="flex min-h-0 grow flex-col py-0">
       {/* max-w and wrap/break to handle long topic titles */}
       {/* hardcode shadow to be 1px lower than default tailwind shadow so that no shadow appears above the container */}
-      <div className="flex items-center justify-center text-wrap break-words border-b px-4 pb-1 shadow-[0_2px_3px_0_rgba(0,0,0,0.1)]">
+      <div className="flex items-center justify-center border-b px-4 pb-1 text-wrap wrap-break-word shadow-[0_2px_3px_0_rgba(0,0,0,0.1)]">
         {isPlaygroundTopic ? (
           "Playground Topic"
         ) : (

@@ -78,7 +78,7 @@ export const Tooltip = ({
       slotProps={{
         tooltip: {
           className: tooltipBody
-            ? "text-black bg-paperShaded-main shadow border rounded-xl text-sm font-normal"
+            ? "text-black bg-paperShaded-main shadow-sm border rounded-xl text-sm font-normal"
             : "",
         },
         popper: {

@@ -21,13 +21,12 @@ export const NumberInput = ({ name, min, max }: Props) => {
     <div className="flex items-center gap-2">
       <Typography variant="body2">{startCase(name)}</Typography>
       <MuiNumberInput
-        {...field}
         min={min}
         max={max}
         value={field.value as number} // should be able to type-safe this but seems hard and not worth effort
-        onChange={(event, value) => {
+        onChange={(event: React.SyntheticEvent, value: number | null) => {
           event.preventDefault(); // don't trigger default form submit, which would refresh the page
-          if (value === null) throw new Error("NumberInput should not allow empty value");
+          if (value === null) return; // after blurring, this should result in the change being undone
 
           field.onChange(value);
           submit();

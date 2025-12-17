@@ -38,7 +38,7 @@ export const breakdownSteps: StepType[] = [
               width={1237}
               height={911}
               unoptimized
-              className="rounded-xl border shadow"
+              className="rounded-xl border shadow-sm"
             />
             <Typography variant="caption">
               From:{" "}
@@ -80,7 +80,7 @@ export const breakdownSteps: StepType[] = [
               width={711}
               height={572}
               unoptimized
-              className="rounded-xl border shadow"
+              className="rounded-xl border shadow-sm"
             />
             <Typography variant="caption">
               From:{" "}
@@ -120,7 +120,7 @@ export const breakdownSteps: StepType[] = [
               width={653}
               height={545}
               unoptimized
-              className="rounded-xl border shadow"
+              className="rounded-xl border shadow-sm"
             />
             <Typography variant="caption">
               From:{" "}
@@ -153,7 +153,7 @@ export const breakdownSteps: StepType[] = [
               width={738}
               height={636}
               unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-              className="rounded-xl border shadow"
+              className="rounded-xl border shadow-sm"
             />
             <Typography variant="caption">
               From:{" "}
@@ -193,7 +193,7 @@ export const breakdownSteps: StepType[] = [
               width={627}
               height={547}
               unoptimized
-              className="rounded-xl border shadow"
+              className="rounded-xl border shadow-sm"
             />
             <Typography variant="caption">
               From:{" "}

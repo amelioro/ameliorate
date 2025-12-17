@@ -43,6 +43,7 @@ import {
   type ThemeOptions,
   createTheme,
 } from "@mui/material";
+import { createEmotionCache } from "@mui/material-nextjs/v14-pagesRouter";
 import Color from "colorjs.io";
 
 import { type FlowNodeType } from "@/web/topic/utils/node";
@@ -290,3 +291,13 @@ export const getThemeOptions = (mode: PaletteMode): ThemeOptions => ({
     },
   },
 });
+
+/**
+ * This cache needs to be the same one used for `_document.page.tsx` and `_app.page.tsx` or layering won't work.
+ *
+ * The example for ensuring MUI styles are properly layered shows the `_app.page.tsx` having the
+ * cache in its params, but our nextjs version doesn't support that... maybe it's in v15? https://mui.com/material-ui/integrations/nextjs/#configuration-2
+ *
+ * So when we upgrade from nextjs 14 to 15 or 16, maybe we can instantiate this and use it in one file (document.page.tsx?).
+ */
+export const clientEmotionCache = createEmotionCache({ key: "css", enableCssLayer: true });

@@ -165,14 +165,16 @@ const EditableNodeBase = ({ node, className = "", onClick }: Props) => {
           " relative p-0 flex flex-col rounded-md border-2" +
           // avoid inheriting pointer-events because flow node will wrap in a motion.div that ignores pointer events
           " pointer-events-auto" +
-          (!fillNodesWithColor ? " shadow shadow-gray-400" : "") +
-          (selected ? " selected border-info-main shadow-info-main shadow-[0_0_0_1px]" : "")
+          (!fillNodesWithColor ? " shadow-sm shadow-gray-400" : "") +
+          // add extra 1px ring so that selected node stands out a little more
+          // awkward `shadow-none!` because the extra 1px ring makes the `shadow-sm` barely spill over, looking awkward
+          (selected ? " selected shadow-none! border-info-main ring-1 ring-info-main" : "")
         }
         {...floatingToolbarProps.getReferenceProps()} // for floating toolbar
       >
         <TopDiv className="flex h-6 items-center justify-between">
           {/* pb/pr-0.5 to have 2px of space below/right, to match the 2px border of the node that's above/left of this node type div */}
-          <NodeTypeDiv className="flex h-6 items-center rounded-br rounded-tl pb-0.5 pr-0.5">
+          <NodeTypeDiv className="flex h-6 items-center rounded-tl rounded-br pr-0.5 pb-0.5">
             <NodeIcon className="mx-1 size-3.5" />
             <NodeTypeSpan
               contentEditable={customizable}
@@ -194,7 +196,7 @@ const EditableNodeBase = ({ node, className = "", onClick }: Props) => {
           <CommonIndicatorGroup graphPart={node} />
         </TopDiv>
         {/* grow to fill out remaining space with this div because it contains the textarea */}
-        <MiddleDiv className="flex grow px-1 pb-2 pt-1">
+        <MiddleDiv className="flex grow px-1 pt-1 pb-2">
           <NodeTextArea
             nodeId={node.id}
             nodeText={node.data.label}

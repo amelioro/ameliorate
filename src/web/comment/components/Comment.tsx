@@ -67,7 +67,7 @@ export const Comment = ({ comment }: Props) => {
   return (
     <BorderDiv
       ref={commentRef}
-      className="relative space-y-2 break-words rounded outline-2 outline-offset-4 outline-blue-500 focus:outline"
+      className="relative space-y-2 rounded-sm wrap-break-word outline-2 outline-offset-4 outline-blue-500 focus:outline-solid"
       tabIndex={-1} // no value in tabbing to it besides showing border, so only set for the purpose of on-load highlighting
     >
       <HeaderDiv className="flex items-center justify-between">
@@ -146,7 +146,7 @@ export const Comment = ({ comment }: Props) => {
       </HeaderDiv>
 
       {!editing ? (
-        <p className="whitespace-pre text-wrap">{comment.content}</p>
+        <p className="text-wrap whitespace-pre">{comment.content}</p>
       ) : (
         <Draft
           authorName={comment.authorName}

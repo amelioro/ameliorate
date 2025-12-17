@@ -1,3 +1,45 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/*
+  Seems like setting the layers here is wrong for the pages router, and there we need to use
+  `GlobalStyles` in `_app.page.tsx` https://mui.com/material-ui/integrations/tailwindcss/tailwindcss-v4/#next-js-pages-router
+*/
+/* @layer theme, base, mui, components, utilities; */
+
+@import "tailwindcss";
+
+/*
+  React Flow styles must be in a layer so MUI/Emotion styles can override them.
+  Using 'base' layer since these are foundational library styles.
+*/
+@import "@xyflow/react/dist/style.css" layer(base);
+
+/*
+  The default border color changed to `currentcolor` in Tailwind CSS v4,
+  so we set the border color explicitly to the previous default. This ensures it
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+
+  We also set `cursor: pointer` for buttons/roles which was removed in Tailwind v4.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+
+  button,
+  [role="button"] {
+    cursor: pointer;
+  }
+}
+
+/*
+  JS Tailwind config is considered legacy in favor of Tailwind v4's CSS-first @theme approach, but
+  we need to use JS in order to add our custom MUI palette to Tailwind. See file comment in
+  tailwind.config.js.
+*/
+@config '../../../tailwind.config.js';

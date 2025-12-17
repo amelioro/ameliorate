@@ -25,7 +25,7 @@ export const SummaryBreadcrumbs = () => {
       itemsAfterCollapse={2} // always at least show the previous node and current
       onClick={(event) => event.stopPropagation()} // e.g. prevent triggering node deselect from summary background click
       aria-label="Summary Breadcrumbs"
-      className="[&>ol]:flex-nowrap [&_.MuiBreadcrumbs-separator]:mx-1"
+      className="[&_.MuiBreadcrumbs-separator]:mx-1 [&>ol]:flex-nowrap"
     >
       <Tooltip tooltipHeading="Summary Home">
         <button
@@ -33,7 +33,7 @@ export const SummaryBreadcrumbs = () => {
             setSelected(null);
             setSummaryNodeId(null);
           }}
-          className="flex p-[0.0625rem]" // match 20x20 px size of icon nodes
+          className="flex p-px" // match 20x20 px size of icon nodes
         >
           <Home fontSize="small" />
         </button>

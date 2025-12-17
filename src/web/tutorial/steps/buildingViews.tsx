@@ -38,7 +38,7 @@ export const buildingViewsSteps: StepType[] = [
               height={847}
               unoptimized // warning without this - gifs aren't optimized by nextjs apparently
               // extra padding & bg because spacing seems to look better
-              className="rounded-xl border bg-paperPlain-main p-2 shadow"
+              className="rounded-xl border bg-paperPlain-main p-2 shadow-sm"
             />
             <Typography variant="caption">
               From:{" "}
@@ -77,7 +77,7 @@ export const buildingViewsSteps: StepType[] = [
               width={450}
               height={434}
               unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-              className="rounded-xl border shadow"
+              className="rounded-xl border shadow-sm"
             />
           </>
         }
@@ -113,7 +113,7 @@ export const buildingViewsSteps: StepType[] = [
               width={659}
               height={412}
               unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-              className="rounded-xl border shadow"
+              className="rounded-xl border shadow-sm"
             />
             <Typography variant="caption">
               From:{" "}
@@ -153,7 +153,7 @@ export const buildingViewsSteps: StepType[] = [
               width={659}
               height={369}
               unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-              className="rounded-xl border shadow"
+              className="rounded-xl border shadow-sm"
             />
             <Typography variant="caption">
               From:{" "}
@@ -193,7 +193,7 @@ export const buildingViewsSteps: StepType[] = [
               width={600}
               height={445}
               unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-              className="rounded-xl border shadow"
+              className="rounded-xl border shadow-sm"
             />
             <Typography variant="caption">
               From:{" "}
@@ -232,7 +232,7 @@ export const buildingViewsSteps: StepType[] = [
               width={596}
               height={475}
               unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-              className="rounded-xl border shadow"
+              className="rounded-xl border shadow-sm"
             />
             <Typography variant="caption">
               From:{" "}
@@ -272,7 +272,7 @@ export const buildingViewsSteps: StepType[] = [
               width={591}
               height={516}
               unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-              className="rounded-xl border shadow"
+              className="rounded-xl border shadow-sm"
             />
             <Typography variant="caption">
               From:{" "}
@@ -311,7 +311,7 @@ export const buildingViewsSteps: StepType[] = [
               width={788}
               height={475}
               unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-              className="rounded-xl border shadow"
+              className="rounded-xl border shadow-sm"
             />
           </>
         }

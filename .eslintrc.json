@@ -4,10 +4,15 @@
     "next/core-web-vitals",
     "eslint:recommended",
     "plugin:import/recommended",
-    "plugin:tailwindcss/recommended",
+    "plugin:better-tailwindcss/recommended",
     "prettier"
   ],
   "plugins": ["functional", "import", "no-relative-import-paths"],
+  "settings": {
+    "better-tailwindcss": {
+      "entryPoint": "src/web/common/globals.css"
+    }
+  },
   "overrides": [
     // don't use ts checking for js files https://stackoverflow.com/a/64488475
     {
@@ -118,18 +123,20 @@
         "allowSeparatedGroups": true // separating imports by group seems more readable
       }
     ],
-    "tailwindcss/no-custom-classname": [
+    // single lines have felt fine so far, don't encourage breaking classes into multiple lines
+    "better-tailwindcss/enforce-consistent-line-wrapping": "off",
+    "better-tailwindcss/no-unregistered-classes": [
       "error",
       {
-        "cssFiles": [], // don't need this anyway, but the reasonable default causes perf issues https://github.com/francoismassart/eslint-plugin-tailwindcss/issues/276#issuecomment-2076947699
-        "whitelist": [
-          "nopan",
-          "react\\-flow.*",
-          "selected",
-          "flashlight-mode",
-          "spotlight\\-",
-          "diagram-node",
-          "diagram-edge"
+        // Use anchored regex patterns (^...$) to match more strictly, e.g. "flashlight-modes" wouldn't be prevented without the `$` at the end
+        "ignore": [
+          "^nopan$",
+          "^react-flow.*",
+          "^selected$",
+          "^flashlight-mode$",
+          "^spotlight-.*",
+          "^diagram-node$",
+          "^diagram-edge$"
         ]
       }
     ]

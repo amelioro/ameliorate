@@ -177,7 +177,7 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
            * Somewhat janky way to blur not-selected/not-neighboring nodes, edge labels, and edge
            * paths when a node or edge is selected.
            *
-           * `blur-sm` (4px) might not be enough contrast, `blur` (8px) might be too much because blurred
+           * `blur-xs` (4px) might not be enough contrast, `blur-sm` (8px) might be too much because blurred
            * edge lines aren't easily found, so `blur-[5px]` seems like an ok middleground.
            *
            * Notes:
