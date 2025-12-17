@@ -166,7 +166,9 @@ const EditableNodeBase = ({ node, className = "", onClick }: Props) => {
           // avoid inheriting pointer-events because flow node will wrap in a motion.div that ignores pointer events
           " pointer-events-auto" +
           (!fillNodesWithColor ? " shadow-sm shadow-gray-400" : "") +
-          (selected ? " selected border-info-main shadow-info-main shadow-[0_0_0_1px]" : "")
+          // add extra 1px ring so that selected node stands out a little more
+          // awkward `shadow-none!` because the extra 1px ring makes the `shadow-sm` barely spill over, looking awkward
+          (selected ? " selected shadow-none! border-info-main ring-1 ring-info-main" : "")
         }
         {...floatingToolbarProps.getReferenceProps()} // for floating toolbar
       >
