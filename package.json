@@ -146,7 +146,7 @@
     "prismock": "1.31.1",
     "tailwindcss": "4.1.18",
     "tsx": "4.19.3",
-    "typescript": "5.5.2",
+    "typescript": "5.9.3",
     "typescript-eslint": "8.50.0",
     "vite-tsconfig-paths": "^4.3.2",
     "vitest": "3.0.6",
