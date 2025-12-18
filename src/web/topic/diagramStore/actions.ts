@@ -25,9 +25,8 @@ import {
 export const setScore = (username: string, graphPartId: string, score: Score) => {
   const state = createDraft(useDiagramStore.getState());
 
-  /* eslint-disable functional/immutable-data, no-param-reassign */
+  // mutation seems much easier than not mutating
   set(state.userScores, [username, graphPartId], score);
-  /* eslint-enable functional/immutable-data, no-param-reassign */
 
   // update parent graphPart's score if this is a RootClaim
   const graphPart = findGraphPartOrThrow(graphPartId, state.nodes, state.edges);
@@ -35,9 +34,8 @@ export const setScore = (username: string, graphPartId: string, score: Score) =>
     if (graphPart.data.arguedDiagramPartId === undefined)
       throw errorWithData("no arguedDiagramPartId on root claim", graphPart);
 
-    /* eslint-disable functional/immutable-data, no-param-reassign */
+    // mutation seems much easier than not mutating
     set(state.userScores, [username, graphPart.data.arguedDiagramPartId], score);
-    /* eslint-enable functional/immutable-data, no-param-reassign */
   }
 
   // update implicit child claim's score if it exists
@@ -45,9 +43,8 @@ export const setScore = (username: string, graphPartId: string, score: Score) =>
     (node) => node.data.arguedDiagramPartId === graphPartId,
   );
   if (implicitRootClaim) {
-    /* eslint-disable functional/immutable-data, no-param-reassign */
+    // mutation seems much easier than not mutating
     set(state.userScores, [username, implicitRootClaim.id], score);
-    /* eslint-enable functional/immutable-data, no-param-reassign */
   }
 
   useDiagramStore.setState(finishDraft(state), false, "setScore");
@@ -58,9 +55,9 @@ export const setNodeLabel = (nodeId: string, value: string) => {
 
   const foundNode = findNodeOrThrow(nodeId, state.nodes);
 
-  /* eslint-disable functional/immutable-data, no-param-reassign */
+  /* eslint-disable functional/immutable-data */
   foundNode.data.label = value;
-  /* eslint-enable functional/immutable-data, no-param-reassign */
+  /* eslint-enable functional/immutable-data */
 
   useDiagramStore.setState(finishDraft(state), false, "setNodeLabel");
 };
@@ -79,9 +76,9 @@ export const setCustomNodeType = (node: Node, value: string) => {
 
   const foundNode = findNodeOrThrow(node.id, state.nodes);
 
-  /* eslint-disable functional/immutable-data, no-param-reassign */
+  /* eslint-disable functional/immutable-data */
   foundNode.data.customType = value;
-  /* eslint-enable functional/immutable-data, no-param-reassign */
+  /* eslint-enable functional/immutable-data */
 
   useDiagramStore.setState(finishDraft(state), false, "setCustomEdgeLabel");
 };
@@ -100,9 +97,9 @@ export const setCustomEdgeLabel = (edge: Edge, value: string) => {
 
   const foundEdge = findEdgeOrThrow(edge.id, state.edges);
 
-  /* eslint-disable functional/immutable-data, no-param-reassign */
+  /* eslint-disable functional/immutable-data */
   foundEdge.data.customLabel = value;
-  /* eslint-enable functional/immutable-data, no-param-reassign */
+  /* eslint-enable functional/immutable-data */
 
   useDiagramStore.setState(finishDraft(state), false, "setCustomEdgeLabel");
 };
@@ -112,10 +109,10 @@ export const changeNodeType = (node: Node, newType: NodeType) => {
 
   const foundNode = findNodeOrThrow(node.id, state.nodes);
 
-  /* eslint-disable functional/immutable-data, no-param-reassign */
+  /* eslint-disable functional/immutable-data */
   foundNode.type = newType;
   foundNode.data.customType = null; // reset custom type so new type is used for label
-  /* eslint-enable functional/immutable-data, no-param-reassign */
+  /* eslint-enable functional/immutable-data */
 
   useDiagramStore.setState(finishDraft(state), false, "changeNodeType");
 };
@@ -125,10 +122,10 @@ export const changeEdgeType = (edge: Edge, newType: RelationName) => {
 
   const foundEdge = findEdgeOrThrow(edge.id, state.edges);
 
-  /* eslint-disable functional/immutable-data, no-param-reassign */
+  /* eslint-disable functional/immutable-data */
   foundEdge.label = newType;
   foundEdge.data.customLabel = null; // reset custom label so new type is used for label
-  /* eslint-enable functional/immutable-data, no-param-reassign */
+  /* eslint-enable functional/immutable-data */
 
   useDiagramStore.setState(finishDraft(state), false, "changeEdgeType");
 };
@@ -138,9 +135,9 @@ export const setGraphPartNotes = (graphPart: GraphPart, value: string) => {
 
   const foundGraphPart = findGraphPartOrThrow(graphPart.id, state.nodes, state.edges);
 
-  /* eslint-disable functional/immutable-data, no-param-reassign */
+  /* eslint-disable functional/immutable-data */
   foundGraphPart.data.notes = value;
-  /* eslint-enable functional/immutable-data, no-param-reassign */
+  /* eslint-enable functional/immutable-data */
 
   useDiagramStore.setState(finishDraft(state), false, "setGraphPartNotes");
 };

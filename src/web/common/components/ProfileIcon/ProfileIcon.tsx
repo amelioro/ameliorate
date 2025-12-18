@@ -1,7 +1,7 @@
 import { Avatar } from "@mui/material";
 
 const stringToColor = (string: string) => {
-  /* eslint-disable no-bitwise, functional/no-let, functional/no-loop-statements -- copied implementation from https://mui.com/material-ui/react-avatar/#letter-avatars */
+  /* eslint-disable functional/no-let, functional/no-loop-statements -- copied implementation from https://mui.com/material-ui/react-avatar/#letter-avatars */
   let hash = 0;
   let i;
 
@@ -15,7 +15,7 @@ const stringToColor = (string: string) => {
     const value = (hash >> (i * 8)) & 0xff;
     color += `00${value.toString(16)}`.slice(-2);
   }
-  /* eslint-enable no-bitwise, functional/no-let, functional/no-loop-statements */
+  /* eslint-enable functional/no-let, functional/no-loop-statements */
 
   return color;
 };

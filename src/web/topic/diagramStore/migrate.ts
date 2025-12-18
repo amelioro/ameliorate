@@ -570,7 +570,6 @@ interface FromState24 {
   edges: { data: { customLabel?: string | null } }[];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface ToState25 {
   nodes: { data: { customType?: string | null } }[];
   edges: { data: { customLabel?: string | null } }[];

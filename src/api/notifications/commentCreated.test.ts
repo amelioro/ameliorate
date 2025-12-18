@@ -389,7 +389,6 @@ describe("handleCommentCreated", () => {
 
     describe("when sendgrid isn't set up to send emails", () => {
       beforeEach(() => {
-        // eslint-disable-next-line functional/immutable-data
         const canSendEmailsSpy = vi.spyOn(email, "canSendEmails");
         canSendEmailsSpy.mockImplementation(() => false);
       });
@@ -403,7 +402,6 @@ describe("handleCommentCreated", () => {
 
     describe("when sendgrid is set up to send emails", () => {
       beforeEach(() => {
-        // eslint-disable-next-line functional/immutable-data
         const canSendEmailsSpy = vi.spyOn(email, "canSendEmails");
         canSendEmailsSpy.mockImplementation(() => true);
       });

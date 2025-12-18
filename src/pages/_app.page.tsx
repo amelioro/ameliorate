@@ -1,13 +1,13 @@
 import { UserProvider as AuthUserProvider } from "@auth0/nextjs-auth0/client";
 import { Global } from "@emotion/react";
 import { GlobalStyles } from "@mui/material";
-import { AppCacheProvider } from "@mui/material-nextjs/v14-pagesRouter";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { AppCacheProvider } from "@mui/material-nextjs/v14-pagesRouter";
 import { TourProvider } from "@reactour/tour";
-import PlausibleProvider, { usePlausible } from "next-plausible";
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import PlausibleProvider, { usePlausible } from "next-plausible";
 import { useEffect } from "react";
 
 import { globals } from "@/pages/_app.styles";

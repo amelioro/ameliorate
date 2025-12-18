@@ -8,7 +8,7 @@ import eslint from "@eslint/js";
 import prettier from "eslint-config-prettier";
 import betterTailwindcss from "eslint-plugin-better-tailwindcss";
 import functional from "eslint-plugin-functional";
-// import * as importPlugin from "eslint-plugin-import";
+import importPlugin from "eslint-plugin-import";
 import noRelativeImportPaths from "eslint-plugin-no-relative-import-paths";
 import tseslint from "typescript-eslint";
 
@@ -32,11 +32,7 @@ export default tseslint.config(
   {
     files: ["**/*.{js,jsx,ts,tsx,cjs,mjs}"],
     extends: [compat.extends("next/core-web-vitals")],
-    // TODO: try adding import plugin here after upgrading to eslint v9 ; right now
-    // next/core-web-vitals already includes it, and there's a "cannot redefine plugin" error, but
-    // there's a ticket to fix this https://github.com/eslint/eslintrc/issues/135
-    // plugins: { functional, "better-tailwindcss": betterTailwindcss, import: importPlugin },
-    plugins: { functional, "better-tailwindcss": betterTailwindcss },
+    plugins: { functional, "better-tailwindcss": betterTailwindcss, import: importPlugin },
     settings: {
       "better-tailwindcss": { entryPoint: "src/web/common/globals.css" },
     },

@@ -61,7 +61,6 @@ interface FromState2 {
       };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface ToState3 {}
 
 // remove topic state from this store; diagram store migration will handle putting it into topic store if we're on the playground (to preserve description)

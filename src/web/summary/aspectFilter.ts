@@ -101,7 +101,7 @@ export const getIncomingNodesByRelationDescription = (summaryNode: Node, graph: 
 
       return acc;
     }, {});
-  /* eslint-disable functional/immutable-data, no-param-reassign, functional/immutable-data */
+  /* eslint-enable functional/immutable-data, no-param-reassign, functional/immutable-data */
 
   return sourcesByRelationDescription;
 };
@@ -129,7 +129,7 @@ export const getOutgoingNodesByRelationDescription = (summaryNode: Node, graph: 
 
       return acc;
     }, {});
-  /* eslint-disable functional/immutable-data, no-param-reassign, functional/immutable-data */
+  /* eslint-enable functional/immutable-data, functional/immutable-data */
 
   return targetsByRelationDescription;
 };
@@ -208,7 +208,7 @@ export const getObstacles = (summaryNode: Node, graph: Graph) => {
     ["has", "causes"],
     undefined,
     ["solutionComponent", "detriment"],
-  ).sort((node1, node2) => node1.layersAway - node2.layersAway); // ensure indirect obstacles are sorted by how far away they are, for convenience
+  ).toSorted((node1, node2) => node1.layersAway - node2.layersAway); // ensure indirect obstacles are sorted by how far away they are, for convenience
 
   const indirectObstacles = componentsAndDetriments
     .flatMap((node) => upstreamNodes(node, graph, [], ["impedes"]))

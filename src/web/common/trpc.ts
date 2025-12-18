@@ -44,9 +44,9 @@ export const trpc = createTRPCNext<AppRouter>({
   ssr: false,
 });
 
+// jank way to enable trpc queries outside of react tree, e.g. from zustand middleware https://github.com/trpc/trpc/discussions/2926#discussioncomment-5647033
 // separate from its assignment so that importers don't need to import from a file with jsx
 // using an object so that app.page can set the client after importing
-// eslint-disable-next-line functional/no-let, prefer-const -- jank way to enable trpc queries outside of react tree, e.g. from zustand middleware https://github.com/trpc/trpc/discussions/2926#discussioncomment-5647033
 export const trpcHelper = {
   client: null as unknown as ReturnType<typeof trpc.useContext>["client"],
 };

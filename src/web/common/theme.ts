@@ -227,7 +227,6 @@ const sharedPalette = {
   custom: augmentColor({ color: { main: oklchToHex("oklch(90% 0 0)") } }), // neutral gray for customizable, darker than white to have some contrast, lighter than question-gray to distinguish
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- document won't be defined when rendered server-side
 const rootElement = typeof document !== "undefined" ? document.getElementById("__next") : null;
 
 export const getThemeOptions = (mode: PaletteMode): ThemeOptions => ({
