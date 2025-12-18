@@ -108,8 +108,8 @@
   },
   "devDependencies": {
     "@babel/core": "7.19.6",
-    "@commitlint/cli": "17.6.6",
-    "@commitlint/config-conventional": "17.6.6",
+    "@commitlint/cli": "20.2.0",
+    "@commitlint/config-conventional": "20.2.0",
     "@emotion/babel-plugin": "11.10.5",
     "@eslint/compat": "2.0.0",
     "@eslint/eslintrc": "3.3.3",

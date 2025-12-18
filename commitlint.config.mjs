@@ -1,5 +1,4 @@
-// eslint-disable-next-line functional/immutable-data
-module.exports = {
+const config = {
   extends: ["@commitlint/config-conventional"],
   helpUrl: "https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md#conventional-commits",
   rules: {
@@ -24,3 +23,5 @@ module.exports = {
     ],
   },
 };
+
+export default config;
