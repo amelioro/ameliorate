@@ -1,3 +1,5 @@
+import fs from "node:fs";
+
 import { type DMMF } from "@prisma/client/runtime/client";
 import { getDMMF } from "@prisma/internals";
 import * as matchers from "jest-extended";
@@ -28,7 +30,41 @@ process.env.BASE_URL = "http://localhost:3000"; // not sure how to reuse next.co
  */
 export const testEmail = "test@test.test";
 
-// this seems to add ~300ms per test file, couldn't find a way to load this once for all tests
+/**
+ * Patches Node's require to redirect @prisma/client/runtime/library to client.
+ *
+ * This is AI-generated, looks fine enough though.
+ *
+ * Prisma 7 renamed the runtime path from "library" to "client".
+ * prismock still imports from the old path, so we patch Node's require
+ * to redirect those imports to the new path.
+ * See https://github.com/morintd/prismock/issues/1284
+ *
+ * This uses vi.hoisted to ensure the patch runs before any imports.
+ */
+/* eslint-disable -- this is a hack, let's not bother with making it clean */
+vi.hoisted(() => {
+  const NodeModule = require("node:module") as typeof import("node:module");
+  const nodePath = require("node:path") as typeof import("node:path");
+
+  const originalRequire = NodeModule.prototype.require;
+
+  NodeModule.prototype.require = function patchedRequire(
+    this: NodeJS.Module,
+    id: string,
+  ): NodeJS.Module {
+    if (id === "@prisma/client/runtime/library") {
+      const redirectPath = nodePath.resolve(
+        process.cwd(),
+        "node_modules/@prisma/client/runtime/client.js",
+      );
+      return originalRequire.call(this, redirectPath);
+    }
+    return originalRequire.call(this, id);
+  } as NodeJS.Require;
+});
+/* eslint-enable */
+
 vi.mock("@/db/generated/prisma/client", async (importOriginal) => {
   const original = await importOriginal<typeof import("@/db/generated/prisma/client")>();
   const { Prisma } = original;
@@ -38,7 +74,12 @@ vi.mock("@/db/generated/prisma/client", async (importOriginal) => {
   // Apparently `getDMMF()` is more stable for public usage, so we're using that here. https://www.answeroverflow.com/m/1366812800663420978
   // Note: after upgrading, with prisma-client-js there _is_ `Prisma.dmmf`, but it doesn't have all
   // the fields that are expected by its TS type, so that doesn't work either.
-  const dmmf = await getDMMF({ datamodelPath: "./src/db/schema.prisma" });
+  // ---
+  // Prisma 7 changed the API from `datamodelPath` to `datamodel` which takes the schema content, so
+  // we have to read the file ourselves now.
+  // Open prismock issue: https://github.com/morintd/prismock/issues/1482
+  const schemaContent = fs.readFileSync("./src/db/schema.prisma", "utf-8");
+  const dmmf = await getDMMF({ datamodel: schemaContent });
   const PrismaWithDMMF = { ...Prisma, dmmf };
 
   return {

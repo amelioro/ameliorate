@@ -10,6 +10,9 @@ import { PrismaClient } from "@/db/generated/prisma/client";
 // eslint-disable-next-line functional/immutable-data
 neonConfig.webSocketConstructor = ws;
 
+// DATABASE_URL should generally be pooled, otherwise I guess serverless functions will result in many connections.
+// Prisma docs: https://www.prisma.io/docs/orm/prisma-client/setup-and-configuration/databases-connections/pgbouncer
+// Neon docs: https://neon.tech/docs/guides/prisma
 const dbUrl = process.env.DATABASE_URL ?? "";
 
 const adapter =

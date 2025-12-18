@@ -23,6 +23,5 @@
   "typescript.preferences.importModuleSpecifier": "non-relative",
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
-  },
-  "prisma.pinToPrisma6": true
+  }
 }
