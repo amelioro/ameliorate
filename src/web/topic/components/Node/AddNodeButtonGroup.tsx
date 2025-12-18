@@ -74,7 +74,10 @@ const AddMenuSearch = ({ fromNodeId, addableRelations, className }: AddMenuSearc
         }
       }}
       fullWidth
-      ChipProps={{ className: "max-w-40" }} // small enough that the limited tag text (e.g. "+5") fits in one line with the chip
+      slotProps={{
+        chip: { className: "max-w-40" }, // small enough that the limited tag text (e.g. "+5") fits in one line with the chip
+        listbox: { className: "text-sm" }, // match size of menu item text
+      }}
       multiple
       limitTags={1}
       disableClearable // so that we can handle adding/removing selections individually without needing to handle multiple changes at once
@@ -82,7 +85,6 @@ const AddMenuSearch = ({ fromNodeId, addableRelations, className }: AddMenuSearc
       size="small"
       // make sure the search box at least fits a few words, but doesn't expand too widely either
       className={"w-72" + (className ? ` ${className}` : "")}
-      ListboxProps={{ className: "text-sm" }} // match size of menu item text
       onKeyDown={(event) => event.stopPropagation()} // don't trigger parent menu's default keydown handler, which e.g. makes "a" select "Add Cause" menu item instead of typing in the search box
       renderInput={(params) => (
         <TextField

@@ -75,7 +75,7 @@ const elk = new ELK();
  * For "UP" orientation, a lower partitioned node will be placed in a layer lower than nodes of a higher partition.
  * "calculated" is a string that will error if it remains; it should be replaced before layout.
  */
-const partitionOrders: { [type in NodeType]: string } = {
+const partitionOrders: Record<NodeType, string> = {
   // topic
   problem: "3",
   cause: "3",
@@ -444,7 +444,7 @@ export const layout = async (
 
     const parsedGraph = parseElkjsOutput(layoutedGraph);
     return parsedGraph;
-  } catch (error) {
+  } catch {
     const layoutedGraph = await elk.layout(graph, {
       layoutOptions: { ...layoutOptions, "elk.partitioning.activate": "false" },
       // log-related options throw error with SPLINES edge routing somehow; see https://github.com/kieler/elkjs/issues/309

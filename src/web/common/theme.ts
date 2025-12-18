@@ -39,6 +39,8 @@
 
 import {
   type Theme as MaterialUITheme,
+  PaletteColor,
+  PaletteColorOptions,
   type PaletteMode,
   type ThemeOptions,
   createTheme,
@@ -50,41 +52,40 @@ import { type FlowNodeType } from "@/web/topic/utils/node";
 
 // adding colors to theme documented at https://mui.com/material-ui/customization/palette/#adding-new-colors
 
-/* eslint-disable @typescript-eslint/no-empty-interface -- interfaces are not same as superclass because we're augmenting the module's existing interfaces */
 declare module "@mui/material/styles" {
   // bit awkward but don't think it's possible to create keys for each NodeType in an interface without creating this intermediate type
   // thanks https://stackoverflow.com/a/60378992
-  type NodeTypePalettes = { [key in FlowNodeType]: Palette["primary"] };
-  type NodeTypePaletteOptions = { [key in FlowNodeType]: PaletteOptions["primary"] };
+  type NodeTypePalettes = Record<FlowNodeType, PaletteColor>;
+  type NodeTypePaletteOptions = Record<FlowNodeType, PaletteColorOptions>;
 
   interface Palette extends NodeTypePalettes {
-    neutral: Palette["primary"];
-    neutralContrast: Palette["primary"];
-    paperPlain: Palette["primary"];
-    paperShaded: Palette["primary"];
-    support1: Palette["primary"];
-    support2: Palette["primary"];
-    support3: Palette["primary"];
-    support4: Palette["primary"];
-    critique1: Palette["primary"];
-    critique2: Palette["primary"];
-    critique3: Palette["primary"];
-    critique4: Palette["primary"];
+    neutral: PaletteColor;
+    neutralContrast: PaletteColor;
+    paperPlain: PaletteColor;
+    paperShaded: PaletteColor;
+    support1: PaletteColor;
+    support2: PaletteColor;
+    support3: PaletteColor;
+    support4: PaletteColor;
+    critique1: PaletteColor;
+    critique2: PaletteColor;
+    critique3: PaletteColor;
+    critique4: PaletteColor;
   }
 
   interface PaletteOptions extends NodeTypePaletteOptions {
-    neutral: PaletteOptions["primary"];
-    neutralContrast: PaletteOptions["primary"];
-    paperPlain: PaletteOptions["primary"];
-    paperShaded: PaletteOptions["primary"];
-    support1: PaletteOptions["primary"];
-    support2: PaletteOptions["primary"];
-    support3: PaletteOptions["primary"];
-    support4: PaletteOptions["primary"];
-    critique1: PaletteOptions["primary"];
-    critique2: PaletteOptions["primary"];
-    critique3: PaletteOptions["primary"];
-    critique4: PaletteOptions["primary"];
+    neutral: PaletteColorOptions;
+    neutralContrast: PaletteColorOptions;
+    paperPlain: PaletteColorOptions;
+    paperShaded: PaletteColorOptions;
+    support1: PaletteColorOptions;
+    support2: PaletteColorOptions;
+    support3: PaletteColorOptions;
+    support4: PaletteColorOptions;
+    critique1: PaletteColorOptions;
+    critique2: PaletteColorOptions;
+    critique3: PaletteColorOptions;
+    critique4: PaletteColorOptions;
   }
 
   interface BreakpointOverrides {
@@ -94,7 +95,7 @@ declare module "@mui/material/styles" {
 }
 
 declare module "@mui/material" {
-  type NodeTypeColors = { [key in FlowNodeType]: true };
+  type NodeTypeColors = Record<FlowNodeType, true>;
 
   interface ButtonPropsColorOverrides extends NodeTypeColors {
     neutral: true;
@@ -141,12 +142,11 @@ declare module "@mui/material" {
     critique4: true;
   }
 }
-/* eslint-disable @typescript-eslint/no-empty-interface */
 
 // augment emotion theme to include Material methods (for use with styled)
 // https://github.com/emotion-js/emotion/discussions/2291#discussioncomment-491185
 declare module "@emotion/react" {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type -- empty to extend the module
   export interface Theme extends MaterialUITheme {}
 }
 

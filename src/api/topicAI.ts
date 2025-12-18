@@ -19,18 +19,18 @@ export const topicAICreatePartsSchema = z.object({
 
 type TopicAICreateParts = z.infer<typeof topicAICreatePartsSchema>;
 
-const topicAIPartsWithoutSummariesSchema = z.object({
+const _topicAIPartsWithoutSummariesSchema = z.object({
   nodes: z.array(topicAINodeSchema),
   edges: z.array(topicAIEdgeSchema),
 });
 
-type TopicAIPartsWithoutSummaries = z.infer<typeof topicAIPartsWithoutSummariesSchema>;
+type TopicAIPartsWithoutSummaries = z.infer<typeof _topicAIPartsWithoutSummariesSchema>;
 
-const topicAIPartsWithSummariesSchema = z.object({
+const _topicAIPartsWithSummariesSchema = z.object({
   nodes: z.array(topicAINodeSchema.omit({ tempId: true })),
 });
 
-type TopicAIPartsWithSummaries = z.infer<typeof topicAIPartsWithSummariesSchema>;
+type TopicAIPartsWithSummaries = z.infer<typeof _topicAIPartsWithSummariesSchema>;
 
 export const visibleActSourceText = readFileSync(
   path.join(process.cwd(), "examples", "visible_act.source.txt"),

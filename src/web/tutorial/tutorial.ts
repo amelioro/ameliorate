@@ -17,6 +17,9 @@ import { Track, Tutorial } from "@/web/tutorial/tutorialUtils";
  */
 const getTutorialSteps = (tutorial: Tutorial, track: Track | null) => {
   switch (tutorial) {
+    case "welcome":
+      throw new Error("Welcome tutorial should be started with startWelcomeTutorial");
+
     // builders
     case "diagramBasics":
       return diagramBasicsSteps;
@@ -35,8 +38,11 @@ const getTutorialSteps = (tutorial: Tutorial, track: Track | null) => {
     // 1b. evaluatingTradeoffs is reused from builders path
     case "navigatingATopic":
       return navigatingTopicSteps;
-    default:
-      throw new Error("No steps found for tutorial: " + tutorial);
+
+    // experts
+    case "moreActions":
+    case "advancedFiltering":
+      throw new Error("Expert tutorial not yet implemented: " + tutorial);
   }
 };
 

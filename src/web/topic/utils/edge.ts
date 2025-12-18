@@ -230,9 +230,7 @@ export const getDirectedRelationDescription = (relation: DirectedToRelation): st
 type Commonality = "common" | "uncommon" | "onlyForConnections";
 
 interface AddableRelation extends Relation {
-  commonalityFrom: {
-    [key in EdgeDirection]?: Commonality;
-  };
+  commonalityFrom: Partial<Record<EdgeDirection, Commonality>>;
 }
 
 export const getRelation = (
@@ -395,7 +393,7 @@ export const addableRelationsFrom = (
       // otherwise, if unrestricted, allow adding any same-category node as source or target
       // but prioritize common relations first if they exist
       const mostCommonAddable = addableRelationsFrom[0];
-      if (mostCommonAddable && mostCommonAddable.commonality === "common") {
+      if (mostCommonAddable?.commonality === "common") {
         return mostCommonAddable;
       }
 

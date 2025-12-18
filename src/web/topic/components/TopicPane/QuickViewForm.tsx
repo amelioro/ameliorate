@@ -52,13 +52,15 @@ export const QuickViewForm = ({ currentView, quickViews, onClose }: Props) => {
     <Dialog
       open={true}
       onClose={onClose}
-      PaperProps={{
-        component: "form",
-        onSubmit: (event: FormEvent<HTMLFormElement>) =>
-          void handleSubmit((data) => {
-            setTitle(currentView.id, data.title);
-            onClose();
-          })(event),
+      slotProps={{
+        paper: {
+          component: "form",
+          onSubmit: (event: FormEvent<HTMLFormElement>) =>
+            void handleSubmit((data) => {
+              setTitle(currentView.id, data.title);
+              onClose();
+            })(event),
+        },
       }}
     >
       <DialogTitle>Quick View</DialogTitle>

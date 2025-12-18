@@ -242,7 +242,7 @@ interface Props {
   topic?: Topic;
   creatorName: string;
   onSubmit: (data: FormData) => void;
-  DeleteSection?: JSX.Element;
+  DeleteSection?: React.JSX.Element;
 }
 
 const TopicForm = ({ topic, creatorName, onSubmit, DeleteSection }: Props) => {

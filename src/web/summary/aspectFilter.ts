@@ -96,7 +96,7 @@ export const getIncomingNodesByRelationDescription = (summaryNode: Node, graph: 
         target: summaryNode.type,
         as: "source",
       });
-      if (acc[relationDescription] === undefined) acc[relationDescription] = [];
+      acc[relationDescription] ??= [];
       acc[relationDescription].push(incomingNode);
 
       return acc;
@@ -124,7 +124,7 @@ export const getOutgoingNodesByRelationDescription = (summaryNode: Node, graph: 
         as: "target",
       });
 
-      if (acc[relationDescription] === undefined) acc[relationDescription] = [];
+      acc[relationDescription] ??= [];
       acc[relationDescription].push(targetNode);
 
       return acc;

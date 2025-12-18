@@ -2,11 +2,11 @@ import { uniqBy } from "es-toolkit";
 
 import { NodeType, nodeTypes } from "@/common/node";
 
-const summaries = ["topic", ...nodeTypes] as const;
-export type Summary = (typeof summaries)[number];
+const _summaries = ["topic", ...nodeTypes] as const;
+export type Summary = (typeof _summaries)[number];
 
 // categories are used as tabs in the summary view
-const categories = [
+const _categories = [
   "coreNodes",
   "all",
   // solution
@@ -23,7 +23,7 @@ const categories = [
   "nuance",
   "isAbout",
 ] as const;
-export type Category = (typeof categories)[number];
+export type Category = (typeof _categories)[number];
 
 export const categoriesBySummary: Record<Summary, [Category, ...Category[]]> = {
   topic: ["coreNodes"],
@@ -59,8 +59,8 @@ export const categoriesBySummary: Record<Summary, [Category, ...Category[]]> = {
 };
 
 // aspects are used as columns with a summary view's tab
-const topicAspects = ["coreNodes"] as const;
-const nodeAspects = [
+const _topicAspects = ["coreNodes"] as const;
+const _nodeAspects = [
   "incoming",
   "outgoing",
   // solution
@@ -82,8 +82,8 @@ const nodeAspects = [
   "isAbout",
 ] as const;
 
-export type TopicAspect = (typeof topicAspects)[number];
-export type NodeAspect = (typeof nodeAspects)[number];
+export type TopicAspect = (typeof _topicAspects)[number];
+export type NodeAspect = (typeof _nodeAspects)[number];
 export type Aspect = TopicAspect | NodeAspect;
 
 export const aspectsByCategory: Record<Category, [Aspect, Aspect?]> = {

@@ -18,7 +18,7 @@ test("can play around", async ({ page }) => {
 
   // confirm playground starts with tutorial popup
   await expect(page.getByLabel("Close Tour")).toBeVisible();
-  const flow = await page.getByTestId("rf__wrapper");
+  const flow = page.getByTestId("rf__wrapper");
 
   // confirm nodes/edges can be added and persist after refresh
   await page.getByLabel("Close Tour").click();

@@ -18,6 +18,17 @@ jobs:
         with:
           node-version-file: .nvmrc
       - run: npm ci
+      # Also install deps for child projects so that linting can use shared config and run once for all of them
+      # annoying that contributors will have to know to install deps in child projects when linting,
+      # but that's not the end of the world.
+      # - Considered using npm workspaces but that seems to be intended for when child projects are
+      # always required for the parent project - in this case, e2e/mock-auth are dev-only, and
+      # docs-site is an independent nextjs project.
+      # - Could alternatively just have a separate lint config for each child project, but that seems
+      # a bit annoying to maintain.
+      - run: npm ci --prefix ./docs-site
+      - run: npm ci --prefix ./e2e
+      - run: npm ci --prefix ./mock-auth
       - run: npm run check-types
       - run: npm run check-pretty
         if: always() # get formatting errors even if there are errors above

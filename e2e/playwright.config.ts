@@ -24,9 +24,7 @@ export default defineConfig({
     // Base URL to use in actions like `await page.goto('/')`.
     // deploy preview is different because the URL is different for each PR
     // copied from next.config.js because that won't have run for this
-    baseURL: process.env.AUTH0_BASE_URL
-      ? process.env.AUTH0_BASE_URL
-      : process.env.DEPLOY_PRIME_URL ?? "http://localhost:3000",
+    baseURL: process.env.AUTH0_BASE_URL ?? process.env.DEPLOY_PRIME_URL ?? "http://localhost:3000",
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on",

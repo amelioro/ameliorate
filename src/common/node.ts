@@ -267,9 +267,7 @@ export const isDefaultCoreNodeType = (nodeType: NodeType): boolean => {
 
 const nodePriorities = Object.fromEntries(
   nodeTypes.map((type, index) => [type, index.toString()]),
-) as {
-  [type in NodeType]: string;
-};
+) as Record<NodeType, string>;
 
 export const compareNodesByType = (node1: { type: NodeType }, node2: { type: NodeType }) => {
   return Number(nodePriorities[node1.type]) - Number(nodePriorities[node2.type]);
