@@ -1,9 +1,5 @@
-import fs from "node:fs";
-
-import { type DMMF } from "@prisma/client/runtime/client";
-import { getDMMF } from "@prisma/internals";
+import { type PrismockClientType } from "@pkgverse/prismock/v7";
 import * as matchers from "jest-extended";
-import { type PrismockClientType, createPrismock } from "prismock/build/main/lib/client";
 import { afterEach, expect, vi } from "vitest";
 
 import { type PrismaClient } from "@/db/generated/prisma/client";
@@ -30,68 +26,28 @@ process.env.BASE_URL = "http://localhost:3000"; // not sure how to reuse next.co
  */
 export const testEmail = "test@test.test";
 
-/**
- * Patches Node's require to redirect @prisma/client/runtime/library to client.
- *
- * This is AI-generated, looks fine enough though.
- *
- * Prisma 7 renamed the runtime path from "library" to "client".
- * prismock still imports from the old path, so we patch Node's require
- * to redirect those imports to the new path.
- * See https://github.com/morintd/prismock/issues/1284
- *
- * This uses vi.hoisted to ensure the patch runs before any imports.
- */
-/* eslint-disable -- this is a hack, let's not bother with making it clean */
-vi.hoisted(() => {
-  const NodeModule = require("node:module") as typeof import("node:module");
-  const nodePath = require("node:path") as typeof import("node:path");
-
-  const originalRequire = NodeModule.prototype.require;
-
-  NodeModule.prototype.require = function patchedRequire(
-    this: NodeJS.Module,
-    id: string,
-  ): NodeJS.Module {
-    if (id === "@prisma/client/runtime/library") {
-      const redirectPath = nodePath.resolve(
-        process.cwd(),
-        "node_modules/@prisma/client/runtime/client.js",
-      );
-      return originalRequire.call(this, redirectPath);
-    }
-    return originalRequire.call(this, id);
-  } as NodeJS.Require;
-});
-/* eslint-enable */
-
+// Started using this fork of prismock instead of OG prismock https://github.com/JQuezada0/prismock
+// because prismock wasn't updated for prisma v6.16 or v7.
+// Unfortunately 1. the fork isn't popular so could be a security issue (I at least tried glancing
+// over the code and having an LLM review it...) and 2. I still have to add some hacks to get it to
+// work (thanks AI) (i.e. 1. mocking generated instead of @prisma/client as the docs say, 2. adding
+// alias and server.deps.inline in vitest.config.ts). But since it's at least slightly maintained,
+// and the mocking isn't as hacky as the non-prisma-v7-supporting OG prismock, it seems slightly
+// better.
 vi.mock("@/db/generated/prisma/client", async (importOriginal) => {
   const original = await importOriginal<typeof import("@/db/generated/prisma/client")>();
-  const { Prisma } = original;
-
-  // After upgrading from prisma 5.15.1 -> 6.16.2, and generating /prisma/client via the rust-free
-  // engine and prisma-client (rather than prisma-client-js), `Prisma` no longer has `dmmf` on it.
-  // Apparently `getDMMF()` is more stable for public usage, so we're using that here. https://www.answeroverflow.com/m/1366812800663420978
-  // Note: after upgrading, with prisma-client-js there _is_ `Prisma.dmmf`, but it doesn't have all
-  // the fields that are expected by its TS type, so that doesn't work either.
-  // ---
-  // Prisma 7 changed the API from `datamodelPath` to `datamodel` which takes the schema content, so
-  // we have to read the file ourselves now.
-  // Open prismock issue: https://github.com/morintd/prismock/issues/1482
-  const schemaContent = fs.readFileSync("./src/db/schema.prisma", "utf-8");
-  const dmmf = await getDMMF({ datamodel: schemaContent });
-  const PrismaWithDMMF = { ...Prisma, dmmf };
+  const { getClientClass } =
+    await vi.importActual<typeof import("@pkgverse/prismock/v7")>("@pkgverse/prismock/v7");
 
   return {
-    // ensure other parts of the import are still usable e.g. `Prisma`
     ...original,
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    PrismaClient: createPrismock(
-      PrismaWithDMMF as unknown as typeof Prisma & { dmmf: DMMF.Document },
-    ),
+    PrismaClient: await getClientClass({
+      PrismaClient: original.PrismaClient,
+      schemaPath: "./src/db/schema.prisma",
+    }),
   };
 });
 
-afterEach(() => {
-  (xprisma as PrismockClientType<PrismaClient>).reset();
+afterEach(async () => {
+  await (xprisma as PrismockClientType<PrismaClient>).reset();
 });
