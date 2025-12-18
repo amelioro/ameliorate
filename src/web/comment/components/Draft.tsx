@@ -26,7 +26,7 @@ export const Draft = ({
   commentId,
   onDone,
 }: Props) => {
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
 
   const [draftHasText, setDraftHasText] = useState(startingText && startingText.length > 0);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -83,7 +83,7 @@ export const Draft = ({
 
               // TODO?: super-jank/unreliable to use a timeout, but comment store's
               // apiSyncerMiddleware is what makes the comment creation query, and it's outside of
-              // the react tree. usually we rely on the tree's trpc.useContext() to invalidate
+              // the react tree. usually we rely on the tree's trpc.useUtils() to invalidate
               // queries, so we'd have to figure out how to invalidate outside of the tree.
               if (creating) {
                 setTimeout(() => {

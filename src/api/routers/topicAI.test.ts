@@ -1,10 +1,10 @@
 import { describe, expect, test } from "vitest";
 
-import { appRouter } from "@/api/routers/_app";
+import { createCaller } from "@/api/routers/_app";
 
 describe("getPromptData", () => {
   test("returns expected schemas and examples", async () => {
-    const trpc = appRouter.createCaller({});
+    const trpc = createCaller({});
 
     const promptData = await trpc.topicAI.getPromptData();
 

@@ -31,7 +31,7 @@ export let plausible = null as unknown as ReturnType<typeof usePlausible>;
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const theme = createTheme(getThemeOptions("light"));
 
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
   useEffect(() => {
     // eslint-disable-next-line functional/immutable-data -- ideally we wouldn't need to do this jank to use trpc outside of the react tree
     trpcHelper.client = utils.client;

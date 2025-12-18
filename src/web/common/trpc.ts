@@ -48,5 +48,5 @@ export const trpc = createTRPCNext<AppRouter>({
 // separate from its assignment so that importers don't need to import from a file with jsx
 // using an object so that app.page can set the client after importing
 export const trpcHelper = {
-  client: null as unknown as ReturnType<typeof trpc.useContext>["client"],
+  client: null as unknown as ReturnType<typeof trpc.useUtils>["client"],
 };

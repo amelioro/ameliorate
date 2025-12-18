@@ -30,7 +30,7 @@ import { updateTopicWithoutSyncingToApi } from "@/web/topic/topicStore/store";
 import { generateBasicViews } from "@/web/view/quickViewStore/store";
 
 export const CreateTopicForm = ({ creatorName }: { creatorName: string }) => {
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
 
   const updateDiagram = trpc.topic.updateDiagram.useMutation();
 
@@ -74,7 +74,7 @@ export const CreateTopicForm = ({ creatorName }: { creatorName: string }) => {
 };
 
 export const EditTopicForm = ({ topic, creatorName }: { topic: Topic; creatorName: string }) => {
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const updateTopic = trpc.topic.update.useMutation({
@@ -215,7 +215,7 @@ export const EditTopicForm = ({ topic, creatorName }: { topic: Topic; creatorNam
 
 // not sure if extracting the form schema here is a good pattern, but it was
 // really annoying to have so much code to read through in the component
-const formSchema = (utils: ReturnType<typeof trpc.useContext>, username: string, topic?: Topic) => {
+const formSchema = (utils: ReturnType<typeof trpc.useUtils>, username: string, topic?: Topic) => {
   return z.object({
     title: topicSchema.shape.title.refine(
       async (title) => {
@@ -246,7 +246,7 @@ interface Props {
 }
 
 const TopicForm = ({ topic, creatorName, onSubmit, DeleteSection }: Props) => {
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
 
   const {
     control,

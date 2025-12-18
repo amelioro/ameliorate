@@ -15,7 +15,7 @@ import { trpc } from "@/web/common/trpc";
 type RowData = InAppNotification & { topic: UserTopic | null };
 
 export default withPageAuthRequired(({ user }) => {
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
 
   // `user` gives us guaranteed authId, but we need our session user to get at Ameliorate-specific user fields
   const { sessionUser } = useSessionUser();

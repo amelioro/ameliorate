@@ -2,7 +2,7 @@
 import shortUUID from "short-uuid";
 import { beforeEach, describe, expect, test } from "vitest";
 
-import { appRouter } from "@/api/routers/_app";
+import { createCaller } from "@/api/routers/_app";
 import { QuickView } from "@/common/view";
 import { xprisma } from "@/db/extendedPrisma";
 import { Topic, User } from "@/db/generated/prisma/client";
@@ -64,7 +64,7 @@ beforeEach(async () => {
 describe("handleChangesets", () => {
   describe("when user can edit topic", () => {
     test("can CRUD views", async () => {
-      const trpc = appRouter.createCaller({
+      const trpc = createCaller({
         userAuthId: creatorOfTopic.authId,
         userEmailVerified: true,
         user: creatorOfTopic,
@@ -98,7 +98,7 @@ describe("handleChangesets", () => {
     test("can create a new view with the same title as a view being deleted", async () => {
       // e.g. when uploading a topic
 
-      const trpc = appRouter.createCaller({
+      const trpc = createCaller({
         userAuthId: creatorOfTopic.authId,
         userEmailVerified: true,
         user: creatorOfTopic,
@@ -126,7 +126,7 @@ describe("handleChangesets", () => {
     });
 
     test("cannot CRUD views from different topics", async () => {
-      const trpc = appRouter.createCaller({
+      const trpc = createCaller({
         userAuthId: creatorOfTopic.authId,
         userEmailVerified: true,
         user: creatorOfTopic,
@@ -149,7 +149,7 @@ describe("handleChangesets", () => {
 
   describe("when user cannot edit topic", () => {
     test("cannot CRUD views", async () => {
-      const trpc = appRouter.createCaller({
+      const trpc = createCaller({
         userAuthId: notCreatorOfTopic.authId,
         userEmailVerified: true,
         user: notCreatorOfTopic,

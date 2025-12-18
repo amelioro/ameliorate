@@ -169,7 +169,7 @@ export const ScoreEdge = ({ inReactFlow, ...flowEdge }: EdgeProps & Props) => {
           contentEditable={userCanEditTopicData && unrestrictedEditing}
           suppressContentEditableWarning // https://stackoverflow.com/a/49639256/8409296
           onBlur={(event) => {
-            const text = event.target.textContent?.trim();
+            const text = event.target.textContent.trim();
             if (text && text !== lowerCase(edge.label) && text !== edge.data.customLabel)
               setCustomEdgeLabel(edge, text);
           }}

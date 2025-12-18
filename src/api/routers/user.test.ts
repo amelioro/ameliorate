@@ -1,7 +1,7 @@
 /* eslint-disable functional/no-let -- let is needed to reuse `before`-initialized variables across tests */
 import { beforeEach, describe, expect, test } from "vitest";
 
-import { appRouter } from "@/api/routers/_app";
+import { createCaller } from "@/api/routers/_app";
 import { xprisma } from "@/db/extendedPrisma";
 import { Topic, User } from "@/db/generated/prisma/client";
 
@@ -50,7 +50,7 @@ beforeEach(async () => {
 describe("findByUsername", () => {
   describe("when viewing your own topics", () => {
     test("returns all topics", async () => {
-      const trpc = appRouter.createCaller({
+      const trpc = createCaller({
         userAuthId: userWithTopics.authId,
         userEmailVerified: true,
         user: userWithTopics,
@@ -64,7 +64,7 @@ describe("findByUsername", () => {
 
   describe("when logged in and viewing someone else's topics", () => {
     test("returns only public topics", async () => {
-      const trpc = appRouter.createCaller({
+      const trpc = createCaller({
         userAuthId: otherUser.authId,
         userEmailVerified: true,
         user: otherUser,
@@ -78,7 +78,7 @@ describe("findByUsername", () => {
 
   describe("when logged out and viewing someone else's topics", () => {
     test("returns only public topics", async () => {
-      const trpc = appRouter.createCaller({});
+      const trpc = createCaller({});
 
       const user = await trpc.user.findByUsername({ username: userWithTopics.username });
 

@@ -2,7 +2,7 @@
 import { v4 as uuid } from "uuid";
 import { beforeEach, describe, expect, test } from "vitest";
 
-import { appRouter } from "@/api/routers/_app";
+import { createCaller } from "@/api/routers/_app";
 import { xprisma } from "@/db/extendedPrisma";
 import { Topic, User } from "@/db/generated/prisma/client";
 
@@ -69,7 +69,7 @@ beforeEach(async () => {
 describe("findByUsernameAndTitle", () => {
   describe("when viewing your own topic", () => {
     test("can view private topic", async () => {
-      const trpc = appRouter.createCaller({
+      const trpc = createCaller({
         userAuthId: userWithTopics.authId,
         userEmailVerified: true,
         user: userWithTopics,
@@ -86,7 +86,7 @@ describe("findByUsernameAndTitle", () => {
 
   describe("when viewing someone else's topic", () => {
     test("can view public topic", async () => {
-      const trpc = appRouter.createCaller({});
+      const trpc = createCaller({});
 
       const topic = await trpc.topic.findByUsernameAndTitle({
         username: userWithTopics.username,
@@ -97,7 +97,7 @@ describe("findByUsernameAndTitle", () => {
     });
 
     test("can view unlisted topic", async () => {
-      const trpc = appRouter.createCaller({});
+      const trpc = createCaller({});
 
       const topic = await trpc.topic.findByUsernameAndTitle({
         username: userWithTopics.username,
@@ -108,7 +108,7 @@ describe("findByUsernameAndTitle", () => {
     });
 
     test("cannot view private topic", async () => {
-      const trpc = appRouter.createCaller({});
+      const trpc = createCaller({});
 
       const topic = await trpc.topic.findByUsernameAndTitle({
         username: userWithTopics.username,
@@ -123,7 +123,7 @@ describe("findByUsernameAndTitle", () => {
 describe("getData", () => {
   describe("when viewing your own topic", () => {
     test("can view private topic", async () => {
-      const trpc = appRouter.createCaller({
+      const trpc = createCaller({
         userAuthId: userWithTopics.authId,
         userEmailVerified: true,
         user: userWithTopics,
@@ -140,7 +140,7 @@ describe("getData", () => {
 
   describe("when viewing someone else's topic", () => {
     test("can view public topic", async () => {
-      const trpc = appRouter.createCaller({});
+      const trpc = createCaller({});
 
       const topic = await trpc.topic.getData({
         username: userWithTopics.username,
@@ -151,7 +151,7 @@ describe("getData", () => {
     });
 
     test("can view unlisted topic", async () => {
-      const trpc = appRouter.createCaller({});
+      const trpc = createCaller({});
 
       const topic = await trpc.topic.getData({
         username: userWithTopics.username,
@@ -162,7 +162,7 @@ describe("getData", () => {
     });
 
     test("cannot view private topic", async () => {
-      const trpc = appRouter.createCaller({});
+      const trpc = createCaller({});
 
       const topic = await trpc.topic.getData({
         username: userWithTopics.username,
@@ -176,7 +176,7 @@ describe("getData", () => {
 
 describe("setData", () => {
   const tryUpdateTopic = async (loggedInUser: User | null, topic: Topic) => {
-    const trpc = appRouter.createCaller(
+    const trpc = createCaller(
       loggedInUser
         ? {
             userAuthId: loggedInUser.authId,
@@ -239,7 +239,7 @@ describe("setData", () => {
 
 describe("create", () => {
   test("creates a watch on the topic for the creator", async () => {
-    const trpc = appRouter.createCaller({
+    const trpc = createCaller({
       userAuthId: userWithTopics.authId,
       userEmailVerified: true,
       user: userWithTopics,

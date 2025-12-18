@@ -6,7 +6,7 @@ import { topicAIRouter } from "@/api/routers/topicAI";
 import { userRouter } from "@/api/routers/user";
 import { viewRouter } from "@/api/routers/view";
 import { watchRouter } from "@/api/routers/watch";
-import { router } from "@/api/trpc";
+import { createCallerFactory, router } from "@/api/trpc";
 
 export const appRouter = router({
   topic: topicRouter,
@@ -18,6 +18,9 @@ export const appRouter = router({
   watch: watchRouter,
   topicAI: topicAIRouter,
 });
+
+// for tests only? awkward but trpc's official example does this, and deprecated `appRouter.createContext` which was usable directly from tests https://github.com/trpc/examples-next-prisma-starter/blob/main/src/server/routers/_app.ts
+export const createCaller = createCallerFactory(appRouter);
 
 // export type definition of API
 export type AppRouter = typeof appRouter;
