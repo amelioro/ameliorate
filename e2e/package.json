@@ -4,11 +4,10 @@
   "description": "This is a separate package specifically for the e2e tests dependencies, since they don't require the large majority of package setup as the root project",
   "type": "module",
   "engines": {
-    "//": "run `nvm install` to use the right versions; these are enforced via .npmrc's engine-strict when npm is used",
-    "//2": "different from root package.json because these are the versions that come with the playwright container",
-    "//3": "without these, CI would use a different version than local, since it pulls the root repo's directory first, which has a different version of node",
-    "node": "22.20.0",
-    "npm": "10.9.3"
+    "//1": "run `nvm install` to use the right versions; these are enforced via .npmrc's engine-strict when npm is used",
+    "//2": "these are the minimum playwright-supported versions.",
+    "node": ">=20",
+    "npm": ">=10"
   },
   "private": true,
   "scripts": {
