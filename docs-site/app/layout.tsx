@@ -1,10 +1,10 @@
 import { Metadata } from "next";
-import PlausibleProvider from "next-plausible";
 import Image from "next/image";
 import Link from "next/link";
-import { Layout, Navbar } from "nextra-theme-docs";
+import PlausibleProvider from "next-plausible";
 import { Banner, Head, Search } from "nextra/components";
 import { getPageMap } from "nextra/page-map";
+import { Layout, Navbar } from "nextra-theme-docs";
 import "nextra-theme-docs/style-prefixed.css";
 import { ReactNode } from "react";
 

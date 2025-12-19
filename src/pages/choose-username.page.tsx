@@ -14,7 +14,7 @@ import { trpc } from "@/web/common/trpc";
 // not sure if extracting the queries into a method is a good pattern, but it was
 // really annoying to have so much code to read through in the component
 const useQueries = () => {
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
   const createUser = trpc.user.create.useMutation({
     onSuccess: (newUser, variables) => {
       utils.user.findByAuthId.setData({ authId: variables.authId }, newUser);
@@ -30,7 +30,7 @@ const useQueries = () => {
 
 // not sure if extracting the form schema here is a good pattern, but it was
 // really annoying to have so much code to read through in the component
-const formSchema = (utils: ReturnType<typeof trpc.useContext>) => {
+const formSchema = (utils: ReturnType<typeof trpc.useUtils>) => {
   return z.object({
     username: userSchema.shape.username.refine(
       async (username) => {
@@ -51,7 +51,7 @@ const CreateUserPage = () => {
   const authId = authUser?.sub;
   const email = authUser?.email;
 
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
   const { createUser } = useQueries();
 
   const {

@@ -7,6 +7,7 @@ const buildEslintCommand = (filenames) =>
     .map((f) => path.relative(process.cwd(), f))
     .join(" --file ")}`;
 
-export default {
+const config = {
   "*": ["prettier --ignore-unknown --write", buildEslintCommand],
 };
+export default config;

@@ -48,7 +48,7 @@ export const Tooltip = ({
   children,
   tooltipHeading,
   tooltipBody,
-  placement = undefined,
+  placement,
   childrenOpensAMenu = false,
   /**
    * e.g. true for help icon tooltips, but false for node icon where tap actually performs an action
@@ -71,11 +71,8 @@ export const Tooltip = ({
         )
       }
       placement={placement}
-      TransitionProps={{ exit: !childrenHideViaCss }}
-      enterDelay={childrenOpensAMenu ? 500 : undefined}
-      enterTouchDelay={immediatelyOpenOnTouch ? 0 : undefined}
-      leaveTouchDelay={immediatelyOpenOnTouch ? Infinity : undefined} // touch-away to close on mobile, since message is long
       slotProps={{
+        transition: { exit: !childrenHideViaCss },
         tooltip: {
           className: tooltipBody
             ? "text-black bg-paperShaded-main shadow-sm border rounded-xl text-sm font-normal"
@@ -85,6 +82,9 @@ export const Tooltip = ({
           className: tooltipPopperClassName,
         },
       }}
+      enterDelay={childrenOpensAMenu ? 500 : undefined}
+      enterTouchDelay={immediatelyOpenOnTouch ? 0 : undefined}
+      leaveTouchDelay={immediatelyOpenOnTouch ? Infinity : undefined} // touch-away to close on mobile, since message is long
     >
       {children}
     </MuiTooltip>

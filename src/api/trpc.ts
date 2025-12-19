@@ -31,3 +31,4 @@ const sentryMiddleware = t.middleware(async (opts) => {
 export const router = t.router;
 export const procedure = t.procedure.use(sentryMiddleware);
 export const middleware = t.middleware;
+export const createCallerFactory = t.createCallerFactory;

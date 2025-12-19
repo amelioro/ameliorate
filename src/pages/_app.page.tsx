@@ -1,13 +1,13 @@
 import { UserProvider as AuthUserProvider } from "@auth0/nextjs-auth0/client";
 import { Global } from "@emotion/react";
 import { GlobalStyles } from "@mui/material";
-import { AppCacheProvider } from "@mui/material-nextjs/v14-pagesRouter";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { AppCacheProvider } from "@mui/material-nextjs/v14-pagesRouter";
 import { TourProvider } from "@reactour/tour";
-import PlausibleProvider, { usePlausible } from "next-plausible";
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import PlausibleProvider, { usePlausible } from "next-plausible";
 import { useEffect } from "react";
 
 import { globals } from "@/pages/_app.styles";
@@ -31,7 +31,7 @@ export let plausible = null as unknown as ReturnType<typeof usePlausible>;
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const theme = createTheme(getThemeOptions("light"));
 
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
   useEffect(() => {
     // eslint-disable-next-line functional/immutable-data -- ideally we wouldn't need to do this jank to use trpc outside of the react tree
     trpcHelper.client = utils.client;

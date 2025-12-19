@@ -73,5 +73,4 @@ const nextAndSentryConfig = withSentryConfig(nextConfig, {
   // automaticVercelMonitors: true,
 });
 
-// eslint-disable-next-line functional/immutable-data
 export default withBundleAnalyzer(nextAndSentryConfig);

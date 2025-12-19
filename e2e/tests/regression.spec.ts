@@ -6,8 +6,9 @@
  * noise on PRs, since that noise can be auto-committed without much issue.
  */
 
-import { getNode } from "@/tests/utils";
 import { expect, test } from "@playwright/test";
+
+import { getNode } from "@/tests/utils";
 
 test("can play around", async ({ page }) => {
   // confirm home page looks ok
@@ -29,7 +30,7 @@ test("can play around", async ({ page }) => {
   // confirm playground and layout with standard nodes look normal, and are persisted after refresh
   await page.getByRole("link", { name: "Play Around" }).first().click();
   await page.getByLabel("Close Tour").click();
-  const flow = await page.getByTestId("rf__wrapper");
+  const flow = page.getByTestId("rf__wrapper");
   // add problem nodes
   await getNode(page, "Problem").click();
   await flow.getByRole("button", { name: "Add node" }).click();

@@ -180,7 +180,7 @@ const EditableNodeBase = ({ node, className = "", onClick }: Props) => {
               contentEditable={customizable}
               suppressContentEditableWarning // https://stackoverflow.com/a/49639256/8409296
               onBlur={(event) => {
-                const text = event.target.textContent?.trim();
+                const text = event.target.textContent.trim();
                 if (text && text !== typeText && text !== node.data.customType)
                   setCustomNodeType(node, text);
               }}

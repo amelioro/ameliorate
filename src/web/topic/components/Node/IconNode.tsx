@@ -51,7 +51,7 @@ export const IconNode = ({ node, className, onClick }: Props) => {
           ? `0 0 0 1px ${primarySpotlightColor}, 0 0 0 1px ${primarySpotlightColor}`
           : "none",
       }}
-      className={"rounded-sm p-0.25" + (className ? ` ${className}` : "")}
+      className={"rounded-sm p-px" + (className ? ` ${className}` : "")}
     />
   );
 

@@ -6,13 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  // DATABASE_URL will use pooling for deployed environments, so we need to set a DIRECT_URL as well.
-  // I guess serverless functions will otherwise result in many connections
-  // Prisma docs: https://www.prisma.io/docs/guides/performance-and-optimization/connection-management/configure-pg-bouncer
-  // Neon docs: https://neon.tech/docs/guides/prisma
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
 }
 
 model User {

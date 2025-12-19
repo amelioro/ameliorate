@@ -68,9 +68,9 @@ const connectCriteriaToSolutions = (state: DiagramStoreState, newNode: Node, pro
       });
     });
 
-  /* eslint-disable functional/immutable-data, no-param-reassign */
+  /* eslint-disable functional/immutable-data */
   state.edges.push(...newCriterionEdges);
-  /* eslint-enable functional/immutable-data, no-param-reassign */
+  /* eslint-enable functional/immutable-data */
 };
 
 interface AddNodeProps {
@@ -179,9 +179,9 @@ const createEdge = (
     arguedDiagramPartId: source.data.arguedDiagramPartId,
   });
 
-  /* eslint-disable functional/immutable-data, no-param-reassign */
+  /* eslint-disable functional/immutable-data */
   topicGraph.edges.push(newEdge);
-  /* eslint-enable functional/immutable-data, no-param-reassign */
+  /* eslint-enable functional/immutable-data */
 
   return newEdge;
 };
@@ -235,9 +235,9 @@ export const reconnectEdge = (
 
   const state = createDraft(useDiagramStore.getState());
 
-  /* eslint-disable functional/immutable-data, no-param-reassign */
+  /* eslint-disable functional/immutable-data */
   state.edges = state.edges.filter((edge) => edge.id !== oldEdge.id);
-  /* eslint-enable functional/immutable-data, no-param-reassign */
+  /* eslint-enable functional/immutable-data */
 
   const topicGraph = { nodes: state.nodes, edges: state.edges };
   const newEdge = createConnection(topicGraph, newSourceId, undefined, newTargetId);
@@ -256,26 +256,25 @@ export const deleteNode = (nodeId: string) => {
     const remainingArguedJustification = getJustificationCount(state, arguedDiagramPartId);
     // deleted node was the last
     if (remainingArguedJustification <= 1) {
-      /* eslint-disable functional/immutable-data, no-param-reassign */
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete -- consider using a map instead of an object?
+      /* eslint-disable functional/immutable-data */
       state.nodes = state.nodes.filter(
         (node) => node.data.arguedDiagramPartId !== deletedNode.data.arguedDiagramPartId,
       );
       state.edges = state.edges.filter(
         (edge) => edge.data.arguedDiagramPartId !== deletedNode.data.arguedDiagramPartId,
       );
-      /* eslint-enable functional/immutable-data, no-param-reassign */
+      /* eslint-enable functional/immutable-data */
     }
   }
 
   const nodeEdges = edges(deletedNode, state.edges);
 
-  /* eslint-disable functional/immutable-data, no-param-reassign */
+  /* eslint-disable functional/immutable-data */
   // delete this node and edges connected to this node
   state.nodes = state.nodes.filter((node) => node.id !== nodeId);
   state.edges = state.edges.filter((edge) => !nodeEdges.includes(edge));
   deleteInvalidJustification(state);
-  /* eslint-enable functional/immutable-data, no-param-reassign */
+  /* eslint-enable functional/immutable-data */
 
   // Don't delete or undo/re-create other users' scores because that's awkward to allow permissions-wise.
   // Could delete/undo own scores but if we're already orphaning other users' scores, it seems fine to leave own scores as orphaned too.
@@ -287,11 +286,11 @@ export const deleteNode = (nodeId: string) => {
 export const deleteEdge = (edgeId: string) => {
   const state = createDraft(useDiagramStore.getState());
 
-  /* eslint-disable functional/immutable-data, no-param-reassign */
+  /* eslint-disable functional/immutable-data */
   // delete this edge
   state.edges = state.edges.filter((edge) => edge.id !== edgeId);
   deleteInvalidJustification(state);
-  /* eslint-enable functional/immutable-data, no-param-reassign */
+  /* eslint-enable functional/immutable-data */
 
   // Don't delete or undo/re-create other users' scores because that's awkward to allow permissions-wise.
   // Could delete/undo own scores but if we're already orphaning other users' scores, it seems fine to leave own scores as orphaned too.

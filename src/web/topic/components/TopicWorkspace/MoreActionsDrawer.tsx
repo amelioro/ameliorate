@@ -437,7 +437,7 @@ export const MoreActionsDrawer = ({
               </Tooltip>
               <Select
                 value={layoutThoroughness}
-                onChange={(event) => setLayoutThoroughness(Number(event.target.value))}
+                onChange={(event) => setLayoutThoroughness(event.target.value)}
                 fullWidth // Use fullWidth for proper alignment
                 size="small" // Smaller size for better fit
               >
@@ -538,13 +538,15 @@ export const MoreActionsDrawer = ({
       <Dialog
         open={screenshotDialogOpen}
         onClose={() => setScreenshotDialogOpen(false)}
-        PaperProps={{
-          component: "form",
-          onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
-            void handleSubmit((data) => {
-              onScreenshotSubmit(data);
-              setScreenshotDialogOpen(false);
-            })(event);
+        slotProps={{
+          paper: {
+            component: "form",
+            onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
+              void handleSubmit((data) => {
+                onScreenshotSubmit(data);
+                setScreenshotDialogOpen(false);
+              })(event);
+            },
           },
         }}
       >

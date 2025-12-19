@@ -1,7 +1,5 @@
-import { type DMMF } from "@prisma/client/runtime/client";
-import { getDMMF } from "@prisma/internals";
+import { type PrismockClientType } from "@pkgverse/prismock/v7";
 import * as matchers from "jest-extended";
-import { type PrismockClientType, createPrismock } from "prismock/build/main/lib/client";
 import { afterEach, expect, vi } from "vitest";
 
 import { type PrismaClient } from "@/db/generated/prisma/client";
@@ -28,29 +26,28 @@ process.env.BASE_URL = "http://localhost:3000"; // not sure how to reuse next.co
  */
 export const testEmail = "test@test.test";
 
-// this seems to add ~300ms per test file, couldn't find a way to load this once for all tests
+// Started using this fork of prismock instead of OG prismock https://github.com/JQuezada0/prismock
+// because prismock wasn't updated for prisma v6.16 or v7.
+// Unfortunately 1. the fork isn't popular so could be a security issue (I at least tried glancing
+// over the code and having an LLM review it...) and 2. I still have to add some hacks to get it to
+// work (thanks AI) (i.e. 1. mocking generated instead of @prisma/client as the docs say, 2. adding
+// alias and server.deps.inline in vitest.config.ts). But since it's at least slightly maintained,
+// and the mocking isn't as hacky as the non-prisma-v7-supporting OG prismock, it seems slightly
+// better.
 vi.mock("@/db/generated/prisma/client", async (importOriginal) => {
   const original = await importOriginal<typeof import("@/db/generated/prisma/client")>();
-  const { Prisma } = original;
-
-  // After upgrading from prisma 5.15.1 -> 6.16.2, and generating /prisma/client via the rust-free
-  // engine and prisma-client (rather than prisma-client-js), `Prisma` no longer has `dmmf` on it.
-  // Apparently `getDMMF()` is more stable for public usage, so we're using that here. https://www.answeroverflow.com/m/1366812800663420978
-  // Note: after upgrading, with prisma-client-js there _is_ `Prisma.dmmf`, but it doesn't have all
-  // the fields that are expected by its TS type, so that doesn't work either.
-  const dmmf = await getDMMF({ datamodelPath: "./src/db/schema.prisma" });
-  const PrismaWithDMMF = { ...Prisma, dmmf };
+  const { getClientClass } =
+    await vi.importActual<typeof import("@pkgverse/prismock/v7")>("@pkgverse/prismock/v7");
 
   return {
-    // ensure other parts of the import are still usable e.g. `Prisma`
     ...original,
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    PrismaClient: createPrismock(
-      PrismaWithDMMF as unknown as typeof Prisma & { dmmf: DMMF.Document },
-    ),
+    PrismaClient: await getClientClass({
+      PrismaClient: original.PrismaClient,
+      schemaPath: "./src/db/schema.prisma",
+    }),
   };
 });
 
-afterEach(() => {
-  (xprisma as PrismockClientType<PrismaClient>).reset();
+afterEach(async () => {
+  await (xprisma as PrismockClientType<PrismaClient>).reset();
 });

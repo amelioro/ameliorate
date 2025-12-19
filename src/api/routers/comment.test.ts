@@ -3,7 +3,7 @@ import shortUUID from "short-uuid";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
 import * as commentCreated from "@/api/notifications/commentCreated";
-import { appRouter } from "@/api/routers/_app";
+import { createCaller } from "@/api/routers/_app";
 import { Comment } from "@/common/comment";
 import { xprisma } from "@/db/extendedPrisma";
 import { Topic, User } from "@/db/generated/prisma/client";
@@ -86,7 +86,7 @@ beforeEach(async () => {
 describe("handleChangesets", () => {
   describe("when user is author of comment", () => {
     test("can CRUD own comments", async () => {
-      const trpc = appRouter.createCaller({
+      const trpc = createCaller({
         userAuthId: notCreatorOfTopic.authId,
         userEmailVerified: true,
         user: notCreatorOfTopic,
@@ -114,7 +114,7 @@ describe("handleChangesets", () => {
 
     describe("when deleting own root comment", () => {
       test("can delete others' child comments", async () => {
-        const trpc = appRouter.createCaller({
+        const trpc = createCaller({
           userAuthId: notCreatorOfTopic.authId,
           userEmailVerified: true,
           user: notCreatorOfTopic,
@@ -139,7 +139,7 @@ describe("handleChangesets", () => {
     });
 
     test("cannot CRUD comments from different topics", async () => {
-      const trpc = appRouter.createCaller({
+      const trpc = createCaller({
         userAuthId: notCreatorOfTopic.authId,
         userEmailVerified: true,
         user: notCreatorOfTopic,
@@ -163,7 +163,7 @@ describe("handleChangesets", () => {
   describe("when user is not author of comment", () => {
     describe("when user can edit topic", () => {
       test("can resolve others' comments", async () => {
-        const trpc = appRouter.createCaller({
+        const trpc = createCaller({
           userAuthId: creatorOfTopic.authId,
           userEmailVerified: true,
           user: creatorOfTopic,
@@ -183,7 +183,7 @@ describe("handleChangesets", () => {
       });
 
       test("can delete others' comments", async () => {
-        const trpc = appRouter.createCaller({
+        const trpc = createCaller({
           userAuthId: creatorOfTopic.authId,
           userEmailVerified: true,
           user: creatorOfTopic,
@@ -203,7 +203,7 @@ describe("handleChangesets", () => {
       });
 
       test("cannot create or update others' comments", async () => {
-        const trpc = appRouter.createCaller({
+        const trpc = createCaller({
           userAuthId: creatorOfTopic.authId,
           userEmailVerified: true,
           user: creatorOfTopic,
@@ -236,7 +236,7 @@ describe("handleChangesets", () => {
 
     describe("when user cannot edit topic", () => {
       test("cannot CRUD others' comments", async () => {
-        const trpc = appRouter.createCaller({
+        const trpc = createCaller({
           userAuthId: notCreatorOrAuthor.authId,
           userEmailVerified: true,
           user: notCreatorOrAuthor,
@@ -308,7 +308,7 @@ describe("handleChangesets", () => {
 
     // a simple notification test is here as one api-to-end test
     test("creates subscriptions and notifications", async () => {
-      const trpc = appRouter.createCaller({
+      const trpc = createCaller({
         userAuthId: notCreatorOfTopic.authId,
         userEmailVerified: true,
         user: notCreatorOfTopic,
@@ -354,7 +354,7 @@ describe("handleChangesets", () => {
     test("invokes handleCommentCreated", async () => {
       const handleCommentCreatedSpy = vi.spyOn(commentCreated, "handleCommentCreated");
 
-      const trpc = appRouter.createCaller({
+      const trpc = createCaller({
         userAuthId: notCreatorOfTopic.authId,
         userEmailVerified: true,
         user: notCreatorOfTopic,
