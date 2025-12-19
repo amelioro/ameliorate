@@ -5,6 +5,7 @@ import { fileURLToPath } from "url";
 import { includeIgnoreFile } from "@eslint/compat";
 import { FlatCompat } from "@eslint/eslintrc";
 import eslint from "@eslint/js";
+import { defineConfig } from "eslint/config";
 import prettier from "eslint-config-prettier";
 import betterTailwindcss from "eslint-plugin-better-tailwindcss";
 import functional from "eslint-plugin-functional";
@@ -18,7 +19,7 @@ const __dirname = dirname(__filename);
 // FlatCompat for plugins that don't support flat config yet
 const compat = new FlatCompat({ baseDirectory: __dirname });
 
-export default tseslint.config(
+export default defineConfig(
   // Reuse .gitignore patterns + add additional ignores
   includeIgnoreFile(`${__dirname}/.gitignore`),
   // Ignore auto-generated Next.js type declaration files; these aren't in gitignore yet because
@@ -32,6 +33,7 @@ export default tseslint.config(
   {
     files: ["**/*.{js,jsx,ts,tsx,cjs,mjs}"],
     extends: [compat.extends("next/core-web-vitals")],
+    // @ts-expect-error - functional plugin doesn't support `defineConfig` yet, see https://github.com/eslint-functional/eslint-plugin-functional/issues/998
     plugins: { functional, "better-tailwindcss": betterTailwindcss, import: importPlugin },
     settings: {
       "better-tailwindcss": { entryPoint: "src/web/common/globals.css" },
