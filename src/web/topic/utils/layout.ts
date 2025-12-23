@@ -169,6 +169,64 @@ const flipElkSection = (elkSection: ElkEdgeSection): ElkEdgeSection => {
   };
 };
 
+/**
+ * Centers the layouted graph around the origin (0, 0) by offsetting all positions.
+ * This helps minimize viewport movement when views change and nodes are hidden/shown,
+ * since remaining nodes stay closer to the center rather than being anchored to the upper-left.
+ *
+ * A lot of positions are offsetted here. Seems worth the effort, but we can consider not doing it if
+ * maintenance is annoying.
+ */
+const centerGraphAroundOriginZeroZero = (
+  graph: LayoutedGraph & { width?: number; height?: number },
+): LayoutedGraph => {
+  const { layoutedNodes, layoutedEdges, width, height } = graph;
+
+  if (layoutedNodes.length === 0 || width === undefined || height === undefined) return graph;
+
+  // Calculate offset to center the diagram around (0, 0)
+  const centerX = width / 2;
+  const centerY = height / 2;
+  const offsetX = -centerX;
+  const offsetY = -centerY;
+
+  // Offset all node positions
+  const centeredNodes: LayoutedNode[] = layoutedNodes.map((node) => ({
+    ...node,
+    x: node.x + offsetX,
+    y: node.y + offsetY,
+  }));
+
+  // Offset all edge section points and labels
+  const centeredEdges: LayoutedEdge[] = layoutedEdges.map((edge) => ({
+    ...edge,
+    elkLabel: edge.elkLabel
+      ? {
+          ...edge.elkLabel,
+          x: (edge.elkLabel.x ?? 0) + offsetX,
+          y: (edge.elkLabel.y ?? 0) + offsetY,
+        }
+      : undefined,
+    elkSections: edge.elkSections.map((section) => ({
+      ...section,
+      startPoint: {
+        x: section.startPoint.x + offsetX,
+        y: section.startPoint.y + offsetY,
+      },
+      endPoint: {
+        x: section.endPoint.x + offsetX,
+        y: section.endPoint.y + offsetY,
+      },
+      bendPoints: section.bendPoints?.map((point) => ({
+        x: point.x + offsetX,
+        y: point.y + offsetY,
+      })),
+    })),
+  }));
+
+  return { layoutedNodes: centeredNodes, layoutedEdges: centeredEdges };
+};
+
 export interface LayoutedNode {
   id: string;
   x: number;
@@ -192,7 +250,11 @@ export interface LayoutedGraph {
   layoutedEdges: LayoutedEdge[];
 }
 
-const parseElkjsOutput = (layoutedGraph: ElkNode): LayoutedGraph => {
+// width and height aren't included in `LayoutedGraph` because they're only used within layout calc
+// for centering the graph around (0,0), and they shouldn't be needed outside of layout
+const parseElkjsOutput = (
+  layoutedGraph: ElkNode,
+): LayoutedGraph & { width?: number; height?: number } => {
   const { children, edges } = layoutedGraph;
   if (!children || !edges) {
     return throwError("layouted graph missing children or edges", layoutedGraph);
@@ -233,7 +295,7 @@ const parseElkjsOutput = (layoutedGraph: ElkNode): LayoutedGraph => {
     }
   });
 
-  return { layoutedNodes, layoutedEdges };
+  return { layoutedNodes, layoutedEdges, width: layoutedGraph.width, height: layoutedGraph.height };
 };
 
 /**
@@ -443,7 +505,7 @@ export const layout = async (
     });
 
     const parsedGraph = parseElkjsOutput(layoutedGraph);
-    return parsedGraph;
+    return centerGraphAroundOriginZeroZero(parsedGraph);
   } catch {
     const layoutedGraph = await elk.layout(graph, {
       layoutOptions: { ...layoutOptions, "elk.partitioning.activate": "false" },
@@ -453,6 +515,6 @@ export const layout = async (
     });
 
     const parsedGraph = parseElkjsOutput(layoutedGraph);
-    return parsedGraph;
+    return centerGraphAroundOriginZeroZero(parsedGraph);
   }
 };

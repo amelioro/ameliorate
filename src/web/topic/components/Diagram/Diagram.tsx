@@ -17,12 +17,12 @@ import { useSessionUser } from "@/web/common/hooks";
 import { openContextMenu } from "@/web/common/store/contextMenuActions";
 import { clearPartIdToCentralize, usePartIdToCentralize } from "@/web/common/store/ephemeralStore";
 import { StyledReactFlow } from "@/web/topic/components/Diagram/Diagram.styles";
-import { setDisplayNodesGetter } from "@/web/topic/components/Diagram/externalFlowStore";
+import { setFlowMethods } from "@/web/topic/components/Diagram/externalFlowStore";
 import { FlowEdge } from "@/web/topic/components/Edge/FlowEdge";
 import { FlowNode } from "@/web/topic/components/Node/FlowNode";
 import { connectNodes, reconnectEdge } from "@/web/topic/diagramStore/createDeleteActions";
 import { useDiagram } from "@/web/topic/diagramStore/store";
-import { useLayoutedDiagram } from "@/web/topic/hooks/diagramHooks";
+import { usePositionedDiagram } from "@/web/topic/hooks/diagramHooks";
 import { PanDirection, panDirections, useViewportUpdater } from "@/web/topic/hooks/flowHooks";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { Diagram as DiagramData, PositionedEdge, PositionedNode } from "@/web/topic/utils/diagram";
@@ -31,7 +31,7 @@ import { hotkeys } from "@/web/topic/utils/hotkeys";
 import { FlowNodeType } from "@/web/topic/utils/node";
 import { tutorialIsOpen } from "@/web/tutorial/tutorial";
 import { useFlashlightMode } from "@/web/view/actionConfigStore";
-import { setSelected } from "@/web/view/selectedPartStore";
+import { setSelected, useSelectedGraphPart } from "@/web/view/selectedPartStore";
 
 const buildNodeComponent = (type: FlowNodeType) => {
   // eslint-disable-next-line react/display-name -- react flow dynamically creates these components without name anyway
@@ -94,9 +94,10 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const { fitViewForNodes, moveViewportToIncludeNode, pan, zoomIn, zoomOut } = useViewportUpdater();
-  const { viewportInitialized, getNodes } = useReactFlow();
-  const { layoutedDiagram, hasNewLayout, setHasNewLayout } = useLayoutedDiagram(diagram);
+  const { viewportInitialized, getNodes, getNodesBounds } = useReactFlow();
+  const { positionedDiagram, hasNewLayout, setHasNewLayout } = usePositionedDiagram(diagram);
 
+  const selectedGraphPart = useSelectedGraphPart();
   const flashlightMode = useFlashlightMode();
   const partIdToCentralize = usePartIdToCentralize();
 
@@ -131,26 +132,26 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
   }, []);
 
   useEffect(() => {
-    setDisplayNodesGetter(getNodes);
-  }, [getNodes]);
+    setFlowMethods(getNodes, getNodesBounds);
+  }, [getNodes, getNodesBounds]);
 
   // centralize part via `useEffect` because `viewBasics` event can directly cause `TopicPane` re-render, which throws a React error if it happens during the `Diagram` render
   useEffect(() => {
-    if (!partIdToCentralize || !layoutedDiagram || !viewportInitialized) return;
+    if (!partIdToCentralize || !positionedDiagram || !viewportInitialized) return;
 
-    const nodeToCentralize = layoutedDiagram.nodes.find((node) => node.id === partIdToCentralize);
-    const edgeToCentralize = layoutedDiagram.edges.find((edge) => edge.id === partIdToCentralize);
+    const nodeToCentralize = positionedDiagram.nodes.find((node) => node.id === partIdToCentralize);
+    const edgeToCentralize = positionedDiagram.edges.find((edge) => edge.id === partIdToCentralize);
     const partIsDisplayed = nodeToCentralize ?? edgeToCentralize;
 
     if (nodeToCentralize) fitViewForNodes([nodeToCentralize], true);
     else if (!partIsDisplayed) emitter.emit("viewBasics");
 
     clearPartIdToCentralize();
-  }, [fitViewForNodes, layoutedDiagram, partIdToCentralize, viewportInitialized]);
+  }, [fitViewForNodes, positionedDiagram, partIdToCentralize, viewportInitialized]);
 
-  if (!layoutedDiagram) return <Loading />;
+  if (!positionedDiagram) return <Loading />;
 
-  const { nodes, edges } = layoutedDiagram;
+  const { nodes, edges } = positionedDiagram;
 
   if (newNodeId && hasNewLayout) {
     const newNode = nodes.find((node) => node.id === newNodeId);
@@ -159,7 +160,7 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
   }
 
   if (topicViewUpdated && hasNewLayout) {
-    fitViewForNodes(nodes);
+    fitViewForNodes(nodes, true);
     setTopicViewUpdated(false);
   }
 
@@ -207,8 +208,10 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
           String.raw` [&_.diagram-edge]:transition-[filter] [&_.diagram-edge]:duration-300` +
           String.raw` [&_.react-flow\_\_edge-path]:transition-[filter] [&_.react-flow\_\_edge-path]:duration-300`
         }
-        nodes={nodes}
-        edges={edges}
+        // add selected here because react flow uses it (as opposed to our custom components, which can rely on selectedGraphPart hook independently)
+        // may need to memoize if performance is an issue? since this will create a different array every Diagram render
+        nodes={nodes.map((node) => ({ ...node, selected: node.id === selectedGraphPart?.id }))}
+        edges={edges.map((edge) => ({ ...edge, selected: edge.id === selectedGraphPart?.id }))}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         fitView

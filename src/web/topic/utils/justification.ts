@@ -30,7 +30,7 @@ export const getImplicitLabel = (arguedDiagramPartId: string, topicGraph: Graph)
 
     return (
       `${prettyNodeTypes[sourceNode.type]} "${sourceNode.data.label}" ` +
-      lowerCase(arguedDiagramPart.label) +
+      lowerCase(arguedDiagramPart.data.customLabel ?? arguedDiagramPart.label) +
       ` ${prettyNodeTypes[targetNode.type]} "${targetNode.data.label}"`
     );
   }

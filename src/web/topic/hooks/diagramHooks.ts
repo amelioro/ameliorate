@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { Diagram, PositionedDiagram } from "@/web/topic/utils/diagram";
 import { isNode } from "@/web/topic/utils/graph";
-import { LayoutedGraph, layout } from "@/web/topic/utils/layout";
+import { layout } from "@/web/topic/utils/layout";
 import {
   useAvoidEdgeLabelOverlap,
   useForceNodesIntoLayers,
@@ -10,10 +10,9 @@ import {
   useLayoutThoroughness,
   useMinimizeEdgeCrossings,
 } from "@/web/view/currentViewStore/layout";
-import { useSelectedGraphPart } from "@/web/view/selectedPartStore";
 
 // re-renders when diagram changes, but only re-layouts if graph parts are added or removed
-export const useLayoutedDiagram = (diagram: Diagram) => {
+export const usePositionedDiagram = (diagram: Diagram) => {
   const forceNodesIntoLayers = useForceNodesIntoLayers();
   const layerNodeIslandsTogether = useLayerNodeIslandsTogether();
   const minimizeEdgeCrossings = useMinimizeEdgeCrossings();
@@ -38,16 +37,16 @@ export const useLayoutedDiagram = (diagram: Diagram) => {
     .join();
   const [prevDiagramHash, setPrevDiagramHash] = useState<string | null>(null);
 
-  const [layoutedGraph, setLayoutedGraph] = useState<LayoutedGraph | null>(null);
+  const [positionedDiagram, setPositionedDiagram] = useState<PositionedDiagram | null>(null);
   const [hasNewLayout, setHasNewLayout] = useState<boolean>(false);
-
-  const selectedGraphPart = useSelectedGraphPart();
 
   if (diagramHash !== prevDiagramHash) {
     setPrevDiagramHash(diagramHash);
 
     const layoutDiagram = async () => {
-      const newLayoutedGraph = await layout(
+      // TODO?: could add `loadingLayout` state but it seems like most of the time taken is actually
+      // elsewhere? so there's still a delay before showing a Loading indicator anyway
+      const newLayoutedDiagram = await layout(
         diagram,
         forceNodesIntoLayers,
         layerNodeIslandsTogether,
@@ -55,56 +54,52 @@ export const useLayoutedDiagram = (diagram: Diagram) => {
         avoidEdgeLabelOverlap,
         thoroughness,
       );
-      setLayoutedGraph(newLayoutedGraph);
+
+      const positionedDiagram: PositionedDiagram = {
+        ...diagram,
+        nodes: diagram.nodes
+          .map((node) => {
+            const layoutedNode = newLayoutedDiagram.layoutedNodes.find(
+              (layoutedNode) => layoutedNode.id === node.id,
+            );
+            if (!layoutedNode) return null;
+
+            return {
+              ...node,
+              data: { ...node.data, ports: layoutedNode.ports },
+              position: {
+                x: layoutedNode.x,
+                y: layoutedNode.y,
+              },
+            };
+          })
+          .filter((node) => node !== null),
+        edges: diagram.edges
+          .map((edge) => {
+            const layoutedEdge = newLayoutedDiagram.layoutedEdges.find(
+              (layoutedEdge) => layoutedEdge.id === edge.id,
+            );
+            if (!layoutedEdge) return null;
+            const { sourcePortId, targetPortId, elkLabel, elkSections } = layoutedEdge;
+
+            return {
+              ...edge,
+              sourceHandle: sourcePortId,
+              targetHandle: targetPortId,
+              data: { ...edge.data, elkLabel, elkSections },
+            };
+          })
+          .filter((edge) => edge !== null),
+      };
+
+      setPositionedDiagram(positionedDiagram);
       setHasNewLayout(true);
     };
     void layoutDiagram();
   }
 
-  if (!layoutedGraph) return { layoutedDiagram: null, hasNewLayout, setHasNewLayout };
+  // if we're waiting for the first layout to complete
+  if (!positionedDiagram) return { positionedDiagram: null, hasNewLayout, setHasNewLayout };
 
-  const layoutedDiagram: PositionedDiagram = {
-    ...diagram,
-    nodes: diagram.nodes
-      .map((node) => {
-        const layoutedNode = layoutedGraph.layoutedNodes.find(
-          (layoutedNode) => layoutedNode.id === node.id,
-        );
-        if (!layoutedNode) return null;
-
-        return {
-          ...node,
-          data: { ...node.data, ports: layoutedNode.ports },
-          position: {
-            x: layoutedNode.x,
-            y: layoutedNode.y,
-          },
-          selected: node.id === selectedGraphPart?.id, // add selected here because react flow uses it (as opposed to our custom components, which can rely on selectedGraphPart hook independently)
-        };
-      })
-      .filter((node) => node !== null),
-    edges: diagram.edges
-      .map((edge) => {
-        const layoutedEdge = layoutedGraph.layoutedEdges.find(
-          (layoutedEdge) => layoutedEdge.id === edge.id,
-        );
-        if (!layoutedEdge) return null;
-        const { sourcePortId, targetPortId, elkLabel, elkSections } = layoutedEdge;
-
-        return {
-          ...edge,
-          sourceHandle: sourcePortId,
-          targetHandle: targetPortId,
-          data: { ...edge.data, elkLabel, elkSections },
-          selected: edge.id === selectedGraphPart?.id, // add selected here because react flow uses it (as opposed to our custom components, which can rely on selectedGraphPart hook independently)
-        };
-      })
-      .filter((edge) => edge !== null),
-  };
-
-  // loading a new diagram but layout hasn't finished yet
-  if (diagram.nodes.length !== 0 && layoutedDiagram.nodes.length === 0)
-    return { layoutedDiagram: null, hasNewLayout, setHasNewLayout };
-
-  return { layoutedDiagram, hasNewLayout, setHasNewLayout };
+  return { positionedDiagram, hasNewLayout, setHasNewLayout };
 };

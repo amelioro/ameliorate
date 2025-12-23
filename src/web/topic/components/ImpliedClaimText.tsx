@@ -27,7 +27,8 @@ export const ImpliedClaimText = ({ graphPart }: { graphPart: GraphPart }) => {
       <i>
         <b>{prettyNodeTypes[edgeSourceNode.type]}</b> "{edgeSourceNode.data.label}"{" "}
         <b>
-          {lowerCase(graphPart.label)} {prettyNodeTypes[edgeTargetNode.type]}
+          {lowerCase(graphPart.data.customLabel ?? graphPart.label)}{" "}
+          {prettyNodeTypes[edgeTargetNode.type]}
         </b>{" "}
         "{edgeTargetNode.data.label}"
       </i>

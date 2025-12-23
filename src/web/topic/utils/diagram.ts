@@ -14,14 +14,12 @@ export interface PositionedNode extends Node {
     x: number;
     y: number;
   };
-  selected: boolean;
 }
 
 export interface PositionedEdge
   extends Edge,
     Required<Pick<ReactFlowEdge, "sourceHandle" | "targetHandle">> {
   data: Edge["data"] & Omit<LayoutedEdge, "id" | "sourcePortId" | "targetPortId">; // edge already has id directly on it
-  selected: boolean;
 }
 
 export interface PositionedDiagram extends Diagram {
