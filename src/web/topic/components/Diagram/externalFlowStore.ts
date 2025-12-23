@@ -1,12 +1,14 @@
-import { Node as FlowNode } from "@xyflow/react";
+import { Node as FlowNode, GeneralHelpers } from "@xyflow/react";
 import { create } from "zustand";
 
 interface ExternalFlowStoreState {
   getFlowDisplayedNodes: () => FlowNode[];
+  getNodesBounds: GeneralHelpers["getNodesBounds"];
 }
 
 const initialState = {
   getFlowDisplayedNodes: () => [],
+  getNodesBounds: () => ({ width: 0, height: 0, x: 0, y: 0 }),
 };
 
 /**
@@ -17,13 +19,22 @@ const initialState = {
  */
 const useExternalFlowStoreState = create<ExternalFlowStoreState>()(() => initialState);
 
-export const setDisplayNodesGetter = (getter: () => FlowNode[]) => {
+export const setFlowMethods = (
+  getNodes: () => FlowNode[],
+  getNodesBounds: GeneralHelpers["getNodesBounds"],
+) => {
   useExternalFlowStoreState.setState({
-    getFlowDisplayedNodes: getter,
+    getFlowDisplayedNodes: getNodes,
+    getNodesBounds: getNodesBounds,
   });
 };
 
 export const getDisplayNodes = () => {
   const state = useExternalFlowStoreState.getState();
   return state.getFlowDisplayedNodes();
+};
+
+export const getNodesBounds = (...props: Parameters<GeneralHelpers["getNodesBounds"]>) => {
+  const state = useExternalFlowStoreState.getState();
+  return state.getNodesBounds(...props);
 };

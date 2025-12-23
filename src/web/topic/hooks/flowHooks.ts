@@ -1,15 +1,8 @@
-import {
-  type Viewport,
-  getViewportForBounds,
-  useReactFlow,
-  useStore,
-  useStoreApi,
-} from "@xyflow/react";
+import { type Viewport, useReactFlow, useStore, useStoreApi } from "@xyflow/react";
 import { shallow } from "zustand/shallow";
 
 import { nodeHeightPx, nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
 import { PositionedNode } from "@/web/topic/utils/diagram";
-import { defaultFitViewPadding, getNotYetRenderedNodesBounds } from "@/web/topic/utils/flowUtils";
 import { Node } from "@/web/topic/utils/graph";
 
 const getViewportToIncludeNode = (
@@ -66,32 +59,22 @@ export type PanDirection = (typeof panDirections)[number];
  * Diagram render.
  */
 export const useViewportUpdater = () => {
-  const { getViewport, setViewport, zoomIn, zoomOut } = useReactFlow();
+  const { getViewport, setViewport, zoomIn, zoomOut, fitView } = useReactFlow();
   const viewportHeight = useStore((state) => state.height);
   const viewportWidth = useStore((state) => state.width);
   const minZoom = useStore((state) => state.minZoom);
 
   /**
-   * Can't just use reactflow's `fitView` because that uses nodes that are already rendered in
-   * the flow; we want to be able to invoke this after a store action, which means we may not have
-   * re-rendered the flow yet.
+   * reactflow's fitView docs say it should be usable without `setTimeout` https://reactflow.dev/whats-new#fitview-just-got-a-lot-better
+   * but it still throws a "cannot update a component while rendering a different component" error,
+   * so we're still wrapping it in a convenient method.
    */
   const fitViewForNodes = (nodes: PositionedNode[], smoothTransition = false) => {
-    const bounds = getNotYetRenderedNodesBounds(nodes);
-
-    const viewport = getViewportForBounds(
-      bounds,
-      viewportWidth,
-      viewportHeight,
-      minZoom,
-      1,
-      defaultFitViewPadding,
-    );
-
-    const transition = smoothTransition ? { duration: 500 } : undefined;
-
     // defer to avoid "Cannot update a component while rendering a different component" error e.g. when called during Diagram render, so that react flow's Background component doesn't try to re-render during that Diagram render
-    setTimeout(() => void setViewport(viewport, transition), 0);
+    setTimeout(
+      () => void fitView({ nodes, minZoom, maxZoom: 1, duration: smoothTransition ? 500 : 0 }),
+      0,
+    );
   };
 
   const moveViewportToIncludeNode = (node: PositionedNode) => {

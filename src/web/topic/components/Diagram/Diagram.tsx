@@ -17,7 +17,7 @@ import { useSessionUser } from "@/web/common/hooks";
 import { openContextMenu } from "@/web/common/store/contextMenuActions";
 import { clearPartIdToCentralize, usePartIdToCentralize } from "@/web/common/store/ephemeralStore";
 import { StyledReactFlow } from "@/web/topic/components/Diagram/Diagram.styles";
-import { setDisplayNodesGetter } from "@/web/topic/components/Diagram/externalFlowStore";
+import { setFlowMethods } from "@/web/topic/components/Diagram/externalFlowStore";
 import { FlowEdge } from "@/web/topic/components/Edge/FlowEdge";
 import { FlowNode } from "@/web/topic/components/Node/FlowNode";
 import { connectNodes, reconnectEdge } from "@/web/topic/diagramStore/createDeleteActions";
@@ -94,7 +94,7 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const { fitViewForNodes, moveViewportToIncludeNode, pan, zoomIn, zoomOut } = useViewportUpdater();
-  const { viewportInitialized, getNodes } = useReactFlow();
+  const { viewportInitialized, getNodes, getNodesBounds } = useReactFlow();
   const { layoutedDiagram, hasNewLayout, setHasNewLayout } = useLayoutedDiagram(diagram);
 
   const flashlightMode = useFlashlightMode();
@@ -131,8 +131,8 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
   }, []);
 
   useEffect(() => {
-    setDisplayNodesGetter(getNodes);
-  }, [getNodes]);
+    setFlowMethods(getNodes, getNodesBounds);
+  }, [getNodes, getNodesBounds]);
 
   // centralize part via `useEffect` because `viewBasics` event can directly cause `TopicPane` re-render, which throws a React error if it happens during the `Diagram` render
   useEffect(() => {

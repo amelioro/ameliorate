@@ -51,10 +51,10 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { hasComments, resetComments } from "@/web/comment/store/commentStore";
-import { getDisplayNodes } from "@/web/topic/components/Diagram/externalFlowStore";
+import { getDisplayNodes, getNodesBounds } from "@/web/topic/components/Diagram/externalFlowStore";
 import { resetDiagramData } from "@/web/topic/diagramStore/utilActions";
 import { downloadTopic, uploadTopic } from "@/web/topic/loadStores";
-import { defaultFitViewPadding, getNotYetRenderedNodesBounds } from "@/web/topic/utils/flowUtils";
+import { defaultFitViewPadding } from "@/web/topic/utils/flowUtils";
 import { hotkeys } from "@/web/topic/utils/hotkeys";
 import {
   toggleFlashlightMode,
@@ -105,10 +105,12 @@ type ScreenshotFormData = z.infer<typeof ScreenshotFormSchema>;
 const defaultResolution = { width: 2560, height: 1440 };
 
 const onScreenshotSubmit = ({ width, height }: ScreenshotFormData) => {
+  // these two functions (jankily?) come from our `externalFlowStore` because otherwise we have to
+  // be within the react flow provider's react tree in order to access them (via `useReactFlow`).
   const nodes = getDisplayNodes();
+  const bounds = getNodesBounds(nodes);
 
   // thanks react flow example https://reactflow.dev/examples/misc/download-image
-  const bounds = getNotYetRenderedNodesBounds(nodes);
   const viewport = getViewportForBounds(bounds, width, height, 0.125, 2, defaultFitViewPadding);
   const viewportElement = document.querySelector(".react-flow__viewport");
   if (!viewportElement) throw new Error("Couldn't find viewport element to screenshot");
@@ -132,6 +134,79 @@ const onScreenshotSubmit = ({ width, height }: ScreenshotFormData) => {
     .catch((error: unknown) => {
       console.error("Failed to export PNG:", error);
     });
+};
+
+interface ScreenshotResolutionDialogProps {
+  screenshotDialogOpen: boolean;
+  setScreenshotDialogOpen: (isOpen: boolean) => void;
+}
+
+const ScreenshotResolutionDialog = ({
+  screenshotDialogOpen,
+  setScreenshotDialogOpen,
+}: ScreenshotResolutionDialogProps) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ScreenshotFormData>({
+    mode: "onBlur",
+    reValidateMode: "onBlur",
+    defaultValues: defaultResolution,
+    resolver: zodResolver(ScreenshotFormSchema),
+  });
+
+  return (
+    <Dialog
+      open={screenshotDialogOpen}
+      onClose={() => setScreenshotDialogOpen(false)}
+      slotProps={{
+        paper: {
+          component: "form",
+          onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
+            void handleSubmit((data) => {
+              onScreenshotSubmit(data);
+              setScreenshotDialogOpen(false);
+            })(event);
+          },
+        },
+      }}
+    >
+      <DialogTitle>Set Screenshot Resolution</DialogTitle>
+      <DialogContent className="flex flex-col">
+        <TextField
+          label="Width"
+          type="number"
+          margin="dense"
+          slotProps={{
+            input: { endAdornment: <InputAdornment position="end">px</InputAdornment> },
+          }}
+          error={!!errors.width}
+          helperText={errors.width?.message}
+          {...register("width", { valueAsNumber: true })}
+        />
+        <TextField
+          label="Height"
+          type="number"
+          margin="dense"
+          slotProps={{
+            input: { endAdornment: <InputAdornment position="end">px</InputAdornment> },
+          }}
+          error={!!errors.height}
+          helperText={errors.height?.message}
+          {...register("height", { valueAsNumber: true })}
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => setScreenshotDialogOpen(false)} color="inherit">
+          Cancel
+        </Button>
+        <Button type="submit" variant="contained" color="primary">
+          Download
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
 };
 
 interface Props {
@@ -170,17 +245,6 @@ export const MoreActionsDrawer = ({
 
   const [resetDialogOpen, setResetDialogOpen] = useState(false);
   const [screenshotDialogOpen, setScreenshotDialogOpen] = useState(false);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ScreenshotFormData>({
-    mode: "onBlur",
-    reValidateMode: "onBlur",
-    defaultValues: defaultResolution,
-    resolver: zodResolver(ScreenshotFormSchema),
-  });
 
   const resetDialog = (
     <Dialog
@@ -534,56 +598,10 @@ export const MoreActionsDrawer = ({
         </ListItem>
       </List>
 
-      {/* Screenshot Resolution Dialog  */}
-      <Dialog
-        open={screenshotDialogOpen}
-        onClose={() => setScreenshotDialogOpen(false)}
-        slotProps={{
-          paper: {
-            component: "form",
-            onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
-              void handleSubmit((data) => {
-                onScreenshotSubmit(data);
-                setScreenshotDialogOpen(false);
-              })(event);
-            },
-          },
-        }}
-      >
-        <DialogTitle>Set Screenshot Resolution</DialogTitle>
-        <DialogContent className="flex flex-col">
-          <TextField
-            label="Width"
-            type="number"
-            margin="dense"
-            slotProps={{
-              input: { endAdornment: <InputAdornment position="end">px</InputAdornment> },
-            }}
-            error={!!errors.width}
-            helperText={errors.width?.message}
-            {...register("width", { valueAsNumber: true })}
-          />
-          <TextField
-            label="Height"
-            type="number"
-            margin="dense"
-            slotProps={{
-              input: { endAdornment: <InputAdornment position="end">px</InputAdornment> },
-            }}
-            error={!!errors.height}
-            helperText={errors.height?.message}
-            {...register("height", { valueAsNumber: true })}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setScreenshotDialogOpen(false)} color="inherit">
-            Cancel
-          </Button>
-          <Button type="submit" variant="contained" color="primary">
-            Download
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <ScreenshotResolutionDialog
+        screenshotDialogOpen={screenshotDialogOpen}
+        setScreenshotDialogOpen={setScreenshotDialogOpen}
+      />
     </Drawer>
   );
 };
