@@ -159,7 +159,7 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
   }
 
   if (topicViewUpdated && hasNewLayout) {
-    fitViewForNodes(nodes);
+    fitViewForNodes(nodes, true);
     setTopicViewUpdated(false);
   }
 

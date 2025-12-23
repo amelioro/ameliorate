@@ -72,7 +72,7 @@ export const useViewportUpdater = () => {
   const fitViewForNodes = (nodes: PositionedNode[], smoothTransition = false) => {
     // defer to avoid "Cannot update a component while rendering a different component" error e.g. when called during Diagram render, so that react flow's Background component doesn't try to re-render during that Diagram render
     setTimeout(
-      () => void fitView({ nodes, minZoom, maxZoom: 1, duration: smoothTransition ? 500 : 0 }),
+      () => void fitView({ nodes, minZoom, maxZoom: 1, duration: smoothTransition ? 1300 : 0 }),
       0,
     );
   };
