@@ -28,10 +28,8 @@ export const testEmail = "test@test.test";
 
 // Started using this fork of prismock instead of OG prismock https://github.com/JQuezada0/prismock
 // because prismock wasn't updated for prisma v6.16 or v7.
-// Unfortunately 1. the fork isn't popular so could be a security issue (I at least tried glancing
-// over the code and having an LLM review it...) and 2. I still have to add some hacks to get it to
-// work (thanks AI) (i.e. 1. mocking generated instead of @prisma/client as the docs say, 2. adding
-// alias and server.deps.inline in vitest.config.ts). But since it's at least slightly maintained,
+// Unfortunately the fork isn't popular so could be a security issue (I at least tried glancing
+// over the code and having an LLM review it...). But since it's at least slightly maintained,
 // and the mocking isn't as hacky as the non-prisma-v7-supporting OG prismock, it seems slightly
 // better.
 vi.mock("@/db/generated/prisma/client", async (importOriginal) => {
