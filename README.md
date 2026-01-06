@@ -5,7 +5,7 @@
 [Ameliorate](https://www.ameliorate.app/) is a tool for analyzing debatable problems effectively, collaboratively, and with an open mind.
 
 It provides a structure to help you visualize all details and perspectives relevant to a problem, so that it's easier to **grasp the problem**, **understand each other**, and ultimately **make better decisions**.
-
+ 
 Check out:
 
 - the [homepage](https://www.ameliorate.app/), which showcases what the app does and some cool features
