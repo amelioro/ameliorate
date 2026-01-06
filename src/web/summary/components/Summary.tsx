@@ -144,7 +144,15 @@ export const Summary = () => {
             <TabPanel
               key={category}
               value={category}
-              keepMounted
+              /**
+               * TODO?: `keepMounted` could be nice to avoid re-rendering across tab switching, but
+               * it gives a greater chance of rendering two of the same node at the same time, which
+               * breaks our `layoutId` usage in `EditableNode` for `framer-motion` animations.
+               * When two nodes with the same `layoutId` are rendered at the same time, one of them
+               * one will be given `opacity: 0` which is awful UX for our columns here.
+               * (if we fix #855 we may be able to enable this again)
+               */
+              // keepMounted
               classes={{
                 root:
                   "p-0 grow flex *:grow *:basis-0 divide-x overflow-y-auto *:min-w-0 [&>div>*]:p-1" +
