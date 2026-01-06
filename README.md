@@ -4,7 +4,7 @@
 
 [Ameliorate](https://www.ameliorate.app/) is a tool for refining your understanding of a situation, so that you can make better decisions about it.
 
-It proposes [a way of breaking down problems](https://ameliorate.app/#break-things-down) that's particularly built for collaborative refinement, and provides [tooling](https://ameliorate.app/#features) for navigating and working with that information.
+It proposes [a way of breaking down problems](https://ameliorate.app/#break-things-down) that's particularly built for collaborative refinement, and provides [tooling](https://ameliorate.app/#features) for navigating and working with that information. 
 
 Check out:
 
