@@ -6,7 +6,7 @@
 
 It proposes [a way of breaking down problems](https://ameliorate.app/#break-things-down) that's particularly built for collaborative refinement, and provides [tooling](https://ameliorate.app/#features) for navigating and working with that information.
 
-Check out:
+Check out: 
 
 - the [homepage](https://www.ameliorate.app/), which showcases what the app does and some cool features
 - the in-app tutorials (go to the app via [Start Building](https://ameliorate.app/new) or [Play Around](https://ameliorate.app/playground)), which show you how to use the tool
