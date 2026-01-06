@@ -143,6 +143,7 @@ const EditableNodeBase = ({ node, className = "", onClick }: Props) => {
         key={node.id}
         ref={setNodeRef}
         // TODO?: not sure why summary nodes sometimes animate from height that's slightly off
+        // TODO(bug): #855 duplicate `layoutId`s can happen in the Summary view, causing one of the nodes to be invisible
         // don't animate in diagram because FlowNode already animates for diagram (with Handles)
         // don't animate in table because animation doesn't go over rows/cols - probably need to change overflows/positions/z-indexes in table, something like this https://github.com/amelioro/ameliorate/pull/771/files#diff-41880963d81eba31b5d0de56b7d1c84335078e0472037158b6a18b970da4d102
         // don't animate between contexts because if the node shows up in two spots at once, animation will remove it from one of the spots
