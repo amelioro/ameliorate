@@ -15,7 +15,10 @@ import { useHiddenNodes } from "@/web/topic/hooks/flowHooks";
 import { Node } from "@/web/topic/utils/graph";
 import { indicatorLengthRem, nodeDecorations } from "@/web/topic/utils/nodeDecoration";
 import { showNode } from "@/web/view/currentViewStore/filter";
-import { useFillNodeAttachmentWithColor } from "@/web/view/userConfigStore";
+import {
+  useFillNodeAttachmentWithColor,
+  useShowContentIndicators,
+} from "@/web/view/userConfigStore";
 
 const NodeSummary = ({ node, beforeSlot }: { node: Node; beforeSlot?: ReactNode }) => {
   const { NodeIcon } = nodeDecorations[node.type];
@@ -64,6 +67,8 @@ interface FocusNodeAttachmentProps {
 }
 
 export const FocusNodeAttachment = ({ node, position, className }: FocusNodeAttachmentProps) => {
+  const showContentIndicators = useShowContentIndicators();
+
   const neighbors = useNeighbors(node.id);
   const fillNodeAttachmentWithColor = useFillNodeAttachmentWithColor();
   // TODO(bug): if new neighbor is added and there are currently no hidden neighbors,
@@ -77,7 +82,7 @@ export const FocusNodeAttachment = ({ node, position, className }: FocusNodeAtta
   // but used on every node's attachment render).
   const hiddenNeighbors = useHiddenNodes(neighbors);
 
-  if (hiddenNeighbors.length === 0) return null;
+  if (!showContentIndicators || hiddenNeighbors.length === 0) return null;
 
   const sortedHiddenNeighbors: Node[] = hiddenNeighbors.toSorted((a, b) => {
     const diff = nodeTypes.indexOf(a.type) - nodeTypes.indexOf(b.type);
