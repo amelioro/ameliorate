@@ -22,7 +22,7 @@ import { ViewToolbar } from "@/web/topic/components/TopicWorkspace/ViewToolbar";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { setScore } from "@/web/topic/diagramStore/actions";
 import { playgroundUsername } from "@/web/topic/diagramStore/store";
-import { isOnPlayground } from "@/web/topic/topicStore/store";
+import { isOnPlayground, useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { Score, possibleScores } from "@/web/topic/utils/graph";
 import { hotkeys } from "@/web/topic/utils/hotkeys";
 import { userCanEditScores } from "@/web/topic/utils/score";
@@ -31,8 +31,13 @@ import { useFormat } from "@/web/view/currentViewStore/store";
 import { getPerspectives } from "@/web/view/perspectiveStore";
 import { getSelectedGraphPart, setSelected } from "@/web/view/selectedPartStore";
 import { toggleZenMode, useZenMode } from "@/web/view/userConfigStore";
+import { useTemporalHooks } from "@/web/topic/diagramStore/utilHooks";
+import { undo, redo } from "@/web/topic/diagramStore/utilActions";
 
 const useWorkspaceHotkeys = (user: { username: string } | null | undefined) => {
+  const [canUndo, canRedo] = useTemporalHooks();
+  const userCanEditTopicData = useUserCanEditTopicData(user?.username);
+
   useHotkeys([hotkeys.deselectPart], () => setSelected(null));
   useHotkeys([hotkeys.readonlyMode], () => toggleReadonlyMode());
 
@@ -46,6 +51,18 @@ const useWorkspaceHotkeys = (user: { username: string } | null | undefined) => {
     const myUsername = isOnPlayground() ? playgroundUsername : user?.username;
     if (!userCanEditScores(myUsername, getPerspectives(), getReadonlyMode())) return;
     setScore(myUsername, selectedPart.id, score as Score);
+  });
+
+  useHotkeys([hotkeys.undo], (event) => {
+    event.preventDefault();
+    if (!userCanEditTopicData || !canUndo) return;
+    undo();
+  });
+
+  useHotkeys([hotkeys.redo], (event) => {
+    event.preventDefault();
+    if (!userCanEditTopicData || !canRedo) return;
+    redo();
   });
 };
 
