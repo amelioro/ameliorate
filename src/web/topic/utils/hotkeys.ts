@@ -13,4 +13,6 @@ export const hotkeys = {
   score: "1, 2, 3, 4, 5, 6, 7, 8, 9, -",
   zoomIn: "Ctrl + =",
   zoomOut: "Ctrl + -",
+  undo: "Ctrl + Z, Meta + Z",
+  redo: "Ctrl + SHIFT + Z, Meta + SHIFT + Z",
 };
