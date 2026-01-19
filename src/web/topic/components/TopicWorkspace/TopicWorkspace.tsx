@@ -22,6 +22,8 @@ import { ViewToolbar } from "@/web/topic/components/TopicWorkspace/ViewToolbar";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { setScore } from "@/web/topic/diagramStore/actions";
 import { playgroundUsername } from "@/web/topic/diagramStore/store";
+import { redo, undo } from "@/web/topic/diagramStore/utilActions";
+import { useTemporalHooks } from "@/web/topic/diagramStore/utilHooks";
 import { isOnPlayground, useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { Score, possibleScores } from "@/web/topic/utils/graph";
 import { hotkeys } from "@/web/topic/utils/hotkeys";
@@ -31,8 +33,6 @@ import { useFormat } from "@/web/view/currentViewStore/store";
 import { getPerspectives } from "@/web/view/perspectiveStore";
 import { getSelectedGraphPart, setSelected } from "@/web/view/selectedPartStore";
 import { toggleZenMode, useZenMode } from "@/web/view/userConfigStore";
-import { useTemporalHooks } from "@/web/topic/diagramStore/utilHooks";
-import { undo, redo } from "@/web/topic/diagramStore/utilActions";
 
 const useWorkspaceHotkeys = (user: { username: string } | null | undefined) => {
   const [canUndo, canRedo] = useTemporalHooks();
@@ -54,13 +54,13 @@ const useWorkspaceHotkeys = (user: { username: string } | null | undefined) => {
   });
 
   useHotkeys([hotkeys.undo], (event) => {
-    event.preventDefault();
+    event.preventDefault(); // prevents undoing of both the text in textfield outside the canvas and the intended undo
     if (!userCanEditTopicData || !canUndo) return;
     undo();
   });
 
   useHotkeys([hotkeys.redo], (event) => {
-    event.preventDefault();
+    event.preventDefault(); // prevents redoing of both the text in textfield outside the canvas and the intended redo
     if (!userCanEditTopicData || !canRedo) return;
     redo();
   });

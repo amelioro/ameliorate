@@ -2,9 +2,10 @@ import { type PrismockClientType } from "@pkgverse/prismock/v7";
 import * as matchers from "jest-extended";
 import { afterEach, expect, vi } from "vitest";
 
+import { xprisma } from "../src/db/extendedPrisma";
+
 import { type PrismaClient } from "@/db/generated/prisma/client";
 
-import { xprisma } from "../src/db/extendedPrisma";
 
 // add more matchers, e.g. `toIncludeSameMembers` for array comparison without order
 // set up by following https://jest-extended.jestcommunity.dev/docs/getting-started/setup#use-with-vitest
