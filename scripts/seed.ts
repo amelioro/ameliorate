@@ -2,12 +2,11 @@
 
 import { v4 as uuid } from "uuid";
 
+import { Edge, Node } from "@/db/generated/prisma/client";
 
 import { RelationName } from "../src/common/edge";
 import { NodeType } from "../src/common/node";
 import { xprisma } from "../src/db/extendedPrisma";
-
-import { Edge, Node } from "@/db/generated/prisma/client";
 
 const seed = async () => {
   const testUser = await xprisma.user.upsert({

@@ -2,13 +2,12 @@
 import shortUUID from "short-uuid";
 import { beforeEach, describe, expect, test } from "vitest";
 
-import { testEmail } from "../../../scripts/setupTests";
-
 import { createCaller } from "@/api/routers/_app";
 import { QuickView } from "@/common/view";
 import { xprisma } from "@/db/extendedPrisma";
 import { Topic, User } from "@/db/generated/prisma/client";
 
+import { testEmail } from "../../../scripts/setupTests";
 
 let creatorOfTopic: User;
 let notCreatorOfTopic: User;

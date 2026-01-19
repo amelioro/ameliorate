@@ -78,6 +78,15 @@ export default defineConfig(
             "index",
             "unknown",
           ],
+          // Ensure @/ and ~/ path aliases are treated as "internal" group, even if the TypeScript
+          // resolver fails to resolve them (which would otherwise classify them as "unknown").
+          // Unsure why resolver would fail, since npm/eslint/ts versions should all be pinned via
+          // package.json, but it seems to have happened for a contributor here https://github.com/amelioro/ameliorate/pull/859
+          // resulting in eslint reordering imports in a different way.
+          pathGroups: [
+            { pattern: "@/**", group: "internal" },
+            { pattern: "~/**", group: "internal" },
+          ],
           "newlines-between": "always",
           alphabetize: { order: "asc" },
         },

@@ -2,14 +2,13 @@
 import shortUUID from "short-uuid";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
-import { testEmail } from "../../../scripts/setupTests";
-
 import * as commentCreated from "@/api/notifications/commentCreated";
 import { createCaller } from "@/api/routers/_app";
 import { Comment } from "@/common/comment";
 import { xprisma } from "@/db/extendedPrisma";
 import { Topic, User } from "@/db/generated/prisma/client";
 
+import { testEmail } from "../../../scripts/setupTests";
 
 let creatorOfTopic: User;
 let notCreatorOfTopic: User;
