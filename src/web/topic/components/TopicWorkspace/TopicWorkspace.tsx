@@ -22,7 +22,9 @@ import { ViewToolbar } from "@/web/topic/components/TopicWorkspace/ViewToolbar";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { setScore } from "@/web/topic/diagramStore/actions";
 import { playgroundUsername } from "@/web/topic/diagramStore/store";
-import { isOnPlayground } from "@/web/topic/topicStore/store";
+import { redo, undo } from "@/web/topic/diagramStore/utilActions";
+import { useTemporalHooks } from "@/web/topic/diagramStore/utilHooks";
+import { isOnPlayground, useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { Score, possibleScores } from "@/web/topic/utils/graph";
 import { hotkeys } from "@/web/topic/utils/hotkeys";
 import { userCanEditScores } from "@/web/topic/utils/score";
@@ -33,6 +35,9 @@ import { getSelectedGraphPart, setSelected } from "@/web/view/selectedPartStore"
 import { toggleZenMode, useZenMode } from "@/web/view/userConfigStore";
 
 const useWorkspaceHotkeys = (user: { username: string } | null | undefined) => {
+  const [canUndo, canRedo] = useTemporalHooks();
+  const userCanEditTopicData = useUserCanEditTopicData(user?.username);
+
   useHotkeys([hotkeys.deselectPart], () => setSelected(null));
   useHotkeys([hotkeys.readonlyMode], () => toggleReadonlyMode());
 
@@ -46,6 +51,18 @@ const useWorkspaceHotkeys = (user: { username: string } | null | undefined) => {
     const myUsername = isOnPlayground() ? playgroundUsername : user?.username;
     if (!userCanEditScores(myUsername, getPerspectives(), getReadonlyMode())) return;
     setScore(myUsername, selectedPart.id, score as Score);
+  });
+
+  useHotkeys([hotkeys.undo], (event) => {
+    event.preventDefault(); // prevents undoing of both the text in textfield outside the canvas and the intended undo
+    if (!userCanEditTopicData || !canUndo) return;
+    undo();
+  });
+
+  useHotkeys([hotkeys.redo], (event) => {
+    event.preventDefault(); // prevents redoing of both the text in textfield outside the canvas and the intended redo
+    if (!userCanEditTopicData || !canRedo) return;
+    redo();
   });
 };
 
