@@ -1,9 +1,10 @@
-import { Button, MenuItem, useTheme } from "@mui/material";
+import { Button, MenuItem } from "@mui/material";
 import { useCallback, useContext } from "react";
 
 import { NodeType, prettyNodeTypes } from "@/common/node";
 import { Tooltip } from "@/web/common/components/Tooltip/Tooltip";
 import { useSessionUser } from "@/web/common/hooks";
+import { ColoredNodeIcon } from "@/web/topic/components/ColoredNodeIcon";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { addNode, addNodeWithoutEdge } from "@/web/topic/diagramStore/createDeleteActions";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
@@ -55,8 +56,6 @@ export const AddNodeButton = ({
   tooltipDirection = "bottom",
   className,
 }: Props & AddableProps) => {
-  const theme = useTheme();
-
   const { sessionUser } = useSessionUser();
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const context = useContext(WorkspaceContext);
@@ -93,10 +92,7 @@ export const AddNodeButton = ({
 
   return buttonType === "menu" ? (
     <MenuItem className={className} onClick={memoizedOnClick}>
-      <NodeIcon
-        className="mr-2 rounded-sm p-0.5"
-        sx={{ backgroundColor: theme.palette[toNodeType].main }}
-      />
+      <ColoredNodeIcon type={toNodeType} className="mr-2 rounded-sm p-0.5" />
       <span>
         Add {title}
         <i className="ml-1 text-slate-400">{titleSuffix}</i>
