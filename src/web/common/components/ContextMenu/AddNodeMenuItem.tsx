@@ -1,12 +1,10 @@
-import { useTheme } from "@mui/material/styles";
-
 import { breakdownNodeTypes, prettyNodeTypes, researchNodeTypes } from "@/common/node";
 import { ContextMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
 import { NestedMenuItem } from "@/web/common/components/Menu/NestedMenuItem";
 import { useSessionUser } from "@/web/common/hooks";
+import { ColoredNodeIcon } from "@/web/topic/components/ColoredNodeIcon";
 import { addNodeWithoutEdge } from "@/web/topic/diagramStore/createDeleteActions";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
-import { nodeDecorations } from "@/web/topic/utils/nodeDecoration";
 import { useFormat } from "@/web/view/currentViewStore/store";
 
 interface Props {
@@ -23,8 +21,6 @@ export const AddNodeMenuItem = ({ parentMenuOpen }: Props) => {
   // always showing breakdown + research nodes seems reasonable. justification nodes never need to be added on their own.
   const shownNodeTypes = breakdownNodeTypes.concat(researchNodeTypes);
 
-  const theme = useTheme();
-
   // shouldn't be able to view this menu item if we're in the table view
   if (!userCanEditTopicData || format == "table") return <></>;
 
@@ -32,14 +28,10 @@ export const AddNodeMenuItem = ({ parentMenuOpen }: Props) => {
     <>
       <NestedMenuItem label="Add node" parentMenuOpen={parentMenuOpen}>
         {shownNodeTypes.map((type) => {
-          const { NodeIcon } = nodeDecorations[type];
           const title = prettyNodeTypes[type];
           return (
             <ContextMenuItem key={type} onClick={() => addNodeWithoutEdge(type, "diagram")}>
-              <NodeIcon
-                sx={{ backgroundColor: theme.palette[type].main }}
-                className="mr-2 rounded-sm p-0.5"
-              />
+              <ColoredNodeIcon type={type} className="mr-2 rounded-sm p-0.5" />
               {title}
             </ContextMenuItem>
           );

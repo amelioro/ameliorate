@@ -1,6 +1,6 @@
 import { Autocomplete, TextField } from "@mui/material";
 import { startCase } from "es-toolkit";
-import { useContext, useMemo } from "react";
+import { ReactNode, useContext, useMemo } from "react";
 import { useController } from "react-hook-form";
 
 import { FormContext } from "@/web/common/components/Form/FormContext";
@@ -8,7 +8,7 @@ import { FormContext } from "@/web/common/components/Form/FormContext";
 interface Props {
   name: string;
   label?: string;
-  options: readonly { id: string; label: string }[] | readonly string[];
+  options: readonly { id: string; label: string; beforeSlot?: ReactNode }[] | readonly string[];
   multiple?: boolean;
   disableClearable?: boolean;
   width?: string;
@@ -72,7 +72,7 @@ export const Select = ({
     <Autocomplete
       {...field}
       options={optionsObjects}
-      value={valueObject as { id: string; label: string }[]}
+      value={valueObject as { id: string; label: string; beforeSlot?: ReactNode }[]}
       multiple
       limitTags={1}
       disableCloseOnSelect
@@ -88,6 +88,7 @@ export const Select = ({
       renderOption={(props, option) => {
         return (
           <li {...props} key={option.id}>
+            {option.beforeSlot}
             {option.label}
           </li>
         );
@@ -99,7 +100,7 @@ export const Select = ({
     <Autocomplete
       {...field}
       options={optionsObjects}
-      value={valueObject as { id: string; label: string } | null}
+      value={valueObject as { id: string; label: string; beforeSlot?: ReactNode } | null}
       onChange={(_event, option) => {
         if (!option) return;
         field.onChange(option.id);
@@ -113,6 +114,7 @@ export const Select = ({
       renderOption={(props, option) => {
         return (
           <li {...props} key={option.id}>
+            {option.beforeSlot}
             {option.label}
           </li>
         );

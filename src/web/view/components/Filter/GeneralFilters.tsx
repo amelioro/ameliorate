@@ -10,6 +10,7 @@ import { FormContext } from "@/web/common/components/Form/FormContext";
 import { NodeSelect } from "@/web/common/components/Form/NodeSelect";
 import { Select } from "@/web/common/components/Form/Select";
 import { Switch } from "@/web/common/components/Form/Switch";
+import { ColoredNodeIcon } from "@/web/topic/components/ColoredNodeIcon";
 import { useAllNodes } from "@/web/topic/diagramStore/nodeHooks";
 import { possibleScores } from "@/web/topic/utils/graph";
 import { ShowSecondaryNeighborsLabel } from "@/web/view/components/Filter/ShowSecondaryNeighborsLabel";
@@ -21,7 +22,12 @@ import {
   scoredComparers,
 } from "@/web/view/utils/generalFilter";
 
-const nodeTypeOptions = nodeTypes.map((type) => ({ id: type, label: startCase(type) })); // so that dropdown options can be startCased but ids can still be type-safe
+// so that dropdown options can be startCased but ids can still be type-safe
+const nodeTypeOptions = nodeTypes.map((type) => ({
+  id: type,
+  label: startCase(type),
+  beforeSlot: <ColoredNodeIcon type={type} className="mr-2 rounded-sm p-0.5" />,
+}));
 
 export const GeneralFilters = () => {
   const generalFilter = useGeneralFilter();

@@ -7,7 +7,6 @@ import {
   ListItem,
   ListSubheader,
   TextField,
-  useTheme,
 } from "@mui/material";
 import fuzzysort from "fuzzysort";
 import { memo, useCallback, useRef, useState } from "react";
@@ -15,6 +14,7 @@ import { memo, useCallback, useRef, useState } from "react";
 import { NodeType, compareNodesByType, prettyNodeTypes } from "@/common/node";
 import { Menu } from "@/web/common/components/Menu/Menu";
 import { Tooltip } from "@/web/common/components/Tooltip/Tooltip";
+import { ColoredNodeIcon } from "@/web/topic/components/ColoredNodeIcon";
 import { AddNodeButton } from "@/web/topic/components/Node/AddNodeButton";
 import { connectNodes, deleteEdge } from "@/web/topic/diagramStore/createDeleteActions";
 import { useConnectableNodes } from "@/web/topic/diagramStore/nodeHooks";
@@ -24,7 +24,6 @@ import {
   getDirectedRelationDescription,
 } from "@/web/topic/utils/edge";
 import { Node } from "@/web/topic/utils/graph";
-import { nodeDecorations } from "@/web/topic/utils/nodeDecoration";
 import { useExpandAddNodeButtons } from "@/web/view/userConfigStore";
 
 const getOptionText = (node: Node) => {
@@ -39,8 +38,6 @@ interface AddMenuSearchProps {
 }
 
 const AddMenuSearch = ({ fromNodeId, addableRelations, className }: AddMenuSearchProps) => {
-  const theme = useTheme();
-
   const { connected, notConnected } = useConnectableNodes(fromNodeId, addableRelations);
 
   const connectable = [
@@ -110,7 +107,6 @@ const AddMenuSearch = ({ fromNodeId, addableRelations, className }: AddMenuSearc
       }}
       // ensure node type icon is rendered along with highlighted matching chars from the search
       renderOption={(props, option, { inputValue }) => {
-        const { NodeIcon } = nodeDecorations[option.type];
         const optionText = getOptionText(option);
 
         const result = fuzzysort.single(inputValue, optionText);
@@ -118,10 +114,7 @@ const AddMenuSearch = ({ fromNodeId, addableRelations, className }: AddMenuSearc
         return (
           <li {...props} key={option.id}>
             <div className="flex items-center">
-              <NodeIcon
-                className="mr-2 rounded-sm p-0.5"
-                sx={{ backgroundColor: theme.palette[option.type].main }}
-              />
+              <ColoredNodeIcon type={option.type} className="mr-2 rounded-sm p-0.5" />
               <span>
                 {result
                   ? result
