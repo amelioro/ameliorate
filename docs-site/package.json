@@ -19,7 +19,7 @@
   "/": "dompurify should not be needed here, it's only used indirectly via nextra's mermaid rendering, but there is a dependency issue they need to fix, see https://github.com/mermaid-js/mermaid/issues/6078",
   "dependencies": {
     "dompurify": "^3.2.1",
-    "next": "^15.5.7",
+    "next": "^15.5.10",
     "next-plausible": "^3.12.4",
     "next-sitemap": "^4.2.3",
     "nextra": "^4.2.16",
