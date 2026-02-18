@@ -17,7 +17,8 @@ const initialState: PerspectiveStoreState = {
   aggregationMode: "average",
 };
 
-const usePerspectiveStore = create<PerspectiveStoreState>()(() => initialState);
+// exported so filteredDiagramStore can subscribe to perspective changes
+export const usePerspectiveStore = create<PerspectiveStoreState>()(() => initialState);
 
 // hooks
 export const usePerspectives = () => {
