@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 import { InfoCategory } from "@/common/infoCategory";
+import { type EdgeType } from "@/db/generated/prisma/enums";
 
-// not sure how to guarantee that this matches the schema enum
 export const relationNames = [
   // topic
   "causes",
@@ -28,7 +28,7 @@ export const relationNames = [
 
   // generic, for unrestricted editing
   "relatesTo",
-] as const;
+] as const satisfies readonly EdgeType[]; // `satisfies` to make it easier to ensure these types the prisma schema's, while not requiring this file to depend on prisma (at least once types are stripped)
 
 const zRelationNames = z.enum(relationNames);
 

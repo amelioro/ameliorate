@@ -3,8 +3,8 @@ import { v4 as uuid } from "uuid";
 import { z } from "zod";
 
 import { InfoCategory } from "@/common/infoCategory";
+import { type NodeType as PrismaNodeType } from "@/db/generated/prisma/enums";
 
-// Not sure how to guarantee that this matches the schema enum.
 // This order is generally used for sorting, e.g.:
 // - the order in which add-node buttons are displayed,
 // - the order to group node types in the same layer of the diagram,
@@ -40,7 +40,7 @@ export const nodeTypes = [
 
   // generic
   "custom",
-] as const;
+] as const satisfies readonly PrismaNodeType[]; // `satisfies` to make it easier to ensure these types the prisma schema's, while not requiring this file to depend on prisma (at leastonce types are stripped)
 
 export const zNodeTypes = z.enum(nodeTypes).describe(
   `Implies the intended meaning of the node. There are three categories of node types: Breakdown, Research, and Justification.  Generally if a node could be a breakdown node or another category of node, it should be a breakdown node, because those are generally causally-related nodes, and causally-related things are easier to reason about.
