@@ -11,7 +11,7 @@ import { Tooltip } from "@/web/common/components/Tooltip/Tooltip";
 import { edgeColor } from "@/web/topic/components/Edge/ScoreEdge.styles";
 import { CustomDataEntry, PieChart } from "@/web/topic/components/Score/PieChart";
 import { useNeighbors } from "@/web/topic/diagramStore/nodeHooks";
-import { useHiddenNodes } from "@/web/topic/hooks/flowHooks";
+import { useHiddenNodes } from "@/web/topic/diagramStore/store";
 import { Node } from "@/web/topic/utils/graph";
 import { indicatorLengthRem, nodeDecorations } from "@/web/topic/utils/nodeDecoration";
 import { visibleOnPartHoverSelectedClasses } from "@/web/topic/utils/styleUtils";
@@ -75,15 +75,6 @@ export const FocusNodeAttachment = ({ node, position, className }: FocusNodeAtta
 
   const neighbors = useNeighbors(node.id);
   const fillNodeAttachmentWithColor = useFillNodeAttachmentWithColor();
-  // TODO(bug): if new neighbor is added and there are currently no hidden neighbors,
-  // `useNeighbors` will trigger a re-render at the same time as Diagram re-renders,
-  // so the `hiddenNeighbors` will not yet know that the new neighbor is displayed... then the Diagram
-  // will finish rendering and `hiddenNeighbors` will trigger a re-render.
-  // The result is that adding a new neighbor will make the handle flicker to indicate that there's
-  // a hidden neighbor for just a moment, before rendering without indicating a hidden neighbor.
-  // Instead of relying on what react flow is displaying, we should probably just re-use the
-  // `useDiagram` hook to know what is currently being shown (definitely would want it cached if it'll
-  // but used on every node's attachment render).
   const hiddenNeighbors = useHiddenNodes(neighbors);
 
   if (!enableContentIndicators || hiddenNeighbors.length === 0) return null;

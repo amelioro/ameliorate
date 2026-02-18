@@ -126,3 +126,15 @@ export const useDiagram = (): Diagram => {
     return { nodes: sortBy(nodes, "id"), edges: sortBy(edges, "id") };
   });
 };
+
+/**
+ * Finds nodes that are hidden by the current set of filters.
+ *
+ * This is calculated from the diagram store's filtered result (useDiagram) rather than from React
+ * Flow's internal state, so that it stays in sync without waiting for a React Flow render cycle.
+ */
+export const useHiddenNodes = (nodes: Node[]): Node[] => {
+  const diagram = useDiagram();
+  const displayedNodeIds = new Set(diagram.nodes.map((n) => n.id));
+  return nodes.filter((node) => !displayedNodeIds.has(node.id));
+};
