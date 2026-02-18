@@ -21,6 +21,7 @@ import {
 } from "@/web/comment/store/commentStore";
 import { loadDraftsFromLocalStorage } from "@/web/comment/store/draftStore";
 import { setPartIdToCentralize } from "@/web/common/store/ephemeralStore";
+import { computeFilteredDiagram } from "@/web/topic/diagramStore/filteredDiagramStore";
 import { getGraphPart } from "@/web/topic/diagramStore/graphPartHooks";
 import {
   populateDiagramFromApi,
@@ -286,6 +287,8 @@ export const loadStores = async (diagramData?: TopicData) => {
     loadCommentsFromApi(diagramData.comments);
     await loadDraftsFromLocalStorage(`${diagramData.creatorName}/${diagramData.title}`);
   }
+
+  computeFilteredDiagram();
 
   // process URL params
   const urlParams = new URLSearchParams(window.location.search);
