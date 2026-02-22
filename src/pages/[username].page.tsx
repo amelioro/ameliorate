@@ -130,7 +130,7 @@ const User: NextPage = () => {
               onClose={() => setEditingTopicId(null)}
               aria-label="Topic Settings"
             >
-              <EditTopicForm topic={row.original} creatorName={foundUser.username} />
+              <EditTopicForm topic={row.original} creatorName={foundUser.username}  afterSubmit={() => setEditingTopicId(null)} />
             </Dialog>
           </>
         )}
