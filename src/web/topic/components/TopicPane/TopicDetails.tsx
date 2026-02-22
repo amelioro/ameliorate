@@ -170,8 +170,11 @@ export const TopicDetails = ({ selectedTab, setSelectedTab }: Props) => {
               onClose={() => setTopicFormOpen(false)}
               aria-label="Topic Settings"
             >
-              <EditTopicForm topic={topic} creatorName={sessionUser.username} 
-                afterSubmit={() => {setTimeout(() =>{setTopicFormOpen(false); }, 400); }}/>
+              <EditTopicForm
+                topic={topic}
+                creatorName={sessionUser.username}
+                afterSave={() => setTopicFormOpen(false)}
+              />
             </Dialog>
           </>
         )}

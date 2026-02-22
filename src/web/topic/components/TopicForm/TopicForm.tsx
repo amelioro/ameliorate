@@ -53,7 +53,6 @@ export const CreateTopicForm = ({ creatorName }: { creatorName: string }) => {
         return oldUser;
       });
 
-      
       await Router.push(`/${creatorName}/${variables.topic.title}`);
     },
   });
@@ -74,7 +73,13 @@ export const CreateTopicForm = ({ creatorName }: { creatorName: string }) => {
   return <TopicForm creatorName={creatorName} onSubmit={onSubmit} />;
 };
 
-export const EditTopicForm = ({ topic, creatorName,afterSubmit }: { topic: Topic; creatorName: string;afterSubmit?: () => void;}) => {
+interface EditTopicFormProps {
+  topic: Topic;
+  creatorName: string;
+  afterSave?: () => void;
+}
+
+export const EditTopicForm = ({ topic, creatorName, afterSave }: EditTopicFormProps) => {
   const utils = trpc.useUtils();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
@@ -124,7 +129,7 @@ export const EditTopicForm = ({ topic, creatorName,afterSubmit }: { topic: Topic
         { username: creatorName, title: updatedTopic.title },
         updatedTopic,
       );
-      afterSubmit?.();
+      if (afterSave) afterSave();
     },
   });
 
