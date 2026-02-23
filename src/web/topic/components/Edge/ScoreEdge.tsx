@@ -4,17 +4,14 @@ import { lowerCase } from "es-toolkit";
 
 import { useSessionUser } from "@/web/common/hooks";
 import { openContextMenu } from "@/web/common/store/contextMenuActions";
-import {
-  Spotlight,
-  primarySpotlightColor,
-  secondarySpotlightColor,
-} from "@/web/topic/components/Diagram/Diagram.styles";
-import { StyledDiv, StyledPath, edgeColor } from "@/web/topic/components/Edge/ScoreEdge.styles";
+import { Spotlight } from "@/web/topic/components/Diagram/Diagram.styles";
+import { StyledDiv, StyledPath } from "@/web/topic/components/Edge/ScoreEdge.styles";
 import { getPathDefinitionForEdge } from "@/web/topic/components/Edge/svgPathDrawer";
 import { CommonIndicatorGroup } from "@/web/topic/components/Indicator/Base/CommonIndicatorGroup";
 import { ContentIndicatorGroup } from "@/web/topic/components/Indicator/Base/ContentIndicatorGroup";
 import { StatusIndicatorGroup } from "@/web/topic/components/Indicator/Base/StatusIndicatorGroup";
 import { nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
+import { markerIds } from "@/web/topic/components/TopicWorkspace/SvgEdgeMarkerDefs";
 import { setCustomEdgeLabel } from "@/web/topic/diagramStore/actions";
 import { useIsNodeSelected } from "@/web/topic/diagramStore/edgeHooks";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
@@ -26,43 +23,6 @@ import { useAvoidEdgeLabelOverlap } from "@/web/view/currentViewStore/layout";
 import { useIsGraphPartSelected } from "@/web/view/selectedPartStore";
 import { setSelected } from "@/web/view/selectedPartStore";
 import { useWhenToShowIndicators } from "@/web/view/userConfigStore/store";
-
-// mostly copied from react-flow's marker html - jank but the package doesn't export its marker definition
-// https://github.com/xyflow/xyflow/blob/f0117939bae934447fa7f232081f937169ee23b5/packages/react/src/container/EdgeRenderer/MarkerDefinitions.tsx#L29-L41
-const svgMarkerDef = (spotlight: Spotlight) => {
-  const id = `marker-${spotlight}`;
-  const color =
-    spotlight === "primary"
-      ? primarySpotlightColor
-      : spotlight === "secondary"
-        ? secondarySpotlightColor
-        : edgeColor;
-
-  return (
-    <defs>
-      <marker
-        id={id}
-        markerWidth="30"
-        markerHeight="30"
-        viewBox="-10 -10 20 20"
-        // changed from `strokeWidth` so that stroke can increase edge width without affecting arrow size
-        markerUnits="userSpaceOnUse"
-        orient="auto"
-        refX="0"
-        refY="0"
-      >
-        <polyline
-          stroke={color}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="1"
-          fill={color}
-          points="-5,-4 0,0 -5,4 -5,-4"
-        />
-      </marker>
-    </defs>
-  );
-};
 
 interface Props {
   edge: Edge;
@@ -95,7 +55,7 @@ export const ScoreEdge = ({ edge, edgeLayoutData, inReactFlow }: Props) => {
       id={edge.id}
       className={"react-flow__edge-path" + ` spotlight-${spotlight}`}
       d={pathDefinition}
-      markerEnd={`url(#marker-${spotlight})`}
+      markerEnd={`url(#${markerIds[spotlight]})`}
       spotlight={spotlight}
       onClick={() => setSelected(edge.id)}
       onContextMenu={(event) => openContextMenu(event, { edge })}
@@ -191,8 +151,6 @@ export const ScoreEdge = ({ edge, edgeLayoutData, inReactFlow }: Props) => {
   if (inReactFlow) {
     return (
       <>
-        {/* shouldn't need an svg marker def per edge, but it's easiest to just put here */}
-        {svgMarkerDef(spotlight)}
         {path}
         {hiddenInteractivePath}
 
@@ -212,9 +170,6 @@ export const ScoreEdge = ({ edge, edgeLayoutData, inReactFlow }: Props) => {
             className="react-flow__edge selected"
             onContextMenu={(event) => openContextMenu(event, { edge })}
           >
-            {/* shouldn't need an svg marker def per edge, but it's easiest to just put here */}
-            {svgMarkerDef(spotlight)}
-
             {path}
           </svg>
 

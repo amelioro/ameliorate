@@ -15,6 +15,7 @@ import { TopicPane } from "@/web/topic/components/TopicPane/TopicPane";
 import { drawerMinWidthRem } from "@/web/topic/components/TopicPane/TopicPane.styles";
 import { AppHeader } from "@/web/topic/components/TopicWorkspace/AppHeader";
 import { MainToolbar } from "@/web/topic/components/TopicWorkspace/MainToolbar";
+import { SvgEdgeMarkerDefs } from "@/web/topic/components/TopicWorkspace/SvgEdgeMarkerDefs";
 import { TourSetter } from "@/web/topic/components/TopicWorkspace/TourSetter";
 import { TutorialAnchor } from "@/web/topic/components/TopicWorkspace/TutorialAnchor";
 import { TutorialController } from "@/web/topic/components/TopicWorkspace/TutorialController";
@@ -178,6 +179,8 @@ export const TopicWorkspace = () => {
       <ContextMenu />
 
       <InfoDialog />
+
+      <SvgEdgeMarkerDefs />
 
       <TourSetter />
       <TutorialAnchor />
