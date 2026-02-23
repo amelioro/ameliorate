@@ -27,13 +27,10 @@ import { useIsGraphPartSelected } from "@/web/view/selectedPartStore";
 import { setSelected } from "@/web/view/selectedPartStore";
 import { useWhenToShowIndicators } from "@/web/view/userConfigStore/store";
 
-const flowMarkerId = "flowMarker";
-const nonFlowMarkerId = "nonFlowMarker";
-
 // mostly copied from react-flow's marker html - jank but the package doesn't export its marker definition
 // https://github.com/xyflow/xyflow/blob/f0117939bae934447fa7f232081f937169ee23b5/packages/react/src/container/EdgeRenderer/MarkerDefinitions.tsx#L29-L41
-const svgMarkerDef = (inReactFlow: boolean, spotlight: Spotlight) => {
-  const id = `${inReactFlow ? flowMarkerId : nonFlowMarkerId}-${spotlight}`;
+const svgMarkerDef = (spotlight: Spotlight) => {
+  const id = `marker-${spotlight}`;
   const color =
     spotlight === "primary"
       ? primarySpotlightColor
@@ -50,9 +47,7 @@ const svgMarkerDef = (inReactFlow: boolean, spotlight: Spotlight) => {
         viewBox="-10 -10 20 20"
         // changed from `strokeWidth` so that stroke can increase edge width without affecting arrow size
         markerUnits="userSpaceOnUse"
-        // `auto-start-reverse` works for flow but for some reason for non-flow it's not in viewbox.
-        // Easier to just use what works outside of flow than to figure that out.
-        orient={inReactFlow ? "auto-start-reverse" : "auto"}
+        orient="auto"
         refX="0"
         refY="0"
       >
@@ -100,7 +95,7 @@ export const ScoreEdge = ({ edge, edgeLayoutData, inReactFlow }: Props) => {
       id={edge.id}
       className={"react-flow__edge-path" + ` spotlight-${spotlight}`}
       d={pathDefinition}
-      markerEnd={`url(#${inReactFlow ? flowMarkerId : nonFlowMarkerId}-${spotlight})`}
+      markerEnd={`url(#marker-${spotlight})`}
       spotlight={spotlight}
       onClick={() => setSelected(edge.id)}
       onContextMenu={(event) => openContextMenu(event, { edge })}
@@ -197,7 +192,7 @@ export const ScoreEdge = ({ edge, edgeLayoutData, inReactFlow }: Props) => {
     return (
       <>
         {/* shouldn't need an svg marker def per edge, but it's easiest to just put here */}
-        {svgMarkerDef(inReactFlow, spotlight)}
+        {svgMarkerDef(spotlight)}
         {path}
         {hiddenInteractivePath}
 
@@ -218,7 +213,7 @@ export const ScoreEdge = ({ edge, edgeLayoutData, inReactFlow }: Props) => {
             onContextMenu={(event) => openContextMenu(event, { edge })}
           >
             {/* shouldn't need an svg marker def per edge, but it's easiest to just put here */}
-            {svgMarkerDef(inReactFlow, spotlight)}
+            {svgMarkerDef(spotlight)}
 
             {path}
           </svg>
