@@ -76,6 +76,9 @@ export const CreateTopicForm = ({ creatorName }: { creatorName: string }) => {
 interface EditTopicFormProps {
   topic: Topic;
   creatorName: string;
+  /**
+   * allow the calling component to react, e.g. to close a dialog that this form is within
+   */
   afterSave?: () => void;
 }
 
@@ -85,9 +88,9 @@ export const EditTopicForm = ({ topic, creatorName, afterSave }: EditTopicFormPr
 
   const updateTopic = trpc.topic.update.useMutation({
     onSuccess: (updatedTopic) => {
-      // need to update the URL if we're changing from the topic's page in the workspace
-
       if (afterSave) afterSave();
+
+      // need to update the URL if we're changing from the topic's page in the workspace
       const url = new URL(window.location.href);
       const oldPath = `/${creatorName}/${topic.title}`;
       const newPath = `/${creatorName}/${updatedTopic.title}`;
