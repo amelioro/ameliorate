@@ -405,7 +405,7 @@ const TopicForm = ({ topic, creatorName, onSubmit, DeleteSection }: Props) => {
               Cancel
             </Button>
             <Button type="submit" variant="contained" disabled={!isDirty}>
-              {newTopic ? "Create" : "Save&Close"}
+              {newTopic ? "Create" : "Save & Close"}
             </Button>
           </Stack>
 
