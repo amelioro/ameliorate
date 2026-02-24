@@ -84,8 +84,11 @@ export const EditTopicForm = ({ topic, creatorName, afterSave }: EditTopicFormPr
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const updateTopic = trpc.topic.update.useMutation({
+    
     onSuccess: (updatedTopic) => {
       // need to update the URL if we're changing from the topic's page in the workspace
+      
+      if (afterSave) afterSave();
       const url = new URL(window.location.href);
       const oldPath = `/${creatorName}/${topic.title}`;
       const newPath = `/${creatorName}/${updatedTopic.title}`;
@@ -129,7 +132,6 @@ export const EditTopicForm = ({ topic, creatorName, afterSave }: EditTopicFormPr
         { username: creatorName, title: updatedTopic.title },
         updatedTopic,
       );
-      if (afterSave) afterSave();
     },
   });
 
