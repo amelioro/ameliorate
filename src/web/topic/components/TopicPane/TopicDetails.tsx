@@ -115,7 +115,6 @@ export const TopicDetails = ({ selectedTab, setSelectedTab }: Props) => {
   const expandDetailsTabs = useExpandDetailsTabs();
 
   const [topicFormOpen, setTopicFormOpen] = useState(false);
-
   // Ideally we could exactly reuse the indicator logic here, rather than duplicating, but not sure
   // a good way to do that, so we're just duplicating the logic for now.
   // Don't want to use the exact indicators, because pane indication seems to look better with Icon
@@ -171,7 +170,11 @@ export const TopicDetails = ({ selectedTab, setSelectedTab }: Props) => {
               onClose={() => setTopicFormOpen(false)}
               aria-label="Topic Settings"
             >
-              <EditTopicForm topic={topic} creatorName={sessionUser.username} />
+              <EditTopicForm
+                topic={topic}
+                creatorName={sessionUser.username}
+                afterSave={() => setTopicFormOpen(false)}
+              />
             </Dialog>
           </>
         )}
