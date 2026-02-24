@@ -94,6 +94,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/akashchekodu"><img src="https://avatars.githubusercontent.com/u/110985224?v=4?s=100" width="100px;" alt="Akash Chekodu"/><br /><sub><b>Akash Chekodu</b></sub></a><br /><a href="https://github.com/amelioro/ameliorate/commits?author=akashchekodu" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/sudeepchalla"><img src="https://avatars.githubusercontent.com/u/176368026?v=4?s=100" width="100px;" alt="Sudeep Challa"/><br /><sub><b>Sudeep Challa</b></sub></a><br /><a href="https://github.com/amelioro/ameliorate/commits?author=sudeepchalla" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://devrishabh.com"><img src="https://avatars.githubusercontent.com/u/90109188?v=4?s=100" width="100px;" alt="Rishabh Rathore"/><br /><sub><b>Rishabh Rathore</b></sub></a><br /><a href="https://github.com/amelioro/ameliorate/commits?author=rishabhrthr001" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Naughty8020"><img src="https://avatars.githubusercontent.com/u/169634290?v=4?s=100" width="100px;" alt="YusukeTamura"/><br /><sub><b>YusukeTamura</b></sub></a><br /><a href="https://github.com/amelioro/ameliorate/commits?author=Naughty8020" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
