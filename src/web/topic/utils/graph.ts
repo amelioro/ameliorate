@@ -4,17 +4,17 @@ import { z } from "zod";
 
 import {
   RelationName,
+  diagramStoreEdgeSchema,
   justificationRelationNames,
-  reactFlowEdgeSchema,
   relationNames,
 } from "@/common/edge";
 import { errorWithData } from "@/common/errorHandling";
 import {
   NodeType,
+  diagramStoreNodeSchema,
   infoNodeTypes,
   justificationNodeTypes,
   nodeTypes,
-  reactFlowNodeSchema,
 } from "@/common/node";
 import { GeneralFilter } from "@/web/view/utils/generalFilter";
 
@@ -23,7 +23,7 @@ export interface Graph {
   edges: Edge[];
 }
 
-export type Node = z.infer<typeof reactFlowNodeSchema>;
+export type Node = z.infer<typeof diagramStoreNodeSchema>;
 
 export interface ProblemNode extends Node {
   type: "problem";
@@ -61,7 +61,7 @@ export const buildNode = ({
 
 export type EdgeDirection = "source" | "target";
 
-export type Edge = z.infer<typeof reactFlowEdgeSchema>;
+export type Edge = z.infer<typeof diagramStoreEdgeSchema>;
 
 interface BuildEdgeProps {
   id?: string;
