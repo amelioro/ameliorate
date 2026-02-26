@@ -56,7 +56,7 @@ interface HeaderCell extends Cell {
 const buildNodeHeader = (node: Node): HeaderCell => {
   return {
     id: node.id,
-    label: node.data.label,
+    label: node.data.text,
     data: node,
     render: () => <NodeCell node={node} />,
   };

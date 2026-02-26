@@ -16,7 +16,7 @@ export const ImpliedClaimText = ({ graphPart }: { graphPart: GraphPart }) => {
   if (isNode) {
     return (
       <i>
-        "{graphPart.data.label}" <b>is an important {prettyNodeTypes[graphPart.type]}</b> in this
+        "{graphPart.data.text}" <b>is an important {prettyNodeTypes[graphPart.type]}</b> in this
         topic
       </i>
     );
@@ -25,12 +25,12 @@ export const ImpliedClaimText = ({ graphPart }: { graphPart: GraphPart }) => {
 
     return (
       <i>
-        <b>{prettyNodeTypes[edgeSourceNode.type]}</b> "{edgeSourceNode.data.label}"{" "}
+        <b>{prettyNodeTypes[edgeSourceNode.type]}</b> "{edgeSourceNode.data.text}"{" "}
         <b>
-          {lowerCase(graphPart.data.customLabel ?? graphPart.label)}{" "}
+          {lowerCase(graphPart.data.customLabel ?? graphPart.type)}{" "}
           {prettyNodeTypes[edgeTargetNode.type]}
         </b>{" "}
-        "{edgeTargetNode.data.label}"
+        "{edgeTargetNode.data.text}"
       </i>
     );
   }

@@ -26,7 +26,7 @@ const NodeSummary = ({ node, beforeSlot }: { node: Node; beforeSlot?: ReactNode 
   const { NodeIcon } = nodeDecorations[node.type];
   const title = prettyNodeTypes[node.type];
 
-  const summary = `${title}: ${node.data.label}`;
+  const summary = `${title}: ${node.data.text}`;
 
   return (
     <div className="flex items-center text-nowrap">

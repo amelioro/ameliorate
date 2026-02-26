@@ -66,7 +66,7 @@ export const useFulfillsHasContext = (fulfillsEdgeId: string) => {
       // - remove reactiveness from the context indicator
       const { nodes } = applyTradeoffsFilter(topicGraph, filter);
       const contextNodes = nodes.filter(
-        (node) => node.id !== fulfillsEdge.source && node.id !== fulfillsEdge.target,
+        (node) => node.id !== fulfillsEdge.sourceId && node.id !== fulfillsEdge.targetId,
       );
 
       return contextNodes.length > 0;

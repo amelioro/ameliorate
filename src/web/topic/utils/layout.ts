@@ -352,16 +352,16 @@ const buildElkLayoutOptions = (
 };
 
 const shouldFlipEdge = (edge: Edge, nodes: Node[], edges: Edge[]) => {
-  if (edge.label !== "has" && edge.label !== "causes") return false;
+  if (edge.type !== "has" && edge.type !== "causes") return false;
 
   const sourceNode = sourceNodeOfEdge(edge, nodes);
   const targetNode = targetNodeOfEdge(edge, nodes);
 
   const sourceEffectType: EffectType = getEffectType(sourceNode, { nodes, edges });
 
-  const isSubproblemEdge = edge.label === "has" && sourceNode.type === "problem";
+  const isSubproblemEdge = edge.type === "has" && sourceNode.type === "problem";
   const isProblemCausesEdge =
-    edge.label === "causes" &&
+    edge.type === "causes" &&
     (sourceNode.type === "problem" || sourceEffectType === "problem") &&
     // if causing a problem, let problem continue in orientation direction so that its causes and effects can both be placed between it and solutions
     targetNode.type !== "problem";
@@ -389,25 +389,25 @@ const buildElkEdgesAndUsedPorts = ({ edges, nodes }: Diagram, avoidEdgeLabelOver
   const elkEdges: ElkExtendedEdge[] = edges
     .map((edge) => {
       return shouldFlipEdge(edge, nodes, edges)
-        ? { ...edge, source: edge.target, target: edge.source, flipped: true }
+        ? { ...edge, sourceId: edge.targetId, targetId: edge.sourceId, flipped: true }
         : { ...edge, flipped: false };
     })
     .map((edge) => {
       /* eslint-disable functional/immutable-data -- seems significantly easier to populate used ports via mutation */
       const sourcePort: ElkPort = {
-        id: buildPortId(edge.source, "source"),
+        id: buildPortId(edge.sourceId, "source"),
         layoutOptions: { "elk.port.side": "NORTH" },
       };
-      const usedSourcePorts = (usedPortsByNodeId[edge.source] ??= []);
+      const usedSourcePorts = (usedPortsByNodeId[edge.sourceId] ??= []);
       if (usedSourcePorts.find((port) => port.id === sourcePort.id) === undefined) {
         usedSourcePorts.push(sourcePort);
       }
 
       const targetPort: ElkPort = {
-        id: buildPortId(edge.target, "target"),
+        id: buildPortId(edge.targetId, "target"),
         layoutOptions: { "elk.port.side": "SOUTH" },
       };
-      const usedTargetPorts = (usedPortsByNodeId[edge.target] ??= []);
+      const usedTargetPorts = (usedPortsByNodeId[edge.targetId] ??= []);
       if (usedTargetPorts.find((port) => port.id === targetPort.id) === undefined) {
         usedTargetPorts.push(targetPort);
       }
@@ -425,14 +425,14 @@ const buildElkEdgesAndUsedPorts = ({ edges, nodes }: Diagram, avoidEdgeLabelOver
           // using space efficiently.
           // This isn't thoroughly tested, and might be more accurate to check source/target types?
           // But seems ok enough for now.
-          "elk.layered.priority.shortness": ["addresses", "mitigates"].includes(edge.label)
+          "elk.layered.priority.shortness": ["addresses", "mitigates"].includes(edge.type)
             ? "0"
             : "100",
         },
         labels: avoidEdgeLabelOverlap
           ? [
               {
-                text: edge.label,
+                text: edge.type,
                 layoutOptions: {
                   "edgeLabels.inline": "true",
                 },
@@ -459,7 +459,7 @@ const buildElkNodes = (
       const elkNode: ElkNode = {
         id: node.id,
         width: nodeWidthPx,
-        height: calculateNodeHeight(node.data.label),
+        height: calculateNodeHeight(node.data.text),
         ports: usedPortsByNodeId[node.id],
         layoutOptions: {
           // Some nodes can be taller than others (based on how long their text is),

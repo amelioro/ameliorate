@@ -21,7 +21,7 @@ import {
 export const convertToStoreNode = (apiNode: ApiNode) => {
   return buildNode({
     id: apiNode.id,
-    label: apiNode.text,
+    text: apiNode.text,
     notes: apiNode.notes,
     type: apiNode.type,
     arguedDiagramPartId: apiNode.arguedDiagramPartId ?? undefined,
@@ -66,7 +66,7 @@ export const convertToApiNode = (storeNode: StoreNode, topicId: number): ApiNode
     arguedDiagramPartId: storeNode.data.arguedDiagramPartId ?? null,
     type: storeNode.type,
     customType: storeNode.data.customType,
-    text: storeNode.data.label,
+    text: storeNode.data.text,
     notes: storeNode.data.notes,
   };
 };
@@ -76,11 +76,11 @@ export const convertToApiEdge = (storeEdge: StoreEdge, topicId: number): ApiEdge
     id: storeEdge.id,
     topicId: topicId,
     arguedDiagramPartId: storeEdge.data.arguedDiagramPartId ?? null,
-    type: storeEdge.label,
+    type: storeEdge.type,
     customLabel: storeEdge.data.customLabel,
     notes: storeEdge.data.notes,
-    sourceId: storeEdge.source,
-    targetId: storeEdge.target,
+    sourceId: storeEdge.sourceId,
+    targetId: storeEdge.targetId,
   };
 };
 

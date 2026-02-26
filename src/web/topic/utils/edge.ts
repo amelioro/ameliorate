@@ -416,8 +416,8 @@ export const addableRelationsFrom = (
 export const canCreateEdge = (topicGraph: Graph, source: Node, target: Node) => {
   const existingEdge = topicGraph.edges.find((edge) => {
     return (
-      (edge.source === target.id && edge.target === source.id) ||
-      (edge.source === source.id && edge.target === target.id)
+      (edge.sourceId === target.id && edge.targetId === source.id) ||
+      (edge.sourceId === source.id && edge.targetId === target.id)
     );
   });
 
@@ -435,11 +435,11 @@ export const canCreateEdge = (topicGraph: Graph, source: Node, target: Node) => 
 };
 
 export const sourceNode = (edge: Edge, nodes: Node[]) => {
-  return findNodeOrThrow(edge.source, nodes);
+  return findNodeOrThrow(edge.sourceId, nodes);
 };
 
 export const targetNode = (edge: Edge, nodes: Node[]) => {
-  return findNodeOrThrow(edge.target, nodes);
+  return findNodeOrThrow(edge.targetId, nodes);
 };
 
 export const nodes = (edge: Edge, nodes: Node[]): [Node, Node] => {
@@ -449,8 +449,8 @@ export const nodes = (edge: Edge, nodes: Node[]): [Node, Node] => {
 export const getConnectingEdge = (graphPartId1: string, graphPartId2: string, edges: Edge[]) => {
   const edge = edges.find(
     (edge) =>
-      (edge.source === graphPartId1 && edge.target === graphPartId2) ||
-      (edge.source === graphPartId2 && edge.target === graphPartId1),
+      (edge.sourceId === graphPartId1 && edge.targetId === graphPartId2) ||
+      (edge.sourceId === graphPartId2 && edge.targetId === graphPartId1),
   );
 
   return edge;
@@ -494,7 +494,7 @@ export const isEdgeImpliedByComposition = (edge: Edge, topicGraph: Graph) => {
   // hiding nodes composed by composed nodes is really complex, let's not bother
   // TODO?: this complexity makes me think it's not worth trying to hide composed edges at all, and
   // that #434 is a better solution to the issue of showing connections when nodes are hidden
-  if (edge.label === "has") return false;
+  if (edge.type === "has") return false;
 
   const edgeSource = sourceNode(edge, topicGraph.nodes);
   const edgeTarget = targetNode(edge, topicGraph.nodes);
@@ -504,9 +504,9 @@ export const isEdgeImpliedByComposition = (edge: Edge, topicGraph: Graph) => {
   const impliedThroughTargetComponent = componentsOfTarget.some((component) => {
     return topicGraph.edges.some(
       (otherEdge) =>
-        otherEdge.target === component.id &&
-        otherEdge.label === edge.label &&
-        otherEdge.source === edgeSource.id,
+        otherEdge.targetId === component.id &&
+        otherEdge.type === edge.type &&
+        otherEdge.sourceId === edgeSource.id,
     );
   });
 
@@ -517,9 +517,9 @@ export const isEdgeImpliedByComposition = (edge: Edge, topicGraph: Graph) => {
   const impliedThroughSourceComponent = componentsOfSource.some((component) => {
     return topicGraph.edges.some(
       (otherEdge) =>
-        otherEdge.source === component.id &&
-        otherEdge.label === edge.label &&
-        otherEdge.target === edgeTarget.id,
+        otherEdge.sourceId === component.id &&
+        otherEdge.type === edge.type &&
+        otherEdge.targetId === edgeTarget.id,
     );
   });
 
@@ -535,7 +535,7 @@ export const isEdgeImpliedByComposition = (edge: Edge, topicGraph: Graph) => {
 // hidden. The button to show implied edges should reduce this pain, but maybe we need a better view
 // to reduce the need to hide implied edges?
 export const isEdgeImplied = (edge: Edge, graph: Graph, justificationEdges: Edge[]) => {
-  if (justificationRelationNames.includes(edge.label)) return false; // justifications can't be implied
+  if (justificationRelationNames.includes(edge.type)) return false; // justifications can't be implied
   if (hasJustification(edge, justificationEdges)) return false;
 
   return isEdgeAShortcut(edge, graph) || isEdgeImpliedByComposition(edge, graph);

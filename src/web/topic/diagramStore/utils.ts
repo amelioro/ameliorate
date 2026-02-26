@@ -5,5 +5,5 @@ export const getTopicTitleFromNodes = (state: DiagramStoreState) => {
   const rootNode = state.nodes[0];
   if (!rootNode) throw errorWithData("diagram has no root node", state.nodes);
 
-  return rootNode.data.label;
+  return rootNode.data.text;
 };
