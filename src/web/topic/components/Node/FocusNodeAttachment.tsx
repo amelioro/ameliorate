@@ -8,7 +8,7 @@ import { Data } from "react-minimal-pie-chart/types/commonTypes";
 
 import { NodeType, nodeTypes, prettyNodeTypes } from "@/common/node";
 import { Tooltip } from "@/web/common/components/Tooltip/Tooltip";
-import { edgeColor } from "@/web/topic/components/Edge/ScoreEdge.styles";
+import { edgeColor } from "@/web/topic/components/Edge/Edge.styles";
 import { CustomDataEntry, PieChart } from "@/web/topic/components/Score/PieChart";
 import { useHiddenNodes } from "@/web/topic/diagramStore/filteredDiagramStore";
 import { useNeighbors } from "@/web/topic/diagramStore/nodeHooks";

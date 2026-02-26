@@ -1,44 +1,46 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { EdgeLabelRenderer } from "@xyflow/react";
-import { lowerCase } from "es-toolkit";
+import { type ReactNode } from "react";
 
-import { useSessionUser } from "@/web/common/hooks";
-import { openContextMenu } from "@/web/common/store/contextMenuActions";
 import { Spotlight } from "@/web/topic/components/Diagram/Diagram.styles";
-import { StyledDiv, StyledPath } from "@/web/topic/components/Edge/ScoreEdge.styles";
+import { StyledDiv, StyledPath } from "@/web/topic/components/Edge/Edge.styles";
 import { getPathDefinitionForEdge } from "@/web/topic/components/Edge/svgPathDrawer";
-import { CommonIndicatorGroup } from "@/web/topic/components/Indicator/Base/CommonIndicatorGroup";
-import { ContentIndicatorGroup } from "@/web/topic/components/Indicator/Base/ContentIndicatorGroup";
-import { StatusIndicatorGroup } from "@/web/topic/components/Indicator/Base/StatusIndicatorGroup";
 import { nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
 import { markerIds } from "@/web/topic/components/TopicWorkspace/SvgEdgeMarkerDefs";
-import { setCustomEdgeLabel } from "@/web/topic/diagramStore/actions";
 import { useIsNodeSelected } from "@/web/topic/diagramStore/edgeHooks";
-import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { EdgeLayoutData } from "@/web/topic/utils/diagram";
-import { Edge } from "@/web/topic/utils/graph";
-import { graphPartClass, visibleOnPartHoverSelectedClasses } from "@/web/topic/utils/styleUtils";
-import { useUnrestrictedEditing } from "@/web/view/actionConfigStore";
+import { Edge as EdgeData } from "@/web/topic/utils/graph";
+import { graphPartClass } from "@/web/topic/utils/styleUtils";
 import { useAvoidEdgeLabelOverlap } from "@/web/view/currentViewStore/layout";
 import { useIsGraphPartSelected } from "@/web/view/selectedPartStore";
 import { setSelected } from "@/web/view/selectedPartStore";
-import { useWhenToShowIndicators } from "@/web/view/userConfigStore/store";
 
 interface Props {
-  edge: Edge;
+  edge: EdgeData;
   edgeLayoutData: EdgeLayoutData;
+  /**
+   * Content to show within the edge label. Extracted this because our direct edges will show
+   * different things than our indirect edges (e.g. indirect edges will not have content indicators).
+   */
+  labelContentSlot: ReactNode;
+  onContextMenu: React.MouseEventHandler;
   inReactFlow: boolean;
 }
 
-// base for custom edge taken from https://reactflow.dev/docs/examples/edges/edge-with-button/
-export const ScoreEdge = ({ edge, edgeLayoutData, inReactFlow }: Props) => {
-  const { sessionUser } = useSessionUser();
-  const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
-
-  const unrestrictedEditing = useUnrestrictedEditing();
+/**
+ * Consistently render the edge path and label container, regardless of edge type (e.g. direct vs
+ * indirect edges).
+ *
+ * Base for custom edge taken from https://reactflow.dev/docs/examples/edges/edge-with-button/.
+ */
+export const Edge = ({
+  edge,
+  edgeLayoutData,
+  labelContentSlot,
+  onContextMenu,
+  inReactFlow,
+}: Props) => {
   const avoidEdgeLabelOverlap = useAvoidEdgeLabelOverlap();
-  const whenToShowIndicators = useWhenToShowIndicators();
-  const showIndicatorsOnHoverSelect = whenToShowIndicators === "onHoverOrSelect";
 
   const isNodeSelected = useIsNodeSelected(edge.id);
   const isEdgeSelected = useIsGraphPartSelected(edge.id);
@@ -58,7 +60,7 @@ export const ScoreEdge = ({ edge, edgeLayoutData, inReactFlow }: Props) => {
       markerEnd={`url(#${markerIds[spotlight]})`}
       spotlight={spotlight}
       onClick={() => setSelected(edge.id)}
-      onContextMenu={(event) => openContextMenu(event, { edge })}
+      onContextMenu={onContextMenu}
     />
   );
 
@@ -74,18 +76,16 @@ export const ScoreEdge = ({ edge, edgeLayoutData, inReactFlow }: Props) => {
       strokeOpacity={0}
       strokeWidth={20}
       onClick={() => setSelected(edge.id)}
-      onContextMenu={(event) => openContextMenu(event, { edge })}
+      onContextMenu={onContextMenu}
     />
   );
-
-  const labelText = edge.data.customLabel ?? lowerCase(edge.type);
 
   const label = (
     <StyledDiv
       labelX={labelX}
       labelY={labelY}
       onClick={() => setSelected(edge.id)}
-      onContextMenu={(event) => openContextMenu(event, { edge })}
+      onContextMenu={onContextMenu}
       role="button"
       spotlight={spotlight}
       className={
@@ -101,46 +101,7 @@ export const ScoreEdge = ({ edge, edgeLayoutData, inReactFlow }: Props) => {
         (isEdgeSelected ? " selected" : "")
       }
     >
-      <Typography
-        variant="body1"
-        margin="0"
-        contentEditable={userCanEditTopicData && unrestrictedEditing}
-        suppressContentEditableWarning // https://stackoverflow.com/a/49639256/8409296
-        onBlur={(event) => {
-          const text = event.target.textContent.trim();
-          if (text && text !== lowerCase(edge.type) && text !== edge.data.customLabel)
-            setCustomEdgeLabel(edge, text);
-        }}
-        // without nopan, clicking on the span won't let you edit text
-        className={userCanEditTopicData && unrestrictedEditing ? "nopan" : ""}
-      >
-        {labelText}
-      </Typography>
-      <CommonIndicatorGroup graphPart={edge} className="absolute right-0 translate-x-5" />
-      <div
-        className={
-          "absolute bottom-0 flex translate-y-5" +
-          /**
-           * Ideally we only put this on the respective indicator groups, but when we do that, this
-           * div still takes up space and is hoverable even when indicators are invisible.
-           * Not sure how to avoid that without putting this here (`:empty` doesn't work because the
-           * children _are_ in the DOM, they just have `visibility: hidden`).
-           * Note: EditableNode's hanging indicator div (BottomDiv) is able to take up no space
-           * because the children indicator groups are `absolute`ly positioned. We can't do that
-           * here because edge labels don't have enough space to put the groups in opposite corners,
-           * they have to be next to each other (and not overlap each other).
-           */
-          (showIndicatorsOnHoverSelect ? ` invisible ${visibleOnPartHoverSelectedClasses}` : "")
-        }
-      >
-        <StatusIndicatorGroup graphPartId={edge.id} bgColor="white" notes={edge.data.notes} />
-        <ContentIndicatorGroup
-          graphPartId={edge.id}
-          graphPartType="edge"
-          bgColor="white"
-          className="ml-0"
-        />
-      </div>
+      {labelContentSlot}
     </StyledDiv>
   );
 
@@ -168,7 +129,7 @@ export const ScoreEdge = ({ edge, edgeLayoutData, inReactFlow }: Props) => {
             height={100}
             style={{ position: "absolute", cursor: "default" }}
             className="react-flow__edge selected"
-            onContextMenu={(event) => openContextMenu(event, { edge })}
+            onContextMenu={onContextMenu}
           >
             {path}
           </svg>

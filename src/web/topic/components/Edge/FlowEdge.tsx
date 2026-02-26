@@ -1,4 +1,4 @@
-import { ScoreEdge } from "@/web/topic/components/Edge/ScoreEdge";
+import { DirectEdge } from "@/web/topic/components/Edge/DirectEdge";
 import { useEdge } from "@/web/topic/diagramStore/edgeHooks";
 import { FlowEdgeProps } from "@/web/topic/utils/flowUtils";
 
@@ -7,5 +7,5 @@ export const FlowEdge = (flowEdge: FlowEdgeProps) => {
 
   if (!edge) return null;
 
-  return <ScoreEdge edge={edge} edgeLayoutData={flowEdge.data} inReactFlow={true} />;
+  return <DirectEdge edge={edge} edgeLayoutData={flowEdge.data} inReactFlow={true} />;
 };
