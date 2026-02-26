@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 import { InfoCategory } from "@/common/infoCategory";
+import { type EdgeType } from "@/db/generated/prisma/enums";
 
-// not sure how to guarantee that this matches the schema enum
 export const relationNames = [
   // topic
   "causes",
@@ -28,7 +28,7 @@ export const relationNames = [
 
   // generic, for unrestricted editing
   "relatesTo",
-] as const;
+] as const satisfies readonly EdgeType[]; // `satisfies` to make it easier to ensure these types match the prisma schema's, while not requiring this file to depend on prisma (at least once types are stripped)
 
 const zRelationNames = z.enum(relationNames);
 
@@ -92,14 +92,16 @@ export const createEdgeSchema = edgeSchema
 export type CreateEdge = z.infer<typeof createEdgeSchema>;
 
 /**
- * Ideally we wouldn't need this outside of the react-flow components, but we unfortunately let this
- * format leak into everywhere on the frontend, including the download topic JSON logic, and we use
- * downloaded files for `examples/`, which we use on the backend (e.g. for topic AI examples).
+ * Ideally we wouldn't need this outside of the frontend, or that it'd be identical to the backend
+ * schema, but the frontend doesn't need `topicId` so it seems like it'll at least be different in
+ * that way. Unfortunately we need this in `common/` here because it's used for the download
+ * topic JSON logic, and we use downloaded files for `examples/` on the backend (e.g. for topic AI
+ * examples).
  *
- * TODO: use the above `edgeSchema` in most places on the frontend, and only use the flow schema for
- * flow-related components.
+ * TODO?: I think ideally we'd have this be identical to backend schema except for `topicId`, and
+ * name it something that implies `topicId` isn't needed ("localEdgeSchema"?).
  */
-export const reactFlowEdgeSchema = z.object({
+export const diagramStoreEdgeSchema = z.object({
   id: z.string(),
   data: z.object({
     /**

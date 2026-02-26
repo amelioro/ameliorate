@@ -3,8 +3,8 @@ import { v4 as uuid } from "uuid";
 import { z } from "zod";
 
 import { InfoCategory } from "@/common/infoCategory";
+import { type NodeType as PrismaNodeType } from "@/db/generated/prisma/enums";
 
-// Not sure how to guarantee that this matches the schema enum.
 // This order is generally used for sorting, e.g.:
 // - the order in which add-node buttons are displayed,
 // - the order to group node types in the same layer of the diagram,
@@ -40,7 +40,7 @@ export const nodeTypes = [
 
   // generic
   "custom",
-] as const;
+] as const satisfies readonly PrismaNodeType[]; // `satisfies` to make it easier to ensure these types match the prisma schema's, while not requiring this file to depend on prisma (at least once types are stripped)
 
 export const zNodeTypes = z.enum(nodeTypes).describe(
   `Implies the intended meaning of the node. There are three categories of node types: Breakdown, Research, and Justification.  Generally if a node could be a breakdown node or another category of node, it should be a breakdown node, because those are generally causally-related nodes, and causally-related things are easier to reason about.
@@ -147,14 +147,16 @@ export const createNodeSchema = nodeSchema
 export type CreateNode = z.infer<typeof createNodeSchema>;
 
 /**
- * Ideally we wouldn't need this outside of the react-flow components, but we unfortunately let this
- * format leak into everywhere on the frontend, including the download topic JSON logic, and we use
- * downloaded files for `examples/`, which we use on the backend (e.g. for topic AI examples).
+ * Ideally we wouldn't need this outside of the frontend, or that it'd be identical to the backend
+ * schema, but the frontend doesn't need `topicId` so it seems like it'll at least be different in
+ * that way. Unfortunately we need this in `common/` here because it's used for the download
+ * topic JSON logic, and we use downloaded files for `examples/` on the backend (e.g. for topic AI
+ * examples).
  *
- * TODO: use the above `nodeSchema` in most places on the frontend, and only use the flow schema for
- * flow-related components.
+ * TODO?: I think ideally we'd have this be identical to backend schema except for `topicId`, and
+ * name it something that implies `topicId` isn't needed ("localNodeSchema"?).
  */
-export const reactFlowNodeSchema = z.object({
+export const diagramStoreNodeSchema = z.object({
   id: z.string(),
   data: z.object({
     /**

@@ -29,7 +29,7 @@ export const setFlowMethods = (
   });
 };
 
-export const getDisplayNodes = () => {
+export const getRenderedNodes = () => {
   const state = useExternalFlowStoreState.getState();
   return state.getFlowDisplayedNodes();
 };

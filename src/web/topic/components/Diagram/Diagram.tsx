@@ -19,11 +19,10 @@ import { setFlowMethods } from "@/web/topic/components/Diagram/externalFlowStore
 import { FlowEdge } from "@/web/topic/components/Edge/FlowEdge";
 import { FlowNode } from "@/web/topic/components/Node/FlowNode";
 import { connectNodes, reconnectEdge } from "@/web/topic/diagramStore/createDeleteActions";
-import { useDiagram } from "@/web/topic/diagramStore/store";
+import { useFilteredDiagram } from "@/web/topic/diagramStore/filteredDiagramStore";
 import { useLayoutedDiagram } from "@/web/topic/hooks/diagramHooks";
 import { PanDirection, panDirections, useViewportUpdater } from "@/web/topic/hooks/flowHooks";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
-import { Diagram as DiagramData } from "@/web/topic/utils/diagram";
 import {
   FlowEdgeProps,
   FlowNodeProps,
@@ -92,7 +91,7 @@ const onReconnect: OnReconnectFunc = (oldEdge, newConnection) => {
   reconnectEdge(oldEdge, newConnection.source, newConnection.target);
 };
 
-const DiagramWithoutProvider = (diagram: DiagramData) => {
+const DiagramWithoutProvider = () => {
   const [topicViewUpdated, setTopicViewUpdated] = useState(false);
   const [newNodeId, setNewNodeId] = useState<string | null>(null);
 
@@ -100,7 +99,9 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const { fitViewForNodes, moveViewportToIncludeNode, pan, zoomIn, zoomOut } = useViewportUpdater();
   const { viewportInitialized, getNodes, getNodesBounds } = useReactFlow();
-  const { layoutedDiagram, hasNewLayout, setHasNewLayout } = useLayoutedDiagram(diagram);
+
+  const filteredDiagram = useFilteredDiagram();
+  const { layoutedDiagram, hasNewLayout, setHasNewLayout } = useLayoutedDiagram(filteredDiagram);
 
   const selectedGraphPartId = useSelectedGraphPart()?.id;
   const flashlightMode = useFlashlightMode();
@@ -259,12 +260,10 @@ const DiagramWithoutProvider = (diagram: DiagramData) => {
 };
 
 export const Diagram = () => {
-  const diagram = useDiagram();
-
   return (
     // wrap in provider so we can use react-flow state https://reactflow.dev/docs/api/react-flow-provider/
     <ReactFlowProvider>
-      <DiagramWithoutProvider {...diagram} />
+      <DiagramWithoutProvider />
     </ReactFlowProvider>
   );
 };

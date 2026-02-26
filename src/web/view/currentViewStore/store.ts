@@ -1,7 +1,7 @@
 import Router from "next/router";
 import { temporal } from "zundo";
 import { useStore } from "zustand";
-import { devtools, persist } from "zustand/middleware";
+import { devtools, persist, subscribeWithSelector } from "zustand/middleware";
 import { createWithEqualityFn } from "zustand/traditional";
 
 import { Format, InfoCategory } from "@/common/infoCategory";
@@ -109,18 +109,20 @@ export const initialViewState: ViewState = {
 const persistedNameBase = "navigateStore";
 
 export const useCurrentViewStore = createWithEqualityFn<ViewState>()(
-  triggerEvent(
-    persist(temporal(devtools(() => initialViewState, { name: persistedNameBase })), {
-      name: persistedNameBase,
-      version: 2,
-      migrate: migrate,
-      skipHydration: true,
-      // don't merge persisted state with current state when rehydrating - instead, use the initialState to fill in missing values
-      // e.g. so that a new non-null value in initialState is non-null in the persisted state,
-      // removing the need to write a migration for every new field
-      merge: (persistedState, _currentState) =>
-        withDefaults(persistedState as Partial<ViewState>, initialViewState),
-    }),
+  subscribeWithSelector(
+    triggerEvent(
+      persist(temporal(devtools(() => initialViewState, { name: persistedNameBase })), {
+        name: persistedNameBase,
+        version: 2,
+        migrate: migrate,
+        skipHydration: true,
+        // don't merge persisted state with current state when rehydrating - instead, use the initialState to fill in missing values
+        // e.g. so that a new non-null value in initialState is non-null in the persisted state,
+        // removing the need to write a migration for every new field
+        merge: (persistedState, _currentState) =>
+          withDefaults(persistedState as Partial<ViewState>, initialViewState),
+      }),
+    ),
   ),
 
   // Using `createWithEqualityFn` so that we can do a diff in hooks that return new arrays/objects
