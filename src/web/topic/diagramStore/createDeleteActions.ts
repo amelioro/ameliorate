@@ -19,7 +19,7 @@ import {
   findNodeOrThrow,
   isNode,
 } from "@/web/topic/utils/graph";
-import { getImplicitLabel } from "@/web/topic/utils/justification";
+import { getImplicitText } from "@/web/topic/utils/justification";
 import { edges } from "@/web/topic/utils/node";
 import { setSelected } from "@/web/view/selectedPartStore";
 
@@ -53,13 +53,13 @@ const connectCriteriaToSolutions = (state: DiagramStoreState, newNode: Node, pro
   const newCriterionEdges = state.edges
     .filter(
       (edge) =>
-        edge.target === problemNode.id &&
-        edge.label === targetRelation.name &&
-        findNodeOrThrow(edge.source, state.nodes).type === targetRelation.source,
+        edge.targetId === problemNode.id &&
+        edge.type === targetRelation.name &&
+        findNodeOrThrow(edge.sourceId, state.nodes).type === targetRelation.source,
     )
     .map((edge) => {
-      const sourceId = newNode.type === "criterion" ? edge.source : newNode.id; // point from other solutions to this criterion
-      const targetId = newNode.type === "criterion" ? newNode.id : edge.source; // point from this solution to other criteria
+      const sourceId = newNode.type === "criterion" ? edge.sourceId : newNode.id; // point from other solutions to this criterion
+      const targetId = newNode.type === "criterion" ? newNode.id : edge.sourceId; // point from this solution to other criteria
 
       return buildEdge({
         sourceId,
@@ -99,9 +99,9 @@ export const addNode = ({ fromPartId, directedRelation, context, selectNewNode }
         (node.data.arguedDiagramPartId === fromPartId || node.id === fromPartId),
     )
   ) {
-    const label = getImplicitLabel(fromPartId, topicGraph);
+    const text = getImplicitText(fromPartId, topicGraph);
     // eslint-disable-next-line functional/immutable-data
-    state.nodes.push(buildNode({ type: "rootClaim", arguedDiagramPartId: fromPartId, label }));
+    state.nodes.push(buildNode({ type: "rootClaim", arguedDiagramPartId: fromPartId, text }));
   }
 
   const rootClaim =

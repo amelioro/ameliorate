@@ -60,21 +60,21 @@ export const getRefinedVisibleAct = () => {
         return {
           tempId,
           type: node.type,
-          text: node.data.label,
+          text: node.data.text,
           notes: node.data.notes,
         };
       }),
     edgesToCreate: parsedVisibleAct.diagram.state.edges
       // TODO: remove `rootClaim` nodes so it's easier for an AI to use justification properly
-      .filter((edge) => !justificationRelationNames.includes(edge.label))
+      .filter((edge) => !justificationRelationNames.includes(edge.type))
       .map((edge) => {
-        const tempSourceId = tempNodeIds[edge.source];
-        const tempTargetId = tempNodeIds[edge.target];
+        const tempSourceId = tempNodeIds[edge.sourceId];
+        const tempTargetId = tempNodeIds[edge.targetId];
         if (tempSourceId === undefined || tempTargetId === undefined)
           throw new Error("Failed to refine visible act: couldn't find source/target nodes");
 
         return {
-          type: edge.label,
+          type: edge.type,
           notes: edge.data.notes,
           tempSourceId,
           tempTargetId,
@@ -86,7 +86,7 @@ export const getRefinedVisibleAct = () => {
 };
 
 const formatNode = (node: WebNode) => {
-  return `${node.type}: ${node.data.label}`;
+  return `${node.type}: ${node.data.text}`;
 };
 
 const formatNodeWithRelationDescription = (node: WebNode, relationDescription: string) => {

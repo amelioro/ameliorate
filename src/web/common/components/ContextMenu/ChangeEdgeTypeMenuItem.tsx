@@ -27,7 +27,7 @@ export const ChangeEdgeTypeMenuItem = ({ edge, parentMenuOpen }: Props) => {
   return (
     <>
       <NestedMenuItem label="Change edge type" parentMenuOpen={parentMenuOpen}>
-        {getSameCategoryEdgeTypes(edge.label).map((type) => (
+        {getSameCategoryEdgeTypes(edge.type).map((type) => (
           <ContextMenuItem
             key={type}
             onClick={() => {

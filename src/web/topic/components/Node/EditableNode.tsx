@@ -200,7 +200,7 @@ const EditableNodeBase = ({ node, className = "", onClick }: Props) => {
         <MiddleDiv className="flex grow px-1 pt-1 pb-2">
           <NodeTextArea
             nodeId={node.id}
-            nodeText={node.data.label}
+            nodeText={node.data.text}
             context={context}
             editable={userCanEditTopicData}
           />

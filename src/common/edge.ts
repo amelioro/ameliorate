@@ -105,13 +105,13 @@ export const diagramStoreEdgeSchema = z.object({
   id: z.string(),
   data: z.object({
     /**
-     * Distinguished from `label` because this is explicitly open user input, and `label` can maintain stricter typing
+     * Distinguished from `type` because this is explicitly open user input, and `type` can maintain stricter typing
      */
     customLabel: z.string().nullable(),
     notes: z.string(),
     arguedDiagramPartId: z.string().optional(),
   }),
-  label: zRelationNames,
+  type: zRelationNames,
   /**
    * id of the source graph part. Can be a node or an edge, but most UI edge operations only work
    * with node sources.
@@ -120,7 +120,7 @@ export const diagramStoreEdgeSchema = z.object({
    * regular edges can be distinguished. But that sounds like a lot of work and it's hard to tell
    * that it'd be worth it.
    */
-  source: z.string(), // arrows point from source to target
+  sourceId: z.string(), // arrows point from source to target
   /**
    * id of the target graph part. Can be a node or an edge, but most UI edge operations only work
    * with node targets.
@@ -129,8 +129,7 @@ export const diagramStoreEdgeSchema = z.object({
    * regular edges can be distinguished. But that sounds like a lot of work and it's hard to tell
    * that it'd be worth it.
    */
-  target: z.string(), // arrows point from source to target
-  type: z.literal("FlowEdge"),
+  targetId: z.string(), // arrows point from source to target
 });
 
 export const infoRelationNames: Record<InfoCategory, RelationName[]> = {

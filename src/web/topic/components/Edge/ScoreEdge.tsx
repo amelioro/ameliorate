@@ -78,7 +78,7 @@ export const ScoreEdge = ({ edge, edgeLayoutData, inReactFlow }: Props) => {
     />
   );
 
-  const labelText = edge.data.customLabel ?? lowerCase(edge.label);
+  const labelText = edge.data.customLabel ?? lowerCase(edge.type);
 
   const label = (
     <StyledDiv
@@ -108,7 +108,7 @@ export const ScoreEdge = ({ edge, edgeLayoutData, inReactFlow }: Props) => {
         suppressContentEditableWarning // https://stackoverflow.com/a/49639256/8409296
         onBlur={(event) => {
           const text = event.target.textContent.trim();
-          if (text && text !== lowerCase(edge.label) && text !== edge.data.customLabel)
+          if (text && text !== lowerCase(edge.type) && text !== edge.data.customLabel)
             setCustomEdgeLabel(edge, text);
         }}
         // without nopan, clicking on the span won't let you edit text

@@ -65,8 +65,8 @@ export const useConnectableNodes = (fromNodeId: string, addableRelations: Direct
 
         const existingEdge = state.edges.find(
           (edge) =>
-            (edge.source === fromNodeId && edge.target === toNode.id) ||
-            (edge.target === fromNodeId && edge.source === toNode.id),
+            (edge.sourceId === fromNodeId && edge.targetId === toNode.id) ||
+            (edge.targetId === fromNodeId && edge.sourceId === toNode.id),
         );
 
         if (existingEdge) return { ...toNode, existingEdge };
@@ -151,7 +151,7 @@ export const useCriterionSolutionEdges = (problemNodeId: string | undefined) => 
       const solutionIds = solutions.map((node) => node.id);
 
       return topicGraph.edges.filter((edge) => {
-        return solutionIds.includes(edge.source) && criteriaIds.includes(edge.target);
+        return solutionIds.includes(edge.sourceId) && criteriaIds.includes(edge.targetId);
       });
     } catch {
       return [];
@@ -224,7 +224,7 @@ export const useSolutions = (problemId?: string) => {
     const problemSolutions = solutions.filter((solution) =>
       state.edges.find(
         (edge) =>
-          edge.source === solution.id && edge.label === "addresses" && edge.target === problemId,
+          edge.sourceId === solution.id && edge.type === "addresses" && edge.targetId === problemId,
       ),
     );
 
@@ -240,9 +240,9 @@ export const useCriteria = (problemId?: string) => {
     const problemCriteria = criteria.filter((criterion) =>
       state.edges.find(
         (edge) =>
-          edge.source === criterion.id &&
-          edge.label === "criterionFor" &&
-          edge.target === problemId,
+          edge.sourceId === criterion.id &&
+          edge.type === "criterionFor" &&
+          edge.targetId === problemId,
       ),
     );
 

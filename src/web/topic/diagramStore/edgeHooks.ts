@@ -37,7 +37,7 @@ export const useIsTableEdge = (edgeId: string) => {
   return useDiagramStore((state) => {
     try {
       const edge = findEdgeOrThrow(edgeId, state.edges);
-      if (edge.label !== "fulfills") return false;
+      if (edge.type !== "fulfills") return false;
 
       const [sourceNode, targetNode] = nodes(edge, state.nodes);
       return sourceNode.type === "solution" && targetNode.type === "criterion";

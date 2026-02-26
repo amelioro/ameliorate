@@ -163,7 +163,7 @@ export const diagramStoreNodeSchema = z.object({
      * Distinguished from `type` because this is explicitly open user input, and `type` can maintain stricter typing
      */
     customType: z.string().nullable(),
-    label: z.string(),
+    text: z.string(),
     notes: z.string(),
     arguedDiagramPartId: z.string().optional(),
   }),

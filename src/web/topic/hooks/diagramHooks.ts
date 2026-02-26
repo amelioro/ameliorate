@@ -24,8 +24,8 @@ export const useLayoutedDiagram = (diagram: Diagram) => {
     // not 100% sure that it's worth re-laying out when node text changes, but we can easily remove if it doesn't seem like it
     .map((graphPart) =>
       isNode(graphPart)
-        ? graphPart.id + graphPart.data.label + graphPart.type
-        : graphPart.id + graphPart.label,
+        ? graphPart.id + graphPart.data.text + graphPart.type
+        : graphPart.id + graphPart.type,
     )
     .concat(
       String(forceNodesIntoLayers),

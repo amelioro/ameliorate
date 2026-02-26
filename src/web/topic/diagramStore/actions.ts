@@ -50,16 +50,16 @@ export const setScore = (username: string, graphPartId: string, score: Score) =>
   useDiagramStore.setState(finishDraft(state), false, "setScore");
 };
 
-export const setNodeLabel = (nodeId: string, value: string) => {
+export const setNodeText = (nodeId: string, value: string) => {
   const state = createDraft(useDiagramStore.getState());
 
   const foundNode = findNodeOrThrow(nodeId, state.nodes);
 
   /* eslint-disable functional/immutable-data */
-  foundNode.data.label = value;
+  foundNode.data.text = value;
   /* eslint-enable functional/immutable-data */
 
-  useDiagramStore.setState(finishDraft(state), false, "setNodeLabel");
+  useDiagramStore.setState(finishDraft(state), false, "setNodeText");
 };
 
 export const setCustomNodeType = (node: Node, value: string) => {
@@ -80,7 +80,7 @@ export const setCustomNodeType = (node: Node, value: string) => {
   foundNode.data.customType = value;
   /* eslint-enable functional/immutable-data */
 
-  useDiagramStore.setState(finishDraft(state), false, "setCustomEdgeLabel");
+  useDiagramStore.setState(finishDraft(state), false, "setCustomNodeType");
 };
 
 export const setCustomEdgeLabel = (edge: Edge, value: string) => {
@@ -123,7 +123,7 @@ export const changeEdgeType = (edge: Edge, newType: RelationName) => {
   const foundEdge = findEdgeOrThrow(edge.id, state.edges);
 
   /* eslint-disable functional/immutable-data */
-  foundEdge.label = newType;
+  foundEdge.type = newType;
   foundEdge.data.customLabel = null; // reset custom label so new type is used for label
   /* eslint-enable functional/immutable-data */
 

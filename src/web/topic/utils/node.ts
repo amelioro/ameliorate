@@ -7,11 +7,11 @@ export const hideableNodeTypes: NodeType[] = ["criterion", "effect", "solutionCo
 
 // TODO: memoize? this could traverse a lot of nodes & edges, seems not performant
 export const sourceNodes = (node: Node, topicGraph: Graph, sameCategoryNodes = true) => {
-  const sourceEdges = topicGraph.edges.filter((edge) => edge.target === node.id);
+  const sourceEdges = topicGraph.edges.filter((edge) => edge.targetId === node.id);
 
   const sources = sourceEdges.map((edge) => {
-    const node = topicGraph.nodes.find((node) => edge.source === node.id);
-    if (!node) throw errorWithData(`node ${edge.source} not found`, topicGraph);
+    const node = topicGraph.nodes.find((node) => edge.sourceId === node.id);
+    if (!node) throw errorWithData(`node ${edge.sourceId} not found`, topicGraph);
 
     return node;
   });
@@ -23,10 +23,10 @@ export const sourceNodes = (node: Node, topicGraph: Graph, sameCategoryNodes = t
 
 // all children references prefer to look for same-category nodes
 export const targetNodes = (node: Node, topicGraph: Graph, sameCategoryNodes = true) => {
-  const targetEdges = topicGraph.edges.filter((edge) => edge.source === node.id);
+  const targetEdges = topicGraph.edges.filter((edge) => edge.sourceId === node.id);
   const targets = targetEdges.map((edge) => {
-    const node = topicGraph.nodes.find((node) => edge.target === node.id);
-    if (!node) throw errorWithData(`node ${edge.target} not found`, topicGraph);
+    const node = topicGraph.nodes.find((node) => edge.targetId === node.id);
+    if (!node) throw errorWithData(`node ${edge.targetId} not found`, topicGraph);
 
     return node;
   });
@@ -73,5 +73,5 @@ export const components = (node: Node, topicGraph: Graph) => {
 };
 
 export const edges = (node: Node, edges: Edge[]) => {
-  return edges.filter((edge) => edge.source === node.id || edge.target === node.id);
+  return edges.filter((edge) => edge.sourceId === node.id || edge.targetId === node.id);
 };

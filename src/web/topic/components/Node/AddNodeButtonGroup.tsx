@@ -28,7 +28,7 @@ import { useExpandAddNodeButtons } from "@/web/view/userConfigStore/store";
 
 const getOptionText = (node: Node) => {
   const title = prettyNodeTypes[node.type];
-  return `${title}: ${node.data.label}`;
+  return `${title}: ${node.data.text}`;
 };
 
 interface AddMenuSearchProps {
@@ -135,7 +135,7 @@ const AddMenuSearch = ({ fromNodeId, addableRelations, className }: AddMenuSearc
                   : optionText}
                 <i className="text-slate-400">
                   {/* ideally the `existingEdge` would probably use the same format of relation description, but that'd require grabbing the source/target node types from the edge, which is a bit annoying to do, and showing at least the edge label seems fine enough */}
-                  {` (${option.addableRelationToNode ? getDirectedRelationDescription(option.addableRelationToNode) : option.existingEdge.label})`}
+                  {` (${option.addableRelationToNode ? getDirectedRelationDescription(option.addableRelationToNode) : option.existingEdge.type})`}
                 </i>
               </span>
             </div>

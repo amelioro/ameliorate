@@ -43,17 +43,19 @@ export const useTopLevelJustification = (graphPartId: string) => {
 
     const topLevelJustificationEdges = state.edges.filter(
       (edge) =>
-        justificationRelationNames.includes(edge.label) &&
-        edge.target === nodeToCheckForJustification.id,
+        justificationRelationNames.includes(edge.type) &&
+        edge.targetId === nodeToCheckForJustification.id,
     );
 
     const supports = topLevelJustificationEdges
-      .map((edge) => state.nodes.find((node) => node.id === edge.source && node.type === "support"))
+      .map((edge) =>
+        state.nodes.find((node) => node.id === edge.sourceId && node.type === "support"),
+      )
       .filter((node): node is Node => !!node);
 
     const critiques = topLevelJustificationEdges
       .map((edge) =>
-        state.nodes.find((node) => node.id === edge.source && node.type === "critique"),
+        state.nodes.find((node) => node.id === edge.sourceId && node.type === "critique"),
       )
       .filter((node): node is Node => !!node);
 
@@ -69,7 +71,7 @@ export const useNonTopLevelJustificationCount = (graphPartId: string) => {
     if (!rootClaim) return 0;
 
     return state.edges.filter(
-      (edge) => edge.data.arguedDiagramPartId === graphPartId && edge.target !== rootClaim.id,
+      (edge) => edge.data.arguedDiagramPartId === graphPartId && edge.targetId !== rootClaim.id,
     ).length;
   });
 };
@@ -79,7 +81,7 @@ export const useResearchNodes = (graphPartId: string) => {
     const researchNodes = state.nodes.filter(
       (node) =>
         researchNodeTypes.includes(node.type) &&
-        state.edges.find((edge) => edge.source === node.id && edge.target === graphPartId),
+        state.edges.find((edge) => edge.sourceId === node.id && edge.targetId === graphPartId),
     );
 
     return {

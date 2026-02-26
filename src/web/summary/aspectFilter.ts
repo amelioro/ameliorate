@@ -86,13 +86,13 @@ export const getIncomingNodesByRelationDescription = (summaryNode: Node, graph: 
   const sourcesByRelationDescription = graph.edges
     .filter(
       (edge) =>
-        edge.target === summaryNode.id && getEdgeInfoCategory(edge.label) === nodeInfoCategory,
+        edge.targetId === summaryNode.id && getEdgeInfoCategory(edge.type) === nodeInfoCategory,
     )
     .reduce<Record<string, Node[]>>((acc, incomingEdge) => {
-      const incomingNode = findNodeOrThrow(incomingEdge.source, graph.nodes);
+      const incomingNode = findNodeOrThrow(incomingEdge.sourceId, graph.nodes);
       const relationDescription = getDirectedRelationDescription({
         source: incomingNode.type,
-        name: incomingEdge.label,
+        name: incomingEdge.type,
         target: summaryNode.type,
         as: "source",
       });
@@ -113,13 +113,13 @@ export const getOutgoingNodesByRelationDescription = (summaryNode: Node, graph: 
   const targetsByRelationDescription = graph.edges
     .filter(
       (edge) =>
-        edge.source === summaryNode.id && getEdgeInfoCategory(edge.label) === nodeInfoCategory,
+        edge.sourceId === summaryNode.id && getEdgeInfoCategory(edge.type) === nodeInfoCategory,
     )
     .reduce<Record<string, Node[]>>((acc, sourceEdge) => {
-      const targetNode = findNodeOrThrow(sourceEdge.target, graph.nodes);
+      const targetNode = findNodeOrThrow(sourceEdge.targetId, graph.nodes);
       const relationDescription = getDirectedRelationDescription({
         source: summaryNode.type,
-        name: sourceEdge.label,
+        name: sourceEdge.type,
         target: targetNode.type,
         as: "target",
       });

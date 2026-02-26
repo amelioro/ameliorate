@@ -32,7 +32,7 @@ export interface ProblemNode extends Node {
 interface BuildProps {
   id?: string;
   customType?: string | null;
-  label?: string;
+  text?: string;
   notes?: string;
   type: NodeType;
   arguedDiagramPartId?: string;
@@ -40,7 +40,7 @@ interface BuildProps {
 export const buildNode = ({
   id,
   customType = null,
-  label,
+  text,
   notes,
   type,
   arguedDiagramPartId,
@@ -49,7 +49,7 @@ export const buildNode = ({
     id: id ?? uuid(),
     data: {
       customType: customType,
-      label: label ?? `new node`,
+      text: text ?? `new node`,
       notes: notes ?? "",
       arguedDiagramPartId: justificationNodeTypes.includes(type) ? arguedDiagramPartId : undefined, // don't set arguedDiagramPartId on non-justifications because non-justifications shouldn't be deleted when the justification tree is deleted
     },
@@ -90,10 +90,9 @@ export const buildEdge = ({
         ? arguedDiagramPartId
         : undefined, // don't set arguedDiagramPartId on non-justifications because non-justifications shouldn't be deleted when the justification tree is deleted
     },
-    label: relation,
-    source: sourceId,
-    target: targetId,
-    type: "FlowEdge" as const,
+    type: relation,
+    sourceId: sourceId,
+    targetId: targetId,
   };
 };
 
@@ -125,8 +124,8 @@ export const findGraphPartOrThrow = (graphPartId: string, nodes: Node[], edges: 
 };
 
 export const isNode = (graphPart: GraphPart): graphPart is Node => {
-  if (graphPart.type !== "FlowEdge") return true;
-  return false;
+  if ("sourceId" in graphPart) return false;
+  return true;
 };
 
 export const isNodeType = <T extends NodeType>(
@@ -159,20 +158,20 @@ const findNodesRecursivelyFrom = (
    */
   layersAway: number;
 })[] => {
-  const from = toDirection === "target" ? "source" : "target";
-  const to = toDirection;
+  const from = toDirection === "target" ? "sourceId" : "targetId";
+  const to = toDirection === "target" ? "targetId" : "sourceId";
 
   const foundEdges = {
     traverse: graph.edges.filter(
       (edge) =>
         edge[from] === fromNode.id &&
-        labelsToTraverse.includes(edge.label) &&
+        labelsToTraverse.includes(edge.type) &&
         !seenIds.includes(edge[to]),
     ),
     keep: graph.edges.filter(
       (edge) =>
         edge[from] === fromNode.id &&
-        labelsToKeep.includes(edge.label) &&
+        labelsToKeep.includes(edge.type) &&
         !seenIds.includes(edge[to]),
     ),
   };
@@ -252,7 +251,7 @@ export const getRelevantEdges = (nodes: Node[], graph: Graph) => {
   const nodeIds = nodes.map((node) => node.id);
 
   return graph.edges.filter(
-    (edge) => nodeIds.includes(edge.target) && nodeIds.includes(edge.source),
+    (edge) => nodeIds.includes(edge.targetId) && nodeIds.includes(edge.sourceId),
   );
 };
 
@@ -282,8 +281,8 @@ export const getSecondaryNeighbors = (
         infoNodeTypes.research.includes(node.type) &&
         graph.edges.some(
           (edge) =>
-            (edge.source === node.id && primaryNonResearchIds.includes(edge.target)) ||
-            (edge.target === node.id && primaryNonResearchIds.includes(edge.source)),
+            (edge.sourceId === node.id && primaryNonResearchIds.includes(edge.targetId)) ||
+            (edge.targetId === node.id && primaryNonResearchIds.includes(edge.sourceId)),
         ),
     );
 
@@ -302,8 +301,8 @@ export const getSecondaryNeighbors = (
         infoNodeTypes.breakdown.includes(node.type) &&
         graph.edges.some(
           (edge) =>
-            (edge.source === node.id && primaryNonBreakdownIds.includes(edge.target)) ||
-            (edge.target === node.id && primaryNonBreakdownIds.includes(edge.source)),
+            (edge.sourceId === node.id && primaryNonBreakdownIds.includes(edge.targetId)) ||
+            (edge.targetId === node.id && primaryNonBreakdownIds.includes(edge.sourceId)),
         ),
     );
 

@@ -28,7 +28,7 @@ export const IconNode = ({ node, className, onClick }: Props) => {
   const NodeIcon = nodeDecorations[node.type].NodeIcon;
 
   const typeText = node.data.customType ?? prettyNodeTypes[node.type];
-  const nodeDescription = `${typeText}: ${node.data.label}`;
+  const nodeDescription = `${typeText}: ${node.data.text}`;
 
   const tooltipBody = (
     // Slight hack to ensure that the tooltip node doesn't animate towards/from a currently-showing node, which would cause that node to disappear.

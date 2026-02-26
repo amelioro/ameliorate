@@ -34,6 +34,7 @@ export const migrate = (persistedState: any, version: number) => {
     migrate_24_to_25,
     migrate_25_to_26,
     migrate_26_to_27,
+    migrate_27_to_28,
   ];
 
   let state = persistedState;
@@ -687,6 +688,58 @@ const migrate_26_to_27 = (state: State26) => {
     if (newLabel) {
       (edge.label as Relation27) = newLabel;
     }
+  });
+
+  return state;
+};
+
+interface Node27 {
+  data: {
+    label?: string;
+  };
+}
+
+interface Edge27 {
+  label?: string;
+  source?: string;
+  target?: string;
+  type: string;
+}
+
+interface State27 {
+  nodes: Node27[];
+  edges: Edge27[];
+}
+
+interface Node28 {
+  data: {
+    text?: string;
+  };
+}
+
+interface Edge28 {
+  sourceId?: string;
+  targetId?: string;
+  type?: string;
+}
+
+const migrate_27_to_28 = (state: State27) => {
+  // rename node data.label to data.text
+  state.nodes.forEach((node) => {
+    (node as unknown as Node28).data.text = node.data.label;
+    delete node.data.label;
+  });
+
+  // rename edge label to type, remove old type ("FlowEdge"), rename source/target to sourceId/targetId
+  state.edges.forEach((edge) => {
+    (edge as unknown as Edge28).type = edge.label;
+    delete edge.label;
+
+    (edge as unknown as Edge28).sourceId = edge.source;
+    delete edge.source;
+
+    (edge as unknown as Edge28).targetId = edge.target;
+    delete edge.target;
   });
 
   return state;

@@ -13,29 +13,29 @@ export const hasJustification = (edge: Edge, justificationEdges: Edge[]) => {
   );
 };
 
-export const getImplicitLabel = (arguedDiagramPartId: string, topicGraph: Graph): string => {
+export const getImplicitText = (arguedDiagramPartId: string, topicGraph: Graph): string => {
   const arguedDiagramPart = findGraphPartOrThrow(
     arguedDiagramPartId,
     topicGraph.nodes,
     topicGraph.edges,
   );
   if (isNode(arguedDiagramPart)) {
-    return `"${arguedDiagramPart.data.label}" is an important ${prettyNodeTypes[arguedDiagramPart.type]} in this topic`;
+    return `"${arguedDiagramPart.data.text}" is an important ${prettyNodeTypes[arguedDiagramPart.type]} in this topic`;
   } else {
-    const sourceNode = topicGraph.nodes.find((node) => node.id === arguedDiagramPart.source);
-    const targetNode = topicGraph.nodes.find((node) => node.id === arguedDiagramPart.target);
+    const sourceNode = topicGraph.nodes.find((node) => node.id === arguedDiagramPart.sourceId);
+    const targetNode = topicGraph.nodes.find((node) => node.id === arguedDiagramPart.targetId);
     if (!sourceNode || !targetNode) {
       throw errorWithData("edge nodes not found", arguedDiagramPart, topicGraph);
     }
 
     return (
-      `${prettyNodeTypes[sourceNode.type]} "${sourceNode.data.label}" ` +
-      lowerCase(arguedDiagramPart.data.customLabel ?? arguedDiagramPart.label) +
-      ` ${prettyNodeTypes[targetNode.type]} "${targetNode.data.label}"`
+      `${prettyNodeTypes[sourceNode.type]} "${sourceNode.data.text}" ` +
+      lowerCase(arguedDiagramPart.data.customLabel ?? arguedDiagramPart.type) +
+      ` ${prettyNodeTypes[targetNode.type]} "${targetNode.data.text}"`
     );
   }
 };
 
 export const isJustificationEdge = (graphPart: GraphPart) => {
-  return !isNode(graphPart) && justificationRelationNames.includes(graphPart.label);
+  return !isNode(graphPart) && justificationRelationNames.includes(graphPart.type);
 };

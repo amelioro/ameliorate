@@ -17,17 +17,17 @@ export const useQuestionDetails = (questionNodeId: string) => {
   return useDiagramStore((state) => {
     try {
       const asksAboutEdge = state.edges.find(
-        (edge) => edge.source === questionNodeId && edge.label === "asksAbout",
+        (edge) => edge.sourceId === questionNodeId && edge.type === "asksAbout",
       );
       const partAskingAbout = asksAboutEdge
-        ? findGraphPartOrThrow(asksAboutEdge.target, state.nodes, state.edges)
+        ? findGraphPartOrThrow(asksAboutEdge.targetId, state.nodes, state.edges)
         : null;
 
       const answerEdges = state.edges.filter(
-        (edge) => edge.target === questionNodeId && edge.label === "potentialAnswerTo",
+        (edge) => edge.targetId === questionNodeId && edge.type === "potentialAnswerTo",
       );
       const answers = state.nodes.filter((node) =>
-        answerEdges.some((edge) => edge.source === node.id),
+        answerEdges.some((edge) => edge.sourceId === node.id),
       );
 
       return { partAskingAbout, answers };
@@ -41,9 +41,9 @@ export const useAnswerDetails = (answerNodeId: string) => {
   return useDiagramStore((state) => {
     try {
       const answerToEdge = state.edges.find(
-        (edge) => edge.source === answerNodeId && edge.label === "potentialAnswerTo",
+        (edge) => edge.sourceId === answerNodeId && edge.type === "potentialAnswerTo",
       );
-      const question = answerToEdge ? findNodeOrThrow(answerToEdge.target, state.nodes) : null;
+      const question = answerToEdge ? findNodeOrThrow(answerToEdge.targetId, state.nodes) : null;
       return { question };
     } catch {
       return { question: null };
@@ -54,21 +54,21 @@ export const useAnswerDetails = (answerNodeId: string) => {
 export const useFactDetails = (factNodeId: string) => {
   return useDiagramStore((state) => {
     const relevantForEdges = state.edges.filter(
-      (edge) => edge.source === factNodeId && edge.label === "relevantFor",
+      (edge) => edge.sourceId === factNodeId && edge.type === "relevantFor",
     );
 
     const nodesRelevantFor = state.nodes.filter((node) =>
-      relevantForEdges.some((relevantForEdge) => relevantForEdge.target === node.id),
+      relevantForEdges.some((relevantForEdge) => relevantForEdge.targetId === node.id),
     );
     const edgesRelevantFor = state.edges.filter((edge) =>
-      relevantForEdges.some((relevantForEdge) => relevantForEdge.target === edge.id),
+      relevantForEdges.some((relevantForEdge) => relevantForEdge.targetId === edge.id),
     );
 
     const sourceEdges = state.edges.filter(
-      (edge) => edge.target === factNodeId && edge.label === "sourceOf",
+      (edge) => edge.targetId === factNodeId && edge.type === "sourceOf",
     );
     const sources = state.nodes.filter((node) =>
-      sourceEdges.some((sourceEdge) => node.id === sourceEdge.source),
+      sourceEdges.some((sourceEdge) => node.id === sourceEdge.sourceId),
     );
 
     return { nodesRelevantFor, edgesRelevantFor, sources };
@@ -78,28 +78,28 @@ export const useFactDetails = (factNodeId: string) => {
 export const useSourceDetails = (sourceNodeId: string) => {
   return useDiagramStore((state) => {
     const relevantForEdges = state.edges.filter(
-      (edge) => edge.source === sourceNodeId && edge.label === "relevantFor",
+      (edge) => edge.sourceId === sourceNodeId && edge.type === "relevantFor",
     );
 
     const nodesRelevantFor = state.nodes.filter((node) =>
-      relevantForEdges.some((relevantForEdge) => relevantForEdge.target === node.id),
+      relevantForEdges.some((relevantForEdge) => relevantForEdge.targetId === node.id),
     );
     const edgesRelevantFor = state.edges.filter((edge) =>
-      relevantForEdges.some((relevantForEdge) => relevantForEdge.target === edge.id),
+      relevantForEdges.some((relevantForEdge) => relevantForEdge.targetId === edge.id),
     );
 
     const factEdges = state.edges.filter(
-      (edge) => edge.source === sourceNodeId && edge.label === "sourceOf",
+      (edge) => edge.sourceId === sourceNodeId && edge.type === "sourceOf",
     );
     const facts = state.nodes.filter((node) =>
-      factEdges.some((factEdge) => node.id === factEdge.target),
+      factEdges.some((factEdge) => node.id === factEdge.targetId),
     );
 
     const mentionEdges = state.edges.filter(
-      (edge) => edge.source === sourceNodeId && edge.label === "mentions",
+      (edge) => edge.sourceId === sourceNodeId && edge.type === "mentions",
     );
     const mentionedSources = state.nodes.filter((node) =>
-      mentionEdges.some((mentionEdge) => node.id === mentionEdge.target),
+      mentionEdges.some((mentionEdge) => node.id === mentionEdge.targetId),
     );
 
     return { nodesRelevantFor, edgesRelevantFor, facts, mentionedSources };
