@@ -1,6 +1,6 @@
 import { Stack } from "@mui/material";
 
-import { ScoreEdge } from "@/web/topic/components/Edge/ScoreEdge";
+import { DirectEdge } from "@/web/topic/components/Edge/DirectEdge";
 import { EditableNode } from "@/web/topic/components/Node/EditableNode";
 import { nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
 import { useNode } from "@/web/topic/diagramStore/nodeHooks";
@@ -31,7 +31,7 @@ export const StandaloneEdge = ({ edge }: Props) => {
     <Stack>
       {/* z-index to ensure hanging node indicators don't fall behind the edge svg empty background */}
       <EditableNode node={targetNode} className="z-10" />
-      <ScoreEdge edge={edge} edgeLayoutData={edgeLayoutData} inReactFlow={false} />
+      <DirectEdge edge={edge} edgeLayoutData={edgeLayoutData} inReactFlow={false} />
       <EditableNode node={sourceNode} className="z-10" />
     </Stack>
   );

@@ -3,20 +3,22 @@ import { v4 as uuid } from "uuid";
 import { z } from "zod";
 
 import {
-  RelationName,
+  type MinimalEdge,
+  type RelationName,
   diagramStoreEdgeSchema,
   justificationRelationNames,
   relationNames,
 } from "@/common/edge";
 import { errorWithData } from "@/common/errorHandling";
 import {
-  NodeType,
+  type MinimalNode,
+  type NodeType,
   diagramStoreNodeSchema,
   infoNodeTypes,
   justificationNodeTypes,
   nodeTypes,
 } from "@/common/node";
-import { GeneralFilter } from "@/web/view/utils/generalFilter";
+import { type GeneralFilter } from "@/web/view/utils/generalFilter";
 
 export interface Graph {
   nodes: Node[];
@@ -102,14 +104,14 @@ export type GraphPartType = "node" | "edge";
 export const possibleScores = ["-", "1", "2", "3", "4", "5", "6", "7", "8", "9"] as const;
 export type Score = (typeof possibleScores)[number];
 
-export const findNodeOrThrow = (nodeId: string, nodes: Node[]) => {
+export const findNodeOrThrow = <TNode extends MinimalNode>(nodeId: string, nodes: TNode[]) => {
   const node = nodes.find((node) => node.id === nodeId);
   if (!node) throw errorWithData("node not found", nodeId, nodes);
 
   return node;
 };
 
-export const findEdgeOrThrow = (edgeId: string, edges: Edge[]) => {
+export const findEdgeOrThrow = <TEdge extends MinimalEdge>(edgeId: string, edges: TEdge[]) => {
   const edge = edges.find((edge) => edge.id === edgeId);
   if (!edge) throw errorWithData("edge not found", edgeId, edges);
 
@@ -128,17 +130,17 @@ export const isNode = (graphPart: GraphPart): graphPart is Node => {
   return true;
 };
 
-export const isNodeType = <T extends NodeType>(
+export const isNodeType = <TNodeType extends NodeType>(
   graphPart: GraphPart,
-  type: T,
-): graphPart is Node & { type: T } => {
+  type: TNodeType,
+): graphPart is Node & { type: TNodeType } => {
   return isNode(graphPart) && graphPart.type === type;
 };
 
-const findNodesRecursivelyFrom = (
-  fromNode: Node,
+const findNodesRecursivelyFrom = <TNode extends MinimalNode>(
+  fromNode: MinimalNode,
   toDirection: EdgeDirection,
-  graph: Graph,
+  graph: { nodes: TNode[]; edges: MinimalEdge[] },
   labelsToTraverse: readonly RelationName[] = relationNames,
   labelsToKeep: readonly RelationName[] = labelsToTraverse, // if we don't have labelsToKeep, assume we want to narrow via labelsToTraverse (we don't generally want to keep nodes through all edge types, unless we're traversing all edge types)
   nodeTypesToKeep: readonly NodeType[] = nodeTypes,
@@ -152,7 +154,7 @@ const findNodesRecursivelyFrom = (
    * could accept a max depth and do the filtering itself.
    */
   depth = 1,
-): (Node & {
+): (TNode & {
   /**
    * how far away the node is from the `fromNode`. e.g. 1 if it's a direct neighbor, 2 if it's a neighbor's neighbor, etc.
    */
@@ -213,9 +215,9 @@ const findNodesRecursivelyFrom = (
   return uniqBy(foundNodes.keep.concat(furtherNodesToKeep), (node) => node.id);
 };
 
-export const upstreamNodes = (
-  fromNode: Node,
-  graph: Graph,
+export const upstreamNodes = <TNode extends MinimalNode>(
+  fromNode: MinimalNode,
+  graph: { nodes: TNode[]; edges: MinimalEdge[] },
   labelsToTraverse?: RelationName[],
   labelsToKeep?: RelationName[],
   nodeTypesToKeep?: NodeType[],
@@ -230,9 +232,9 @@ export const upstreamNodes = (
   );
 };
 
-export const downstreamNodes = (
-  fromNode: Node,
-  graph: Graph,
+export const downstreamNodes = <TNode extends MinimalNode>(
+  fromNode: MinimalNode,
+  graph: { nodes: TNode[]; edges: MinimalEdge[] },
   labelsToTraverse?: RelationName[],
   labelsToKeep?: RelationName[],
   nodeTypesToKeep?: NodeType[],
@@ -247,7 +249,10 @@ export const downstreamNodes = (
   );
 };
 
-export const getRelevantEdges = (nodes: Node[], graph: Graph) => {
+export const getRelevantEdges = <TEdge extends MinimalEdge>(
+  nodes: MinimalNode[],
+  graph: { nodes: MinimalNode[]; edges: TEdge[] },
+) => {
   const nodeIds = nodes.map((node) => node.id);
 
   return graph.edges.filter(
@@ -261,11 +266,11 @@ export const getRelevantEdges = (nodes: Node[], graph: Graph) => {
  * For example, question and fact nodes are secondary in the topic diagram, and problem and solution
  * nodes are secondary in the research diagram.
  */
-export const getSecondaryNeighbors = (
-  primaryNodes: Node[],
-  graph: Graph,
+export const getSecondaryNeighbors = <TNode extends MinimalNode>(
+  primaryNodes: MinimalNode[],
+  graph: { nodes: TNode[]; edges: MinimalEdge[] },
   generalFilter: GeneralFilter,
-) => {
+): TNode[] => {
   const primaryNodeIds = primaryNodes.map((node) => node.id);
 
   const secondaryNeighbors = [];
@@ -318,7 +323,9 @@ export const getSecondaryNeighbors = (
  *
  * Also sorts indirect nodes by how far away they are, for convenience.
  */
-export const splitNodesByDirectAndIndirect = (nodes: (Node & { layersAway: number })[]) => {
+export const splitNodesByDirectAndIndirect = <TNode extends MinimalNode>(
+  nodes: (TNode & { layersAway: number })[],
+) => {
   return {
     directNodes: nodes.filter((node) => node.layersAway === 1),
     indirectNodes: nodes

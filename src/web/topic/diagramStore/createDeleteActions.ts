@@ -1,18 +1,18 @@
 import { createDraft, finishDraft } from "immer";
 
-import { RelationName } from "@/common/edge";
+import { type Relation, type RelationName } from "@/common/edge";
 import { errorWithData } from "@/common/errorHandling";
-import { NodeType, justificationNodeTypes } from "@/common/node";
+import { type NodeType, justificationNodeTypes } from "@/common/node";
 import { emitter } from "@/web/common/event";
 import { setNewlyAddedNode } from "@/web/common/store/ephemeralStore";
-import { WorkspaceContextType } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
+import { type WorkspaceContextType } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { getJustificationCount } from "@/web/topic/diagramStore/graphPartHooks";
-import { DiagramStoreState, useDiagramStore } from "@/web/topic/diagramStore/store";
-import { DirectedToRelation, Relation, canCreateEdge, getRelation } from "@/web/topic/utils/edge";
+import { type DiagramStoreState, useDiagramStore } from "@/web/topic/diagramStore/store";
+import { type DirectedToRelation, canCreateEdge, getRelation } from "@/web/topic/utils/edge";
 import {
-  Graph,
+  type Graph,
   type GraphPart,
-  Node,
+  type Node,
   buildEdge,
   buildNode,
   findGraphPartOrThrow,

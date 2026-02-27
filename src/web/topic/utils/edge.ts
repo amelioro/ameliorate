@@ -1,9 +1,21 @@
 import { lowerCase, startCase } from "es-toolkit";
 
-import { RelationName, justificationRelationNames } from "@/common/edge";
-import { NodeType, getSameCategoryNodeTypes, nodeTypes, researchNodeTypes } from "@/common/node";
+import {
+  type MinimalEdge,
+  type Relation,
+  type RelationName,
+  justificationRelationNames,
+} from "@/common/edge";
+import { type MinimalGraph } from "@/common/graph";
+import {
+  type MinimalNode,
+  type NodeType,
+  getSameCategoryNodeTypes,
+  nodeTypes,
+  researchNodeTypes,
+} from "@/common/node";
 import { type EffectType } from "@/web/topic/utils/effect";
-import { Edge, EdgeDirection, Graph, Node, findNodeOrThrow } from "@/web/topic/utils/graph";
+import { type Edge, type EdgeDirection, findNodeOrThrow } from "@/web/topic/utils/graph";
 import { hasJustification } from "@/web/topic/utils/justification";
 import { components, sourceNodes, targetNodes } from "@/web/topic/utils/node";
 
@@ -156,12 +168,6 @@ const relations: AddableRelation[] = researchRelations.concat([
   { source: "critique", name: "critiques", target: "critique", commonalityFrom: { target: "common" } },
 ]);
 
-export interface Relation {
-  source: NodeType;
-  name: RelationName;
-  target: NodeType;
-}
-
 /**
  * For searching for relations or nodes, e.g. finding nodes in a summary column, or finding which
  * addable relations should be used for the add node button's search box.
@@ -257,12 +263,6 @@ export const getRelation = (
   // we're assuming that anything can relate to anything else; potentially this should only be true when unrestricted editing is on
   return relationsSortedByCommonality[0] ?? { source, name: "relatesTo", target };
 };
-
-export const composedRelations: Relation[] = [
-  { source: "solution", name: "has", target: "solutionComponent" },
-];
-
-export const componentTypes = composedRelations.map((relation) => relation.target);
 
 interface ShortcutRelation {
   detourNodeType: NodeType;
@@ -413,7 +413,11 @@ export const addableRelationsFrom = (
   return formattedRelations;
 };
 
-export const canCreateEdge = (topicGraph: Graph, source: Node, target: Node) => {
+export const canCreateEdge = (
+  topicGraph: MinimalGraph,
+  source: MinimalNode,
+  target: MinimalNode,
+) => {
   const existingEdge = topicGraph.edges.find((edge) => {
     return (
       (edge.sourceId === target.id && edge.targetId === source.id) ||
@@ -434,19 +438,26 @@ export const canCreateEdge = (topicGraph: Graph, source: Node, target: Node) => 
   return true;
 };
 
-export const sourceNode = (edge: Edge, nodes: Node[]) => {
+export const sourceNode = <TNode extends MinimalNode>(edge: MinimalEdge, nodes: TNode[]) => {
   return findNodeOrThrow(edge.sourceId, nodes);
 };
 
-export const targetNode = (edge: Edge, nodes: Node[]) => {
+export const targetNode = <TNode extends MinimalNode>(edge: MinimalEdge, nodes: TNode[]) => {
   return findNodeOrThrow(edge.targetId, nodes);
 };
 
-export const nodes = (edge: Edge, nodes: Node[]): [Node, Node] => {
+export const nodes = <TNode extends MinimalNode>(
+  edge: MinimalEdge,
+  nodes: TNode[],
+): [TNode, TNode] => {
   return [sourceNode(edge, nodes), targetNode(edge, nodes)];
 };
 
-export const getConnectingEdge = (graphPartId1: string, graphPartId2: string, edges: Edge[]) => {
+export const getConnectingEdge = <TEdge extends MinimalEdge>(
+  graphPartId1: string,
+  graphPartId2: string,
+  edges: TEdge[],
+) => {
   const edge = edges.find(
     (edge) =>
       (edge.sourceId === graphPartId1 && edge.targetId === graphPartId2) ||
@@ -457,7 +468,7 @@ export const getConnectingEdge = (graphPartId1: string, graphPartId2: string, ed
 };
 
 // see algorithm pseudocode & example at https://github.com/amelioro/ameliorate/issues/66#issuecomment-1465078133
-export const isEdgeAShortcut = (edge: Edge, topicGraph: Graph) => {
+export const isEdgeAShortcut = (edge: MinimalEdge, topicGraph: MinimalGraph) => {
   const edgeSource = sourceNode(edge, topicGraph.nodes);
   const edgeTarget = targetNode(edge, topicGraph.nodes);
 
@@ -490,7 +501,7 @@ export const isEdgeAShortcut = (edge: Edge, topicGraph: Graph) => {
  * note: does not check if component node is showing - this is so that hidden implied edges
  * can still be shown when a component node is hidden
  */
-export const isEdgeImpliedByComposition = (edge: Edge, topicGraph: Graph) => {
+export const isEdgeImpliedByComposition = (edge: MinimalEdge, topicGraph: MinimalGraph) => {
   // hiding nodes composed by composed nodes is really complex, let's not bother
   // TODO?: this complexity makes me think it's not worth trying to hide composed edges at all, and
   // that #434 is a better solution to the issue of showing connections when nodes are hidden
@@ -534,7 +545,11 @@ export const isEdgeImpliedByComposition = (edge: Edge, topicGraph: Graph) => {
 // We don't want users to apply scores and then never see them again due to an implied edge being
 // hidden. The button to show implied edges should reduce this pain, but maybe we need a better view
 // to reduce the need to hide implied edges?
-export const isEdgeImplied = (edge: Edge, graph: Graph, justificationEdges: Edge[]) => {
+export const isEdgeImplied = (
+  edge: MinimalEdge,
+  graph: MinimalGraph,
+  justificationEdges: Edge[],
+) => {
   if (justificationRelationNames.includes(edge.type)) return false; // justifications can't be implied
   if (hasJustification(edge, justificationEdges)) return false;
 

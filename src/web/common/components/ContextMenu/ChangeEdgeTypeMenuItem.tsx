@@ -7,7 +7,7 @@ import { useSessionUser } from "@/web/common/hooks";
 import { changeEdgeType } from "@/web/topic/diagramStore/actions";
 import { useIsTableEdge } from "@/web/topic/diagramStore/edgeHooks";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
-import { Edge } from "@/web/topic/utils/graph";
+import { type Edge } from "@/web/topic/utils/graph";
 
 interface Props {
   edge: Edge;

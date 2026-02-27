@@ -1,12 +1,16 @@
+import { componentTypes } from "@/common/component";
+import { type MinimalEdge } from "@/common/edge";
 import { errorWithData } from "@/common/errorHandling";
-import { NodeType, areSameCategoryNodes } from "@/common/node";
-import { componentTypes } from "@/web/topic/utils/edge";
-import { Edge, Graph, Node } from "@/web/topic/utils/graph";
+import { type MinimalNode, type NodeType, areSameCategoryNodes } from "@/common/node";
 
 export const hideableNodeTypes: NodeType[] = ["criterion", "effect", "solutionComponent"];
 
 // TODO: memoize? this could traverse a lot of nodes & edges, seems not performant
-export const sourceNodes = (node: Node, topicGraph: Graph, sameCategoryNodes = true) => {
+export const sourceNodes = <TNode extends MinimalNode>(
+  node: MinimalNode,
+  topicGraph: { nodes: TNode[]; edges: MinimalEdge[] },
+  sameCategoryNodes = true,
+) => {
   const sourceEdges = topicGraph.edges.filter((edge) => edge.targetId === node.id);
 
   const sources = sourceEdges.map((edge) => {
@@ -22,7 +26,11 @@ export const sourceNodes = (node: Node, topicGraph: Graph, sameCategoryNodes = t
 };
 
 // all children references prefer to look for same-category nodes
-export const targetNodes = (node: Node, topicGraph: Graph, sameCategoryNodes = true) => {
+export const targetNodes = <TNode extends MinimalNode>(
+  node: MinimalNode,
+  topicGraph: { nodes: TNode[]; edges: MinimalEdge[] },
+  sameCategoryNodes = true,
+) => {
   const targetEdges = topicGraph.edges.filter((edge) => edge.sourceId === node.id);
   const targets = targetEdges.map((edge) => {
     const node = topicGraph.nodes.find((node) => edge.targetId === node.id);
@@ -41,13 +49,13 @@ export const targetNodes = (node: Node, topicGraph: Graph, sameCategoryNodes = t
  * @param sameCategoryNodes whether or not to only return nodes of the same info category; usually this is desirable.
  * @param foundNodeIds nodes to exclude from the search; used to prevent finding the same node multiple times
  */
-export const neighbors = (
-  node: Node,
-  topicGraph: Graph,
+export const neighbors = <TNode extends MinimalNode>(
+  node: TNode,
+  topicGraph: { nodes: TNode[]; edges: MinimalEdge[] },
   layersDeep = 1,
   sameCategoryNodes = true,
   foundNodeIds: string[] = [],
-): Node[] => {
+): TNode[] => {
   if (layersDeep < 1) throw errorWithData("layersDeep must be at least 1", layersDeep);
 
   const immediateNeighbors = [
@@ -68,10 +76,13 @@ export const neighbors = (
   return immediateNeighbors.concat(furtherNeighbors);
 };
 
-export const components = (node: Node, topicGraph: Graph) => {
+export const components = <TNode extends MinimalNode>(
+  node: MinimalNode,
+  topicGraph: { nodes: TNode[]; edges: MinimalEdge[] },
+) => {
   return targetNodes(node, topicGraph).filter((target) => componentTypes.includes(target.type));
 };
 
-export const edges = (node: Node, edges: Edge[]) => {
+export const edges = (node: MinimalNode, edges: MinimalEdge[]) => {
   return edges.filter((edge) => edge.sourceId === node.id || edge.targetId === node.id);
 };

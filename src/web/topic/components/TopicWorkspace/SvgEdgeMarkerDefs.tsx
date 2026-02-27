@@ -3,7 +3,7 @@ import {
   primarySpotlightColor,
   secondarySpotlightColor,
 } from "@/web/topic/components/Diagram/Diagram.styles";
-import { edgeColor } from "@/web/topic/components/Edge/ScoreEdge.styles";
+import { edgeColor } from "@/web/topic/components/Edge/Edge.styles";
 
 // mostly copied from react-flow's marker html - jank but the package doesn't export its marker definition
 // https://github.com/xyflow/xyflow/blob/f0117939bae934447fa7f232081f937169ee23b5/packages/react/src/container/EdgeRenderer/MarkerDefinitions.tsx#L29-L41
