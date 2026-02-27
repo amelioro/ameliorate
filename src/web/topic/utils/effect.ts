@@ -1,5 +1,6 @@
-import { isEffect } from "@/common/node";
-import { Graph, Node, upstreamNodes } from "@/web/topic/utils/graph";
+import { type MinimalGraph } from "@/common/graph";
+import { type MinimalNode, isEffect } from "@/common/node";
+import { upstreamNodes } from "@/web/topic/utils/graph";
 
 /**
  * For determining layout and which nodes can be added from this node, we need to know if this
@@ -12,7 +13,7 @@ import { Graph, Node, upstreamNodes } from "@/web/topic/utils/graph";
  */
 export type EffectType = "problem" | "solution" | "problemAndSolution" | "neither" | "n/a";
 
-export const getEffectType = (node: Node, graph: Graph): EffectType => {
+export const getEffectType = (node: MinimalNode, graph: MinimalGraph): EffectType => {
   if (!isEffect(node.type)) return "n/a";
 
   const upstreamCauses = upstreamNodes(node, graph, ["causes"]);

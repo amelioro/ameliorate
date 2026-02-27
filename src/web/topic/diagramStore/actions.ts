@@ -1,16 +1,16 @@
 import { set } from "es-toolkit/compat";
 import { createDraft, finishDraft } from "immer";
 
-import { RelationName, edgeSchema } from "@/common/edge";
+import { type RelationName, edgeSchema } from "@/common/edge";
 import { errorWithData } from "@/common/errorHandling";
-import { NodeType, nodeSchema } from "@/common/node";
+import { type NodeType, nodeSchema } from "@/common/node";
 import { showError } from "@/web/common/components/InfoDialog/infoEvents";
 import { useDiagramStore } from "@/web/topic/diagramStore/store";
 import {
-  Edge,
-  GraphPart,
+  type Edge,
+  type GraphPart,
   type Node,
-  Score,
+  type Score,
   findEdgeOrThrow,
   findGraphPartOrThrow,
   findNodeOrThrow,

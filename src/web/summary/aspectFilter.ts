@@ -7,16 +7,21 @@
 import { uniqBy } from "es-toolkit";
 
 import {
+  type MinimalEdge,
   getEdgeInfoCategory,
   justificationRelationNames,
   researchRelationNames,
 } from "@/common/edge";
-import { badNodeTypes, getNodeInfoCategory } from "@/common/node";
+import { type MinimalNode, badNodeTypes, getNodeInfoCategory } from "@/common/node";
 import { type Aspect } from "@/web/summary/summary";
-import { DirectedSearchRelation, getDirectedRelationDescription } from "@/web/topic/utils/edge";
 import {
-  Graph,
-  Node,
+  type DirectedSearchRelation,
+  getDirectedRelationDescription,
+} from "@/web/topic/utils/edge";
+import {
+  // Graph and Node still needed (rather than `Minimal`) because of `arguedDiagramPartId` usage for justification logic
+  type Graph,
+  type Node,
   downstreamNodes,
   findNodeOrThrow,
   splitNodesByDirectAndIndirect,
@@ -79,7 +84,10 @@ export const getAspectNodes = (
 };
 
 // TODO?: this and "getOutgoing..." could be refactored to be one function that takes a direction
-export const getIncomingNodesByRelationDescription = (summaryNode: Node, graph: Graph) => {
+export const getIncomingNodesByRelationDescription = <TNode extends MinimalNode>(
+  summaryNode: MinimalNode,
+  graph: { nodes: TNode[]; edges: MinimalEdge[] },
+) => {
   const nodeInfoCategory = getNodeInfoCategory(summaryNode.type);
 
   /* eslint-disable functional/immutable-data, no-param-reassign, functional/immutable-data -- seems easiest to do this mutably */
@@ -88,7 +96,7 @@ export const getIncomingNodesByRelationDescription = (summaryNode: Node, graph: 
       (edge) =>
         edge.targetId === summaryNode.id && getEdgeInfoCategory(edge.type) === nodeInfoCategory,
     )
-    .reduce<Record<string, Node[]>>((acc, incomingEdge) => {
+    .reduce<Record<string, TNode[]>>((acc, incomingEdge) => {
       const incomingNode = findNodeOrThrow(incomingEdge.sourceId, graph.nodes);
       const relationDescription = getDirectedRelationDescription({
         source: incomingNode.type,
@@ -106,7 +114,10 @@ export const getIncomingNodesByRelationDescription = (summaryNode: Node, graph: 
   return sourcesByRelationDescription;
 };
 
-export const getOutgoingNodesByRelationDescription = (summaryNode: Node, graph: Graph) => {
+export const getOutgoingNodesByRelationDescription = <TNode extends MinimalNode>(
+  summaryNode: MinimalNode,
+  graph: { nodes: TNode[]; edges: MinimalEdge[] },
+) => {
   const nodeInfoCategory = getNodeInfoCategory(summaryNode.type);
 
   /* eslint-disable functional/immutable-data, no-param-reassign, functional/immutable-data -- seems easiest to do this mutably */
@@ -115,7 +126,7 @@ export const getOutgoingNodesByRelationDescription = (summaryNode: Node, graph: 
       (edge) =>
         edge.sourceId === summaryNode.id && getEdgeInfoCategory(edge.type) === nodeInfoCategory,
     )
-    .reduce<Record<string, Node[]>>((acc, sourceEdge) => {
+    .reduce<Record<string, TNode[]>>((acc, sourceEdge) => {
       const targetNode = findNodeOrThrow(sourceEdge.targetId, graph.nodes);
       const relationDescription = getDirectedRelationDescription({
         source: summaryNode.type,
@@ -140,13 +151,19 @@ export const componentsDirectedSearchRelations: DirectedSearchRelation[] = [
 ];
 
 // TODO: test this
-export const getComponents = (summaryNode: Node, graph: Graph) => {
+export const getComponents = <TNode extends MinimalNode>(
+  summaryNode: MinimalNode,
+  graph: { nodes: TNode[]; edges: MinimalEdge[] },
+) => {
   const components = downstreamNodes(summaryNode, graph, ["has"]);
 
   return splitNodesByDirectAndIndirect(components);
 };
 
-export const getMotivation = (summaryNode: Node, graph: Graph) => {
+export const getMotivation = <TNode extends MinimalNode>(
+  summaryNode: MinimalNode,
+  graph: { nodes: TNode[]; edges: MinimalEdge[] },
+) => {
   const { directNodes: directBenefits, indirectNodes: indirectBenefits } = getSolutionBenefits(
     summaryNode,
     graph,
@@ -166,7 +183,10 @@ export const addressedDirectedSearchRelations: DirectedSearchRelation[] = [
   { toDirection: "target", relationNames: ["addresses", "mitigates"] },
 ];
 
-export const getAddressed = (summaryNode: Node, graph: Graph) => {
+export const getAddressed = <TNode extends MinimalNode>(
+  summaryNode: MinimalNode,
+  graph: { nodes: TNode[]; edges: MinimalEdge[] },
+) => {
   const addressed = downstreamNodes(
     summaryNode,
     graph,
@@ -177,7 +197,10 @@ export const getAddressed = (summaryNode: Node, graph: Graph) => {
   return splitNodesByDirectAndIndirect(addressed);
 };
 
-export const getSolutionConcerns = (summaryNode: Node, graph: Graph) => {
+export const getSolutionConcerns = <TNode extends MinimalNode>(
+  summaryNode: MinimalNode,
+  graph: { nodes: TNode[]; edges: MinimalEdge[] },
+) => {
   const { directNodes: directDetriments, indirectNodes: indirectDetriments } = getDetriments(
     summaryNode,
     graph,
@@ -198,7 +221,10 @@ export const obstaclesDirectedSearchRelations: DirectedSearchRelation[] = [
 ];
 
 // TODO: test this
-export const getObstacles = (summaryNode: Node, graph: Graph) => {
+export const getObstacles = <TNode extends MinimalNode>(
+  summaryNode: MinimalNode,
+  graph: { nodes: TNode[]; edges: MinimalEdge[] },
+) => {
   const directObstacles = upstreamNodes(summaryNode, graph, [], ["impedes"]); // empty edgesToTraverse because we only want direct obstacles
   const directObstaclesIds = directObstacles.map((node) => node.id);
 
@@ -222,7 +248,10 @@ export const solutionsDirectedSearchRelations: DirectedSearchRelation[] = [
   { toDirection: "source", relationNames: ["addresses", "mitigates"] },
 ];
 
-export const getSolutions = (summaryNode: Node, graph: Graph) => {
+export const getSolutions = <TNode extends MinimalNode>(
+  summaryNode: MinimalNode,
+  graph: { nodes: TNode[]; edges: MinimalEdge[] },
+) => {
   const upstreamConcerns = upstreamNodes(summaryNode, graph, ["causes"], undefined, badNodeTypes);
   const downstreamConcerns = downstreamNodes(
     summaryNode,
@@ -262,7 +291,10 @@ export const solutionBenefitsDirectedSearchRelations: DirectedSearchRelation[] =
   { toDirection: "target", relationNames: ["causes"], toNodeTypes: ["benefit"] },
 ];
 
-export const getSolutionBenefits = (summaryNode: Node, graph: Graph) => {
+export const getSolutionBenefits = <TNode extends MinimalNode>(
+  summaryNode: MinimalNode,
+  graph: { nodes: TNode[]; edges: MinimalEdge[] },
+) => {
   const benefits = downstreamNodes(summaryNode, graph, ["has", "causes"], ["causes"], ["benefit"]);
 
   return splitNodesByDirectAndIndirect(benefits);
@@ -273,7 +305,10 @@ export const detrimentsDirectedSearchRelations: DirectedSearchRelation[] = [
 ];
 
 // TODO: test this
-export const getDetriments = (summaryNode: Node, graph: Graph) => {
+export const getDetriments = <TNode extends MinimalNode>(
+  summaryNode: MinimalNode,
+  graph: { nodes: TNode[]; edges: MinimalEdge[] },
+) => {
   const detriments = downstreamNodes(
     summaryNode,
     graph,
@@ -290,7 +325,10 @@ export const effectsDirectedSearchRelations: DirectedSearchRelation[] = [
 ];
 
 // TODO: test this
-export const getEffects = (summaryNode: Node, graph: Graph) => {
+export const getEffects = <TNode extends MinimalNode>(
+  summaryNode: MinimalNode,
+  graph: { nodes: TNode[]; edges: MinimalEdge[] },
+) => {
   const effects = downstreamNodes(summaryNode, graph, ["has", "causes"], ["causes"]);
 
   return splitNodesByDirectAndIndirect(effects);
@@ -301,7 +339,10 @@ export const causesDirectedSearchRelations: DirectedSearchRelation[] = [
 ];
 
 // TODO: test this
-export const getCauses = (summaryNode: Node, graph: Graph) => {
+export const getCauses = <TNode extends MinimalNode>(
+  summaryNode: MinimalNode,
+  graph: { nodes: TNode[]; edges: MinimalEdge[] },
+) => {
   // include "has" so that we get e.g. solutions that have components that cause benefits
   const causes = upstreamNodes(summaryNode, graph, ["has", "causes"], ["has", "causes"]);
 
@@ -312,7 +353,7 @@ export const getCauses = (summaryNode: Node, graph: Graph) => {
 
 // no directed search relations for justification because root claims make it complicated
 
-export const getJustification = (summaryNode: Node, graph: Graph) => {
+export const getJustification = (summaryNode: MinimalNode, graph: Graph) => {
   const directRootClaims = graph.nodes.filter(
     (node) => node.type === "rootClaim" && node.data.arguedDiagramPartId === summaryNode.id,
   );
@@ -344,7 +385,10 @@ export const researchDirectedSearchRelations: DirectedSearchRelation[] = [
   },
 ];
 
-export const getResearch = (summaryNode: Node, graph: Graph) => {
+export const getResearch = <TNode extends MinimalNode>(
+  summaryNode: MinimalNode,
+  graph: { nodes: TNode[]; edges: MinimalEdge[] },
+) => {
   const research = upstreamNodes(
     summaryNode,
     graph,

@@ -2,21 +2,21 @@ import { Box } from "@mui/material";
 import { EdgeLabelRenderer } from "@xyflow/react";
 import { type ReactNode } from "react";
 
+import { type MinimalEdge } from "@/common/edge";
 import { Spotlight } from "@/web/topic/components/Diagram/Diagram.styles";
 import { StyledDiv, StyledPath } from "@/web/topic/components/Edge/Edge.styles";
 import { getPathDefinitionForEdge } from "@/web/topic/components/Edge/svgPathDrawer";
 import { nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
 import { markerIds } from "@/web/topic/components/TopicWorkspace/SvgEdgeMarkerDefs";
 import { useIsNodeSelected } from "@/web/topic/diagramStore/edgeHooks";
-import { EdgeLayoutData } from "@/web/topic/utils/diagram";
-import { Edge as EdgeData } from "@/web/topic/utils/graph";
+import { type EdgeLayoutData } from "@/web/topic/utils/diagram";
 import { graphPartClass } from "@/web/topic/utils/styleUtils";
 import { useAvoidEdgeLabelOverlap } from "@/web/view/currentViewStore/layout";
 import { useIsGraphPartSelected } from "@/web/view/selectedPartStore";
 import { setSelected } from "@/web/view/selectedPartStore";
 
 interface Props {
-  edge: EdgeData;
+  edge: MinimalEdge;
   edgeLayoutData: EdgeLayoutData;
   /**
    * Content to show within the edge label. Extracted this because our direct edges will show

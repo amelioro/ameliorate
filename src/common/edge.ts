@@ -1,6 +1,7 @@
 import { z } from "zod";
 
-import { InfoCategory } from "@/common/infoCategory";
+import { type InfoCategory } from "@/common/infoCategory";
+import { type NodeType } from "@/common/node";
 import { type EdgeType } from "@/db/generated/prisma/enums";
 
 export const relationNames = [
@@ -34,6 +35,12 @@ const zRelationNames = z.enum(relationNames);
 
 export type RelationName = z.infer<typeof zRelationNames>;
 
+export interface Relation {
+  source: NodeType;
+  name: RelationName;
+  target: NodeType;
+}
+
 export const edgeSchema = z.object({
   id: z.string().uuid(),
   topicId: z.number(),
@@ -52,6 +59,19 @@ export const edgeSchema = z.object({
 });
 
 export type Edge = z.infer<typeof edgeSchema>;
+
+/**
+ * Intended for cases where we only need basic edge info, e.g. for graph algorithm stuff, not for
+ * react components or store hooks/actions.
+ *
+ * Initial motivation: want a shared base type between direct and indirect edges so e.g. indirect
+ * edges can still take advantage of functions that make sense for them.
+ *
+ * Considered also removing `type` and separating a `MinimalTypedEdge`, for pure graph algorithm
+ * stuff that doesn't use Ameliorate types, but I don't think we have enough of that to justify the
+ * separate type. If we add more "pure" stuff, we can reconsider at that time.
+ */
+export type MinimalEdge = Pick<Edge, "id" | "type" | "sourceId" | "targetId">;
 
 export const topicAIEdgeSchema = edgeSchema
   .pick({

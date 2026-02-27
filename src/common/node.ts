@@ -101,6 +101,20 @@ export const nodeSchema = z.object({
 
 export type Node = z.infer<typeof nodeSchema>;
 
+/**
+ * Intended for cases where we only need basic node info, e.g. for graph algorithm stuff, not for
+ * react components or store hooks/actions.
+ *
+ * Initial motivation: want a shared base type between direct and indirect edges so e.g. indirect
+ * edges can still take advantage of functions that make sense for them. `MinimalNode` just happened
+ * because we wanted a shared base type for edge.
+ *
+ * Considered also removing `type` and separating a `MinimalTypedNode`, for pure graph algorithm
+ * stuff that doesn't use Ameliorate types, but I don't think we have enough of that to justify the
+ * separate type. If we add more "pure" stuff, we can reconsider at that time.
+ */
+export type MinimalNode = Pick<Node, "id" | "type">;
+
 export const topicAINodeSchema = nodeSchema
   .pick({
     type: true,
