@@ -4,8 +4,8 @@ on:
   schedule:
     # Runs at 00:00 every Sunday
     #- cron: '0 0 * * 0'
-    # Runs at 18:45 (6:45 PM) every Monday
-    - cron: "15 13 * * 1"
+    # Runs at 18:45 (7:15 PM) every Monday
+    - cron: "45 13 * * 1"
   workflow_dispatch:
 
 jobs:
