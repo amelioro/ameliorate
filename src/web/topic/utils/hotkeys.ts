@@ -15,4 +15,5 @@ export const hotkeys = {
   zoomOut: "Ctrl + -",
   undo: "Ctrl + Z, Meta + Z",
   redo: "Ctrl + Shift + Z, Meta + Shift + Z",
+  delete: "Delete",
 };
