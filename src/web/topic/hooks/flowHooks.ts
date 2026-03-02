@@ -1,9 +1,7 @@
 import { type Viewport, useReactFlow, useStore, useStoreApi } from "@xyflow/react";
-import { shallow } from "zustand/shallow";
 
 import { nodeHeightPx, nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
 import { ReactFlowNode } from "@/web/topic/utils/flowUtils";
-import { Node } from "@/web/topic/utils/graph";
 
 const getViewportToIncludeNode = (
   node: ReactFlowNode,
@@ -127,14 +125,4 @@ export const useFlowZoom = () => {
   } catch {
     return 1;
   }
-};
-
-/**
- * Used to find nodes that are currently being hidden.
- */
-export const useHiddenNodes = (nodes: Node[]) => {
-  return useStore((state) => {
-    const displayingNodes = Array.from(state.nodeLookup.values());
-    return nodes.filter((node) => !displayingNodes.some((displaying) => displaying.id === node.id));
-  }, shallow);
 };

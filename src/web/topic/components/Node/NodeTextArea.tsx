@@ -7,7 +7,7 @@ import { hasSeenTrigger } from "@/web/common/components/InfoDialog/infoDialogSto
 import { showInfo } from "@/web/common/components/InfoDialog/infoEvents";
 import { clearNewlyAddedNode, isNodeNewlyAdded } from "@/web/common/store/ephemeralStore";
 import { WorkspaceContextType } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
-import { setNodeLabel } from "@/web/topic/diagramStore/actions";
+import { setNodeText } from "@/web/topic/diagramStore/actions";
 
 // If we had to resize, make sure the user knows that text should be concise.
 const onFontResize = (textAreaId: string) => {
@@ -176,7 +176,7 @@ const NodeTextAreaBase = ({ nodeId, nodeText, context, editable }: Props) => {
       }}
       onBlur={(event) => {
         if (textAreaSelected) setTextAreaSelected(false);
-        if (event.target.value !== nodeText) setNodeLabel(nodeId, event.target.value);
+        if (event.target.value !== nodeText) setNodeText(nodeId, event.target.value);
       }}
       onChange={(event) => {
         const resized = fitTextIntoElement(event.target);

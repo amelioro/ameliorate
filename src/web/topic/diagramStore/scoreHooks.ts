@@ -56,21 +56,21 @@ export const useSolutionTotal = (solution: Node, problem: Node) => {
     );
     const criteriaSolutionEdges = compact(
       criteriaForProblem.map((criterion) =>
-        edges(criterion, state.edges).find((edge) => edge.source === solution.id),
+        edges(criterion, state.edges).find((edge) => edge.sourceId === solution.id),
       ),
     );
 
     return criteriaSolutionEdges;
   });
 
-  const graphPartIds = criteriaSolutionEdges.flatMap((edge) => [edge.id, edge.target]);
+  const graphPartIds = criteriaSolutionEdges.flatMap((edge) => [edge.id, edge.targetId]);
   const { scoresByGraphPartId: scores } = useDisplayScores(graphPartIds);
 
   return sum(
     criteriaSolutionEdges.map((edge) => {
       const edgeScore = scores[edge.id] ?? throwError(`No score found for edge ${edge.id}`);
       const criterionScore =
-        scores[edge.target] ?? throwError(`No score found for criterion ${edge.target}`);
+        scores[edge.targetId] ?? throwError(`No score found for criterion ${edge.targetId}`);
 
       // use a (-4,4) range for the edge because low means doesn't embody, high means does
       // use a (0,8) range for the criterion because it's just importance, and should therefore just increase/decrease emphasis of the edge score

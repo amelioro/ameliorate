@@ -3,7 +3,7 @@ import { useSessionUser } from "@/web/common/hooks";
 import { deleteEdge } from "@/web/topic/diagramStore/createDeleteActions";
 import { useIsTableEdge } from "@/web/topic/diagramStore/edgeHooks";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
-import { Edge } from "@/web/topic/utils/graph";
+import { type Edge } from "@/web/topic/utils/graph";
 
 export const DeleteEdgeMenuItem = ({ edge }: { edge: Edge }) => {
   const { sessionUser } = useSessionUser();

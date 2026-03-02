@@ -1,6 +1,5 @@
 import { AppBar, Toolbar, useTheme } from "@mui/material";
 import Image from "next/image";
-import { useRouter } from "next/router";
 
 import { Logo } from "@/web/common/components/Header/Logo";
 import { ProfileButton } from "@/web/common/components/Header/ProfileButton";
@@ -19,15 +18,16 @@ export const SiteHeader = () => {
   // Potentially use getInitialProps in _app.tsx because that's for all pages but it seems like that'd
   // remove automatic usage of static pages https://nextjs.org/docs/pages/api-reference/functions/get-initial-props
   const { sessionUser } = useSessionUser();
-  const { route } = useRouter();
 
   // We want a different header for the App, so we can't rely on the root layout for header everywhere.
   // Moving to nextjs app dir should make it easier to only use SiteHeader vs AppHeader based on
   // route, without having to `useRouter` with hardcoded values like this.
-  if (route == "/[username]/[topicTitle]" || route == "/playground") return null;
 
   return (
-    <AppBar position="sticky" className="overflow-x-auto border-b bg-paperShaded-main shadow-none">
+    <AppBar
+      position="sticky"
+      className="overflow-x-auto border-b bg-paperShaded-main shadow-none [body:has(#workspace)_&]:hidden"
+    >
       {/* banner within app bar so that it matches stickiness of the toolbar */}
       <SiteBanner />
 

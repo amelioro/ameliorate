@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-import { reactFlowEdgeSchema } from "@/common/edge";
-import { reactFlowNodeSchema } from "@/common/node";
+import { diagramStoreEdgeSchema } from "@/common/edge";
+import { diagramStoreNodeSchema } from "@/common/node";
 import { reservedSecondLevelEndpointNames } from "@/common/reservedEndpointNames";
 import { userSchema } from "@/common/user";
 import { getBaseUrl } from "@/common/utils";
@@ -47,8 +47,8 @@ export const topicFileSchema = z.object({
   }),
   diagram: z.object({
     state: z.object({
-      nodes: reactFlowNodeSchema.array(),
-      edges: reactFlowEdgeSchema.array(),
+      nodes: diagramStoreNodeSchema.array(),
+      edges: diagramStoreEdgeSchema.array(),
       userScores: z.any(),
     }),
     version: z.number(),

@@ -1,5 +1,4 @@
 import { union, without } from "es-toolkit";
-import { shallow } from "zustand/shallow";
 
 import { InfoCategory } from "@/common/infoCategory";
 import { emitter } from "@/web/common/event";
@@ -7,7 +6,11 @@ import { getDefaultNode, getNeighbors } from "@/web/topic/diagramStore/nodeGette
 import { useDiagramStore } from "@/web/topic/diagramStore/store";
 import { findNodeOrThrow } from "@/web/topic/utils/graph";
 import { neighbors } from "@/web/topic/utils/node";
-import { initialViewState, useCurrentViewStore } from "@/web/view/currentViewStore/store";
+import {
+  ViewState,
+  initialViewState,
+  useCurrentViewStore,
+} from "@/web/view/currentViewStore/store";
 import {
   getCriterionContextFilter,
   getFulfillsContextFilter,
@@ -22,25 +25,8 @@ import {
 import { TableFilter } from "@/web/view/utils/tableFilter";
 
 // hooks
-const useCategoriesToShow = () => {
-  return useCurrentViewStore((state) => state.categoriesToShow, shallow);
-};
-
-const useStandardFilter = (category: InfoCategory) => {
-  return useCurrentViewStore((state) => state[`${category}Filter`], shallow);
-};
-
 export const useInfoFilter = (): InfoFilter => {
-  const categoriesToShow = useCategoriesToShow();
-  const breakdownFilter = useStandardFilter("breakdown");
-  const researchFilter = useStandardFilter("research");
-  const justificationFilter = useStandardFilter("justification");
-
-  return {
-    breakdown: { show: categoriesToShow.includes("breakdown"), ...breakdownFilter },
-    research: { show: categoriesToShow.includes("research"), ...researchFilter },
-    justification: { show: categoriesToShow.includes("justification"), ...justificationFilter },
-  };
+  return useCurrentViewStore((state) => getInfoFilter(state));
 };
 
 export const useTableFilter = (): TableFilter => {
@@ -304,6 +290,19 @@ export const toggleShowProblemCriterionSolutionEdges = (show: boolean) => {
 };
 
 // helpers
+export const getInfoFilter = (state: ViewState): InfoFilter => {
+  const { categoriesToShow, breakdownFilter, researchFilter, justificationFilter } = state;
+
+  return {
+    breakdown: { show: categoriesToShow.includes("breakdown"), ...breakdownFilter },
+    research: { show: categoriesToShow.includes("research"), ...researchFilter },
+    justification: {
+      show: categoriesToShow.includes("justification"),
+      ...justificationFilter,
+    },
+  };
+};
+
 export const getStandardFilterWithFallbacks = (standardFilter: StandardFilter): StandardFilter => {
   const centralProblemId = getDefaultNode("problem")?.id;
   const centralSolutionId = getDefaultNode("solution")?.id;

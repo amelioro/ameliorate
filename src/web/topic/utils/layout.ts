@@ -1,17 +1,18 @@
 import { Position } from "@xyflow/react";
 import ELK, { type ElkExtendedEdge, type ElkNode, type ElkPort, type LayoutOptions } from "elkjs";
 
+import { type MinimalEdge } from "@/common/edge";
 import { throwError } from "@/common/errorHandling";
-import { type NodeType, compareNodesByType, isEffect } from "@/common/node";
+import { type MinimalGraph } from "@/common/graph";
+import { type MinimalNode, type NodeType, compareNodesByType, isEffect } from "@/common/node";
 import { scalePxViaDefaultFontSize } from "@/pages/_document.page";
 import { nodeHeightPx, nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
-import { type Diagram } from "@/web/topic/utils/diagram";
 import {
   sourceNode as sourceNodeOfEdge,
   targetNode as targetNodeOfEdge,
 } from "@/web/topic/utils/edge";
-import { EffectType, getEffectType } from "@/web/topic/utils/effect";
-import { type Edge, EdgeDirection, type Node } from "@/web/topic/utils/graph";
+import { type EffectType, getEffectType } from "@/web/topic/utils/effect";
+import { type EdgeDirection } from "@/web/topic/utils/graph";
 
 export type Orientation = "DOWN" | "UP" | "RIGHT" | "LEFT";
 export const orientation: Orientation = "UP" as Orientation; // not constant to allow potential other orientations in the future, and keeping code that currently exists for handling "LEFT" orientation
@@ -99,7 +100,7 @@ const partitionOrders: Record<NodeType, string> = {
   custom: "null",
 };
 
-const calculatePartition = (node: Node, diagram: Diagram) => {
+const calculatePartition = (node: MinimalNode, diagram: MinimalGraph) => {
   // TODO?: if we want to support flipping orientation (to "DOWN"), we could take the resulting value from this method and flip it (e.g. 100 - X)
   if (isEffect(node.type)) {
     const effectType = getEffectType(node, diagram);
@@ -271,7 +272,7 @@ const parseElkjsOutput = (
       labelX !== undefined && labelY !== undefined ? { x: labelX, y: labelY } : undefined;
 
     // annoying to actually carry `flipped` up to this point without casting so we're just casting it
-    const flippableEdge = edge as unknown as Edge & { flipped: boolean };
+    const flippableEdge = edge as unknown as ElkExtendedEdge & { flipped: boolean };
 
     if (flippableEdge.flipped) {
       return {
@@ -351,17 +352,17 @@ const buildElkLayoutOptions = (
   };
 };
 
-const shouldFlipEdge = (edge: Edge, nodes: Node[], edges: Edge[]) => {
-  if (edge.label !== "has" && edge.label !== "causes") return false;
+const shouldFlipEdge = (edge: MinimalEdge, nodes: MinimalNode[], edges: MinimalEdge[]) => {
+  if (edge.type !== "has" && edge.type !== "causes") return false;
 
   const sourceNode = sourceNodeOfEdge(edge, nodes);
   const targetNode = targetNodeOfEdge(edge, nodes);
 
   const sourceEffectType: EffectType = getEffectType(sourceNode, { nodes, edges });
 
-  const isSubproblemEdge = edge.label === "has" && sourceNode.type === "problem";
+  const isSubproblemEdge = edge.type === "has" && sourceNode.type === "problem";
   const isProblemCausesEdge =
-    edge.label === "causes" &&
+    edge.type === "causes" &&
     (sourceNode.type === "problem" || sourceEffectType === "problem") &&
     // if causing a problem, let problem continue in orientation direction so that its causes and effects can both be placed between it and solutions
     targetNode.type !== "problem";
@@ -383,31 +384,34 @@ export const parsePortId = (portId: string): { nodeId: string; direction: EdgeDi
   return { nodeId, direction };
 };
 
-const buildElkEdgesAndUsedPorts = ({ edges, nodes }: Diagram, avoidEdgeLabelOverlap: boolean) => {
+const buildElkEdgesAndUsedPorts = (
+  { edges, nodes }: MinimalGraph,
+  avoidEdgeLabelOverlap: boolean,
+) => {
   const usedPortsByNodeId: Record<string, ElkPort[]> = {};
 
   const elkEdges: ElkExtendedEdge[] = edges
     .map((edge) => {
       return shouldFlipEdge(edge, nodes, edges)
-        ? { ...edge, source: edge.target, target: edge.source, flipped: true }
+        ? { ...edge, sourceId: edge.targetId, targetId: edge.sourceId, flipped: true }
         : { ...edge, flipped: false };
     })
     .map((edge) => {
       /* eslint-disable functional/immutable-data -- seems significantly easier to populate used ports via mutation */
       const sourcePort: ElkPort = {
-        id: buildPortId(edge.source, "source"),
+        id: buildPortId(edge.sourceId, "source"),
         layoutOptions: { "elk.port.side": "NORTH" },
       };
-      const usedSourcePorts = (usedPortsByNodeId[edge.source] ??= []);
+      const usedSourcePorts = (usedPortsByNodeId[edge.sourceId] ??= []);
       if (usedSourcePorts.find((port) => port.id === sourcePort.id) === undefined) {
         usedSourcePorts.push(sourcePort);
       }
 
       const targetPort: ElkPort = {
-        id: buildPortId(edge.target, "target"),
+        id: buildPortId(edge.targetId, "target"),
         layoutOptions: { "elk.port.side": "SOUTH" },
       };
-      const usedTargetPorts = (usedPortsByNodeId[edge.target] ??= []);
+      const usedTargetPorts = (usedPortsByNodeId[edge.targetId] ??= []);
       if (usedTargetPorts.find((port) => port.id === targetPort.id) === undefined) {
         usedTargetPorts.push(targetPort);
       }
@@ -425,14 +429,14 @@ const buildElkEdgesAndUsedPorts = ({ edges, nodes }: Diagram, avoidEdgeLabelOver
           // using space efficiently.
           // This isn't thoroughly tested, and might be more accurate to check source/target types?
           // But seems ok enough for now.
-          "elk.layered.priority.shortness": ["addresses", "mitigates"].includes(edge.label)
+          "elk.layered.priority.shortness": ["addresses", "mitigates"].includes(edge.type)
             ? "0"
             : "100",
         },
         labels: avoidEdgeLabelOverlap
           ? [
               {
-                text: edge.label,
+                text: edge.type,
                 layoutOptions: {
                   "edgeLabels.inline": "true",
                 },
@@ -450,7 +454,7 @@ const buildElkEdgesAndUsedPorts = ({ edges, nodes }: Diagram, avoidEdgeLabelOver
 };
 
 const buildElkNodes = (
-  diagram: Diagram,
+  diagram: GraphToLayout,
   usedPortsByNodeId: Record<string, ElkPort[]>,
 ): ElkNode[] => {
   return diagram.nodes
@@ -459,7 +463,7 @@ const buildElkNodes = (
       const elkNode: ElkNode = {
         id: node.id,
         width: nodeWidthPx,
-        height: calculateNodeHeight(node.data.label),
+        height: calculateNodeHeight(node.data.text),
         ports: usedPortsByNodeId[node.id],
         layoutOptions: {
           // Some nodes can be taller than others (based on how long their text is),
@@ -484,8 +488,23 @@ const buildElkNodes = (
     });
 };
 
+/**
+ * Layout needs node text for sizing, but doesn't need other store-specific fields like notes,
+ * customType, arguedDiagramPartId.
+ */
+type NodeToLayout = MinimalNode & { data: { text: string } };
+
+/**
+ * Layout needs node text for sizing, but doesn't need other store-specific node fields like notes,
+ * customType, arguedDiagramPartId.
+ */
+interface GraphToLayout {
+  nodes: NodeToLayout[];
+  edges: MinimalEdge[];
+}
+
 export const layout = async (
-  diagram: Diagram,
+  diagram: GraphToLayout,
   partition: boolean,
   layerNodeIslandsTogether: boolean,
   minimizeEdgeCrossings: boolean,

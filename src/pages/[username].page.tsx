@@ -103,6 +103,7 @@ const User: NextPage = () => {
   const rowData: RowData[] = foundUser.topics;
 
   const hasEditAccess = foundUser.id === sessionUser?.id;
+  const editingTopic = rowData.find((topic) => topic.id === editingTopicId) ?? null;
 
   return (
     <>
@@ -125,13 +126,6 @@ const User: NextPage = () => {
             >
               <Settings fontSize="inherit" />
             </IconButton>
-            <Dialog
-              open={editingTopicId === row.original.id}
-              onClose={() => setEditingTopicId(null)}
-              aria-label="Topic Settings"
-            >
-              <EditTopicForm topic={row.original} creatorName={foundUser.username} />
-            </Dialog>
           </>
         )}
         positionActionsColumn="last"
@@ -146,13 +140,6 @@ const User: NextPage = () => {
                   <Button variant="contained" onClick={() => setCreatingTopic(true)}>
                     New Topic
                   </Button>
-                  <Dialog
-                    open={creatingTopic}
-                    onClose={() => setCreatingTopic(false)}
-                    aria-label="New Topic"
-                  >
-                    <CreateTopicForm creatorName={foundUser.username} />
-                  </Dialog>
                 </>
               )}
             </>
@@ -163,6 +150,24 @@ const User: NextPage = () => {
           sorting: [{ id: "updatedAt", desc: true }],
         }}
       />
+
+      <Dialog
+        open={editingTopic !== null}
+        onClose={() => setEditingTopicId(null)}
+        aria-label="Topic Settings"
+      >
+        {editingTopic && (
+          <EditTopicForm
+            topic={editingTopic}
+            creatorName={foundUser.username}
+            afterSave={() => setEditingTopicId(null)}
+          />
+        )}
+      </Dialog>
+
+      <Dialog open={creatingTopic} onClose={() => setCreatingTopic(false)} aria-label="New Topic">
+        <CreateTopicForm creatorName={foundUser.username} />
+      </Dialog>
     </>
   );
 };

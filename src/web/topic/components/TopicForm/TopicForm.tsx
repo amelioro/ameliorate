@@ -73,12 +73,23 @@ export const CreateTopicForm = ({ creatorName }: { creatorName: string }) => {
   return <TopicForm creatorName={creatorName} onSubmit={onSubmit} />;
 };
 
-export const EditTopicForm = ({ topic, creatorName }: { topic: Topic; creatorName: string }) => {
+interface EditTopicFormProps {
+  topic: Topic;
+  creatorName: string;
+  /**
+   * allow the calling component to react, e.g. to close a dialog that this form is within
+   */
+  afterSave?: () => void;
+}
+
+export const EditTopicForm = ({ topic, creatorName, afterSave }: EditTopicFormProps) => {
   const utils = trpc.useUtils();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const updateTopic = trpc.topic.update.useMutation({
     onSuccess: (updatedTopic) => {
+      if (afterSave) afterSave();
+
       // need to update the URL if we're changing from the topic's page in the workspace
       const url = new URL(window.location.href);
       const oldPath = `/${creatorName}/${topic.title}`;
@@ -396,7 +407,7 @@ const TopicForm = ({ topic, creatorName, onSubmit, DeleteSection }: Props) => {
               Cancel
             </Button>
             <Button type="submit" variant="contained" disabled={!isDirty}>
-              {newTopic ? "Create" : "Save"}
+              {newTopic ? "Create" : "Save & Close"}
             </Button>
           </Stack>
 

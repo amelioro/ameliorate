@@ -25,7 +25,7 @@ export const NodeSelect = ({
     return nodeOptions.map((node) => {
       return {
         id: node.id,
-        label: node.data.label,
+        label: node.data.text,
         beforeSlot: <ColoredNodeIcon type={node.type} className="mr-2 rounded-sm p-0.5" />,
       };
     });

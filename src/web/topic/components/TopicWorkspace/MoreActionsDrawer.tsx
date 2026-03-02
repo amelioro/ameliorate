@@ -51,7 +51,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { hasComments, resetComments } from "@/web/comment/store/commentStore";
-import { getDisplayNodes, getNodesBounds } from "@/web/topic/components/Diagram/externalFlowStore";
+import { getNodesBounds, getRenderedNodes } from "@/web/topic/components/Diagram/externalFlowStore";
 import { resetDiagramData } from "@/web/topic/diagramStore/utilActions";
 import { downloadTopic, uploadTopic } from "@/web/topic/loadStores";
 import { defaultFitViewPadding } from "@/web/topic/utils/flowUtils";
@@ -107,7 +107,7 @@ const defaultResolution = { width: 2560, height: 1440 };
 const onScreenshotSubmit = ({ width, height }: ScreenshotFormData) => {
   // these two functions (jankily?) come from our `externalFlowStore` because otherwise we have to
   // be within the react flow provider's react tree in order to access them (via `useReactFlow`).
-  const nodes = getDisplayNodes();
+  const nodes = getRenderedNodes();
   const bounds = getNodesBounds(nodes);
 
   // thanks react flow example https://reactflow.dev/examples/misc/download-image
@@ -338,10 +338,6 @@ export const MoreActionsDrawer = ({
                     resetDiagramData();
                     resetQuickViews();
                   }
-                  // intentionally not resetting comments/drafts, since undoing a reset would be painful if comments were lost,
-                  // and it's annoying to try and put these all on the same undo/redo button.
-                  // if orphaned comments are really a problem, we should be able to manually clean them up.
-                  // if they're routinely a problem, we can consider trying to combining comments/drafts in the same undo/redo stack for this.
                 }}
               >
                 <AutoStoriesOutlined />

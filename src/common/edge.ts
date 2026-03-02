@@ -1,8 +1,9 @@
 import { z } from "zod";
 
-import { InfoCategory } from "@/common/infoCategory";
+import { type InfoCategory } from "@/common/infoCategory";
+import { type NodeType } from "@/common/node";
+import { type EdgeType } from "@/db/generated/prisma/enums";
 
-// not sure how to guarantee that this matches the schema enum
 export const relationNames = [
   // topic
   "causes",
@@ -28,11 +29,17 @@ export const relationNames = [
 
   // generic, for unrestricted editing
   "relatesTo",
-] as const;
+] as const satisfies readonly EdgeType[]; // `satisfies` to make it easier to ensure these types match the prisma schema's, while not requiring this file to depend on prisma (at least once types are stripped)
 
 const zRelationNames = z.enum(relationNames);
 
 export type RelationName = z.infer<typeof zRelationNames>;
+
+export interface Relation {
+  source: NodeType;
+  name: RelationName;
+  target: NodeType;
+}
 
 export const edgeSchema = z.object({
   id: z.string().uuid(),
@@ -52,6 +59,19 @@ export const edgeSchema = z.object({
 });
 
 export type Edge = z.infer<typeof edgeSchema>;
+
+/**
+ * Intended for cases where we only need basic edge info, e.g. for graph algorithm stuff, not for
+ * react components or store hooks/actions.
+ *
+ * Initial motivation: want a shared base type between direct and indirect edges so e.g. indirect
+ * edges can still take advantage of functions that make sense for them.
+ *
+ * Considered also removing `type` and separating a `MinimalTypedEdge`, for pure graph algorithm
+ * stuff that doesn't use Ameliorate types, but I don't think we have enough of that to justify the
+ * separate type. If we add more "pure" stuff, we can reconsider at that time.
+ */
+export type MinimalEdge = Pick<Edge, "id" | "type" | "sourceId" | "targetId">;
 
 export const topicAIEdgeSchema = edgeSchema
   .pick({
@@ -92,24 +112,26 @@ export const createEdgeSchema = edgeSchema
 export type CreateEdge = z.infer<typeof createEdgeSchema>;
 
 /**
- * Ideally we wouldn't need this outside of the react-flow components, but we unfortunately let this
- * format leak into everywhere on the frontend, including the download topic JSON logic, and we use
- * downloaded files for `examples/`, which we use on the backend (e.g. for topic AI examples).
+ * Ideally we wouldn't need this outside of the frontend, or that it'd be identical to the backend
+ * schema, but the frontend doesn't need `topicId` so it seems like it'll at least be different in
+ * that way. Unfortunately we need this in `common/` here because it's used for the download
+ * topic JSON logic, and we use downloaded files for `examples/` on the backend (e.g. for topic AI
+ * examples).
  *
- * TODO: use the above `edgeSchema` in most places on the frontend, and only use the flow schema for
- * flow-related components.
+ * TODO?: I think ideally we'd have this be identical to backend schema except for `topicId`, and
+ * name it something that implies `topicId` isn't needed ("localEdgeSchema"?).
  */
-export const reactFlowEdgeSchema = z.object({
+export const diagramStoreEdgeSchema = z.object({
   id: z.string(),
   data: z.object({
     /**
-     * Distinguished from `label` because this is explicitly open user input, and `label` can maintain stricter typing
+     * Distinguished from `type` because this is explicitly open user input, and `type` can maintain stricter typing
      */
     customLabel: z.string().nullable(),
     notes: z.string(),
     arguedDiagramPartId: z.string().optional(),
   }),
-  label: zRelationNames,
+  type: zRelationNames,
   /**
    * id of the source graph part. Can be a node or an edge, but most UI edge operations only work
    * with node sources.
@@ -118,7 +140,7 @@ export const reactFlowEdgeSchema = z.object({
    * regular edges can be distinguished. But that sounds like a lot of work and it's hard to tell
    * that it'd be worth it.
    */
-  source: z.string(), // arrows point from source to target
+  sourceId: z.string(), // arrows point from source to target
   /**
    * id of the target graph part. Can be a node or an edge, but most UI edge operations only work
    * with node targets.
@@ -127,8 +149,7 @@ export const reactFlowEdgeSchema = z.object({
    * regular edges can be distinguished. But that sounds like a lot of work and it's hard to tell
    * that it'd be worth it.
    */
-  target: z.string(), // arrows point from source to target
-  type: z.literal("FlowEdge"),
+  targetId: z.string(), // arrows point from source to target
 });
 
 export const infoRelationNames: Record<InfoCategory, RelationName[]> = {

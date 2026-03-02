@@ -7,22 +7,24 @@
  */
 
 import * as Sentry from "@sentry/nextjs";
-import type { NextPage } from "next";
+import type { NextPage, NextPageContext } from "next";
 import type { ErrorProps } from "next/error";
-import Error from "next/error";
+import NextError from "next/error";
 
-const CustomErrorComponent: NextPage<ErrorProps> = (props) => {
-  return <Error statusCode={props.statusCode} />;
+import { AppError } from "@/web/common/components/Error/Error";
+
+const CustomErrorComponent: NextPage<ErrorProps> = (props: ErrorProps) => {
+  return <AppError statusCode={props.statusCode} />;
 };
 
 // eslint-disable-next-line functional/immutable-data
-CustomErrorComponent.getInitialProps = async (contextData) => {
+CustomErrorComponent.getInitialProps = async (contextData: NextPageContext) => {
   // In case this is running in a serverless function, await this in order to give Sentry
   // time to send the error before the lambda exits
   await Sentry.captureUnderscoreErrorException(contextData);
 
   // This will contain the status code of the response
-  return Error.getInitialProps(contextData);
+  return NextError.getInitialProps(contextData);
 };
 
 export default CustomErrorComponent;
