@@ -5,7 +5,7 @@ import { type NodeType } from "@/common/node";
 import { type EdgeType } from "@/db/generated/prisma/enums";
 
 export const relationNames = [
-  // topic
+  // breakdown
   "causes",
   "addresses",
   "accomplishes",
@@ -15,6 +15,7 @@ export const relationNames = [
   "fulfills",
   "impedes",
   "mitigates",
+  "reduces",
 
   // research
   "asksAbout", //question to any node
@@ -163,6 +164,7 @@ export const infoRelationNames: Record<InfoCategory, RelationName[]> = {
     "fulfills",
     "impedes",
     "mitigates",
+    "reduces",
     "relatesTo", // is a generic relation but currently only seems worthwhile in topic
   ],
   research: ["asksAbout", "potentialAnswerTo", "relevantFor", "sourceOf", "mentions"],
