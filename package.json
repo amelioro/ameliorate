@@ -39,6 +39,7 @@
     "migration:rollback": "tsx scripts/rollbackMigration.ts",
     "migration:run": "prisma migrate dev",
     "migration:deploy": "prisma migrate deploy",
+    "db:cleanup": "tsx scripts/cleanupOrphanedScores.ts",
     "postinstall": "prisma generate"
   },
   "dependencies": {
