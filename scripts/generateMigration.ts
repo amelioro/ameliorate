@@ -19,13 +19,16 @@ const generateMigration = async () => {
   await xprisma.$executeRawUnsafe(`DROP DATABASE IF EXISTS ${shadowDbName};`);
   await xprisma.$executeRawUnsafe(`CREATE DATABASE ${shadowDbName};`);
 
+  const shadowDatabaseUrl = `postgres://postgres:Demo99@localhost:33100/${shadowDbName}`;
+  // eslint-disable-next-line functional/immutable-data -- manually set this so that we can control shadow db creation/deletion with our nonstandard generation process (diffing for `down.sql`), yet have it not set for other commands so that prisma can control the shadow db automatically for those
+  process.env.SHADOW_DATABASE_URL = shadowDatabaseUrl;
+
   try {
     // Create down migration
     // @ts-expect-error idk, execa example usage is like this but ts doesn't like piping after command returns potentially undefined
     const { stdout: downStdout } = await $`prisma migrate diff \
-  --from-schema-datamodel src/db/schema.prisma \
+  --from-schema src/db/schema.prisma \
   --to-migrations src/db/migrations \
-  --shadow-database-url postgres://postgres:Demo99@localhost:33100/${shadowDbName} \
   --script`.pipeStdout("down.sql");
 
     // add BEGIN and COMMIT to ensure migration is wrapped in a transaction
@@ -38,8 +41,7 @@ const generateMigration = async () => {
     // @ts-expect-error idk, execa example usage is like this but ts doesn't like piping after command returns potentially undefined
     const { stdout: upStdout } = await $`prisma migrate diff \
   --from-migrations src/db/migrations \
-  --to-schema-datamodel src/db/schema.prisma \
-  --shadow-database-url postgres://postgres:Demo99@localhost:33100/${shadowDbName} \
+  --to-schema src/db/schema.prisma \
   --script`.pipeStdout("migration.sql");
 
     // add BEGIN and COMMIT to ensure migration is wrapped in a transaction

@@ -33,9 +33,7 @@ const rollbackMigration = async () => {
 
   console.log(`Rolling back migration: ${migrationToRollback}`);
 
-  await $`prisma db execute \
-  --file src/db/migrations/${migrationToRollback}/down.sql \
-  --schema src/db/schema.prisma`;
+  await $`prisma db execute --file src/db/migrations/${migrationToRollback}/down.sql`;
 
   // Not using `prisma migrate resolve` because that requires the migration to have failed.
   // Setting `rolled_back_at` might have benefits because it maintains the started_at, checksum, etc, (https://github.com/prisma/prisma-engines/blob/bb8e7aae27ce478f586df41260253876ccb5b390/schema-engine/ARCHITECTURE.md#the-_prisma_migrations-table)

@@ -129,7 +129,7 @@ model Edge {
 }
 
 enum EdgeType {
-  // topic
+  // breakdown
   causes
   addresses
   accomplishes
@@ -139,6 +139,7 @@ enum EdgeType {
   fulfills
   impedes
   mitigates
+  reduces
 
   // research
   asksAbout
