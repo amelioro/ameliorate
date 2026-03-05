@@ -22,6 +22,7 @@ import { TutorialController } from "@/web/topic/components/TopicWorkspace/Tutori
 import { ViewToolbar } from "@/web/topic/components/TopicWorkspace/ViewToolbar";
 import { WorkspaceContext } from "@/web/topic/components/TopicWorkspace/WorkspaceContext";
 import { setScore } from "@/web/topic/diagramStore/actions";
+import { deleteGraphPart } from "@/web/topic/diagramStore/createDeleteActions";
 import { playgroundUsername } from "@/web/topic/diagramStore/store";
 import { redo, undo } from "@/web/topic/diagramStore/utilActions";
 import { useTemporalHooks } from "@/web/topic/diagramStore/utilHooks";
@@ -64,6 +65,12 @@ const useWorkspaceHotkeys = (user: { username: string } | null | undefined) => {
     event.preventDefault(); // prevents redoing of both the text in textfield outside the canvas and the intended redo
     if (!userCanEditTopicData || !canRedo) return;
     redo();
+  });
+
+  useHotkeys([hotkeys.delete], () => {
+    const selectedPart = getSelectedGraphPart();
+    if (!userCanEditTopicData || !selectedPart) return;
+    deleteGraphPart(selectedPart);
   });
 };
 
