@@ -416,22 +416,23 @@ export const addableRelationsFrom = (
 export const canCreateEdge = (
   topicGraph: MinimalGraph,
   source: MinimalNode,
+  edgeType: RelationName,
   target: MinimalNode,
 ) => {
-  const existingEdge = topicGraph.edges.find((edge) => {
-    return (
-      (edge.sourceId === target.id && edge.targetId === source.id) ||
-      (edge.sourceId === source.id && edge.targetId === target.id)
-    );
-  });
-
   if (source.id === target.id) {
     console.log("cannot connect nodes: tried dragging node onto itself");
     return false;
   }
 
-  if (existingEdge) {
-    console.log("cannot connect nodes: tried dragging between already-connected nodes");
+  // Multiple edges between the same nodes are allowed as long as the type or direction is different.
+  const duplicateEdge = topicGraph.edges.find(
+    (edge) => edge.sourceId === source.id && edge.targetId === target.id && edge.type === edgeType,
+  );
+
+  if (duplicateEdge) {
+    console.log(
+      "cannot connect nodes: an edge with the same source, type, and target already exists",
+    );
     return false;
   }
 

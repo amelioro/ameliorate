@@ -9,6 +9,7 @@ import {
 import { ComponentType, useEffect, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 
+import { throwError } from "@/common/errorHandling";
 import { Loading } from "@/web/common/components/Loading/Loading";
 import { emitter } from "@/web/common/event";
 import { useSessionUser } from "@/web/common/hooks";
@@ -58,10 +59,54 @@ const convertToReactFlowNodes = (
   }));
 };
 
+/**
+ * Build a map from edge id to its parallel offset index, so that multiple edges between the same
+ * two nodes can be visually spread apart.
+ *
+ * Indexes are symmetric around 0: e.g. 2 edges: [-1, 1]; 3 edges: [-1, 0, 1]; 4 edges: [-2, -1, 1, 2].
+ * Index is undefined when there's only 1 edge between the two nodes.
+ */
+const getParallelOffsetsByEdgeId = (layoutedEdges: LayoutedEdge[]) => {
+  const edgesByNodePair: Record<string, LayoutedEdge[]> = {};
+  layoutedEdges.forEach((edge) => {
+    const nodeA = parsePortId(edge.sourcePortId).nodeId;
+    const nodeB = parsePortId(edge.targetPortId).nodeId;
+    // use sorted IDs so A→B and B→A share a group
+    const pairKey = nodeA < nodeB ? `${nodeA}..${nodeB}` : `${nodeB}..${nodeA}`;
+    // eslint-disable-next-line functional/immutable-data
+    (edgesByNodePair[pairKey] ??= []).push(edge);
+  });
+
+  const offsetsByEdgeId: Record<string, number | undefined> = {};
+  Object.values(edgesByNodePair).forEach((group) => {
+    if (group.length === 1) {
+      const edgeId = group[0]?.id ?? throwError("expected edge in group", group);
+      // eslint-disable-next-line functional/immutable-data
+      offsetsByEdgeId[edgeId] = undefined;
+      return;
+    }
+
+    const count = group.length;
+    const isEven = count % 2 === 0;
+    group.forEach((edge, i) => {
+      // For odd count: -floor(count/2) ... 0 ... +floor(count/2)
+      // For even count: skip 0, e.g. -2, -1, 1, 2
+      const rawIndex = i - Math.floor(count / 2);
+      const offsetIndex = isEven && rawIndex >= 0 ? rawIndex + 1 : rawIndex;
+      // eslint-disable-next-line functional/immutable-data
+      offsetsByEdgeId[edge.id] = offsetIndex;
+    });
+  });
+
+  return offsetsByEdgeId;
+};
+
 const convertToReactFlowEdges = (
   layoutedEdges: LayoutedEdge[],
   selectedGraphPartId: string | undefined,
 ): ReactFlowEdge[] => {
+  const parallelOffsetByEdgeId = getParallelOffsetsByEdgeId(layoutedEdges);
+
   return layoutedEdges.map((edge) => ({
     id: edge.id,
     // layouted edges don't have source/target nodes because they use ports directly... could add them but it seems not worth
@@ -82,6 +127,7 @@ const convertToReactFlowEdges = (
       targetPoint: edge.targetPoint,
       bendPoints: edge.bendPoints,
       labelPosition: edge.labelPosition,
+      parallelOffsetIndex: parallelOffsetByEdgeId[edge.id],
     },
     selected: edge.id === selectedGraphPartId,
   }));
