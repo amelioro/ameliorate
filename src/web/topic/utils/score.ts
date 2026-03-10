@@ -1,7 +1,10 @@
 import { type Palette } from "@mui/material";
 import { maxBy, mean, meanBy, round } from "es-toolkit";
+import { get } from "es-toolkit/compat";
 
 import { type Score } from "@/web/topic/utils/graph";
+
+export type UserScores = Record<string, Record<string, Score>>; // userScores[:username][:graphPartId]
 
 // could have average in here too but average of importance still means importance and seems like it should use the same colors
 // TODO? probably add "truth" as a type here, for edges
@@ -108,4 +111,39 @@ export const userCanEditScores = (
     username !== undefined &&
     perspectives[0] === username
   );
+};
+
+export const getDisplayScoresByGraphPartId = (
+  graphPartIds: string[],
+  perspectives: string[],
+  userScores: UserScores,
+  aggregationMode: AggregationMode,
+): Record<string, Score> => {
+  const perspectiveScoresByGraphPart = getPerspectiveScoresByGraphPart(
+    graphPartIds,
+    perspectives,
+    userScores,
+  );
+
+  const displayScoresWithGraphParts = Object.entries(perspectiveScoresByGraphPart).map(
+    ([graphPartId, scores]) =>
+      [graphPartId, getDisplayScore(scores, aggregationMode)] as [string, Score],
+  );
+  return Object.fromEntries(displayScoresWithGraphParts);
+};
+
+const getPerspectiveScoresByGraphPart = (
+  graphPartIds: string[],
+  perspectives: string[],
+  userScores: UserScores,
+) => {
+  const scoresWithGraphPart: [string, Score[]][] = graphPartIds.map((graphPartId) => {
+    const perspectiveScores = perspectives.map((perspective) => {
+      return get(userScores, [perspective, graphPartId], "-");
+    });
+
+    return [graphPartId, perspectiveScores];
+  });
+
+  return Object.fromEntries(scoresWithGraphPart);
 };

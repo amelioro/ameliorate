@@ -1,25 +1,13 @@
-import { sortBy, uniqBy } from "es-toolkit/compat";
 import { shallow } from "zustand/shallow";
 import { createWithEqualityFn } from "zustand/traditional";
 
-import { getDisplayScoresByGraphPartId } from "@/web/topic/diagramStore/scoreGetters";
-import { UserScores, useDiagramStore } from "@/web/topic/diagramStore/store";
+import { useDiagramStore } from "@/web/topic/diagramStore/store";
 import { Diagram } from "@/web/topic/utils/diagram";
-import { Node, getRelevantEdges, getSecondaryNeighbors } from "@/web/topic/utils/graph";
-import { AggregationMode } from "@/web/topic/utils/score";
+import { applyFilters } from "@/web/topic/utils/diagramFilter";
+import { Node } from "@/web/topic/utils/graph";
 import { getInfoFilter } from "@/web/view/currentViewStore/filter";
 import { useCurrentViewStore } from "@/web/view/currentViewStore/store";
 import { usePerspectiveStore } from "@/web/view/perspectiveStore";
-import {
-  GeneralFilter,
-  applyNodeTypeFilter,
-  applyScoreFilter,
-} from "@/web/view/utils/generalFilter";
-import { InfoFilter, applyInfoFilter } from "@/web/view/utils/infoFilter";
-import {
-  hideImpliedEdges,
-  hideProblemCriterionSolutionEdges,
-} from "@/web/view/utils/miscDiagramFilters";
 
 interface FilteredDiagramState {
   filteredDiagram: Diagram;
@@ -78,58 +66,6 @@ export const getFilteredDiagram = (): Diagram => {
 };
 
 // utils
-const applyFilters = (
-  diagram: Diagram,
-  userScores: UserScores,
-  infoFilter: InfoFilter,
-  generalFilter: GeneralFilter,
-  showImpliedEdges: boolean,
-  showProblemCriterionSolutionEdges: boolean,
-  perspectives: string[],
-  aggregationMode: AggregationMode,
-): Diagram => {
-  const nodesAfterDiagramFilter = applyInfoFilter(diagram, infoFilter);
-
-  const nodesAfterTypeFilter = applyNodeTypeFilter(
-    nodesAfterDiagramFilter,
-    generalFilter.nodeTypes,
-  );
-
-  // don't filter edges because hard to prevent awkwardness when edge doesn't pass filter and suddenly nodes are scattered
-  const partIdsForScores = diagram.nodes.map((part) => part.id);
-  const scores = getDisplayScoresByGraphPartId(
-    partIdsForScores,
-    perspectives,
-    userScores,
-    aggregationMode,
-  );
-  const nodesAfterScoreFilter = applyScoreFilter(nodesAfterTypeFilter, generalFilter, scores);
-
-  const nodesToShow = diagram.nodes.filter((node) => generalFilter.nodesToShow.includes(node.id));
-  const nodesAfterToShow = uniqBy(nodesAfterScoreFilter.concat(nodesToShow), "id");
-
-  const secondaryNeighbors = getSecondaryNeighbors(nodesAfterToShow, diagram, generalFilter);
-
-  const nodesBeforeHide = nodesAfterToShow.concat(secondaryNeighbors);
-  const nodesAfterHide = nodesBeforeHide.filter(
-    (node) => !generalFilter.nodesToHide.includes(node.id),
-  );
-
-  const filteredNodes = uniqBy(nodesAfterHide, "id");
-
-  const relevantEdges = getRelevantEdges(filteredNodes, diagram);
-  const edgesAfterImplied = showImpliedEdges
-    ? relevantEdges
-    : hideImpliedEdges(relevantEdges, { nodes: filteredNodes, edges: relevantEdges }, diagram);
-
-  const filteredEdges = showProblemCriterionSolutionEdges
-    ? edgesAfterImplied
-    : hideProblemCriterionSolutionEdges(filteredNodes, edgesAfterImplied);
-
-  // sort nodes/edges to ensure layout doesn't change if nodes/edges occur in a different order
-  return { nodes: sortBy(filteredNodes, "id"), edges: sortBy(filteredEdges, "id") };
-};
-
 /**
  * Recompute when related store data changes.
  *

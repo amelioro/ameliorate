@@ -4,13 +4,8 @@ import { createWithEqualityFn } from "zustand/traditional";
 
 import { apiSyncer } from "@/web/topic/diagramStore/apiSyncerMiddleware";
 import { migrate } from "@/web/topic/diagramStore/migrate";
-import { Edge, Node, Score, buildNode } from "@/web/topic/utils/graph";
-
-// TODO: probably better to put userScores into a separate store (it doesn't seem necessary to
-// couple scores with the nodes/edges, and we'd be able to avoid triggering score comparators by
-// non-score-related changes), but a separate store will create the problem of separate undos/redos,
-// and the need for another apiSyncer middleware? So it'll be nontrivial.
-export type UserScores = Record<string, Record<string, Score>>; // userScores[:username][:graphPartId]
+import { Edge, Node, buildNode } from "@/web/topic/utils/graph";
+import { UserScores } from "@/web/topic/utils/score";
 
 /**
  * If we're on the playground, hardcode "me." as the username. This:
@@ -23,6 +18,12 @@ export const playgroundUsername = "playground.user";
 export interface DiagramStoreState {
   nodes: Node[];
   edges: Edge[];
+  /**
+   * TODO: probably better to put userScores into a separate store (it doesn't seem necessary to
+   * couple scores with the nodes/edges, and we'd be able to avoid triggering score comparators by
+   * non-score-related changes), but a separate store will create the problem of separate undos/redos,
+   * and the need for another apiSyncer middleware? So it'll be nontrivial.
+   */
   userScores: UserScores;
 }
 

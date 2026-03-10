@@ -3,11 +3,15 @@ import { get } from "es-toolkit/compat";
 import { shallow } from "zustand/shallow";
 
 import { throwError } from "@/common/errorHandling";
-import { getDisplayScoresByGraphPartId } from "@/web/topic/diagramStore/scoreGetters";
 import { useDiagramStore } from "@/web/topic/diagramStore/store";
 import { Node, Score } from "@/web/topic/utils/graph";
 import { edges, sourceNodes } from "@/web/topic/utils/node";
-import { ScoreMeaning, getNumericScore, getScoreMeaning } from "@/web/topic/utils/score";
+import {
+  ScoreMeaning,
+  getDisplayScoresByGraphPartId,
+  getNumericScore,
+  getScoreMeaning,
+} from "@/web/topic/utils/score";
 import { useAggregationMode, usePerspectives } from "@/web/view/perspectiveStore";
 
 export const useDisplayScores = (
