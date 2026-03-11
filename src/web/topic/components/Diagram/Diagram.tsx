@@ -17,7 +17,8 @@ import { openContextMenu } from "@/web/common/store/contextMenuActions";
 import { clearPartIdToCentralize, usePartIdToCentralize } from "@/web/common/store/ephemeralStore";
 import { StyledReactFlow } from "@/web/topic/components/Diagram/Diagram.styles";
 import { setFlowMethods } from "@/web/topic/components/Diagram/externalFlowStore";
-import { FlowEdge } from "@/web/topic/components/Edge/FlowEdge";
+import { FlowDirectEdge } from "@/web/topic/components/Edge/FlowDirectEdge";
+import { FlowIndirectEdge } from "@/web/topic/components/Edge/FlowIndirectEdge";
 import { FlowNode } from "@/web/topic/components/Node/FlowNode";
 import { connectNodes, reconnectEdge } from "@/web/topic/diagramStore/createDeleteActions";
 import { useFilteredDiagram } from "@/web/topic/diagramStore/filteredDiagramStore";
@@ -31,13 +32,17 @@ import {
   ReactFlowNode,
 } from "@/web/topic/utils/flowUtils";
 import { hotkeys } from "@/web/topic/utils/hotkeys";
+import { isIndirectEdgeId } from "@/web/topic/utils/indirectEdges";
 import { LayoutedEdge, LayoutedNode, parsePortId } from "@/web/topic/utils/layout";
 import { tutorialIsOpen } from "@/web/tutorial/tutorial";
 import { useFlashlightMode } from "@/web/view/actionConfigStore";
 import { setSelected, useSelectedGraphPart } from "@/web/view/selectedPartStore";
 
 const nodeTypes: Record<"FlowNode", ComponentType<FlowNodeProps>> = { FlowNode: FlowNode };
-const edgeTypes: Record<"FlowEdge", ComponentType<FlowEdgeProps>> = { FlowEdge: FlowEdge };
+const edgeTypes: Record<"FlowDirectEdge" | "FlowIndirectEdge", ComponentType<FlowEdgeProps>> = {
+  FlowDirectEdge: FlowDirectEdge,
+  FlowIndirectEdge: FlowIndirectEdge,
+};
 
 const convertToReactFlowNodes = (
   layoutedNodes: LayoutedNode[],
@@ -114,12 +119,9 @@ const convertToReactFlowEdges = (
     target: parsePortId(edge.targetPortId).nodeId,
     /**
      * This is awkward to overwrite our own edge types (e.g. causes/has/etc.), but react flow
-     * doesn't need to know about these types - its types are used for mapping to react components,
-     * and all of our edge types use the same FlowEdge component.
-     * In the future we may use different components, but they very likely wouldn't be 1-1 with our
-     * types - e.g. for FlowEdge we might use an IndirectEdge type.
+     * doesn't need to know about these types - its types are used for mapping to react components.
      */
-    type: "FlowEdge" as const,
+    type: isIndirectEdgeId(edge.id) ? "FlowIndirectEdge" : "FlowDirectEdge",
     sourceHandle: edge.sourcePortId,
     targetHandle: edge.targetPortId,
     data: {

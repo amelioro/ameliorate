@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
+import { type CalculatedEdge } from "@/common/edge";
 import { Edge, Node } from "@/web/topic/utils/graph";
 
 export interface MenuPosition {
@@ -11,6 +12,7 @@ export interface MenuPosition {
 export interface Context {
   node?: Node;
   edge?: Edge;
+  calculatedEdge?: CalculatedEdge;
 }
 
 export interface ContextMenuStoreState {

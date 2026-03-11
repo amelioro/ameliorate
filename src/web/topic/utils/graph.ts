@@ -3,6 +3,7 @@ import { v4 as uuid } from "uuid";
 import { z } from "zod";
 
 import {
+  MinimalCalculatedEdge,
   type MinimalEdge,
   type RelationName,
   diagramStoreEdgeSchema,
@@ -125,8 +126,13 @@ export const findGraphPartOrThrow = (graphPartId: string, nodes: Node[], edges: 
   return graphPart;
 };
 
-export const isNode = (graphPart: GraphPart): graphPart is Node => {
-  if ("sourceId" in graphPart) return false;
+/**
+ * Note: `MinimalCalculatedEdge` feels like maybe it doesn't fit in this file (the other methods are
+ * on persisted parts), but not sure yet if this method should move or if a different type should be
+ * used.
+ */
+export const isNode = (part: GraphPart | MinimalCalculatedEdge): part is Node => {
+  if ("sourceId" in part) return false;
   return true;
 };
 

@@ -205,6 +205,11 @@ export type CalculatedEdge = Omit<MinimalEdge, "type"> & {
 };
 
 /**
+ * Same as MinimalEdge but including calculated edge types (e.g. IndirectEdge types).
+ */
+export type MinimalCalculatedEdge = Omit<MinimalEdge, "type"> & { type: AnyRelationName };
+
+/**
  * Includes both persisted edge types and calculated edge types.
  *
  * Not the best name, but it seems somewhat beneficial to keep the persisted types as the unprefixed

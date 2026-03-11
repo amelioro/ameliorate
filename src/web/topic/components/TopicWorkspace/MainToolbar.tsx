@@ -42,6 +42,7 @@ import { deleteGraphPart } from "@/web/topic/diagramStore/createDeleteActions";
 import { useIsTableEdge } from "@/web/topic/diagramStore/edgeHooks";
 import { useTopic, useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { hotkeys } from "@/web/topic/utils/hotkeys";
+import { isIndirectEdge } from "@/web/topic/utils/indirectEdges";
 import { AggregationMode, aggregationModes } from "@/web/topic/utils/score";
 import {
   toggleFlashlightMode,
@@ -261,6 +262,7 @@ export const MainToolbar = () => {
 
   const selectedGraphPart = useSelectedGraphPart();
   const partIsTableEdge = useIsTableEdge(selectedGraphPart?.id ?? "");
+  const partIsCalculatedEdge = selectedGraphPart ? isIndirectEdge(selectedGraphPart) : false;
 
   const [showHideMenuAnchorEl, setShowHideMenuAnchorEl] = useState<null | HTMLElement>(null);
   const [perspectivesMenuAnchorEl, setPerspectivesMenuAnchorEl] = useState<null | HTMLElement>(
@@ -378,12 +380,13 @@ export const MainToolbar = () => {
               title="Delete"
               aria-label="Delete"
               onClick={() => {
-                if (selectedGraphPart) {
+                if (selectedGraphPart && !isIndirectEdge(selectedGraphPart)) {
                   deleteGraphPart(selectedGraphPart);
                 }
               }}
               // don't allow modifying edges that are part of the table, because they should always exist as long as their nodes do
-              disabled={!selectedGraphPart || partIsTableEdge}
+              // don't allow deleting calculated edges, because they aren't persisted
+              disabled={!selectedGraphPart || partIsTableEdge || partIsCalculatedEdge}
               className="rounded-sm"
             >
               <Delete />

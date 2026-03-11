@@ -1,7 +1,13 @@
 import { sortBy, uniqBy } from "es-toolkit/compat";
 
 import { Diagram } from "@/web/topic/utils/diagram";
-import { getRelevantEdges, getSecondaryNeighbors } from "@/web/topic/utils/graph";
+import {
+  type Edge,
+  type Node,
+  getRelevantEdges,
+  getSecondaryNeighbors,
+} from "@/web/topic/utils/graph";
+import { type IndirectEdge, getIndirectEdges } from "@/web/topic/utils/indirectEdges";
 import {
   AggregationMode,
   UserScores,
@@ -18,6 +24,11 @@ import {
   hideProblemCriterionSolutionEdges,
 } from "@/web/view/utils/miscDiagramFilters";
 
+export interface FilteredDiagram {
+  nodes: Node[];
+  edges: (Edge | IndirectEdge)[];
+}
+
 export const applyFilters = (
   diagram: Diagram,
   userScores: UserScores,
@@ -27,7 +38,7 @@ export const applyFilters = (
   showProblemCriterionSolutionEdges: boolean,
   perspectives: string[],
   aggregationMode: AggregationMode,
-): Diagram => {
+): FilteredDiagram => {
   const nodesAfterDiagramFilter = applyInfoFilter(diagram, infoFilter);
 
   const nodesAfterTypeFilter = applyNodeTypeFilter(
@@ -58,9 +69,13 @@ export const applyFilters = (
   const filteredNodes = uniqBy(nodesAfterHide, "id");
 
   const relevantEdges = getRelevantEdges(filteredNodes, diagram);
+  const indirectEdges = getIndirectEdges({ nodes: filteredNodes, edges: relevantEdges }, diagram);
+  const displayedEdges = [...relevantEdges, ...indirectEdges];
+
+  // hide edges if configured to
   const edgesAfterImplied = showImpliedEdges
-    ? relevantEdges
-    : hideImpliedEdges(relevantEdges, { nodes: filteredNodes, edges: relevantEdges }, diagram);
+    ? displayedEdges
+    : hideImpliedEdges(displayedEdges, { nodes: filteredNodes, edges: relevantEdges }, diagram);
 
   const filteredEdges = showProblemCriterionSolutionEdges
     ? edgesAfterImplied

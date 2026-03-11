@@ -439,16 +439,22 @@ export const canCreateEdge = (
   return true;
 };
 
-export const sourceNode = <TNode extends MinimalNode>(edge: MinimalEdge, nodes: TNode[]) => {
+export const sourceNode = <TNode extends MinimalNode>(
+  edge: Omit<MinimalEdge, "type">,
+  nodes: TNode[],
+) => {
   return findNodeOrThrow(edge.sourceId, nodes);
 };
 
-export const targetNode = <TNode extends MinimalNode>(edge: MinimalEdge, nodes: TNode[]) => {
+export const targetNode = <TNode extends MinimalNode>(
+  edge: Omit<MinimalEdge, "type">,
+  nodes: TNode[],
+) => {
   return findNodeOrThrow(edge.targetId, nodes);
 };
 
 export const nodes = <TNode extends MinimalNode>(
-  edge: MinimalEdge,
+  edge: Omit<MinimalEdge, "type">,
   nodes: TNode[],
 ): [TNode, TNode] => {
   return [sourceNode(edge, nodes), targetNode(edge, nodes)];

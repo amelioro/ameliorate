@@ -21,6 +21,22 @@ import { MinimalNode, goodNodeTypes } from "@/common/node";
  */
 export type IndirectEdge = CalculatedEdge;
 
+/**
+ * Indirect edge ids follow the format `<sourceId>..<type>..<targetId>`.
+ * Regular persisted edge ids don't contain `..`.
+ */
+export const isIndirectEdgeId = (id: string): boolean => {
+  return id.includes("..");
+};
+
+export const isIndirectEdge = (edge: { id: string }): edge is CalculatedEdge => {
+  return isIndirectEdgeId(edge.id);
+};
+
+const getIndirectEdgeId = (path: Path): string => {
+  return `${path.startNode.id}..${path.combinedLabel}..${path.nextNode.id}`;
+};
+
 interface Path {
   edges: MinimalEdge[];
   startNode: MinimalNode;
@@ -107,10 +123,6 @@ export const getIndirectEdges = (
   );
 
   return indirectEdges;
-};
-
-const getIndirectEdgeId = (path: Path): string => {
-  return `${path.startNode.id}..${path.combinedLabel}..${path.nextNode.id}`;
 };
 
 const getNodeOrThrow = (allNodesById: Record<string, MinimalNode>, nodeId: string): MinimalNode => {

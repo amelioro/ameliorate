@@ -1,16 +1,17 @@
 import { shallow } from "zustand/shallow";
 import { createWithEqualityFn } from "zustand/traditional";
 
+import { type CalculatedEdge } from "@/common/edge";
 import { useDiagramStore } from "@/web/topic/diagramStore/store";
-import { Diagram } from "@/web/topic/utils/diagram";
-import { applyFilters } from "@/web/topic/utils/diagramFilter";
+import { FilteredDiagram, applyFilters } from "@/web/topic/utils/diagramFilter";
 import { Node } from "@/web/topic/utils/graph";
+import { isIndirectEdge } from "@/web/topic/utils/indirectEdges";
 import { getInfoFilter } from "@/web/view/currentViewStore/filter";
 import { useCurrentViewStore } from "@/web/view/currentViewStore/store";
 import { usePerspectiveStore } from "@/web/view/perspectiveStore";
 
 interface FilteredDiagramState {
-  filteredDiagram: Diagram;
+  filteredDiagram: FilteredDiagram;
 }
 
 const useFilteredDiagramStore = createWithEqualityFn<FilteredDiagramState>()(
@@ -19,7 +20,7 @@ const useFilteredDiagramStore = createWithEqualityFn<FilteredDiagramState>()(
 );
 
 // hooks
-export const useFilteredDiagram = (): Diagram => {
+export const useFilteredDiagram = (): FilteredDiagram => {
   return useFilteredDiagramStore((state) => state.filteredDiagram, shallow);
 };
 
@@ -34,6 +35,37 @@ export const useHiddenNodes = (nodes: Node[]): Node[] => {
     const displayedNodeIds = new Set(state.filteredDiagram.nodes.map((n) => n.id));
     return nodes.filter((node) => !displayedNodeIds.has(node.id));
   }, shallow);
+};
+
+export const useDisplayedEdgeIds = (nodeId: string): string[] => {
+  return useFilteredDiagramStore(
+    (state) =>
+      state.filteredDiagram.edges
+        .filter((edge) => edge.sourceId === nodeId || edge.targetId === nodeId)
+        .map((edge) => edge.id),
+    shallow,
+  );
+};
+
+export const useDisplayedNeighborIds = (nodeId: string): string[] => {
+  return useFilteredDiagramStore(
+    (state) =>
+      state.filteredDiagram.edges
+        .filter((edge) => edge.sourceId === nodeId || edge.targetId === nodeId)
+        .map((edge) => (edge.sourceId === nodeId ? edge.targetId : edge.sourceId)),
+    shallow,
+  );
+};
+
+export const useIndirectEdge = (edgeId: string | null): CalculatedEdge | null => {
+  return useFilteredDiagramStore((state) => {
+    if (!edgeId) return null;
+
+    const edge = state.filteredDiagram.edges.find((edge) => edge.id === edgeId);
+    if (!edge || !isIndirectEdge(edge)) return null;
+
+    return edge;
+  });
 };
 
 // actions
@@ -61,8 +93,17 @@ export const computeFilteredDiagram = () => {
 };
 
 // helpers
-export const getFilteredDiagram = (): Diagram => {
+export const getFilteredDiagram = (): FilteredDiagram => {
   return useFilteredDiagramStore.getState().filteredDiagram;
+};
+
+export const getIndirectEdge = (edgeId: string): CalculatedEdge | null => {
+  const filteredDiagram = useFilteredDiagramStore.getState().filteredDiagram;
+
+  const edge = filteredDiagram.edges.find((edge) => edge.id === edgeId);
+  if (!edge || !isIndirectEdge(edge)) return null;
+
+  return edge;
 };
 
 // utils
