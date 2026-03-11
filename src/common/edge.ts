@@ -65,8 +65,11 @@ export type Edge = z.infer<typeof edgeSchema>;
  * Intended for cases where we only need basic edge info, e.g. for graph algorithm stuff, not for
  * react components or store hooks/actions.
  *
- * Initial motivation: want a shared base type between direct and indirect edges so e.g. indirect
- * edges can still take advantage of functions that make sense for them.
+ * Initial motivation was to have a shared base type between direct and indirect edges, but after
+ * looking at usages, basically everything should operate on persisted edges. A significant drawback
+ * to making this support indirect edges is that the calculated edge types need to be included.
+ * So we're keeping the meaning of this to be for persisted edges. We definitely want this type for
+ * places where we don't need additional persisted edge info anyway.
  *
  * Considered also removing `type` and separating a `MinimalTypedEdge`, for pure graph algorithm
  * stuff that doesn't use Ameliorate types, but I don't think we have enough of that to justify the
@@ -174,6 +177,98 @@ export const infoRelationNames: Record<InfoCategory, RelationName[]> = {
 export const breakdownRelationNames = infoRelationNames.breakdown;
 export const researchRelationNames = infoRelationNames.research;
 export const justificationRelationNames = infoRelationNames.justification;
+
+export const effectOfTypes = ["addressesEffectOf", "mitigatesEffectOf", "reducesEffectOf"] as const;
+
+const _calculatedRelationTypes = [...effectOfTypes, "maybeSupports", "maybeCritiques"] as const;
+
+/**
+ * It's unclear right now where all this type should be used. Ideally there would be a clearer
+ * boundary where only persisted edges are used vs where persisted + calculated edges are used vs
+ * where only calculated edges are used.
+ */
+export type CalculatedRelationType = (typeof _calculatedRelationTypes)[number];
+
+/**
+ * An edge that isn't persisted.
+ *
+ * Note: currently the only kind of `CalculatedEdge` is `IndirectEdge`, but we have separate types for these
+ * because some places in code care about the fact that an indirect edge is calculated, and others
+ * actually care that it's an indirect edge. Technically there may be other `CalculatedEdge`s in the
+ * future, but it seems unlikely.
+ */
+export type CalculatedEdge = Omit<MinimalEdge, "type"> & {
+  type: RelationName | CalculatedRelationType;
+  data: {
+    hiddenPath: MinimalEdge[];
+  };
+};
+
+/**
+ * Same as MinimalEdge but including calculated edge types (e.g. IndirectEdge types).
+ */
+export type MinimalCalculatedEdge = Omit<MinimalEdge, "type"> & { type: AnyRelationName };
+
+/**
+ * Includes both persisted edge types and calculated edge types.
+ *
+ * Not the best name, but it seems somewhat beneficial to keep the persisted types as the unprefixed
+ * `RelationName` because those are used in most places. Not sure a better name for this that would
+ * be clear that it includes both persisted and calculated edge types.
+ */
+export type AnyRelationName = RelationName | CalculatedRelationType;
+
+/**
+ * Categorizes the kind of edge a bit more meaningfully than our InfoCategories.
+ *
+ * Mainly used for identifying meaningful calculations involving graph traversal, e.g. indirect
+ * edges.
+ *
+ * "supports"/"critiques" aren't really causal, but they have a distinct category of relation for
+ * calculations. This type probably could use a better name, but not sure what it should be
+ * otherwise.
+ *
+ * "misc" generally means that the relation isn't causal but there could be value in traversing it,
+ * as opposed to "none". E.g. "relatesTo" is kind of neutral causally. Maybe there could be a better
+ * name such that these non-causal things have more-clear implications?
+ *
+ * Maybe ideally our these would somehow tie in with InfoCategory? Not sure.
+ */
+export type CausalType = "causes" | "reduces" | "has" | "misc" | "supports" | "critiques" | "none";
+
+export const causalTypes: Record<AnyRelationName, CausalType> = {
+  // topic
+  causes: "causes",
+  addresses: "reduces",
+  accomplishes: "misc",
+  contingencyFor: "misc",
+  has: "has",
+  criterionFor: "none", // ignore, mostly won't be relevant and criteria will have lots of edges so could be poor for performance
+  fulfills: "none", // ^^
+  impedes: "reduces",
+  mitigates: "reduces",
+  reduces: "reduces",
+
+  addressesEffectOf: "reduces",
+  mitigatesEffectOf: "reduces",
+  reducesEffectOf: "reduces",
+
+  // research
+  asksAbout: "none",
+  potentialAnswerTo: "none",
+  relevantFor: "none",
+  sourceOf: "none",
+  mentions: "none",
+
+  // justification
+  supports: "supports",
+  critiques: "critiques",
+  maybeSupports: "supports",
+  maybeCritiques: "critiques",
+
+  // generic, for unrestricted editing
+  relatesTo: "misc",
+};
 
 export const getEdgeInfoCategory = (edgeType: RelationName): InfoCategory => {
   if (breakdownRelationNames.includes(edgeType)) return "breakdown";

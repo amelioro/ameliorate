@@ -14,11 +14,7 @@ import {
 } from "@/web/topic/components/Node/FlowNode.styles";
 import { FocusNodeAttachment } from "@/web/topic/components/Node/FocusNodeAttachment";
 import { NodeHandle } from "@/web/topic/components/Node/NodeHandle";
-import {
-  useIsEdgeSelected,
-  useIsNeighborSelected,
-  useNode,
-} from "@/web/topic/diagramStore/nodeHooks";
+import { useNode } from "@/web/topic/diagramStore/nodeHooks";
 import { useEffectType } from "@/web/topic/diagramStore/nodeTypeHooks";
 import { useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { addableRelationsFrom } from "@/web/topic/utils/edge";
@@ -27,7 +23,11 @@ import { buildPortId, opposite, orientation, positions } from "@/web/topic/utils
 import { visibleOnPartHoverSelectedClasses } from "@/web/topic/utils/styleUtils";
 import { getFlashlightMode, useUnrestrictedEditing } from "@/web/view/actionConfigStore";
 import { showNodeAndNeighbors } from "@/web/view/currentViewStore/filter";
-import { useIsGraphPartSelected } from "@/web/view/selectedPartStore";
+import {
+  useIsDisplayedEdgeSelected,
+  useIsDisplayedNeighborSelected,
+  useIsGraphPartSelected,
+} from "@/web/view/selectedPartStore";
 
 export const FlowNode = (flowNode: FlowNodeProps) => {
   const [animated, setAnimated] = useState(false);
@@ -38,8 +38,8 @@ export const FlowNode = (flowNode: FlowNodeProps) => {
 
   const node = useNode(flowNode.id);
   const isSelected = useIsGraphPartSelected(flowNode.id);
-  const isNeighborSelected = useIsNeighborSelected(flowNode.id);
-  const isEdgeSelected = useIsEdgeSelected(flowNode.id);
+  const isNeighborSelected = useIsDisplayedNeighborSelected(flowNode.id);
+  const isEdgeSelected = useIsDisplayedEdgeSelected(flowNode.id);
 
   const unrestrictedEditing = useUnrestrictedEditing();
   const effectType = useEffectType(flowNode.id);

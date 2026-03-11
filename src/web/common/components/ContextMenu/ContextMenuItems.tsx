@@ -20,19 +20,21 @@ import { Context } from "@/web/common/store/contextMenuStore";
 export const ContextMenuItems = ({
   node: contextNode,
   edge: contextEdge,
+  calculatedEdge: contextCalculatedEdge,
   isOpen,
 }: Context & { isOpen: boolean }) => {
   const contextPart = contextNode ?? contextEdge;
+  const contextPartMaybeCalculated = contextPart ?? contextCalculatedEdge;
 
   return (
     <>
       {/* view actions (so that this functionality is still available if indicators are hidden) */}
-      {contextPart && <ViewDetailsMenuItem graphPart={contextPart} />}
+      {contextPartMaybeCalculated && <ViewDetailsMenuItem graphPart={contextPartMaybeCalculated} />}
       {contextNode?.type === "problem" && <ViewTableMenuItem node={contextNode} />}
       {contextPart && <ViewContextInDiagramMenuItem graphPart={contextPart} />}
 
       {/* CRUD actions */}
-      {contextPart === undefined && <AddNodeMenuItem parentMenuOpen={isOpen} />}
+      {contextPartMaybeCalculated === undefined && <AddNodeMenuItem parentMenuOpen={isOpen} />}
       {contextNode && <ChangeNodeTypeMenuItem node={contextNode} parentMenuOpen={isOpen} />}
       {contextEdge && <ChangeEdgeTypeMenuItem edge={contextEdge} parentMenuOpen={isOpen} />}
       {contextNode && <DeleteNodeMenuItem node={contextNode} />}

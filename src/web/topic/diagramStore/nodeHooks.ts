@@ -12,8 +12,7 @@ import {
   findNodeOrThrow,
   upstreamNodes,
 } from "@/web/topic/utils/graph";
-import { edges, neighbors, sourceNodes } from "@/web/topic/utils/node";
-import { useIsAnyGraphPartSelected } from "@/web/view/selectedPartStore";
+import { neighbors, sourceNodes } from "@/web/topic/utils/node";
 
 export const useNode = (nodeId: string | null) => {
   return useDiagramStore((state) => {
@@ -169,33 +168,6 @@ export const useNeighbors = (nodeId: string) => {
       return [];
     }
   }, shallow);
-};
-
-export const useIsNeighborSelected = (nodeId: string) => {
-  const neighborNodes = useDiagramStore((state) => {
-    try {
-      const node = findNodeOrThrow(nodeId, state.nodes);
-      const topicGraph = { nodes: state.nodes, edges: state.edges };
-      return neighbors(node, topicGraph);
-    } catch {
-      return [];
-    }
-  });
-
-  return useIsAnyGraphPartSelected(neighborNodes.map((node) => node.id));
-};
-
-export const useIsEdgeSelected = (nodeId: string) => {
-  const neighborEdges = useDiagramStore((state) => {
-    try {
-      const node = findNodeOrThrow(nodeId, state.nodes);
-      return edges(node, state.edges);
-    } catch {
-      return [];
-    }
-  });
-
-  return useIsAnyGraphPartSelected(neighborEdges.map((edge) => edge.id));
 };
 
 /**

@@ -5,10 +5,8 @@ import { memo, useEffect, useRef, useState } from "react";
 
 import { deepIsEqual } from "@/common/utils";
 import { emitter } from "@/web/common/event";
-import {
-  GraphPartDetails,
-  DetailsTab as PartDetailsTab,
-} from "@/web/topic/components/TopicPane/GraphPartDetails";
+import { type DetailsTab as PartDetailsTab } from "@/web/topic/components/TopicPane/GraphPartDetails";
+import { SelectedPartDetails } from "@/web/topic/components/TopicPane/SelectedPartDetails";
 import {
   TopicDetails,
   DetailsTab as TopicDetailsTab,
@@ -187,8 +185,8 @@ const TopicPaneBase = ({ anchor, tabs }: Props) => {
           <DetailsToolbar />
 
           {selectedGraphPart !== null ? (
-            <GraphPartDetails
-              graphPart={selectedGraphPart}
+            <SelectedPartDetails
+              selectedPart={selectedGraphPart}
               selectedTab={selectedPartDetailsTab}
               setSelectedTab={setSelectedPartDetailsTab}
               // use `key` to prevent details from being reused from previous part when a new one is selected
