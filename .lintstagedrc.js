@@ -8,7 +8,11 @@ const buildEslintCommand = (filenames) =>
     .join(" --file ")}`;
 
 const config = {
-  "*": "prettier --ignore-unknown --write",
-  "**/*.{js,jsx,ts,tsx}": buildEslintCommand,
+  // We shouldn't pass files like `yml` to eslint because we haven't configured eslint for that
+  // and we want to run prettier against those because prettier has good defaults.
+  // Annoyingly we also don't want two different globs to overlap because of concurrency issues https://github.com/lint-staged/lint-staged?tab=readme-ov-file#task-concurrency
+  // So we run prettier synchronously with eslint for overlapping files, and concurrently for non-overlapping files.
+  "!(**/*.{js,jsx,ts,tsx})": "prettier --ignore-unknown --write",
+  "**/*.{js,jsx,ts,tsx}": ["prettier --ignore-unknown --write", buildEslintCommand],
 };
 export default config;
