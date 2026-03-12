@@ -1,9 +1,8 @@
 import { Position } from "@xyflow/react";
 import ELK, { type ElkExtendedEdge, type ElkNode, type ElkPort, type LayoutOptions } from "elkjs";
 
-import { type MinimalEdge } from "@/common/edge";
+import { type MinimalCalculatedEdge, type MinimalEdge } from "@/common/edge";
 import { throwError } from "@/common/errorHandling";
-import { type MinimalGraph } from "@/common/graph";
 import { type MinimalNode, type NodeType, compareNodesByType, isEffect } from "@/common/node";
 import { scalePxViaDefaultFontSize } from "@/pages/_document.page";
 import { nodeHeightPx, nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
@@ -13,6 +12,7 @@ import {
 } from "@/web/topic/utils/edge";
 import { type EffectType, getEffectType } from "@/web/topic/utils/effect";
 import { type EdgeDirection } from "@/web/topic/utils/graph";
+import { isIndirectEdge } from "@/web/topic/utils/indirectEdges";
 
 export type Orientation = "DOWN" | "UP" | "RIGHT" | "LEFT";
 export const orientation: Orientation = "UP" as Orientation; // not constant to allow potential other orientations in the future, and keeping code that currently exists for handling "LEFT" orientation
@@ -100,10 +100,11 @@ const partitionOrders: Record<NodeType, string> = {
   custom: "null",
 };
 
-const calculatePartition = (node: MinimalNode, diagram: MinimalGraph) => {
+const calculatePartition = (node: MinimalNode, diagram: GraphToLayout) => {
   // TODO?: if we want to support flipping orientation (to "DOWN"), we could take the resulting value from this method and flip it (e.g. 100 - X)
   if (isEffect(node.type)) {
-    const effectType = getEffectType(node, diagram);
+    const directEdges = diagram.edges.filter((edge): edge is MinimalEdge => !isIndirectEdge(edge));
+    const effectType = getEffectType(node, { nodes: diagram.nodes, edges: directEdges });
 
     if (effectType === "problem") return "3";
     else if (effectType === "solution") return "1";
@@ -352,13 +353,18 @@ const buildElkLayoutOptions = (
   };
 };
 
-const shouldFlipEdge = (edge: MinimalEdge, nodes: MinimalNode[], edges: MinimalEdge[]) => {
+const shouldFlipEdge = (
+  edge: MinimalEdge | MinimalCalculatedEdge,
+  nodes: MinimalNode[],
+  edges: (MinimalEdge | MinimalCalculatedEdge)[],
+) => {
   if (edge.type !== "has" && edge.type !== "causes") return false;
 
   const sourceNode = sourceNodeOfEdge(edge, nodes);
   const targetNode = targetNodeOfEdge(edge, nodes);
 
-  const sourceEffectType: EffectType = getEffectType(sourceNode, { nodes, edges });
+  const directEdges = edges.filter((edge): edge is MinimalEdge => !isIndirectEdge(edge));
+  const sourceEffectType: EffectType = getEffectType(sourceNode, { nodes, edges: directEdges });
 
   const isSubproblemEdge = edge.type === "has" && sourceNode.type === "problem";
   const isProblemCausesEdge =
@@ -385,7 +391,7 @@ export const parsePortId = (portId: string): { nodeId: string; direction: EdgeDi
 };
 
 const buildElkEdgesAndUsedPorts = (
-  { edges, nodes }: MinimalGraph,
+  { edges, nodes }: GraphToLayout,
   avoidEdgeLabelOverlap: boolean,
 ) => {
   const usedPortsByNodeId: Record<string, ElkPort[]> = {};
@@ -500,7 +506,7 @@ type NodeToLayout = MinimalNode & { data: { text: string } };
  */
 interface GraphToLayout {
   nodes: NodeToLayout[];
-  edges: MinimalEdge[];
+  edges: (MinimalEdge | MinimalCalculatedEdge)[];
 }
 
 export const layout = async (
