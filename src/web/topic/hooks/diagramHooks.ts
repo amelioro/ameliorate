@@ -1,7 +1,6 @@
 import { useState } from "react";
 
-import { Diagram } from "@/web/topic/utils/diagram";
-import { isNode } from "@/web/topic/utils/graph";
+import { FilteredDiagram } from "@/web/topic/utils/diagramFilter";
 import { LayoutedGraph, layout } from "@/web/topic/utils/layout";
 import {
   useAvoidEdgeLabelOverlap,
@@ -12,7 +11,7 @@ import {
 } from "@/web/view/currentViewStore/layout";
 
 // re-renders when diagram changes, but only re-layouts if graph parts are added or removed
-export const useLayoutedDiagram = (diagram: Diagram) => {
+export const useLayoutedDiagram = (diagram: FilteredDiagram) => {
   const forceNodesIntoLayers = useForceNodesIntoLayers();
   const layerNodeIslandsTogether = useLayerNodeIslandsTogether();
   const minimizeEdgeCrossings = useMinimizeEdgeCrossings();
@@ -20,21 +19,16 @@ export const useLayoutedDiagram = (diagram: Diagram) => {
   const thoroughness = useLayoutThoroughness();
 
   // re-layout if this changes
-  const diagramHash = [...diagram.nodes, ...diagram.edges]
+  const diagramHash = [
     // not 100% sure that it's worth re-laying out when node text changes, but we can easily remove if it doesn't seem like it
-    .map((graphPart) =>
-      isNode(graphPart)
-        ? graphPart.id + graphPart.data.text + graphPart.type
-        : graphPart.id + graphPart.type,
-    )
-    .concat(
-      String(forceNodesIntoLayers),
-      String(layerNodeIslandsTogether),
-      String(minimizeEdgeCrossings),
-      String(avoidEdgeLabelOverlap),
-      String(thoroughness),
-    )
-    .join();
+    ...diagram.nodes.map((node) => node.id + node.data.text + node.type),
+    ...diagram.edges.map((edge) => edge.id + edge.type),
+    String(forceNodesIntoLayers),
+    String(layerNodeIslandsTogether),
+    String(minimizeEdgeCrossings),
+    String(avoidEdgeLabelOverlap),
+    String(thoroughness),
+  ].join();
   const [prevDiagramHash, setPrevDiagramHash] = useState<string | null>(null);
 
   const [layoutedDiagram, setLayoutedDiagram] = useState<LayoutedGraph | null>(null);

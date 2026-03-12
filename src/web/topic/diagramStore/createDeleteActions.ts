@@ -170,7 +170,7 @@ const createEdge = (
   // It's not clear at this time whether completely adding or removing support for edges to edges is better,
   // so here's a hack assuming we won't use it for now.,
   if (!isNode(source) || !isNode(target)) throw new Error("source or target is not a node");
-  if (!canCreateEdge(topicGraph, source, target)) return null;
+  if (!canCreateEdge(topicGraph, source, relationName, target)) return null;
 
   const newEdge = buildEdge({
     sourceId: source.id,
@@ -198,11 +198,9 @@ const createConnection = (
     throw errorWithData("source or target not found", sourceId, targetId, topicGraph);
   }
 
-  if (!canCreateEdge(topicGraph, source, target)) return null;
-
   const relation = getRelation(source.type, relationName, target.type);
 
-  // modifies topicGraph.edges through `state`
+  // if edge is valid, topicGraph.edges is modified via `state`
   return createEdge(topicGraph, source, relation.name, target);
 };
 
