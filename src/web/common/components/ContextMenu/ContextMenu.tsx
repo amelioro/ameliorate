@@ -23,6 +23,7 @@ export const ContextMenu = () => {
       <ContextMenuItems
         node={contextMenuContext.node}
         edge={contextMenuContext.edge}
+        calculatedEdge={contextMenuContext.calculatedEdge}
         isOpen={isOpen}
       />
     </MuiMenu>

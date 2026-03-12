@@ -29,6 +29,7 @@ import { useTemporalHooks } from "@/web/topic/diagramStore/utilHooks";
 import { isOnPlayground, useUserCanEditTopicData } from "@/web/topic/topicStore/store";
 import { Score, possibleScores } from "@/web/topic/utils/graph";
 import { hotkeys } from "@/web/topic/utils/hotkeys";
+import { isIndirectEdge } from "@/web/topic/utils/indirectEdges";
 import { userCanEditScores } from "@/web/topic/utils/score";
 import { getReadonlyMode, toggleReadonlyMode } from "@/web/view/actionConfigStore";
 import { useFormat } from "@/web/view/currentViewStore/store";
@@ -70,6 +71,7 @@ const useWorkspaceHotkeys = (user: { username: string } | null | undefined) => {
   useHotkeys([hotkeys.delete], () => {
     const selectedPart = getSelectedGraphPart();
     if (!userCanEditTopicData || !selectedPart) return;
+    if (isIndirectEdge(selectedPart)) return; // can't delete calculated edges
     deleteGraphPart(selectedPart);
   });
 };

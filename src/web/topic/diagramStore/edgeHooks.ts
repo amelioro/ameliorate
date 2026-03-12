@@ -3,7 +3,6 @@ import { shallow } from "zustand/shallow";
 import { useDiagramStore } from "@/web/topic/diagramStore/store";
 import { nodes } from "@/web/topic/utils/edge";
 import { Node, findEdgeOrThrow } from "@/web/topic/utils/graph";
-import { useIsAnyGraphPartSelected } from "@/web/view/selectedPartStore";
 
 export const useEdge = (edgeId: string | null) => {
   return useDiagramStore((state) => {
@@ -26,11 +25,6 @@ export const useEdgeNodes = (edgeId: string): [Node, Node] | [] => {
       return [];
     }
   }, shallow);
-};
-
-export const useIsNodeSelected = (edgeId: string) => {
-  const neighborNodes = useEdgeNodes(edgeId);
-  return useIsAnyGraphPartSelected(neighborNodes.map((node) => node.id));
 };
 
 export const useIsTableEdge = (edgeId: string) => {

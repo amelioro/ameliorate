@@ -1,28 +1,17 @@
-import { sortBy, uniqBy } from "es-toolkit/compat";
 import { shallow } from "zustand/shallow";
 import { createWithEqualityFn } from "zustand/traditional";
 
-import { getDisplayScoresByGraphPartId } from "@/web/topic/diagramStore/scoreGetters";
-import { UserScores, useDiagramStore } from "@/web/topic/diagramStore/store";
-import { Diagram } from "@/web/topic/utils/diagram";
-import { Node, getRelevantEdges, getSecondaryNeighbors } from "@/web/topic/utils/graph";
-import { AggregationMode } from "@/web/topic/utils/score";
+import { type CalculatedEdge } from "@/common/edge";
+import { useDiagramStore } from "@/web/topic/diagramStore/store";
+import { FilteredDiagram, applyFilters } from "@/web/topic/utils/diagramFilter";
+import { Node } from "@/web/topic/utils/graph";
+import { isIndirectEdge } from "@/web/topic/utils/indirectEdges";
 import { getInfoFilter } from "@/web/view/currentViewStore/filter";
 import { useCurrentViewStore } from "@/web/view/currentViewStore/store";
 import { usePerspectiveStore } from "@/web/view/perspectiveStore";
-import {
-  GeneralFilter,
-  applyNodeTypeFilter,
-  applyScoreFilter,
-} from "@/web/view/utils/generalFilter";
-import { InfoFilter, applyInfoFilter } from "@/web/view/utils/infoFilter";
-import {
-  hideImpliedEdges,
-  hideProblemCriterionSolutionEdges,
-} from "@/web/view/utils/miscDiagramFilters";
 
 interface FilteredDiagramState {
-  filteredDiagram: Diagram;
+  filteredDiagram: FilteredDiagram;
 }
 
 const useFilteredDiagramStore = createWithEqualityFn<FilteredDiagramState>()(
@@ -31,7 +20,7 @@ const useFilteredDiagramStore = createWithEqualityFn<FilteredDiagramState>()(
 );
 
 // hooks
-export const useFilteredDiagram = (): Diagram => {
+export const useFilteredDiagram = (): FilteredDiagram => {
   return useFilteredDiagramStore((state) => state.filteredDiagram, shallow);
 };
 
@@ -46,6 +35,37 @@ export const useHiddenNodes = (nodes: Node[]): Node[] => {
     const displayedNodeIds = new Set(state.filteredDiagram.nodes.map((n) => n.id));
     return nodes.filter((node) => !displayedNodeIds.has(node.id));
   }, shallow);
+};
+
+export const useDisplayedEdgeIds = (nodeId: string): string[] => {
+  return useFilteredDiagramStore(
+    (state) =>
+      state.filteredDiagram.edges
+        .filter((edge) => edge.sourceId === nodeId || edge.targetId === nodeId)
+        .map((edge) => edge.id),
+    shallow,
+  );
+};
+
+export const useDisplayedNeighborIds = (nodeId: string): string[] => {
+  return useFilteredDiagramStore(
+    (state) =>
+      state.filteredDiagram.edges
+        .filter((edge) => edge.sourceId === nodeId || edge.targetId === nodeId)
+        .map((edge) => (edge.sourceId === nodeId ? edge.targetId : edge.sourceId)),
+    shallow,
+  );
+};
+
+export const useIndirectEdge = (edgeId: string | null): CalculatedEdge | null => {
+  return useFilteredDiagramStore((state) => {
+    if (!edgeId) return null;
+
+    const edge = state.filteredDiagram.edges.find((edge) => edge.id === edgeId);
+    if (!edge || !isIndirectEdge(edge)) return null;
+
+    return edge;
+  });
 };
 
 // actions
@@ -73,63 +93,20 @@ export const computeFilteredDiagram = () => {
 };
 
 // helpers
-export const getFilteredDiagram = (): Diagram => {
+export const getFilteredDiagram = (): FilteredDiagram => {
   return useFilteredDiagramStore.getState().filteredDiagram;
 };
 
-// utils
-const applyFilters = (
-  diagram: Diagram,
-  userScores: UserScores,
-  infoFilter: InfoFilter,
-  generalFilter: GeneralFilter,
-  showImpliedEdges: boolean,
-  showProblemCriterionSolutionEdges: boolean,
-  perspectives: string[],
-  aggregationMode: AggregationMode,
-): Diagram => {
-  const nodesAfterDiagramFilter = applyInfoFilter(diagram, infoFilter);
+export const getIndirectEdge = (edgeId: string): CalculatedEdge | null => {
+  const filteredDiagram = useFilteredDiagramStore.getState().filteredDiagram;
 
-  const nodesAfterTypeFilter = applyNodeTypeFilter(
-    nodesAfterDiagramFilter,
-    generalFilter.nodeTypes,
-  );
+  const edge = filteredDiagram.edges.find((edge) => edge.id === edgeId);
+  if (!edge || !isIndirectEdge(edge)) return null;
 
-  // don't filter edges because hard to prevent awkwardness when edge doesn't pass filter and suddenly nodes are scattered
-  const partIdsForScores = diagram.nodes.map((part) => part.id);
-  const scores = getDisplayScoresByGraphPartId(
-    partIdsForScores,
-    perspectives,
-    userScores,
-    aggregationMode,
-  );
-  const nodesAfterScoreFilter = applyScoreFilter(nodesAfterTypeFilter, generalFilter, scores);
-
-  const nodesToShow = diagram.nodes.filter((node) => generalFilter.nodesToShow.includes(node.id));
-  const nodesAfterToShow = uniqBy(nodesAfterScoreFilter.concat(nodesToShow), "id");
-
-  const secondaryNeighbors = getSecondaryNeighbors(nodesAfterToShow, diagram, generalFilter);
-
-  const nodesBeforeHide = nodesAfterToShow.concat(secondaryNeighbors);
-  const nodesAfterHide = nodesBeforeHide.filter(
-    (node) => !generalFilter.nodesToHide.includes(node.id),
-  );
-
-  const filteredNodes = uniqBy(nodesAfterHide, "id");
-
-  const relevantEdges = getRelevantEdges(filteredNodes, diagram);
-  const edgesAfterImplied = showImpliedEdges
-    ? relevantEdges
-    : hideImpliedEdges(relevantEdges, { nodes: filteredNodes, edges: relevantEdges }, diagram);
-
-  const filteredEdges = showProblemCriterionSolutionEdges
-    ? edgesAfterImplied
-    : hideProblemCriterionSolutionEdges(filteredNodes, edgesAfterImplied);
-
-  // sort nodes/edges to ensure layout doesn't change if nodes/edges occur in a different order
-  return { nodes: sortBy(filteredNodes, "id"), edges: sortBy(filteredEdges, "id") };
+  return edge;
 };
 
+// utils
 /**
  * Recompute when related store data changes.
  *

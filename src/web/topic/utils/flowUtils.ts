@@ -32,7 +32,7 @@ export interface FlowNodeProps extends DefaultNodeProps {
  */
 export interface FlowEdgeProps extends DefaultEdgeProps {
   data: EdgeLayoutData;
-  type: "FlowEdge"; // for some reason after reactflow 11->12, DefaultEdgeProps has optional type, but ReactFlow component expects it to be defined
+  type: "FlowDirectEdge" | "FlowIndirectEdge"; // for some reason after reactflow 11->12, DefaultEdgeProps has optional type, but ReactFlow component expects it to be defined
 }
 
 /**
@@ -43,4 +43,4 @@ export type ReactFlowNode = Node<FlowNodeProps["data"], "FlowNode">;
 /**
  * This type is passed into the ReactFlow component's `edges` prop.
  */
-export type ReactFlowEdge = Edge<FlowEdgeProps["data"], "FlowEdge">;
+export type ReactFlowEdge = Edge<FlowEdgeProps["data"], "FlowDirectEdge" | "FlowIndirectEdge">;

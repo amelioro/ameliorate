@@ -2,21 +2,25 @@ import { Box } from "@mui/material";
 import { EdgeLabelRenderer } from "@xyflow/react";
 import { type ReactNode } from "react";
 
-import { type MinimalEdge } from "@/common/edge";
+import { type CalculatedEdge } from "@/common/edge";
 import { Spotlight } from "@/web/topic/components/Diagram/Diagram.styles";
 import { StyledDiv, StyledPath } from "@/web/topic/components/Edge/Edge.styles";
 import { getPathDefinitionForEdge } from "@/web/topic/components/Edge/svgPathDrawer";
 import { nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
 import { markerIds } from "@/web/topic/components/TopicWorkspace/SvgEdgeMarkerDefs";
-import { useIsNodeSelected } from "@/web/topic/diagramStore/edgeHooks";
 import { type EdgeLayoutData } from "@/web/topic/utils/diagram";
+import { type Edge as EdgeData } from "@/web/topic/utils/graph";
 import { graphPartClass } from "@/web/topic/utils/styleUtils";
 import { useAvoidEdgeLabelOverlap } from "@/web/view/currentViewStore/layout";
-import { useIsGraphPartSelected } from "@/web/view/selectedPartStore";
-import { setSelected } from "@/web/view/selectedPartStore";
+import {
+  setSelected,
+  useIsAnyGraphPartSelected,
+  useIsGraphPartSelected,
+} from "@/web/view/selectedPartStore";
 
 interface Props {
-  edge: MinimalEdge;
+  // could accept MinimalEdge here, but our react components seem to generally make more sense operating on real persisted or indirect edges
+  edge: EdgeData | CalculatedEdge;
   edgeLayoutData: EdgeLayoutData;
   /**
    * Content to show within the edge label. Extracted this because our direct edges will show
@@ -25,6 +29,7 @@ interface Props {
   labelContentSlot: ReactNode;
   onContextMenu: React.MouseEventHandler;
   inReactFlow: boolean;
+  pathClassName?: string;
 }
 
 /**
@@ -39,10 +44,11 @@ export const Edge = ({
   labelContentSlot,
   onContextMenu,
   inReactFlow,
+  pathClassName,
 }: Props) => {
   const avoidEdgeLabelOverlap = useAvoidEdgeLabelOverlap();
 
-  const isNodeSelected = useIsNodeSelected(edge.id);
+  const isNodeSelected = useIsAnyGraphPartSelected([edge.sourceId, edge.targetId]);
   const isEdgeSelected = useIsGraphPartSelected(edge.id);
 
   const spotlight: Spotlight = isEdgeSelected ? "primary" : isNodeSelected ? "secondary" : "normal";
@@ -55,7 +61,11 @@ export const Edge = ({
   const path = (
     <StyledPath
       id={edge.id}
-      className={"react-flow__edge-path" + ` spotlight-${spotlight}`}
+      className={
+        "react-flow__edge-path" +
+        ` spotlight-${spotlight}` +
+        (pathClassName ? ` ${pathClassName}` : "")
+      }
       d={pathDefinition}
       markerEnd={`url(#${markerIds[spotlight]})`}
       spotlight={spotlight}

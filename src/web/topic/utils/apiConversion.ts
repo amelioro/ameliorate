@@ -6,10 +6,7 @@ import { type AppRouter } from "@/api/routers/_app";
 import { Edge as ApiEdge, Edge } from "@/common/edge";
 import { Node as ApiNode, Node } from "@/common/node";
 import { UserScore as ApiScore } from "@/common/userScore";
-import {
-  type DiagramStoreState,
-  type UserScores as StoreScores,
-} from "@/web/topic/diagramStore/store";
+import { type DiagramStoreState } from "@/web/topic/diagramStore/store";
 import {
   type Score,
   type Edge as StoreEdge,
@@ -17,6 +14,7 @@ import {
   buildEdge,
   buildNode,
 } from "@/web/topic/utils/graph";
+import { type UserScores as StoreScores } from "@/web/topic/utils/score";
 
 export const convertToStoreNode = (apiNode: ApiNode) => {
   return buildNode({

@@ -2,8 +2,17 @@ import { temporal } from "zundo";
 import { create, useStore } from "zustand";
 import { persist } from "zustand/middleware";
 
+import { type CalculatedEdge } from "@/common/edge";
 import { emitter } from "@/web/common/event";
+import {
+  getIndirectEdge,
+  useDisplayedEdgeIds,
+  useDisplayedNeighborIds,
+  useIndirectEdge,
+} from "@/web/topic/diagramStore/filteredDiagramStore";
 import { getGraphPart, useGraphPart } from "@/web/topic/diagramStore/graphPartHooks";
+import { type GraphPart } from "@/web/topic/utils/graph";
+import { isIndirectEdgeId } from "@/web/topic/utils/indirectEdges";
 
 interface SelectedPartStoreState {
   selectedGraphPartId: string | null;
@@ -35,10 +44,18 @@ const useSelectedPartStore = create<SelectedPartStoreState>()(
 const useTemporalStore = () => useStore(useSelectedPartStore.temporal);
 
 // hooks
-export const useSelectedGraphPart = () => {
+/**
+ * Generally we're assuming that "selected" implies our part can be persisted _or_ calculated.
+ */
+export const useSelectedGraphPart = (): GraphPart | CalculatedEdge | null => {
   const selectedGraphPartId = useSelectedPartStore((state) => state.selectedGraphPartId);
 
-  return useGraphPart(selectedGraphPartId);
+  const graphPart = useGraphPart(selectedGraphPartId);
+  const indirectEdge = useIndirectEdge(selectedGraphPartId);
+
+  if (!selectedGraphPartId) return null;
+
+  return graphPart ?? indirectEdge;
 };
 
 export const useIsGraphPartSelected = (graphPartId: string) => {
@@ -53,6 +70,22 @@ export const useIsAnyGraphPartSelected = (graphPartIds: string[]) => {
     if (!state.selectedGraphPartId) return false;
     return graphPartIds.includes(state.selectedGraphPartId);
   });
+};
+
+/**
+ * Uses the filtered diagram so that indirect edges are included.
+ */
+export const useIsDisplayedEdgeSelected = (nodeId: string) => {
+  const displayedEdgeIds = useDisplayedEdgeIds(nodeId);
+  return useIsAnyGraphPartSelected(displayedEdgeIds);
+};
+
+/**
+ * Uses the filtered diagram so that indirect-edge neighbors are included.
+ */
+export const useIsDisplayedNeighborSelected = (nodeId: string) => {
+  const displayedNeighborIds = useDisplayedNeighborIds(nodeId);
+  return useIsAnyGraphPartSelected(displayedNeighborIds);
 };
 
 export const useCanGoBackForward = () => {
@@ -82,9 +115,16 @@ export const goForward = () => {
 };
 
 // util actions
-export const getSelectedGraphPart = () => {
+/**
+ * Generally we're assuming that "selected" implies our part can be persisted _or_ calculated.
+ */
+export const getSelectedGraphPart = (): GraphPart | CalculatedEdge | null => {
   const selectedGraphPartId = useSelectedPartStore.getState().selectedGraphPartId;
   if (!selectedGraphPartId) return null;
+
+  if (isIndirectEdgeId(selectedGraphPartId)) {
+    return getIndirectEdge(selectedGraphPartId);
+  }
 
   return getGraphPart(selectedGraphPartId);
 };
