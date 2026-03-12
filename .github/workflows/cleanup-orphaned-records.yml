@@ -1,0 +1,33 @@
+name: Cleanup Orphaned Records
+
+on:
+  schedule:
+    # Runs at 00:00 every Sunday
+    #- cron: '0 0 * * 0'
+    # Runs at 6:45 AM UTC (~12:45 AM US Central Time) every Monday
+    - cron: "45 6 * * 1"
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'test' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: Run Cleanup Script
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: npm run db:cleanup
