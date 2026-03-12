@@ -3,6 +3,7 @@ import { v4 as uuid } from "uuid";
 import { z } from "zod";
 
 import { isLoggedIn } from "@/api/auth";
+import { handleGraphPartChanged } from "@/api/notifications/watch";
 import { findTopicByUsernameAndTitle } from "@/api/topic/topic";
 import { procedure, router } from "@/api/trpc";
 import { CreateEdge, Edge, createEdgeSchema, edgeSchema } from "@/common/edge";
@@ -249,6 +250,12 @@ export const topicRouter = router({
           });
         }
       });
+      // Future?: if we want to handle `watch` errors independent of the graph part changes,
+      // we can consider triggering an event to start a separate process for this.
+      // Would probably need to look into different infrastructure for that though, which sounds like work that isn't worth it right now.
+      if (graphPartsChanged) {
+        await handleGraphPartChanged(opts.ctx.user.username, opts.input.topicId);
+      }
     }),
 
   create: procedure
