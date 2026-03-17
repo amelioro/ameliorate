@@ -38,7 +38,7 @@ export const SelectedPartDetails = ({ selectedPart, selectedTab, setSelectedTab 
 
       <ContentDiv className="grow overflow-auto">
         {isIndirectEdge(selectedPart) ? (
-          <CalculatedEdgeDetails />
+          <CalculatedEdgeDetails indirectEdge={selectedPart} />
         ) : (
           <GraphPartDetails
             graphPart={selectedPart}

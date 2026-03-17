@@ -22,6 +22,9 @@ export const HoverBridgeDiv = styled.div`
 
   .react-flow__node:hover > & {
     display: inherit;
+    // TODO?: ideally wouldn't need to set this manually, but "inherit" would use the flow node's
+    // cursor (pointer for clicking on it to select the node)
+    cursor: grab;
   }
 `;
 
