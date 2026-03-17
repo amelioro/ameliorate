@@ -4,9 +4,10 @@ import {
   ConnectionMode,
   OnReconnect as OnReconnectFunc,
   ReactFlowProvider,
+  useOnViewportChange,
   useReactFlow,
 } from "@xyflow/react";
-import { ComponentType, useEffect, useState } from "react";
+import { ComponentType, useCallback, useEffect, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import { throwError } from "@/common/errorHandling";
@@ -17,6 +18,7 @@ import { openContextMenu } from "@/web/common/store/contextMenuActions";
 import { clearPartIdToCentralize, usePartIdToCentralize } from "@/web/common/store/ephemeralStore";
 import { StyledReactFlow } from "@/web/topic/components/Diagram/Diagram.styles";
 import { setFlowMethods } from "@/web/topic/components/Diagram/externalFlowStore";
+import { setViewportIsChanging } from "@/web/topic/components/Diagram/viewportChangeStore";
 import { FlowDirectEdge } from "@/web/topic/components/Edge/FlowDirectEdge";
 import { FlowIndirectEdge } from "@/web/topic/components/Edge/FlowIndirectEdge";
 import { FlowNode } from "@/web/topic/components/Node/FlowNode";
@@ -147,6 +149,11 @@ const DiagramWithoutProvider = () => {
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const { fitViewForNodes, moveViewportToIncludeNode, pan, zoomIn, zoomOut } = useViewportUpdater();
   const { viewportInitialized, getNodes, getNodesBounds } = useReactFlow();
+
+  useOnViewportChange({
+    onStart: useCallback(() => setViewportIsChanging(true), []),
+    onEnd: useCallback(() => setViewportIsChanging(false), []),
+  });
 
   const filteredDiagram = useFilteredDiagram();
   const { layoutedDiagram, hasNewLayout, setHasNewLayout } = useLayoutedDiagram(filteredDiagram);

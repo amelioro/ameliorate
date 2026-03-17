@@ -25,6 +25,7 @@ This repo is a Next.js + tRPC + Prisma TypeScript app with a React UI and Zustan
 - Auth: Auth0 in hosted envs; local uses `mock-auth` (accepts any username/password; use seeded user authId like `oauth-test-user`).
 - Observability: Sentry wraps all tRPC routes (`src/api/trpc.ts`), sets transaction names `trpc/{type}/{path}`.
 - Commit messages follow Conventional Commits enforced by `commitlint.config.cjs`.
+- Prefer functional-style programming generally, but prefer `.forEach` over `.reduce`
 
 ## Developer workflows
 

@@ -1,41 +1,43 @@
 import { useTheme } from "@emotion/react";
-import { Visibility } from "@mui/icons-material";
-import { Button, IconButton, Typography } from "@mui/material";
+import { Button, ClickAwayListener, Link, Paper, Popper, Typography } from "@mui/material";
+import { type Instance } from "@popperjs/core";
 import { Position } from "@xyflow/react";
 import { groupBy } from "es-toolkit";
-import { ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Data } from "react-minimal-pie-chart/types/commonTypes";
 
-import { NodeType, nodeTypes, prettyNodeTypes } from "@/common/node";
-import { Tooltip } from "@/web/common/components/Tooltip/Tooltip";
+import { NodeType, nodeTypes } from "@/common/node";
+import { useIsViewportChanging } from "@/web/topic/components/Diagram/viewportChangeStore";
 import { edgeColor } from "@/web/topic/components/Edge/Edge.styles";
+import { CompressedNode } from "@/web/topic/components/Node/CompressedNode";
 import { CustomDataEntry, PieChart } from "@/web/topic/components/Score/PieChart";
 import { useHiddenNodes } from "@/web/topic/diagramStore/filteredDiagramStore";
 import { useNeighbors } from "@/web/topic/diagramStore/nodeHooks";
 import { Node } from "@/web/topic/utils/graph";
-import { indicatorLengthRem, nodeDecorations } from "@/web/topic/utils/nodeDecoration";
+import { indicatorLengthRem } from "@/web/topic/utils/nodeDecoration";
 import { visibleOnPartHoverSelectedClasses } from "@/web/topic/utils/styleUtils";
 import { showNode } from "@/web/view/currentViewStore/filter";
+import { setSelected } from "@/web/view/selectedPartStore";
 import {
   useEnableContentIndicators,
   useFillNodeAttachmentWithColor,
   useWhenToShowIndicators,
 } from "@/web/view/userConfigStore/store";
 
-const NodeSummary = ({ node, beforeSlot }: { node: Node; beforeSlot?: ReactNode }) => {
-  const { NodeIcon } = nodeDecorations[node.type];
-  const title = prettyNodeTypes[node.type];
-
-  const summary = `${title}: ${node.data.text}`;
-
+const HiddenNeighborRow = ({ node }: { node: Node }) => {
   return (
-    <div className="flex items-center text-nowrap">
-      {beforeSlot}
-      <NodeIcon color={node.type} sx={{ marginX: "2px" }} />
-      {/* title set so that hover can show the full text if truncated */}
-      <Typography title={summary} variant="body1" className="items-center truncate">
-        {summary}
-      </Typography>
+    <div className="flex items-center gap-2">
+      <Link
+        component="button"
+        variant="body2"
+        onClick={() => {
+          showNode(node.id);
+          setSelected(node.id);
+        }}
+      >
+        Reveal
+      </Link>
+      <CompressedNode node={node} />
     </div>
   );
 };
@@ -69,13 +71,24 @@ interface FocusNodeAttachmentProps {
 }
 
 export const FocusNodeAttachment = ({ node, position, className }: FocusNodeAttachmentProps) => {
+  const [open, setOpen] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const popperRef = useRef<Instance>(null);
+
   const whenToShowIndicators = useWhenToShowIndicators();
   const showIndicatorsOnHoverSelect = whenToShowIndicators === "onHoverOrSelect";
   const enableContentIndicators = useEnableContentIndicators();
+  const isViewportChanging = useIsViewportChanging();
 
   const neighbors = useNeighbors(node.id);
   const fillNodeAttachmentWithColor = useFillNodeAttachmentWithColor();
   const hiddenNeighbors = useHiddenNodes(neighbors);
+
+  // Hide the popper visually during panning/zooming so it doesn't detach/lag (also Miro does it
+  // this way), then reposition it once panning ends.
+  useEffect(() => {
+    if (!isViewportChanging) popperRef.current?.forceUpdate();
+  }, [isViewportChanging]);
 
   if (!enableContentIndicators || hiddenNeighbors.length === 0) return null;
 
@@ -84,55 +97,36 @@ export const FocusNodeAttachment = ({ node, position, className }: FocusNodeAtta
     return diff;
   });
 
-  const buttonWithTooltip = (
-    // NOTE: planning to remove this tooltip when implementing focused nodes.
-    // Probably will make click focus the node, and right click maybe would show a list of node types to show/hide all...
-    // or a list of nodes by node type, where you could quick-show a node or all the nodes of a type?
-    // Bug?: seems like on mobile sometimes when a neighbor is hidden, this tooltip just starts showing
-    // without tapping. seems to happen inconsistently. seems maybe related to what is focused when
-    // the neighbor is hidden?
-    <Tooltip
-      tooltipBody={
-        <div className="space-y-2">
-          {sortedHiddenNeighbors.map((neighbor) => (
-            <NodeSummary
-              key={neighbor.id}
-              node={neighbor}
-              beforeSlot={
-                <IconButton className="p-0" onClick={() => showNode(neighbor.id)}>
-                  {<Visibility />}
-                </IconButton>
-              }
-            />
-          ))}
-        </div>
+  const button = (
+    <Button
+      ref={buttonRef}
+      onClick={(e) => {
+        e.stopPropagation();
+        setOpen((prev) => !prev);
+      }}
+      className={
+        "min-w-0 cursor-pointer rounded-full border-solid p-0 text-text-primary hover:brightness-75" +
+        (fillNodeAttachmentWithColor ? "" : " border bg-paperPlain-main")
       }
+      sx={{
+        height: `${indicatorLengthRem}rem`,
+        width: `${indicatorLengthRem}rem`,
+        borderColor: edgeColor,
+      }}
     >
-      <Button
-        className={
-          "min-w-0 cursor-auto rounded-full border-solid p-0 text-text-primary" +
-          (fillNodeAttachmentWithColor ? "" : " border bg-paperPlain-main")
-        }
-        sx={{
-          height: `${indicatorLengthRem}rem`,
-          width: `${indicatorLengthRem}rem`,
-          borderColor: edgeColor,
-        }}
-      >
-        {fillNodeAttachmentWithColor && (
-          <div
-            // Behind the button so the score shows in front of the pie.
-            // No pointer events because our button will handle clicks/hovers.
-            // Overflow hidden because pie chart type "button" renders a larger pie in case you want a
-            // square pie e.g. like the score button does.
-            className="absolute z-[-1] size-full overflow-hidden rounded-full *:pointer-events-none"
-          >
-            <NeighborsPie neighbors={hiddenNeighbors} />
-          </div>
-        )}
-        {hiddenNeighbors.length}
-      </Button>
-    </Tooltip>
+      {fillNodeAttachmentWithColor && (
+        <div
+          // Behind the button so the score shows in front of the pie.
+          // No pointer events because our button will handle clicks/hovers.
+          // Overflow hidden because pie chart type "button" renders a larger pie in case you want a
+          // square pie e.g. like the score button does.
+          className="absolute z-[-1] size-full overflow-hidden rounded-full *:pointer-events-none"
+        >
+          <NeighborsPie neighbors={hiddenNeighbors} />
+        </div>
+      )}
+      {hiddenNeighbors.length}
+    </Button>
   );
 
   const verticalDirection = [Position.Top, Position.Bottom].includes(position);
@@ -152,20 +146,57 @@ export const FocusNodeAttachment = ({ node, position, className }: FocusNodeAtta
     <div
       className={
         `pointer-events-auto absolute flex flex-col items-center ${className}` +
-        (showIndicatorsOnHoverSelect ? ` invisible ${visibleOnPartHoverSelectedClasses}` : "")
+        (showIndicatorsOnHoverSelect && !open
+          ? ` invisible ${visibleOnPartHoverSelectedClasses}`
+          : "")
       }
     >
       {position === Position.Top || position === Position.Left ? (
         <>
-          {buttonWithTooltip}
+          {button}
           {path}
         </>
       ) : (
         <>
           {path}
-          {buttonWithTooltip}
+          {button}
         </>
       )}
+
+      {/* Using this similarly for both node attachment and hidden path panel, but doesn't seem worth extracting to a component yet. Can keep an eye out and extract later if it seems worthwhile */}
+      {/* NOTE: might remove this Popper when implementing focused nodes. */}
+      {/* Probably will make click focus the node, and right click maybe would show a list of node types to show/hide all... */}
+      {/* or a list of nodes by node type, where you could quick-show a node or all the nodes of a type? */}
+      <Popper
+        open={open}
+        anchorEl={buttonRef.current}
+        popperRef={popperRef}
+        placement="left-start"
+        modifiers={[
+          { name: "offset", options: { offset: [0, 8] } },
+          // try all sides so the panel stays on-screen even when the anchor is near an edge
+          { name: "flip", options: { fallbackPlacements: ["right-start", "bottom", "top"] } },
+          // make sure the popper doesn't go off-screen
+          { name: "preventOverflow", options: { padding: 8 } },
+        ]}
+        className="z-50"
+        style={{ visibility: isViewportChanging ? "hidden" : "visible" }}
+      >
+        <ClickAwayListener onClickAway={() => setOpen(false)}>
+          <Paper elevation={4} className="max-h-[50vh] max-w-xs overflow-auto rounded-xl border">
+            <div className="flex flex-col items-center gap-1 p-3">
+              <Typography variant="body1" className="font-bold">
+                Hidden Neighbors
+              </Typography>
+              <div className="space-y-2">
+                {sortedHiddenNeighbors.map((neighbor) => (
+                  <HiddenNeighborRow key={neighbor.id} node={neighbor} />
+                ))}
+              </div>
+            </div>
+          </Paper>
+        </ClickAwayListener>
+      </Popper>
     </div>
   );
 };
