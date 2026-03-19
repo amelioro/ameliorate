@@ -100,7 +100,7 @@ export const Edge = ({
       spotlight={spotlight}
       className={
         // pointer-events is set because this div is within an SVG and doesn't handle pointer-events properly by default
-        "[pointer-events:all] flex flex-col items-center justify-center bg-white p-1 rounded-xl" +
+        "[pointer-events:all] flex flex-col items-center justify-center p-1 rounded-xl" +
         // allow edge to be styled based on its spotlight
         ` spotlight-${spotlight}` +
         // border adds a lot of clutter so only show it if we're highlighting the edge

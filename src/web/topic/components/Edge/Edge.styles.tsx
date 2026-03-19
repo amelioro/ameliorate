@@ -64,12 +64,14 @@ export const StyledDiv = styled("div", divOptions)<DivProps>`
         border-color: ${primarySpotlightColor};
         border-width: ${highlightedEdgeWidth};
         z-index: ${zIndex.primary};
+        background-color: white; // don't add bg when not in spotlight - label text itself should handle bg when not in spotlight so that it can take up less space. but we want it here when in spotlight because it should meet the border, which is padded
       `;
     } else if (spotlight === "secondary") {
       return css`
         border-color: ${secondarySpotlightColor};
         border-width: ${highlightedEdgeWidth};
         z-index: ${zIndex.secondary};
+        background-color: white; // don't add bg when not in spotlight - label text itself should handle bg when not in spotlight so that it can take up less space. but we want it here when in spotlight because it should meet the border, which is padded
       `;
     }
   }}
