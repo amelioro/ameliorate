@@ -6,6 +6,7 @@ import {
   ReactFlowProvider,
   useOnViewportChange,
   useReactFlow,
+  useStoreApi,
 } from "@xyflow/react";
 import { ComponentType, useCallback, useEffect, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
@@ -48,6 +49,7 @@ const edgeTypes: Record<"FlowDirectEdge" | "FlowIndirectEdge", ComponentType<Flo
 
 const convertToReactFlowNodes = (
   layoutedNodes: LayoutedNode[],
+  nodeLookup: Map<string, { measured: { width?: number; height?: number } }>,
   selectedGraphPartId?: string,
 ): ReactFlowNode[] => {
   return layoutedNodes.map((node) => ({
@@ -63,6 +65,11 @@ const convertToReactFlowNodes = (
     position: { x: node.x, y: node.y },
     data: { ports: node.ports },
     selected: node.id === selectedGraphPartId,
+    /**
+     * Without carrying forward React Flow's `measured`, React Flow thinks nodes are "uninitialized"
+     * and destroys connected edge SVGs until re-measurement completes (causing edge remounts).
+     */
+    measured: nodeLookup.get(node.id)?.measured,
   }));
 };
 
@@ -149,6 +156,7 @@ const DiagramWithoutProvider = () => {
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const { fitViewForNodes, moveViewportToIncludeNode, pan, zoomIn, zoomOut } = useViewportUpdater();
   const { viewportInitialized, getNodes, getNodesBounds } = useReactFlow();
+  const nodeLookup = useStoreApi().getState().nodeLookup; // so we can pass react flow's `node.measured` back into react flow, see `convertToReactFlowNodes` comment
 
   useOnViewportChange({
     onStart: useCallback(() => setViewportIsChanging(true), []),
@@ -214,7 +222,7 @@ const DiagramWithoutProvider = () => {
    * Note: may need to memoize if performance is an issue? I think React Flow wraps our node/edge
    * components in a memoized component though, so may not be an issue.
    */
-  const reactFlowNodes = convertToReactFlowNodes(layoutedNodes, selectedGraphPartId);
+  const reactFlowNodes = convertToReactFlowNodes(layoutedNodes, nodeLookup, selectedGraphPartId);
   const reactFlowEdges = convertToReactFlowEdges(layoutedEdges, selectedGraphPartId);
 
   if (newNodeId && hasNewLayout) {
