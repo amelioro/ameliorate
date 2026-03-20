@@ -14,7 +14,7 @@ import { useHotkeys } from "react-hotkeys-hook";
 import { throwError } from "@/common/errorHandling";
 import { Loading } from "@/web/common/components/Loading/Loading";
 import { emitter } from "@/web/common/event";
-import { useSessionUser } from "@/web/common/hooks";
+import { useDeepMemo, useSessionUser } from "@/web/common/hooks";
 import { openContextMenu } from "@/web/common/store/contextMenuActions";
 import { clearPartIdToCentralize, usePartIdToCentralize } from "@/web/common/store/ephemeralStore";
 import { StyledReactFlow } from "@/web/topic/components/Diagram/Diagram.styles";
@@ -204,9 +204,10 @@ const DiagramWithoutProvider = () => {
     setFlowMethods(getNodes, getNodesBounds);
   }, [getNodes, getNodesBounds]);
 
-  if (!layoutedDiagram) return <Loading />;
-
-  const { layoutedNodes, layoutedEdges } = layoutedDiagram;
+  const { layoutedNodes, layoutedEdges } = layoutedDiagram ?? {
+    layoutedNodes: [] as LayoutedNode[],
+    layoutedEdges: [] as LayoutedEdge[],
+  };
 
   /**
    * Generally React Flow should only need layout information, and our own node/edge components can
@@ -222,8 +223,12 @@ const DiagramWithoutProvider = () => {
    * Note: may need to memoize if performance is an issue? I think React Flow wraps our node/edge
    * components in a memoized component though, so may not be an issue.
    */
-  const reactFlowNodes = convertToReactFlowNodes(layoutedNodes, nodeLookup, selectedGraphPartId);
-  const reactFlowEdges = convertToReactFlowEdges(layoutedEdges, selectedGraphPartId);
+  const reactFlowNodes = useDeepMemo(
+    convertToReactFlowNodes(layoutedNodes, nodeLookup, selectedGraphPartId),
+  );
+  const reactFlowEdges = useDeepMemo(convertToReactFlowEdges(layoutedEdges, selectedGraphPartId));
+
+  if (!layoutedDiagram) return <Loading />;
 
   if (newNodeId && hasNewLayout) {
     const newNode = reactFlowNodes.find((node) => node.id === newNodeId);
