@@ -294,9 +294,11 @@ const DiagramWithoutProvider = () => {
           String.raw` [&:has(.spotlight-primary):not(:has(.react-flow\_\_connectionline))_.react-flow\_\_node:has(.spotlight-normal):not(:hover)]:blur-[5px]` +
           String.raw` [&:has(.spotlight-primary)_.diagram-edge.spotlight-normal:not(:hover)]:blur-[5px]` +
           String.raw` [&:has(.spotlight-primary)_.react-flow\_\_edge-path.spotlight-normal]:blur-[5px]` +
+          String.raw` [&:has(.spotlight-primary)_.react-flow\_\_edge-arrow.spotlight-normal]:blur-[5px]` +
           String.raw` [&_.react-flow\_\_node]:transition-[filter] [&_.react-flow\_\_node]:duration-300` +
           String.raw` [&_.diagram-edge]:transition-[filter] [&_.diagram-edge]:duration-300` +
-          String.raw` [&_.react-flow\_\_edge-path]:transition-[filter] [&_.react-flow\_\_edge-path]:duration-300`
+          String.raw` [&_.react-flow\_\_edge-path]:transition-[filter] [&_.react-flow\_\_edge-path]:duration-300` +
+          String.raw` [&_.react-flow\_\_edge-arrow]:transition-[filter] [&_.react-flow\_\_edge-arrow]:duration-300`
         }
         nodes={reactFlowNodes}
         edges={reactFlowEdges}
