@@ -1,21 +1,35 @@
 import { useLayoutEffect, useMemo, useState } from "react";
 
+import { type AnyRelationName, type CausalType, causalTypes } from "@/common/edge";
 import {
   type Spotlight,
   primarySpotlightColor,
   secondarySpotlightColor,
 } from "@/web/topic/components/Diagram/Diagram.styles";
 import { edgeColor } from "@/web/topic/components/Edge/Edge.styles";
+import { useEnableSemanticArrowShapes } from "@/web/view/userConfigStore/store";
 
 /**
  * Arrow type that determines the shape rendered on the edge.
  *
  * Logic gates give us a way to convey roughly our edge types via symbol. See here for what they look like https://techterms.com/img/xl/logic_gate_375.png
- * Right now we just use one, but we plan to use more later.
  *
- * - "bufferGate": Simple triangle (▷)
+ * - "bufferGate": Simple triangle (▷) - for "causes" / "supports"
+ * - "andGate": D-shape (flat left, curved right) - for "has"
+ * - "notGate": Triangle with small circle at tip - for "reduces" / "critiques"
+ * - "orGate": Curved shield shape - for "misc" / "none"
  */
-type ArrowType = "bufferGate";
+type ArrowType = "bufferGate" | "andGate" | "notGate" | "orGate";
+
+const causalTypeToArrowType: Record<CausalType, ArrowType> = {
+  causes: "bufferGate",
+  supports: "bufferGate",
+  has: "andGate",
+  reduces: "notGate",
+  critiques: "notGate",
+  misc: "orGate",
+  none: "orGate",
+};
 
 const spotlightToEdgeColor: Record<Spotlight, string> = {
   primary: primarySpotlightColor,
@@ -25,13 +39,21 @@ const spotlightToEdgeColor: Record<Spotlight, string> = {
 };
 
 interface EdgeArrowProps {
+  edgeType: AnyRelationName;
   labelContainer: HTMLDivElement | null;
   pathDefinition: string;
   spotlight: Spotlight;
 }
 
-export const EdgeArrow = ({ labelContainer, pathDefinition, spotlight }: EdgeArrowProps) => {
+export const EdgeArrow = ({
+  edgeType,
+  labelContainer,
+  pathDefinition,
+  spotlight,
+}: EdgeArrowProps) => {
   const [labelSize, setLabelSize] = useState<{ width: number; height: number } | null>(null);
+
+  const enableSemanticArrowShapes = useEnableSemanticArrowShapes();
 
   useLayoutEffect(() => {
     if (!labelContainer) return;
@@ -51,7 +73,8 @@ export const EdgeArrow = ({ labelContainer, pathDefinition, spotlight }: EdgeArr
 
   if (!arrowPosition) return null;
 
-  const shape = arrowShapePaths.bufferGate;
+  const arrowType = enableSemanticArrowShapes ? getArrowTypeForEdge(edgeType) : "bufferGate";
+  const shape = arrowShapePaths[arrowType];
   const color = spotlightToEdgeColor[spotlight];
 
   return (
@@ -60,8 +83,22 @@ export const EdgeArrow = ({ labelContainer, pathDefinition, spotlight }: EdgeArr
       transform={`translate(${arrowPosition.x}, ${arrowPosition.y}) rotate(${arrowPosition.angle}) scale(1.25, 1.125)`}
     >
       <path d={shape.path} fill="white" stroke={color} strokeWidth="1" strokeLinejoin="round" />
+      {shape.circle && (
+        <circle
+          cx={shape.circle.cx}
+          cy={shape.circle.cy}
+          r={shape.circle.r}
+          fill="white"
+          stroke={color}
+          strokeWidth="1"
+        />
+      )}
     </g>
   );
+};
+
+const getArrowTypeForEdge = (edgeType: AnyRelationName): ArrowType => {
+  return causalTypeToArrowType[causalTypes[edgeType]];
 };
 
 /**
@@ -137,9 +174,33 @@ const arrowSizePx = 10;
  * SVG path data for each arrow shape, drawn centered at origin pointing right (→).
  * The arrow will be rotated to follow the edge path direction.
  */
-const arrowShapePaths: Record<ArrowType, { path: string }> = {
+const arrowShapePaths: Record<
+  ArrowType,
+  { path: string; circle?: { cx: number; cy: number; r: number } }
+> = {
   // Simple triangle: ▷
   bufferGate: {
     path: `M ${-arrowSizePx / 2} ${-arrowSizePx / 2} L ${arrowSizePx / 2} 0 L ${-arrowSizePx / 2} ${arrowSizePx / 2} Z`,
+  },
+  // D-shape (AND gate): flat left side, curved right side
+  andGate: {
+    path:
+      `M ${-arrowSizePx / 2} ${-arrowSizePx / 2} L ${-arrowSizePx / 2} ${arrowSizePx / 2} ` +
+      `Q ${arrowSizePx / 2 + 2} ${arrowSizePx / 2}, ${arrowSizePx / 2 + 2} 0 ` +
+      `Q ${arrowSizePx / 2 + 2} ${-arrowSizePx / 2}, ${-arrowSizePx / 2} ${-arrowSizePx / 2} Z`,
+  },
+  // NOT gate: triangle with small circle at the tip
+  notGate: {
+    path: `M ${-arrowSizePx / 2} ${-arrowSizePx / 2} L ${arrowSizePx / 2 - 2} 0 L ${-arrowSizePx / 2} ${arrowSizePx / 2} Z`,
+    circle: { cx: arrowSizePx / 2 + 1, cy: 0, r: 2.5 },
+  },
+  // OR gate: curved shield shape
+  orGate: {
+    path:
+      `M ${-arrowSizePx / 2} ${-arrowSizePx / 2} ` +
+      `Q ${-arrowSizePx / 6} ${-arrowSizePx / 4}, ${-arrowSizePx / 6} 0 ` +
+      `Q ${-arrowSizePx / 6} ${arrowSizePx / 4}, ${-arrowSizePx / 2} ${arrowSizePx / 2} ` +
+      `Q ${arrowSizePx / 4} ${arrowSizePx / 3}, ${arrowSizePx / 2 + 2} 0 ` +
+      `Q ${arrowSizePx / 4} ${-arrowSizePx / 3}, ${-arrowSizePx / 2} ${-arrowSizePx / 2} Z`,
   },
 };

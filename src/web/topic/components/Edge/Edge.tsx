@@ -62,6 +62,7 @@ export const Edge = ({
 
   const edgeArrow = (
     <EdgeArrow
+      edgeType={edge.type}
       labelContainer={labelContainer}
       pathDefinition={pathDefinition}
       spotlight={spotlight}
