@@ -24,7 +24,21 @@ export const IndirectEdge = ({ edge, edgeLayoutData, inReactFlow }: Props) => {
 
   const labelContentSlot = (
     <>
-      <Typography variant="body1" margin="0">
+      <Typography
+        variant="body1"
+        margin="0"
+        className={
+          /**
+           * - `bg-white`: ensures our label has a background so that paths don't go _through_ the
+           * label. note: putting this on the label container itself makes the background bigger
+           * than it needs to be, overlapping other labels/paths more often.
+           * - `leading-none`: ensures the background is as tight as possible to the text so that it
+           * doesn't overlap other labels/paths often. should be ok because edge labels are on a
+           * single line, so vertical spacing between other lines isn't relevant.
+           */
+          "bg-white leading-none"
+        }
+      >
         {labelText}
       </Typography>
       {inReactFlow && <HiddenNodesAnchor indirectEdge={edge} />}

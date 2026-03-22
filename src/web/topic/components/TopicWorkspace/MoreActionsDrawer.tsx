@@ -13,6 +13,7 @@ import {
   Highlight,
   Info,
   Layers,
+  Navigation,
   PhotoCamera,
   PieChart,
   PowerInput,
@@ -85,10 +86,12 @@ import {
 import { resetView, useFormat } from "@/web/view/currentViewStore/store";
 import { resetQuickViews } from "@/web/view/quickViewStore/store";
 import {
+  toggleEnableSemanticArrowShapes,
   toggleExpandAddNodeButtons,
   toggleExpandDetailsTabs,
   toggleFillNodeAttachmentWithColor,
   toggleFillNodesWithColor,
+  useEnableSemanticArrowShapes,
   useExpandAddNodeButtons,
   useExpandDetailsTabs,
   useFillNodeAttachmentWithColor,
@@ -242,6 +245,7 @@ export const MoreActionsDrawer = ({
   const fillNodeAttachmentWithColor = useFillNodeAttachmentWithColor();
   const expandDetailsTabs = useExpandDetailsTabs();
   const expandAddNodeButtons = useExpandAddNodeButtons();
+  const enableSemanticArrowShapes = useEnableSemanticArrowShapes();
 
   const [resetDialogOpen, setResetDialogOpen] = useState(false);
   const [screenshotDialogOpen, setScreenshotDialogOpen] = useState(false);
@@ -590,6 +594,18 @@ export const MoreActionsDrawer = ({
             sx={{ borderRadius: "50%", border: "0" }}
           >
             <WebStories />
+          </ToggleButton>
+          <ToggleButton
+            value={enableSemanticArrowShapes}
+            title="Use semantic arrow shapes"
+            aria-label="Use semantic arrow shapes"
+            color="primary"
+            size="small"
+            selected={enableSemanticArrowShapes}
+            onClick={() => toggleEnableSemanticArrowShapes()}
+            sx={{ borderRadius: "50%", border: "0" }}
+          >
+            <Navigation />
           </ToggleButton>
         </ListItem>
       </List>

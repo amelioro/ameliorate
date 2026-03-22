@@ -51,7 +51,7 @@ const divOptions = {
 };
 
 export const StyledDiv = styled("div", divOptions)<DivProps>`
-  border: 1px solid ${edgeColor};
+  border-style: solid;
 
   ${({ labelX, labelY }) => css`
     position: absolute;
@@ -64,12 +64,22 @@ export const StyledDiv = styled("div", divOptions)<DivProps>`
         border-color: ${primarySpotlightColor};
         border-width: ${highlightedEdgeWidth};
         z-index: ${zIndex.primary};
+        background-color: white; // don't add bg when not in spotlight - label text itself should handle bg when not in spotlight so that it can take up less space. but we want it here when in spotlight because it should meet the border, which is padded
       `;
     } else if (spotlight === "secondary") {
       return css`
         border-color: ${secondarySpotlightColor};
         border-width: ${highlightedEdgeWidth};
         z-index: ${zIndex.secondary};
+        background-color: white; // don't add bg when not in spotlight - label text itself should handle bg when not in spotlight so that it can take up less space. but we want it here when in spotlight because it should meet the border, which is padded
+      `;
+    } else {
+      return css`
+        // When not spotlighted, we don't show the border because it adds a bit of clutter.
+        // But we still want to maintain the same width so that our EdgeArrow position calculation
+        // doesn't change based on whether the border is present or not.
+        border-width: ${highlightedEdgeWidth};
+        border-color: transparent;
       `;
     }
   }}

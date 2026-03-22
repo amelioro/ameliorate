@@ -1,13 +1,13 @@
 import { Box } from "@mui/material";
 import { EdgeLabelRenderer } from "@xyflow/react";
-import { type ReactNode } from "react";
+import { type ReactNode, useState } from "react";
 
 import { type CalculatedEdge } from "@/common/edge";
-import { Spotlight } from "@/web/topic/components/Diagram/Diagram.styles";
+import { type Spotlight } from "@/web/topic/components/Diagram/Diagram.styles";
 import { StyledDiv, StyledPath } from "@/web/topic/components/Edge/Edge.styles";
+import { EdgeArrow } from "@/web/topic/components/Edge/EdgeArrow";
 import { getPathDefinitionForEdge } from "@/web/topic/components/Edge/svgPathDrawer";
 import { nodeWidthPx } from "@/web/topic/components/Node/EditableNode.styles";
-import { markerIds } from "@/web/topic/components/TopicWorkspace/SvgEdgeMarkerDefs";
 import { type EdgeLayoutData } from "@/web/topic/utils/diagram";
 import { type Edge as EdgeData } from "@/web/topic/utils/graph";
 import { graphPartClass } from "@/web/topic/utils/styleUtils";
@@ -46,6 +46,8 @@ export const Edge = ({
   inReactFlow,
   pathClassName,
 }: Props) => {
+  const [labelContainer, setLabelContainer] = useState<HTMLDivElement | null>(null);
+
   const avoidEdgeLabelOverlap = useAvoidEdgeLabelOverlap();
 
   const isNodeSelected = useIsAnyGraphPartSelected([edge.sourceId, edge.targetId]);
@@ -58,6 +60,15 @@ export const Edge = ({
     avoidEdgeLabelOverlap,
   );
 
+  const edgeArrow = (
+    <EdgeArrow
+      edgeType={edge.type}
+      labelContainer={labelContainer}
+      pathDefinition={pathDefinition}
+      spotlight={spotlight}
+    />
+  );
+
   const path = (
     <StyledPath
       id={edge.id}
@@ -67,7 +78,6 @@ export const Edge = ({
         (pathClassName ? ` ${pathClassName}` : "")
       }
       d={pathDefinition}
-      markerEnd={`url(#${markerIds[spotlight]})`}
       spotlight={spotlight}
       onClick={() => setSelected(edge.id)}
       onContextMenu={onContextMenu}
@@ -92,6 +102,8 @@ export const Edge = ({
 
   const label = (
     <StyledDiv
+      // use a ref-setting callback so that our Edge Arrow's useLayoutEffect can react to the ref being set; if we just `useRef` for this, then our label would _have_ to be rendered before the edge arrow, which isn't necessarily going to be the case
+      ref={setLabelContainer}
       labelX={labelX}
       labelY={labelY}
       onClick={() => setSelected(edge.id)}
@@ -100,11 +112,9 @@ export const Edge = ({
       spotlight={spotlight}
       className={
         // pointer-events is set because this div is within an SVG and doesn't handle pointer-events properly by default
-        "[pointer-events:all] flex flex-col items-center justify-center bg-white p-1 rounded-xl" +
+        "[pointer-events:all] flex flex-col items-center justify-center p-1 rounded-xl" +
         // allow edge to be styled based on its spotlight
         ` spotlight-${spotlight}` +
-        // border adds a lot of clutter so only show it if we're highlighting the edge
-        (spotlight === "normal" ? " border-none" : "") +
         // allow other components to apply conditional css related to this edge, e.g. when it's hovered/selected
         // separate from react-flow__edge because sometimes edges are rendered outside of react-flow (e.g. details pane), and we still want to style these
         ` diagram-edge ${graphPartClass}` +
@@ -123,6 +133,7 @@ export const Edge = ({
     return (
       <>
         {path}
+        {edgeArrow}
         {hiddenInteractivePath}
 
         {/* see for example usage https://reactflow.dev/docs/api/edges/edge-label-renderer/ */}
@@ -142,6 +153,7 @@ export const Edge = ({
             onContextMenu={onContextMenu}
           >
             {path}
+            {edgeArrow}
           </svg>
 
           {label}

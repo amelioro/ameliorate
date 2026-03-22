@@ -41,6 +41,16 @@ interface UserConfigStoreState {
   enableContentIndicators: boolean;
   enableViewIndicators: boolean;
   enableForceShownIndicators: boolean;
+
+  /**
+   * When true, edge arrows use distinct logic-gate shapes per edge type (AND, NOT, OR gates).
+   * When false (default), all edges use a simple triangle (buffer gate) arrow.
+   *
+   * Defaulted off because it may make things less clear for new users. I wanted the option so I can
+   * see how it feels. It might allow us to hide the edge label and therefore reduce clutter a bit,
+   * though we aren't doing that quite yet.
+   */
+  enableSemanticArrowShapes: boolean;
 }
 
 const initialState: UserConfigStoreState = {
@@ -56,6 +66,8 @@ const initialState: UserConfigStoreState = {
   enableContentIndicators: true,
   enableViewIndicators: false,
   enableForceShownIndicators: false,
+
+  enableSemanticArrowShapes: false,
 };
 
 const useUserConfigStore = create<UserConfigStoreState>()(
@@ -111,6 +123,10 @@ export const useEnableForceShownIndicators = () => {
   return useUserConfigStore((state) => state.enableForceShownIndicators);
 };
 
+export const useEnableSemanticArrowShapes = () => {
+  return useUserConfigStore((state) => state.enableSemanticArrowShapes);
+};
+
 // actions
 export const toggleZenMode = () => {
   useUserConfigStore.setState((state) => ({ zenMode: !state.zenMode }));
@@ -157,5 +173,11 @@ export const toggleEnableViewIndicators = () => {
 export const toggleEnableForceShownIndicators = () => {
   useUserConfigStore.setState((state) => ({
     enableForceShownIndicators: !state.enableForceShownIndicators,
+  }));
+};
+
+export const toggleEnableSemanticArrowShapes = () => {
+  useUserConfigStore.setState((state) => ({
+    enableSemanticArrowShapes: !state.enableSemanticArrowShapes,
   }));
 };

@@ -1,7 +1,8 @@
 import { useUser as useAuthUser } from "@auth0/nextjs-auth0/client";
 import * as Sentry from "@sentry/nextjs";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
+import { replaceEqualDeep } from "@/common/utils";
 import { MenuPosition } from "@/web/common/store/contextMenuStore";
 import { trpc } from "@/web/common/trpc";
 
@@ -72,4 +73,15 @@ export const useSessionUser = () => {
     isLoading: authUserIsLoading || (findUserByAuthId.isFetching && findUserByAuthId.isLoading), // return isLoading: false if not fetching, e.g. if user isn't authenticated
     checkSession,
   };
+};
+
+/**
+ * Returns a referentially-stable version of `value`, using structural sharing to preserve old
+ * references for any deeply-equal sub-values (including individual array items). This prevents
+ * downstream consumers (e.g. React Flow) from re-rendering unchanged items.
+ */
+export const useDeepMemo = <T>(value: T): T => {
+  const ref = useRef(value);
+  ref.current = replaceEqualDeep(ref.current, value); // eslint-disable-line functional/immutable-data
+  return ref.current;
 };

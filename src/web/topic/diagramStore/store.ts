@@ -8,7 +8,7 @@ import { Edge, Node, buildNode } from "@/web/topic/utils/graph";
 import { UserScores } from "@/web/topic/utils/score";
 
 /**
- * If we're on the playground, hardcode "me." as the username. This:
+ * If we're on the playground, hardcode "playground.user" as the username. This:
  * - allows us to still use the userScores object in the store
  * - indicates that the scores are the creator's
  * - indicates that the user is not a real user, since "." is not a valid username character

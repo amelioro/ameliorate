@@ -6,6 +6,7 @@ import {
   ReactFlowProvider,
   useOnViewportChange,
   useReactFlow,
+  useStoreApi,
 } from "@xyflow/react";
 import { ComponentType, useCallback, useEffect, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
@@ -13,7 +14,7 @@ import { useHotkeys } from "react-hotkeys-hook";
 import { throwError } from "@/common/errorHandling";
 import { Loading } from "@/web/common/components/Loading/Loading";
 import { emitter } from "@/web/common/event";
-import { useSessionUser } from "@/web/common/hooks";
+import { useDeepMemo, useSessionUser } from "@/web/common/hooks";
 import { openContextMenu } from "@/web/common/store/contextMenuActions";
 import { clearPartIdToCentralize, usePartIdToCentralize } from "@/web/common/store/ephemeralStore";
 import { StyledReactFlow } from "@/web/topic/components/Diagram/Diagram.styles";
@@ -48,6 +49,7 @@ const edgeTypes: Record<"FlowDirectEdge" | "FlowIndirectEdge", ComponentType<Flo
 
 const convertToReactFlowNodes = (
   layoutedNodes: LayoutedNode[],
+  nodeLookup: Map<string, { measured: { width?: number; height?: number } }>,
   selectedGraphPartId?: string,
 ): ReactFlowNode[] => {
   return layoutedNodes.map((node) => ({
@@ -63,6 +65,11 @@ const convertToReactFlowNodes = (
     position: { x: node.x, y: node.y },
     data: { ports: node.ports },
     selected: node.id === selectedGraphPartId,
+    /**
+     * Without carrying forward React Flow's `measured`, React Flow thinks nodes are "uninitialized"
+     * and destroys connected edge SVGs until re-measurement completes (causing edge remounts).
+     */
+    measured: nodeLookup.get(node.id)?.measured,
   }));
 };
 
@@ -149,6 +156,7 @@ const DiagramWithoutProvider = () => {
   const userCanEditTopicData = useUserCanEditTopicData(sessionUser?.username);
   const { fitViewForNodes, moveViewportToIncludeNode, pan, zoomIn, zoomOut } = useViewportUpdater();
   const { viewportInitialized, getNodes, getNodesBounds } = useReactFlow();
+  const nodeLookup = useStoreApi().getState().nodeLookup; // so we can pass react flow's `node.measured` back into react flow, see `convertToReactFlowNodes` comment
 
   useOnViewportChange({
     onStart: useCallback(() => setViewportIsChanging(true), []),
@@ -196,9 +204,10 @@ const DiagramWithoutProvider = () => {
     setFlowMethods(getNodes, getNodesBounds);
   }, [getNodes, getNodesBounds]);
 
-  if (!layoutedDiagram) return <Loading />;
-
-  const { layoutedNodes, layoutedEdges } = layoutedDiagram;
+  const { layoutedNodes, layoutedEdges } = layoutedDiagram ?? {
+    layoutedNodes: [] as LayoutedNode[],
+    layoutedEdges: [] as LayoutedEdge[],
+  };
 
   /**
    * Generally React Flow should only need layout information, and our own node/edge components can
@@ -214,8 +223,12 @@ const DiagramWithoutProvider = () => {
    * Note: may need to memoize if performance is an issue? I think React Flow wraps our node/edge
    * components in a memoized component though, so may not be an issue.
    */
-  const reactFlowNodes = convertToReactFlowNodes(layoutedNodes, selectedGraphPartId);
-  const reactFlowEdges = convertToReactFlowEdges(layoutedEdges, selectedGraphPartId);
+  const reactFlowNodes = useDeepMemo(
+    convertToReactFlowNodes(layoutedNodes, nodeLookup, selectedGraphPartId),
+  );
+  const reactFlowEdges = useDeepMemo(convertToReactFlowEdges(layoutedEdges, selectedGraphPartId));
+
+  if (!layoutedDiagram) return <Loading />;
 
   if (newNodeId && hasNewLayout) {
     const newNode = reactFlowNodes.find((node) => node.id === newNodeId);
@@ -281,9 +294,11 @@ const DiagramWithoutProvider = () => {
           String.raw` [&:has(.spotlight-primary):not(:has(.react-flow\_\_connectionline))_.react-flow\_\_node:has(.spotlight-normal):not(:hover)]:blur-[5px]` +
           String.raw` [&:has(.spotlight-primary)_.diagram-edge.spotlight-normal:not(:hover)]:blur-[5px]` +
           String.raw` [&:has(.spotlight-primary)_.react-flow\_\_edge-path.spotlight-normal]:blur-[5px]` +
+          String.raw` [&:has(.spotlight-primary)_.react-flow\_\_edge-arrow.spotlight-normal]:blur-[5px]` +
           String.raw` [&_.react-flow\_\_node]:transition-[filter] [&_.react-flow\_\_node]:duration-300` +
           String.raw` [&_.diagram-edge]:transition-[filter] [&_.diagram-edge]:duration-300` +
-          String.raw` [&_.react-flow\_\_edge-path]:transition-[filter] [&_.react-flow\_\_edge-path]:duration-300`
+          String.raw` [&_.react-flow\_\_edge-path]:transition-[filter] [&_.react-flow\_\_edge-path]:duration-300` +
+          String.raw` [&_.react-flow\_\_edge-arrow]:transition-[filter] [&_.react-flow\_\_edge-arrow]:duration-300`
         }
         nodes={reactFlowNodes}
         edges={reactFlowEdges}

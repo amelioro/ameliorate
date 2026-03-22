@@ -43,8 +43,19 @@ export const DirectEdge = ({ edge, edgeLayoutData, inReactFlow }: Props) => {
           if (text && text !== lowerCase(edge.type) && text !== edge.data.customLabel)
             setCustomEdgeLabel(edge, text);
         }}
-        // without nopan, clicking on the span won't let you edit text
-        className={userCanEditTopicData && unrestrictedEditing ? "nopan" : ""}
+        className={
+          /**
+           * - `bg-white`: ensures our label has a background so that paths don't go _through_ the
+           * label. note: putting this on the label container itself makes the background bigger
+           * than it needs to be, overlapping other labels/paths more often.
+           * - `leading-none`: ensures the background is as tight as possible to the text so that it
+           * doesn't overlap other labels/paths often. should be ok because edge labels are on a
+           * single line, so vertical spacing between other lines isn't relevant.
+           */
+          "bg-white leading-none" +
+          // without nopan, clicking on the span won't let you edit text
+          (userCanEditTopicData && unrestrictedEditing ? " nopan" : "")
+        }
       >
         {labelText}
       </Typography>
