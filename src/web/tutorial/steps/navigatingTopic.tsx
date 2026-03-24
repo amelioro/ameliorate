@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Link } from "@/web/common/components/Link";
 import { celebrateGif } from "@/web/common/urls";
 import { StepContent } from "@/web/tutorial/StepContent";
+import { ZoomableImage } from "@/web/tutorial/ZoomableImage";
 import {
   quickViewDropdownSelector,
   tutorialDefaultAnchorClass,
@@ -22,15 +23,23 @@ export const navigatingTopicSteps: StepType[] = [
         }
         imageSlot={
           <>
-            <Image
-              key="https://github.com/user-attachments/assets/87055acd-debb-45f2-981f-ef511e770222"
-              src="https://github.com/user-attachments/assets/87055acd-debb-45f2-981f-ef511e770222"
-              alt="clicking between views in cars-going-too-fast topic"
-              width={1096}
-              height={847}
-              unoptimized // warning without this - gifs aren't optimized by nextjs apparently
-              // extra padding & bg because spacing seems to look better
-              className="rounded-xl border bg-paperPlain-main p-2 shadow-sm"
+            <ZoomableImage
+              modalTitle="Quick Views"
+              modalText={
+                <span>
+                  Quick Views allow you to easily jump between different aspects of a topic.
+                </span>
+              }
+              imageProps={{
+                key: "https://github.com/user-attachments/assets/87055acd-debb-45f2-981f-ef511e770222",
+                src: "https://github.com/user-attachments/assets/87055acd-debb-45f2-981f-ef511e770222",
+                alt: "clicking between views in cars-going-too-fast topic",
+                width: 1096,
+                height: 847,
+                unoptimized: true, // warning without this - gifs aren't optimized by nextjs apparently
+                // extra padding & bg because spacing seems to look better
+                className: "rounded-xl border bg-paperPlain-main p-2 shadow-sm",
+              }}
             />
             <Typography variant="caption">
               From:{" "}
@@ -62,14 +71,26 @@ export const navigatingTopicSteps: StepType[] = [
         }
         imageSlot={
           <>
-            <Image
-              key="https://github.com/user-attachments/assets/bc02d4e2-5507-49d6-bd10-a32ea0ebd841"
-              src="https://github.com/user-attachments/assets/bc02d4e2-5507-49d6-bd10-a32ea0ebd841"
-              alt="indicators"
-              width={600}
-              height={467}
-              unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-              className="rounded-xl border shadow-sm"
+            <ZoomableImage
+              modalTitle="More details"
+              modalText={
+                <span>
+                  Indicators convey at-a-glance where extra details are.
+                  <br />
+                  <br />
+                  Details can be found by selecting the piece and looking at the Details Pane{" "}
+                  <VerticalSplit color="primary" />.
+                </span>
+              }
+              imageProps={{
+                key: "https://github.com/user-attachments/assets/bc02d4e2-5507-49d6-bd10-a32ea0ebd841",
+                src: "https://github.com/user-attachments/assets/bc02d4e2-5507-49d6-bd10-a32ea0ebd841",
+                alt: "indicators",
+                width: 600,
+                height: 467,
+                unoptimized: true, // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+                className: "rounded-xl border shadow-sm",
+              }}
             />
           </>
         }
@@ -92,14 +113,27 @@ export const navigatingTopicSteps: StepType[] = [
           </span>
         }
         imageSlot={
-          <Image
-            key="https://github.com/user-attachments/assets/bdf7fd16-d44a-4a74-8e5e-24cd577dc647"
-            src="https://github.com/user-attachments/assets/bdf7fd16-d44a-4a74-8e5e-24cd577dc647"
-            alt="viewing other perspectives"
-            width={492}
-            height={411}
-            unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-            className="rounded-xl border shadow-sm"
+          <ZoomableImage
+            modalTitle="Perspectives"
+            modalText={
+              <span>
+                If you're logged in, you'll see your own scores, otherwise you'll see the scores of
+                the topic's creator.
+                <br />
+                <br />
+                You can compare multiple people's scores via the Compare button <Group />, or select
+                specific perspectives via the More Actions Drawer <Build />.
+              </span>
+            }
+            imageProps={{
+              key: "https://github.com/user-attachments/assets/bdf7fd16-d44a-4a74-8e5e-24cd577dc647",
+              src: "https://github.com/user-attachments/assets/bdf7fd16-d44a-4a74-8e5e-24cd577dc647",
+              alt: "viewing other perspectives",
+              width: 492,
+              height: 411,
+              unoptimized: true, // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+              className: "rounded-xl border shadow-sm",
+            }}
           />
         }
       />

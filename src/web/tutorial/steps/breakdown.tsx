@@ -6,6 +6,7 @@ import { Link } from "@/web/common/components/Link";
 import { celebrateGif } from "@/web/common/urls";
 import { NodeTypeText } from "@/web/topic/components/NodeTypeText/NodeTypeText";
 import { StepContent } from "@/web/tutorial/StepContent";
+import { ZoomableImage } from "@/web/tutorial/ZoomableImage";
 import { startTutorial } from "@/web/tutorial/tutorial";
 import { tutorialDefaultAnchorClass } from "@/web/tutorial/tutorialUtils";
 
@@ -31,14 +32,24 @@ export const breakdownSteps: StepType[] = [
         }
         imageSlot={
           <>
-            <Image
-              key="https://github.com/user-attachments/assets/dc5029a6-51c5-4b03-92c8-ed67ab9eb500"
-              src="https://github.com/user-attachments/assets/dc5029a6-51c5-4b03-92c8-ed67ab9eb500"
-              alt="layout of details via cars-going-too-fast"
-              width={1237}
-              height={911}
-              unoptimized
-              className="rounded-xl border shadow-sm"
+            <ZoomableImage
+              modalTitle="Laying things out"
+              modalText={
+                <span>
+                  Generally, <NodeTypeText type="problem" /> details are placed at the top, with{" "}
+                  <NodeTypeText type="solution" /> details across from them at the bottom. Solution
+                  tradeoffs (<NodeTypeText type="criterion" />) are in between.
+                </span>
+              }
+              imageProps={{
+                key: "https://github.com/user-attachments/assets/dc5029a6-51c5-4b03-92c8-ed67ab9eb500",
+                src: "https://github.com/user-attachments/assets/dc5029a6-51c5-4b03-92c8-ed67ab9eb500",
+                alt: "layout of details via cars-going-too-fast",
+                width: 1237,
+                height: 911,
+                unoptimized: true,
+                className: "rounded-xl border shadow-sm",
+              }}
             />
             <Typography variant="caption">
               From:{" "}
@@ -73,14 +84,29 @@ export const breakdownSteps: StepType[] = [
         }
         imageSlot={
           <>
-            <Image
-              key="https://github.com/user-attachments/assets/7d6769ba-a20d-419e-b72f-280a25fc4a79"
-              src="https://github.com/user-attachments/assets/7d6769ba-a20d-419e-b72f-280a25fc4a79"
-              alt="problem details of climate-change"
-              width={711}
-              height={572}
-              unoptimized
-              className="rounded-xl border shadow-sm"
+            <ZoomableImage
+              modalTitle="Problem details"
+              modalText={
+                <span>
+                  Problems are mainly broken down into <NodeTypeText type="cause" /> and{" "}
+                  <NodeTypeText type="effect" />, and these can have their own causes and effects.
+                  <br />
+                  <br />
+                  Effects can be neutral (<NodeTypeText type="effect" />
+                  ), positive (<NodeTypeText type="benefit" />
+                  ), or negative (<NodeTypeText type="detriment" />
+                  ). Problems usually have negative effects.
+                </span>
+              }
+              imageProps={{
+                key: "https://github.com/user-attachments/assets/7d6769ba-a20d-419e-b72f-280a25fc4a79",
+                src: "https://github.com/user-attachments/assets/7d6769ba-a20d-419e-b72f-280a25fc4a79",
+                alt: "problem details of climate-change",
+                width: 711,
+                height: 572,
+                unoptimized: true,
+                className: "rounded-xl border shadow-sm",
+              }}
             />
             <Typography variant="caption">
               From:{" "}
@@ -113,14 +139,27 @@ export const breakdownSteps: StepType[] = [
         }
         imageSlot={
           <>
-            <Image
-              key="https://github.com/user-attachments/assets/a1121e7a-0845-4a92-937e-2f168e34a871"
-              src="https://github.com/user-attachments/assets/a1121e7a-0845-4a92-937e-2f168e34a871"
-              alt="solution details of mta-congestion-pricing"
-              width={653}
-              height={545}
-              unoptimized
-              className="rounded-xl border shadow-sm"
+            <ZoomableImage
+              modalTitle="Solution details"
+              modalText={
+                <span>
+                  Solutions can be broken down into <NodeTypeText type="solutionComponent" />,{" "}
+                  <NodeTypeText type="effect" />, and <NodeTypeText type="obstacle" />. Obstacles
+                  convey something that restricts implementation of the solution.
+                  <br />
+                  <br />
+                  Components can also have their own effects and obstacles.
+                </span>
+              }
+              imageProps={{
+                key: "https://github.com/user-attachments/assets/a1121e7a-0845-4a92-937e-2f168e34a871",
+                src: "https://github.com/user-attachments/assets/a1121e7a-0845-4a92-937e-2f168e34a871",
+                alt: "solution details of mta-congestion-pricing",
+                width: 653,
+                height: 545,
+                unoptimized: true,
+                className: "rounded-xl border shadow-sm",
+              }}
             />
             <Typography variant="caption">
               From:{" "}
@@ -146,14 +185,23 @@ export const breakdownSteps: StepType[] = [
         }
         imageSlot={
           <>
-            <Image
-              key="https://github.com/user-attachments/assets/03dc8f21-b7da-46db-bbee-ebacd490d016"
-              src="https://github.com/user-attachments/assets/03dc8f21-b7da-46db-bbee-ebacd490d016"
-              alt="showing that a benefit addresses a cause"
-              width={738}
-              height={636}
-              unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-              className="rounded-xl border shadow-sm"
+            <ZoomableImage
+              modalTitle="How solutions address problems"
+              modalText={
+                <span>
+                  You can tie specific solution details directly to specific problem details in
+                  order to convey exactly how a solution addresses a problem.
+                </span>
+              }
+              imageProps={{
+                key: "https://github.com/user-attachments/assets/03dc8f21-b7da-46db-bbee-ebacd490d016",
+                src: "https://github.com/user-attachments/assets/03dc8f21-b7da-46db-bbee-ebacd490d016",
+                alt: "showing that a benefit addresses a cause",
+                width: 738,
+                height: 636,
+                unoptimized: true, // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+                className: "rounded-xl border shadow-sm",
+              }}
             />
             <Typography variant="caption">
               From:{" "}
@@ -186,14 +234,27 @@ export const breakdownSteps: StepType[] = [
         }
         imageSlot={
           <>
-            <Image
-              key="https://github.com/user-attachments/assets/d3467cd8-f805-46cf-a5e5-84a031ad98cc"
-              src="https://github.com/user-attachments/assets/d3467cd8-f805-46cf-a5e5-84a031ad98cc"
-              alt="showing a benefit fulfilling a criterion"
-              width={627}
-              height={547}
-              unoptimized
-              className="rounded-xl border shadow-sm"
+            <ZoomableImage
+              modalTitle="Criteria"
+              modalText={
+                <span>
+                  Solutions can also be indirectly tied to problems through{" "}
+                  <NodeTypeText type="criterion" />.
+                  <br />
+                  <br />
+                  Criteria represent tradeoffs between solutions, and should be worded as something
+                  good about a solution, so that solutions can be easily compared with them.
+                </span>
+              }
+              imageProps={{
+                key: "https://github.com/user-attachments/assets/d3467cd8-f805-46cf-a5e5-84a031ad98cc",
+                src: "https://github.com/user-attachments/assets/d3467cd8-f805-46cf-a5e5-84a031ad98cc",
+                alt: "showing a benefit fulfilling a criterion",
+                width: 627,
+                height: 547,
+                unoptimized: true,
+                className: "rounded-xl border shadow-sm",
+              }}
             />
             <Typography variant="caption">
               From:{" "}
