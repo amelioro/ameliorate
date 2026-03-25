@@ -1,6 +1,7 @@
-import { ArrowBack, ArrowForward, InfoOutlined, Redo, Undo } from "@mui/icons-material";
+import { ArrowBack, ArrowForward, InfoOutlined, MoreVert, Redo, Undo } from "@mui/icons-material";
 import { Divider, IconButton, useTheme } from "@mui/material";
 import Image from "next/image";
+import { useState } from "react";
 
 import { Logo } from "@/web/common/components/Header/Logo";
 import { ProfileButton } from "@/web/common/components/Header/ProfileButton";
@@ -11,6 +12,7 @@ import { Tooltip } from "@/web/common/components/Tooltip/Tooltip";
 import { emitter } from "@/web/common/event";
 import { useSessionUser } from "@/web/common/hooks";
 import { discordInvite, githubRepo } from "@/web/common/urls";
+import { MoreActionsMenu } from "@/web/topic/components/TopicWorkspace/MoreActionsMenu";
 import { redo, undo } from "@/web/topic/diagramStore/utilActions";
 import { useTemporalHooks } from "@/web/topic/diagramStore/utilHooks";
 import { useTopic, useUserCanEditTopicData, useUserIsCreator } from "@/web/topic/topicStore/store";
@@ -35,6 +37,7 @@ export const AppHeader = () => {
 
   const [canGoBack, canGoForward] = useCanGoBackForward();
   const [canUndo, canRedo] = useTemporalHooks();
+  const [moreMenuAnchorEl, setMoreMenuAnchorEl] = useState<null | HTMLElement>(null);
 
   const leftHeader = (
     // shrink-0 because center header should be the only one shrinking
@@ -89,6 +92,26 @@ export const AppHeader = () => {
             </IconButton>
           </>
         )}
+
+        {/* show "more" on med+ screens because there's space, otherwise put it in the main toolbar */}
+        <div className="hidden md:contents">
+          <Divider orientation="vertical" flexItem />
+
+          <IconButton
+            color="inherit"
+            title="More"
+            aria-label="More"
+            onClick={(event) => setMoreMenuAnchorEl(event.currentTarget)}
+          >
+            <MoreVert />
+          </IconButton>
+          <MoreActionsMenu
+            anchorEl={moreMenuAnchorEl}
+            setAnchorEl={setMoreMenuAnchorEl}
+            sessionUser={sessionUser}
+            userCanEditTopicData={userCanEditTopicData}
+          />
+        </div>
 
         <Divider orientation="vertical" flexItem />
       </div>
