@@ -42,7 +42,7 @@ export const AppHeader = () => {
   const leftHeader = (
     // shrink-0 because center header should be the only one shrinking
     <div className={"shrink-0 pl-1 " + headerCornerClasses}>
-      <SiteMenu />
+      <SiteMenu className="rounded-sm" />
       <Logo className="mr-4 ml-1" titleClassName="hidden xl:flex" />
 
       <Divider orientation="vertical" flexItem />
@@ -55,6 +55,7 @@ export const AppHeader = () => {
           aria-label="Back"
           onClick={goBack}
           disabled={!canGoBack}
+          className="rounded-sm"
         >
           <ArrowBack />
         </IconButton>
@@ -64,6 +65,7 @@ export const AppHeader = () => {
           aria-label="Forward"
           onClick={goForward}
           disabled={!canGoForward}
+          className="rounded-sm"
         >
           <ArrowForward />
         </IconButton>
@@ -78,6 +80,7 @@ export const AppHeader = () => {
               aria-label="Undo"
               onClick={undo}
               disabled={!canUndo}
+              className="rounded-sm"
             >
               <Undo />
             </IconButton>
@@ -87,6 +90,7 @@ export const AppHeader = () => {
               aria-label="Redo"
               onClick={redo}
               disabled={!canRedo}
+              className="rounded-sm"
             >
               <Redo />
             </IconButton>
@@ -102,6 +106,7 @@ export const AppHeader = () => {
             title="More"
             aria-label="More"
             onClick={(event) => setMoreMenuAnchorEl(event.currentTarget)}
+            className="rounded-sm"
           >
             <MoreVert />
           </IconButton>
