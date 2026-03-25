@@ -326,6 +326,17 @@ export const getThemeOptions = (mode: PaletteMode): ThemeOptions => ({
         container: rootElement,
       },
     },
+    MuiButtonBase: {
+      styleOverrides: {
+        root: {
+          "& .MuiTouchRipple-root": {
+            // Default ripple of 0.3 feels really strong and distracting. Material Design 3 uses a
+            // much lighter pressed/focus state layer than MUI's default ripple.
+            opacity: 0.1,
+          },
+        },
+      },
+    },
   },
 });
 
