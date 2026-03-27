@@ -258,6 +258,44 @@ export const getThemeOptions = (mode: PaletteMode): ThemeOptions => ({
         dense: true,
       },
     },
+    // Many of these overrides are because the default MUI menu item sizes seem really big
+    // Note: didn't make `dense` the default because the More Actions Menu, with its switches/radios,
+    // seems like it should have _a little_ more space than other menus - so we use `dense` for other
+    // menus.
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          ".MuiList-root:not(.MuiList-dense) &": {
+            // extra `&` for specificity because this value is set by a MUI breakpoint, which otherwise takes precedence over our override
+            "&": {
+              minHeight: 40,
+            },
+            fontSize: "0.875rem", // 14px; matches dense MenuItem text size (non-dense default is 1rem/16px)
+            "& .MuiListItemIcon-root svg": {
+              fontSize: "1.25rem", // 20px; matches dense MenuItem icon size (non-dense default is 1.5rem/24px)
+            },
+            "& .MuiListItemText-primary": {
+              fontSize: "inherit", // make this match dense MenuItem text size (non-dense default is 1rem/16px)
+            },
+          },
+        },
+      },
+    },
+    MuiSwitch: {
+      defaultProps: {
+        size: "small", // medium seems a bit large; small fits nicely into our 28px-height (plus 12px padding) menu list items
+      },
+    },
+    MuiRadio: {
+      defaultProps: {
+        size: "small", // let's default to using small because then we match our switch defaults too (radio small vs medium doesn't seem as big of a difference)
+      },
+      styleOverrides: {
+        root: {
+          padding: 4, // want height (20) + paddingY to fit into 28px list item height (so a list item can be 40px with its own padding); default is 9, so we override to (28 - 20) / 2 = 4
+        },
+      },
+    },
     MuiListItem: {
       defaultProps: {
         // Intended for list item buttons, so that the hover effect uses the whole row.
@@ -286,6 +324,17 @@ export const getThemeOptions = (mode: PaletteMode): ThemeOptions => ({
     MuiModal: {
       defaultProps: {
         container: rootElement,
+      },
+    },
+    MuiButtonBase: {
+      styleOverrides: {
+        root: {
+          "& .MuiTouchRipple-root": {
+            // Default ripple of 0.3 feels really strong and distracting. Material Design 3 uses a
+            // much lighter pressed/focus state layer than MUI's default ripple.
+            opacity: 0.1,
+          },
+        },
       },
     },
   },

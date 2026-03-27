@@ -2,7 +2,7 @@ import { lowerCase } from "es-toolkit";
 
 import { getSameCategoryEdgeTypes } from "@/common/edge";
 import { ContextMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
-import { NestedMenuItem } from "@/web/common/components/Menu/NestedMenuItem";
+import { FlyoutSubMenu } from "@/web/common/components/Menu/FlyoutSubMenu";
 import { useSessionUser } from "@/web/common/hooks";
 import { changeEdgeType } from "@/web/topic/diagramStore/actions";
 import { useIsTableEdge } from "@/web/topic/diagramStore/edgeHooks";
@@ -26,7 +26,7 @@ export const ChangeEdgeTypeMenuItem = ({ edge, parentMenuOpen }: Props) => {
 
   return (
     <>
-      <NestedMenuItem label="Change edge type" parentMenuOpen={parentMenuOpen}>
+      <FlyoutSubMenu label="Change edge type" parentMenuOpen={parentMenuOpen}>
         {getSameCategoryEdgeTypes(edge.type).map((type) => (
           <ContextMenuItem
             key={type}
@@ -37,7 +37,7 @@ export const ChangeEdgeTypeMenuItem = ({ edge, parentMenuOpen }: Props) => {
             {lowerCase(type)}
           </ContextMenuItem>
         ))}
-      </NestedMenuItem>
+      </FlyoutSubMenu>
     </>
   );
 };
