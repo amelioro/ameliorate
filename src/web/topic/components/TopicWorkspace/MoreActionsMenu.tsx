@@ -47,13 +47,16 @@ import {
   Radio,
   RadioGroup,
   Switch,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { type Dispatch, type SetStateAction, useState } from "react";
 
 import { hasComments, resetComments } from "@/web/comment/store/commentStore";
 import { HelpIcon } from "@/web/common/components/HelpIcon";
 import { Menu } from "@/web/common/components/Menu/Menu";
-import { NestedMenuItem } from "@/web/common/components/Menu/NestedMenuItem";
+import { MobileMenuDrawer } from "@/web/common/components/Menu/MobileMenuDrawer";
+import { ResponsiveSubMenu } from "@/web/common/components/Menu/ResponsiveSubMenu";
 import { IconWithTooltip } from "@/web/common/components/Tooltip/IconWithTooltip";
 import { ScreenshotResolutionDialog } from "@/web/topic/components/TopicWorkspace/ScreenshotResolutionDialog";
 import { resetDiagramData } from "@/web/topic/diagramStore/utilActions";
@@ -127,45 +130,62 @@ export const MoreActionsMenu = ({
   userCanEditTopicData,
   openDirection,
 }: Props) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
   const menuOpen = Boolean(anchorEl);
   const handleClose = () => setAnchorEl(null);
+
   const format = useFormat();
   const isTableActive = format === "table";
 
+  // Using an array (not a Fragment) because MUI's Menu errors on Fragment children.
+  const menuContent = [
+    <TopicSubmenu
+      key="topic"
+      menuOpen={menuOpen}
+      handleClose={handleClose}
+      sessionUser={sessionUser}
+      userCanEditTopicData={userCanEditTopicData}
+      isTableActive={isTableActive}
+    />,
+
+    !isTableActive && (
+      <ModesSubmenu key="modes" menuOpen={menuOpen} userCanEditTopicData={userCanEditTopicData} />
+    ),
+
+    <PreferencesSubmenu key="preferences" menuOpen={menuOpen} />,
+
+    !isTableActive && <Divider key="divider" className="my-1" />,
+
+    !isTableActive && <LayoutSubmenu key="layout" menuOpen={menuOpen} />,
+
+    !isTableActive && <FilterSubmenu key="filter" menuOpen={menuOpen} />,
+  ];
+
+  if (isMobile) {
+    return (
+      <MobileMenuDrawer
+        open={menuOpen}
+        onClose={handleClose}
+        slotProps={{ list: { dense: false } }} // give our More MenuItems a bit more breathing space because many of them have sizable icons like switches/radios
+      >
+        {menuContent}
+      </MobileMenuDrawer>
+    );
+  }
+
   return (
-    <>
-      {menuOpen && (
-        <Menu
-          anchorEl={anchorEl}
-          open={menuOpen}
-          onClose={handleClose}
-          closeOnClick={false}
-          openDirection={openDirection}
-          slotProps={{ list: { dense: false } }} // give our More MenuItems a bit more breathing space because many of them have sizable icons like switches/radios
-        >
-          <TopicSubmenu
-            menuOpen={menuOpen}
-            handleClose={handleClose}
-            sessionUser={sessionUser}
-            userCanEditTopicData={userCanEditTopicData}
-            isTableActive={isTableActive}
-          />
-
-          {!isTableActive && (
-            <ModesSubmenu menuOpen={menuOpen} userCanEditTopicData={userCanEditTopicData} />
-          )}
-
-          <PreferencesSubmenu menuOpen={menuOpen} />
-
-          {/* not using one conditional for divider + rest of submenus because Mui's `Menu` throws an error when rendering a react fragment */}
-          {!isTableActive && <Divider className="my-1" />}
-
-          {!isTableActive && <LayoutSubmenu menuOpen={menuOpen} />}
-
-          {!isTableActive && <FilterSubmenu menuOpen={menuOpen} />}
-        </Menu>
-      )}
-    </>
+    <Menu
+      anchorEl={anchorEl}
+      open={menuOpen}
+      onClose={handleClose}
+      closeOnClick={false}
+      openDirection={openDirection}
+      slotProps={{ list: { dense: false } }} // give our More MenuItems a bit more breathing space because many of them have sizable icons like switches/radios
+    >
+      {menuContent}
+    </Menu>
   );
 };
 
@@ -189,7 +209,7 @@ const TopicSubmenu = ({
 
   return (
     <>
-      <NestedMenuItem
+      <ResponsiveSubMenu
         label="Topic"
         leftIcon={<AutoStories />}
         parentMenuOpen={menuOpen}
@@ -268,7 +288,7 @@ const TopicSubmenu = ({
           </ListItemIcon>
           <ListItemText primary="Reset layout & filter" />
         </MenuItem>
-      </NestedMenuItem>
+      </ResponsiveSubMenu>
 
       <ScreenshotResolutionDialog
         screenshotDialogOpen={screenshotDialogOpen}
@@ -322,7 +342,7 @@ const ModesSubmenu = ({ menuOpen, userCanEditTopicData }: ModesSubmenuProps) => 
   const readonlyMode = useReadonlyMode();
 
   return (
-    <NestedMenuItem
+    <ResponsiveSubMenu
       label="Modes"
       leftIcon={<Engineering />}
       parentMenuOpen={menuOpen}
@@ -400,7 +420,7 @@ const ModesSubmenu = ({ menuOpen, userCanEditTopicData }: ModesSubmenuProps) => 
           className="pointer-events-none"
         />
       </MenuItem>
-    </NestedMenuItem>
+    </ResponsiveSubMenu>
   );
 };
 
@@ -422,13 +442,13 @@ const PreferencesSubmenu = ({ menuOpen }: PreferencesSubmenuProps) => {
   const expandAddNodeButtons = useExpandAddNodeButtons();
 
   return (
-    <NestedMenuItem
+    <ResponsiveSubMenu
       label="Preferences"
       leftIcon={<Tune />}
       parentMenuOpen={menuOpen}
       slotProps={{ list: { dense: false } }} // give our More MenuItems a bit more breathing space because many of them have sizable icons like switches/radios
     >
-      <NestedMenuItem
+      <ResponsiveSubMenu
         parentMenuOpen={menuOpen}
         leftIcon={<TabUnselected />}
         label="Indicators"
@@ -505,9 +525,9 @@ const PreferencesSubmenu = ({ menuOpen }: PreferencesSubmenuProps) => {
             className="pointer-events-none"
           />
         </MenuItem>
-      </NestedMenuItem>
+      </ResponsiveSubMenu>
 
-      <NestedMenuItem
+      <ResponsiveSubMenu
         parentMenuOpen={menuOpen}
         leftIcon={<Tab />}
         label="Nodes"
@@ -548,9 +568,9 @@ const PreferencesSubmenu = ({ menuOpen }: PreferencesSubmenuProps) => {
             className="pointer-events-none"
           />
         </MenuItem>
-      </NestedMenuItem>
+      </ResponsiveSubMenu>
 
-      <NestedMenuItem
+      <ResponsiveSubMenu
         parentMenuOpen={menuOpen}
         leftIcon={<CallMade />}
         label="Edges"
@@ -567,7 +587,7 @@ const PreferencesSubmenu = ({ menuOpen }: PreferencesSubmenuProps) => {
             className="pointer-events-none"
           />
         </MenuItem>
-      </NestedMenuItem>
+      </ResponsiveSubMenu>
 
       <MenuItem onClick={() => toggleExpandDetailsTabs()}>
         <ListItemIcon>
@@ -580,7 +600,7 @@ const PreferencesSubmenu = ({ menuOpen }: PreferencesSubmenuProps) => {
           className="pointer-events-none"
         />
       </MenuItem>
-    </NestedMenuItem>
+    </ResponsiveSubMenu>
   );
 };
 
@@ -592,7 +612,7 @@ const LayoutSubmenu = ({ menuOpen }: { menuOpen: boolean }) => {
   const layoutThoroughness = useLayoutThoroughness();
 
   return (
-    <NestedMenuItem
+    <ResponsiveSubMenu
       label="Layout"
       leftIcon={<Dashboard />}
       parentMenuOpen={menuOpen}
@@ -648,9 +668,10 @@ const LayoutSubmenu = ({ menuOpen }: { menuOpen: boolean }) => {
 
       <Divider className="my-1" />
 
-      <NestedMenuItem
+      <ResponsiveSubMenu
         parentMenuOpen={menuOpen}
         leftIcon={<Speed />}
+        id="Thoroughness"
         slotProps={{ list: { dense: false } }} // give our More MenuItems a bit more breathing space because many of them have sizable icons like switches/radios
         renderLabel={() => (
           <span className="flex items-center gap-1">
@@ -683,8 +704,8 @@ const LayoutSubmenu = ({ menuOpen }: { menuOpen: boolean }) => {
             <Radio value={100} />
           </MenuItem>
         </RadioGroup>
-      </NestedMenuItem>
-    </NestedMenuItem>
+      </ResponsiveSubMenu>
+    </ResponsiveSubMenu>
   );
 };
 
@@ -693,7 +714,7 @@ const FilterSubmenu = ({ menuOpen }: { menuOpen: boolean }) => {
   const showProblemCriterionSolutionEdges = useShowProblemCriterionSolutionEdges();
 
   return (
-    <NestedMenuItem
+    <ResponsiveSubMenu
       label="Filter"
       leftIcon={<FilterAltOutlined />}
       parentMenuOpen={menuOpen}
@@ -724,6 +745,6 @@ const FilterSubmenu = ({ menuOpen }: { menuOpen: boolean }) => {
           className="pointer-events-none"
         />
       </MenuItem>
-    </NestedMenuItem>
+    </ResponsiveSubMenu>
   );
 };

@@ -51,8 +51,8 @@ interface Props {
   };
 }
 
-export const NestedMenuItem = forwardRef<HTMLLIElement | null, Props>(
-  function NestedMenuItem(props, ref) {
+export const FlyoutSubMenu = forwardRef<HTMLLIElement | null, Props>(
+  function FlyoutSubMenu(props, ref) {
     const {
       parentMenuOpen,
       label,
@@ -135,7 +135,7 @@ export const NestedMenuItem = forwardRef<HTMLLIElement | null, Props>(
         onMouseLeave={handleMouseLeave}
         onKeyDown={handleKeyDown}
       >
-        <MenuItem disabled={disabled} ref={menuItemRef} className={className} dense={false}>
+        <MenuItem disabled={disabled} ref={menuItemRef} className={className}>
           {leftIcon ? <ListItemIcon>{leftIcon}</ListItemIcon> : <span />}
           {renderLabel ? (
             <ListItemText>{renderLabel()}</ListItemText>

@@ -23,8 +23,8 @@ import {
 import { startCase } from "es-toolkit";
 import { Dispatch, ReactNode, SetStateAction, useState } from "react";
 
+import { FlyoutSubMenu } from "@/web/common/components/Menu/FlyoutSubMenu";
 import { Menu } from "@/web/common/components/Menu/Menu";
-import { NestedMenuItem } from "@/web/common/components/Menu/NestedMenuItem";
 import { useSessionUser } from "@/web/common/hooks";
 import { HelpMenu } from "@/web/topic/components/TopicWorkspace/HelpMenu";
 import { MoreActionsMenu } from "@/web/topic/components/TopicWorkspace/MoreActionsMenu";
@@ -77,7 +77,7 @@ const PerspectivesMenu = ({ anchorEl, setAnchorEl }: PerspectivesMenuProps) => {
       // match the ~300px width of drawer
       className="w-75 px-2"
     >
-      <NestedMenuItem label="Aggregation mode" parentMenuOpen={menuOpen} className="mb-2">
+      <FlyoutSubMenu label="Aggregation mode" parentMenuOpen={menuOpen} className="mb-2">
         <RadioGroup name="aggregation mode">
           {aggregationModes.map((mode) => {
             return (
@@ -89,7 +89,7 @@ const PerspectivesMenu = ({ anchorEl, setAnchorEl }: PerspectivesMenuProps) => {
             );
           })}
         </RadioGroup>
-      </NestedMenuItem>
+      </FlyoutSubMenu>
 
       <Perspectives />
     </Menu>

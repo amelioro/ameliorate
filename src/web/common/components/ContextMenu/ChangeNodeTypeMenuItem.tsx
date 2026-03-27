@@ -1,6 +1,6 @@
 import { getSameCategoryNodeTypes, prettyNodeTypes } from "@/common/node";
 import { ContextMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
-import { NestedMenuItem } from "@/web/common/components/Menu/NestedMenuItem";
+import { FlyoutSubMenu } from "@/web/common/components/Menu/FlyoutSubMenu";
 import { useSessionUser } from "@/web/common/hooks";
 import { ColoredNodeIcon } from "@/web/topic/components/ColoredNodeIcon";
 import { changeNodeType } from "@/web/topic/diagramStore/actions";
@@ -19,7 +19,7 @@ export const ChangeNodeTypeMenuItem = ({ node, parentMenuOpen }: Props) => {
   if (!userCanEditTopicData) return <></>;
 
   return (
-    <NestedMenuItem label="Change node type" parentMenuOpen={parentMenuOpen}>
+    <FlyoutSubMenu label="Change node type" parentMenuOpen={parentMenuOpen}>
       {getSameCategoryNodeTypes(node.type).map((type) => {
         const title = prettyNodeTypes[type];
 
@@ -30,6 +30,6 @@ export const ChangeNodeTypeMenuItem = ({ node, parentMenuOpen }: Props) => {
           </ContextMenuItem>
         );
       })}
-    </NestedMenuItem>
+    </FlyoutSubMenu>
   );
 };
