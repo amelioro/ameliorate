@@ -5,7 +5,6 @@ import Image from "next/image";
 
 import { celebrateGif } from "@/web/common/urls";
 import { StepContent } from "@/web/tutorial/StepContent";
-import { ZoomableImage } from "@/web/tutorial/ZoomableImage";
 import { startTutorial } from "@/web/tutorial/tutorial";
 import { tutorialDefaultAnchorClass } from "@/web/tutorial/tutorialUtils";
 
@@ -19,20 +18,14 @@ export const diagramBasicsSteps: StepType[] = [
 
 Below is a problem node, which suggests that "cars going too fast in my neighborhood" is a problem.`}
         imageSlot={
-          <ZoomableImage
-            modalTitle="Nodes"
-            modalText={`Nodes are central to how you'll represent information.
-
-            Below is a problem node, which suggests that "cars going too fast in my neighborhood" is a problem.`}
-            imageProps={{
-              key: "https://github.com/user-attachments/assets/989d5310-6193-421c-9dac-aaaa55ba7ef6",
-              src: "https://github.com/user-attachments/assets/989d5310-6193-421c-9dac-aaaa55ba7ef6",
-              alt: "problem node - cars going too fast",
-              width: 305,
-              height: 159,
-              unoptimized: true,
-              className: "rounded-xl border shadow-sm",
-            }}
+          <Image
+            key="https://github.com/user-attachments/assets/989d5310-6193-421c-9dac-aaaa55ba7ef6"
+            src="https://github.com/user-attachments/assets/989d5310-6193-421c-9dac-aaaa55ba7ef6"
+            alt="problem node - cars going too fast"
+            width={305}
+            height={159}
+            unoptimized
+            className="rounded-xl border shadow-sm"
           />
         }
       />
@@ -47,20 +40,14 @@ Below is a problem node, which suggests that "cars going too fast in my neighbor
 
 Note that editing is only possible if you created the topic or if you were given editing privileges.`}
         imageSlot={
-          <ZoomableImage
-            modalTitle="Editing node text"
-            modalText={`Edit a node's text by selecting the node, then clicking on the text.
-
-Note that editing is only possible if you created the topic or if you were given editing privileges.`}
-            imageProps={{
-              key: "https://github.com/user-attachments/assets/ca5049a6-cb74-479a-a386-0fe22d2034e1",
-              src: "https://github.com/user-attachments/assets/ca5049a6-cb74-479a-a386-0fe22d2034e1",
-              alt: "editing node text",
-              width: 322,
-              height: 205,
-              unoptimized: true, // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-              className: "rounded-xl border shadow-sm",
-            }}
+          <Image
+            key="https://github.com/user-attachments/assets/ca5049a6-cb74-479a-a386-0fe22d2034e1"
+            src="https://github.com/user-attachments/assets/ca5049a6-cb74-479a-a386-0fe22d2034e1"
+            alt="editing node text"
+            width={322}
+            height={205}
+            unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+            className="rounded-xl border shadow-sm"
           />
         }
       />
@@ -73,18 +60,14 @@ Note that editing is only possible if you created the topic or if you were given
         stepTitle="Adding a node"
         text={`When a node is selected, you can use the buttons that pop up to add related nodes.`}
         imageSlot={
-          <ZoomableImage
-            modalTitle="Adding a node"
-            modalText={`When a node is selected, you can use the buttons that pop up to add related nodes.`}
-            imageProps={{
-              key: "https://github.com/user-attachments/assets/380f2603-33c9-46d7-997f-532831196ff4",
-              src: "https://github.com/user-attachments/assets/380f2603-33c9-46d7-997f-532831196ff4",
-              alt: "adding a node",
-              width: 527,
-              height: 387,
-              unoptimized: true, // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-              className: "rounded-xl border shadow-sm",
-            }}
+          <Image
+            key="https://github.com/user-attachments/assets/380f2603-33c9-46d7-997f-532831196ff4"
+            src="https://github.com/user-attachments/assets/380f2603-33c9-46d7-997f-532831196ff4"
+            alt="adding a node"
+            width={527}
+            height={387}
+            unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+            className="rounded-xl border shadow-sm"
           />
         }
       />
@@ -106,27 +89,14 @@ Note that editing is only possible if you created the topic or if you were given
           </span>
         }
         imageSlot={
-          <ZoomableImage
-            modalTitle="Other actions"
-            modalText={
-              <span>
-                Per-node actions, like delete, can be found by right-clicking a node, and other
-                common actions like undo/redo are in the toolbar.
-                <br />
-                <br />
-                Advanced actions and configuration can be found by clicking on the More Actions
-                wrench <Build />.
-              </span>
-            }
-            imageProps={{
-              key: "https://github.com/user-attachments/assets/61b07a44-bd48-49ef-b9ee-780b4c2a676c",
-              src: "https://github.com/user-attachments/assets/61b07a44-bd48-49ef-b9ee-780b4c2a676c",
-              alt: "Other actions",
-              width: 413,
-              height: 476,
-              unoptimized: true, // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-              className: "rounded-xl border shadow-sm",
-            }}
+          <Image
+            key="https://github.com/user-attachments/assets/61b07a44-bd48-49ef-b9ee-780b4c2a676c"
+            src="https://github.com/user-attachments/assets/61b07a44-bd48-49ef-b9ee-780b4c2a676c"
+            alt="Other actions"
+            width={413}
+            height={476}
+            unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+            className="rounded-xl border shadow-sm"
           />
         }
       />
@@ -139,18 +109,14 @@ Note that editing is only possible if you created the topic or if you were given
         stepTitle="Edges"
         text={`Edges represent relations between nodes. We can read this bottom-up like: "street goes downhill" - causes -> "cars going too fast", or in plain English: "The street's hill causes cars to go too fast".`}
         imageSlot={
-          <ZoomableImage
-            modalTitle="Edges"
-            modalText={`Edges represent relations between nodes. We can read this bottom-up like: "street goes downhill" - causes -> "cars going too fast", or in plain English: "The street's hill causes cars to go too fast".`}
-            imageProps={{
-              key: "https://github.com/user-attachments/assets/14892d89-d970-407d-bb41-64dd6ae4ac6b",
-              src: "https://github.com/user-attachments/assets/14892d89-d970-407d-bb41-64dd6ae4ac6b",
-              alt: "Edges",
-              width: 273,
-              height: 324,
-              unoptimized: true,
-              className: "rounded-xl border shadow-sm",
-            }}
+          <Image
+            key="https://github.com/user-attachments/assets/14892d89-d970-407d-bb41-64dd6ae4ac6b"
+            src="https://github.com/user-attachments/assets/14892d89-d970-407d-bb41-64dd6ae4ac6b"
+            alt="Edges"
+            width={273}
+            height={324}
+            unoptimized
+            className="rounded-xl border shadow-sm"
           />
         }
       />

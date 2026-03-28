@@ -1,12 +1,11 @@
 import { VerticalSplit } from "@mui/icons-material";
-import { Button, Typography } from "@mui/material";
+import { Button } from "@mui/material";
 import { StepType } from "@reactour/tour";
 import Image from "next/image";
 
 import { Link } from "@/web/common/components/Link";
 import { celebrateGif } from "@/web/common/urls";
 import { StepContent } from "@/web/tutorial/StepContent";
-import { ZoomableImage } from "@/web/tutorial/ZoomableImage";
 import { startTutorial } from "@/web/tutorial/tutorial";
 import { Track, tutorialDefaultAnchorClass } from "@/web/tutorial/tutorialUtils";
 
@@ -27,27 +26,14 @@ export const getEvaluatingTradeoffsSteps = (track: Track | null): StepType[] => 
           </span>
         }
         imageSlot={
-          <ZoomableImage
-            modalTitle="Viewing the table"
-            modalText={
-              <span>
-                The Criteria Table can help make it easier to compare tradeoffs of each solution.
-                You can find it by right-clicking on a problem node.
-                <br />
-                <br />
-                If you need to return to the diagram, you can change the format back to "Diagram"
-                under VIEWS {">"} Format in the Topic Pane <VerticalSplit color="primary" />.
-              </span>
-            }
-            imageProps={{
-              key: "https://github.com/user-attachments/assets/5ccc00a7-a3e9-439f-8e19-4d32106bfdef",
-              src: "https://github.com/user-attachments/assets/5ccc00a7-a3e9-439f-8e19-4d32106bfdef",
-              alt: "viewing criteria table",
-              width: 677,
-              height: 472,
-              unoptimized: true, // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-              className: "rounded-xl border shadow-sm",
-            }}
+          <Image
+            key="https://github.com/user-attachments/assets/5ccc00a7-a3e9-439f-8e19-4d32106bfdef"
+            src="https://github.com/user-attachments/assets/5ccc00a7-a3e9-439f-8e19-4d32106bfdef"
+            alt="viewing criteria table"
+            width={677}
+            height={472}
+            unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+            className="rounded-xl border shadow-sm"
           />
         }
       />
@@ -70,39 +56,25 @@ export const getEvaluatingTradeoffsSteps = (track: Track | null): StepType[] => 
           </span>
         }
         imageSlot={
-          <>
-            <ZoomableImage
-              modalTitle="Scores"
-              modalText={
-                <span>
-                  Header scores convey how important we think the solutions and criteria are, and
-                  intersection scores convey how well we think a solution fulfills the criteria.
-                  <br />
-                  <br />
-                  Here, the scores show that the stop light solution isn't great. While we expect
-                  it'll get people to stop, it's not cheap, and traffic will be interrupted during
-                  implementation.
-                </span>
-              }
-              imageProps={{
-                key: "https://github.com/user-attachments/assets/1dd98e5e-198a-41ff-967a-099c7cbe430b",
-                src: "https://github.com/user-attachments/assets/1dd98e5e-198a-41ff-967a-099c7cbe430b",
-                alt: "criteria table scores",
-                width: 540,
-                height: 325,
-                className: "rounded-xl border shadow-sm",
-              }}
-            />
-            <Typography variant="caption">
-              From:{" "}
-              <Link
-                href="https://ameliorate.app/examples/detailed-cars-going-too-fast?view=Tradeoff+table"
-                target="_blank"
-              >
-                cars-going-too-fast
-              </Link>
-            </Typography>
-          </>
+          <Image
+            key="https://github.com/user-attachments/assets/1dd98e5e-198a-41ff-967a-099c7cbe430b"
+            src="https://github.com/user-attachments/assets/1dd98e5e-198a-41ff-967a-099c7cbe430b"
+            alt="criteria table scores"
+            width={540}
+            height={325}
+            className="rounded-xl border shadow-sm"
+          />
+        }
+        imageCaption={
+          <span>
+            From:{" "}
+            <Link
+              href="https://ameliorate.app/examples/detailed-cars-going-too-fast?view=Tradeoff+table"
+              target="_blank"
+            >
+              cars-going-too-fast
+            </Link>
+          </span>
         }
       />
     ),
@@ -123,39 +95,25 @@ export const getEvaluatingTradeoffsSteps = (track: Track | null): StepType[] => 
           </span>
         }
         imageSlot={
-          <>
-            <ZoomableImage
-              modalTitle="Solution totals"
-              modalText={
-                <span>
-                  Solutions are given a calculated Solution Total to help show how good they are
-                  across all of the criteria.
-                  <br />
-                  <br />
-                  Positive indicates a good solution, negative indicates a bad solution. A detailed
-                  explanation of the calculation can be found by clicking the info icon in the
-                  table.
-                </span>
-              }
-              imageProps={{
-                key: "https://github.com/user-attachments/assets/f71c1dd1-0f60-4151-9b1d-ea207911ce60",
-                src: "https://github.com/user-attachments/assets/f71c1dd1-0f60-4151-9b1d-ea207911ce60",
-                alt: "solution totals",
-                width: 543,
-                height: 108,
-                className: "rounded-xl border shadow-sm",
-              }}
-            />
-            <Typography variant="caption">
-              From:{" "}
-              <Link
-                href="https://ameliorate.app/examples/detailed-cars-going-too-fast?view=Tradeoff+table"
-                target="_blank"
-              >
-                cars-going-too-fast
-              </Link>
-            </Typography>
-          </>
+          <Image
+            key="https://github.com/user-attachments/assets/f71c1dd1-0f60-4151-9b1d-ea207911ce60"
+            src="https://github.com/user-attachments/assets/f71c1dd1-0f60-4151-9b1d-ea207911ce60"
+            alt="solution totals"
+            width={543}
+            height={108}
+            className="rounded-xl border shadow-sm"
+          />
+        }
+        imageCaption={
+          <span>
+            From:{" "}
+            <Link
+              href="https://ameliorate.app/examples/detailed-cars-going-too-fast?view=Tradeoff+table"
+              target="_blank"
+            >
+              cars-going-too-fast
+            </Link>
+          </span>
         }
       />
     ),
