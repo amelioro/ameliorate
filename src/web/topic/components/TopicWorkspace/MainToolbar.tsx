@@ -1,21 +1,14 @@
 import {
-  AdsClick,
   AlignVerticalCenter,
   ArrowDropDown,
-  Build,
   Delete,
   EditOff,
   FormatLineSpacing,
   Group,
   Highlight,
-  Looks6,
+  MoreVert,
   QuestionMark,
   SelfImprovement,
-  TabUnselected,
-  TableChartOutlined,
-  ThumbsUpDown,
-  Visibility,
-  WbTwilight,
 } from "@mui/icons-material";
 import {
   Divider,
@@ -25,19 +18,16 @@ import {
   MenuItem,
   Radio,
   RadioGroup,
-  Switch,
   ToggleButton,
 } from "@mui/material";
 import { startCase } from "es-toolkit";
 import { Dispatch, ReactNode, SetStateAction, useState } from "react";
 
-import { HelpIcon } from "@/web/common/components/HelpIcon";
+import { FlyoutSubMenu } from "@/web/common/components/Menu/FlyoutSubMenu";
 import { Menu } from "@/web/common/components/Menu/Menu";
-import { NestedMenuItem } from "@/web/common/components/Menu/NestedMenuItem";
-import { IconWithTooltip } from "@/web/common/components/Tooltip/IconWithTooltip";
 import { useSessionUser } from "@/web/common/hooks";
 import { HelpMenu } from "@/web/topic/components/TopicWorkspace/HelpMenu";
-import { MoreActionsDrawer } from "@/web/topic/components/TopicWorkspace/MoreActionsDrawer";
+import { MoreActionsMenu } from "@/web/topic/components/TopicWorkspace/MoreActionsMenu";
 import { deleteGraphPart } from "@/web/topic/diagramStore/createDeleteActions";
 import { useIsTableEdge } from "@/web/topic/diagramStore/edgeHooks";
 import { useTopic, useUserCanEditTopicData } from "@/web/topic/topicStore/store";
@@ -59,35 +49,11 @@ import {
   useIsComparingPerspectives,
 } from "@/web/view/perspectiveStore";
 import { useSelectedGraphPart } from "@/web/view/selectedPartStore";
-import {
-  setWhenToShowIndicators,
-  toggleEnableContentIndicators,
-  toggleEnableForceShownIndicators,
-  toggleEnableScoresToShow,
-  toggleEnableViewIndicators,
-  toggleQuickScoring,
-  toggleZenMode,
-  useEnableContentIndicators,
-  useEnableForceShownIndicators,
-  useEnableScoresToShow,
-  useEnableViewIndicators,
-  useQuickScoring,
-  useWhenToShowIndicators,
-} from "@/web/view/userConfigStore/store";
+import { toggleZenMode } from "@/web/view/userConfigStore/store";
 
 const aggregationModeIcons: Record<AggregationMode, ReactNode> = {
   average: <AlignVerticalCenter />,
   disagreement: <FormatLineSpacing />,
-};
-
-const QuickScoringHelpIcon = () => {
-  return (
-    <IconWithTooltip
-      tooltipHeading="Quick Scoring"
-      tooltipBody="Quick scoring allows you to set scores more quickly by showing score pies when hovering a score. This isn't on all the time because it can be annoying to see the score pies when you're not intending to score."
-      icon={<HelpIcon />}
-    />
-  );
 };
 
 interface PerspectivesMenuProps {
@@ -96,7 +62,6 @@ interface PerspectivesMenuProps {
 }
 
 const PerspectivesMenu = ({ anchorEl, setAnchorEl }: PerspectivesMenuProps) => {
-  const quickScoring = useQuickScoring();
   const aggregationMode = useAggregationMode();
 
   const menuOpen = Boolean(anchorEl);
@@ -112,23 +77,7 @@ const PerspectivesMenu = ({ anchorEl, setAnchorEl }: PerspectivesMenuProps) => {
       // match the ~300px width of drawer
       className="w-75 px-2"
     >
-      <MenuItem onClick={() => toggleQuickScoring()}>
-        <ListItemText
-          primary={
-            <span className="flex items-center gap-1">
-              Quick scoring <QuickScoringHelpIcon />
-            </span>
-          }
-        />
-        <Switch
-          checked={quickScoring}
-          // for some reason the parent MenuItem click gets doubled if we don't stopPropagation
-          onClick={(e) => e.stopPropagation()}
-          className="pointer-events-none"
-        />
-      </MenuItem>
-
-      <NestedMenuItem label="Aggregation mode" parentMenuOpen={menuOpen} className="mb-2">
+      <FlyoutSubMenu label="Aggregation mode" parentMenuOpen={menuOpen} className="mb-2">
         <RadioGroup name="aggregation mode">
           {aggregationModes.map((mode) => {
             return (
@@ -140,111 +89,9 @@ const PerspectivesMenu = ({ anchorEl, setAnchorEl }: PerspectivesMenuProps) => {
             );
           })}
         </RadioGroup>
-      </NestedMenuItem>
+      </FlyoutSubMenu>
 
       <Perspectives />
-    </Menu>
-  );
-};
-
-interface ShowHideMenuProps {
-  anchorEl: HTMLElement | null;
-  setAnchorEl: Dispatch<SetStateAction<HTMLElement | null>>;
-}
-
-const ShowHideMenu = ({ anchorEl, setAnchorEl }: ShowHideMenuProps) => {
-  const whenToShowIndicators = useWhenToShowIndicators();
-  const enableScoresToShow = useEnableScoresToShow();
-  const enableContentIndicators = useEnableContentIndicators();
-  const enableViewIndicators = useEnableViewIndicators();
-  const enableForceShownIndicators = useEnableForceShownIndicators();
-
-  const menuOpen = Boolean(anchorEl);
-  if (!menuOpen) return;
-
-  return (
-    <Menu
-      anchorEl={anchorEl}
-      open={menuOpen}
-      onClose={() => setAnchorEl(null)}
-      closeOnClick={false}
-      openDirection="top"
-    >
-      <RadioGroup name="when to show indicators">
-        <MenuItem onClick={() => setWhenToShowIndicators("always")}>
-          <ListItemIcon>
-            <Visibility />
-          </ListItemIcon>
-          <ListItemText primary="Always show indicators" />
-          <Radio
-            checked={whenToShowIndicators === "always"}
-            value="always"
-            name="when to show indicators"
-          />
-        </MenuItem>
-        <MenuItem onClick={() => setWhenToShowIndicators("onHoverOrSelect")}>
-          <ListItemIcon>
-            <AdsClick />
-          </ListItemIcon>
-          <ListItemText primary="Show indicators on hover or select" />
-          <Radio
-            checked={whenToShowIndicators === "onHoverOrSelect"}
-            value="onHoverOrSelect"
-            name="when to show indicators"
-          />
-        </MenuItem>
-      </RadioGroup>
-
-      <Divider />
-
-      <MenuItem onClick={() => toggleEnableScoresToShow()}>
-        <ListItemIcon>
-          <Looks6 />
-        </ListItemIcon>
-        <ListItemText primary="Enable scores to show" />
-        <Switch
-          checked={enableScoresToShow}
-          // for some reason the parent MenuItem click gets doubled if we don't stopPropagation
-          onClick={(e) => e.stopPropagation()}
-          className="pointer-events-none"
-        />
-      </MenuItem>
-      <MenuItem onClick={() => toggleEnableContentIndicators()}>
-        <ListItemIcon>
-          <ThumbsUpDown />
-        </ListItemIcon>
-        <ListItemText primary="Enable content indicators" />
-        <Switch
-          checked={enableContentIndicators}
-          // for some reason the parent MenuItem click gets doubled if we don't stopPropagation
-          onClick={(e) => e.stopPropagation()}
-          className="pointer-events-none"
-        />
-      </MenuItem>
-      <MenuItem onClick={() => toggleEnableViewIndicators()}>
-        <ListItemIcon>
-          <TableChartOutlined />
-        </ListItemIcon>
-        <ListItemText primary="Enable view indicators" />
-        <Switch
-          checked={enableViewIndicators}
-          // for some reason the parent MenuItem click gets doubled if we don't stopPropagation
-          onClick={(e) => e.stopPropagation()}
-          className="pointer-events-none"
-        />
-      </MenuItem>
-      <MenuItem onClick={() => toggleEnableForceShownIndicators()}>
-        <ListItemIcon>
-          <WbTwilight />
-        </ListItemIcon>
-        <ListItemText primary="Enable force shown indicators" />
-        <Switch
-          checked={enableForceShownIndicators}
-          // for some reason the parent MenuItem click gets doubled if we don't stopPropagation
-          onClick={(e) => e.stopPropagation()}
-          className="pointer-events-none"
-        />
-      </MenuItem>
     </Menu>
   );
 };
@@ -264,12 +111,11 @@ export const MainToolbar = () => {
   const partIsTableEdge = useIsTableEdge(selectedGraphPart?.id ?? "");
   const partIsCalculatedEdge = selectedGraphPart ? isIndirectEdge(selectedGraphPart) : false;
 
-  const [showHideMenuAnchorEl, setShowHideMenuAnchorEl] = useState<null | HTMLElement>(null);
   const [perspectivesMenuAnchorEl, setPerspectivesMenuAnchorEl] = useState<null | HTMLElement>(
     null,
   );
-  const [isMoreActionsDrawerOpen, setIsMoreActionsDrawerOpen] = useState(false);
   const [helpAnchorEl, setHelpAnchorEl] = useState<null | HTMLElement>(null);
+  const [moreMenuAnchorEl, setMoreMenuAnchorEl] = useState<null | HTMLElement>(null);
 
   return (
     // Toolbar buttons have square-rounding to fit more snuggly into the toolbar.
@@ -288,20 +134,6 @@ export const MainToolbar = () => {
         >
           <SelfImprovement />
         </ToggleButton>
-
-        <IconButton
-          title="Show/hide menu"
-          aria-label="Show/hide menu"
-          color="inherit"
-          size="small"
-          onClick={(event) => setShowHideMenuAnchorEl(event.currentTarget)}
-          // pr-0 because the dropdown arrow has a bunch of extra space
-          className="rounded-sm border-none pr-0"
-        >
-          <TabUnselected />
-          <ArrowDropDown fontSize="small" />
-        </IconButton>
-        <ShowHideMenu anchorEl={showHideMenuAnchorEl} setAnchorEl={setShowHideMenuAnchorEl} />
 
         {!onPlayground && (
           <>
@@ -398,22 +230,6 @@ export const MainToolbar = () => {
 
         <IconButton
           color="inherit"
-          title="More actions"
-          aria-label="More actions"
-          onClick={() => setIsMoreActionsDrawerOpen(true)}
-          className="rounded-sm"
-        >
-          <Build />
-        </IconButton>
-        <MoreActionsDrawer
-          isMoreActionsDrawerOpen={isMoreActionsDrawerOpen}
-          setIsMoreActionsDrawerOpen={setIsMoreActionsDrawerOpen}
-          sessionUser={sessionUser}
-          userCanEditTopicData={userCanEditTopicData}
-        />
-
-        <IconButton
-          color="inherit"
           title="Help"
           aria-label="Help"
           onClick={(event) => setHelpAnchorEl(event.currentTarget)}
@@ -422,6 +238,26 @@ export const MainToolbar = () => {
           <QuestionMark />
         </IconButton>
         <HelpMenu helpAnchorEl={helpAnchorEl} setHelpAnchorEl={setHelpAnchorEl} />
+
+        {/* show "more" in app header on med+ screens because there's space, otherwise put it in the main toolbar */}
+        <div className="contents md:hidden">
+          <IconButton
+            color="inherit"
+            title="More"
+            aria-label="More"
+            onClick={(event) => setMoreMenuAnchorEl(event.currentTarget)}
+            className="rounded-sm"
+          >
+            <MoreVert />
+          </IconButton>
+          <MoreActionsMenu
+            anchorEl={moreMenuAnchorEl}
+            setAnchorEl={setMoreMenuAnchorEl}
+            sessionUser={sessionUser}
+            userCanEditTopicData={userCanEditTopicData}
+            openDirection="top"
+          />
+        </div>
       </div>
     </div>
   );

@@ -15,8 +15,17 @@
  */
 
 import { ChevronRight } from "@mui/icons-material";
-import { ClickAwayListener, Grow, MenuList, Paper, Popper } from "@mui/material";
-import { IconMenuItem } from "mui-nested-menu";
+import {
+  ClickAwayListener,
+  Grow,
+  ListItemIcon,
+  ListItemText,
+  MenuItem,
+  MenuList,
+  type MenuListProps,
+  Paper,
+  Popper,
+} from "@mui/material";
 import {
   type KeyboardEvent,
   type MouseEvent,
@@ -37,10 +46,13 @@ interface Props {
   className?: string;
   disabled?: boolean;
   tabIndex?: number;
+  slotProps?: {
+    list?: Partial<MenuListProps>;
+  };
 }
 
-export const NestedMenuItem = forwardRef<HTMLLIElement | null, Props>(
-  function NestedMenuItem(props, ref) {
+export const FlyoutSubMenu = forwardRef<HTMLLIElement | null, Props>(
+  function FlyoutSubMenu(props, ref) {
     const {
       parentMenuOpen,
       label,
@@ -51,6 +63,7 @@ export const NestedMenuItem = forwardRef<HTMLLIElement | null, Props>(
       className,
       disabled,
       tabIndex: tabIndexProp,
+      slotProps,
     } = props;
 
     const menuItemRef = useRef<HTMLLIElement | null>(null);
@@ -122,16 +135,15 @@ export const NestedMenuItem = forwardRef<HTMLLIElement | null, Props>(
         onMouseLeave={handleMouseLeave}
         onKeyDown={handleKeyDown}
       >
-        <IconMenuItem
-          MenuItemProps={{ disabled }}
-          // match default mui menu padding and size
-          className={"px-[16px] [&_p]:px-0 [&_p]:text-sm" + (className ? ` ${className}` : "")}
-          ref={menuItemRef}
-          leftIcon={leftIcon}
-          rightIcon={rightIcon}
-          label={label}
-          renderLabel={renderLabel}
-        />
+        <MenuItem disabled={disabled} ref={menuItemRef} className={className}>
+          {leftIcon ? <ListItemIcon>{leftIcon}</ListItemIcon> : <span />}
+          {renderLabel ? (
+            <ListItemText>{renderLabel()}</ListItemText>
+          ) : (
+            <ListItemText primary={label} />
+          )}
+          {rightIcon}
+        </MenuItem>
         <Popper
           open={open}
           anchorEl={menuItemRef.current}
@@ -143,7 +155,7 @@ export const NestedMenuItem = forwardRef<HTMLLIElement | null, Props>(
             <Grow {...TransitionProps}>
               <Paper elevation={8}>
                 <ClickAwayListener onClickAway={() => setIsSubMenuOpen(false)}>
-                  <MenuList ref={menuContainerRef} dense autoFocusItem={false}>
+                  <MenuList {...slotProps?.list} ref={menuContainerRef} autoFocusItem={false}>
                     {children}
                   </MenuList>
                 </ClickAwayListener>
