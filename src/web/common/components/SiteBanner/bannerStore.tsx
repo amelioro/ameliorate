@@ -3,6 +3,8 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+import { migrate } from "@/web/common/components/SiteBanner/migrate";
+
 interface BannerStoreState {
   showBanner: boolean;
 }
@@ -16,6 +18,8 @@ const persistKey = "banner-storage";
 const useUserConfigStore = create<BannerStoreState>()(
   persist(() => initialState, {
     name: persistKey,
+    version: 2,
+    migrate,
     skipHydration: true, // so we can avoid showing the banner until we check localstorage and know that we should show it
   }),
 );
