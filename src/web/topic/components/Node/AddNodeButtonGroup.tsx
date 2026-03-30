@@ -1,13 +1,5 @@
 import { Add } from "@mui/icons-material";
-import {
-  Autocomplete,
-  Button,
-  ButtonGroup,
-  Divider,
-  ListItem,
-  ListSubheader,
-  TextField,
-} from "@mui/material";
+import { Autocomplete, Button, ButtonGroup, ListItem, TextField } from "@mui/material";
 import fuzzysort from "fuzzysort";
 import { memo, useCallback, useRef, useState } from "react";
 
@@ -24,7 +16,6 @@ import {
   getDirectedRelationDescription,
 } from "@/web/topic/utils/edge";
 import { Node } from "@/web/topic/utils/graph";
-import { useExpandAddNodeButtons } from "@/web/view/userConfigStore/store";
 
 const getOptionText = (node: Node) => {
   const title = prettyNodeTypes[node.type];
@@ -170,11 +161,10 @@ interface Props {
 }
 
 /**
- * There's a ton of extra complexity in this component because the UX for whether or not we're
- * expanding the common add node buttons is pretty different.
+ * Common add-node actions are shown as buttons, while uncommon ones stay in the overflow menu.
  *
- * I'm hoping to eventually choose one UX to always use without configuration, but it doesn't feel
- * like one of these two options is obviously better right now.
+ * The intention of this separation is so that the common actions are easier to access. Also, there
+ * are often many uncommon actions, so it reduces clutter to put them in the menu.
  */
 const AddNodeButtonGroup = memo(
   ({
@@ -190,8 +180,6 @@ const AddNodeButtonGroup = memo(
     const [menuOpen, setMenuOpen] = useState(false);
     const closeMenu = useCallback(() => setMenuOpen(false), []);
 
-    const expandAddNodeButtons = useExpandAddNodeButtons();
-
     const commonNodeButtons = addableRelations
       ? addableRelations
           .filter((relation) => relation.commonality === "common")
@@ -200,7 +188,7 @@ const AddNodeButtonGroup = memo(
               key={getDirectedRelationKey(addableRelation)}
               fromNodeId={fromNodeId}
               addableRelation={addableRelation}
-              buttonType={!expandAddNodeButtons ? "menu" : "button"}
+              buttonType="button"
               selectNewNode={selectNewNode}
               tooltipDirection={openDirection}
               onClick={closeMenu}
@@ -210,7 +198,7 @@ const AddNodeButtonGroup = memo(
           <AddNodeButton
             key={addableNodeType}
             addableNodeType={addableNodeType}
-            buttonType={!expandAddNodeButtons ? "menu" : "button"}
+            buttonType="button"
             selectNewNode={selectNewNode}
             tooltipDirection={openDirection}
             onClick={closeMenu}
@@ -225,7 +213,6 @@ const AddNodeButtonGroup = memo(
               key={getDirectedRelationKey(addableRelation)}
               fromNodeId={fromNodeId}
               addableRelation={addableRelation}
-              // trying out how it feels to have "expanded" only expand common buttons, keeping uncommon stuff in the menu still
               buttonType="menu"
               selectNewNode={selectNewNode}
               tooltipDirection={openDirection}
@@ -243,7 +230,7 @@ const AddNodeButtonGroup = memo(
           ])
       : []; // right now addable node types are all assumed to be common
 
-    const menuButtonTitle = title ?? (!expandAddNodeButtons ? "Add node" : "Add more");
+    const menuButtonTitle = title ?? "Add more";
 
     return (
       <>
@@ -255,23 +242,15 @@ const AddNodeButtonGroup = memo(
             "flex" +
             // keep the button rendered if the menu is open (if button was only open due to hover, it'd otherwise disappear)
             (menuOpen ? " flex!" : "") +
-            // If the menu button only has uncommon options, make it stand out less - this way users
-            // are slightly encouraged to add nodes in the direction that is intended to commonly
-            // be added; e.g. problem nodes have problem details added below, and solution nodes
-            // have solution details added above.
-            (expandAddNodeButtons || commonNodeButtons.length > 0 ? "" : " shadow-slate-300") +
             (className ? ` ${className}` : "")
           }
         >
-          {expandAddNodeButtons ? commonNodeButtons : null}
+          {commonNodeButtons}
 
           {/* don't show add menu button if it won't have anything in it */}
-          {(!expandAddNodeButtons || uncommonNodeButtons.length > 0) && (
+          {uncommonNodeButtons.length > 0 && (
             <Tooltip
-              tooltipHeading={
-                menuButtonTitle +
-                (expandAddNodeButtons || commonNodeButtons.length > 0 ? "" : " (uncommon)")
-              }
+              tooltipHeading={menuButtonTitle}
               placement={openDirection}
               childrenOpensAMenu={true}
               immediatelyOpenOnTouch={false}
@@ -279,9 +258,7 @@ const AddNodeButtonGroup = memo(
             >
               <Button
                 ref={buttonRef}
-                color={
-                  !expandAddNodeButtons && commonNodeButtons.length > 0 ? "neutral" : "paperPlain"
-                }
+                color="paperPlain"
                 size="small"
                 variant="contained"
                 onClick={(event) => {
@@ -319,18 +296,6 @@ const AddNodeButtonGroup = memo(
           // they're buttons with click actions.
           className="select-none"
         >
-          {!expandAddNodeButtons &&
-            commonNodeButtons.length > 0 &&
-            uncommonNodeButtons.length > 0 && (
-              <ListSubheader className="leading-loose">Common</ListSubheader>
-            )}
-          {!expandAddNodeButtons && commonNodeButtons}
-          {!expandAddNodeButtons &&
-            commonNodeButtons.length > 0 &&
-            uncommonNodeButtons.length > 0 && <Divider />}
-          {!expandAddNodeButtons && uncommonNodeButtons.length > 0 && (
-            <ListSubheader className="leading-loose">Uncommon</ListSubheader>
-          )}
           {uncommonNodeButtons}
         </Menu>
       </>
