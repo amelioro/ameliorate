@@ -1,7 +1,7 @@
 /* eslint-disable -- don't really care to make this file meet eslint standards, since store type is changing between each migration */
 
 export const migrate = (persistedState: any, version: number) => {
-  const migrations = [migrate_1_to_2];
+  const migrations = [migrate_1_to_2, migrate_2_to_3];
 
   let state = persistedState;
 
@@ -39,6 +39,43 @@ export const migrate_1_to_2 = (state: FromState1) => {
   delete state.showContentIndicators;
   delete state.showViewIndicators;
   delete state.indicateWhenNodeForcedToShow;
+
+  return state;
+};
+
+interface FromState2 {
+  expandAddNodeButtons?: boolean;
+
+  // also cleanup old values that were removed but weren't cleaned up previously
+  useSemanticArrowShapes?: boolean;
+  enableScoresShowing?: boolean;
+  enableScoreShowing?: boolean;
+  alwaysShowIndicators?: boolean;
+  onlyShowIndicatorsOnHoverOrSelect?: boolean;
+  showNeighborIndicators?: boolean;
+  showIndicators?: boolean;
+  showViewButtons?: boolean;
+  showStatusIndicators?: boolean;
+  panelVisibility?: string;
+  hasVisitedWorkspace?: boolean;
+}
+
+// remove expand add node buttons config options
+export const migrate_2_to_3 = (state: FromState2) => {
+  delete state.expandAddNodeButtons;
+
+  // also cleanup old values that were removed but weren't cleaned up previously
+  delete state.useSemanticArrowShapes;
+  delete state.enableScoresShowing;
+  delete state.enableScoreShowing;
+  delete state.alwaysShowIndicators;
+  delete state.onlyShowIndicatorsOnHoverOrSelect;
+  delete state.showNeighborIndicators;
+  delete state.showIndicators;
+  delete state.showViewButtons;
+  delete state.showStatusIndicators;
+  delete state.panelVisibility;
+  delete state.hasVisitedWorkspace;
 
   return state;
 };

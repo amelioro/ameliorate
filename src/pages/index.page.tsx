@@ -15,8 +15,8 @@ const Home: NextPage = () => {
   const showBanner = useShowBanner();
 
   // scroll-mt-12 to allow sections, when scrolled to via anchor, to appear below the header (which is 48px or 3rem height)
-  // if banner is showing, we need to double it, and add 22px if mobile because then the banner has two lines of text and is taller
-  const scrollMarginTopClasses = showBanner ? "*:scroll-mt-28 sm:*:scroll-mt-24" : "*:scroll-mt-12";
+  // if banner is showing, we need to double it, and add 10rem/40px if mobile because then the banner has three lines of text and is taller
+  const scrollMarginTopClasses = showBanner ? "*:scroll-mt-34 sm:*:scroll-mt-24" : "*:scroll-mt-12";
 
   return (
     <>

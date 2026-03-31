@@ -16,3 +16,4 @@ export const youtubeChannel = "https://www.youtube.com/@Ameliorate-xs5pl";
 export const youtubeLivestreams = "https://www.youtube.com/@Ameliorate-xs5pl/streams";
 export const discordInvite = "https://discord.gg/3KhdyJkTWT";
 export const blogPage = "https://amelioro.substack.com/";
+export const reasoningToolsDiscordInvite = "https://discord.gg/s2DPpscXFy";

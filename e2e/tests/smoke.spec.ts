@@ -23,8 +23,7 @@ test("can play around", async ({ page }) => {
   // confirm nodes/edges can be added and persist after refresh
   await page.getByLabel("Close Tour").click();
   await getNode(page, "Problem").click();
-  await flow.getByRole("button", { name: "Add node" }).click();
-  await page.getByRole("menuitem", { name: "Add Solution" }).click();
+  await flow.getByRole("button", { name: "Add Solution" }).click();
   await page.reload();
   await page.getByLabel("Close Tour").click(); // make sure page is done reloading, and get the tour out of the screenshot so we can see the diagram
   await expect(getNode(page, "Problem")).toBeVisible();

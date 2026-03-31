@@ -31,7 +31,6 @@ import {
   Upload,
   Visibility,
   WbTwilight,
-  WebStories,
 } from "@mui/icons-material";
 import {
   Button,
@@ -97,7 +96,6 @@ import {
   toggleEnableScoresToShow,
   toggleEnableSemanticArrowShapes,
   toggleEnableViewIndicators,
-  toggleExpandAddNodeButtons,
   toggleExpandDetailsTabs,
   toggleFillNodeAttachmentWithColor,
   toggleFillNodesWithColor,
@@ -107,7 +105,6 @@ import {
   useEnableScoresToShow,
   useEnableSemanticArrowShapes,
   useEnableViewIndicators,
-  useExpandAddNodeButtons,
   useExpandDetailsTabs,
   useFillNodeAttachmentWithColor,
   useFillNodesWithColor,
@@ -439,7 +436,6 @@ const PreferencesSubmenu = ({ menuOpen }: PreferencesSubmenuProps) => {
   const fillNodesWithColor = useFillNodesWithColor();
   const fillNodeAttachmentWithColor = useFillNodeAttachmentWithColor();
   const expandDetailsTabs = useExpandDetailsTabs();
-  const expandAddNodeButtons = useExpandAddNodeButtons();
 
   return (
     <ResponsiveSubMenu
@@ -552,18 +548,6 @@ const PreferencesSubmenu = ({ menuOpen }: PreferencesSubmenuProps) => {
           <ListItemText primary="Fill node attachment with color" />
           <Switch
             checked={fillNodeAttachmentWithColor}
-            onClick={(e) => e.stopPropagation()}
-            className="pointer-events-none"
-          />
-        </MenuItem>
-
-        <MenuItem onClick={() => toggleExpandAddNodeButtons()}>
-          <ListItemIcon>
-            <WebStories />
-          </ListItemIcon>
-          <ListItemText primary="Expand add node buttons" />
-          <Switch
-            checked={expandAddNodeButtons}
             onClick={(e) => e.stopPropagation()}
             className="pointer-events-none"
           />

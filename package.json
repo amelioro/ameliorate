@@ -14,7 +14,7 @@
   },
   "private": true,
   "scripts": {
-    "dev": "npm run db:start && npm run mock-auth:start && next dev",
+    "dev": "npm run db:start && npm run mock-auth:start && next dev --turbo",
     "build": "next build",
     "start": "next start",
     "setup:local": "bash ./scripts/setupLocal.sh",

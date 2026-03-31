@@ -7,6 +7,7 @@ import {
   initializeBanner,
   useShowBanner,
 } from "@/web/common/components/SiteBanner/bannerStore";
+import { reasoningToolsDiscordInvite } from "@/web/common/urls";
 
 export const SiteBanner = () => {
   const showBanner = useShowBanner();
@@ -25,14 +26,11 @@ export const SiteBanner = () => {
       icon={false}
       onClose={() => hideBanner()}
     >
-      <span className="hidden sm:[display:unset]">
-        🚀 Looking for an easy way to help out? Pilot test Ameliorate!{" "}
-      </span>
-      {/* Shorter message so it can stay on one line for small screens, so we can have consistent height calcs for showing the second home page section on initial load */}
-      <span className="sm:hidden">🚀 Help pilot test Ameliorate! </span>
-      <Link href="https://ameliorate.app/docs/pilot-testing" target="_blank">
-        Read more
+      <span>🧠 Want to discuss tools like Ameliorate? Join the Collaborative Reasoning Tech </span>
+      <Link href={reasoningToolsDiscordInvite} target="_blank">
+        Discord Server
       </Link>
+      !
     </Alert>
   );
 };
