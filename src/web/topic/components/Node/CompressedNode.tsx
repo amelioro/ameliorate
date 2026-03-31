@@ -29,6 +29,7 @@ export const CompressedNode = ({ node, className = "" }: Props) => {
     >
       <NodeIcon fontSize="small" />
       <span className="grow text-sm">{node.data.text}</span>
+      <Score graphPartId={node.id} />
     </div>
   );
 };
