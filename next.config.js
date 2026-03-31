@@ -34,7 +34,16 @@ const nextConfig = {
   swcMinify: true,
 };
 
-// ideally would separately have a sentryConfig but couldn't figure out how to get the `SentryBuildOptions` type
+/**
+ * Note: `next dev --turbo` warns that webpack is configured because `withSentryConfig`
+ * and `@next/bundle-analyzer` both add webpack hooks. That is expected for now:
+ * this app is on `next@14.2.35`, where Turbopack is only used for local dev,
+ * while `next build` still uses webpack. So the warning is dev-only and is not
+ * affecting production builds. To remove it cleanly, we would need to move to a
+ * Turbopack-compatible stack (`next@15.4.1+`, `@sentry/nextjs@10.13.0+`) and
+ * replace webpack-only `@next/bundle-analyzer` with Turbopack's analyzer.
+ * TODO?: ideally would separately have a sentryConfig but couldn't figure out how to get the `SentryBuildOptions` type
+ */
 const nextAndSentryConfig = withSentryConfig(nextConfig, {
   // For all available options, see:
   // https://github.com/getsentry/sentry-webpack-plugin#options
