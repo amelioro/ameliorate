@@ -2,6 +2,7 @@ import { useTheme } from "@emotion/react";
 import styled from "@emotion/styled";
 import { SelfImprovement } from "@mui/icons-material";
 import { ToggleButton, useMediaQuery } from "@mui/material";
+import dynamic from "next/dynamic";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import { ContextMenu } from "@/web/common/components/ContextMenu/ContextMenu";
@@ -9,7 +10,6 @@ import { InfoDialog } from "@/web/common/components/InfoDialog/InfoDialog";
 import { SiteBanner } from "@/web/common/components/SiteBanner/SiteBanner";
 import { useSessionUser } from "@/web/common/hooks";
 import { Summary } from "@/web/summary/components/Summary";
-import { CriteriaTable } from "@/web/topic/components/CriteriaTable/CriteriaTable";
 import { Diagram } from "@/web/topic/components/Diagram/Diagram";
 import { TopicPane } from "@/web/topic/components/TopicPane/TopicPane";
 import { drawerMinWidthRem } from "@/web/topic/components/TopicPane/TopicPane.styles";
@@ -35,6 +35,14 @@ import { useFormat } from "@/web/view/currentViewStore/store";
 import { getPerspectives } from "@/web/view/perspectiveStore";
 import { getSelectedGraphPart, setSelected } from "@/web/view/selectedPartStore";
 import { toggleZenMode, useZenMode } from "@/web/view/userConfigStore/store";
+
+// Lazy-load CriteriaTable because material-react-table (~273KB) and its peer dep
+// @mui/x-date-pickers (~704KB) are large (uncompressed) and only needed when the user switches to table view.
+const CriteriaTable = dynamic(
+  () =>
+    import("@/web/topic/components/CriteriaTable/CriteriaTable").then((mod) => mod.CriteriaTable),
+  { ssr: false },
+);
 
 const useWorkspaceHotkeys = (user: { username: string } | null | undefined) => {
   const [canUndo, canRedo] = useTemporalHooks();
