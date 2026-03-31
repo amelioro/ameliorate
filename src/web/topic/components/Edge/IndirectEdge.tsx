@@ -1,12 +1,14 @@
-import { ClickAwayListener, Link, Paper, Popper, Typography } from "@mui/material";
+import { Button, ClickAwayListener, Paper, Popper, Typography } from "@mui/material";
 import { type Instance } from "@popperjs/core";
 import { lowerCase } from "es-toolkit";
 import { useEffect, useRef, useState } from "react";
 
 import { type CalculatedEdge } from "@/common/edge";
+import { Tooltip } from "@/web/common/components/Tooltip/Tooltip";
 import { openContextMenu } from "@/web/common/store/contextMenuActions";
 import { useIsViewportChanging } from "@/web/topic/components/Diagram/viewportChangeStore";
 import { Edge } from "@/web/topic/components/Edge/Edge";
+import { edgeColor } from "@/web/topic/components/Edge/Edge.styles";
 import { HiddenPathPanel } from "@/web/topic/components/Edge/HiddenPathPanel";
 import { EdgeLayoutData } from "@/web/topic/utils/diagram";
 import { type IndirectEdge as IndirectEdgeData } from "@/web/topic/utils/indirectEdges";
@@ -41,7 +43,7 @@ export const IndirectEdge = ({ edge, edgeLayoutData, inReactFlow }: Props) => {
       >
         {labelText}
       </Typography>
-      {inReactFlow && <HiddenNodesAnchor indirectEdge={edge} />}
+      {inReactFlow && <HiddenNodesButton indirectEdge={edge} />}
     </>
   );
 
@@ -60,7 +62,7 @@ export const IndirectEdge = ({ edge, edgeLayoutData, inReactFlow }: Props) => {
 /**
  * Displays "X nodes hidden" and opens the hidden path panel.
  */
-const HiddenNodesAnchor = ({ indirectEdge }: { indirectEdge: CalculatedEdge }) => {
+const HiddenNodesButton = ({ indirectEdge }: { indirectEdge: CalculatedEdge }) => {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
   const popperRef = useRef<Instance>(null);
@@ -85,23 +87,26 @@ const HiddenNodesAnchor = ({ indirectEdge }: { indirectEdge: CalculatedEdge }) =
       {/* hover bridge so we can add a gap between the link and the label, and mouse can hover between them */}
       <div className="absolute bottom-0 h-2 w-full translate-y-full" />
 
-      <Link
-        ref={anchorRef}
-        component="button"
-        variant="body2"
-        color="textSecondary"
-        onClick={(event) => {
-          event.stopPropagation();
-          setOpen((prev) => !prev);
-        }}
-        className={
-          // nowrap because otherwise our text can be smaller than the parent label's text, in which case it would wrap
-          "absolute bottom-0 translate-y-[calc(100%+4px)] whitespace-nowrap rounded-full border bg-white px-2 py-0.5 text-sm" +
-          (showOnHoverSelect && !open ? ` invisible ${visibleOnPartHoverSelectedClasses}` : "")
-        }
-      >
-        {hiddenCount} {hiddenCount === 1 ? "node" : "nodes"} hidden
-      </Link>
+      <Tooltip tooltipHeading="View hidden path">
+        <Button
+          ref={anchorRef}
+          onClick={(event) => {
+            event.stopPropagation();
+            setOpen((prev) => !prev);
+          }}
+          className={
+            // nowrap because otherwise our text can be smaller than the parent label's text, in which case it would wrap
+            "absolute bottom-0 translate-y-[calc(100%+4px)] whitespace-nowrap rounded-full border border-dashed bg-paperPlain-main px-2 py-0.5" +
+            // override some mui button defaults to keep the button from standing out too much
+            // TODO?: maybe worth extracting something like `PillButton` or `QuietButton`. could also use `variant="outlined"` with `normal-case` if we add an `edgeColor` theme color
+            " text-sm font-normal normal-case text-text-secondary hover:brightness-80" +
+            (showOnHoverSelect && !open ? ` invisible ${visibleOnPartHoverSelectedClasses}` : "")
+          }
+          sx={{ borderColor: edgeColor }}
+        >
+          {hiddenCount} {hiddenCount === 1 ? "node" : "nodes"} hidden
+        </Button>
+      </Tooltip>
 
       {/* Using this similarly for both node attachment and hidden path panel, but doesn't seem worth extracting to a component yet. Can keep an eye out and extract later if it seems worthwhile */}
       <Popper

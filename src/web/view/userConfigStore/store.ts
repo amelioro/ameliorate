@@ -12,8 +12,8 @@ interface UserConfigStoreState {
    * Have this because there's visual conflict with scores, but it can be nice sometimes to have the
    * hint of which node types are hidden.
    *
-   * Default on, assuming that we'll default "show scores" to on-hover/select so there isn't as much
-   * visual conflict.
+   * Default off because the dashed border is nice for conveying "hidden" but that doesn't work very
+   * well when the attachment is filled with color.
    *
    * We'll want to keep an eye on this to see if on/off feels best; ideally we wouldn't have to have
    * a config for this.
@@ -48,7 +48,7 @@ interface UserConfigStoreState {
 const initialState: UserConfigStoreState = {
   zenMode: false,
   fillNodesWithColor: false,
-  fillNodeAttachmentWithColor: true,
+  fillNodeAttachmentWithColor: false,
   expandDetailsTabs: true,
   quickScoring: false,
 

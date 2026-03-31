@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { Data } from "react-minimal-pie-chart/types/commonTypes";
 
 import { NodeType, nodeTypes } from "@/common/node";
+import { Tooltip } from "@/web/common/components/Tooltip/Tooltip";
 import { useIsViewportChanging } from "@/web/topic/components/Diagram/viewportChangeStore";
 import { edgeColor } from "@/web/topic/components/Edge/Edge.styles";
 import { CompressedNode } from "@/web/topic/components/Node/CompressedNode";
@@ -98,35 +99,41 @@ export const FocusNodeAttachment = ({ node, position, className }: FocusNodeAtta
   });
 
   const button = (
-    <Button
-      ref={buttonRef}
-      onClick={(e) => {
-        e.stopPropagation();
-        setOpen((prev) => !prev);
-      }}
-      className={
-        "min-w-0 cursor-pointer rounded-full border-solid p-0 text-text-primary hover:brightness-75" +
-        (fillNodeAttachmentWithColor ? "" : " border bg-paperPlain-main")
-      }
-      sx={{
-        height: `${indicatorLengthRem}rem`,
-        width: `${indicatorLengthRem}rem`,
-        borderColor: edgeColor,
-      }}
+    <Tooltip
+      tooltipHeading={`View ${hiddenNeighbors.length} hidden ${hiddenNeighbors.length === 1 ? "node" : "nodes"}`}
     >
-      {fillNodeAttachmentWithColor && (
-        <div
-          // Behind the button so the score shows in front of the pie.
-          // No pointer events because our button will handle clicks/hovers.
-          // Overflow hidden because pie chart type "button" renders a larger pie in case you want a
-          // square pie e.g. like the score button does.
-          className="absolute z-[-1] size-full overflow-hidden rounded-full *:pointer-events-none"
-        >
-          <NeighborsPie neighbors={hiddenNeighbors} />
-        </div>
-      )}
-      {hiddenNeighbors.length}
-    </Button>
+      <Button
+        ref={buttonRef}
+        onClick={(e) => {
+          e.stopPropagation();
+          setOpen((prev) => !prev);
+        }}
+        className={
+          "min-w-0 rounded-full border border-dashed p-0 font-normal hover:brightness-80" +
+          (fillNodeAttachmentWithColor
+            ? " text-text-primary"
+            : " bg-paperPlain-main text-text-secondary")
+        }
+        sx={{
+          height: `${indicatorLengthRem}rem`,
+          width: `${indicatorLengthRem}rem`,
+          borderColor: edgeColor,
+        }}
+      >
+        {fillNodeAttachmentWithColor && (
+          <div
+            // Behind the button so the score shows in front of the pie.
+            // No pointer events because our button will handle clicks/hovers.
+            // Overflow hidden because pie chart type "button" renders a larger pie in case you want a
+            // square pie e.g. like the score button does.
+            className="absolute z-[-1] size-full overflow-hidden rounded-full *:pointer-events-none"
+          >
+            <NeighborsPie neighbors={hiddenNeighbors} />
+          </div>
+        )}
+        {hiddenNeighbors.length}
+      </Button>
+    </Tooltip>
   );
 
   const verticalDirection = [Position.Top, Position.Bottom].includes(position);
