@@ -19,6 +19,20 @@ const nextConfig = {
     AUTH0_BASE_URL: baseUrl,
     BASE_URL: baseUrl,
   },
+  experimental: {
+    // Reduces barrel-import overhead for these packages. Measured ~-7% webpack modules
+    // (5,376 → 5,005) for the playground page. Only affects webpack (i.e. production builds);
+    // Turbopack (used in local dev via `next dev --turbo`) ignores this option in Next.js 14.2.
+    // Note: this config will be a no-op after upgrading to Next.js 15+, which uses Turbopack
+    // for both dev and prod, but leaving it here for webpack builds until we make that change.
+    optimizePackageImports: [
+      "@mui/icons-material",
+      "@mui/material",
+      "@mui/lab",
+      "es-toolkit",
+      "es-toolkit/compat",
+    ],
+  },
   images: {
     remotePatterns: [
       {
