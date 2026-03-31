@@ -37,7 +37,7 @@ const HiddenNeighborRow = ({ node }: { node: Node }) => {
       >
         Reveal
       </Link>
-      <CompressedNode node={node} />
+      <CompressedNode node={node} className="grow" />
     </div>
   );
 };
