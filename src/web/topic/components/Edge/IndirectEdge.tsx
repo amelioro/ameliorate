@@ -122,8 +122,11 @@ const HiddenNodesAnchor = ({ indirectEdge }: { indirectEdge: CalculatedEdge }) =
         style={{ visibility: isViewportChanging ? "hidden" : "visible" }}
       >
         <ClickAwayListener onClickAway={() => setOpen(false)}>
-          <Paper elevation={4} className="max-h-[50vh] max-w-xs overflow-auto rounded-xl border">
-            <HiddenPathPanel indirectEdge={indirectEdge} />
+          <Paper elevation={4} className="max-w-xs overflow-hidden rounded-xl border">
+            {/* extra div so that scrollbar can be cut off via `overflow-hidden` and therefore rounded */}
+            <div className="max-h-[50vh] overflow-auto">
+              <HiddenPathPanel indirectEdge={indirectEdge} />
+            </div>
           </Paper>
         </ClickAwayListener>
       </Popper>
