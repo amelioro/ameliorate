@@ -33,33 +33,26 @@ test("can play around", async ({ page }) => {
   const flow = page.getByTestId("rf__wrapper");
   // add problem nodes
   await getNode(page, "Problem").click();
-  await flow.getByRole("button", { name: "Add node" }).click();
-  await page.getByRole("menuitem", { name: "Add Cause" }).click();
+  await flow.getByRole("button", { name: "Add Cause" }).click();
   await getNode(page, "Problem").click();
   await flow.getByRole("button", { name: "Add node" }).click();
   await page.getByRole("menuitem", { name: "Add Benefit" }).click();
   await getNode(page, "Problem").click();
-  await flow.getByRole("button", { name: "Add node" }).click();
-  await page.getByRole("menuitem", { name: "Add Detriment" }).click();
-  await flow.getByRole("button", { name: "Add node" }).click();
-  await page.getByRole("menuitem", { name: "Add Detriment" }).click();
+  await flow.getByRole("button", { name: "Add Detriment (this Problem" }).click();
+  await flow.getByRole("button", { name: "Add Detriment (this Detriment" }).click();
   // awkward need to reload because the problem's add button is too high, behind the top toolbar, reloading seems the easiest way to re-center things
   await page.reload();
   await page.getByLabel("Close Tour").click(); // make sure page is done reloading, and get the tour out of the screenshot so we can see the diagram
   await getNode(page, "Problem").click();
-  await flow.getByRole("button", { name: "Add node" }).click();
-  await page.getByRole("menuitem", { name: "Add Solution" }).click();
+  await flow.getByRole("button", { name: "Add Solution" }).click();
   // add solution nodes
   await flow.getByRole("button", { name: "Add node" }).click();
   await page.getByRole("menuitem", { name: "Add Obstacle" }).click();
   await getNode(page, "Solution").click();
-  await flow.getByRole("button", { name: "Add node" }).click();
-  await page.getByRole("menuitem", { name: "Add Component" }).click();
-  await flow.getByRole("button", { name: "Add node" }).click();
-  await page.getByRole("menuitem", { name: "Add Benefit" }).click();
+  await flow.getByRole("button", { name: "Add Component" }).click();
+  await flow.getByRole("button", { name: "Add Benefit" }).click();
   await getNode(page, "Component").click();
-  await flow.getByRole("button", { name: "Add node" }).click();
-  await page.getByRole("menuitem", { name: "Add Detriment" }).click();
+  await flow.getByRole("button", { name: "Add Detriment" }).click();
   // confirm it looks good
   await page.reload();
   await expect(page).toHaveScreenshot("playground-with-solution.png");

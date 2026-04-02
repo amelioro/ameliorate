@@ -61,56 +61,59 @@ export const HiddenPathPanel = ({ indirectEdge }: Props) => {
         Hidden Path
       </Typography>
 
-      {/* one column for "reveal button" (empty divs for spacing where we don't show this), and one for nodes / edges */}
-      <div className="grid grid-cols-[auto_1fr] items-center gap-x-2 gap-y-0.5 p-3 pt-0">
-        <div />
-        <div className="flex justify-center">
-          <CompressedNodeViaId nodeId={indirectEdge.targetId} />
-        </div>
+      <div className="flex flex-col items-center gap-x-2 gap-y-0.5 p-3 pt-0">
+        <CompressedNodeViaId nodeId={indirectEdge.targetId} />
 
-        {pathSteps.map((step, index) => {
-          // last step's node is the indirect edge's source, which is currently visible
-          const showReveal = index < pathSteps.length - 1;
+        <HiddenPathDiv
+          className="my-2 rounded-xl border border-dashed px-2"
+          style={{ borderColor: edgeColor }}
+        >
+          {pathSteps.map((step, index) => {
+            // don't show next node for last in path since we'll just manually plop the source node at the bottom
+            const showNextNode = index < pathSteps.length - 1;
 
-          return (
-            <Fragment key={step.edgeId}>
-              {/* Empty "reveal" cell + arrow + edge label */}
-              <div />
-              <ArrowLabelDiv className="flex flex-col items-center py-0.5">
-                {step.arrowDirection === "up" && (
-                  <KeyboardArrowUp fontSize="small" sx={{ color: edgeColor }} />
-                )}
-                <Typography variant="body2">{lowerCase(step.edgeType)}</Typography>
-                {step.arrowDirection === "down" && (
-                  <KeyboardArrowDown fontSize="small" sx={{ color: edgeColor }} />
-                )}
-              </ArrowLabelDiv>
-
-              {/* Reveal link + compressed node */}
-              {showReveal ? (
-                <Link
-                  component="button"
-                  variant="body2"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    showNode(step.nodeId);
-                    setSelected(step.nodeId);
-                  }}
-                >
-                  Reveal
-                </Link>
-              ) : (
+            return (
+              <Fragment key={step.edgeId}>
+                {/* Arrow + edge label */}
                 <div />
-              )}
-              <div className="flex justify-center">
-                <CompressedNodeViaId nodeId={step.nodeId} />
-              </div>
-            </Fragment>
-          );
-        })}
+                <ArrowLabelDiv className="flex flex-col items-center py-0.5">
+                  {step.arrowDirection === "up" && (
+                    <KeyboardArrowUp fontSize="small" sx={{ color: edgeColor }} />
+                  )}
+                  <Typography variant="body2">{lowerCase(step.edgeType)}</Typography>
+                  {step.arrowDirection === "down" && (
+                    <KeyboardArrowDown fontSize="small" sx={{ color: edgeColor }} />
+                  )}
+                </ArrowLabelDiv>
+
+                {/* Reveal link + compressed node */}
+                {showNextNode && (
+                  <div className="flex gap-2">
+                    <Link
+                      component="button"
+                      variant="body2"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        showNode(step.nodeId);
+                        setSelected(step.nodeId);
+                      }}
+                    >
+                      Reveal
+                    </Link>
+
+                    <CompressedNodeViaId nodeId={step.nodeId} className="grow" />
+                  </div>
+                )}
+              </Fragment>
+            );
+          })}
+        </HiddenPathDiv>
+
+        <CompressedNodeViaId nodeId={indirectEdge.sourceId} />
       </div>
     </div>
   );
 };
 
 const ArrowLabelDiv = styled.div``;
+const HiddenPathDiv = styled.div``;

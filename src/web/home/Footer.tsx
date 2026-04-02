@@ -11,6 +11,7 @@ import {
   feedbackPage,
   gettingStartedPage,
   githubRepo,
+  reasoningToolsDiscordInvite,
   youtubeChannel,
 } from "@/web/common/urls";
 
@@ -52,6 +53,9 @@ export const Footer = () => {
         </NavLink>
         <NavLink href={facebookPage} target="_blank">
           Facebook
+        </NavLink>
+        <NavLink href={reasoningToolsDiscordInvite} target="_blank">
+          Reasoning Tools Discord
         </NavLink>
       </div>
 
