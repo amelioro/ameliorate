@@ -1,0 +1,147 @@
+---
+title: "Ameliorate Update 1/8/24: A Place for Everything"
+date: 2024-01-08T12:00
+description: "And everything in its place! (Eventually)"
+tags:
+  - update
+---
+
+import { PostMeta } from "../../components/PostMeta";
+
+<PostMeta />
+
+[Ameliorate](https://ameliorate.app/) is a tool for discussing and mutually understanding tough problems.
+
+Check out [this blog post](/blog/posts/2023-05-12-update-dream-to-ameliorate) for the tool's motivation, goals, plans, and an initial demo.
+
+### TLDR
+
+- New features: add more details, add questions & facts, use custom nodes/edges
+- Upcoming features will focus on complementing live discourse
+- I'll be hosting discourse sessions to test out and improve Ameliorate
+
+---
+
+Hey all 🙂, and welcome back to the second update post for [Ameliorate](https://ameliorate.app/)! Like last time, I'll be sharing the latest features I've been working on, and going over what I plan to focus on next.
+
+Side note: I'm moving my posts from Medium to Substack because people don't need an account to subscribe to Substack (full reasons [here](https://ameliorate.app/keyserj/mail-sub-service) if you're curious).
+
+## New Features
+
+For this update, the focus was on providing places to put any kind of information that might be relevant to a topic. If you'd like to follow along within the tool as features are described here, most of them are demoed in [this topic](https://ameliorate.app/keyserj/government-shutdown).
+
+![Visual representation of places you can now put your information](https://substack-post-media.s3.amazonaws.com/public/images/d1712104-7252-41e0-83e5-b6c6f76b5767_1124x750.jpeg)
+
+### Details Pane
+
+The first new feature is the details pane! Here, you can add a description for your topic:
+
+![Details pane with topic description](https://substack-post-media.s3.amazonaws.com/public/images/11466e9d-658f-44ac-a117-7922f8ff0814_869x540.png)
+
+And when you click on a node or edge, you can see details for it:
+
+![Node details view](https://substack-post-media.s3.amazonaws.com/public/images/9a4895fd-b273-417d-8bfd-7f9edcdc2335_758x743.png)
+
+The first new thing you can enter here is a note:
+
+![Notes for a node](https://substack-post-media.s3.amazonaws.com/public/images/8e7bc582-2208-4a65-9d76-90bff94701e0_841x752.png)
+
+Since a node's summary is very brief, notes provide a nice place to put extra explanation, description, or ideas.
+
+The description of the topic and notes in each node can also be used as fallback places to put information that may not seem to fit anywhere else.
+
+Below the notes, I've also decided to add the node's top-level supports and critiques, so that you don't have to leave the diagram to get an idea of relevant arguments being made. And with that, I changed the claim indicator into a details indicator, indicating if the node has any details (notes, claims, etc.) to view.
+
+![Details indicator on nodes](https://substack-post-media.s3.amazonaws.com/public/images/800fdfa0-3ffa-44e2-9ff4-e801aa52a36d_490x188.png)
+
+### Exploring a Topic
+
+The next thing you might notice in a node's details is the Exploration section:
+
+![Exploration section in node details](https://substack-post-media.s3.amazonaws.com/public/images/4e5ac017-d2e2-42e3-b476-a2faa7905461_841x752.png)
+
+This is a bit of an experiment. I often want to call out questions that come to mind, and to be able to convey how important I think they are. And for these questions, I want to do some research to answer them and organize the information I've found.
+
+So I added a few new node types: Questions, Facts, and Sources. These can be added as relevant for any node, and Questions can also have Answers. Since these are nodes, you can also score them and add justification about their importance.
+
+There's not a lot of space in the main topic diagram, so these are kept off to the side, in the details pane. But to help provide more visibility, there's a question indicator that appears if the node has a question:
+
+![Question indicator on a node](https://substack-post-media.s3.amazonaws.com/public/images/489aa3ca-cf87-4b94-85fe-e18a91d169c0_237x219.png)
+
+If any of the node's questions are scored as important, this indicator's color will match the color of that question's score, so you can also be clued into which nodes have important questions.
+
+There's also an Explore Diagram, where you can view all the exploration nodes and where they're relevant:
+
+![Explore Diagram view](https://substack-post-media.s3.amazonaws.com/public/images/07966535-b22e-4e2f-9f10-1eda7600b546_1223x724.png)
+
+Thus far, it seems like these exploration nodes are all nice to have, but the process of researching and organizing information into Answer/Fact/Source nodes feels a little cumbersome compared to just taking notes with something like Google Docs. I'll be on the lookout for ways to make this feel smoother - [let me know](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md#providing-feedback) if you have any ideas!
+
+### Unrestricted Editing
+
+Exploration nodes will probably be worth keeping in some form, but it would've been nice if I could've experimented before implementing them. And I want to be able to experiment more with other node types too. So I created an Unrestricted Editing mode, where you can add any node to any other node, add custom nodes, edit node types, and edit edge labels:
+
+![Unrestricted editing mode demo](https://substack-post-media.s3.amazonaws.com/public/images/2fbc16b0-5cf0-4950-ba72-ec6e2e0a8873_689x683.gif)
+
+### Misc
+
+I've made a bunch of other small improvements that you might notice, but here are just a couple that seem worth calling out.
+
+#### Topic Visibility
+
+If you're logged in and you create a topic to be shared, you can now control who can see it, by setting it as public, unlisted, or private:
+
+![Topic visibility options](https://substack-post-media.s3.amazonaws.com/public/images/e2567575-861e-4e85-b8fc-b9a7d31b1877_884x778.png)
+
+Private means that only you can view the topic, unlisted means that anyone can view the topic if they have the link, and public means that anyone can view it with the link but it will also show up in topic-sharing functionality like your topic list (at ameliorate.app/your-username).
+
+#### Layout Improvements
+
+A few changes were made to the automatic layout to make the diagram easier to visualize.
+
+Nodes of the same type are now generally placed next to each other:
+
+![Nodes grouped by type](https://substack-post-media.s3.amazonaws.com/public/images/2f34613e-a895-4b1d-b73c-c7c979c78656_1063x421.png)
+
+Some nodes (criteria, effects, components, and solutions) are now generally placed into layers by their type:
+
+![Layered node layout](https://substack-post-media.s3.amazonaws.com/public/images/7b780888-cc9e-4c1f-aba1-f11ac3452b1e_992x683.png)
+
+Also: layout transitions! So you can see where nodes move when the layout is changed:
+
+![Layout transition animation](https://substack-post-media.s3.amazonaws.com/public/images/9a87e272-cb7c-4f9d-92e9-ee4b7361bf41_1087x813.gif)
+
+## What's Next?
+
+There are a few small features I plan to work on based on previous feedback (e.g. [weighted criteria table scores](https://github.com/amelioro/ameliorate/issues/205), [sort criteria table by scores](https://github.com/amelioro/ameliorate/issues/270)), but after those I'd like to focus on improving how Ameliorate represents a group's understanding (via diagram) and the process for building that understanding.
+
+And I think live group discussions will be the perfect way to get ideas and feedback for these! So I'll be hosting discourse sessions 🔥.
+
+![Visual representation of us having fun at a discourse session](https://substack-post-media.s3.amazonaws.com/public/images/602c966b-0f1c-42e2-89f3-448f8d9be3eb_1125x750.png)
+
+### Discourse Sessions
+
+Here is what I'm envisioning for a session:
+
+- Groups of 3-6
+- We pick a political/social/world/controversial issue to discuss
+- Someone (probably me) facilitates, i.e. shares their screen and builds an Ameliorate diagram as we discuss (screen sharing is necessary until [this](https://github.com/amelioro/ameliorate/issues/198) is done)
+- Everyone has their own Ameliorate account for scoring the diagram
+- The goal of discussion is to build an improved, mutual understanding of the topic being discussed
+- 1.5 hours total: 1 hour discussion, 30 minutes for intro and feedback
+- Probably use the [Ameliorate Discord server](https://discord.gg/3KhdyJkTWT) to meet remotely
+
+I'm excited to discuss these kinds of issues, and I'm on the lookout to recruit others who'll enjoy it too 😁. If you're interested in participating, join [this mailing list](https://buttondown.email/ameliorate-discourse) and you'll receive invites when they happen.
+
+### Backlog
+
+Beyond this, you can always check out the [backlog](https://github.com/orgs/amelioro/projects/2/views/1) for a list of ideas I'd like to implement. I've left the immediate upcoming work a bit bare so that there's room to take on ideas that come up in the discourse sessions.
+
+## Onward!
+
+That's all for today! Thanks for reading.
+
+Cheers 🙂
+
+**_Understand ourselves. Understand each other. Grow together._**
+
+**_Ameliorate._**

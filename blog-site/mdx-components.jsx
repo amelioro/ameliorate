@@ -1,0 +1,14 @@
+/**
+ * Copied from https://the-guild.dev/blog/nextra-4#migration-guide
+ */
+
+import { useMDXComponents as getDocsMDXComponents } from "nextra-theme-docs";
+
+const docsComponents = getDocsMDXComponents();
+
+export function useMDXComponents(components) {
+  return {
+    ...docsComponents,
+    ...components,
+  };
+}

@@ -1,0 +1,97 @@
+---
+title: "Ameliorate Update 12/12/24: Reducing Clutter"
+date: 2024-12-12T12:00
+description: "Got a lot of great feedback, trying to make the app more new-user-friendly"
+tags:
+  - update
+---
+
+import { PostMeta } from "../../components/PostMeta";
+
+<PostMeta />
+
+[Ameliorate](https://ameliorate.app/) is a tool for analyzing problems effectively, collaboratively, and with an open mind.
+
+### TLDR
+
+- Got a lot of great feedback, trying to make the app more new-user-friendly
+- Reduced interface clutter, various misc improvements (see the [demo video](https://www.youtube.com/watch?v=hbB8tGKH1mc))
+- Check out the [new Ameliorate intro video](https://www.youtube.com/watch?v=eC-Xs5ec90Q)
+- Next: try a few things to make the interface more intuitive, and do some socializing of the tool
+
+---
+
+Hey everyone! Welcome to another edition of Ameliorate updates 🙂.
+
+## What I've been doing
+
+I started off this last couple months socializing the tool, and have gotten a lot of good feedback! You can check out (and join!) some of the discussions across the various [GitHub issues](https://github.com/amelioro/ameliorate/issues), as well as at the recently-created [GitHub Discussions](https://github.com/amelioro/ameliorate/discussions).
+
+I put a bit of a pause on further socializing to think about (and discuss) how to make the tool more intuitive and easier to use, particularly without having to rely as much on the tutorials and documentation. Some of the improvements in this update are for reducing clutter in diagrams (kind of a first step in improving the intuitiveness), and some of the improvements are a bit miscellaneous. There are more interface-improvement designs in the works!
+
+Also: I made a [new intro video](https://www.youtube.com/watch?v=eC-Xs5ec90Q)! I felt that the old one was way out of date (to the point of being misleading). You may have already seen this if you follow Ameliorate's [Facebook](https://www.facebook.com/profile.php?id=100091844721178), [YouTube](https://www.youtube.com/@Ameliorate-xs5pl), or [Discord](https://discord.gg/3KhdyJkTWT).
+
+## App Updates
+
+If you'd like to see these in a demo video, check it out here: [Ameliorate Update Demo: Reducing Clutter](https://www.youtube.com/watch?v=hbB8tGKH1mc).
+
+### More consistent colors for nodes
+
+Previously, there were some significant differences in brightness and saturation between the node colors, and that was kind of annoying (e.g. Effect was really bright, Problem/Detriment were really dark and saturated). I've made the colors more consistent in terms of brightness and saturation! Note: I'm sure the colors could still be improved, let me know if you have any ideas.
+
+Here's the before and after:
+
+![Node color consistency before and after](https://substack-post-media.s3.amazonaws.com/public/images/392c932b-156c-4e91-9364-a8a575577d30_884x773.gif)
+
+### Defaulting indicators off
+
+One piece of feedback that was pretty useful was that indicators add a bit of clutter, and new users don't know what they mean right off the bat anyway. So I've defaulted indicators to off, and added an easy button for showing them.
+
+![Indicators toggle demo](https://substack-post-media.s3.amazonaws.com/public/images/36f7a42b-ec7b-4c8d-8af2-e634d359c7a6_1079x581.gif)
+
+Honestly I was surprised at how much cleaner it looks with indicators off! It's even more noticeable when there are more nodes in a diagram too.
+
+### Indicators stand out less
+
+Along the same vein, when the indicators are showing, they now stand out a little less. Light gray backgrounds if they're indicating something, white backgrounds if not, and node handles are hidden unless you're hovering or selecting a node:
+
+![Subtle indicators demo](https://substack-post-media.s3.amazonaws.com/public/images/f54d734d-d9fc-4dd5-9e16-526cffad15ef_374x197.gif)
+
+### Avoiding edge label overlap
+
+One thing that contributes to the feeling of clutter is that edge labels are sometimes hidden behind other ones, or behind nodes. I set off to have labels avoid being hidden, and added an option (in the More Actions Drawer) to make this happen:
+
+![Edge label overlap avoidance demo](https://substack-post-media.s3.amazonaws.com/public/images/254f674c-497d-4d27-ba4f-a14ddef2dafe_967x834.gif)
+
+I really wanted to make this the default, but unfortunately there are two issues with avoiding overlap:
+
+1. the layout is affected, and often extra layers of nodes are unnecessarily created (making the diagram more spread out)
+2. the edges often connect two nodes at awkward angles (rather than matching the up/down flow of the diagram)
+
+Sometimes avoiding the overlap is worth these issues, but I think often it isn't. These issues could be addressed with more effort, but I didn't want to spend more time on it.
+
+### "View context in diagram" button
+
+I was building a somewhat-large diagram ([open-source-vs-closed](https://ameliorate.app/keyserj/open-source-vs-closed)) with many pieces (Components & Effects) of the possible Solutions, and a Criteria Table to help evaluate the tradeoffs of all of these, but I didn't have an easy way to see which Solution pieces that were relevant to the Criteria. So I added a button to the "fulfills" edge that sets filters to show only the one Solution's pieces that are relevant for one Criterion:
+
+![View context in diagram demo](https://substack-post-media.s3.amazonaws.com/public/images/d5720184-fa94-4abe-b6e3-cfad037580e2_980x845.gif)
+
+There's also one of these on Solution nodes, to show all the pieces of that Solution, and on Criterion nodes too, to show all the Solution pieces connected to it from any Solution.
+
+### "layers from core nodes" filter option
+
+I noticed that, when trying to creating a high level view for a diagram, some diagrams prefer to show a different number of layers, based on how wide and deep the diagram goes. So I added a "layers deep" option to the High Level standard filter, that can easily adjust this. The High Level filter now shows all core nodes (Problems and Solutions) with X layers of neighbors from them:
+
+![Layers from core nodes filter demo](https://substack-post-media.s3.amazonaws.com/public/images/58408a07-0a0c-4361-a97b-a6993586ec1b_1537x805.gif)
+
+## What's next?
+
+For the next couple months, I plan to focus on making the interface a little more intuitive, and to resume socializing the tool. If you know of anyone or any groups that may be interested in Ameliorate, or if you'd like to discuss how to use it for a problem you're working at, don't hesitate to [reach out](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md#reaching-out)! And as always, you can check out the top of the [backlog](https://github.com/orgs/amelioro/projects/2/views/1) to see more specific details about what's coming up.
+
+See you in a couple months!
+
+Cheers 🙂
+
+**_Understand ourselves. Understand each other. Grow together._**
+
+**_Ameliorate._**

@@ -1,0 +1,129 @@
+---
+title: "Ameliorate Update 3/18/24: A Better View"
+date: 2024-03-18T12:00
+description: "Diagram filters, docs site, and more misc. improvements"
+tags:
+  - update
+---
+
+import { PostMeta } from "../../components/PostMeta";
+
+<PostMeta />
+
+[Ameliorate](https://ameliorate.app/) is a tool for discussing and mutually understanding tough problems.
+
+Check out the [documentation](https://ameliorate.app/docs) to learn more about the app.
+
+### TLDR
+
+- New features: filtering! And various small improvements.
+- Documentation for using Ameliorate has been created, [check it out](https://ameliorate.app/docs)!
+- Upcoming features will once again be prioritized based on feedback (join a [discourse session](https://ameliorate.app/docs/discourse-sessions)!), though there are currently a few things at the top of the [backlog](https://github.com/orgs/amelioro/projects/2/views/1).
+
+---
+
+Greetings 🙂 and welcome to Ameliorate Update #3! We've done a few [discourse sessions](https://ameliorate.app/docs/discourse-sessions), got some great feedback, and now Ameliorate has a few more features 🔥.
+
+## Bigger Updates
+
+There were a few smaller improvements, but the big feature added this time around is filtering, to help view your diagram in different ways.
+
+### Filters
+
+One problem that became apparent in the first discourse session is that it's easy to get lost when your diagram gets big:
+
+![Climate change diagram from the first discourse session](https://substack-post-media.s3.amazonaws.com/public/images/2b7b2488-7974-4eae-b748-0d2a03c6d560_2560x1440.png)
+
+_Climate change diagram from the first discourse session (slightly modified). You can view it [here](https://ameliorate.app/examples/climate-change)._
+
+To address that, some filtering options have been added:
+
+![Filter options panel](https://substack-post-media.s3.amazonaws.com/public/images/01db5d12-3130-44c6-95b6-1787c5982118_650x786.png)
+
+There are some general filter options:
+
+- Choose which node types to display (e.g. only Problem and Solution nodes)
+- Show only nodes that have scores within a specified range (this also works to filter the Criteria Table)
+- Show "Secondary Neighbors", e.g. show relevant Questions in the Topic Diagram, show relevant Problems in the Research Diagram (renamed from "Explore Diagram")
+
+And predefined standard filters:
+
+- **high level**: show only immediate causes, effects, and solutions of the problem(s)
+
+![Climate change diagram with high level filter](https://substack-post-media.s3.amazonaws.com/public/images/c248d0b9-950e-45df-80b4-85d5ea353096_2560x1440.png)
+
+_Climate change diagram, with the high level filter applied_
+
+- **problem**: for a problem, show all causes and/or effects and/or criteria and/or solutions
+
+![Climate change diagram with problem filter showing causes](https://substack-post-media.s3.amazonaws.com/public/images/be139b0c-62bb-40d2-8ee7-c185fb1d0d79_2560x1440.png)
+
+_Climate change diagram, with the problem filter applied (showing all causes)_
+
+- **tradeoffs**: show selected criteria and/or solutions, with or without their details (effects/components) (this also works to filter the Criteria Table)
+
+![Climate change diagram with tradeoffs filter](https://substack-post-media.s3.amazonaws.com/public/images/c6be88d2-cb91-4a71-b872-da4333db1cfd_2560x1440.png)
+
+_Climate change diagram, with the tradeoffs filter applied (showing all criteria and solutions, without detail)_
+
+There are a few other standard filters, but that at least gives the idea. I think there are probably more useful ways to filter that haven't been added yet - if you can think of any, let me know!
+
+### Documentation
+
+To explain what Ameliorate is and how to get started, all in one spot, I've set up a [documentation site](https://ameliorate.app/docs). Right now, it's relatively basic - the main thing that's fleshed out is the [Getting Started section](https://ameliorate.app/docs/getting-started) - but I'll add more details over time, as features are added and the app becomes more solid.
+
+If there's any feature or aspect of Ameliorate that isn't documented and you're wondering about or think is worth documenting, let me know!
+
+## Smaller Updates
+
+### Editing Improvements
+
+- You can right-click on a node or edge to change to another type; sometimes a node makes more sense as another one
+
+![Right-click to change node type](https://substack-post-media.s3.amazonaws.com/public/images/4a7f4703-9f99-45b2-92fe-1545a162fa0b_654x466.png)
+
+- You can right-click on the diagram background to add any node without connecting it to another; sometimes you think of a node that doesn't yet directly relate to what's currently in the diagram
+
+![Right-click to add unconnected node](https://substack-post-media.s3.amazonaws.com/public/images/250187fe-1738-468c-b14c-ea98666d0a93_403x371.png)
+
+- You can allow others to edit your topic; this is nice if you're working with others and want to expand the topic from a few different angles at once. Right now this isn't limited to specific users, meaning anyone can modify your diagram if you use this, so be careful with it
+
+![Allow others to edit option](https://substack-post-media.s3.amazonaws.com/public/images/19eec7e4-2c1d-4976-bd67-95d6317d044b_683x423.png)
+
+### New Node Types
+
+- Benefits and Detriments have been added to allow for more-specifically conveying what's good or bad about a problem or solution
+
+![Benefit and detriment nodes](https://substack-post-media.s3.amazonaws.com/public/images/ca16531d-15d5-405a-8569-3c8d75a2f1d6_677x777.png)
+
+- Causes have been added to distinguish a special kind of problem: one that is concerning primarily because it causes another problem
+
+![Cause nodes](https://substack-post-media.s3.amazonaws.com/public/images/b260ac02-1e2f-415a-9ff3-c2074e648b5a_734x326.png)
+
+### Misc
+
+- Not a feature, but I've defined "classes of information" to help distinguish structural nodes (problem, effect, solution, component, etc) from research nodes (questions, facts, sources) from justification nodes (supports, critiques)
+- You can add URL parameters "selected" and "view" to share your topic from a specific view and/or with a specific node selected, such as [this example](https://ameliorate.app/examples/detailed-cars-going-too-fast?selected=52d5ad5b&view=researchDiagram)
+- There are solution totals calculated for the Criteria Table; totals will be positive if the solution does well embodying Criteria, and negative if not, and more so if the Criteria are scored as important
+
+![Solution totals in criteria table](https://substack-post-media.s3.amazonaws.com/public/images/4e8b1c8b-8245-4168-a80f-de3fa200e768_904x326.png)
+
+- You can download a high-quality screenshot of your diagram for showing it off! This is hidden in the More Actions drawer (get to by clicking on the wrench). Eventually there'll be an option to [specify the resolution](https://github.com/amelioro/ameliorate/issues/339).
+
+![Screenshot download option](https://substack-post-media.s3.amazonaws.com/public/images/82ac6e64-3ed1-4516-bcd9-9aefe71e295b_369x204.png)
+
+- You can slightly adjust the diagram layout by turning off the default of forcing nodes into hierarchical layers by their type; this can sometimes help the diagram look better
+
+![Layout layer toggle](https://substack-post-media.s3.amazonaws.com/public/images/2b71a6d0-b063-411d-b4e2-9c017c078265_320x213.png)
+
+## What's Next?
+
+There are a small number of issues planned for the near-future in the [backlog](https://github.com/orgs/amelioro/projects/2/views/1), but I plan to continue prioritizing feedback from discourse sessions, as that's been working out pretty well! If you'd like to join a session, check out [the new documentation](https://ameliorate.app/docs/discourse-sessions#joining-a-session) on it.
+
+That's all for today! Thanks for reading.
+
+Cheers 🙂
+
+**_Understand ourselves. Understand each other. Grow together._**
+
+**_Ameliorate._**

@@ -1,4 +1,4 @@
-import { Add, AutoStories, Campaign, Close, Fort, MenuBook } from "@mui/icons-material";
+import { Add, Article, AutoStories, Close, Fort, MenuBook } from "@mui/icons-material";
 import {
   Divider,
   Drawer,
@@ -14,7 +14,7 @@ import {
 import Image from "next/image";
 import NextLink from "next/link";
 
-import { discordInvite, feedbackPage, githubRepo } from "@/web/common/urls";
+import { discordInvite, blogPage, githubRepo } from "@/web/common/urls";
 import favicon from "~/public/favicon.png";
 
 interface Props {
@@ -79,11 +79,7 @@ export const SiteDrawer = ({ username, isSiteDrawerOpen, setIsSiteDrawerOpen }: 
         <Divider className="my-1" />
 
         <ListItem>
-          <ListItemButton
-            LinkComponent={NextLink}
-            href="https://ameliorate.app/docs"
-            target="_blank"
-          >
+          <ListItemButton LinkComponent={NextLink} href="https://ameliorate.app/docs">
             <ListItemIcon>
               <MenuBook />
             </ListItemIcon>
@@ -92,11 +88,11 @@ export const SiteDrawer = ({ username, isSiteDrawerOpen, setIsSiteDrawerOpen }: 
         </ListItem>
 
         <ListItem>
-          <ListItemButton LinkComponent={NextLink} href={feedbackPage} target="_blank">
+          <ListItemButton LinkComponent={NextLink} href={blogPage}>
             <ListItemIcon>
-              <Campaign />
+              <Article />
             </ListItemIcon>
-            <ListItemText primary="Feedback" />
+            <ListItemText primary="Blog" />
           </ListItemButton>
         </ListItem>
 

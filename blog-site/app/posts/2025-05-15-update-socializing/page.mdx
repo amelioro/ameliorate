@@ -1,0 +1,109 @@
+---
+title: "Ameliorate Update 5/15/25: Socializing"
+date: 2025-05-15T12:00
+description: "Refined homepage, reached out to communities, reorganized app interface & quality-of-life improvements"
+tags:
+  - update
+---
+
+import { PostMeta } from "../../components/PostMeta";
+
+<PostMeta />
+
+[Ameliorate](https://ameliorate.app/) is a tool for critically thinking about problems and collaboratively refining our understanding of them.
+
+### TLDR
+
+- Refined homepage to better convey goals & what the app is
+- Spent a good chunk of time looking for possible usage, reaching out, posting around
+- Reorganized app interface & made a few quality-of-life improvements (see [demo](https://www.youtube.com/watch?v=qPUNkhD27PM)!)
+- Next: simple/mobile-friendly view, more quality-of-life improvements, suggestions & approvals?
+
+---
+
+Greetings, and welcome to another round of Ameliorate updates! 🙂
+
+## What I've been doing
+
+Most of the focus since last time has been on socializing Ameliorate - improving the home page, looking for places the tool could be useful, reaching out to people, posting about it.
+
+There's been some interest in the realm of legislation - using Ameliorate to break down bills in a way that's easily understandable, so that they're more accessible to citizens, and potentially citizens can even help refine them! I'm excited about the possibilities here 🔥.
+
+I've also been thrilled about recent activity in [the Ameliorate Discord server](https://discord.gg/3KhdyJkTWT)! There have been a lot of great discussions, lots of good ideas for features I hadn't thought of, lots of considerations I hadn't thought of. It's been really helpful for me to discuss specifics of the tool more, and I feel like I've gained significant insights about the tool and its possibilities.
+
+There have been some [code contributions from others](https://github.com/search?q=repo%3Aamelioro%2Fameliorate+is%3APR+-author%3Akeyserj+-author%3Adependabot%5Bbot%5D+-author%3Aallcontributors%5Bbot%5D+closed%3A2024-12-12..2025-05-15+is%3Amerged+&type=pullrequests), too! I was inspired to classify [a few "Good Second Issues"](https://github.com/amelioro/ameliorate/labels/good%20second%20issue) as a stepping stone between [Good First Issues](https://github.com/amelioro/ameliorate/labels/good%20first%20issue) and more challenging issues, and I'm pretty happy with this as a path for new contributors.
+
+Aside from these things, I've taken some time to make various quality-of-life improvements. Let's take a look!
+
+## App updates
+
+If you prefer to watch the latest updates rather than read, check out the [demo video](https://www.youtube.com/watch?v=qPUNkhD27PM)!
+
+### Reorganized app interface
+
+Previously, there were a couple annoying things about the interface:
+
+1. There was an option to turn indicators on/off, but when they were on, the interface was more cluttered than it needed to be
+2. The topic's title wasn't called out very well
+3. It was hard to find the topic's Quick Views, which are the topic author's intended way of viewing a topic
+4. There were two headers, pushing the diagram a bit off-center vertically
+
+I shuffled the interface around a little bit in attempts to address these things, check it out:
+
+![Reorganizing the app's interface: before and after](https://substack-post-media.s3.amazonaws.com/public/images/1306d8d6-ec0e-4613-82a7-1e6c8b75ae24_1270x906.gif)
+
+### Cleaning up home page + added examples
+
+I felt like the old homepage was a little hectic and didn't do a great job of communicating Ameliorate's goals and what it does, so I updated a few sections. I won't show it all here, but [you can check it out yourself](https://ameliorate.app/). One big thing I will show is the new section for showing off a few use cases along with example topics:
+
+![New section on the home page for use cases and examples](https://substack-post-media.s3.amazonaws.com/public/images/cac7382e-27e5-4f6c-bc4a-6b1867be5fd9_1061x843.png)
+
+### Some more docs: pilot testing + breakdown process
+
+I wanted to make an obvious request for feedback, while also providing an opportunity for people to ease into using Ameliorate, with guidance from me if that'd help! So I made a simple [pilot testing program](https://ameliorate.app/docs/pilot-testing) for exactly this. I also created a [breakdown process page](https://ameliorate.app/docs/breakdown-process-phases) to explain how I generally go about breaking down problems, using various "phases" to focus on different aspects of the problem(s)/solution(s), one at a time.
+
+Feel free to reach out if you're interested in participating with some hands-on guidance! 🙂
+
+### Misc
+
+#### Mitigation nodes
+
+There's a new node type! This was added as a way to distinguish solutions that aren't exactly "core" solutions, whose main purpose is to mitigate a concern. It seems to be working well for now; I'll be keeping an eye out for whether or not it continues to seem valuable enough to keep as a distinct node type.
+
+![Mitigation node in the mta-congestion-pricing topic](https://substack-post-media.s3.amazonaws.com/public/images/a5b6886d-2484-47e3-bbbc-802099217c17_251x312.png)
+
+_Mitigation node, as seen in [the mta-congestion-pricing topic](https://ameliorate.app/keyserj/mta-congestion-pricing?view=Issues+with+Solution)_
+
+#### Show/hide options
+
+Previously, one option was added to show/hide a bunch of indicators. But often-times you want only some to show, and not others! So some fine-grained control has been added for which indicators to show:
+
+![Options for show/hiding various indicators](https://substack-post-media.s3.amazonaws.com/public/images/d4abb746-0433-43b3-8713-1d87253fe4f1_566x528.png)
+
+#### Zen mode
+
+As an effort to add more ways to reduce clutter, the Zen mode option has been added, which hides the various auxiliary aspects of the interface:
+
+![Zen mode demo](https://substack-post-media.s3.amazonaws.com/public/images/e73f27f5-b2dd-4b78-8fe2-a5272bf68dfd_1082x911.gif)
+
+#### Details tabs
+
+Another effort to make the interface easier to navigate was adding tabs for each section of the details pane. I'm not totally sold on it yet, so it's just a configuration option for now.
+
+![Details tabs demo](https://substack-post-media.s3.amazonaws.com/public/images/a0be0ea5-55f9-4044-96c4-5d3f14856a6d_1059x656.gif)
+
+## What's next?
+
+Next up, there are a lot of small quality-of-life improvements I want to make. A lot of these are ideas or things that came up in recent [discourse sessions](https://ameliorate.app/docs/discourse-sessions), or from the great Discord discussions I mentioned earlier. You can check out the current state of the [backlog](https://github.com/orgs/amelioro/projects/2/views/1) (next update is Update #7). I've actually got so many improvements that I want to make that I've started slotting some of them for the update after the next one!
+
+The biggest thing I'm working on for the next update is an interface that's simpler - particularly easier to use on mobile. This is something that should be useful for the legislation realm, so people can conveniently get a bill breakdown (and potentially help refine it) from their phones, where many people get their news and would read about bills. I've got [a million different designs already](https://www.figma.com/proto/psTRolY8LTVOef3fkCJ0B4/Simplified-Views?node-id=205-494&t=kMxAFDEdkA4n3GOy-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=205%3A494&show-proto-sidebar=1), and I think they're slowly getting closer to something useful 😄. Let me know if you have any ideas!
+
+After that, the big thing I want to do is allow people to make suggestions on other people's topics, and for those other people to be able to approve them. It's very unlikely that I make much progress on this before the next update, but there's a chance.
+
+That's all for this time!
+
+Cheers 🙂
+
+**_Understand ourselves. Understand each other. Grow together._**
+
+**_Ameliorate._**

@@ -1,0 +1,107 @@
+@import "tailwindcss" prefix(x);
+
+@custom-variant dark (&:where(.dark *));
+
+/* Post card link wrapper - prevents hover underline */
+.post-card-link {
+  text-decoration: none !important;
+  display: block;
+}
+
+.post-card-link:hover {
+  text-decoration: none !important;
+}
+
+/* Post card styles */
+.post-card {
+  border: 1px solid var(--x-color-gray-200, #e5e7eb);
+  border-radius: 0.5rem;
+  padding: 1.25rem 1.5rem;
+  transition:
+    border-color 0.15s,
+    background-color 0.15s;
+}
+
+.post-card:hover {
+  border-color: var(--x-color-gray-400, #9ca3af);
+  background-color: var(--x-color-gray-50, #f9fafb);
+}
+
+:where(.dark *) .post-card {
+  border-color: var(--x-color-neutral-800, #262626);
+}
+
+:where(.dark *) .post-card:hover {
+  border-color: var(--x-color-neutral-600, #525252);
+  background-color: var(--x-color-neutral-900, #171717);
+}
+
+.post-card-title {
+  color: var(--x-color-gray-900, #111827);
+}
+
+:where(.dark *) .post-card-title {
+  color: var(--x-color-gray-100, #f3f4f6);
+}
+
+.post-card-description {
+  color: var(--x-color-gray-600, #4b5563);
+  line-height: 1.5 !important;
+}
+
+:where(.dark *) .post-card-description {
+  color: var(--x-color-gray-400, #9ca3af);
+}
+
+/* Tag pill styles */
+.tag-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 0.15s;
+  background-color: var(--x-color-gray-100, #f3f4f6);
+  color: var(--x-color-gray-700, #374151);
+}
+
+.tag-pill:hover {
+  background-color: var(--x-color-gray-200, #e5e7eb);
+}
+
+:where(.dark *) .tag-pill {
+  background-color: var(--x-color-neutral-800, #262626);
+  color: var(--x-color-gray-300, #d1d5db);
+}
+
+:where(.dark *) .tag-pill:hover {
+  background-color: var(--x-color-neutral-700, #404040);
+}
+
+/* Small inline tag in cards */
+.tag-inline {
+  display: inline-flex;
+  border-radius: 9999px;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background-color: var(--x-color-gray-100, #f3f4f6);
+  color: var(--x-color-gray-500, #6b7280);
+}
+
+:where(.dark *) .tag-inline {
+  background-color: var(--x-color-neutral-800, #262626);
+  color: var(--x-color-gray-400, #9ca3af);
+}
+
+/* Override Nextra's anchor styling inside tag pills */
+.tag-pill a {
+  color: inherit !important;
+  text-decoration: none !important;
+  font-weight: inherit !important;
+  font-size: inherit !important;
+  display: inline !important;
+  transition: none !important;
+}

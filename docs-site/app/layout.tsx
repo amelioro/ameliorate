@@ -8,7 +8,7 @@ import { Layout, Navbar } from "nextra-theme-docs";
 import "nextra-theme-docs/style-prefixed.css";
 import { ReactNode } from "react";
 
-import { discordInvite, githubRepo } from "../../src/web/common/urls";
+import { discordInvite, docsPage, blogPage, githubRepo } from "../../src/web/common/urls";
 
 const faviconIco = "https://ameliorate.app/favicon.ico";
 // Image doesn't work with .ico
@@ -54,7 +54,10 @@ const navbar = (
     logoLink="https://ameliorate.app"
     projectLink={githubRepo}
     chatLink={discordInvite}
-  />
+  >
+    <a href={docsPage}>Docs</a>
+    <a href={blogPage}>Blog</a>
+  </Navbar>
 );
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
