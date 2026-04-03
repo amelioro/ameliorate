@@ -51,11 +51,13 @@ export const StepContent = ({
         </Typography>
         {actionSlot && <div className="flex pt-2">{actionSlot}</div>}
         {imageSlot && ( // allow image to grow to fill height & width space while maintaining aspect ratio
-          <div
-            className="flex min-h-0 grow cursor-zoom-in flex-col items-center justify-center pt-2 [&_>_img]:size-auto [&_>_img]:max-h-full"
-            onClick={() => setModalOpen(true)}
-          >
-            {imageSlot}
+          <div className="flex min-h-0 grow flex-col items-center justify-center pt-2 [&_>_img]:size-auto [&_>_img]:max-h-full">
+            <div
+              className="flex min-h-0 grow cursor-zoom-in flex-col items-center justify-center pt-2 [&_>_img]:size-auto [&_>_img]:max-h-full"
+              onClick={() => setModalOpen(true)}
+            >
+              {imageSlot}
+            </div>
             {imageCaption && <Typography variant="caption">{imageCaption}</Typography>}
           </div>
         )}
@@ -81,7 +83,7 @@ export const StepContent = ({
             <Typography variant="body2" className="p-4 pt-0 whitespace-pre-wrap">
               {text}
             </Typography>
-            <div className="flex w-full items-center justify-center [&_img]:h-auto [&_img]:max-h-[calc(95vh-12rem)] [&_img]:w-auto [&_img]:max-w-[90vw] [&_img]:object-contain">
+            <div className="flex w-full grow flex-col items-center justify-center [&_img]:h-auto [&_img]:max-h-[calc(95vh-12rem)] [&_img]:w-auto [&_img]:max-w-[90vw] [&_img]:object-contain">
               {imageSlot}
             </div>
           </Box>
