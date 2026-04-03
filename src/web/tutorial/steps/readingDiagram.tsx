@@ -1,5 +1,5 @@
 import { TabUnselected } from "@mui/icons-material";
-import { Button, Typography } from "@mui/material";
+import { Button } from "@mui/material";
 import { StepType } from "@reactour/tour";
 import Image from "next/image";
 
@@ -60,26 +60,26 @@ export const getReadingDiagramSteps = (track?: Track | null): StepType[] => [
           </span>
         }
         imageSlot={
-          <>
-            <Image
-              key="https://github.com/user-attachments/assets/dc5029a6-51c5-4b03-92c8-ed67ab9eb500"
-              src="https://github.com/user-attachments/assets/dc5029a6-51c5-4b03-92c8-ed67ab9eb500"
-              alt="layout of details via cars-going-too-fast"
-              width={1237}
-              height={911}
-              unoptimized
-              className="rounded-xl border shadow-sm"
-            />
-            <Typography variant="caption">
-              From:{" "}
-              <Link
-                href="https://ameliorate.app/examples/detailed-cars-going-too-fast?view=All+structure"
-                target="_blank"
-              >
-                cars-going-too-fast
-              </Link>
-            </Typography>
-          </>
+          <Image
+            key="https://github.com/user-attachments/assets/dc5029a6-51c5-4b03-92c8-ed67ab9eb500"
+            src="https://github.com/user-attachments/assets/dc5029a6-51c5-4b03-92c8-ed67ab9eb500"
+            alt="layout of details via cars-going-too-fast"
+            width={1237}
+            height={911}
+            unoptimized
+            className="rounded-xl border shadow-sm"
+          />
+        }
+        imageCaption={
+          <span>
+            From:{" "}
+            <Link
+              href="https://ameliorate.app/examples/detailed-cars-going-too-fast?view=All+structure"
+              target="_blank"
+            >
+              cars-going-too-fast
+            </Link>
+          </span>
         }
       />
     ),

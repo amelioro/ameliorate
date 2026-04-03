@@ -1,4 +1,4 @@
-import { Button, Typography } from "@mui/material";
+import { Button } from "@mui/material";
 import { StepType } from "@reactour/tour";
 import Image from "next/image";
 
@@ -30,26 +30,26 @@ export const breakdownSteps: StepType[] = [
           </span>
         }
         imageSlot={
-          <>
-            <Image
-              key="https://github.com/user-attachments/assets/dc5029a6-51c5-4b03-92c8-ed67ab9eb500"
-              src="https://github.com/user-attachments/assets/dc5029a6-51c5-4b03-92c8-ed67ab9eb500"
-              alt="layout of details via cars-going-too-fast"
-              width={1237}
-              height={911}
-              unoptimized
-              className="rounded-xl border shadow-sm"
-            />
-            <Typography variant="caption">
-              From:{" "}
-              <Link
-                href="https://ameliorate.app/examples/detailed-cars-going-too-fast?view=All+structure"
-                target="_blank"
-              >
-                cars-going-too-fast
-              </Link>
-            </Typography>
-          </>
+          <Image
+            key="https://github.com/user-attachments/assets/dc5029a6-51c5-4b03-92c8-ed67ab9eb500"
+            src="https://github.com/user-attachments/assets/dc5029a6-51c5-4b03-92c8-ed67ab9eb500"
+            alt="layout of details via cars-going-too-fast"
+            width={1237}
+            height={911}
+            unoptimized
+            className="rounded-xl border shadow-sm"
+          />
+        }
+        imageCaption={
+          <span>
+            From:{" "}
+            <Link
+              href="https://ameliorate.app/examples/detailed-cars-going-too-fast?view=All+structure"
+              target="_blank"
+            >
+              cars-going-too-fast
+            </Link>
+          </span>
         }
       />
     ),
@@ -72,26 +72,26 @@ export const breakdownSteps: StepType[] = [
           </span>
         }
         imageSlot={
-          <>
-            <Image
-              key="https://github.com/user-attachments/assets/7d6769ba-a20d-419e-b72f-280a25fc4a79"
-              src="https://github.com/user-attachments/assets/7d6769ba-a20d-419e-b72f-280a25fc4a79"
-              alt="problem details of climate-change"
-              width={711}
-              height={572}
-              unoptimized
-              className="rounded-xl border shadow-sm"
-            />
-            <Typography variant="caption">
-              From:{" "}
-              <Link
-                href="https://ameliorate.app/examples/climate-change?view=Causes+and+concerns"
-                target="_blank"
-              >
-                climate-change
-              </Link>
-            </Typography>
-          </>
+          <Image
+            key="https://github.com/user-attachments/assets/7d6769ba-a20d-419e-b72f-280a25fc4a79"
+            src="https://github.com/user-attachments/assets/7d6769ba-a20d-419e-b72f-280a25fc4a79"
+            alt="problem details of climate-change"
+            width={711}
+            height={572}
+            unoptimized
+            className="rounded-xl border shadow-sm"
+          />
+        }
+        imageCaption={
+          <span>
+            From:{" "}
+            <Link
+              href="https://ameliorate.app/examples/climate-change?view=Causes+and+concerns"
+              target="_blank"
+            >
+              climate-change
+            </Link>
+          </span>
         }
       />
     ),
@@ -112,23 +112,23 @@ export const breakdownSteps: StepType[] = [
           </span>
         }
         imageSlot={
-          <>
-            <Image
-              key="https://github.com/user-attachments/assets/a1121e7a-0845-4a92-937e-2f168e34a871"
-              src="https://github.com/user-attachments/assets/a1121e7a-0845-4a92-937e-2f168e34a871"
-              alt="solution details of mta-congestion-pricing"
-              width={653}
-              height={545}
-              unoptimized
-              className="rounded-xl border shadow-sm"
-            />
-            <Typography variant="caption">
-              From:{" "}
-              <Link href="https://ameliorate.app/keyserj/mta-congestion-pricing" target="_blank">
-                mta-congestion-pricing
-              </Link>
-            </Typography>
-          </>
+          <Image
+            key="https://github.com/user-attachments/assets/a1121e7a-0845-4a92-937e-2f168e34a871"
+            src="https://github.com/user-attachments/assets/a1121e7a-0845-4a92-937e-2f168e34a871"
+            alt="solution details of mta-congestion-pricing"
+            width={653}
+            height={545}
+            unoptimized
+            className="rounded-xl border shadow-sm"
+          />
+        }
+        imageCaption={
+          <span>
+            From:{" "}
+            <Link href="https://ameliorate.app/keyserj/mta-congestion-pricing" target="_blank">
+              mta-congestion-pricing
+            </Link>
+          </span>
         }
       />
     ),
@@ -145,26 +145,26 @@ export const breakdownSteps: StepType[] = [
           </span>
         }
         imageSlot={
-          <>
-            <Image
-              key="https://github.com/user-attachments/assets/03dc8f21-b7da-46db-bbee-ebacd490d016"
-              src="https://github.com/user-attachments/assets/03dc8f21-b7da-46db-bbee-ebacd490d016"
-              alt="showing that a benefit addresses a cause"
-              width={738}
-              height={636}
-              unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-              className="rounded-xl border shadow-sm"
-            />
-            <Typography variant="caption">
-              From:{" "}
-              <Link
-                href="https://ameliorate.app/examples/detailed-cars-going-too-fast"
-                target="_blank"
-              >
-                cars-going-too-fast
-              </Link>
-            </Typography>
-          </>
+          <Image
+            key="https://github.com/user-attachments/assets/03dc8f21-b7da-46db-bbee-ebacd490d016"
+            src="https://github.com/user-attachments/assets/03dc8f21-b7da-46db-bbee-ebacd490d016"
+            alt="showing that a benefit addresses a cause"
+            width={738}
+            height={636}
+            unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+            className="rounded-xl border shadow-sm"
+          />
+        }
+        imageCaption={
+          <span>
+            From:{" "}
+            <Link
+              href="https://ameliorate.app/examples/detailed-cars-going-too-fast"
+              target="_blank"
+            >
+              cars-going-too-fast
+            </Link>
+          </span>
         }
       />
     ),
@@ -185,26 +185,26 @@ export const breakdownSteps: StepType[] = [
           </span>
         }
         imageSlot={
-          <>
-            <Image
-              key="https://github.com/user-attachments/assets/d3467cd8-f805-46cf-a5e5-84a031ad98cc"
-              src="https://github.com/user-attachments/assets/d3467cd8-f805-46cf-a5e5-84a031ad98cc"
-              alt="showing a benefit fulfilling a criterion"
-              width={627}
-              height={547}
-              unoptimized
-              className="rounded-xl border shadow-sm"
-            />
-            <Typography variant="caption">
-              From:{" "}
-              <Link
-                href="https://ameliorate.app/examples/detailed-cars-going-too-fast?view=All+structure"
-                target="_blank"
-              >
-                cars-going-too-fast
-              </Link>
-            </Typography>
-          </>
+          <Image
+            key="https://github.com/user-attachments/assets/d3467cd8-f805-46cf-a5e5-84a031ad98cc"
+            src="https://github.com/user-attachments/assets/d3467cd8-f805-46cf-a5e5-84a031ad98cc"
+            alt="showing a benefit fulfilling a criterion"
+            width={627}
+            height={547}
+            unoptimized
+            className="rounded-xl border shadow-sm"
+          />
+        }
+        imageCaption={
+          <span>
+            From:{" "}
+            <Link
+              href="https://ameliorate.app/examples/detailed-cars-going-too-fast?view=All+structure"
+              target="_blank"
+            >
+              cars-going-too-fast
+            </Link>
+          </span>
         }
       />
     ),

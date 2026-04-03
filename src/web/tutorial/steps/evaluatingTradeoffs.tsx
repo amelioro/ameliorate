@@ -1,5 +1,5 @@
 import { VerticalSplit } from "@mui/icons-material";
-import { Button, Typography } from "@mui/material";
+import { Button } from "@mui/material";
 import { StepType } from "@reactour/tour";
 import Image from "next/image";
 
@@ -56,25 +56,25 @@ export const getEvaluatingTradeoffsSteps = (track: Track | null): StepType[] => 
           </span>
         }
         imageSlot={
-          <>
-            <Image
-              key="https://github.com/user-attachments/assets/1dd98e5e-198a-41ff-967a-099c7cbe430b"
-              src="https://github.com/user-attachments/assets/1dd98e5e-198a-41ff-967a-099c7cbe430b"
-              alt="criteria table scores"
-              width={540}
-              height={325}
-              className="rounded-xl border shadow-sm"
-            />
-            <Typography variant="caption">
-              From:{" "}
-              <Link
-                href="https://ameliorate.app/examples/detailed-cars-going-too-fast?view=Tradeoff+table"
-                target="_blank"
-              >
-                cars-going-too-fast
-              </Link>
-            </Typography>
-          </>
+          <Image
+            key="https://github.com/user-attachments/assets/1dd98e5e-198a-41ff-967a-099c7cbe430b"
+            src="https://github.com/user-attachments/assets/1dd98e5e-198a-41ff-967a-099c7cbe430b"
+            alt="criteria table scores"
+            width={540}
+            height={325}
+            className="rounded-xl border shadow-sm"
+          />
+        }
+        imageCaption={
+          <span>
+            From:{" "}
+            <Link
+              href="https://ameliorate.app/examples/detailed-cars-going-too-fast?view=Tradeoff+table"
+              target="_blank"
+            >
+              cars-going-too-fast
+            </Link>
+          </span>
         }
       />
     ),
@@ -95,25 +95,25 @@ export const getEvaluatingTradeoffsSteps = (track: Track | null): StepType[] => 
           </span>
         }
         imageSlot={
-          <>
-            <Image
-              key="https://github.com/user-attachments/assets/f71c1dd1-0f60-4151-9b1d-ea207911ce60"
-              src="https://github.com/user-attachments/assets/f71c1dd1-0f60-4151-9b1d-ea207911ce60"
-              alt="solution totals"
-              width={543}
-              height={108}
-              className="rounded-xl border shadow-sm"
-            />
-            <Typography variant="caption">
-              From:{" "}
-              <Link
-                href="https://ameliorate.app/examples/detailed-cars-going-too-fast?view=Tradeoff+table"
-                target="_blank"
-              >
-                cars-going-too-fast
-              </Link>
-            </Typography>
-          </>
+          <Image
+            key="https://github.com/user-attachments/assets/f71c1dd1-0f60-4151-9b1d-ea207911ce60"
+            src="https://github.com/user-attachments/assets/f71c1dd1-0f60-4151-9b1d-ea207911ce60"
+            alt="solution totals"
+            width={543}
+            height={108}
+            className="rounded-xl border shadow-sm"
+          />
+        }
+        imageCaption={
+          <span>
+            From:{" "}
+            <Link
+              href="https://ameliorate.app/examples/detailed-cars-going-too-fast?view=Tradeoff+table"
+              target="_blank"
+            >
+              cars-going-too-fast
+            </Link>
+          </span>
         }
       />
     ),

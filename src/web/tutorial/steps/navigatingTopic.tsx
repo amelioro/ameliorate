@@ -1,5 +1,4 @@
 import { Build, Group, VerticalSplit } from "@mui/icons-material";
-import { Typography } from "@mui/material";
 import { StepType } from "@reactour/tour";
 import Image from "next/image";
 
@@ -21,27 +20,27 @@ export const navigatingTopicSteps: StepType[] = [
           <span>Quick Views allow you to easily jump between different aspects of a topic.</span>
         }
         imageSlot={
-          <>
-            <Image
-              key="https://github.com/user-attachments/assets/87055acd-debb-45f2-981f-ef511e770222"
-              src="https://github.com/user-attachments/assets/87055acd-debb-45f2-981f-ef511e770222"
-              alt="clicking between views in cars-going-too-fast topic"
-              width={1096}
-              height={847}
-              unoptimized // warning without this - gifs aren't optimized by nextjs apparently
-              // extra padding & bg because spacing seems to look better
-              className="rounded-xl border bg-paperPlain-main p-2 shadow-sm"
-            />
-            <Typography variant="caption">
-              From:{" "}
-              <Link
-                href="https://ameliorate.app/examples/detailed-cars-going-too-fast"
-                target="_blank"
-              >
-                cars-going-too-fast
-              </Link>
-            </Typography>
-          </>
+          <Image
+            key="https://github.com/user-attachments/assets/87055acd-debb-45f2-981f-ef511e770222"
+            src="https://github.com/user-attachments/assets/87055acd-debb-45f2-981f-ef511e770222"
+            alt="clicking between views in cars-going-too-fast topic"
+            width={1096}
+            height={847}
+            unoptimized // warning without this - gifs aren't optimized by nextjs apparently
+            // extra padding & bg because spacing seems to look better
+            className="rounded-xl border bg-paperPlain-main p-2 shadow-sm"
+          />
+        }
+        imageCaption={
+          <span>
+            From:{" "}
+            <Link
+              href="https://ameliorate.app/examples/detailed-cars-going-too-fast"
+              target="_blank"
+            >
+              cars-going-too-fast
+            </Link>
+          </span>
         }
       />
     ),

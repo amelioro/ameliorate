@@ -1,5 +1,4 @@
 import { Build } from "@mui/icons-material";
-import { Typography } from "@mui/material";
 import { StepType } from "@reactour/tour";
 import Image from "next/image";
 
@@ -29,27 +28,27 @@ export const buildingViewsSteps: StepType[] = [
           </span>
         }
         imageSlot={
-          <>
-            <Image
-              key="https://github.com/user-attachments/assets/87055acd-debb-45f2-981f-ef511e770222"
-              src="https://github.com/user-attachments/assets/87055acd-debb-45f2-981f-ef511e770222"
-              alt="clicking between views in cars-going-too-fast topic"
-              width={1096}
-              height={847}
-              unoptimized // warning without this - gifs aren't optimized by nextjs apparently
-              // extra padding & bg because spacing seems to look better
-              className="rounded-xl border bg-paperPlain-main p-2 shadow-sm"
-            />
-            <Typography variant="caption">
-              From:{" "}
-              <Link
-                href="https://ameliorate.app/examples/detailed-cars-going-too-fast"
-                target="_blank"
-              >
-                cars-going-too-fast
-              </Link>
-            </Typography>
-          </>
+          <Image
+            key="https://github.com/user-attachments/assets/87055acd-debb-45f2-981f-ef511e770222"
+            src="https://github.com/user-attachments/assets/87055acd-debb-45f2-981f-ef511e770222"
+            alt="clicking between views in cars-going-too-fast topic"
+            width={1096}
+            height={847}
+            unoptimized // warning without this - gifs aren't optimized by nextjs apparently
+            // extra padding & bg because spacing seems to look better
+            className="rounded-xl border bg-paperPlain-main p-2 shadow-sm"
+          />
+        }
+        imageCaption={
+          <span>
+            From:{" "}
+            <Link
+              href="https://ameliorate.app/examples/detailed-cars-going-too-fast"
+              target="_blank"
+            >
+              cars-going-too-fast
+            </Link>
+          </span>
         }
       />
     ),
@@ -105,26 +104,26 @@ export const buildingViewsSteps: StepType[] = [
           </span>
         }
         imageSlot={
-          <>
-            <Image
-              key="https://github.com/user-attachments/assets/edbc5e18-447e-4ae7-a0ae-00aa9f72e8c8"
-              src="https://github.com/user-attachments/assets/edbc5e18-447e-4ae7-a0ae-00aa9f72e8c8"
-              alt="toggling on and off some Information Filters"
-              width={659}
-              height={412}
-              unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-              className="rounded-xl border shadow-sm"
-            />
-            <Typography variant="caption">
-              From:{" "}
-              <Link
-                href="https://ameliorate.app/examples/detailed-cars-going-too-fast"
-                target="_blank"
-              >
-                cars-going-too-fast
-              </Link>
-            </Typography>
-          </>
+          <Image
+            key="https://github.com/user-attachments/assets/edbc5e18-447e-4ae7-a0ae-00aa9f72e8c8"
+            src="https://github.com/user-attachments/assets/edbc5e18-447e-4ae7-a0ae-00aa9f72e8c8"
+            alt="toggling on and off some Information Filters"
+            width={659}
+            height={412}
+            unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+            className="rounded-xl border shadow-sm"
+          />
+        }
+        imageCaption={
+          <span>
+            From:{" "}
+            <Link
+              href="https://ameliorate.app/examples/detailed-cars-going-too-fast"
+              target="_blank"
+            >
+              cars-going-too-fast
+            </Link>
+          </span>
         }
       />
     ),
@@ -145,26 +144,26 @@ export const buildingViewsSteps: StepType[] = [
           </span>
         }
         imageSlot={
-          <>
-            <Image
-              key="https://github.com/user-attachments/assets/533529a7-0de0-4c22-94cf-d9b00943399f"
-              src="https://github.com/user-attachments/assets/533529a7-0de0-4c22-94cf-d9b00943399f"
-              alt="changing some General Filters"
-              width={659}
-              height={369}
-              unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-              className="rounded-xl border shadow-sm"
-            />
-            <Typography variant="caption">
-              From:{" "}
-              <Link
-                href="https://ameliorate.app/examples/detailed-cars-going-too-fast"
-                target="_blank"
-              >
-                cars-going-too-fast
-              </Link>
-            </Typography>
-          </>
+          <Image
+            key="https://github.com/user-attachments/assets/533529a7-0de0-4c22-94cf-d9b00943399f"
+            src="https://github.com/user-attachments/assets/533529a7-0de0-4c22-94cf-d9b00943399f"
+            alt="changing some General Filters"
+            width={659}
+            height={369}
+            unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+            className="rounded-xl border shadow-sm"
+          />
+        }
+        imageCaption={
+          <span>
+            From:{" "}
+            <Link
+              href="https://ameliorate.app/examples/detailed-cars-going-too-fast"
+              target="_blank"
+            >
+              cars-going-too-fast
+            </Link>
+          </span>
         }
       />
     ),
@@ -185,26 +184,26 @@ export const buildingViewsSteps: StepType[] = [
           </span>
         }
         imageSlot={
-          <>
-            <Image
-              key="https://github.com/user-attachments/assets/2ceccd62-e5ff-46ad-81cb-e0c564ed4269"
-              src="https://github.com/user-attachments/assets/2ceccd62-e5ff-46ad-81cb-e0c564ed4269"
-              alt="showing neighbor indicator"
-              width={600}
-              height={445}
-              unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-              className="rounded-xl border shadow-sm"
-            />
-            <Typography variant="caption">
-              From:{" "}
-              <Link
-                href="https://ameliorate.app/examples/detailed-cars-going-too-fast"
-                target="_blank"
-              >
-                cars-going-too-fast
-              </Link>
-            </Typography>
-          </>
+          <Image
+            key="https://github.com/user-attachments/assets/2ceccd62-e5ff-46ad-81cb-e0c564ed4269"
+            src="https://github.com/user-attachments/assets/2ceccd62-e5ff-46ad-81cb-e0c564ed4269"
+            alt="showing neighbor indicator"
+            width={600}
+            height={445}
+            unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+            className="rounded-xl border shadow-sm"
+          />
+        }
+        imageCaption={
+          <span>
+            From:{" "}
+            <Link
+              href="https://ameliorate.app/examples/detailed-cars-going-too-fast"
+              target="_blank"
+            >
+              cars-going-too-fast
+            </Link>
+          </span>
         }
       />
     ),
@@ -224,26 +223,26 @@ export const buildingViewsSteps: StepType[] = [
           </span>
         }
         imageSlot={
-          <>
-            <Image
-              key="https://github.com/user-attachments/assets/0a2563db-5795-44ac-b0bd-e97292b4d18f"
-              src="https://github.com/user-attachments/assets/0a2563db-5795-44ac-b0bd-e97292b4d18f"
-              alt="showing and hiding neighbors"
-              width={596}
-              height={475}
-              unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-              className="rounded-xl border shadow-sm"
-            />
-            <Typography variant="caption">
-              From:{" "}
-              <Link
-                href="https://ameliorate.app/examples/detailed-cars-going-too-fast"
-                target="_blank"
-              >
-                cars-going-too-fast
-              </Link>
-            </Typography>
-          </>
+          <Image
+            key="https://github.com/user-attachments/assets/0a2563db-5795-44ac-b0bd-e97292b4d18f"
+            src="https://github.com/user-attachments/assets/0a2563db-5795-44ac-b0bd-e97292b4d18f"
+            alt="showing and hiding neighbors"
+            width={596}
+            height={475}
+            unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+            className="rounded-xl border shadow-sm"
+          />
+        }
+        imageCaption={
+          <span>
+            From:{" "}
+            <Link
+              href="https://ameliorate.app/examples/detailed-cars-going-too-fast"
+              target="_blank"
+            >
+              cars-going-too-fast
+            </Link>
+          </span>
         }
       />
     ),
@@ -264,26 +263,26 @@ export const buildingViewsSteps: StepType[] = [
           </span>
         }
         imageSlot={
-          <>
-            <Image
-              key="https://github.com/user-attachments/assets/0ca650fe-9497-4837-825c-1b980b4cae97"
-              src="https://github.com/user-attachments/assets/0ca650fe-9497-4837-825c-1b980b4cae97"
-              alt="forcing nodes into layers"
-              width={591}
-              height={516}
-              unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
-              className="rounded-xl border shadow-sm"
-            />
-            <Typography variant="caption">
-              From:{" "}
-              <Link
-                href="https://ameliorate.app/examples/detailed-cars-going-too-fast"
-                target="_blank"
-              >
-                cars-going-too-fast
-              </Link>
-            </Typography>
-          </>
+          <Image
+            key="https://github.com/user-attachments/assets/0ca650fe-9497-4837-825c-1b980b4cae97"
+            src="https://github.com/user-attachments/assets/0ca650fe-9497-4837-825c-1b980b4cae97"
+            alt="forcing nodes into layers"
+            width={591}
+            height={516}
+            unoptimized // without this, nextjs sometimes tries to optimize the gif as an image - not sure why only sometimes though; thanks https://github.com/vercel/next.js/discussions/18628#discussioncomment-4036940
+            className="rounded-xl border shadow-sm"
+          />
+        }
+        imageCaption={
+          <span>
+            From:{" "}
+            <Link
+              href="https://ameliorate.app/examples/detailed-cars-going-too-fast"
+              target="_blank"
+            >
+              cars-going-too-fast
+            </Link>
+          </span>
         }
       />
     ),
