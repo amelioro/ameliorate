@@ -18,13 +18,14 @@ model User {
   createdAt                 DateTime @default(now())
   updatedAt                 DateTime @updatedAt
 
-  topics           Topic[]
-  scores           UserScore[]
-  comments         Comment[]
-  notifications    InAppNotification[]
-  watches          Watch[]
-  subscriptions    Subscription[]
-  unsubscribeCodes UnsubscribeCode[]
+  topics               Topic[]
+  scores               UserScore[]
+  comments             Comment[]
+  notifications        InAppNotification[]
+  watches              Watch[]
+  subscriptions        Subscription[]
+  unsubscribeCodes     UnsubscribeCode[]
+  personalAccessTokens PersonalAccessToken[]
 
   @@index([username])
   @@index([authId])
@@ -294,4 +295,21 @@ model UnsubscribeCode {
 
   @@index([createdAt])
   @@map("unsubscribeCodes")
+}
+
+model PersonalAccessToken {
+  id            Int       @id @default(autoincrement())
+  ownerUsername String    @db.VarChar(39)
+  name          String    @db.VarChar(100)
+  tokenHash     String    @unique @db.VarChar(64)
+  lastUsedAt    DateTime?
+  expiresAt     DateTime?
+  revokedAt     DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  user User @relation(fields: [ownerUsername], references: [username], onDelete: Cascade)
+
+  @@index([ownerUsername])
+  @@map("personalAccessTokens")
 }

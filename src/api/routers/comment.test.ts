@@ -90,6 +90,7 @@ describe("handleChangesets", () => {
         userAuthId: notCreatorOfTopic.authId,
         userEmailVerified: true,
         user: notCreatorOfTopic,
+        authSource: "session",
       });
 
       const newComment = generateComment(notCreatorOfTopic, topicWithoutAllowAnyEdit);
@@ -118,6 +119,7 @@ describe("handleChangesets", () => {
           userAuthId: notCreatorOfTopic.authId,
           userEmailVerified: true,
           user: notCreatorOfTopic,
+          authSource: "session",
         });
 
         const rootToDelete = rootCommentByNotTopicCreator;
@@ -143,6 +145,7 @@ describe("handleChangesets", () => {
         userAuthId: notCreatorOfTopic.authId,
         userEmailVerified: true,
         user: notCreatorOfTopic,
+        authSource: "session",
       });
 
       const newComment = generateComment(notCreatorOfTopic, topicWithoutAllowAnyEdit);
@@ -167,6 +170,7 @@ describe("handleChangesets", () => {
           userAuthId: creatorOfTopic.authId,
           userEmailVerified: true,
           user: creatorOfTopic,
+          authSource: "session",
         });
 
         const commentToResolve = { ...rootCommentByNotTopicCreator, resolved: true };
@@ -187,6 +191,7 @@ describe("handleChangesets", () => {
           userAuthId: creatorOfTopic.authId,
           userEmailVerified: true,
           user: creatorOfTopic,
+          authSource: "session",
         });
 
         const deletedComment = childOfCreatorByNotTopicCreator;
@@ -207,6 +212,7 @@ describe("handleChangesets", () => {
           userAuthId: creatorOfTopic.authId,
           userEmailVerified: true,
           user: creatorOfTopic,
+          authSource: "session",
         });
 
         const newComment = generateComment(notCreatorOfTopic, topicWithoutAllowAnyEdit);
@@ -240,6 +246,7 @@ describe("handleChangesets", () => {
           userAuthId: notCreatorOrAuthor.authId,
           userEmailVerified: true,
           user: notCreatorOrAuthor,
+          authSource: "session",
         });
 
         const newComment = generateComment(notCreatorOfTopic, topicWithoutAllowAnyEdit);
@@ -312,6 +319,7 @@ describe("handleChangesets", () => {
         userAuthId: notCreatorOfTopic.authId,
         userEmailVerified: true,
         user: notCreatorOfTopic,
+        authSource: "session",
       });
 
       const newComment = generateComment(notCreatorOfTopic, topicWithoutAllowAnyEdit);
@@ -358,6 +366,7 @@ describe("handleChangesets", () => {
         userAuthId: notCreatorOfTopic.authId,
         userEmailVerified: true,
         user: notCreatorOfTopic,
+        authSource: "session",
       });
 
       const newComment = generateComment(notCreatorOfTopic, topicWithoutAllowAnyEdit);

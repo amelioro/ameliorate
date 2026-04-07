@@ -28,3 +28,19 @@ export const isLoggedIn = isEmailVerified.unstable_pipe(async (opts) => {
 
   return opts.next({ ctx: { user: ctx.user } });
 });
+
+/**
+ * E.g. PersonalAccessToken-management routes (create, list, revoke) require an interactive browser
+ * session so that a compromised PAT cannot be used to mint new PATs.
+ */
+export const isLoggedInViaSession = isLoggedIn.unstable_pipe(async (opts) => {
+  const { ctx } = opts;
+
+  if (ctx.authSource !== "session")
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: "This operation requires an interactive browser session",
+    });
+
+  return opts.next({ ctx: { authSource: ctx.authSource } });
+});

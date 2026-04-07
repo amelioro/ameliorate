@@ -54,6 +54,7 @@ describe("findByUsername", () => {
         userAuthId: userWithTopics.authId,
         userEmailVerified: true,
         user: userWithTopics,
+        authSource: "session",
       });
 
       const user = await trpc.user.findByUsername({ username: userWithTopics.username });
@@ -68,6 +69,7 @@ describe("findByUsername", () => {
         userAuthId: otherUser.authId,
         userEmailVerified: true,
         user: otherUser,
+        authSource: "session",
       });
 
       const user = await trpc.user.findByUsername({ username: userWithTopics.username });

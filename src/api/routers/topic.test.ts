@@ -73,6 +73,7 @@ describe("findByUsernameAndTitle", () => {
         userAuthId: userWithTopics.authId,
         userEmailVerified: true,
         user: userWithTopics,
+        authSource: "session",
       });
 
       const topic = await trpc.topic.findByUsernameAndTitle({
@@ -127,6 +128,7 @@ describe("getData", () => {
         userAuthId: userWithTopics.authId,
         userEmailVerified: true,
         user: userWithTopics,
+        authSource: "session",
       });
 
       const topic = await trpc.topic.getData({
@@ -182,6 +184,7 @@ describe("setData", () => {
             userAuthId: loggedInUser.authId,
             userEmailVerified: true,
             user: loggedInUser,
+            authSource: "session",
           }
         : {},
     );
@@ -243,6 +246,7 @@ describe("create", () => {
       userAuthId: userWithTopics.authId,
       userEmailVerified: true,
       user: userWithTopics,
+      authSource: "session",
     });
 
     const topic = await trpc.topic.create({

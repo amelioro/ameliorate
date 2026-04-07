@@ -1,5 +1,6 @@
 import { commentRouter } from "@/api/routers/comment";
 import { notificationRouter } from "@/api/routers/notifications";
+import { personalAccessTokenRouter } from "@/api/routers/personalAccessToken";
 import { subscriptionRouter } from "@/api/routers/subscription";
 import { topicRouter } from "@/api/routers/topic";
 import { topicAIRouter } from "@/api/routers/topicAI";
@@ -17,6 +18,7 @@ export const appRouter = router({
   subscriptions: subscriptionRouter, // plural to avoid conflict with existing trpc.subscription method
   watch: watchRouter,
   topicAI: topicAIRouter,
+  personalAccessToken: personalAccessTokenRouter,
 });
 
 // for tests only? awkward but trpc's official example does this, and deprecated `appRouter.createContext` which was usable directly from tests https://github.com/trpc/examples-next-prisma-starter/blob/main/src/server/routers/_app.ts

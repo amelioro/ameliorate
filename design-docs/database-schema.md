@@ -9,6 +9,10 @@ Diagram notes:
 - 'GraphPart' refers to Node or Edge; it is not actually its own table.
 - Replaced some topic relations with `topicId` attribute to reduce chaotic number of edges.
 
+Less-core tables that aren't diagrammed:
+
+- `PersonalAccessToken` -- `ownerUsername` --> `User`
+
 ## Core tables
 
 ```mermaid
