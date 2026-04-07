@@ -1,5 +1,7 @@
 # AGENTS: How to be productive here
 
+NOTE: Check `AGENTS.local.md` for personal preferences.
+
 This repo is a Next.js + tRPC + Prisma TypeScript app with a React UI and Zustand state. It runs locally with Dockerized Postgres and a mock Auth0 server; prod is Netlify + Neon.
 
 ## Architecture
