@@ -21,11 +21,19 @@ const adapter =
     ? new PrismaPg({ connectionString: dbUrl })
     : new PrismaNeon({ connectionString: dbUrl });
 
+const createPrismaClient = () =>
+  new PrismaClient({
+    adapter,
+    // shouldn't be abusable if `tokenHash` wasn't omitted, but it shouldn't be needed anywhere and it seems good to omit just in case
+    omit: { personalAccessToken: { tokenHash: true } },
+    log: ["query", "info", "warn", "error"],
+  });
+type AppPrismaClient = ReturnType<typeof createPrismaClient>;
+
 // awkward solution to prevent many connections to the db, specifically as created by nextjs hotreloading
 // https://www.prisma.io/docs/guides/other/troubleshooting-orm/help-articles/nextjs-prisma-client-dev-practices
-const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
-export const prisma =
-  globalForPrisma.prisma ?? new PrismaClient({ adapter, log: ["query", "info", "warn", "error"] });
+const globalForPrisma = globalThis as unknown as { prisma?: AppPrismaClient };
+export const prisma = globalForPrisma.prisma ?? createPrismaClient();
 
 if (process.env.NODE_ENV !== "production") {
   // eslint-disable-next-line functional/immutable-data

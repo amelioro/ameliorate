@@ -52,6 +52,7 @@ export const reservedFirstLevelEndpointNames = [
   "guides",
   "help",
   "hosting",
+  "hidden-settings",
   "ideas",
   "images",
   "jobs",

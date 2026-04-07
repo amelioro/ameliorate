@@ -68,6 +68,7 @@ describe("handleChangesets", () => {
         userAuthId: creatorOfTopic.authId,
         userEmailVerified: true,
         user: creatorOfTopic,
+        authSource: "session",
       });
 
       const newView = generateView("newView", 2, topicWithoutAllowAnyEdit);
@@ -102,6 +103,7 @@ describe("handleChangesets", () => {
         userAuthId: creatorOfTopic.authId,
         userEmailVerified: true,
         user: creatorOfTopic,
+        authSource: "session",
       });
 
       const newView = generateView(quickView1.title, 2, topicWithoutAllowAnyEdit);
@@ -130,6 +132,7 @@ describe("handleChangesets", () => {
         userAuthId: creatorOfTopic.authId,
         userEmailVerified: true,
         user: creatorOfTopic,
+        authSource: "session",
       });
 
       const newView1 = generateView("newView1", 2, topicWithoutAllowAnyEdit);
@@ -153,6 +156,7 @@ describe("handleChangesets", () => {
         userAuthId: notCreatorOfTopic.authId,
         userEmailVerified: true,
         user: notCreatorOfTopic,
+        authSource: "session",
       });
 
       const newView = generateView("newView", 2, topicWithoutAllowAnyEdit);

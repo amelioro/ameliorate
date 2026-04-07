@@ -12,7 +12,39 @@ The following sections are assuming you'll interact via cURL. Please [request](h
 
 ### Using authenticated endpoints
 
-Authenticated endpoints currently can only be used after authenticating via browser, by logging into Auth0 and getting your cookie
+There are two ways to authenticate API requests: Personal Access Tokens and browser session cookies.
+
+#### Personal Access Tokens (for machine API access)
+
+Personal Access Tokens (PATs) allow you to authenticate API requests without a browser session. This is ideal for giving a machine access to act on behalf of a user, but note that a PAT is essentially equivalent to a username and password, so it should be used with caution.
+
+1. Go to the [hidden settings page](https://ameliorate.app/hidden-settings) and create a new token
+2. Copy the token — it will only be shown once
+3. Use it in the `Authorization` header:
+
+```bash
+TOKEN=<your-token>
+```
+
+Here is what a request from the Example section below would look like:
+
+```bash
+curl 'https://ameliorate.app/api/trpc/topic.create' \
+  -H 'accept: */*' \
+  -H 'accept-language: en-US,en;q=0.9' \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: application/json' \
+  -H "Authorization: Bearer $TOKEN" \
+  --data-raw '{"json":'"$TOPIC_CREATE_DATA"'}'
+```
+
+Note: PATs can only be used for general API access. Managing tokens (listing, creating, revoking) requires a browser session.
+
+#### Browser session cookie (for infrequent / manual API access)
+
+You can also authenticate by logging into Auth0 and using your session cookie. This can be preferred if you don't want to create another key for your user - session cookies only last for a short period of time.
+
+To use a cookie for authentication:
 
 - use Chrome's devtools > Application > Cookies > https://ameliorate.app to grab your `appSession` cookie
 - set this value as a variable for easy usage in your future cURL requests:
@@ -21,11 +53,21 @@ Authenticated endpoints currently can only be used after authenticating via brow
 APP_SESSION=<value>
 ```
 
-- future: there are plans to add a user-specific API_KEY for authentication without browser
+Here is what a request from the Example section below would look like:
+
+```bash
+curl 'https://ameliorate.app/api/trpc/topic.create' \
+  -H 'accept: */*' \
+  -H 'accept-language: en-US,en;q=0.9' \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: application/json' \
+  -b 'appSession='"$APP_SESSION" \
+  --data-raw '{"json":'"$TOPIC_CREATE_DATA"'}'
+```
 
 ### Example: Create [VISIBLE-act topic](https://ameliorate.app/keyserj/bill-HR-4667-VISIBLE-act) via API, from scratch
 
-1. Be sure to authenticate for these requests by setting `APP_SESSION` as seen in [Using authenticated endpoints](#using-authenticated-endpoints)
+1. Be sure to authenticate for these requests by setting `TOKEN` or `APP_SESSION` as seen in [Using authenticated endpoints](#using-authenticated-endpoints). The example requests below use `TOKEN`.
 
 2. Create the topic
 
@@ -37,7 +79,7 @@ TOPIC_CREATE_RESULT=$(curl 'https://ameliorate.app/api/trpc/topic.create' \
   -H 'accept-language: en-US,en;q=0.9' \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
-  -b 'appSession='"$APP_SESSION" \
+  -H "Authorization: Bearer $TOKEN" \
   --data-raw '{"json":'"$TOPIC_CREATE_DATA"'}')
 ```
 
@@ -60,7 +102,7 @@ curl 'https://ameliorate.app/api/trpc/topic.updateDiagram' \
   -H 'accept-language: en-US,en;q=0.9' \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
-  -b 'appSession='"$APP_SESSION" \
+  -H "Authorization: Bearer $TOKEN" \
   --data-raw '{"json":{"topicId":'"$TOPIC_ID"',"nodesToCreate":'"$NODES_TO_CREATE"',"edgesToCreate":'"$EDGES_TO_CREATE"'}}'
 ```
 
@@ -76,7 +118,7 @@ TOPIC_GETDATA_RESULT=$(curl 'https://ameliorate.app/api/trpc/topic.getData?input
   -H 'accept-language: en-US,en;q=0.9' \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
-  -b 'appSession='"$APP_SESSION")
+  -H "Authorization: Bearer $TOKEN")
 ```
 
 - grab the solution node id from the response:
@@ -94,6 +136,6 @@ curl 'https://ameliorate.app/api/trpc/view.handleChangesets' \
   -H 'accept-language: en-US,en;q=0.9' \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
-  -b 'appSession='"$APP_SESSION" \
+  -H "Authorization: Bearer $TOKEN" \
   --data-raw '{"json":{"topicId":'"$TOPIC_ID"',"viewsToCreate":[{"type":"quick","title":"Overview","order":1,"viewState":{"format":"summary","summaryBreadcrumbNodeIds":['"$SOLUTION_ID"'],"selectedSummaryTab":"components"},"topicId":'"$TOPIC_ID"'},{"type":"quick","title":"Diagram","order":2,"viewState":{"format":"diagram","minimizeEdgeCrossings":true,"avoidEdgeLabelOverlap":true},"topicId":'"$TOPIC_ID"'}]}}'
 ```
