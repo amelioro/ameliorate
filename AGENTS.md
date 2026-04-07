@@ -54,3 +54,7 @@ This repo is a Next.js + tRPC + Prisma TypeScript app with a React UI and Zustan
 - High-level docs/diagrams: `design-docs/*`
 - Topic graph helpers: `src/web/topic/utils/*` (e.g., `diagram`, `graph`, filters)
 - Example diff-to-API conversion: `src/web/topic/utils/apiConversion.ts`
+
+## Rules
+
+- Always prefer full variable names over abbreviated names, particularly for lambda function parameters.
