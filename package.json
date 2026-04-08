@@ -62,7 +62,7 @@
     "@prisma/adapter-pg": "7.3.0",
     "@prisma/client": "7.3.0",
     "@reactour/tour": "3.7.0",
-    "@sentry/nextjs": "8.54.0",
+    "@sentry/nextjs": "10.40.0",
     "@tanstack/react-query": "4.29.23",
     "@tanstack/react-query-devtools": "4.29.23",
     "@trpc/client": "10.45.3",
