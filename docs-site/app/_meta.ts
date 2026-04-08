@@ -1,6 +1,6 @@
 const meta = {
   index: "Introduction",
-  "mission-vision": "",
+  goals: "",
   comparisons: "Comparisons",
   "-- App": {
     type: "separator",

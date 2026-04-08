@@ -32,7 +32,7 @@ export const Headline = () => {
         </Typography>
 
         <Typography variant="body2" className="text-xs sm:mt-1">
-          <Link href="https://ameliorate.app/docs/mission-vision#vision" target="_blank">
+          <Link href="https://ameliorate.app/docs/goals#vision" target="_blank">
             here's what the world could look like
           </Link>
         </Typography>
