@@ -86,7 +86,10 @@ TOPIC_CREATE_RESULT=$(curl 'https://ameliorate.app/api/trpc/topic.create' \
 - grab the topic id from the response:
 
 ```bash
-TOPIC_ID=$(echo $TOPIC_CREATE_RESULT | jq '.result.data.json.id')
+# use `printf '%s'` rather than `echo` when piping a response to jq, because shell `echo` builtins
+# interpret backslash escapes like `\n` as literal newlines, which corrupts JSON strings
+# (and e.g. node notes fields often have newlines). This causes jq to fail with "control characters must be escaped"
+TOPIC_ID=$(printf '%s' "$TOPIC_CREATE_RESULT" | jq '.result.data.json.id')
 ```
 
 3. Create the desired nodes and edges
@@ -125,7 +128,7 @@ TOPIC_GETDATA_RESULT=$(curl 'https://ameliorate.app/api/trpc/topic.getData?input
 
 ```bash
 # if generating nodes via LLM, you probably can ask for it to specify the central node with its output
-SOLUTION_ID=$(echo "$TOPIC_GETDATA_RESULT" | jq '.result.data.json.nodes | .[] | select(.text=="HR 4667: The VISIBLE Act of 2025") | .id')
+SOLUTION_ID=$(printf '%s' "$TOPIC_GETDATA_RESULT" | jq '.result.data.json.nodes | .[] | select(.text=="HR 4667: The VISIBLE Act of 2025") | .id')
 ```
 
 5. Create the default view you want - in this case a Summary View focused on the solution, with a second view to see the whole diagram
