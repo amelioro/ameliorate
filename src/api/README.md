@@ -100,38 +100,23 @@ NODES_TO_CREATE=$(curl 'https://ameliorate.app/api/trpc/topicAI.getPromptData' |
 EDGES_TO_CREATE=$(curl 'https://ameliorate.app/api/trpc/topicAI.getPromptData' | jq '.result.data.json.examples.visibleAct.topic.edgesToCreate')
 # note: the original source text for the topic (in this case, bill text + kialo arguments) can also be found via `jq '.result.data.json.examples.visibleAct.sourceText'`
 
-curl 'https://ameliorate.app/api/trpc/topic.updateDiagram' \
+UPDATE_DIAGRAM_RESULT=$(curl 'https://ameliorate.app/api/trpc/topic.updateDiagram' \
   -H 'accept: */*' \
   -H 'accept-language: en-US,en;q=0.9' \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
   -H "Authorization: Bearer $TOKEN" \
-  --data-raw '{"json":{"topicId":'"$TOPIC_ID"',"nodesToCreate":'"$NODES_TO_CREATE"',"edgesToCreate":'"$EDGES_TO_CREATE"'}}'
+  --data-raw '{"json":{"topicId":'"$TOPIC_ID"',"nodesToCreate":'"$NODES_TO_CREATE"',"edgesToCreate":'"$EDGES_TO_CREATE"'}}')
 ```
 
-4. Get the topic data so we can create a view using the solution node's ID
-
-```bash
-TOPIC_GETDATA_INPUT_JSON='{"json":{"username":"keyserj","title":"test-VISIBLE-act"}}'
-# note: tRPC requires GET inputs to be URI encoded; the below line relies on `jq` to do this, but you can also use `python` or `node` (ask ChatGPT)
-TOPIC_GETDATA_INPUT_ENCODED=$(jq -rn --arg v "$TOPIC_GETDATA_INPUT_JSON" '$v|@uri')
-
-TOPIC_GETDATA_RESULT=$(curl 'https://ameliorate.app/api/trpc/topic.getData?input='"$TOPIC_GETDATA_INPUT_ENCODED" \
-  -H 'accept: */*' \
-  -H 'accept-language: en-US,en;q=0.9' \
-  -H 'cache-control: no-cache' \
-  -H 'content-type: application/json' \
-  -H "Authorization: Bearer $TOKEN")
-```
-
-- grab the solution node id from the response:
+- grab the solution node id from the `nodesCreated` in the response:
 
 ```bash
 # if generating nodes via LLM, you probably can ask for it to specify the central node with its output
-SOLUTION_ID=$(printf '%s' "$TOPIC_GETDATA_RESULT" | jq '.result.data.json.nodes | .[] | select(.text=="HR 4667: The VISIBLE Act of 2025") | .id')
+SOLUTION_ID=$(printf '%s' "$UPDATE_DIAGRAM_RESULT" | jq '.result.data.json.nodesCreated | .[] | select(.text=="HR 4667: The VISIBLE Act of 2025") | .id')
 ```
 
-5. Create the default view you want - in this case a Summary View focused on the solution, with a second view to see the whole diagram
+4. Create the default view you want - in this case a Summary View focused on the solution, with a second view to see the whole diagram
 
 ```bash
 curl 'https://ameliorate.app/api/trpc/view.handleChangesets' \
