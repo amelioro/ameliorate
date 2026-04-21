@@ -51,3 +51,6 @@ _pagefind/
 
 # prisma
 /src/db/generated/
+
+# local agent config
+AGENTS.local.md

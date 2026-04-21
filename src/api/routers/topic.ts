@@ -256,6 +256,19 @@ export const topicRouter = router({
       if (graphPartsChanged) {
         await handleGraphPartChanged(opts.ctx.user.username, opts.input.topicId);
       }
+
+      return {
+        // for created records, return that actual records so that ids are available (if tempIds were used to create them) without needing a `getData` request
+        nodesCreated: solidifiedNodesToCreate,
+        nodesUpdated: opts.input.nodesToUpdate.length,
+        nodesDeleted: opts.input.nodesToDelete.length,
+        edgesCreated: solidifiedEdgesToCreate,
+        edgesUpdated: opts.input.edgesToUpdate.length,
+        edgesDeleted: opts.input.edgesToDelete.length,
+        scoresCreated: opts.input.scoresToCreate.length,
+        scoresUpdated: opts.input.scoresToUpdate.length,
+        scoresDeleted: opts.input.scoresToDelete.length,
+      };
     }),
 
   create: procedure
