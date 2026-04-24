@@ -143,7 +143,7 @@
     "husky": "8.0.3",
     "jest-extended": "4.0.2",
     "lint-staged": "13.2.3",
-    "postcss": "8.4.38",
+    "postcss": "8.5.10",
     "prettier": "3.3.2",
     "prisma": "7.3.0",
     "tailwindcss": "4.1.18",
