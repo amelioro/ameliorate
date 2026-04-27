@@ -92,12 +92,14 @@ TOPIC_CREATE_RESULT=$(curl 'https://ameliorate.app/api/trpc/topic.create' \
 TOPIC_ID=$(printf '%s' "$TOPIC_CREATE_RESULT" | jq '.result.data.json.id')
 ```
 
-3. Create the desired nodes and edges
+3. Create the desired nodes, edges, and scores
 
 ```bash
-# for this example we're just taking nodes and edges from our example topic
-NODES_TO_CREATE=$(curl 'https://ameliorate.app/api/trpc/topicAI.getPromptData' | jq '.result.data.json.examples.visibleAct.topic.nodesToCreate')
-EDGES_TO_CREATE=$(curl 'https://ameliorate.app/api/trpc/topicAI.getPromptData' | jq '.result.data.json.examples.visibleAct.topic.edgesToCreate')
+# for this example we're just taking nodes, edges, and scores from our example topic
+PROMPT_DATA=$(curl 'https://ameliorate.app/api/trpc/topicAI.getPromptData')
+NODES_TO_CREATE=$(printf '%s' "$PROMPT_DATA" | jq '.result.data.json.examples.visibleAct.topic.nodesToCreate')
+EDGES_TO_CREATE=$(printf '%s' "$PROMPT_DATA" | jq '.result.data.json.examples.visibleAct.topic.edgesToCreate')
+SCORES_TO_CREATE=$(printf '%s' "$PROMPT_DATA" | jq '.result.data.json.examples.visibleAct.topic.scoresToCreate')
 # note: the original source text for the topic (in this case, bill text + kialo arguments) can also be found via `jq '.result.data.json.examples.visibleAct.sourceText'`
 
 UPDATE_DIAGRAM_RESULT=$(curl 'https://ameliorate.app/api/trpc/topic.updateDiagram' \
@@ -106,7 +108,7 @@ UPDATE_DIAGRAM_RESULT=$(curl 'https://ameliorate.app/api/trpc/topic.updateDiagra
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
   -H "Authorization: Bearer $TOKEN" \
-  --data-raw '{"json":{"topicId":'"$TOPIC_ID"',"nodesToCreate":'"$NODES_TO_CREATE"',"edgesToCreate":'"$EDGES_TO_CREATE"'}}')
+  --data-raw '{"json":{"topicId":'"$TOPIC_ID"',"nodesToCreate":'"$NODES_TO_CREATE"',"edgesToCreate":'"$EDGES_TO_CREATE"',"scoresToCreate":'"$SCORES_TO_CREATE"'}}')
 ```
 
 - grab the solution node id from the `nodesCreated` in the response:

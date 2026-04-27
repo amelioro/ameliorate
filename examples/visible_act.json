@@ -813,7 +813,15 @@
           "targetId": "51ea45f5-0873-4bcd-b7b1-90072da0f1fc"
         }
       ],
-      "userScores": {}
+      "userScores": {
+        "keyserj": {
+          "f80226b1-2aaa-4908-b1e8-0b18db700afb": "7",
+          "943d8d9f-d2be-41ba-b204-68f9f75fa5d8": "8",
+          "0d3301a2-777d-4796-baac-a47bb2bb6c3f": "8",
+          "764e60a2-55d8-41b6-90fe-30bf0139873a": "5",
+          "6e86019f-2806-4c58-9d18-336e7b243b2b": "4"
+        }
+      }
     },
     "version": 27
   },

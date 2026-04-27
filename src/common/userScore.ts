@@ -12,3 +12,23 @@ export const userScoreSchema = z.object({
 });
 
 export type UserScore = z.infer<typeof userScoreSchema>;
+
+export const topicAIScoreSchema = z.object({
+  tempGraphPartId: z.number().describe("tempId of the node or edge being scored."),
+  value: userScoreSchema.shape.value,
+});
+
+/**
+ * Looser schema to make hitting the API easier for consumers. Mainly different from `userScoreSchema` in that many fields are optional and can use `tempGraphPartId`.
+ */
+export const createScoreSchema = userScoreSchema
+  .extend(topicAIScoreSchema.shape)
+  .partial({ graphPartId: true, tempGraphPartId: true, username: true, topicId: true })
+  .refine((data) => {
+    return data.graphPartId !== undefined || data.tempGraphPartId !== undefined;
+  }, "Must provide either graphPartId or tempGraphPartId.")
+  .describe(
+    "Can use `tempGraphPartId` to reference a node/edge that hasn't been persisted yet, via its `tempId`. `username` defaults to the authenticated user, and `topicId` defaults to the request's `topicId`.",
+  );
+
+export type CreateScore = z.infer<typeof createScoreSchema>;

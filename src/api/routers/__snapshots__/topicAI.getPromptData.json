@@ -1,6 +1,6 @@
 {
   "schemas": {
-    "createParts": {
+    "createTopicData": {
       "type": "object",
       "properties": {
         "nodesToCreate": {
@@ -93,6 +93,9 @@
                 "type": "string",
                 "maxLength": 10000
               },
+              "tempId": {
+                "type": "number"
+              },
               "tempSourceId": {
                 "type": "number"
               },
@@ -103,8 +106,31 @@
             "required": [
               "type",
               "notes",
+              "tempId",
               "tempSourceId",
               "tempTargetId"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "scoresToCreate": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "tempGraphPartId": {
+                "type": "number",
+                "description": "tempId of the node or edge being scored."
+              },
+              "value": {
+                "type": "number",
+                "minimum": 1,
+                "maximum": 9
+              }
+            },
+            "required": [
+              "tempGraphPartId",
+              "value"
             ],
             "additionalProperties": false
           }
@@ -112,7 +138,8 @@
       },
       "required": [
         "nodesToCreate",
-        "edgesToCreate"
+        "edgesToCreate",
+        "scoresToCreate"
       ],
       "additionalProperties": false,
       "$schema": "http://json-schema.org/draft-07/schema#"
@@ -354,256 +381,320 @@
         ],
         "edgesToCreate": [
           {
+            "tempId": 38,
             "type": "causes",
             "notes": "",
             "tempSourceId": 10,
             "tempTargetId": 12
           },
           {
+            "tempId": 39,
             "type": "causes",
             "notes": "",
             "tempSourceId": 14,
             "tempTargetId": 13
           },
           {
+            "tempId": 40,
             "type": "causes",
             "notes": "",
             "tempSourceId": 15,
             "tempTargetId": 14
           },
           {
+            "tempId": 41,
             "type": "causes",
             "notes": "",
             "tempSourceId": 16,
             "tempTargetId": 14
           },
           {
+            "tempId": 42,
             "type": "addresses",
             "notes": "",
             "tempSourceId": 12,
             "tempTargetId": 13
           },
           {
+            "tempId": 43,
             "type": "causes",
             "notes": "",
             "tempSourceId": 11,
             "tempTargetId": 12
           },
           {
+            "tempId": 44,
             "type": "causes",
             "notes": "",
             "tempSourceId": 19,
             "tempTargetId": 11
           },
           {
+            "tempId": 45,
             "type": "causes",
             "notes": "",
             "tempSourceId": 19,
             "tempTargetId": 10
           },
           {
+            "tempId": 46,
             "type": "has",
             "notes": "",
             "tempSourceId": 9,
             "tempTargetId": 21
           },
           {
+            "tempId": 47,
             "type": "has",
             "notes": "",
             "tempSourceId": 21,
             "tempTargetId": 22
           },
           {
+            "tempId": 48,
             "type": "has",
             "notes": "",
             "tempSourceId": 21,
             "tempTargetId": 23
           },
           {
+            "tempId": 49,
             "type": "has",
             "notes": "",
             "tempSourceId": 21,
             "tempTargetId": 24
           },
           {
+            "tempId": 50,
             "type": "has",
             "notes": "",
             "tempSourceId": 9,
             "tempTargetId": 26
           },
           {
+            "tempId": 51,
             "type": "has",
             "notes": "",
             "tempSourceId": 26,
             "tempTargetId": 27
           },
           {
+            "tempId": 52,
             "type": "has",
             "notes": "",
             "tempSourceId": 26,
             "tempTargetId": 28
           },
           {
+            "tempId": 53,
             "type": "has",
             "notes": "",
             "tempSourceId": 9,
             "tempTargetId": 29
           },
           {
+            "tempId": 54,
             "type": "has",
             "notes": "",
             "tempSourceId": 29,
             "tempTargetId": 30
           },
           {
+            "tempId": 55,
             "type": "has",
             "notes": "",
             "tempSourceId": 29,
             "tempTargetId": 32
           },
           {
+            "tempId": 56,
             "type": "has",
             "notes": "",
             "tempSourceId": 29,
             "tempTargetId": 33
           },
           {
+            "tempId": 57,
             "type": "has",
             "notes": "",
             "tempSourceId": 9,
             "tempTargetId": 17
           },
           {
+            "tempId": 58,
             "type": "has",
             "notes": "",
             "tempSourceId": 17,
             "tempTargetId": 18
           },
           {
+            "tempId": 59,
             "type": "has",
             "notes": "",
             "tempSourceId": 17,
             "tempTargetId": 20
           },
           {
+            "tempId": 60,
             "type": "has",
             "notes": "",
             "tempSourceId": 9,
             "tempTargetId": 25
           },
           {
+            "tempId": 61,
             "type": "has",
             "notes": "",
             "tempSourceId": 25,
             "tempTargetId": 31
           },
           {
+            "tempId": 62,
             "type": "has",
             "notes": "",
             "tempSourceId": 25,
             "tempTargetId": 34
           },
           {
+            "tempId": 63,
             "type": "has",
             "notes": "",
             "tempSourceId": 34,
             "tempTargetId": 35
           },
           {
+            "tempId": 64,
             "type": "has",
             "notes": "",
             "tempSourceId": 34,
             "tempTargetId": 36
           },
           {
+            "tempId": 65,
             "type": "has",
             "notes": "",
             "tempSourceId": 34,
             "tempTargetId": 37
           },
           {
+            "tempId": 66,
             "type": "has",
             "notes": "",
             "tempSourceId": 9,
             "tempTargetId": 0
           },
           {
+            "tempId": 67,
             "type": "has",
             "notes": "",
             "tempSourceId": 0,
             "tempTargetId": 1
           },
           {
+            "tempId": 68,
             "type": "has",
             "notes": "",
             "tempSourceId": 0,
             "tempTargetId": 2
           },
           {
+            "tempId": 69,
             "type": "has",
             "notes": "",
             "tempSourceId": 0,
             "tempTargetId": 3
           },
           {
+            "tempId": 70,
             "type": "causes",
             "notes": "",
             "tempSourceId": 11,
             "tempTargetId": 4
           },
           {
+            "tempId": 71,
             "type": "causes",
             "notes": "",
             "tempSourceId": 19,
             "tempTargetId": 5
           },
           {
+            "tempId": 72,
             "type": "causes",
             "notes": "",
             "tempSourceId": 17,
             "tempTargetId": 19
           },
           {
+            "tempId": 73,
             "type": "causes",
             "notes": "",
             "tempSourceId": 26,
             "tempTargetId": 19
           },
           {
+            "tempId": 74,
             "type": "causes",
             "notes": "",
             "tempSourceId": 29,
             "tempTargetId": 19
           },
           {
+            "tempId": 75,
             "type": "causes",
             "notes": "",
             "tempSourceId": 26,
             "tempTargetId": 6
           },
           {
+            "tempId": 76,
             "type": "causes",
             "notes": "",
             "tempSourceId": 6,
             "tempTargetId": 7
           },
           {
+            "tempId": 77,
             "type": "causes",
             "notes": "",
             "tempSourceId": 29,
             "tempTargetId": 6
           },
           {
+            "tempId": 78,
             "type": "causes",
             "notes": "",
             "tempSourceId": 19,
             "tempTargetId": 8
           },
           {
+            "tempId": 79,
             "type": "addresses",
             "notes": "",
             "tempSourceId": 4,
             "tempTargetId": 14
+          }
+        ],
+        "scoresToCreate": [
+          {
+            "tempGraphPartId": 9,
+            "value": 7
+          },
+          {
+            "tempGraphPartId": 4,
+            "value": 8
+          },
+          {
+            "tempGraphPartId": 10,
+            "value": 8
+          },
+          {
+            "tempGraphPartId": 5,
+            "value": 5
+          },
+          {
+            "tempGraphPartId": 6,
+            "value": 4
           }
         ]
       }
