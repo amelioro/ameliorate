@@ -2,9 +2,10 @@ import { useTheme } from "@emotion/react";
 import { type PaletteColor } from "@mui/material";
 import { Data } from "react-minimal-pie-chart/types/commonTypes";
 
+import { possibleDisplayScores } from "@/common/userScore";
 import { CustomDataEntry, PieChart } from "@/web/topic/components/Score/PieChart";
 import { setScore } from "@/web/topic/diagramStore/actions";
-import { Score, possibleScores } from "@/web/topic/utils/graph";
+import { DisplayScore } from "@/web/topic/utils/graph";
 import { getScoreColor } from "@/web/topic/utils/score";
 
 interface Props {
@@ -16,7 +17,7 @@ interface Props {
 export const ScoreSelect = ({ username, graphPartId, onSelect }: Props) => {
   const theme = useTheme();
 
-  const data: Data<CustomDataEntry> = possibleScores.map((score) => {
+  const data: Data<CustomDataEntry> = possibleDisplayScores.map((score) => {
     const scoreColor = getScoreColor(score, "importance");
     const paletteColor = theme.palette[scoreColor] as PaletteColor; // not sure how to guarantee this type, since palette has non-PaletteColor keys
 
@@ -31,11 +32,11 @@ export const ScoreSelect = ({ username, graphPartId, onSelect }: Props) => {
   return (
     <PieChart
       onClick={(segmentData) => {
-        setScore(username, graphPartId, segmentData.key as Score);
+        setScore(username, graphPartId, segmentData.key as DisplayScore);
         onSelect();
       }}
       customData={data}
-      startAngle={-90 - 360 / possibleScores.length / 2} // shift first slice to top center
+      startAngle={-90 - 360 / possibleDisplayScores.length / 2} // shift first slice to top center
     />
   );
 };

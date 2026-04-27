@@ -8,7 +8,7 @@ import { Node as ApiNode, Node } from "@/common/node";
 import { UserScore as ApiScore } from "@/common/userScore";
 import { type DiagramStoreState } from "@/web/topic/diagramStore/store";
 import {
-  type Score,
+  type DisplayScore,
   type Edge as StoreEdge,
   type Node as StoreNode,
   buildEdge,
@@ -43,7 +43,7 @@ export const convertToStoreScores = (apiUserScores: TopicUserScores): StoreScore
   const storeScores: StoreScores = {};
 
   apiUserScores.forEach((apiScore) => {
-    const score: Score = apiScore.value.toString() as Score;
+    const score: DisplayScore = apiScore.value.toString() as DisplayScore;
 
     // mutation seems much easier than not mutating
     set(storeScores, [apiScore.username, apiScore.graphPartId], score);

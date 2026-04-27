@@ -32,3 +32,7 @@ export const createScoreSchema = userScoreSchema
   );
 
 export type CreateScore = z.infer<typeof createScoreSchema>;
+
+export const possibleDisplayScores = ["-", "1", "2", "3", "4", "5", "6", "7", "8", "9"] as const;
+
+export const diagramStoreUserScoresSchema = z.record(z.record(z.enum(possibleDisplayScores)));

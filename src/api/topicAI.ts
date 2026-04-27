@@ -91,10 +91,7 @@ export const getRefinedVisibleAct = () => {
         };
       });
 
-  const userScores = (parsedVisibleAct.diagram.state.userScores ?? {}) as Record<
-    string,
-    Record<string, string>
-  >;
+  const userScores = parsedVisibleAct.diagram.state.userScores;
   const scoresToCreate: TopicAICreateTopicData["scoresToCreate"] = Object.values(userScores)
     .flatMap((scoresByGraphPartId) => Object.entries(scoresByGraphPartId))
     .flatMap(([graphPartId, score]) => {

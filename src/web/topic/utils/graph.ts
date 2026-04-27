@@ -19,6 +19,7 @@ import {
   justificationNodeTypes,
   nodeTypes,
 } from "@/common/node";
+import { possibleDisplayScores } from "@/common/userScore";
 import { type GeneralFilter } from "@/web/view/utils/generalFilter";
 
 export interface Graph {
@@ -102,8 +103,7 @@ export const buildEdge = ({
 export type GraphPart = Node | Edge;
 export type GraphPartType = "node" | "edge";
 
-export const possibleScores = ["-", "1", "2", "3", "4", "5", "6", "7", "8", "9"] as const;
-export type Score = (typeof possibleScores)[number];
+export type DisplayScore = (typeof possibleDisplayScores)[number];
 
 export const findNodeOrThrow = <TNode extends MinimalNode>(nodeId: string, nodes: TNode[]) => {
   const node = nodes.find((node) => node.id === nodeId);

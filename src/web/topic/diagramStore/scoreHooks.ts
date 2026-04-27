@@ -4,7 +4,7 @@ import { shallow } from "zustand/shallow";
 
 import { throwError } from "@/common/errorHandling";
 import { useDiagramStore } from "@/web/topic/diagramStore/store";
-import { Node, Score } from "@/web/topic/utils/graph";
+import { DisplayScore, Node } from "@/web/topic/utils/graph";
 import { edges, sourceNodes } from "@/web/topic/utils/node";
 import {
   ScoreMeaning,
@@ -16,7 +16,7 @@ import { useAggregationMode, usePerspectives } from "@/web/view/perspectiveStore
 
 export const useDisplayScores = (
   graphPartIds: string[],
-): { scoresByGraphPartId: Record<string, Score>; scoreMeaning: ScoreMeaning } => {
+): { scoresByGraphPartId: Record<string, DisplayScore>; scoreMeaning: ScoreMeaning } => {
   const perspectives = usePerspectives();
   const aggregationMode = useAggregationMode();
   const scoreMeaning = getScoreMeaning(perspectives.length, aggregationMode);
@@ -37,7 +37,7 @@ export const useDisplayScores = (
 
 export const useUserScores = (graphPartId: string, perspectives: string[]) => {
   return useDiagramStore((state) => {
-    const userScores: [string, Score][] = perspectives.map((perspective) => [
+    const userScores: [string, DisplayScore][] = perspectives.map((perspective) => [
       perspective,
       get(state.userScores, [perspective, graphPartId], "-"),
     ]);
