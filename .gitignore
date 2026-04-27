@@ -54,3 +54,7 @@ _pagefind/
 
 # local agent config
 AGENTS.local.md
+.claude/settings.local.json
+
+# place to put temp files if needed
+tmp/
