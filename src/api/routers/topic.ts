@@ -184,16 +184,13 @@ export const topicRouter = router({
         throw new TRPCError({ code: "FORBIDDEN" });
       }
 
-      const authorizedToDeleteScore = opts.input.scoresToDelete.every(
-        (score) => score.username === opts.ctx.user.username,
-      );
-      const authorizedToUpsertScore = [
+      const authorizedToModifyScore = [
         ...opts.input.scoresToCreate,
         ...opts.input.scoresToUpdate,
+        ...opts.input.scoresToDelete,
       ].every((score) => score.username === opts.ctx.user.username);
 
-      if (!authorizedToDeleteScore || !authorizedToUpsertScore)
-        throw new TRPCError({ code: "FORBIDDEN" });
+      if (!authorizedToModifyScore) throw new TRPCError({ code: "FORBIDDEN" });
 
       // make changes
       await xprisma.$transaction(async (tx) => {
