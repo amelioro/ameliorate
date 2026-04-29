@@ -49,6 +49,10 @@ playwright/.cache/
 # docs things
 _pagefind/
 
+# mcp-server things
+mcp-server/src/generated/
+mcp-server/.codegen-build/
+
 # prisma
 /src/db/generated/
 

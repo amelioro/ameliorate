@@ -73,6 +73,10 @@ export const topicRouter = router({
    * - refactoring the topic store into multiple stores, to separate undo/redo from view back/forward
    */
   updateDiagram: procedure
+    .meta({
+      description:
+        "Mass-create, -update, and -delete a topic's nodes, edges, and scores in one call. Use this to populate or modify a topic's diagram.",
+    })
     .use(isLoggedIn)
     .input(
       // seems nice to have these inputs each on one line
@@ -223,6 +227,10 @@ export const topicRouter = router({
     }),
 
   create: procedure
+    .meta({
+      description:
+        "Create a new topic for the authenticated user, optionally with initial quick views. Returns the created topic including its id.",
+    })
     .use(isLoggedIn)
     .input(
       z.object({

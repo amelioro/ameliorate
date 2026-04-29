@@ -28,6 +28,7 @@ jobs:
       # a bit annoying to maintain.
       - run: npm ci --prefix ./docs-site
       - run: npm ci --prefix ./e2e
+      - run: npm ci --prefix ./mcp-server
       - run: npm ci --prefix ./mock-auth
       - run: npm run check-types
       - run: npm run check-pretty
@@ -43,7 +44,8 @@ jobs:
           node-version-file: .nvmrc
       - run: npm ci
       - run: npm run test
-  e2e: # modified from example: https://playwright.dev/docs/ci-intro#setting-up-github-actions
+  # modified from example: https://playwright.dev/docs/ci-intro#setting-up-github-actions
+  e2e:
     runs-on: ubuntu-latest
     permissions:
       # Give the default GITHUB_TOKEN write permission to commit and push updated snapshots
@@ -92,7 +94,8 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v5
         # don't commit if the tests didn't run, but otherwise try to commit in case there are updated screenshots
         # seems like this doesn't evaluate properly without ${{}}
-        if: ${{ steps.wait-for-status.outputs.description == 'Deploy Preview ready!' && !cancelled() }}
+        if: ${{ steps.wait-for-status.outputs.description == 'Deploy Preview ready!' &&
+          !cancelled() }}
         with:
           # skip ci in commit message to prevent triggering GHA or Netlify, since we can trust the previous triggers
           commit_message: "chore: automated snapshot updates [skip ci]"
@@ -100,7 +103,8 @@ jobs:
       # tests can still fail for non-snapshot assertions - keep the test-report around in this case
       - uses: actions/upload-artifact@v4
         # don't commit if the tests didn't run, but otherwise still run to get the report
-        if: ${{ steps.wait-for-status.outputs.description == 'Deploy Preview ready!' && !cancelled() }}
+        if: ${{ steps.wait-for-status.outputs.description == 'Deploy Preview ready!' &&
+          !cancelled() }}
         with:
           name: playwright-report
           # `uses` isn't affected by the `defaults.run.working-directory`, so we still need to prepend `e2e` https://stackoverflow.com/a/63122434/8409296

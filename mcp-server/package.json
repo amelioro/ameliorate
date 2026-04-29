@@ -1,0 +1,20 @@
+{
+  "name": "mcp-server",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "codegen": "esbuild scripts/generate-schemas.ts --bundle --platform=node --format=cjs --packages=external --alias:@/db/extendedPrisma=./scripts/stubs/extendedPrisma.ts --outfile=.codegen-build/script.cjs --tsconfig=tsconfig.json && node .codegen-build/script.cjs",
+    "prestart": "npm run codegen",
+    "start": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1",
+    "dotenv": "^16",
+    "tsx": "^4.19.3",
+    "zod": "3.24.1",
+    "zod-to-json-schema": "3.24.6"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25"
+  }
+}

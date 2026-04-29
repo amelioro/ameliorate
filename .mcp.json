@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "ameliorate": {
+      "type": "stdio",
+      "command": "npm",
+      "//args": "--silent suppresses npm's `> script` preamble lines, which npm writes to stdout and strict MCP clients (e.g. VSCode) try to parse as JSON-RPC. Real errors still surface via stderr. The server itself loads mcp-server/.env via dotenv.",
+      "args": ["start", "--silent", "--prefix", "mcp-server"]
+    }
+  }
+}

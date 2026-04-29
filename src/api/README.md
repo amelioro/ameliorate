@@ -2,6 +2,8 @@
 
 ## API info for LLMs
 
+The recommended way for an LLM agent to use this API is via the MCP server at [`mcp-server/`](../../mcp-server/), which wraps every tRPC endpoint as an MCP tool with up-to-date input schemas. See [mcp-server/README.md](../../mcp-server/README.md) for setup. The cURL flow described below is still available for ad-hoc or manual use.
+
 You can use `curl 'https://ameliorate.app/api/trpc/topicAI.getPromptData'` to get up-to-date `schemas` and topic `examples`. The schemas are intended for validating LLM output, and the example topics are intended for the LLM to better understand what kind of data to output beyond just what types to use from the schema.
 
 ## Using the API directly
