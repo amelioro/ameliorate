@@ -1,0 +1,29 @@
+// Mostly copied from mock-auth/tsconfig.json. The `baseUrl`/`paths` mapping is added so the
+// codegen script can resolve `@/*` imports (matching the main project's tsconfig path alias)
+// when it imports the real appRouter from src/api/routers/_app.ts.
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "noUncheckedIndexedAccess": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "ignoreDeprecations": "6.0",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "incremental": true,
+    "baseUrl": "..",
+    "paths": {
+      "@/*": ["src/*"],
+      "~/*": ["./*"]
+    }
+  },
+  "include": ["scripts/**/*.ts", "src/**/*.ts"],
+  "exclude": ["node_modules"]
+}

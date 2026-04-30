@@ -4,11 +4,11 @@ import { get, reduce, set } from "es-toolkit/compat";
 import { Data } from "react-minimal-pie-chart/types/commonTypes";
 
 import { CustomDataEntry, PieChart } from "@/web/topic/components/Score/PieChart";
-import { Score } from "@/web/topic/utils/graph";
+import { DisplayScore } from "@/web/topic/utils/graph";
 import { getScoreColor } from "@/web/topic/utils/score";
 
 interface Props {
-  userScores: Record<string, Score>;
+  userScores: Record<string, DisplayScore>;
   type?: "regular" | "button";
 }
 
@@ -21,11 +21,11 @@ export const ScoreCompare = ({ userScores, type = "regular" }: Props) => {
       const usernamesForScore = get(result, score, []);
       return set(result, score, [...usernamesForScore, username]);
     },
-    {} as Partial<Record<Score, string[]>>,
+    {} as Partial<Record<DisplayScore, string[]>>,
   );
 
   const data: Data<CustomDataEntry> = Object.entries(scoreUsers).map(([score, usernames]) => {
-    const scoreColor = getScoreColor(score as Score, "importance"); // not sure how to ensure Object.entries remembers score type
+    const scoreColor = getScoreColor(score as DisplayScore, "importance"); // not sure how to ensure Object.entries remembers score type
     const paletteColor = theme.palette[scoreColor] as PaletteColor; // not sure how to guarantee this type, since palette has non-PaletteColor keys
 
     return {

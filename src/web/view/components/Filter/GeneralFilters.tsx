@@ -5,6 +5,7 @@ import { useCallback, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 import { nodeTypes } from "@/common/node";
+import { possibleDisplayScores } from "@/common/userScore";
 import { deepIsEqual } from "@/common/utils";
 import { FormContext } from "@/web/common/components/Form/FormContext";
 import { NodeSelect } from "@/web/common/components/Form/NodeSelect";
@@ -12,7 +13,6 @@ import { Select } from "@/web/common/components/Form/Select";
 import { Switch } from "@/web/common/components/Form/Switch";
 import { ColoredNodeIcon } from "@/web/topic/components/ColoredNodeIcon";
 import { useAllNodes } from "@/web/topic/diagramStore/nodeHooks";
-import { possibleScores } from "@/web/topic/utils/graph";
 import { ShowSecondaryNeighborsLabel } from "@/web/view/components/Filter/ShowSecondaryNeighborsLabel";
 import { setGeneralFilter, useGeneralFilter } from "@/web/view/currentViewStore/filter";
 import { useFormat } from "@/web/view/currentViewStore/store";
@@ -61,7 +61,12 @@ export const GeneralFilters = () => {
               <Stack direction="row" spacing={1}>
                 <Switch name="showOnlyScored" label="Show only nodes scored" />
                 <Select name="scoredComparer" options={scoredComparers} label="" width="50px" />
-                <Select name="scoreToCompare" options={possibleScores} label="" width="50px" />
+                <Select
+                  name="scoreToCompare"
+                  options={possibleDisplayScores}
+                  label=""
+                  width="50px"
+                />
               </Stack>
 
               <NodeSelect name="nodesToShow" useNodeOptions={useAllNodes} multiple />
@@ -82,7 +87,12 @@ export const GeneralFilters = () => {
               <Stack direction="row" spacing={1}>
                 <Switch name="showOnlyScored" label="Show only nodes scored" />
                 <Select name="scoredComparer" options={scoredComparers} label="" width="50px" />
-                <Select name="scoreToCompare" options={possibleScores} label="" width="50px" />
+                <Select
+                  name="scoreToCompare"
+                  options={possibleDisplayScores}
+                  label=""
+                  width="50px"
+                />
               </Stack>
 
               <NodeSelect name="nodesToHide" useNodeOptions={useAllNodes} multiple />

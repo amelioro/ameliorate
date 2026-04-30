@@ -83,6 +83,7 @@ export const topicAIEdgeSchema = edgeSchema
     notes: true,
   })
   .extend({
+    tempId: z.number(),
     tempSourceId: z.number(),
     tempTargetId: z.number(),
   });
@@ -100,6 +101,7 @@ export const createEdgeSchema = edgeSchema
     customLabel: true,
     sourceId: true,
     targetId: true,
+    tempId: true,
     tempSourceId: true,
     tempTargetId: true,
   })

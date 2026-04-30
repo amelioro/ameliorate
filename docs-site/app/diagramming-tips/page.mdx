@@ -1,0 +1,54 @@
+# Diagramming Tips
+
+## Modeling
+
+### Regarding wording everywhere (excluding comments)
+
+- Avoid emotionally-charged words
+  - because: these can be biased; user-specific scores should be used for conveying extent
+  - e.g. "devastating risk to children's safety" could be "risk to children's safety"
+  - e.g. "undermines Nevada's car safety goals" could be "impedes Nevada's car safety goals"
+- Avoid fluff, be succinct
+  - because: we want to minimize the amount needed to read, and avoid bias that usually comes from fluff words
+  - e.g. "cause: asphalt street goes merrily downhill" could be "cause: street goes downhill"
+
+### Regarding wording inside nodes
+
+- Breakdown nodes should prefer being a single concept
+  - because: this way each concept can be independently discussed and scored, and separately considered how it relates to other nodes
+  - e.g. "downhill street causes cars to go too fast" -> "downhill street" causes "cars going too fast"
+  - exception: if multiple things would share the same exact relations, and seem like they'd be scored similarly, it's ok to list them in one node in order to convey each without creating more visual clutter
+    - e.g. "pedestrians might get hit by cars, trucks, or SUVs" (these are all related things that may not need distinguishing in the diagram)
+      - note: if these things are implied, they can even be omitted for brevity e.g. "pedestrians might get hit"
+
+### Regarding statistics
+
+- Each statistic should live in its own fact node
+  - because: this way each statistic can be independently discussed and scored, and separately considered how it relates to other nodes
+  - note: this means that a non-fact node should never have a statistic in its text or notes - they should only have edges that connect to relevant fact nodes
+  - e.g. "cause: cars exceed the 25mph speed limit" could be "cause: cars exceed the speed limit" + "fact: the speed limit is 25 mph"
+
+### Regarding relations
+
+- Don't directly connect nodes if they make more sense being connected through another node
+
+  - because: direct connections would be visually duplicate, and we show indirect edges when intermediate nodes are hidden anyway
+  - e.g. if A causes B causes C, and B is the main answer to "how does A cause C?", then don't directly connect A to C
+  - note: not sure what to do if wanting to score the A->C relationship. perhaps it's ok to only score it indirectly through A->B and B->C?
+
+### Regarding node/edge notes
+
+- Use these to add explanation or definitions, not fluff
+  - because: we want to minimize the amount needed to read, and avoid bias that usually comes from fluff words
+- Heavily prefer splitting off additional nodes over adding more cause-effect in a note
+  - because: the new nodes can then be independently discussed / scored / reasoned-about
+  - e.g. note "downhill street makes it harder to brake, allowing cars to reach higher speeds" could be nodes "downhill street" causes "harder for drivers to brake" causes "cars going too fast"
+
+## Visualizing
+
+### Regarding views
+
+- Prefer showing 5-15 nodes per view
+  - because: more than 15 nodes makes it hard to know where to look; features should make it easy to explore when there are many hidden nodes
+- Generally a "high-level overview" of some kind is a good view to have, with other views to focus on different aspects of the topic (a simple topic might not need more, a complex topic might need many)
+  - because: this helps users know where to start and where they can look deeper, without being overwhelmed by too much information at once

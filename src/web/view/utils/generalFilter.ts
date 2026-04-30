@@ -1,7 +1,8 @@
 import { z } from "zod";
 
 import { NodeType, zNodeTypes } from "@/common/node";
-import { GraphPart, Node, Score, possibleScores } from "@/web/topic/utils/graph";
+import { possibleDisplayScores } from "@/common/userScore";
+import { DisplayScore, GraphPart, Node } from "@/web/topic/utils/graph";
 import { getNumericScore } from "@/web/topic/utils/score";
 
 export const scoredComparers = ["≥", ">", "≤", "<", "="] as const;
@@ -12,7 +13,7 @@ export const generalFilterSchema = z.object({
   nodeTypes: zNodeTypes.array(),
   showOnlyScored: z.boolean(),
   scoredComparer: zScoredComparers,
-  scoreToCompare: z.enum(possibleScores),
+  scoreToCompare: z.enum(possibleDisplayScores),
   nodesToShow: z.string().uuid().array(),
   nodesToHide: z.string().uuid().array(),
   showSecondaryResearch: z.boolean(),
@@ -28,7 +29,7 @@ export const applyNodeTypeFilter = (nodes: Node[], nodeTypes: NodeType[]) => {
 export const applyScoreFilter = <T extends GraphPart>(
   graphParts: T[],
   filter: GeneralFilter,
-  scores: Record<string, Score>,
+  scores: Record<string, DisplayScore>,
 ) => {
   const { showOnlyScored, scoredComparer, scoreToCompare } = filter;
   if (!showOnlyScored) return graphParts;

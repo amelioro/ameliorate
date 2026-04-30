@@ -1,10 +1,12 @@
 import { type Palette } from "@mui/material";
 import { maxBy, mean, meanBy, round } from "es-toolkit";
 import { get } from "es-toolkit/compat";
+import { z } from "zod";
 
-import { type Score } from "@/web/topic/utils/graph";
+import { diagramStoreUserScoresSchema } from "@/common/userScore";
+import { type DisplayScore } from "@/web/topic/utils/graph";
 
-export type UserScores = Record<string, Record<string, Score>>; // userScores[:username][:graphPartId]
+export type UserScores = z.infer<typeof diagramStoreUserScoresSchema>; // userScores[:username][:graphPartId]
 
 // could have average in here too but average of importance still means importance and seems like it should use the same colors
 // TODO? probably add "truth" as a type here, for edges
@@ -15,17 +17,17 @@ export const getScoreMeaning = (numPerspectives: number, aggregationMode: string
   else return "importance";
 };
 
-export const getScoreColor = (score: Score, scoreMeaning: ScoreMeaning): keyof Palette => {
+export const getScoreColor = (score: DisplayScore, scoreMeaning: ScoreMeaning): keyof Palette => {
   if (scoreMeaning === "disagreement") return disagreementScoreColors[score];
   else return defaultScoreColors[score];
 };
 
-export const getHighestScore = (scores: Score[]): Score => {
+export const getHighestScore = (scores: DisplayScore[]): DisplayScore => {
   return maxBy(scores, (score) => Object.keys(defaultScoreColors).indexOf(score)) ?? "-";
 };
 
 // Generally use red to convey negative meaning, white for neutral, and blue for positive.
-const defaultScoreColors: Record<Score, keyof Palette> = {
+const defaultScoreColors: Record<DisplayScore, keyof Palette> = {
   "-": "paperPlain",
   "1": "critique1",
   "2": "critique2",
@@ -40,7 +42,7 @@ const defaultScoreColors: Record<Score, keyof Palette> = {
 
 // Treat all of these as "negative" - disagreement isn't necessarily inherently bad, but want to highlight it.
 // Could be more precise by adding a unique color per score, but reusing the 4 critique colors seems ok enough.
-const disagreementScoreColors: Record<Score, keyof Palette> = {
+const disagreementScoreColors: Record<DisplayScore, keyof Palette> = {
   "-": "paperPlain",
   "1": "paperPlain",
   "2": "critique4",
@@ -56,7 +58,10 @@ const disagreementScoreColors: Record<Score, keyof Palette> = {
 export const aggregationModes = ["average", "disagreement"] as const;
 export type AggregationMode = (typeof aggregationModes)[number];
 
-export const getDisplayScore = (userScores: Score[], aggregationMode: AggregationMode): Score => {
+export const getDisplayScore = (
+  userScores: DisplayScore[],
+  aggregationMode: AggregationMode,
+): DisplayScore => {
   const isComparing = userScores.length > 1;
   if (!isComparing) return userScores[0] ?? "-";
 
@@ -65,7 +70,7 @@ export const getDisplayScore = (userScores: Score[], aggregationMode: Aggregatio
     : getDisagreementScore(userScores);
 };
 
-const getAverageScore = (userScores: Score[]): Score => {
+const getAverageScore = (userScores: DisplayScore[]): DisplayScore => {
   if (userScores.every((score) => score === "-")) return "-";
 
   // average the scores, removing unscored ("-") from the calc
@@ -76,10 +81,10 @@ const getAverageScore = (userScores: Score[]): Score => {
     ),
   );
 
-  return roundedAverage.toString() as Score; // average should still result in a Score
+  return roundedAverage.toString() as DisplayScore; // average should still result in a Score
 };
 
-const getDisagreementScore = (userScores: Score[]): Score => {
+const getDisagreementScore = (userScores: DisplayScore[]): DisplayScore => {
   const numericScores = userScores.map(getNumericScore);
   const scoreAverage = mean(numericScores);
   const scoreVariance = meanBy(numericScores, (score) => Math.pow(score - scoreAverage, 2));
@@ -90,11 +95,11 @@ const getDisagreementScore = (userScores: Score[]): Score => {
   // note: min deviation = 0, max = 4: e.g. one 1 and one 9, mean = 5, variance = 16, deviation = 4
   const deviationInScoreRange = standardDeviation * (8.0 / 4) + 1; // convert 0-4 to 1-9 range
 
-  const disagreementScore = round(deviationInScoreRange).toString() as Score;
+  const disagreementScore = round(deviationInScoreRange).toString() as DisplayScore;
   return disagreementScore;
 };
 
-export const getNumericScore = (score: Score): number => {
+export const getNumericScore = (score: DisplayScore): number => {
   return score === "-" ? 5 : Number(score);
 };
 
@@ -118,7 +123,7 @@ export const getDisplayScoresByGraphPartId = (
   perspectives: string[],
   userScores: UserScores,
   aggregationMode: AggregationMode,
-): Record<string, Score> => {
+): Record<string, DisplayScore> => {
   const perspectiveScoresByGraphPart = getPerspectiveScoresByGraphPart(
     graphPartIds,
     perspectives,
@@ -127,7 +132,7 @@ export const getDisplayScoresByGraphPartId = (
 
   const displayScoresWithGraphParts = Object.entries(perspectiveScoresByGraphPart).map(
     ([graphPartId, scores]) =>
-      [graphPartId, getDisplayScore(scores, aggregationMode)] as [string, Score],
+      [graphPartId, getDisplayScore(scores, aggregationMode)] as [string, DisplayScore],
   );
   return Object.fromEntries(displayScoresWithGraphParts);
 };
@@ -137,7 +142,7 @@ const getPerspectiveScoresByGraphPart = (
   perspectives: string[],
   userScores: UserScores,
 ) => {
-  const scoresWithGraphPart: [string, Score[]][] = graphPartIds.map((graphPartId) => {
+  const scoresWithGraphPart: [string, DisplayScore[]][] = graphPartIds.map((graphPartId) => {
     const perspectiveScores = perspectives.map((perspective) => {
       return get(userScores, [perspective, graphPartId], "-");
     });

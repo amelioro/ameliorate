@@ -5,6 +5,7 @@ import { ToggleButton, useMediaQuery } from "@mui/material";
 import dynamic from "next/dynamic";
 import { useHotkeys } from "react-hotkeys-hook";
 
+import { possibleDisplayScores } from "@/common/userScore";
 import { ContextMenu } from "@/web/common/components/ContextMenu/ContextMenu";
 import { InfoDialog } from "@/web/common/components/InfoDialog/InfoDialog";
 import { SiteBanner } from "@/web/common/components/SiteBanner/SiteBanner";
@@ -26,7 +27,7 @@ import { playgroundUsername } from "@/web/topic/diagramStore/store";
 import { redo, undo } from "@/web/topic/diagramStore/utilActions";
 import { useTemporalHooks } from "@/web/topic/diagramStore/utilHooks";
 import { isOnPlayground, useUserCanEditTopicData } from "@/web/topic/topicStore/store";
-import { Score, possibleScores } from "@/web/topic/utils/graph";
+import { DisplayScore } from "@/web/topic/utils/graph";
 import { hotkeys } from "@/web/topic/utils/hotkeys";
 import { isIndirectEdge } from "@/web/topic/utils/indirectEdges";
 import { userCanEditScores } from "@/web/topic/utils/score";
@@ -55,12 +56,12 @@ const useWorkspaceHotkeys = (user: { username: string } | null | undefined) => {
     const selectedPart = getSelectedGraphPart();
     if (!selectedPart || !hotkeysEvent.keys) return;
     const [score] = hotkeysEvent.keys;
-    if (!score || !possibleScores.some((s) => score === s)) return;
+    if (!score || !possibleDisplayScores.some((s) => score === s)) return;
 
     // seems slightly awkward that there's logic here not reused with the Score component, but hard to reuse that in a clean way
     const myUsername = isOnPlayground() ? playgroundUsername : user?.username;
     if (!userCanEditScores(myUsername, getPerspectives(), getReadonlyMode())) return;
-    setScore(myUsername, selectedPart.id, score as Score);
+    setScore(myUsername, selectedPart.id, score as DisplayScore);
   });
 
   useHotkeys([hotkeys.undo], (event) => {

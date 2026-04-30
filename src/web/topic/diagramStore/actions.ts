@@ -7,10 +7,10 @@ import { type NodeType, nodeSchema } from "@/common/node";
 import { showError } from "@/web/common/components/InfoDialog/infoEvents";
 import { useDiagramStore } from "@/web/topic/diagramStore/store";
 import {
+  type DisplayScore,
   type Edge,
   type GraphPart,
   type Node,
-  type Score,
   findEdgeOrThrow,
   findGraphPartOrThrow,
   findNodeOrThrow,
@@ -22,7 +22,7 @@ import {
 // - on the child/implicit root claim (if it exists)
 // keeping this in sync manually ain't great.
 // TODO: store scores in one place
-export const setScore = (username: string, graphPartId: string, score: Score) => {
+export const setScore = (username: string, graphPartId: string, score: DisplayScore) => {
   const state = createDraft(useDiagramStore.getState());
 
   // mutation seems much easier than not mutating

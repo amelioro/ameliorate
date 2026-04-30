@@ -4,6 +4,7 @@ import { diagramStoreEdgeSchema } from "@/common/edge";
 import { diagramStoreNodeSchema } from "@/common/node";
 import { reservedSecondLevelEndpointNames } from "@/common/reservedEndpointNames";
 import { userSchema } from "@/common/user";
+import { diagramStoreUserScoresSchema } from "@/common/userScore";
 import { getBaseUrl } from "@/common/utils";
 
 // not sure how to guarantee that this matches the schema enum
@@ -49,7 +50,7 @@ export const topicFileSchema = z.object({
     state: z.object({
       nodes: diagramStoreNodeSchema.array(),
       edges: diagramStoreEdgeSchema.array(),
-      userScores: z.any(),
+      userScores: diagramStoreUserScoresSchema,
     }),
     version: z.number(),
   }),

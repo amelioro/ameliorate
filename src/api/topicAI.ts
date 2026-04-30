@@ -6,19 +6,22 @@ import { z } from "zod";
 import { Edge, justificationRelationNames, topicAIEdgeSchema } from "@/common/edge";
 import { Node, justificationNodeTypes, topicAINodeSchema } from "@/common/node";
 import { topicFileSchema } from "@/common/topic";
+import { topicAIScoreSchema } from "@/common/userScore";
 import { getAspectNodes } from "@/web/summary/aspectFilter";
 import { type Aspect, getAspectsForNodeType } from "@/web/summary/summary";
 import { convertToStoreEdge, convertToStoreNode } from "@/web/topic/utils/apiConversion";
 import { type Node as WebNode } from "@/web/topic/utils/graph";
 import unrefinedVisibleAct from "~/examples/visible_act.json";
 
-export const topicAICreatePartsSchema = z.object({
+export const topicAICreateTopicDataSchema = z.object({
   nodesToCreate: z.array(topicAINodeSchema),
   edgesToCreate: z.array(topicAIEdgeSchema),
+  scoresToCreate: z.array(topicAIScoreSchema),
 });
 
-type TopicAICreateParts = z.infer<typeof topicAICreatePartsSchema>;
+type TopicAICreateTopicData = z.infer<typeof topicAICreateTopicDataSchema>;
 
+// TODO?: should topicRefinedForAI include scores? it's probably useful to know opinions of importance. but don't really use these endpoints much though so not going to bother adding it right now
 const _topicAIPartsWithoutSummariesSchema = z.object({
   nodes: z.array(topicAINodeSchema),
   edges: z.array(topicAIEdgeSchema),
@@ -46,16 +49,16 @@ export const getRefinedVisibleAct = () => {
 
   // eslint-disable-next-line functional/no-let
   let tempIdCounter = 0;
-  const tempNodeIds: Record<string, number> = {};
+  const tempGraphPartIds: Record<string, number> = {};
 
-  const refinedVisibleAct: TopicAICreateParts = {
-    nodesToCreate: parsedVisibleAct.diagram.state.nodes
+  const nodesToCreate: TopicAICreateTopicData["nodesToCreate"] =
+    parsedVisibleAct.diagram.state.nodes
       // TODO: remove `rootClaim` nodes so it's easier for an AI to use justification properly
       .filter((node) => !justificationNodeTypes.includes(node.type))
       .map((node) => {
         const tempId = tempIdCounter++;
         // eslint-disable-next-line functional/immutable-data
-        tempNodeIds[node.id] = tempId;
+        tempGraphPartIds[node.id] = tempId;
 
         return {
           tempId,
@@ -63,26 +66,47 @@ export const getRefinedVisibleAct = () => {
           text: node.data.text,
           notes: node.data.notes,
         };
-      }),
-    edgesToCreate: parsedVisibleAct.diagram.state.edges
+      });
+
+  const edgesToCreate: TopicAICreateTopicData["edgesToCreate"] =
+    parsedVisibleAct.diagram.state.edges
       // TODO: remove `rootClaim` nodes so it's easier for an AI to use justification properly
       .filter((edge) => !justificationRelationNames.includes(edge.type))
       .map((edge) => {
-        const tempSourceId = tempNodeIds[edge.sourceId];
-        const tempTargetId = tempNodeIds[edge.targetId];
+        const tempSourceId = tempGraphPartIds[edge.sourceId];
+        const tempTargetId = tempGraphPartIds[edge.targetId];
         if (tempSourceId === undefined || tempTargetId === undefined)
           throw new Error("Failed to refine visible act: couldn't find source/target nodes");
 
+        const tempId = tempIdCounter++;
+        // eslint-disable-next-line functional/immutable-data
+        tempGraphPartIds[edge.id] = tempId;
+
         return {
+          tempId,
           type: edge.type,
           notes: edge.data.notes,
           tempSourceId,
           tempTargetId,
         };
-      }),
-  };
+      });
 
-  return refinedVisibleAct;
+  const userScores = parsedVisibleAct.diagram.state.userScores;
+  const scoresToCreate: TopicAICreateTopicData["scoresToCreate"] = Object.values(userScores)
+    .flatMap((scoresByGraphPartId) => Object.entries(scoresByGraphPartId))
+    .flatMap(([graphPartId, score]) => {
+      const tempGraphPartId = tempGraphPartIds[graphPartId];
+      // skip scores whose target was filtered out (e.g. justification nodes) and skip "-"
+      // TODO?: probably diagram store can store number scores instead of strings with `-`, so that front schema can match back
+      if (tempGraphPartId === undefined || score === "-") return [];
+
+      const value = Number(score);
+      if (Number.isNaN(value)) return [];
+
+      return [{ tempGraphPartId, value }];
+    });
+
+  return { nodesToCreate, edgesToCreate, scoresToCreate } satisfies TopicAICreateTopicData;
 };
 
 const formatNode = (node: WebNode) => {
@@ -226,6 +250,7 @@ export const getTopicRefinedForAIWithoutSummaries = ({
       throw new Error("Failed to refine topic: couldn't find source/target nodes");
 
     return {
+      tempId: tempIdCounter++,
       type: edge.type,
       notes: edge.notes,
       tempSourceId,

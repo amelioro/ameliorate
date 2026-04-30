@@ -49,5 +49,16 @@ playwright/.cache/
 # docs things
 _pagefind/
 
+# mcp-server things
+mcp-server/src/generated/
+mcp-server/.codegen-build/
+
 # prisma
 /src/db/generated/
+
+# local agent config
+AGENTS.local.md
+.claude/settings.local.json
+
+# place to put temp files if needed
+tmp/

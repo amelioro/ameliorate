@@ -11,64 +11,9 @@ import { throwError } from "@/common/errorHandling";
 import { CreateNode, Node, createNodeSchema, nodeSchema } from "@/common/node";
 import { topicSchema } from "@/common/topic";
 import { userSchema } from "@/common/user";
-import { userScoreSchema } from "@/common/userScore";
+import { CreateScore, UserScore, createScoreSchema, userScoreSchema } from "@/common/userScore";
 import { quickViewSchema } from "@/common/view";
 import { xprisma } from "@/db/extendedPrisma";
-
-/**
- * Converts simplified nodes/edges into fully valid nodes/edges ready for persistence.
- *
- * Nodes and edges are allowed to be simpler over the API (i.e. have fewer fields and use tempIds
- * if API consumers can't generate UUIDv4s reliably) so that it's easier for consumers to use.
- */
-const solidifyParts = (topicId: number, nodes: CreateNode[], edges: CreateEdge[]) => {
-  const nodeUuidsByTempId: Record<number, string> = {};
-
-  const solidifiedNodes: Node[] = nodes.map((node) => {
-    const nodeId = node.id ?? uuid();
-    // eslint-disable-next-line functional/immutable-data
-    if (node.tempId !== undefined) nodeUuidsByTempId[node.tempId] = nodeId;
-
-    return {
-      id: nodeId,
-      topicId,
-      arguedDiagramPartId: node.arguedDiagramPartId ?? null,
-      type: node.type,
-      customType: node.customType ?? null,
-      text: node.text,
-      notes: node.notes,
-    };
-  });
-
-  const solidifiedEdges: Edge[] = edges.map((edge) => {
-    const sourceId =
-      edge.tempSourceId !== undefined ? nodeUuidsByTempId[edge.tempSourceId] : edge.sourceId;
-    const targetId =
-      edge.tempTargetId !== undefined ? nodeUuidsByTempId[edge.tempTargetId] : edge.targetId;
-
-    if (sourceId === undefined || targetId === undefined) {
-      return throwError("Edge is missing source or target", {
-        edge,
-        nodeUuidsByTempId,
-        nodes,
-        edges,
-      });
-    }
-
-    return {
-      id: edge.id ?? uuid(),
-      topicId,
-      arguedDiagramPartId: edge.arguedDiagramPartId ?? null,
-      type: edge.type,
-      customLabel: edge.customLabel ?? null,
-      notes: edge.notes,
-      sourceId,
-      targetId,
-    };
-  });
-
-  return { solidifiedNodes, solidifiedEdges };
-};
 
 export const topicRouter = router({
   findByUsernameAndTitle: procedure
@@ -128,6 +73,10 @@ export const topicRouter = router({
    * - refactoring the topic store into multiple stores, to separate undo/redo from view back/forward
    */
   updateDiagram: procedure
+    .meta({
+      description:
+        "Mass-create, -update, and -delete a topic's nodes, edges, and scores in one call. Use this to populate or modify a topic's diagram.",
+    })
     .use(isLoggedIn)
     .input(
       // seems nice to have these inputs each on one line
@@ -140,7 +89,7 @@ export const topicRouter = router({
         edgesToCreate: z.array(createEdgeSchema).default([]),
         edgesToUpdate: z.array(edgeSchema.partial().required({ id: true, topicId: true })).default([]),
         edgesToDelete: z.array(edgeSchema.pick({ id: true, topicId: true })).default([]),
-        scoresToCreate: z.array(userScoreSchema).default([]),
+        scoresToCreate: z.array(createScoreSchema).default([]),
         scoresToUpdate: z.array(userScoreSchema).default([]),
         scoresToDelete: z.array(userScoreSchema.pick({ username: true, graphPartId: true, topicId: true })).default([]),
       }),
@@ -153,8 +102,17 @@ export const topicRouter = router({
       if (!topic || (!isCreator && topic.visibility === "private"))
         throw new TRPCError({ code: "FORBIDDEN" });
 
-      const { solidifiedNodes: solidifiedNodesToCreate, solidifiedEdges: solidifiedEdgesToCreate } =
-        solidifyParts(opts.input.topicId, opts.input.nodesToCreate, opts.input.edgesToCreate);
+      const {
+        solidifiedNodes: solidifiedNodesToCreate,
+        solidifiedEdges: solidifiedEdgesToCreate,
+        solidifiedScores: solidifiedScoresToCreate,
+      } = solidifyTopicData(
+        opts.input.topicId,
+        opts.ctx.user.username,
+        opts.input.nodesToCreate,
+        opts.input.edgesToCreate,
+        opts.input.scoresToCreate,
+      );
 
       const graphPartLists = [
         solidifiedNodesToCreate,
@@ -166,7 +124,7 @@ export const topicRouter = router({
       ];
       const topicObjectLists: { topicId: number }[][] = [
         ...graphPartLists,
-        opts.input.scoresToCreate,
+        solidifiedScoresToCreate,
         opts.input.scoresToUpdate,
         opts.input.scoresToDelete,
       ];
@@ -184,16 +142,13 @@ export const topicRouter = router({
         throw new TRPCError({ code: "FORBIDDEN" });
       }
 
-      const authorizedToDeleteScore = opts.input.scoresToDelete.every(
-        (score) => score.username === opts.ctx.user.username,
-      );
-      const authorizedToUpsertScore = [
-        ...opts.input.scoresToCreate,
+      const authorizedToModifyScore = [
+        ...solidifiedScoresToCreate,
         ...opts.input.scoresToUpdate,
+        ...opts.input.scoresToDelete,
       ].every((score) => score.username === opts.ctx.user.username);
 
-      if (!authorizedToDeleteScore || !authorizedToUpsertScore)
-        throw new TRPCError({ code: "FORBIDDEN" });
+      if (!authorizedToModifyScore) throw new TRPCError({ code: "FORBIDDEN" });
 
       // make changes
       await xprisma.$transaction(async (tx) => {
@@ -210,8 +165,8 @@ export const topicRouter = router({
           await tx.node.createMany({ data: solidifiedNodesToCreate });
         if (solidifiedEdgesToCreate.length > 0)
           await tx.edge.createMany({ data: solidifiedEdgesToCreate });
-        if (opts.input.scoresToCreate.length > 0)
-          await tx.userScore.createMany({ data: opts.input.scoresToCreate });
+        if (solidifiedScoresToCreate.length > 0)
+          await tx.userScore.createMany({ data: solidifiedScoresToCreate });
 
         /* eslint-disable functional/no-loop-statements -- seems like functional methods don't work with promises nicely https://stackoverflow.com/questions/37576685/using-async-await-with-a-foreach-loop#comment65277758_37576787 */
         for (const node of opts.input.nodesToUpdate)
@@ -256,9 +211,26 @@ export const topicRouter = router({
       if (graphPartsChanged) {
         await handleGraphPartChanged(opts.ctx.user.username, opts.input.topicId);
       }
+
+      return {
+        // for created records, return that actual records so that ids are available (if tempIds were used to create them) without needing a `getData` request
+        nodesCreated: solidifiedNodesToCreate,
+        nodesUpdated: opts.input.nodesToUpdate.length,
+        nodesDeleted: opts.input.nodesToDelete.length,
+        edgesCreated: solidifiedEdgesToCreate,
+        edgesUpdated: opts.input.edgesToUpdate.length,
+        edgesDeleted: opts.input.edgesToDelete.length,
+        scoresCreated: solidifiedScoresToCreate,
+        scoresUpdated: opts.input.scoresToUpdate.length,
+        scoresDeleted: opts.input.scoresToDelete.length,
+      };
     }),
 
   create: procedure
+    .meta({
+      description:
+        "Create a new topic for the authenticated user, optionally with initial quick views. Returns the created topic including its id.",
+    })
     .use(isLoggedIn)
     .input(
       z.object({
@@ -344,3 +316,89 @@ export const topicRouter = router({
       return null;
     }),
 });
+
+/**
+ * Converts simplified nodes/edges/scores into fully valid nodes/edges/scores ready for persistence.
+ *
+ * Nodes, edges, and scores are allowed to be simpler over the API (i.e. have fewer fields and use tempIds
+ * if API consumers can't generate UUIDv4s reliably) so that it's easier for consumers to use.
+ */
+const solidifyTopicData = (
+  topicId: number,
+  username: string,
+  nodes: CreateNode[],
+  edges: CreateEdge[],
+  scores: CreateScore[],
+) => {
+  const graphPartUuidsByTempId: Record<number, string> = {};
+
+  const solidifiedNodes: Node[] = nodes.map((node) => {
+    const nodeId = node.id ?? uuid();
+    // eslint-disable-next-line functional/immutable-data
+    if (node.tempId !== undefined) graphPartUuidsByTempId[node.tempId] = nodeId;
+
+    return {
+      id: nodeId,
+      topicId,
+      arguedDiagramPartId: node.arguedDiagramPartId ?? null,
+      type: node.type,
+      customType: node.customType ?? null,
+      text: node.text,
+      notes: node.notes,
+    };
+  });
+
+  const solidifiedEdges: Edge[] = edges.map((edge) => {
+    const sourceId =
+      edge.tempSourceId !== undefined ? graphPartUuidsByTempId[edge.tempSourceId] : edge.sourceId;
+    const targetId =
+      edge.tempTargetId !== undefined ? graphPartUuidsByTempId[edge.tempTargetId] : edge.targetId;
+
+    if (sourceId === undefined || targetId === undefined) {
+      return throwError("Edge is missing source or target", {
+        edge,
+        graphPartUuidsByTempId,
+        nodes,
+        edges,
+      });
+    }
+
+    const edgeId = edge.id ?? uuid();
+    // eslint-disable-next-line functional/immutable-data
+    if (edge.tempId !== undefined) graphPartUuidsByTempId[edge.tempId] = edgeId;
+
+    return {
+      id: edgeId,
+      topicId,
+      arguedDiagramPartId: edge.arguedDiagramPartId ?? null,
+      type: edge.type,
+      customLabel: edge.customLabel ?? null,
+      notes: edge.notes,
+      sourceId,
+      targetId,
+    };
+  });
+
+  const solidifiedScores: UserScore[] = scores.map((score) => {
+    const graphPartId =
+      score.tempGraphPartId !== undefined
+        ? graphPartUuidsByTempId[score.tempGraphPartId]
+        : score.graphPartId;
+
+    if (graphPartId === undefined) {
+      return throwError("Score is missing graphPartId", {
+        score,
+        graphPartUuidsByTempId,
+      });
+    }
+
+    return {
+      username: score.username ?? username,
+      graphPartId,
+      topicId: score.topicId ?? topicId,
+      value: score.value,
+    };
+  });
+
+  return { solidifiedNodes, solidifiedEdges, solidifiedScores };
+};

@@ -1,0 +1,11 @@
+{
+  "servers": {
+    "ameliorate": {
+      "type": "stdio",
+      "command": "npm",
+      // --silent suppresses npm's `> script` preamble lines, which npm writes to stdout
+      // and VSCode tries to parse as JSON-RPC. Real errors still surface via stderr.
+      "args": ["start", "--silent", "--prefix", "${workspaceFolder}/mcp-server"]
+    }
+  }
+}

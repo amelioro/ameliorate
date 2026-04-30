@@ -8,7 +8,7 @@ import {
   getSummaryForNode,
   getTopicRefinedForAIWithSummaries,
   getTopicRefinedForAIWithoutSummaries,
-  topicAICreatePartsSchema,
+  topicAICreateTopicDataSchema,
   visibleActSourceText,
 } from "@/api/topicAI";
 import { procedure, router } from "@/api/trpc";
@@ -17,19 +17,24 @@ import { topicSchema } from "@/common/topic";
 import { xprisma } from "@/db/extendedPrisma";
 
 export const topicAIRouter = router({
-  getPromptData: procedure.query(() => {
-    return {
-      schemas: {
-        createParts: zodToJsonSchema(topicAICreatePartsSchema),
-      },
-      examples: {
-        visibleAct: {
-          sourceText: visibleActSourceText,
-          topic: getRefinedVisibleAct(),
+  getPromptData: procedure
+    .meta({
+      description:
+        "Returns up-to-date schemas (for validating LLM-generated topic data) and example topics (for showing an LLM what good output looks like). Useful as a first step before generating a topic to send to topic.updateDiagram.",
+    })
+    .query(() => {
+      return {
+        schemas: {
+          createTopicData: zodToJsonSchema(topicAICreateTopicDataSchema),
         },
-      },
-    };
-  }),
+        examples: {
+          visibleAct: {
+            sourceText: visibleActSourceText,
+            topic: getRefinedVisibleAct(),
+          },
+        },
+      };
+    }),
   getSummaryForNode: procedure
     .meta({
       description:

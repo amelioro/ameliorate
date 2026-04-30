@@ -10,6 +10,10 @@ import { xprisma } from "@/db/extendedPrisma";
 
 export const viewRouter = router({
   handleChangesets: procedure
+    .meta({
+      description:
+        "Create, update, and delete a topic's quick views in one call. Use this to set up a topic's saved views (e.g. an overview Summary View, a full Diagram View).",
+    })
     .use(isLoggedIn)
     .input(
       z.object({

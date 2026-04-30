@@ -3,7 +3,7 @@ import { MouseEventHandler, forwardRef } from "react";
 
 import { StyledButton } from "@/web/topic/components/Score/ScoreButton.styles";
 import { ScoreCompare } from "@/web/topic/components/Score/ScoreCompare";
-import { type Score as ScoreData } from "@/web/topic/utils/graph";
+import { type DisplayScore } from "@/web/topic/utils/graph";
 import { indicatorLengthRem } from "@/web/topic/utils/nodeDecoration";
 import {
   AggregationMode,
@@ -19,7 +19,7 @@ interface ScoreButtonProps {
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
   zoomRatio?: number;
-  userScores: Record<string, ScoreData>;
+  userScores: Record<string, DisplayScore>;
   aggregationMode: AggregationMode;
   className?: string;
 }
