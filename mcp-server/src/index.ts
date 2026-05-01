@@ -6,6 +6,7 @@ import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
 import { config as loadEnv } from "dotenv";
+import { z } from "zod";
 
 // Resolve paths relative to this file rather than process.cwd() so the server works
 // regardless of how it's launched (e.g. `npm start --prefix ...` from another dir).
@@ -49,7 +50,41 @@ const tools: Record<string, ToolSchema> = Object.fromEntries(
 // pointing the MCP server at it. Set AMELIORATE_BASE_URL=https://ameliorate.app
 // (or another deployment) to override.
 const BASE = process.env.AMELIORATE_BASE_URL ?? "http://localhost:3000";
-const PAT = process.env.AMELIORATE_PAT;
+
+const usersSchema = z.array(
+  z.object({ username: z.string(), description: z.string(), pat: z.string() }),
+);
+
+function parseRawJson(raw: string): unknown {
+  try {
+    return JSON.parse(raw);
+  } catch (err) {
+    console.error("AMELIORATE_USERS is not valid JSON:", (err as Error).message);
+    process.exit(1);
+  }
+}
+
+function parseUsers(): z.infer<typeof usersSchema> {
+  const usersString = process.env.AMELIORATE_USERS;
+  if (!usersString) {
+    console.error("AMELIORATE_USERS is not set. See .env.example for the expected JSON shape.");
+    process.exit(1);
+  }
+  const usersJson = parseRawJson(usersString);
+  const result = usersSchema.safeParse(usersJson);
+  if (!result.success) {
+    console.error("AMELIORATE_USERS failed schema validation:", result.error.message);
+    process.exit(1);
+  }
+  return result.data;
+}
+
+const users = parseUsers();
+const patByUsername = new Map(users.map((u) => [u.username, u.pat]));
+const usernames = users.map((u) => u.username);
+const userToActAsDescription = `Which configured user to act as for this call. Options: ${users
+  .map((u) => `"${u.username}" (${u.description})`)
+  .join("; ")}`;
 
 // eslint-disable-next-line @typescript-eslint/no-deprecated
 const server = new Server(
@@ -58,11 +93,23 @@ const server = new Server(
 );
 
 server.setRequestHandler(ListToolsRequestSchema, () => ({
-  tools: Object.entries(tools).map(([name, { description, inputSchema }]) => ({
-    name,
-    description,
-    inputSchema,
-  })),
+  tools: Object.entries(tools).map(([name, { description, inputSchema }]) => {
+    const properties = (inputSchema.properties as Record<string, unknown> | undefined) ?? {};
+    const required = (inputSchema.required as string[] | undefined) ?? [];
+    const augmentedInputSchema = {
+      ...inputSchema,
+      properties: {
+        ...properties,
+        userToActAs: {
+          type: "string",
+          enum: usernames,
+          description: userToActAsDescription,
+        },
+      },
+      required: [...required, "userToActAs"],
+    };
+    return { name, description, inputSchema: augmentedInputSchema };
+  }),
 }));
 
 server.setRequestHandler(CallToolRequestSchema, async (req) => {
@@ -78,12 +125,26 @@ server.setRequestHandler(CallToolRequestSchema, async (req) => {
     };
   }
 
+  const { userToActAs, ...forwardedArgs } = args ?? {};
+  const pat = typeof userToActAs === "string" ? patByUsername.get(userToActAs) : undefined;
+  if (!pat) {
+    return {
+      content: [
+        {
+          type: "text",
+          text: `userToActAs is required and must be one of: ${usernames.join(", ")}. Received: ${JSON.stringify(userToActAs)}`,
+        },
+      ],
+      isError: true,
+    };
+  }
+
   const headers: Record<string, string> = {
     "content-type": "application/json",
-    ...(PAT ? { Authorization: `Bearer ${PAT}` } : {}),
+    Authorization: `Bearer ${pat}`,
   };
 
-  const queryInput = encodeURIComponent(JSON.stringify({ json: args ?? {} }));
+  const queryInput = encodeURIComponent(JSON.stringify({ json: forwardedArgs }));
   const url =
     tool.procedureType === "query"
       ? `${BASE}/api/trpc/${procedurePath}?input=${queryInput}` // query-type procedures expect input via query string
@@ -92,7 +153,7 @@ server.setRequestHandler(CallToolRequestSchema, async (req) => {
   const res = await fetch(url, {
     method: tool.procedureType === "query" ? "GET" : "POST",
     headers,
-    body: tool.procedureType === "query" ? undefined : JSON.stringify({ json: args ?? {} }),
+    body: tool.procedureType === "query" ? undefined : JSON.stringify({ json: forwardedArgs }),
   });
 
   const text = await res.text();

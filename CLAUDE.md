@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-See `AGENTS.md` for architecture, commands, and conventions. See `AGENTS.local.md` for personal preferences.
+**Always read both `AGENTS.md` and `AGENTS.local.md` whenever you read this file** — they are harness-agnostic and contain authoritative context.
 
 ## Tool alternatives when running in the CLI (not VSCode extension)
 

@@ -10,7 +10,7 @@ NOTE: this is mostly vibe-coded and isn't thoroughly reviewed for quality. I rea
 
 1. `cd mcp-server && npm install`
 2. Copy `.env.example` to `.env` and fill in:
-   - `AMELIORATE_PAT` — a Personal Access Token (see "Personal Access Tokens" in [src/api/README.md](../src/api/README.md))
+   - `AMELIORATE_USERS` — a JSON array of users the LLM can act as. Each entry has `username`, `description`, and `pat` (a Personal Access Token — see "Personal Access Tokens" in [src/api/README.md](../src/api/README.md)). The default template ships with three roles (LLM, source-author, audience) so the LLM can switch identity per call (mainly intended for scoring from multiple perspectives). Every tool call must specify `userToActAs` matching one of the configured usernames.
    - `AMELIORATE_BASE_URL` — optional; defaults to `http://localhost:3000`. Set to `https://ameliorate.app` (or another deployment) to point at a non-local instance.
 3. Configure your MCP client to launch this server.
    - **Claude Code**: a project-scoped [.mcp.json](../.mcp.json) is checked in, so the server is auto-registered when you open the repo. You'll be prompted once to approve it.
