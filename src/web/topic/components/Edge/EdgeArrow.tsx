@@ -41,6 +41,8 @@ const spotlightToEdgeColor: Record<Spotlight, string> = {
 interface EdgeArrowProps {
   edgeType: AnyRelationName;
   labelContainer: HTMLDivElement | null;
+  labelX: number;
+  labelY: number;
   pathDefinition: string;
   spotlight: Spotlight;
 }
@@ -48,6 +50,8 @@ interface EdgeArrowProps {
 export const EdgeArrow = ({
   edgeType,
   labelContainer,
+  labelX,
+  labelY,
   pathDefinition,
   spotlight,
 }: EdgeArrowProps) => {
@@ -68,8 +72,15 @@ export const EdgeArrow = ({
 
     // 12px padding is somewhat arbitrary that looks good for both edge details pane header (which
     // is a short path) and for longer/angled paths that can show up in a diagram.
-    return getArrowTransformAtLabelBorder(pathDefinition, labelSize.width, labelSize.height, 12);
-  }, [pathDefinition, labelSize]);
+    return getArrowTransformAtLabelBorder(
+      pathDefinition,
+      labelX,
+      labelY,
+      labelSize.width,
+      labelSize.height,
+      12,
+    );
+  }, [pathDefinition, labelX, labelY, labelSize]);
 
   if (!arrowPosition) return null;
 
@@ -124,15 +135,29 @@ const getAngleAtFraction = (pathElement: SVGPathElement, fraction: number): numb
  * border, with optional padding.
  *
  * Logic here was mostly written by LLM, but it seems good. There are some visuals here that may help https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection.html
- * And benchmarked to take ~174ms for 500 edges on mid-tier mobile, which seems good enough https://github.com/amelioro/ameliorate/issues/785#issuecomment-4101140950
  *
- * Uses the path's tangent at the midpoint to cast a ray from the label center outward,
+ * Benchmarks on mid-tier mobile are ~350ms for 500 edges with avoidEdgeLabelOverlap off, and
+ * ~1100ms for 500 edges with avoidEdgeLabelOverlap on, see https://github.com/amelioro/ameliorate/issues/785#issuecomment-4372143620.
+ * I think we should expect ~100 edges at most, at around ~200ms this seems like logic that can be
+ * potentially improved but seems ok for now. In any case, we're at a stage where functionality is
+ * more important than performance, as long as performance doesn't make the app unusable.
+ *
+ * --
+ *
+ * Uses the path's tangent at the label position to cast a ray from the label center outward,
  * then analytically computes where that ray intersects the label's bounding rectangle
  * (ray-AABB intersection). The resulting straight-line distance is used as a path-length
- * offset from the midpoint, and `getPointAtLength` snaps it back onto the actual curve.
+ * offset from the label position, and `getPointAtLength` snaps it back onto the actual curve.
+ *
+ * The label position is assumed to be at the path midpoint — which is true when
+ * `avoidEdgeLabelOverlap` is off (we build the path symmetrically around the label). When it's
+ * on and ELK has placed the label elsewhere along the path, we fall back to a bracker-halving
+ * search to locate the closest path point. The fast path covers the common case for free.
  */
 const getArrowTransformAtLabelBorder = (
   pathDefinition: string,
+  labelX: number,
+  labelY: number,
   labelWidthPx: number,
   labelHeightPx: number,
   paddingPx: number,
@@ -141,11 +166,12 @@ const getArrowTransformAtLabelBorder = (
   pathElement.setAttribute("d", pathDefinition);
 
   const totalLength = pathElement.getTotalLength();
-  const midLength = totalLength / 2;
+  if (totalLength === 0) throw new Error("Edge path has zero length, cannot position arrow"); // this should never happen, but we're being explicit because we divide by this value below
+  const lengthToLabel = getLengthToLabel(pathElement, totalLength, labelX, labelY);
 
-  // Get path direction at the midpoint (toward the target).
-  const midAngle = getAngleAtFraction(pathElement, 0.5);
-  const radians = (midAngle * Math.PI) / 180;
+  // Get path direction at the label position (toward the target).
+  const angleAtLabel = getAngleAtFraction(pathElement, lengthToLabel / totalLength);
+  const radians = (angleAtLabel * Math.PI) / 180;
   const dx = Math.cos(radians);
   const dy = Math.sin(radians);
 
@@ -160,12 +186,62 @@ const getArrowTransformAtLabelBorder = (
   const straightDist = Math.min(tx, ty);
 
   // Use that distance as a path-length offset, clamped to the path bounds.
-  const targetLength = Math.min(midLength + straightDist, totalLength);
+  const targetLength = Math.min(lengthToLabel + straightDist, totalLength);
   const point = pathElement.getPointAtLength(targetLength);
   const fraction = targetLength / totalLength;
   const angle = getAngleAtFraction(pathElement, fraction);
 
   return { x: point.x, y: point.y, angle };
+};
+
+/**
+ * Returns the path-length up to the point where the label is located on the path.
+ *
+ * Logic here mostly written by LLM to quick-fix an issue with arrows displaying when avoiding edge
+ * label overlap is on. But it seems reasonable, and performance doesn't seem terribly bad (see comment
+ * on getArrowTransformAtLabelBorder above).
+ *
+ * Fast path: when the label is at (or very near) the path midpoint, return `totalLength / 2`
+ * directly. This covers the `avoidEdgeLabelOverlap`-off case — paths are built so that the label
+ * sits at the parametric midpoint of a (near-)symmetric quartic, which is also the arclength
+ * midpoint within rounding.
+ *
+ * Slow path: when the label has been positioned by ELK along a bend-pointed path, bisect to the
+ * closest point. Each iteration probes at the bracket's inner quartiles and discards the half not
+ * containing the minimum. Assumes distance-to-label is unimodal along the path — true for the
+ * smooth, mostly-monotonic routes we generate.
+ */
+const getLengthToLabel = (
+  pathElement: SVGPathElement,
+  totalLength: number,
+  labelX: number,
+  labelY: number,
+): number => {
+  const distSqFrom = (length: number) => {
+    const point = pathElement.getPointAtLength(length);
+    const dx = point.x - labelX;
+    const dy = point.y - labelY;
+    return dx * dx + dy * dy;
+  };
+
+  // 4px² ≈ 2px tolerance — plenty of slack for bezier vs. arclength midpoint differences without
+  // false-matching ELK positions, which are typically tens of pixels off the path midpoint.
+  const midDistSq = distSqFrom(totalLength / 2);
+  if (midDistSq < 4) return totalLength / 2;
+
+  // Bracket halves each iteration. 8 iterations → ~0.4% of total length, well past the precision
+  // the tangent calc needs.
+  const { low, high } = Array.from({ length: 8 }).reduce<{ low: number; high: number }>(
+    (bracket) => {
+      const mid = (bracket.low + bracket.high) / 2;
+      const quarter = (bracket.high - bracket.low) / 4;
+      return distSqFrom(mid - quarter) < distSqFrom(mid + quarter)
+        ? { low: bracket.low, high: mid }
+        : { low: mid, high: bracket.high };
+    },
+    { low: 0, high: totalLength },
+  );
+  return (low + high) / 2;
 };
 
 const arrowSizePx = 10;
