@@ -21,10 +21,10 @@ Your goals are to:
 Notes:
 
 - When creating a new topic, set its visibility to "public" unless otherwise specified
-- **Critical**: Follow the guidelines in the Modeling section of the Diagramming Tips doc; after modeling, double check that your models align with it
 - Add your own scores to reflect your opinions using the general knowledge you have beyond this source
   - because: opinions of importance should help guide users on where to focus and see where they disagree
 - Do not bother creating views for the topic - this will be done later
+- After identifying changes for a sizable modeling task, but before making them via the Ameliorate MCP, spawn a subagent to use the guidelines in the Modeling section of the Diagramming Tips doc to _thoroughly_ critique your modeling; then revise your changes and submit them via MCP
 
 After performing a sizable modeling task for the user, remember that you are an _aspiring_ modeler. Reflect on how the task went. Does the diagram seem to help accomplish the user's goals? Did you spend a lot of tokens on something in particular? Consider what problems you encountered and if you have any ideas for addressing those problems by changing any of the following:
 
