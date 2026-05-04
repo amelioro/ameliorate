@@ -64,6 +64,8 @@ export const Edge = ({
     <EdgeArrow
       edgeType={edge.type}
       labelContainer={labelContainer}
+      labelX={labelX}
+      labelY={labelY}
       pathDefinition={pathDefinition}
       spotlight={spotlight}
     />
