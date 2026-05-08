@@ -1,0 +1,36 @@
+{
+  "name": "blog-site",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "//dev": "port 3009 for blog, to distinguish from deploying app (3000) and docs (3008)",
+    "dev": "next -p 3009",
+    "//build": "delete .next to prevent netlify from caching and not updating sidebar when page titles change - thanks https://github.com/shuding/nextra/issues/1564#issuecomment-1688460307",
+    "build": "npm run clean && next build",
+    "//sort-sitemap1": "sort lines 3 to n-1 of the sitemap (these are hardcoded where the url tags should be). command is based on the stackoverflow answer here https://stackoverflow.com/a/46018020/8409296",
+    "//sort-sitemap2": "note: avoided using `ex` command for this because that apparently isn't on netlify's default toolchain for building nextjs projects",
+    "//sort-sitemap3": "sitemap is sorted because for some reason after upgrading to nextra 4, order of pages seems to change after each build",
+    "sort-sitemap": "{ head -n 2 public/sitemap.xml; sed '1,2d;$d' public/sitemap.xml | sort; tail -n 1 public/sitemap.xml; } > public/sitemap.tmp && mv public/sitemap.tmp public/sitemap.xml",
+    "postbuild": "next-sitemap && npm run sort-sitemap",
+    "clean": "rm -rf .next",
+    "start": "next start -p 3009"
+  },
+  "dependencies": {
+    "next": "^15.5.10",
+    "next-plausible": "^3.12.4",
+    "next-sitemap": "^4.2.3",
+    "nextra": "^4.2.16",
+    "nextra-theme-docs": "^4.2.16",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-lite-youtube-embed": "^3.5.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.1.18",
+    "@types/node": "20.11.20",
+    "@types/react": "18.3.12",
+    "postcss": "^8.4.39",
+    "tailwindcss": "4.1.18",
+    "typescript": "5.3.3"
+  }
+}

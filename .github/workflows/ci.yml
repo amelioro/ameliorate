@@ -26,6 +26,7 @@ jobs:
       # docs-site is an independent nextjs project.
       # - Could alternatively just have a separate lint config for each child project, but that seems
       # a bit annoying to maintain.
+      - run: npm ci --prefix ./blog-site
       - run: npm ci --prefix ./docs-site
       - run: npm ci --prefix ./e2e
       - run: npm ci --prefix ./mcp-server

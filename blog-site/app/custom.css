@@ -1,0 +1,65 @@
+/* We import tailwind to generate utilities for any classes nextra-theme-docs's bundle
+   doesn't already ship (e.g. `x:mb-3`). That gives us two utility layers — our `utilities`
+   and nextra's `v4-utilities` — and the merged layer order matters:
+   - Our `utilities` must come AFTER `v4-base` so its preflight (`* { margin: 0 }`) doesn't
+     clobber rules like `.x\:mb-3`.
+   - Our `utilities` must come BEFORE `v4-utilities` so nextra's responsive variants
+     (e.g. `.x\:max-md\:hidden`) keep winning over base utilities like `.x\:flex` —
+     responsive overrides only work when the responsive rule is in the same/later layer
+     than the base rule. */
+@layer theme, base, v4-base, components, utilities, v4-utilities;
+
+@import "tailwindcss" prefix(x);
+
+@custom-variant dark (&:where(.dark *));
+
+/* Post card link wrapper - prevents hover underline */
+.post-card-link {
+  text-decoration: none !important;
+  display: block;
+}
+
+.post-card-link:hover {
+  text-decoration: none !important;
+}
+
+/* Post card styles */
+.post-card {
+  border: 1px solid var(--x-color-gray-200, #e5e7eb);
+  border-radius: 0.5rem;
+  padding: 1.25rem 1.5rem;
+  transition:
+    border-color 0.15s,
+    background-color 0.15s;
+}
+
+.post-card:hover {
+  border-color: var(--x-color-gray-400, #9ca3af);
+  background-color: var(--x-color-gray-50, #f9fafb);
+}
+
+:where(.dark *) .post-card {
+  border-color: var(--x-color-neutral-800, #262626);
+}
+
+:where(.dark *) .post-card:hover {
+  border-color: var(--x-color-neutral-600, #525252);
+  background-color: var(--x-color-neutral-900, #171717);
+}
+
+.post-card-title {
+  color: var(--x-color-gray-900, #111827);
+}
+
+:where(.dark *) .post-card-title {
+  color: var(--x-color-gray-100, #f3f4f6);
+}
+
+.post-card-description {
+  color: var(--x-color-gray-600, #4b5563);
+  line-height: 1.5 !important;
+}
+
+:where(.dark *) .post-card-description {
+  color: var(--x-color-gray-400, #9ca3af);
+}

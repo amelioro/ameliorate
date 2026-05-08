@@ -8,7 +8,7 @@ import { Link } from "@/web/common/components/Link";
 import { NavLink } from "@/web/common/components/NavLink";
 import { SiteBanner } from "@/web/common/components/SiteBanner/SiteBanner";
 import { useSessionUser } from "@/web/common/hooks";
-import { discordInvite, feedbackPage, githubRepo } from "@/web/common/urls";
+import { blogPage, discordInvite, docsPage, githubRepo } from "@/web/common/urls";
 
 export const SiteHeader = () => {
   const theme = useTheme();
@@ -51,11 +51,11 @@ export const SiteHeader = () => {
           </div>
 
           <div className="flex items-center gap-4">
-            <NavLink href="https://ameliorate.app/docs" target="_blank" className="hidden sm:block">
+            <NavLink href={docsPage} className="hidden sm:block">
               Docs
             </NavLink>
-            <NavLink href={feedbackPage} target="_blank" className="hidden md:block">
-              Feedback
+            <NavLink href={blogPage} className="hidden sm:block">
+              Blog
             </NavLink>
             <Link href={discordInvite} target="_blank" className="hidden sm:flex">
               <Image
