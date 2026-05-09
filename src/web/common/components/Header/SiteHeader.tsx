@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, useTheme } from "@mui/material";
+import { AppBar, Link as MuiLink, Toolbar, useTheme } from "@mui/material";
 import Image from "next/image";
 
 import { Logo } from "@/web/common/components/Header/Logo";
@@ -51,12 +51,22 @@ export const SiteHeader = () => {
           </div>
 
           <div className="flex items-center gap-4">
-            <NavLink href={docsPage} className="hidden sm:block">
+            {/* Plain MuiLink (not NavLink/NextLink) because /docs and /blog are Netlify proxy rewrites — */}
+            {/* NextLink would treat these same-origin URLs as internal and SPA-route to the [username] catch-all */}
+            <MuiLink
+              href={docsPage}
+              underline="hover"
+              className="hidden text-text-primary sm:block"
+            >
               Docs
-            </NavLink>
-            <NavLink href={blogPage} className="hidden sm:block">
+            </MuiLink>
+            <MuiLink
+              href={blogPage}
+              underline="hover"
+              className="hidden text-text-primary sm:block"
+            >
               Blog
-            </NavLink>
+            </MuiLink>
             <Link href={discordInvite} target="_blank" className="hidden sm:flex">
               <Image
                 src={`/${theme.palette.mode}/Discord-Mark.png`}
