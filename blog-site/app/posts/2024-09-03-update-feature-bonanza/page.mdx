@@ -1,0 +1,131 @@
+---
+title: "Ameliorate Update 9/3/24: Feature Bonanza"
+author: "Joel Keyser"
+date: 2024-09-03T12:00
+description: "A lot of new features for one post 😅"
+tags:
+  - update
+---
+
+import { PostMeta } from "../../components/PostMeta";
+
+<PostMeta />
+
+_[Ameliorate](https://ameliorate.app/) is a tool for analyzing problems effectively, collaboratively, and with an open mind._
+
+---
+
+### TLDR
+
+- Check out [Ameliorate's shiny new home page](https://ameliorate.app/)!
+- New features: tutorials, quick views, indicators, comments, and more!
+- No live stream this time, but there's a [demo video](https://www.youtube.com/watch?v=4bNJyqjK-io) for these features.
+- The next focus will be on finding opportunities to help others benefit from using the tool for their own situations. Don't hesitate to [reach out](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md#reaching-out) if you'd like to discuss how to use it for a problem you're working at 🙂.
+
+---
+
+Hey all, and welcome to another edition of updates for Ameliorate!
+
+It's been a while since the last update, so there's a lot of new stuff to show off 🔥. The focus was initially on making it easier to view different aspects of your diagram, but after that I moved onto a few more unrelated things that I thought would be good.
+
+To save some efforts for myself, I won't be live streaming a demo this time around, but I did make a [demo video](https://www.youtube.com/watch?v=4bNJyqjK-io) that you can still go and watch in case you prefer that format over this post.
+
+Without further ado, let's see what's been added!
+
+## Bigger Updates
+
+### New Home Page
+
+The previous home page was kind-of just thrown together to have something, and didn't really show off the tool very well. So I took some time to give it a bit of a makeover. Check out [the new home page](https://ameliorate.app/)! Here's a sneak-peak:
+
+![new home page](https://substack-post-media.s3.amazonaws.com/public/images/24236610-6d43-4682-aad7-566d4604310a_890x790.png)
+
+I think there's probably still room for improvement, but I'm happy with how it turned out. Let me know if you have any suggestions for it!
+
+### Tutorials
+
+With Ameliorate becoming a bit more fleshed-out, it also seemed time to add an easier way to learn how to use it. There's some documentation, but that can be a lot to read through, and for a complex app like Ameliorate, it's nice to have something built into the app.
+
+So I've added a few tutorials that you can go through to learn about different aspects of the tool. There's a path for Builders if you want to build diagrams yourself, and for Viewers if you just want to be able to navigate others' diagrams. Check it out by opening the app ([Start Building](https://ameliorate.app/new) or [Play Around](https://ameliorate.app/playground)) and let me know what you think!
+
+![Tutorial paths for Builders and Viewers](https://substack-post-media.s3.amazonaws.com/public/images/e56f1d6b-75b0-4c65-b8ce-50cc355b3b15_666x471.png)
+
+(There are also planned tutorials to show off more advanced features for Experts, but those didn't seem worth making right now)
+
+### Quick Views
+
+In the last update, filters were introduced, so you could look at different aspects of your diagram. Those are nice for any one moment, but not nice when you want to quickly jump between viewing different aspects.
+
+That's where Quick Views come in! You can create a Quick View for any view configuration. Not only does this allow easy navigation for yourself, but others will be able to use these views, so you can use them as a way to indicate what some useful views of your topic are.
+
+![Quick Views demo](https://substack-post-media.s3.amazonaws.com/public/images/06070810-5f91-41d3-83fe-3c08f3a263d2_723x487.gif)
+
+### Indicators
+
+Previously, it was somewhat annoying to find where auxiliary information lived. Now, each node (and edge) has indicators to convey which kinds of extra information that the node has.
+
+![Node indicators showing questions, facts/sources, supports/critiques, and comments](https://substack-post-media.s3.amazonaws.com/public/images/8e6c6999-7603-4aaf-8346-d67e096b66f5_324x89.png "These show that the node has, from left to right: questions, facts/sources, supports/critiques, and comments")
+
+### Comments & Notifications
+
+The collaboration over an Ameliorate diagram so far would have to come from presenting and discussing it synchronously, but I wanted to enable usage of it asynchronously too. So now, you can add comments (in the Details Pane), and get notifications for those either via email or through the app.
+
+![Comments on a node](https://substack-post-media.s3.amazonaws.com/public/images/3ef2f7c9-d4ad-4332-8d05-f672591f5b7a_369x193.png)
+
+## Smaller Updates
+
+### Showing/Hiding Nodes
+
+As an addition to the filters that were added last time, now you can show/hide specific nodes, rather than having to rely on general filters that would fit the nodes you want.
+
+You can hide a node through its context menu, and if a node has a neighbor that's hidden, its handle will turn blue. You can show that neighbor through the hover-menu of the handle:
+
+![Show/hide nodes demo](https://substack-post-media.s3.amazonaws.com/public/images/61043a5a-f825-4983-8e1e-3974496b7573_600x445.gif)
+
+There are also convenience actions for showing _only_ that node and its neighbors, and for showing _additionally_ that node's neighbors:
+
+![Show neighbors convenience actions](https://substack-post-media.s3.amazonaws.com/public/images/ec0cc563-7547-439c-96bc-0876d9ffdf26_596x475.gif)
+
+And lastly, there's a "flashlight mode" (found in the More Actions Drawer) for quickly navigating through all the hidden neighbors of a diagram:
+
+![using flashlight mode in brutality-sugar topic](https://substack-post-media.s3.amazonaws.com/public/images/f6a71ac5-3d8e-415b-9f82-abfd00a03224_1022x728.gif)
+
+### Layout Thoroughness
+
+Sometimes the automatic layout isn't good for your specific set of nodes. "Layout Thoroughness" has been added as another option to allow you to have a more desirable layout.
+
+Its value ranges from 1-100, where a higher value will place more priority on keeping the layout balanced, with parent nodes close in distance to their children. A lower value will place more priority on keeping nodes of the same type near each other.
+
+![Layout thoroughness slider demo](https://substack-post-media.s3.amazonaws.com/public/images/a77bfdf6-6c57-44d8-9390-751301dce41f_902x570.gif)
+
+### Toggle Node Fill
+
+You may have noticed from the above images that there's a new default node style, where the node's color just outlines it, rather than being its background. This helps reduce the saturation on the page, which can be hard to look at.
+
+Sometimes though, it's nice to see the node's color as the background - e.g. when you're really zoomed out, and you want the node types to stand out more. So you can toggle this option:
+
+![Node fill toggle comparison](https://substack-post-media.s3.amazonaws.com/public/images/2fa5b37a-20a6-4942-aab9-300033575feb_891x506.png)
+
+### Split Panes
+
+Often, if you have a widescreen monitor, it feels like there's a lot of wasted width, and that the diagram doesn't need so much space. So split panes have been added, to take advantage of this space!
+
+If you have a wide viewport, the Views/Details Pane will automatically split into a separate Views Pane on the left and Details Pane on the right:
+
+![Split panes layout](https://substack-post-media.s3.amazonaws.com/public/images/ed16bbe0-5e67-42f8-bfb7-db133d139d0e_1534x833.png)
+
+## What's Next?
+
+At this point, I'm feeling pretty good about how well Ameliorate works! I still have too many ideas for big improvements to make 🔥 ([backlog](https://github.com/orgs/amelioro/projects/2/views/1)), but it's time to focus more on spreading the word and helping others benefit from the tool.
+
+For the next few months, I plan to spend a good chunk of time looking for opportunities to help others apply Ameliorate to their own situations. I'll be posting around and reaching out to a few different groups. I'm also hoping to find people that, whether or not they want to use Ameliorate themselves, want to help others improve how they analyze their problems.
+
+If you know of anyone or any groups that may be interested in Ameliorate, or if you'd like to discuss how to use it for a problem you're working at, don't hesitate to [reach out](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md#reaching-out)!
+
+That's all for today, and I'll see you next time!
+
+Cheers 🙂
+
+**_Understand ourselves. Understand each other. Grow together._**
+
+**_Ameliorate._**
