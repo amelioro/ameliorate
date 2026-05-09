@@ -10,7 +10,7 @@ export function PageWrapper({ children }: { children: ReactNode }) {
   const mdxComponents = useMDXComponents({});
 
   return (
-    <mdxComponents.wrapper toc={[]} sourceCode="" metadata={{ title: "", filePath: "" }}>
+    <mdxComponents.wrapper toc={[]} metadata={{ title: "", filePath: "" }}>
       {children}
     </mdxComponents.wrapper>
   );

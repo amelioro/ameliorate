@@ -70,7 +70,6 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
             pageMap={await getPageMap()}
             docsRepositoryBase="https://github.com/amelioro/ameliorate/blob/main/blog-site"
             editLink={null}
-            copyPageButton={false}
             sidebar={{ defaultMenuCollapseLevel: 99 }}
             toc={{ backToTop: <>Scroll to top</> }}
           >

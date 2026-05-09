@@ -17,13 +17,18 @@
     "start": "next start -p 3008"
   },
   "/": "dompurify should not be needed here, it's only used indirectly via nextra's mermaid rendering, but there is a dependency issue they need to fix, see https://github.com/mermaid-js/mermaid/issues/6078",
+  "//": "@headlessui/react is overridden to 2.2.0 (it's a transitive dep of nextra) because >=2.2.1 emits an 'Invalid prop ref supplied to React.Fragment' warning when the search box is used under React 18. Drop once we upgrade react/react-dom to 19.",
+  "overrides": {
+    "@headlessui/react": "2.2.0"
+  },
+  "///": " nextra/nextra-theme-docs are pinned to 4.2.17 separately for parity with blog-site (see blog-site/package.json for details).",
   "dependencies": {
     "dompurify": "^3.2.1",
     "next": "^15.5.10",
     "next-plausible": "^3.12.4",
     "next-sitemap": "^4.2.3",
-    "nextra": "^4.2.16",
-    "nextra-theme-docs": "^4.2.16",
+    "nextra": "4.2.17",
+    "nextra-theme-docs": "4.2.17",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
