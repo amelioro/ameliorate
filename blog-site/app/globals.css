@@ -1,0 +1,14 @@
+/* Layer-order declaration must be the FIRST thing the browser parses across all stylesheets
+   — once a layer is mentioned, its position is locked. We need our `base` layer (Tailwind
+   preflight) to slot in BEFORE nextra's `v4-utilities` so preflight rules like
+   `* { padding: 0 }` don't clobber utilities like `x:px-2` on nextra elements.
+
+   The two `@import`s below are inlined here so this file ends up as the
+   only stylesheet carrying these layers. That makes the order-declaration above
+   load-bearing AND independent of however Next.js orders CSS chunks across the app. */
+@layer theme, base, v4-base, components, utilities, v4-utilities;
+
+@import "nextra-theme-docs/style-prefixed.css";
+@import "tailwindcss" prefix(x);
+
+@custom-variant dark (&:where(.dark *));
