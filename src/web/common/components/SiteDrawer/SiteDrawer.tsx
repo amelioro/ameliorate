@@ -78,8 +78,10 @@ export const SiteDrawer = ({ username, isSiteDrawerOpen, setIsSiteDrawerOpen }: 
 
         <Divider className="my-1" />
 
+        {/* plain `a` instead of NextLink because /docs and /blog are Netlify proxy rewrites — */}
+        {/* SPA navigation would skip those rewrites and hit the [username] catch-all route */}
         <ListItem>
-          <ListItemButton LinkComponent={NextLink} href={docsPage}>
+          <ListItemButton LinkComponent="a" href={docsPage}>
             <ListItemIcon>
               <MenuBook />
             </ListItemIcon>
@@ -88,7 +90,7 @@ export const SiteDrawer = ({ username, isSiteDrawerOpen, setIsSiteDrawerOpen }: 
         </ListItem>
 
         <ListItem>
-          <ListItemButton LinkComponent={NextLink} href={blogPage}>
+          <ListItemButton LinkComponent="a" href={blogPage}>
             <ListItemIcon>
               <Article />
             </ListItemIcon>

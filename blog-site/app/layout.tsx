@@ -5,8 +5,10 @@ import { Anchor, Head, Search } from "nextra/components";
 import { DiscordIcon, GitHubIcon } from "nextra/icons";
 import { getPageMap } from "nextra/page-map";
 import { Layout, Navbar } from "nextra-theme-docs";
-import "nextra-theme-docs/style-prefixed.css";
-import "./custom.css";
+// globals.css inlines nextra-theme-docs/style-prefixed.css and tailwindcss together so
+// our cascade-layer order is locked in within a single file, regardless of how Next.js
+// orders CSS chunks elsewhere in the app.
+import "./globals.css";
 import { ReactNode } from "react";
 
 import { discordInvite, docsPage, githubRepo } from "../../src/web/common/urls";

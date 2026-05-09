@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import type { Post } from "../posts/get-posts";
+import "./post-card.css";
 
 export function PostCard({ post }: { post: Post }) {
   const formattedDate = new Date(post.frontMatter.date).toLocaleDateString("en-US", {
