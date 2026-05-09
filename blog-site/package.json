@@ -1,10 +1,10 @@
 {
-  "name": "docs-site",
+  "name": "blog-site",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "//dev": "port 3008 for docs, to distinguish from deploying app",
-    "dev": "next -p 3008",
+    "//dev": "port 3009 for blog, to distinguish from deploying app (3000) and docs (3008)",
+    "dev": "next -p 3009",
     "//build": "delete .next to prevent netlify from caching and not updating sidebar when page titles change - thanks https://github.com/shuding/nextra/issues/1564#issuecomment-1688460307",
     "build": "npm run clean && next build",
     "//sort-sitemap1": "sort lines 3 to n-1 of the sitemap (these are hardcoded where the url tags should be). command is based on the stackoverflow answer here https://stackoverflow.com/a/46018020/8409296",
@@ -14,23 +14,23 @@
     "//postbuild": "build sitemap (sorted) and pagefind index (for searching docs)",
     "postbuild": "next-sitemap && npm run sort-sitemap && pagefind --site .next/server/app --output-path public/_pagefind",
     "clean": "rm -rf .next",
-    "start": "next start -p 3008"
+    "start": "next start -p 3009"
   },
-  "/": "dompurify should not be needed here, it's only used indirectly via nextra's mermaid rendering, but there is a dependency issue they need to fix, see https://github.com/mermaid-js/mermaid/issues/6078",
-  "//": "@headlessui/react is overridden to 2.2.0 (it's a transitive dep of nextra) because >=2.2.1 emits an 'Invalid prop ref supplied to React.Fragment' warning when the search box is used under React 18. Drop once we upgrade react/react-dom to 19.",
+  "/": "@headlessui/react is overridden to 2.2.0 (it's a transitive dep of nextra) because >=2.2.1 emits an 'Invalid prop ref supplied to React.Fragment' warning when the search box is used under React 18. Drop once we upgrade react/react-dom to 19.",
   "overrides": {
     "@headlessui/react": "2.2.0"
   },
-  "///": " nextra/nextra-theme-docs are pinned to 4.2.17 separately for parity with blog-site (see blog-site/package.json for details).",
+  "//": "nextra/nextra-theme-docs are pinned to 4.2.17 because there's a prerender failure on our pages that we haven't diagnosed. Might be releated to our @headlessui/react override. Figured it'd be best to just match the docs-site versions.",
   "dependencies": {
-    "dompurify": "^3.2.1",
     "next": "^15.5.10",
     "next-plausible": "^3.12.4",
     "next-sitemap": "^4.2.3",
     "nextra": "4.2.17",
     "nextra-theme-docs": "4.2.17",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-lite-youtube-embed": "^3.5.1",
+    "rehype-unwrap-images": "^1.0.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "4.1.18",

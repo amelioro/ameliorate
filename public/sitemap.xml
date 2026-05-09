@@ -4,6 +4,9 @@
     <loc>https://ameliorate.app/sitemap-generated.xml</loc>
   </sitemap>
   <sitemap>
+    <loc>https://ameliorate.app/blog/sitemap.xml</loc>
+  </sitemap>
+  <sitemap>
     <loc>https://ameliorate.app/docs/sitemap.xml</loc>
   </sitemap>
 </sitemapindex>

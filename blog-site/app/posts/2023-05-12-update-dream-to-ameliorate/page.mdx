@@ -1,0 +1,209 @@
+---
+title: "A Dream to Ameliorate"
+author: "Joel Keyser"
+date: 2023-05-12T12:00
+description: "Imagine a world where you never have to leave a conversation frustrated that you aren't understood or that you can't understand someone…"
+tags:
+  - update
+---
+
+import { PostMeta } from "../../components/PostMeta";
+
+<PostMeta />
+
+_Imagine a world where…_
+
+_… you never have to leave a conversation frustrated that you aren't understood or that you can't understand someone else._
+
+_… politicians and citizens of diverse perspectives can work together and be satisfied with decisions intended to better society._
+
+_… ANYONE has the power to get traction on an overwhelming problem._
+
+In February, I quit my job to dedicate my time to a personal project, with the goal of making it easier to discuss and mutually understand tough problems.
+
+I'm calling the project Ameliorate. It's a [web application](https://ameliorate.app/) that uses the idea of a [concept map](https://en.wikipedia.org/wiki/Concept_map) to enable concise and precise communication of a problem. It has a long way to go 😅, but I think it's developed enough now to give an idea of what I'm going for, and I'm excited to share it 🙂.
+
+In this blog post, I'll detail the project along with my motivation, goals, and current plans. If you just want to see the tool in action, feel free to jump to the [Demo](#demo). I plan to post every month or two, so [subscribe to this blog](https://amelioro.substack.com/), like the [Facebook page](https://www.facebook.com/profile.php?id=100091844721178), or join the [Discord server](https://discord.gg/3KhdyJkTWT) to get updates!
+
+## Motivation
+
+We're going to start off with a cheesy-but-accurate personal backstory 😅. I think it's useful for fully understanding the reasoning and direction of the tool, but feel free to jump to the section on the tool itself, [Ameliorate](#ameliorate).
+
+### Mountains
+
+In my Ye Olde College Days, some of my fondest memories were the spontaneous, deep conversations that happened late at night with friends. It always felt easier to dream big in these moments. Sometimes we'd talk about the mountainous problems in the world — war, politics, tragedies. Maybe we'd theorize their causes, or what might be done to improve these situations. But we'd always come to this feeling of helplessness, like, "Welp, these problems suck, but they're mountains that are beyond us to move. I guess we cross our fingers that some experts out there can figure them out 😄😭."
+
+![Mountains](https://substack-post-media.s3.amazonaws.com/public/images/a21e9eb8-775f-45d4-8786-adba128d61db_800x534.jpeg)
+
+At some point, I had enough of this feeling. I decided that I'd spend a few years after college focusing on my profession, but then I'd dedicate my skills to work somewhere that is trying to tackle one (probably just one _part_ of one) of these mountains. I started keeping a list of societal issues important to me, and in the back of my mind I kept considering which one would be best for me and my skills.
+
+### A Holiday
+
+Juneteenth 2020. I was surprised and excited to get an unexpected day off in June! Heck yeah! But on that day I found myself lost in thought. It had already been a crazy year so far, with Covid and everything, but particularly in June, there were a lot of protests going on. These were spurred on by the death of George Floyd, and millions of people were participating.
+
+What frustrated me most was that so many people wanted change — millions willing to spend hours of their time advocating — and yet change still seemed uncertain. What even should change?
+
+I imagined what it would be like if all of these people could constructively work together, _with_ those being protested against. How glorious would that be? But reaching mutual understanding over such a heated, controversial, complicated issue like this, and with so many people — that's an impossible feat.
+
+### One Particular Mountain
+
+This led me to a bit of a tangent: honestly, even when both sides are trying to work together, it's still really hard to attain mutual understanding. Even at a smaller scale! I myself have left countless best-effort discussions, about much simpler problems, feeling misunderstood or that we were talking past each other. And what's more: when you're trying to propose a solution, or explain an issue, it's not just about resolving differences in understanding — bringing others up-to-speed is also a difficult mutual understanding problem.
+
+Huh. Mutual understanding is kind of a mountain of its own, isn't it? Every societal problem on my list would be easier to tackle if mutual understanding was easier. By making it easier to get up-to-speed and work together, we could take better advantage of humanity's abundance of diverse perspectives.
+
+So I added this mountain to the top of my list, and decided that this is the problem I'm going to work on.
+
+Hence, Ameliorate. The ultimate goal of the project is to make mutual understanding so simple that _anyone_ can reach the forefront of a complex problem and constructively contribute their perspective, with only one hour of their time.
+
+![The definition of ameliorate, "make (something bad or unsatisfactory) better," sits next to a green sphere and within a green border. Behind it is a collage of headlines that represent societal problems. Examples: "Fighting leaves thousands dead, homeless in Rwanda," "California exceeds 4 million acres burned by wildfires in 2020," "Recidivism Imprisons American Progress," and "The death of George Floyd, and the frustration that nothing ever changes."](https://substack-post-media.s3.amazonaws.com/public/images/15f55e74-3986-4913-bcb2-37a62accc0b8_800x800.jpeg "A collage of headlines I made that represent societal problems. Some are recent, some are decades old. They're intended to provoke a justified anger (some ironically). The green sphere represents an improved world, and it's placed within the green border to imply that those less-impacted by these problems often have the most time and resources available to ameliorate them.")
+
+## Ameliorate
+
+Do I think we can get there? Heck yeah! Do I know how we can get there? Well, not exactly. Complex issues have _a lot_ of relevant and debatable information, so we really gotta ramp up the efficiency of our communication. It's going to take a lot of work.
+
+The great news is that this mountain is made of smaller hills that are valuable to be moved on their own. Many of the features I have in mind are actually useful for simpler, more realistic situations, and can be completed on the way to achieving the grand goal.
+
+These features are centered around a change in the way we organize the information that's relevant for a problem, and I think this change can help us make a huge step towards mutual understanding. The core idea is to break down problem details into distinct pieces, convey relations between these pieces, and enable each of these to be independently reasoned about; in other words, we create a critiqueable, typed [concept map](https://en.wikipedia.org/wiki/Concept_map).
+
+### Concepts
+
+Here is where [Ameliorate](https://ameliorate.app/) comes in! Let's go over this core idea, the "critiqueable, typed concept map." To do this, we'll look at a very oversimplified mapping of the topic of world hunger — it should be good enough to convey the idea.
+
+First off — by "concept map," I mean a format where the problem is broken down into concepts (represented in boxes, called nodes) with their relations to each other made explicit (represented through lines, called edges).
+
+![Concept map showing world hunger broken into causes and solutions](https://substack-post-media.s3.amazonaws.com/public/images/4959e145-6273-4bf3-b589-abbf70b1b574_800x399.png)
+
+For example, in the diagram above, the problem "world hunger" is broken down into known causes (e.g. "poor food production," "poor food transportation logistics") and potential solutions (e.g. "fund agricultural research," "train logistics engineers").
+
+By "typed" concept map, I mean that there are categories for each node and edge. Above, you can see Problem and Solution node types, and "causes" and "addresses" edge types. There are currently a few more of these types in Ameliorate (see the [Demo](#demo)); I expect them to be refined a lot over time.
+
+Finally, by "critiqueable," I mean that each node and edge is implicitly making a claim, and any of those claims can be scored, supported, and critiqued independently.
+
+![Scoring a node's implied claim](https://substack-post-media.s3.amazonaws.com/public/images/2e09f14a-bba6-4d46-b359-bd69a6c3c75d_390x340.png)
+
+In the above example, "poor food production" is a Problem. As a node, its implication is that "this problem is important." You can score this node from 1 to 9, 1 meaning that this isn't a problem at all, 9 meaning this is a big problem. Also look at the "causes" edge above this problem — scoring that edge would indicate the extent to which you think "poor food production causes world hunger."
+
+Note that there's some overlap between these — scoring the edge implies some importance for the problem specifically because it contributes to causing world hunger. But if we score the node higher than the edge (as in the picture), we're implying that poor food production is important for reasons more than just that it causes world hunger. Perhaps it causes another problem too.
+
+Next to the score is the claim indicator. The claim indicator is filled in, so we know there are supports or critiques to the implication that the problem is important. If we click on the claim indicator, we can view these supports and critiques.
+
+![Supports and critiques for a claim](https://substack-post-media.s3.amazonaws.com/public/images/23522db4-0385-40d0-9ea7-b93b13eab951_679x142.png)
+
+Again, this is a bit of an oversimplified example, but in the image above you can see we're saying that poor food production is an important problem because solving it is required for self-sufficiency. We could add more supports or critiques here, and those supports and critiques can also be supported or critiqued.
+
+### Possibilities
+
+That's the core idea of Ameliorate. Once we've broken the information down into a typed concept map, we're able to have some more useful features. For example, one that's already implemented is the criteria table.
+
+![Criteria table comparing solutions](https://substack-post-media.s3.amazonaws.com/public/images/5e8874bd-f5f5-40a6-879e-ae1597643c33_800x226.png)
+
+Criterion is another node type that allows you to convey what you think makes a solution good. The criteria table, as seen above, is one way to visualize a comparison of the solutions across your criteria. The cells are actually edges that represent how much each solution embodies the criterion — so the score of 3 indicates that we think funding agricultural research may have little short-term benefit, but the 8 to the right indicates that we think donating agricultural tech has high short-term benefit.
+
+I had the criteria hidden in the problem mapping to reduce the clutter, but you can show them, as seen in the image below.
+
+![Full concept map with criteria shown](https://substack-post-media.s3.amazonaws.com/public/images/74c23878-15e6-4127-a71c-023fdfde26cd_778x590.png)
+
+A few other planned ideas that can take advantage of the concept mapping are:
+
+- Reducing duplication (e.g. [warn if node seems to duplicate another existing node](https://github.com/amelioro/ameliorate/issues/118))
+- Showing/hiding details you care/don't care about (e.g. [by node type](https://github.com/amelioro/ameliorate/issues/101))
+- Improving automatic layout (e.g. [using node types to group nodes together](https://github.com/amelioro/ameliorate/issues/84))
+- Reducing bias (e.g. [warn when text includes emotional bias](https://github.com/amelioro/ameliorate/issues/12))
+
+### Demo
+
+Here's a demo video to show the tool in action (there's a [shorter demo video](https://www.youtube.com/watch?v=q3kpbV90eOw) as well):
+
+import { YouTube } from "../../components/YouTube";
+
+<YouTube id="yM8RrwQWeJc" title="Ameliorate Demo" />
+
+It's definitely in prototype stages — there are a few issues with the experience, and currently there's no backend so you can't conveniently work with others, which is pretty important 😅, but hopefully you get the idea.
+
+### Why would you use this?
+
+Generally speaking, Ameliorate is intended for anyone who feels that an issue or decision is not straightforward, and that the issue or decision is important enough that it's worth spending extra effort to ensure the different pieces are being considered as best they can. You can use it for yourself, but it'll have more value when you want to align with others.
+
+Alas, the tool is far from being able to help tackle societal problems, and it has a few issues. But it may already be good enough to help you get a grasp on your own ideas about a problem, or to help effectively focus discussion around a problem or proposal by sharing it on your screen.
+
+### Short-term Future & Smaller Hills
+
+Having to share your screen and use the mapping for a live discussion is a pretty massive drawback, so the next big step for me is to allow sharing topics easily (through a URL). This will be a big task, maybe two whole months, since it requires adding a backend, and users, and I need to learn a lot there to ensure it's set up well.
+
+After that, I expect to focus most of my efforts (probably several months) on features for small groups working together to solve tough-but-not-societal problems.
+
+Here are some smaller hills that I've identified as sub-problems of the mutual understanding mountain. I'm not going to go into too much detail here; let your imagination run wild 🙂:
+
+- Conveying concepts ([scratch notes](https://github.com/amelioro/ameliorate/issues/65), clarification annotations)
+- Conveying differences of opinion (scoring by multiple users, views to compare scores)
+- Feedback (comments/threading, suggestion/approval system)
+- Learning topic (version history & history playback, [show/hide by node type](https://github.com/amelioro/ameliorate/issues/101), focus popular concepts, highlight score/claim mismatch)
+- Evolving topic over time (refactoring tools, e.g. [convert claim to effect](https://github.com/amelioro/ameliorate/issues/70))
+- Convenience ([shortcuts/vim mode](https://github.com/amelioro/ameliorate/issues/5), map generation from dialogue, [browser extension](https://github.com/amelioro/ameliorate/issues/121))
+- Big & complex problems ([duplication detection](https://github.com/amelioro/ameliorate/issues/118), [similar problems in different contexts](https://github.com/amelioro/ameliorate/issues/13))
+- Catalyzing new ideas ([brainstorming mode](https://github.com/amelioro/ameliorate/issues/120), prompts, question/answer node types)
+- Constructive with trolls/bad faith (suggestion/approval system, [bias detection](https://github.com/amelioro/ameliorate/issues/12))
+- Actionable/solution rollout planning
+
+## An Important Principle
+
+There's one principle in this endeavor that I find particularly critical, and I think worth calling out: accessibility.
+
+If we want the best chance of addressing societal issues, we need as many diverse perspectives as possible. Any barriers preventing someone from using the tool are reducing its potential value. So it needs to be accessible.
+
+What does this mean for the tool?
+
+A lot is covered by following [A11y](https://www.a11yproject.com/checklist/) guidelines, which ensures support for things like screen readers, mobile, colorblind usage, and mouseless usage. Since the tool is in its early stages, these things haven't all been a priority. But they've been in mind and will continue to be as the tool is used more.
+
+Additionally, cost can be a big barrier to accessibility — so the tool is and will remain free to use. Profit is not a goal for this project, and though funding may eventually be needed, accessibility won't be sacrificed.
+
+## Community
+
+Another highly regarded aspect of this project is community. One thing I know about myself is that I work much better when others are involved! My hope is that the tool becomes useful enough that people start to use it, and they want to make it better. Something like [stone soup](https://en.wikipedia.org/wiki/Stone_Soup), except I've put in a couple of good veggies rather than a stone… I hope you like broccoli! 😄
+
+![Broccoli soup, decked with other veggies and garnishes](https://substack-post-media.s3.amazonaws.com/public/images/886c84d7-ebb6-494c-9838-a06f3836daff_800x534.jpeg "Visual representation of what Ameliorate could be with your help")
+
+I've tried setting up Ameliorate to be community-friendly, so that when you want to help out, you can. So far, I've been really launched forward with the free-time help of full-stack consultant [Anthony Messerschmidt](https://www.linkedin.com/in/anthonymesserschmidt/) and UX-extraordinaire [Alex Tilot](https://www.linkedin.com/in/alex-tilot/) 🔥.
+
+### How you can help
+
+One way for anyone to contribute is to try out the tool and [provide feedback](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md#providing-feedback)! My hope is for feedback to drive a lot of the work on the project, and now is a good time to get involved because it's early enough that it's still possible to make big changes 🤠. I know there's plenty of room for improvement across different aspects, and I'd love to hear any ideas, suggestions, questions, or concerns that you have.
+
+Here are a few different mediums you can use for providing feedback:
+
+- [Discord](https://discord.gg/3KhdyJkTWT) — this is a casual way to mention something and have easy back-and-forth; there's also specifically a channel for #ideas-and-feedback
+- [GitHub Issues](https://github.com/amelioro/ameliorate/issues) — slightly more formal than Discord, but this is the system used for managing the project's work, so if you create an issue, you can track its status
+- Email [ameliorate.app@gmail.com](mailto:ameliorate.app@gmail.com) — easy to use if you're unfamiliar with Discord/GitHub
+- Comment on this blog post
+
+And here are some things that come to mind that'd be particularly useful for me to hear about:
+
+- Anything in the experience that feels awkward
+- Bugs
+- Feature ideas
+- UI design advice
+- Problem information that doesn't feel like it fits within the available node and edge types
+- Resources related to reaching mutual understanding and making decisions
+- Similar tools
+- Coding practices (I was pretty new to front-end before this project)
+- Community building
+
+There are also [quite a few ideas](https://github.com/orgs/amelioro/projects/2/views/9) that haven't been fully thought out that could use some brain power, some specifically [needing technical design](https://github.com/amelioro/ameliorate/labels/needs%20tech%20design) and some [needing feature/UX design](https://github.com/amelioro/ameliorate/labels/needs%20ux%20design).
+
+Other than that, publicity would probably help, so you can throw a like on this blog post, star the [GitHub repo](https://github.com/amelioro/ameliorate), tell your mom, etc.
+
+And if you're a dev, you can [grab an issue](https://github.com/amelioro/ameliorate/blob/main/CONTRIBUTING.md#finding-an-issue-to-work-on) and put up a PR! I'm happy to provide guidance, and every PR approval comes with a [hand](https://github.com/amelioro/ameliorate/pull/126#pullrequestreview-1398353118)-[picked](https://github.com/amelioro/ameliorate/pull/117#pullrequestreview-1394011304), [relevant](https://github.com/amelioro/ameliorate/pull/116#pullrequestreview-1385761670) [meme](https://github.com/amelioro/ameliorate/pull/130#pullrequestreview-1404726806) ([quality varies](https://github.com/amelioro/ameliorate/pull/108#pullrequestreview-1357927322)).
+
+## Journey
+
+As always in the software world, my progress has been a tad slower than I've wanted, but it is what it is. There has been a lot for me to learn, both on the software side and in the problem-solving and argument domains. The group over at [Canonical Debate Lab](https://canonicaldebatelab.com/) has been a particularly helpful source for ideas and tools in the argument space 🔥. But there's still so much to learn!
+
+Luckily, I'm privileged to be able to pursue this for about two years, so we've got some room to work with. I'm not sure how far the tool will get. I'll be re-evaluating how to proceed every couple months or so, along with the direction of the tool, but I don't expect these to change too much. This idea has been slowly brewing for around three years now, and I think it has potential.
+
+If you want to get updates on the project's progress, you can [subscribe to this blog](https://amelioro.substack.com/), like the [Facebook page](https://www.facebook.com/profile.php?id=100091844721178), or join the [Discord server](https://discord.gg/3KhdyJkTWT). I'll likely post updates every other-ish month, at the very least with details about new functionality. I'm also considering livestreaming demos on Twitch to encourage live feedback, but we'll see about that 👀.
+
+Cheers 🙂
+
+**_Understand ourselves. Understand each other. Grow together._**
+
+**_Ameliorate._**
