@@ -22,7 +22,7 @@
   },
   "//": "nextra/nextra-theme-docs are pinned to 4.2.17 because there's a prerender failure on our pages that we haven't diagnosed. Might be releated to our @headlessui/react override. Figured it'd be best to just match the docs-site versions.",
   "dependencies": {
-    "next": "^15.5.10",
+    "next": "^15.5.18",
     "next-plausible": "^3.12.4",
     "next-sitemap": "^4.2.3",
     "nextra": "4.2.17",
