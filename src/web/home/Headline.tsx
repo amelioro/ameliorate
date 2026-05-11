@@ -25,8 +25,8 @@ export const Headline = () => {
           cars-going-too-fast
         </Link>
       </Typography>
-      {/* max-w-xl to have a decent amount of space to the right to show the background image (on most screens) */}
-      <div className="relative flex max-w-xl flex-col self-center rounded-3xl bg-paperPlain-main text-center sm:border sm:border-primary-main sm:p-8 sm:text-left sm:shadow-xl">
+      {/* max-w-156 to have a decent amount of space to the right to show the background image (on most screens) */}
+      <div className="relative flex max-w-156 flex-col self-center rounded-3xl bg-paperPlain-main text-center sm:border sm:border-primary-main sm:p-8 sm:text-left sm:shadow-xl">
         <Typography component="h1" className="self-center text-3xl font-bold sm:self-start">
           What if it was trivial to understand someone's reasoning, and to add yours to it?
         </Typography>
@@ -41,10 +41,13 @@ export const Headline = () => {
           <span className="font-bold underline decoration-primary-main decoration-2">
             Ameliorate
           </span>{" "}
-          aims to make this a reality. It proposes{" "}
-          <Link href="#break-things-down">a way of breaking down problems</Link> that's particularly
-          built for collaborative refinement, and provides <Link href="#features">tooling</Link> for
-          navigating and working with that information.
+          is a collaborative reasoning tool that aims to make this a reality.
+        </Typography>
+
+        <Typography variant="body1" className="mt-5 sm:mt-3">
+          It helps you break down complex problems into clear pieces so that multiple people can
+          inspect assumptions, clarify disagreement, and integrate knowledge - <i>without</i>{" "}
+          talking past each other.
         </Typography>
 
         <div className="mt-3 flex flex-wrap items-center justify-center gap-2 *:shrink-0 sm:justify-normal">
