@@ -1,5 +1,6 @@
 const meta = {
   // Newest first
+  "2026-05-15-update-artificial-edges": "May 2026: Artificial Edges, Artificial Intelligence",
   "2026-01-06-update-summarizing-nonprofitizing":
     "1/6/26: Summarizing, Nonprofit-izing, Communitizing",
   "2025-05-15-update-socializing": "5/15/25: Socializing",
