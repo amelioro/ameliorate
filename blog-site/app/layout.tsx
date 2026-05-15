@@ -18,6 +18,8 @@ const faviconIco = "https://ameliorate.app/favicon.ico";
 const faviconPng = "https://ameliorate.app/favicon.png";
 
 export const metadata: Metadata = {
+  // Lets posts use relative `openGraph.images` paths if ever needed
+  metadataBase: new URL("https://ameliorate.app/blog"),
   title: {
     default: "Blog | Ameliorate",
     template: "%s | Ameliorate Blog",

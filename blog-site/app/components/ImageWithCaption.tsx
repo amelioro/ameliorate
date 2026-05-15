@@ -38,12 +38,11 @@ export const ImageWithCaption = ({ src, alt, title, caption, width, height }: Pr
         alt={alt ?? ""}
         width={Number(width)}
         height={Number(height)}
-        // `not-first-mt` matches nextra's styling for paragraph spacing
-        className="x:mx-auto x:h-auto x:max-w-full x:not-first:mt-[1.25em]"
+        className="x:mx-auto x:h-auto x:max-w-full x:mt-[1.25em]"
       />
     ) : (
       // eslint-disable-next-line @next/next/no-img-element -- see component JSDoc; we'd need to require width/height to use next/image with our remote URLs
-      <img src={src} alt={alt ?? ""} className="x:mx-auto x:max-w-full x:not-first:mt-[1.25em]" />
+      <img src={src} alt={alt ?? ""} className="x:mx-auto x:max-w-full x:mt-[1.25em]" />
     );
 
   if (!captionText) return image;

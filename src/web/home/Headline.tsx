@@ -41,7 +41,7 @@ export const Headline = () => {
           <span className="font-bold underline decoration-primary-main decoration-2">
             Ameliorate
           </span>{" "}
-          is a collaborative reasoning tool that aims to make this a reality.
+          is a collaborative problem-solving tool that aims to make this a reality.
         </Typography>
 
         <Typography variant="body1" className="mt-5 sm:mt-3">
