@@ -143,7 +143,7 @@
     "husky": "8.0.3",
     "jest-extended": "4.0.2",
     "lint-staged": "13.2.3",
-    "postcss": "8.4.38",
+    "postcss": "^8.5.10",
     "prettier": "3.3.2",
     "prisma": "7.3.0",
     "tailwindcss": "4.1.18",
@@ -157,7 +157,8 @@
   "//overrides": {
     "vite.esbuild": "`npm audit fix --force` does not fix this right now, see explanation https://github.com/vitejs/vite/issues/19412#issuecomment-2670593257",
     "react-is": "mui v7 requires this for react 18 compatibility https://mui.com/material-ui/migration/upgrade-to-v7/#react-18-and-below",
-    "mui-nested-menu": "mui-nested-menu v4 officially supports MUI v6, but works fine with v7 using this override. See https://github.com/steviebuilds/mui-nested-menu/issues/63"
+    "mui-nested-menu": "mui-nested-menu v4 officially supports MUI v6, but works fine with v7 using this override. See https://github.com/steviebuilds/mui-nested-menu/issues/63",
+    "postcss": "next bundles its own nested copy of postcss, and we'd have to upgrade to next 16.3+ to get the patch that fixes this; this override forces every copy (including next's) to the patched version that fixes the XSS advisory GHSA-qx2v-qp2m-jg93"
   },
   "overrides": {
     "vite": {
@@ -166,6 +167,7 @@
     "react-is": "^18.3.1",
     "mui-nested-menu": {
       "@mui/material": "$@mui/material"
-    }
+    },
+    "postcss": "^8.5.10"
   }
 }
