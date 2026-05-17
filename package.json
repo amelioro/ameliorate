@@ -58,9 +58,9 @@
     "@mui/x-date-pickers": "7.28.2",
     "@neondatabase/serverless": "1.0.1",
     "@next/bundle-analyzer": "14.2.2",
-    "@prisma/adapter-neon": "7.3.0",
-    "@prisma/adapter-pg": "7.3.0",
-    "@prisma/client": "7.3.0",
+    "@prisma/adapter-neon": "7.8.0",
+    "@prisma/adapter-pg": "7.8.0",
+    "@prisma/client": "7.8.0",
     "@reactour/tour": "3.7.0",
     "@sentry/nextjs": "8.54.0",
     "@tanstack/react-query": "4.29.23",
@@ -117,7 +117,7 @@
     "@eslint/js": "9.39.2",
     "@pkgverse/prismock": "2.0.5-beta.1",
     "@playwright/test": "1.56.1",
-    "@prisma/internals": "7.3.0",
+    "@prisma/internals": "7.8.0",
     "@sindresorhus/slugify": "2.2.1",
     "@tailwindcss/postcss": "4.1.18",
     "@types/dagre": "0.7.48",
@@ -145,7 +145,7 @@
     "lint-staged": "13.2.3",
     "postcss": "^8.5.10",
     "prettier": "3.3.2",
-    "prisma": "7.3.0",
+    "prisma": "7.8.0",
     "tailwindcss": "4.1.18",
     "tsx": "4.19.3",
     "typescript": "5.9.3",
@@ -158,7 +158,9 @@
     "vite.esbuild": "`npm audit fix --force` does not fix this right now, see explanation https://github.com/vitejs/vite/issues/19412#issuecomment-2670593257",
     "react-is": "mui v7 requires this for react 18 compatibility https://mui.com/material-ui/migration/upgrade-to-v7/#react-18-and-below",
     "mui-nested-menu": "mui-nested-menu v4 officially supports MUI v6, but works fine with v7 using this override. See https://github.com/steviebuilds/mui-nested-menu/issues/63",
-    "postcss": "next bundles its own nested copy of postcss, and we'd have to upgrade to next 16.3+ to get the patch that fixes this; this override forces every copy (including next's) to the patched version that fixes the XSS advisory GHSA-qx2v-qp2m-jg93"
+    "postcss": "next bundles its own nested copy of postcss, and we'd have to upgrade to next 16.3+ to get the patch that fixes this; this override forces every copy (including next's) to the patched version that fixes the XSS advisory GHSA-qx2v-qp2m-jg93",
+    "@hono/node-server": "prisma's dev-server dep (@prisma/dev) pins @hono/node-server 1.19.11, which has the serveStatic middleware-bypass advisory GHSA-92pp-h63x-v22m; currently, no newer prisma 7.x bumps it, so this override forces the patched 1.19.x (a non-breaking patch bump within the same minor line)",
+    "effect": "@prisma/internals 7.1.0 (bundled by the @pkgverse/prismock test lib) depends on @prisma/config -> effect 3.18.x, which has advisory GHSA-38f7-945m-qr2g; prismock has no release on a non-vulnerable prisma internals, so this override bumps effect within its v3 major to the patched line"
   },
   "overrides": {
     "vite": {
@@ -168,6 +170,8 @@
     "mui-nested-menu": {
       "@mui/material": "$@mui/material"
     },
-    "postcss": "^8.5.10"
+    "postcss": "^8.5.10",
+    "@hono/node-server": "^1.19.14",
+    "effect": "^3.20.0"
   }
 }
