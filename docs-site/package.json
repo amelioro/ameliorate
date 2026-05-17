@@ -16,12 +16,18 @@
     "clean": "rm -rf .next",
     "start": "next start -p 3008"
   },
-  "/": "dompurify should not be needed here, it's only used indirectly via nextra's mermaid rendering, but there is a dependency issue they need to fix, see https://github.com/mermaid-js/mermaid/issues/6078",
-  "//": "@headlessui/react is overridden to 2.2.0 (it's a transitive dep of nextra) because >=2.2.1 emits an 'Invalid prop ref supplied to React.Fragment' warning when the search box is used under React 18. Drop once we upgrade react/react-dom to 19.",
-  "overrides": {
-    "@headlessui/react": "2.2.0"
+  "//overrides": {
+    "@headlessui/react": "@headlessui/react is overridden to 2.2.0 (it's a transitive dep of nextra) because >=2.2.1 emits an 'Invalid prop ref supplied to React.Fragment' warning when the search box is used under React 18. Drop once we upgrade react/react-dom to 19.",
+    "postcss": "next bundles its own nested copy of postcss, and we'd have to upgrade to next 16.3+ to get the patch that fixes this; this override forces every copy (including next's) to the patched version that fixes the XSS advisory GHSA-qx2v-qp2m-jg93"
   },
-  "///": " nextra/nextra-theme-docs are pinned to 4.2.17 separately for parity with blog-site (see blog-site/package.json for details).",
+  "overrides": {
+    "@headlessui/react": "2.2.0",
+    "postcss": "^8.5.10"
+  },
+  "//dependencies": {
+    "dompurify": "dompurify should not be needed here, it's only used indirectly via nextra's mermaid rendering, but there is a dependency issue they need to fix, see https://github.com/mermaid-js/mermaid/issues/6078",
+    "nextra": "nextra/nextra-theme-docs are pinned to 4.2.17 separately for parity with blog-site (see blog-site/package.json for details)."
+  },
   "dependencies": {
     "dompurify": "^3.2.1",
     "next": "^15.5.10",
@@ -37,7 +43,7 @@
     "@types/node": "20.11.20",
     "@types/react": "18.3.12",
     "pagefind": "^1.3.0",
-    "postcss": "^8.4.39",
+    "postcss": "^8.5.10",
     "tailwindcss": "4.1.18",
     "typescript": "5.3.3"
   }
