@@ -146,6 +146,7 @@ export const FlyoutSubMenu = forwardRef<HTMLLIElement | null, Props>(
         </MenuItem>
         <Popper
           open={open}
+          keepMounted
           anchorEl={menuItemRef.current}
           placement="right-start"
           style={{ zIndex: 1300 }}
