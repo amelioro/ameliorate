@@ -15,6 +15,7 @@ import {
 export const buttonDiameterRem = indicatorLengthRem; //rem
 
 interface ScoreButtonProps {
+  disableHoverColorChange?: boolean;
   onClick?: MouseEventHandler;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
@@ -30,6 +31,7 @@ interface ScoreButtonProps {
 export const ScoreButton = forwardRef<HTMLButtonElement, ScoreButtonProps>(
   function ScoreButton(props, ref) {
     const {
+      disableHoverColorChange = false,
       onClick,
       onMouseEnter,
       onMouseLeave,
@@ -65,6 +67,11 @@ export const ScoreButton = forwardRef<HTMLButtonElement, ScoreButtonProps>(
           onMouseLeave={onMouseLeave}
           buttonDiameter={buttonDiameterRem}
           zoomRatio={zoomRatio}
+          sx={
+            disableHoverColorChange
+              ? { "&:hover": { backgroundColor: `${scoreColor}.main` } }
+              : undefined
+          }
           className={
             "shadow-none border border-solid border-neutral-main" +
             ` ${showComparisonPie ? "pointer-events-none z-0 bg-transparent" : ""}` +

@@ -100,6 +100,7 @@ export const Score = ({ graphPartId }: ScoreProps) => {
       >
         <ScoreButton
           ref={mainButtonRef}
+          disableHoverColorChange={quickScoring}
           onClick={(event) => {
             event.stopPropagation(); // don't select the graph part when clicking
             setSelected(true);
