@@ -12,6 +12,8 @@ import { MinimalNode, goodNodeTypes } from "@/common/node";
  * An indirect edge is one between two nodes that aren't directly connected but have a path between
  * them that's being hidden by filters.
  *
+ * See visuals in this tldraw https://www.tldraw.com/f/HbjLy3_YHi58nNFBlXFoY?d=v-14010.-2644.31736.15058.page.
+ *
  * Note: this is currently the only kind of `CalculatedEdge`, but we have separate types for these
  * because some places in code care about the fact that an indirect edge is calculated, and others
  * actually care that it's an indirect edge. Technically there may be other `CalculatedEdge`s in the
