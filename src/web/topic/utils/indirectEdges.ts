@@ -88,7 +88,6 @@ export const getIndirectEdges = (
 
   // explore each path until we find a visible node and then track it, or no visible node is found
   /* eslint-disable functional/no-let, functional/immutable-data, functional/no-loop-statements -- easier to traverse mutably */
-  // TODO?: "dfs" not "bfs"? or actually use a bfs?
   let path: Path | undefined;
   while ((path = hiddenPathsToExplore.pop())) {
     // if nextNode is visible, stop and track the path; if not, keep exploring further down the path
