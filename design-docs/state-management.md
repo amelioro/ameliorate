@@ -1,6 +1,6 @@
 # State Management Patterns
 
-Zustand stores are used to manage front-end state. Check out the [Zustand documentation](https://docs.pmnd.rs/zustand/getting-started/introduction) for details about how it works. There are a few different pieces that make up our state management: the store, its actions, and its hooks.
+Zustand stores are used to manage front-end state. Check out the [Zustand documentation](https://zustand.docs.pmnd.rs/learn/index.html) for details about how it works. There are a few different pieces that make up our state management: the store, its actions, and its hooks.
 
 ## The store itself
 
@@ -40,7 +40,7 @@ These are functions that update the state
 
 - generally these should be invoked from a component (e.g. clicking the add node button will invoke the addNode action)
 - some actions just read the current state (different from hooks because they don't subscribe to changes)
-- these follow the [separate actions from store pattern](https://docs.pmnd.rs/zustand/guides/practice-with-no-store-actions)
+- these follow the [separate actions from store pattern](https://zustand.docs.pmnd.rs/learn/guides/practice-with-no-store-actions)
 - generally these will look something like
 
 ```ts
