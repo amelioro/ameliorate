@@ -387,7 +387,7 @@ describe("handleCommentCreated", () => {
       sendAllEmailsSpy.mockImplementation(() => {});
     });
 
-    describe("when sendgrid isn't set up to send emails", () => {
+    describe("when email service isn't set up to send emails", () => {
       beforeEach(() => {
         const canSendEmailsSpy = vi.spyOn(email, "canSendEmails");
         canSendEmailsSpy.mockImplementation(() => false);
@@ -400,7 +400,7 @@ describe("handleCommentCreated", () => {
       });
     });
 
-    describe("when sendgrid is set up to send emails", () => {
+    describe("when email service is set up to send emails", () => {
       beforeEach(() => {
         const canSendEmailsSpy = vi.spyOn(email, "canSendEmails");
         canSendEmailsSpy.mockImplementation(() => true);
