@@ -12,6 +12,8 @@ import { MinimalNode, goodNodeTypes } from "@/common/node";
  * An indirect edge is one between two nodes that aren't directly connected but have a path between
  * them that's being hidden by filters.
  *
+ * See visuals in this tldraw https://www.tldraw.com/f/HbjLy3_YHi58nNFBlXFoY?d=v-14010.-2644.31736.15058.page.
+ *
  * Note: this is currently the only kind of `CalculatedEdge`, but we have separate types for these
  * because some places in code care about the fact that an indirect edge is calculated, and others
  * actually care that it's an indirect edge. Technically there may be other `CalculatedEdge`s in the
@@ -86,7 +88,6 @@ export const getIndirectEdges = (
 
   // explore each path until we find a visible node and then track it, or no visible node is found
   /* eslint-disable functional/no-let, functional/immutable-data, functional/no-loop-statements -- easier to traverse mutably */
-  // TODO?: "dfs" not "bfs"? or actually use a bfs?
   let path: Path | undefined;
   while ((path = hiddenPathsToExplore.pop())) {
     // if nextNode is visible, stop and track the path; if not, keep exploring further down the path
