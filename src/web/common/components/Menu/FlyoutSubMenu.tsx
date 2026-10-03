@@ -127,44 +127,52 @@ export const FlyoutSubMenu = forwardRef<HTMLLIElement | null, Props>(
     const tabIndex = disabled ? undefined : tabIndexProp ?? -1;
 
     return (
-      <div
-        ref={containerRef}
-        onFocus={handleFocus}
-        tabIndex={tabIndex}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        onKeyDown={handleKeyDown}
-      >
-        <MenuItem disabled={disabled} ref={menuItemRef} className={className}>
-          {leftIcon ? <ListItemIcon>{leftIcon}</ListItemIcon> : <span />}
-          {renderLabel ? (
-            <ListItemText>{renderLabel()}</ListItemText>
-          ) : (
-            <ListItemText primary={label} />
-          )}
-          {rightIcon}
-        </MenuItem>
-        <Popper
-          open={open}
-          keepMounted
-          anchorEl={menuItemRef.current}
-          placement="right-start"
-          style={{ zIndex: 1300 }}
-          transition
+      // Wrap the trigger along with the submenu so that clicking the trigger isn't considered a click away.
+      // The Popper is portaled, but ClickAwayListener also checks the React tree, so clicks within the submenu are still "inside".
+      <ClickAwayListener onClickAway={() => setIsSubMenuOpen(false)}>
+        <div
+          ref={containerRef}
+          onFocus={handleFocus}
+          tabIndex={tabIndex}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          onKeyDown={handleKeyDown}
         >
-          {({ TransitionProps }) => (
-            <Grow {...TransitionProps}>
-              <Paper elevation={8}>
-                <ClickAwayListener onClickAway={() => setIsSubMenuOpen(false)}>
+          <MenuItem
+            disabled={disabled}
+            ref={menuItemRef}
+            className={className}
+            // touch devices can't hover, so allow tapping to open
+            onClick={() => setIsSubMenuOpen(true)}
+          >
+            {leftIcon ? <ListItemIcon>{leftIcon}</ListItemIcon> : <span />}
+            {renderLabel ? (
+              <ListItemText>{renderLabel()}</ListItemText>
+            ) : (
+              <ListItemText primary={label} />
+            )}
+            {rightIcon}
+          </MenuItem>
+          <Popper
+            open={open}
+            keepMounted
+            anchorEl={menuItemRef.current}
+            placement="right-start"
+            style={{ zIndex: 1300 }}
+            transition
+          >
+            {({ TransitionProps }) => (
+              <Grow {...TransitionProps}>
+                <Paper elevation={8}>
                   <MenuList {...slotProps?.list} ref={menuContainerRef} autoFocusItem={false}>
                     {children}
                   </MenuList>
-                </ClickAwayListener>
-              </Paper>
-            </Grow>
-          )}
-        </Popper>
-      </div>
+                </Paper>
+              </Grow>
+            )}
+          </Popper>
+        </div>
+      </ClickAwayListener>
     );
   },
 );
