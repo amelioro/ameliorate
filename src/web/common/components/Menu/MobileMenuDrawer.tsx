@@ -6,7 +6,6 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
   useRef,
   useState,
@@ -42,19 +41,28 @@ export { DrillDownDepthContext };
 interface MobileMenuDrawerProps {
   open: boolean;
   onClose: () => void;
+  title: string;
   children: ReactNode;
   slotProps?: {
     list?: Partial<MenuListProps>;
   };
 }
 
-export const MobileMenuDrawer = ({ open, onClose, children, slotProps }: MobileMenuDrawerProps) => {
+export const MobileMenuDrawer = ({
+  open,
+  onClose,
+  title,
+  children,
+  slotProps,
+}: MobileMenuDrawerProps) => {
   const [activePath, setActivePath] = useState<PathSegment[]>([]);
   const subMenuContainerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!open) setActivePath([]); // needed separate from `closeMobileMenu` because our child menu items can close the more actions menu that encompasses this drawer, without calling our `closeMobileMenu
-  }, [open]);
+  // Reset when the close transition finishes (rather than as soon as `open` becomes false) so that
+  // the drawer doesn't jump back to the root menu while it's animating closed.
+  // Also, this is needed separate from `closeMobileMenu` because our child menu items can close the
+  // menu that encompasses this drawer, without calling our `closeMobileMenu`.
+  const resetActivePath = useCallback(() => setActivePath([]), []);
 
   const drillInto = useCallback((segment: PathSegment) => {
     setActivePath((previousActivePath) => [...previousActivePath, segment]);
@@ -64,14 +72,9 @@ export const MobileMenuDrawer = ({ open, onClose, children, slotProps }: MobileM
     setActivePath((previousActivePath) => previousActivePath.slice(0, -1));
   }, []);
 
-  const closeMobileMenu = useCallback(() => {
-    setActivePath([]);
-    onClose();
-  }, [onClose]);
-
   const contextValue = useMemo(
-    () => ({ activePath, drillInto, drillBack, closeMobileMenu, subMenuContainerRef }),
-    [activePath, drillInto, drillBack, closeMobileMenu],
+    () => ({ activePath, drillInto, drillBack, closeMobileMenu: onClose, subMenuContainerRef }),
+    [activePath, drillInto, drillBack, onClose],
   );
 
   const currentSegment = activePath.at(-1) ?? null;
@@ -80,11 +83,15 @@ export const MobileMenuDrawer = ({ open, onClose, children, slotProps }: MobileM
     <Drawer
       anchor="bottom"
       open={open}
-      onClose={closeMobileMenu}
+      onClose={onClose}
       slotProps={{
         paper: {
-          className: "w-full max-h-[80vh] rounded-t-xl overflow-x-hidden",
+          className:
+            "w-full max-h-[80vh] rounded-t-xl overflow-x-hidden" +
+            // prevent actions while animating closed, e.g. so that double-tapping "delete" doesn't try to delete twice
+            (open ? "" : " pointer-events-none"),
         },
+        transition: { onExited: resetActivePath },
       }}
     >
       <MobileMenuDrawerContext.Provider value={contextValue}>
@@ -104,7 +111,7 @@ export const MobileMenuDrawer = ({ open, onClose, children, slotProps }: MobileM
           ) : (
             <div className="flex items-center justify-center border-b py-2">
               <Typography variant="h6" className="text-base font-medium">
-                More Actions
+                {title}
               </Typography>
             </div>
           )}
