@@ -26,5 +26,6 @@ export const openContextMenu = (event: React.MouseEvent, context: Context) => {
 };
 
 export const closeContextMenu = () => {
-  useContextMenuStore.setState({ anchorPosition: undefined, context: undefined });
+  // keep the context so that the menu can keep rendering its items while it animates closed
+  useContextMenuStore.setState({ anchorPosition: undefined });
 };

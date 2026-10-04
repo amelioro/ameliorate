@@ -159,6 +159,11 @@ export const FlyoutSubMenu = forwardRef<HTMLLIElement | null, Props>(
             anchorEl={menuItemRef.current}
             placement="right-start"
             style={{ zIndex: 1300 }}
+            // Prevent actions while the parent menu is animating closed, e.g. so that double-clicking
+            // an item doesn't trigger it twice.
+            // Not applied when just this submenu is closing (e.g. on mouse leave), so that moving the
+            // mouse back into the submenu while it's fading out still re-opens it.
+            className={parentMenuOpen ? undefined : "pointer-events-none"}
             transition
           >
             {({ TransitionProps }) => (

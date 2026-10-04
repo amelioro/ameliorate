@@ -165,6 +165,7 @@ export const MoreActionsMenu = ({
       <MobileMenuDrawer
         open={menuOpen}
         onClose={handleClose}
+        title="More Actions"
         slotProps={{ list: { dense: false } }} // give our More MenuItems a bit more breathing space because many of them have sizable icons like switches/radios
       >
         {menuContent}

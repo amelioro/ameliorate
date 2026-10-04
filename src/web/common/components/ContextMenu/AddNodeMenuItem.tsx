@@ -1,6 +1,6 @@
 import { breakdownNodeTypes, prettyNodeTypes, researchNodeTypes } from "@/common/node";
 import { ContextMenuItem } from "@/web/common/components/ContextMenu/CloseOnClickMenuItem";
-import { FlyoutSubMenu } from "@/web/common/components/Menu/FlyoutSubMenu";
+import { ResponsiveSubMenu } from "@/web/common/components/Menu/ResponsiveSubMenu";
 import { useSessionUser } from "@/web/common/hooks";
 import { ColoredNodeIcon } from "@/web/topic/components/ColoredNodeIcon";
 import { addNodeWithoutEdge } from "@/web/topic/diagramStore/createDeleteActions";
@@ -26,7 +26,7 @@ export const AddNodeMenuItem = ({ parentMenuOpen }: Props) => {
 
   return (
     <>
-      <FlyoutSubMenu label="Add node" parentMenuOpen={parentMenuOpen}>
+      <ResponsiveSubMenu label="Add node" parentMenuOpen={parentMenuOpen}>
         {shownNodeTypes.map((type) => {
           const title = prettyNodeTypes[type];
           return (
@@ -36,7 +36,7 @@ export const AddNodeMenuItem = ({ parentMenuOpen }: Props) => {
             </ContextMenuItem>
           );
         })}
-      </FlyoutSubMenu>
+      </ResponsiveSubMenu>
     </>
   );
 };
