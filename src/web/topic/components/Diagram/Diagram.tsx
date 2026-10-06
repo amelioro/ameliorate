@@ -3,6 +3,7 @@ import {
   BackgroundVariant,
   ConnectionMode,
   OnReconnect as OnReconnectFunc,
+  Panel,
   ReactFlowProvider,
   useOnViewportChange,
   useReactFlow,
@@ -18,6 +19,7 @@ import { useDeepMemo, useSessionUser } from "@/web/common/hooks";
 import { openContextMenu } from "@/web/common/store/contextMenuActions";
 import { clearPartIdToCentralize, usePartIdToCentralize } from "@/web/common/store/ephemeralStore";
 import { StyledReactFlow } from "@/web/topic/components/Diagram/Diagram.styles";
+import { ZoomControls } from "@/web/topic/components/Diagram/ZoomControls";
 import { setFlowMethods } from "@/web/topic/components/Diagram/externalFlowStore";
 import { setViewportIsChanging } from "@/web/topic/components/Diagram/viewportChangeStore";
 import { FlowDirectEdge } from "@/web/topic/components/Edge/FlowDirectEdge";
@@ -260,8 +262,8 @@ const DiagramWithoutProvider = () => {
     <>
       <StyledReactFlow
         className={
-          // annoying way of just relying on css to put the react-flow__panel in the bottom-right for big screens, upper-right for small screens
-          // so that it's opposite of the quick view select, which is sometimes overlayed and can otherwise overlap with the react-flow__panel
+          // annoying way of just relying on css to put each react-flow__panel (attribution and zoom controls) in the bottom-right for big screens, upper-right for small screens
+          // so that they're opposite of the quick view select, which is sometimes overlayed and can otherwise overlap with them
           String.raw`[&_.react-flow\_\_panel]:top-0 [&_.react-flow\_\_panel]:bottom-auto lg:[&_.react-flow\_\_panel]:bottom-0 lg:[&_.react-flow\_\_panel]:top-auto` +
           (flashlightMode ? " flashlight-mode" : "") +
           /**
@@ -324,6 +326,14 @@ const DiagramWithoutProvider = () => {
         zoomOnDoubleClick={false} // idk it seems annoying when accidentally double clicking
       >
         <Background variant={BackgroundVariant.Dots} />
+        <Panel
+          // only "right" takes effect; top vs bottom is overridden by the react-flow__panel css in the className above
+          position="bottom-right"
+          // extra y margin to make room for React Flow's attribution (~19px tall), which is in the same corner
+          className="my-6"
+        >
+          <ZoomControls />
+        </Panel>
       </StyledReactFlow>
     </>
   );
