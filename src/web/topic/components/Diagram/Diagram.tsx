@@ -42,6 +42,7 @@ import { LayoutedEdge, LayoutedNode, parsePortId } from "@/web/topic/utils/layou
 import { tutorialIsOpen } from "@/web/tutorial/tutorial";
 import { useFlashlightMode } from "@/web/view/actionConfigStore";
 import { setSelected, useSelectedGraphPart } from "@/web/view/selectedPartStore";
+import { useZenMode } from "@/web/view/userConfigStore/store";
 
 const nodeTypes: Record<"FlowNode", ComponentType<FlowNodeProps>> = { FlowNode: FlowNode };
 const edgeTypes: Record<"FlowDirectEdge" | "FlowIndirectEdge", ComponentType<FlowEdgeProps>> = {
@@ -170,6 +171,7 @@ const DiagramWithoutProvider = () => {
 
   const selectedGraphPartId = useSelectedGraphPart()?.id;
   const flashlightMode = useFlashlightMode();
+  const zenMode = useZenMode();
   const partIdToCentralize = usePartIdToCentralize();
 
   useHotkeys(hotkeys.zoomIn, (e) => {
@@ -326,14 +328,16 @@ const DiagramWithoutProvider = () => {
         zoomOnDoubleClick={false} // idk it seems annoying when accidentally double clicking
       >
         <Background variant={BackgroundVariant.Dots} />
-        <Panel
-          // only "right" takes effect; top vs bottom is overridden by the react-flow__panel css in the className above
-          position="bottom-right"
-          // extra y margin to make room for React Flow's attribution (~19px tall), which is in the same corner
-          className="my-6"
-        >
-          <ZoomControls />
-        </Panel>
+        {!zenMode && (
+          <Panel
+            // only "right" takes effect; top vs bottom is overridden by the react-flow__panel css in the className above
+            position="bottom-right"
+            // extra y margin to make room for React Flow's attribution (~19px tall), which is in the same corner
+            className="my-6"
+          >
+            <ZoomControls />
+          </Panel>
+        )}
       </StyledReactFlow>
     </>
   );
