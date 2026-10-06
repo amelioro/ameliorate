@@ -29,5 +29,7 @@
 [build]
   # Build app only if there are changes outside the docs-site and blog-site directories.
   # If grep finds files changed outside of those, it will exit with 0 status, so we use `!` to invert the status and run build if files are found.
+  # When the build cache is missing (e.g. failed to fetch), Netlify sets CACHED_COMMIT_REF = COMMIT_REF, which makes the diff empty;
+  # so we always build in that case, rather than skipping a build that may have changes.
   # `ignore` command examples here https://answers.netlify.com/t/support-guide-how-to-use-the-ignore-command/37517
-  ignore = "! git diff --name-only $CACHED_COMMIT_REF $COMMIT_REF | grep -v -q -E '(docs-site|blog-site)'"
+  ignore = "[ \"$CACHED_COMMIT_REF\" != \"$COMMIT_REF\" ] && ! git diff --name-only $CACHED_COMMIT_REF $COMMIT_REF | grep -v -q -E '(docs-site|blog-site)'"
