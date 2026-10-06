@@ -60,5 +60,8 @@ mcp-server/.codegen-build/
 AGENTS.local.md
 .claude/settings.local.json
 
+# playwright mcp output (console logs, screenshots) from agent browser sessions
+.playwright-mcp/
+
 # place to put temp files if needed
 tmp/
