@@ -8,6 +8,7 @@ import { useHotkeys } from "react-hotkeys-hook";
 import { possibleDisplayScores } from "@/common/userScore";
 import { ContextMenu } from "@/web/common/components/ContextMenu/ContextMenu";
 import { InfoDialog } from "@/web/common/components/InfoDialog/InfoDialog";
+import { Loading } from "@/web/common/components/Loading/Loading";
 import { SiteBanner } from "@/web/common/components/SiteBanner/SiteBanner";
 import { useSessionUser } from "@/web/common/hooks";
 import { Summary } from "@/web/summary/components/Summary";
@@ -42,7 +43,13 @@ import { toggleZenMode, useZenMode } from "@/web/view/userConfigStore/store";
 const CriteriaTable = dynamic(
   () =>
     import("@/web/topic/components/CriteriaTable/CriteriaTable").then((mod) => mod.CriteriaTable),
-  { ssr: false },
+  {
+    ssr: false,
+    // Take up the table's space while loading, so that the main toolbar doesn't start at the top
+    // and then shift down - tutorial steps (e.g. welcome) anchored to toolbar buttons wouldn't
+    // reposition after the shift, because reactour only recalculates on window resize.
+    loading: () => <Loading />,
+  },
 );
 
 const useWorkspaceHotkeys = (user: { username: string } | null | undefined) => {
