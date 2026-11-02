@@ -23,7 +23,11 @@ export const SiteMenu = ({ className }: Props) => {
 
   return (
     <>
-      <IconButton onClick={() => setIsSiteDrawerOpen(true)} className={className}>
+      <IconButton
+        aria-label="Open site navigation"
+        onClick={() => setIsSiteDrawerOpen(true)}
+        className={className}
+      >
         <Menu />
       </IconButton>
       <SiteDrawer

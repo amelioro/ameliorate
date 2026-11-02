@@ -13,11 +13,6 @@ import { Page, expect, test } from "@playwright/test";
  * Each comment covers what's wrong, why fixing it helps, and the fix.
  */
 const excludedRules = [
-  // The mobile menu button only contains a hidden icon and has no name. Screen reader users
-  // can't tell that it opens the site navigation.
-  // Fix: add aria-label="Open site navigation".
-  "button-name",
-
   // The site drawer is a dialog with no name. Screen readers announce the name when focus moves
   // in, so users aren't told what just opened.
   // Fix: add an aria-label.
@@ -89,7 +84,7 @@ test.describe("home page", () => {
 
     test("site drawer open", async ({ page }) => {
       await gotoHomePage(page);
-      await page.getByTestId("MenuIcon").click();
+      await page.getByRole("button", { name: "Open site navigation" }).click();
 
       // wait for the slide-in to finish, so the scan doesn't see the drawer mid-transition
       await expect(page.getByRole("dialog")).toBeInViewport({ ratio: 1 });
