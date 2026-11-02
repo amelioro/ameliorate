@@ -19,11 +19,6 @@ const excludedRules = [
   // Fix: wrap each divider in an <li>.
   "list",
 
-  // Footer links are 20px tall. Small, tightly spaced targets are hard to hit with tremors or
-  // limited dexterity, and on touchscreens.
-  // Fix: add padding to make them 24px tall.
-  "target-size",
-
   // #4AB84E is about 2.5:1 as text, and needs 4.5:1. Low contrast is hard to read with low vision,
   // on a dim screen, or in bright light.
   // Fix: change primary to #2E7D32.

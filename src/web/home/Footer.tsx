@@ -17,7 +17,7 @@ import {
 
 export const Footer = () => {
   return (
-    <div className="flex flex-wrap justify-evenly gap-4 [&_a]:text-sm">
+    <div className="flex flex-wrap justify-evenly gap-4 [&_a]:py-0.5 [&_a]:text-sm">
       <div className="flex flex-col">
         <Typography component="h2" variant="h6">
           Ameliorate
