@@ -51,7 +51,11 @@ export const SiteDrawer = ({ username, isSiteDrawerOpen, setIsSiteDrawerOpen }: 
           </ListItemButton>
         </ListItem>
 
-        <Divider className="my-1" />
+        {/* hidden so screen readers don't count dividers as list items. a bare <hr> in the list */}
+        {/* would be announced better, but it's invalid until https://github.com/whatwg/html/issues/9126 */}
+        <li aria-hidden="true">
+          <Divider className="my-1" />
+        </li>
 
         <ListItem>
           <ListItemButton LinkComponent={NextLink} href="/playground">
@@ -81,7 +85,9 @@ export const SiteDrawer = ({ username, isSiteDrawerOpen, setIsSiteDrawerOpen }: 
           </ListItemButton>
         </ListItem>
 
-        <Divider className="my-1" />
+        <li aria-hidden="true">
+          <Divider className="my-1" />
+        </li>
 
         {/* plain `a` instead of NextLink because /docs and /blog are Netlify proxy rewrites — */}
         {/* SPA navigation would skip those rewrites and hit the [username] catch-all route */}

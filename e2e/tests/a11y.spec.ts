@@ -13,12 +13,6 @@ import { Page, expect, test } from "@playwright/test";
  * Each comment covers what's wrong, why fixing it helps, and the fix.
  */
 const excludedRules = [
-  // The drawer's <hr> dividers sit directly in its <ul>, which should only contain <li>. Screen
-  // readers depend on that structure to announce lists. Chromium still exposes this list
-  // correctly, so the impact is probably small, but other browsers may not.
-  // Fix: wrap each divider in an <li>.
-  "list",
-
   // #4AB84E is about 2.5:1 as text, and needs 4.5:1. Low contrast is hard to read with low vision,
   // on a dim screen, or in bright light.
   // Fix: change primary to #2E7D32.
