@@ -30,7 +30,7 @@ export const scalePxViaDefaultFontSize = (px: number) => px * (htmlDefaultFontSi
 
 export default function Document(props: DocumentHeadTagsProps) {
   return (
-    <Html>
+    <Html lang="en">
       <Head>
         <DocumentHeadTags {...props} />
       </Head>

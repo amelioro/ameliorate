@@ -13,11 +13,6 @@ import { Page, expect, test } from "@playwright/test";
  * Each comment covers what's wrong, why fixing it helps, and the fix.
  */
 const excludedRules = [
-  // <html> has no `lang`. Screen readers use it to choose pronunciation, so without it they can
-  // read the page with the wrong voice.
-  // Fix: add lang="en".
-  "html-has-lang",
-
   // The mobile menu button only contains a hidden icon and has no name. Screen reader users
   // can't tell that it opens the site navigation.
   // Fix: add aria-label="Open site navigation".
