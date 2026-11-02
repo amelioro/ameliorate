@@ -27,7 +27,12 @@ export const SiteDrawer = ({ username, isSiteDrawerOpen, setIsSiteDrawerOpen }: 
   const theme = useTheme();
 
   return (
-    <Drawer anchor="left" open={isSiteDrawerOpen} onClose={() => setIsSiteDrawerOpen(false)}>
+    <Drawer
+      anchor="left"
+      open={isSiteDrawerOpen}
+      onClose={() => setIsSiteDrawerOpen(false)}
+      slotProps={{ paper: { "aria-label": "Site navigation" } }}
+    >
       <List>
         <ListItem
           secondaryAction={

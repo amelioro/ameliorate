@@ -13,11 +13,6 @@ import { Page, expect, test } from "@playwright/test";
  * Each comment covers what's wrong, why fixing it helps, and the fix.
  */
 const excludedRules = [
-  // The site drawer is a dialog with no name. Screen readers announce the name when focus moves
-  // in, so users aren't told what just opened.
-  // Fix: add an aria-label.
-  "aria-dialog-name",
-
   // Headings skip levels (h1 to h4, then h4 to h6). Screen reader users often navigate by heading
   // level, and skipped levels make it look like sections are missing.
   // Fix: use h2 for sections and footer columns, and h3 for cards.
@@ -87,7 +82,9 @@ test.describe("home page", () => {
       await page.getByRole("button", { name: "Open site navigation" }).click();
 
       // wait for the slide-in to finish, so the scan doesn't see the drawer mid-transition
-      await expect(page.getByRole("dialog")).toBeInViewport({ ratio: 1 });
+      await expect(page.getByRole("dialog", { name: "Site navigation" })).toBeInViewport({
+        ratio: 1,
+      });
 
       await expectNoViolations(page);
     });
