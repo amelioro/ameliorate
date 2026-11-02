@@ -61,12 +61,12 @@ const excludedRules = [
 
   // Links in hidden carousel slides can still take focus. `aria-hidden` hides them from screen
   // readers, so keyboard users can land on something that's announced as nothing.
-  // Fix: remove the links from the cards. This also fixes nested-interactive.
+  // Fix: render links only in the centered card, and use plain text in the other cards.
   "aria-hidden-focus",
 
   // The selected card is a role="button" containing a link. Screen readers treat a button's
   // contents as plain text, so the link can be unannounced or unreachable.
-  // Fix: remove role="button" and the link. This also fixes aria-hidden-focus.
+  // Fix: remove role="button" only from the centered card, keeping its link usable.
   "nested-interactive",
 ];
 ```
@@ -96,7 +96,7 @@ Notes on specific fixes:
 - **`list`:** MUI's `Divider component="li"` still fails, because it adds `role="separator"`. Use a plain `<li>` around the `Divider`.
 - **`target-size`:** add `[&_a]:py-0.5` in [Footer.tsx](../../src/web/home/Footer.tsx).
 - **`color-contrast`:** replace `primary.main` in [theme.ts](../../src/web/common/theme.ts) and update its comment. No new palette color or component overrides are needed. Contained buttons switch to white text automatically (5.13:1), which also fixes their hover contrast and the email field borders. This changes the whole app, so check the diagram UI too.
-- **`aria-hidden-focus` and `nested-interactive`:** remove the link and `role="button"` from [the cards](../../src/web/home/ExamplesSection.tsx), keeping the "See in the app" link below. That alone would leave nothing in the carousel reachable by keyboard, so add Previous/Next buttons outside the slides, using `carouselRef`'s `slickPrev`/`slickNext`, disabled at the ends. Keyboard-test them by hand, because axe won't.
+- **`aria-hidden-focus` and `nested-interactive`:** keep click-to-center in [the cards](../../src/web/home/ExamplesSection.tsx). Use JSX to omit `role="button"` from the centered card and render its title as a normal link; use plain text titles in the other cards. Keep the "See in the app" link below. Leave Previous/Next buttons out for now. Add a comment above the carousel explaining that keyboard users cannot switch cards and suggesting those buttons as a future option. Keep Slick's built-in arrow-key handler disabled (`accessibility={false}`), because it would otherwise remove the focused link when changing slides. Check the centered link, clicking neighboring cards, and mobile swiping by hand, because axe won't.
 
 ## 3. Confirm PageSpeed reaches 100
 
@@ -110,6 +110,7 @@ Notes on specific fixes:
 
 These are real issues that axe and PageSpeed don't detect, or that this plan doesn't scan. They should be handled separately:
 
+- Keyboard users cannot switch carousel cards. Previous/Next buttons outside the slides are a future option.
 - Keyboard focus indicators need separate work. The theme's reduced ripple opacity hides focus on outlined and text buttons and tabs, and `InputBase` removes the email fields' outline.
 - The hero loses content at high zoom, and the sticky header can hide focused elements.
 - Three demo GIFs loop forever with no pause control.
@@ -119,6 +120,6 @@ These are real issues that axe and PageSpeed don't detect, or that this plan doe
 
 ## Validation
 
-- `npm run e2e:test:a11y` passes with `excludedRules` and `.disableRules()` removed.
+- `npm run e2e:test:a11y` passes with `excludedRules` empty. Keep the array and `.disableRules(excludedRules)` for known failures when adding more pages, such as the playground.
 - `npm run check-types`, `npm run lint`, and `npm run check-pretty` pass.
 - PageSpeed shows 100 on mobile and desktop.

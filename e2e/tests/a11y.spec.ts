@@ -3,6 +3,9 @@
  * logged-out home page.
  *
  * axe only detects some issues, so passing this doesn't mean the page is fully accessible.
+ *
+ * NOTE: see the below tests for what pages are actually tested - right now, only the home page is
+ * covered.
  */
 
 import AxeBuilder from "@axe-core/playwright";
@@ -11,20 +14,12 @@ import { Page, expect, test } from "@playwright/test";
 /**
  * Known failures. Delete a rule in the commit that fixes it.
  * Each comment covers what's wrong, why fixing it helps, and the fix.
- *
- * NOTE: see the below tests for what pages are actually tested - right now, only the home page is
- * covered.
  */
-const excludedRules = [
-  // Links in hidden carousel slides can still take focus. `aria-hidden` hides them from screen
-  // readers, so keyboard users can land on something that's announced as nothing.
-  // Fix: remove the links from the cards. This also fixes nested-interactive.
-  "aria-hidden-focus",
-
-  // The selected card is a role="button" containing a link. Screen readers treat a button's
-  // contents as plain text, so the link can be unannounced or unreachable.
-  // Fix: remove role="button" and the link. This also fixes aria-hidden-focus.
-  "nested-interactive",
+const excludedRules: string[] = [
+  /**
+   * Keeping this around because if we add more pages to test, we'll probably want to use the same
+   * strategy where we exclude failing rules and remove the exclusion one at a time, as we fix them.
+   */
 ];
 
 const gotoHomePage = async (page: Page) => {
