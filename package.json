@@ -28,6 +28,7 @@
     "e2e:build": "cd e2e && npm run build",
     "e2e:test:smoke": "cd e2e && npm run container:test:smoke",
     "e2e:test:regression": "cd e2e && npm run container:test:regression",
+    "e2e:test:a11y": "cd e2e && npm run container:test:a11y",
     "e2e:update-snapshots": "cd e2e && npm run container:update-snapshots",
     "e2e:ui": "cd e2e && npm run container:ui",
     "mock-auth:build": "docker build -t mock-auth mock-auth/",
