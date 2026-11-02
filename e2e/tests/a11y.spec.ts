@@ -16,11 +16,6 @@ import { Page, expect, test } from "@playwright/test";
  * covered.
  */
 const excludedRules = [
-  // #4AB84E is about 2.5:1 as text, and needs 4.5:1. Low contrast is hard to read with low vision,
-  // on a dim screen, or in bright light.
-  // Fix: change primary to #2E7D32.
-  "color-contrast",
-
   // Links in hidden carousel slides can still take focus. `aria-hidden` hides them from screen
   // readers, so keyboard users can land on something that's announced as nothing.
   // Fix: remove the links from the cards. This also fixes nested-interactive.

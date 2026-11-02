@@ -36,6 +36,8 @@ export const Indicator = ({
         title={title}
         aria-label={title}
         variant="contained"
+        // bg is overridden below; paperPlain keeps the icon dark, rather than using primary's light contrastText
+        color="paperPlain"
         onClick={onClickHandler}
         className={
           // text-base seems to fit more snuggly than the default 14px
