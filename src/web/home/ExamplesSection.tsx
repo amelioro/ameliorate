@@ -287,7 +287,9 @@ export const ExamplesSection = () => {
   // TODO: currently we're sacrificing req 4 here in order to satisfy the others; ideally we'd find a solution that meets all these reqs without sacrifice.
   return (
     <div className="flex h-full flex-col text-center">
-      <Typography variant="h4">See the potential</Typography>
+      <Typography component="h2" variant="h4">
+        See the potential
+      </Typography>
 
       <Carousel
         ref={carouselRef}
@@ -326,7 +328,7 @@ export const ExamplesSection = () => {
                 : " hover:bg-primary-light/5 hover:cursor-pointer *:pointer-events-none [&_a]:no-underline [&_a]:font-normal") // pointer-events-none to prevent accidental link-clicking when trying to select a card
             }
           >
-            <Typography component="h5" className="text-xl sm:text-2xl">
+            <Typography component="h3" className="text-xl sm:text-2xl">
               {example.category}
             </Typography>
 

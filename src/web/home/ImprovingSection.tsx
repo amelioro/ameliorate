@@ -8,7 +8,9 @@ export const ImprovingSection = () => {
   return (
     <div className="flex flex-col items-center gap-4 text-center">
       <div className="flex flex-col items-center">
-        <Typography variant="h4">Ameliorate is constantly improving</Typography>
+        <Typography component="h2" variant="h4">
+          Ameliorate is constantly improving
+        </Typography>
         <Typography variant="body1">
           and would love your{" "}
           <Link

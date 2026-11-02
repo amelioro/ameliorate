@@ -13,11 +13,6 @@ import { Page, expect, test } from "@playwright/test";
  * Each comment covers what's wrong, why fixing it helps, and the fix.
  */
 const excludedRules = [
-  // Headings skip levels (h1 to h4, then h4 to h6). Screen reader users often navigate by heading
-  // level, and skipped levels make it look like sections are missing.
-  // Fix: use h2 for sections and footer columns, and h3 for cards.
-  "heading-order",
-
   // The drawer's <hr> dividers sit directly in its <ul>, which should only contain <li>. Screen
   // readers depend on that structure to announce lists. Chromium still exposes this list
   // correctly, so the impact is probably small, but other browsers may not.

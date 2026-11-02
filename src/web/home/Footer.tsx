@@ -19,7 +19,9 @@ export const Footer = () => {
   return (
     <div className="flex flex-wrap justify-evenly gap-4 [&_a]:text-sm">
       <div className="flex flex-col">
-        <Typography variant="h6">Ameliorate</Typography>
+        <Typography component="h2" variant="h6">
+          Ameliorate
+        </Typography>
         <NavLink href={docsPage} target="_blank">
           Docs
         </NavLink>
@@ -38,7 +40,9 @@ export const Footer = () => {
       </div>
 
       <div className="flex flex-col">
-        <Typography variant="h6">Community</Typography>
+        <Typography component="h2" variant="h6">
+          Community
+        </Typography>
         <NavLink href={blogPage} target="_blank">
           Blog
         </NavLink>
@@ -60,7 +64,9 @@ export const Footer = () => {
       </div>
 
       <div className="flex flex-col">
-        <Typography variant="h6">Participate</Typography>
+        <Typography component="h2" variant="h6">
+          Participate
+        </Typography>
         <NavLink href={feedbackPage} target="_blank">
           Give Feedback
         </NavLink>
