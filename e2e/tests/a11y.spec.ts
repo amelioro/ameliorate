@@ -11,6 +11,9 @@ import { Page, expect, test } from "@playwright/test";
 /**
  * Known failures. Delete a rule in the commit that fixes it.
  * Each comment covers what's wrong, why fixing it helps, and the fix.
+ *
+ * NOTE: see the below tests for what pages are actually tested - right now, only the home page is
+ * covered.
  */
 const excludedRules = [
   // #4AB84E is about 2.5:1 as text, and needs 4.5:1. Low contrast is hard to read with low vision,
