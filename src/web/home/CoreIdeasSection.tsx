@@ -46,7 +46,9 @@ export const CoreIdeasSection = () => {
 
   return (
     <div className="flex flex-col text-center">
-      <Typography variant="h4">Break things down</Typography>
+      <Typography component="h2" variant="h4">
+        Break things down
+      </Typography>
 
       <TabContext value={selectedCard}>
         <TabList

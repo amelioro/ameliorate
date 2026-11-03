@@ -287,8 +287,15 @@ export const ExamplesSection = () => {
   // TODO: currently we're sacrificing req 4 here in order to satisfy the others; ideally we'd find a solution that meets all these reqs without sacrifice.
   return (
     <div className="flex h-full flex-col text-center">
-      <Typography variant="h4">See the potential</Typography>
+      <Typography component="h2" variant="h4">
+        See the potential
+      </Typography>
 
+      {/*
+       * Keyboard users cannot switch cards. Slick hides non-centered cards, and its arrow-key
+       * navigation would remove the focused link.
+       * TODO: try adding Previous/Next buttons outside the slides.
+       */}
       <Carousel
         ref={carouselRef}
         arrows={false}
@@ -318,24 +325,29 @@ export const ExamplesSection = () => {
         {examples.map((example, index) => (
           <div
             key={example.title}
-            role="button"
+            role={index === currentExampleIndex ? undefined : "button"}
             className={
               "flex flex-col rounded-xl h-full border p-3 sm:p-4 max-w-full whitespace-nowrap text-center" +
               (index === currentExampleIndex
                 ? " border-primary-main bg-primary-light/5 hover:cursor-auto"
-                : " hover:bg-primary-light/5 hover:cursor-pointer *:pointer-events-none [&_a]:no-underline [&_a]:font-normal") // pointer-events-none to prevent accidental link-clicking when trying to select a card
+                : " hover:bg-primary-light/5 hover:cursor-pointer")
             }
           >
-            <Typography component="h5" className="text-xl sm:text-2xl">
+            <Typography component="h3" className="text-xl sm:text-2xl">
               {example.category}
             </Typography>
 
             <Divider className="my-1 sm:my-2" />
 
-            <Typography variant="body2" className="mt-0 sm:mt-1">
-              <Link href={example.href} target="_blank">
-                {example.title}
-              </Link>
+            <Typography variant="body2" className="mt-0 text-primary-main sm:mt-1">
+              {/* Only the centered card has a link, to prevent accidental link-clicking when trying to select a card. */}
+              {index === currentExampleIndex ? (
+                <Link href={example.href} target="_blank">
+                  {example.title}
+                </Link>
+              ) : (
+                example.title
+              )}
             </Typography>
 
             <Typography variant="body2">{example.purpose}</Typography>

@@ -5,8 +5,8 @@
   "type": "module",
   "engines": {
     "//1": "run `nvm install` to use the right versions; these are enforced via .npmrc's engine-strict when npm is used",
-    "//2": "these are the minimum playwright-supported versions.",
-    "node": ">=20",
+    "//2": "these are the minimum versions for playwright (>= 18) and axe-core (>= 22.12.0).",
+    "node": ">=22.12.0",
     "npm": ">=10"
   },
   "private": true,
@@ -15,15 +15,18 @@
     "// container commands": "these are for running locally, which is intended to be from outside of the container, for convenience",
     "container:test:smoke": "bash ./runInContainer.sh 'npm run test:smoke'",
     "container:test:regression": "bash ./runInContainer.sh 'npm run test:regression'",
+    "container:test:a11y": "bash ./runInContainer.sh 'npm run test:a11y'",
     "container:update-snapshots": "bash ./runInContainer.sh 'npm run update-snapshots'",
     "container:ui": "bash ./runInContainer.sh 'npm run ui'",
     "// non-container commands": "these are for running via CI, which is entirely run within a container already",
     "test:smoke": "npx playwright test smoke",
     "test:regression": "npx playwright test regression",
+    "test:a11y": "npx playwright test a11y",
     "update-snapshots": "npx playwright test regression --update-snapshots",
     "ui": "npx playwright test --ui-port=0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
     "@playwright/test": "1.56.1",
     "@types/node": "^22.10.2"
   }

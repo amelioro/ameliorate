@@ -108,7 +108,9 @@ export const FeaturesSection = () => {
 
   return (
     <div className="flex flex-col text-center">
-      <Typography variant="h4">Some cool features</Typography>
+      <Typography component="h2" variant="h4">
+        Some cool features
+      </Typography>
 
       <TabContext value={selectedCard}>
         <TabList onChange={(_, value: Tab) => setSelectedCard(value)} variant="fullWidth">

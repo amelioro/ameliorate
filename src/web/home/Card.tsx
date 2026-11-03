@@ -20,7 +20,9 @@ export const Card = ({ title, description, onClick, selected = false }: CardProp
       onClick={onClick}
       role={onClick ? "button" : undefined}
     >
-      <Typography variant="h5">{title}</Typography>
+      <Typography component="h3" variant="h5">
+        {title}
+      </Typography>
       {description && <Typography variant="body2">{description}</Typography>}
     </div>
   );

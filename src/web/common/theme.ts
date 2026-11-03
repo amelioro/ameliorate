@@ -177,7 +177,7 @@ const { augmentColor } = palette; // automatically creates light and dark colors
 export const infoColor = "#0288D1"; // mui default info https://mui.com/material-ui/customization/palette/#values
 
 const sharedPalette = {
-  primary: { main: "#4AB84E" }, // apple (green): good, optimistic, let's solve things; different from solution because this is too dark for contrasting with black small node text, but solution color is too light from using for text on white background
+  primary: { main: "#00820F", contrastText: "#d3ffd1" }, // darkened apple (green): good, optimistic, let's solve things; OKLCH-adjusted from the previous #4AB84E to keep similar hue with lower lightness, to be dark enough for text on white backgrounds (5.00:1 contrast, WCAG AA needs 4.5:1); light green contrastText because white felt harsh against the saturated fill, though it barely passes (4.52:1 contrast); different from solution because this is too dark for contrasting with black small node text, but solution color is too light from using for text on white background
   info: { main: infoColor },
 
   neutral: augmentColor({ color: { main: oklchToHex("oklch(91% 0 0)") } }), // gray is very neutral, light-ish to not stand out too much, no particular relation to the other colors
